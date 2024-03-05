@@ -1,0 +1,40 @@
+{
+  "name": "illa-agent",
+  "private": true,
+  "scripts": {
+    "dev": "turbo run dev --filter=agent",
+    "build": "NODE_OPTIONS=--max-old-space-size=12288 turbo run build --filter=agent",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.0.3",
+    "@commitlint/config-conventional": "^19.0.3",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/node": "^18.18.11",
+    "@types/react": "^18.2.62",
+    "@types/react-dom": "^18.2.19",
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "@vitejs/plugin-react-swc": "^3.6.0",
+    "eslint-config-illa": "workspace:*",
+    "husky": "^9.0.11",
+    "lint-staged": "^13.2.2",
+    "prettier": "^3.2.5",
+    "tsconfig": "workspace:*",
+    "turbo": "latest",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.5",
+    "vite-plugin-checker": "^0.6.4",
+    "vite-plugin-svgr": "^4.2.0"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "packageManager": "pnpm@8.9.0",
+  "engines": {
+    "node": ">=18"
+  }
+}
