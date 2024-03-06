@@ -1,10 +1,18 @@
-import React from "react"
-import ReactDOM from "react-dom/client"
+import { ILLAMixpanel } from "@illa-public/mixpanel-utils"
+import { StrictMode } from "react"
+import { createRoot } from "react-dom/client"
+import { Provider } from "react-redux"
+import "@/api/http/base"
+import "@/i18n"
 import App from "./App.tsx"
-import "./index.css"
+import store from "./redux/store.ts"
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+ILLAMixpanel.setDeviceID()
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </StrictMode>,
 )

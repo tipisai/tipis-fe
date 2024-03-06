@@ -7,6 +7,9 @@
     "access": "public"
   },
   "exports": {
-    "./*.json": "./*.json"
+    "./*.json": "./*.json",
+    "./global": {
+      "types": "./global.d.ts"
+    }
   }
 }
