@@ -1,16 +1,15 @@
 import { Global } from "@emotion/react"
 import { UpgradeModalGroup } from "@illa-public/upgrade-modal"
 import { HelmetProvider } from "react-helmet-async"
-import { RouterProvider } from "react-router-dom"
 import { MessageGroup, ModalGroup } from "@illa-design/react"
-import ILLARoute from "./router"
+import { ILLARouterProvider } from "./router/config"
 import { globalStyle } from "./style"
 
 function App() {
   return (
     <HelmetProvider>
       <Global styles={globalStyle} />
-      <RouterProvider router={ILLARoute} />
+      <ILLARouterProvider />
       <MessageGroup />
       <UpgradeModalGroup />
       <ModalGroup />

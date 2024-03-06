@@ -1,15 +1,16 @@
 import { Page403, Page404, Page500 } from "@illa-public/status-page"
 import { getILLACloudURL } from "@illa-public/utils"
 import { Suspense, lazy } from "react"
-import { redirect } from "react-router-dom"
+import { RouterProvider, createBrowserRouter, redirect } from "react-router-dom"
 import FullSectionLoading from "@/components/FullSectionLoading"
+import { buildRouter } from "./buildRouter"
 import { RoutesObjectPro } from "./interface"
 
 const RunAgentPage = lazy(() => import("@/page/AI/AIAgentRun"))
 const EditAgentPage = lazy(() => import("@/page/AI/AIAgent/editAgent"))
 const CreateAgentPage = lazy(() => import("@/page/AI/AIAgent/createAgent"))
 
-export const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
+const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   {
     index: true,
     loader: () => redirect(getILLACloudURL(window.customDomain)),
@@ -58,3 +59,11 @@ export const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     accessByMobile: true,
   },
 ]
+
+const ILLARoute = createBrowserRouter(buildRouter(ILLA_ROUTE_CONFIG), {
+  basename: import.meta.env.ILLA_BASE_PATH ?? "/",
+})
+
+export const ILLARouterProvider = () => {
+  return <RouterProvider router={ILLARoute} />
+}
