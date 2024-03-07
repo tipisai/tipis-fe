@@ -1,6 +1,15 @@
+import Icon from "@ant-design/icons"
 import { CodeEditor } from "@illa-public/code-editor"
+import { getColor } from "@illa-public/color-scheme"
 import { AvatarUpload } from "@illa-public/cropper"
-import { UpgradeIcon } from "@illa-public/icon"
+import {
+  DocsIcon,
+  PlayFillIcon,
+  PlusIcon,
+  PreviousIcon,
+  ResetIcon,
+  UpgradeIcon,
+} from "@illa-public/icon"
 import {
   ContributeAgentPC,
   HASHTAG_REQUEST_TYPE,
@@ -48,6 +57,16 @@ import {
   getILLACloudURL,
   sendTagEvent,
 } from "@illa-public/utils"
+import {
+  App,
+  Button,
+  Divider,
+  Image,
+  Input,
+  Segmented,
+  Select,
+  message,
+} from "antd"
 import { isEqual } from "lodash-es"
 import { FC, useCallback, useEffect, useMemo, useState } from "react"
 import { Helmet } from "react-helmet-async"
@@ -56,30 +75,9 @@ import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { v4 } from "uuid"
-import {
-  Button,
-  Divider,
-  DocsIcon,
-  Image,
-  Input,
-  Link,
-  PlayFillIcon,
-  PlusIcon,
-  PreviousIcon,
-  RadioGroup,
-  ResetIcon,
-  Select,
-  TextArea,
-  getColor,
-  useMessage,
-} from "@illa-design/react"
-import { createAction } from "@/api/actions"
 import { TextSignal } from "@/api/ws/textSignal"
 import AIIcon from "@/assets/agent/ai.svg?react"
-import { FullPageLoading } from "@/components/FullPageLoading"
-import { buildActionInfo, buildAppWithAgentSchema } from "@/config/AppWithAgent"
 import { AIAgentBlock } from "@/page/AI/components/AIAgentBlock"
-import AILoading from "@/page/AI/components/AILoading"
 import { PreviewChat } from "@/page/AI/components/PreviewChat"
 import { useAgentConnect } from "@/page/AI/components/ws/useAgentConnect"
 import {
@@ -89,10 +87,10 @@ import {
   useGetAgentIconUploadAddressMutation,
   usePutAgentDetailMutation,
 } from "@/redux/services/agentAPI"
-import { fetchCreateApp } from "@/services/apps"
 import { copyToClipboard } from "@/utils/copyToClipboard"
 import { fetchUploadBase64 } from "@/utils/file"
 import { track } from "@/utils/mixpanelHelper"
+import AILoadingIcon from "../components/AILoading/aiLoading.svg?react"
 import { ChatContext } from "../components/ChatContext"
 import { ErrorText } from "../components/ErrorText"
 import KnowledgeUpload from "../components/KnowledgeUpload"
@@ -165,8 +163,8 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
   const { t } = useTranslation()
 
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!!
+  const { message: messageApi } = App.useApp()
 
-  const message = useMessage()
   const upgradeModal = useUpgradeModal()
 
   const currentUserInfo = useSelector(getCurrentUser)
@@ -206,8 +204,6 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
   )
 
   // ui state
-
-  const [isFullPageLoading, setIsFullPageLoading] = useState(false)
 
   const updateLocalIcon = useCallback(
     (icon: string, newRoomUsers: CollaboratorsInfo[]) => {
@@ -318,7 +314,6 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
       setIsRunning(isRunning)
     },
     onSendClean: () => {
-      console.log("onSendClean")
       sendMessage(
         {} as ChatSendRequestPayload,
         TextSignal.CLEAN,
@@ -489,46 +484,6 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
     return validate
   }
 
-  const handleClickCreateApp = async () => {
-    const validate = await handleVerifyOnSave()
-    if (validate) {
-      try {
-        setIsFullPageLoading(true)
-        const agentInfo = await handleSubmitSave(getValues())
-        if (agentInfo) {
-          const variableKeys = agentInfo.variables.map((v) => v.key)
-          const { appInfo, variableKeyMapInputNodeDisplayName } =
-            buildAppWithAgentSchema(variableKeys)
-          const appInfoResp = await fetchCreateApp(currentTeamInfo.id, {
-            appName: "Untitled app",
-            initScheme: appInfo,
-          })
-          const agentActionInfo = buildActionInfo(
-            agentInfo,
-            variableKeyMapInputNodeDisplayName,
-          )
-          await createAction(
-            currentTeamInfo.id,
-            appInfoResp.data.appId,
-            agentActionInfo,
-          )
-          window.open(
-            `${getILLABuilderURL(window.customDomain)}/${teamIdentifier}/app/${
-              appInfoResp.data.appId
-            }`,
-            "_blank",
-          )
-        }
-      } catch {
-        message.error({
-          content: t("create_fail"),
-        })
-      } finally {
-        setIsFullPageLoading(false)
-      }
-    }
-  }
-
   const handleVerifyOnStart = () => {
     clearErrors()
     if (!getValues("prompt")) {
@@ -604,21 +559,20 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
             <div css={leftPanelCoverContainer}>
               <div css={leftPanelHeaderStyle}>
                 <div css={leftPanelTitleTextStyle} onClick={handleClickBack}>
-                  <PreviousIcon fs="16px" />
+                  <Icon component={PreviousIcon} />
                   <span css={backTextStyle}>{t("editor.ai-agent.title")}</span>
                 </div>
-                <Link
+                <Button
+                  type="link"
                   href="https://docs.illacloud.com/ai-agent"
                   target="__blank"
-                  colorScheme="techPurple"
-                  hoverable={false}
                   css={docTextContainerStyle}
                 >
-                  <span css={docTextStyle}>
-                    <DocsIcon size="16" />
+                  <div css={docTextStyle}>
+                    <Icon component={DocsIcon} />
                     <span>{t("editor.ai-agent.doc")}</span>
-                  </span>
-                </Link>
+                  </div>
+                </Button>
               </div>
               <div css={leftPanelContentContainerStyle}>
                 <Controller
@@ -631,12 +585,8 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                       tips={t("editor.ai-agent.tips.mode")}
                       required
                     >
-                      <RadioGroup
-                        colorScheme={getColor("grayBlue", "02")}
-                        w="100%"
-                        value={field.value}
-                        type="button"
-                        forceEqualWidth={true}
+                      <Segmented
+                        block
                         options={[
                           {
                             value: AI_AGENT_TYPE.CHAT,
@@ -649,7 +599,7 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                         ]}
                         onChange={(value) => {
                           if (isReceiving || isConnecting) {
-                            message.info({
+                            messageApi.info({
                               content: t("editor.ai-agent.message.generating"),
                             })
                             return
@@ -665,6 +615,7 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                           )
                           field.onChange(value)
                         }}
+                        value={field.value}
                       />
                     </AIAgentBlock>
                   )}
@@ -855,6 +806,7 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                     >
                       <Select
                         {...field}
+                        style={{ width: "100%" }}
                         onClick={() => {
                           track(
                             ILLA_MIXPANEL_EVENT_TYPE.CLICK,
@@ -888,7 +840,6 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                           }
                           field.onChange(value)
                         }}
-                        colorScheme={"techPurple"}
                         options={[
                           ...freeModelList.map((model) => {
                             return {
@@ -925,11 +876,7 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                     </AIAgentBlock>
                   )}
                 />
-                <Divider
-                  mt="8px"
-                  text={t("editor.ai-agent.group.information")}
-                  colorScheme="grayBlue"
-                />
+                <Divider>{t("editor.ai-agent.group.information")}</Divider>
                 <Controller
                   name="name"
                   control={control}
@@ -946,10 +893,10 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                       <Input
                         {...field}
                         placeholder={t("editor.ai-agent.placeholder.name")}
-                        colorScheme={"techPurple"}
-                        error={!!errors.name}
+                        status={!!errors.name ? "error" : undefined}
                         maxLength={60}
-                        onChange={(value) => {
+                        onChange={(e) => {
+                          const value = e.target.value
                           field.onChange(value)
                           setInRoomUsers(updateLocalName(value, inRoomUsers))
                         }}
@@ -993,7 +940,7 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                             )
                             const currentTime = performance.now()
                             if (!getValues("prompt")) {
-                              message.error({
+                              messageApi.error({
                                 content: t(
                                   "editor.ai-agent.generate-desc.blank",
                                 ),
@@ -1026,7 +973,7 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                                   parameter2: "failed",
                                 },
                               )
-                              message.error({
+                              messageApi.error({
                                 content: t(
                                   "editor.ai-agent.generate-desc.failed",
                                 ),
@@ -1037,7 +984,13 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                           }}
                         >
                           {generateDescLoading ? (
-                            <AILoading spin={true} size="12px" />
+                            <Icon
+                              component={AILoadingIcon}
+                              spin
+                              style={{
+                                fontSize: "12px",
+                              }}
+                            />
                           ) : (
                             <AIIcon />
                           )}
@@ -1047,14 +1000,12 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                         </div>
                       }
                     >
-                      <TextArea
+                      <Input.TextArea
                         {...field}
-                        minH="120px"
-                        showWordLimit={true}
-                        error={!!errors.description}
+                        status={!!errors.description ? "error" : undefined}
                         maxLength={160}
                         placeholder={t("editor.ai-agent.placeholder.desc")}
-                        colorScheme={"techPurple"}
+                        rows={5}
                       />
                       {errors.description?.message && (
                         <ErrorText errorMessage={errors.description?.message} />
@@ -1092,7 +1043,7 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                               !getValues("name") ||
                               !getValues("description")
                             ) {
-                              message.error({
+                              messageApi.error({
                                 content: t(
                                   "editor.ai-agent.generate-icon.blank",
                                 ),
@@ -1127,7 +1078,7 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                                   parameter2: "failed",
                                 },
                               )
-                              message.error({
+                              messageApi.error({
                                 content: t(
                                   "editor.ai-agent.generate-desc.failed",
                                 ),
@@ -1138,7 +1089,13 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                           }}
                         >
                           {generateIconLoading ? (
-                            <AILoading spin={true} size="12px" />
+                            <Icon
+                              component={AILoadingIcon}
+                              spin
+                              style={{
+                                fontSize: "12px",
+                              }}
+                            />
                           ) : (
                             <AIIcon />
                           )}
@@ -1184,7 +1141,11 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                               <div>
                                 <div css={uploadContainerStyle}>
                                   <div css={uploadContentContainerStyle}>
-                                    <PlusIcon c={getColor("grayBlue", "03")} />
+                                    <Icon
+                                      component={PlusIcon}
+                                      color={getColor("grayBlue", "03")}
+                                    />
+
                                     <div css={uploadTextStyle}>
                                       {t("editor.ai-agent.placeholder.icon")}
                                     </div>
@@ -1216,12 +1177,17 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
             <form onSubmit={handleSubmit(handleSubmitSave)}>
               <div css={buttonContainerStyle}>
                 <Button
-                  flex="1"
+                  block
                   size="large"
-                  type="button"
+                  type="default"
                   loading={isConnecting}
-                  colorScheme="grayBlue"
-                  leftIcon={isRunning ? <ResetIcon /> : <PlayFillIcon />}
+                  icon={
+                    isRunning ? (
+                      <Icon component={ResetIcon} />
+                    ) : (
+                      <Icon component={PlayFillIcon} />
+                    )
+                  }
                   onClick={handleClickStart}
                 >
                   {!isRunning
@@ -1229,13 +1195,12 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                     : t("editor.ai-agent.restart")}
                 </Button>
                 <Button
+                  block
                   id="save-button"
-                  flex="1"
-                  ml="8px"
                   onClick={handleVerifyOnSave}
-                  colorScheme={getColor("grayBlue", "02")}
                   size="large"
                   loading={isSubmitting}
+                  type="primary"
                 >
                   {t("editor.ai-agent.save")}
                 </Button>
@@ -1362,7 +1327,6 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                                 setContributedDialogVisible(true)
                               }
                             }}
-                            onClickCreateApp={handleClickCreateApp}
                           />
                         </MixpanelTrackProvider>
                       </div>
@@ -1570,7 +1534,6 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
             />
           )}
         />
-        {isFullPageLoading && <FullPageLoading hasMask />}
       </ChatContext.Provider>
     </>
   )

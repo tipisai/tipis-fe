@@ -1,3 +1,10 @@
+import Icon from "@ant-design/icons"
+import {
+  ContributeIcon,
+  PlayFillIcon,
+  ResetIcon,
+  ShareIcon,
+} from "@illa-public/icon"
 import IconHotSpot from "@illa-public/icon-hot-spot"
 import { isPremiumModel } from "@illa-public/market-agent"
 import {
@@ -6,6 +13,7 @@ import {
 } from "@illa-public/mixpanel-utils"
 import { AI_AGENT_TYPE, KnowledgeFile } from "@illa-public/public-types"
 import { getCurrentUser } from "@illa-public/user-data"
+import { App, Button, Flex } from "antd"
 import { AnimatePresence, motion } from "framer-motion"
 import {
   ChangeEvent,
@@ -20,14 +28,6 @@ import {
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { v4 } from "uuid"
-import {
-  Button,
-  ContributeIcon,
-  DependencyIcon,
-  PlayFillIcon,
-  ResetIcon,
-  useMessage,
-} from "@illa-design/react"
 import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import AgentBlockInput from "@/assets/agent/agent-block-input.svg?react"
 import GridFillIcon from "@/assets/agent/gridFill.svg?react"
@@ -97,7 +97,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   } = props
 
   const currentUserInfo = useSelector(getCurrentUser)
-  const message = useMessage()
+  const { message: messageAPI } = App.useApp()
 
   const chatRef = useRef<HTMLDivElement>(null)
 
@@ -144,7 +144,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
 
   const handleUploadFile = () => {
     if (knowledgeFiles.length >= MAX_MESSAGE_FILES_LENGTH) {
-      message.warning({
+      messageAPI.warning({
         content: t("dashboard.message.support_for_up_to_10"),
       })
       return
@@ -157,7 +157,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     inputRef.current && (inputRef.current.value = "")
     if (!inputFiles.length) return
     if (inputFiles.length + knowledgeFiles.length > MAX_MESSAGE_FILES_LENGTH) {
-      message.warning({
+      messageAPI.warning({
         content: t("dashboard.message.support_for_up_to_10"),
       })
       return
@@ -168,7 +168,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       for (let file of inputFiles) {
         if (!file) break
         if (file.size > MAX_FILE_SIZE) {
-          message.warning({
+          messageAPI.warning({
             content: t("dashboard.message.please_use_a_file_wi"),
           })
           return
@@ -188,7 +188,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
         setKnowledgeFiles(currentFiles)
         const value = await handleParseFile(file, true)
         if (value === "") {
-          message.warning({
+          messageAPI.warning({
             content: t("dashboard.message.no_usable_text_conte"),
           })
           handleDeleteFile(fileName)
@@ -216,7 +216,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
         setKnowledgeFiles(currentFiles)
       }
     } catch (e) {
-      message.error({
+      messageAPI.error({
         content: t("dashboard.message.bad_file"),
       })
     } finally {
@@ -294,63 +294,58 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
               ? t("editor.ai-agent.title-preview.chat")
               : t("editor.ai-agent.title-preview.text-generation")}
           </div>
-          {editState === "EDIT" && showShareDialog && (
-            <Button
-              disabled={!hasCreated}
-              ml="8px"
-              colorScheme="grayBlue"
-              leftIcon={<DependencyIcon />}
-              onClick={() => {
-                track?.(
-                  ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-                  {
-                    element: "invite_entry",
-                  },
-                  "both",
-                )
-                onShowShareDialog?.()
-              }}
-            >
-              {t("share")}
-            </Button>
-          )}
-          {editState === "EDIT" && showContributeDialog && (
-            <Button
-              disabled={!hasCreated}
-              ml="8px"
-              colorScheme="grayBlue"
-              leftIcon={<ContributeIcon />}
-              onClick={() => {
-                onShowContributeDialog?.()
-              }}
-            >
-              {t("editor.ai-agent.contribute")}
-            </Button>
-          )}
-          {editState === "EDIT" && (
-            <Button
-              ml="8px"
-              colorScheme="grayBlue"
-              leftIcon={<GridFillIcon />}
-              onClick={() => {
-                onClickCreateApp?.()
-              }}
-            >
-              {t("marketplace.agent.create_app")}
-            </Button>
-          )}
-          {editState === "RUN" && !showEditPanel && (
-            <Button
-              colorScheme="grayBlue"
-              loading={isConnecting}
-              leftIcon={isRunning ? <ResetIcon /> : <PlayFillIcon />}
-              onClick={onClickStartRunning}
-            >
-              {!isRunning
-                ? t("editor.ai-agent.start")
-                : t("editor.ai-agent.restart")}
-            </Button>
-          )}
+          <Flex gap="small">
+            {editState === "EDIT" && showShareDialog && (
+              <Button
+                disabled={!hasCreated}
+                icon={<Icon component={ShareIcon} />}
+                onClick={() => {
+                  track?.(
+                    ILLA_MIXPANEL_EVENT_TYPE.CLICK,
+                    {
+                      element: "invite_entry",
+                    },
+                    "both",
+                  )
+                  onShowShareDialog?.()
+                }}
+              >
+                {t("share")}
+              </Button>
+            )}
+            {editState === "EDIT" && showContributeDialog && (
+              <Button
+                disabled={!hasCreated}
+                icon={<Icon component={ContributeIcon} />}
+                onClick={() => {
+                  onShowContributeDialog?.()
+                }}
+              >
+                {t("editor.ai-agent.contribute")}
+              </Button>
+            )}
+            {editState === "EDIT" && (
+              <Button
+                icon={<GridFillIcon />}
+                onClick={() => {
+                  onClickCreateApp?.()
+                }}
+              >
+                {t("marketplace.agent.create_app")}
+              </Button>
+            )}
+            {editState === "RUN" && !showEditPanel && (
+              <Button
+                loading={isConnecting}
+                icon={<Icon component={isRunning ? ResetIcon : PlayFillIcon} />}
+                onClick={onClickStartRunning}
+              >
+                {!isRunning
+                  ? t("editor.ai-agent.start")
+                  : t("editor.ai-agent.restart")}
+              </Button>
+            )}
+          </Flex>
         </div>
       )}
       <div ref={chatRef} css={chatContainerStyle}>
@@ -457,8 +452,6 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
               )}
               <Button
                 disabled={isReceiving || blockInput}
-                ml="8px"
-                colorScheme="techPurple"
                 onClick={() => {
                   sendAndClearMessage()
                 }}
@@ -510,7 +503,6 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
                 )}
                 <Button
                   disabled={isReceiving || blockInput}
-                  colorScheme="techPurple"
                   onClick={() => {
                     sendAndClearMessage()
                   }}

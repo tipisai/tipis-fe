@@ -1,5 +1,5 @@
 import { css } from "@emotion/react"
-import { getColor } from "@illa-design/react"
+import { getColor } from "@illa-public/color-scheme"
 
 export const markdownMessageStyle = css`
   max-width: 100%;
@@ -22,7 +22,7 @@ export const hoverCopyStyle = (isOwnMessage?: boolean) => css`
   background: ${getColor("white", "01")};
   cursor: pointer;
   color: ${getColor("grayBlue", "02")};
-  transform: translate(${isOwnMessage ? "-16px" : "16px"}, 12px);
+  transform: translate(${isOwnMessage ? "-8px" : "8px"}, 12px);
 `
 
 export const cellStyle = css`

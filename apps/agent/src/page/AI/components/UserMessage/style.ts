@@ -1,6 +1,6 @@
 import { css } from "@emotion/react"
+import { getColor } from "@illa-public/color-scheme"
 import { applyMobileStyle } from "@illa-public/utils"
-import { getColor } from "@illa-design/react"
 
 export const agentMessageContainer = css`
   padding: 24px 40px 8px 88px;

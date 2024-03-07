@@ -8,10 +8,10 @@ import {
 } from "@illa-public/upgrade-modal"
 import { getCurrentTeamInfo, getCurrentUser } from "@illa-public/user-data"
 import { getAuthToken } from "@illa-public/utils"
+import { App } from "antd"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
-import { useMessage } from "@illa-design/react"
 import { getTextMessagePayload } from "@/api/ws"
 import { Callback, ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { TextSignal, TextTarget } from "@/api/ws/textSignal"
@@ -63,7 +63,7 @@ export function useAgentConnect(useAgentProps: UseAgentProps) {
   const currentTeamInfo = useSelector(getCurrentTeamInfo)
   const currentUserInfo = useSelector(getCurrentUser)
 
-  const message = useMessage()
+  const { message: messageAPI } = App.useApp()
   const collaModal = useCollarModal()
   const { t } = useTranslation()
 
@@ -263,7 +263,7 @@ export function useAgentConnect(useAgentProps: UseAgentProps) {
                 case 1:
                   onReceiving(false)
                   onRunning(false)
-                  message.error({
+                  messageAPI.error({
                     content: t("editor.ai-agent.message.start-failed"),
                   })
                   break
@@ -271,7 +271,7 @@ export function useAgentConnect(useAgentProps: UseAgentProps) {
                   onReceiving(false)
                   break
                 case 16:
-                  message.error({
+                  messageAPI.error({
                     content: t("editor.ai-agent.message.token"),
                   })
                   break
@@ -301,7 +301,7 @@ export function useAgentConnect(useAgentProps: UseAgentProps) {
           "agent_run",
         )
         if (res) return
-        message.error({
+        messageAPI.error({
           content: t("editor.ai-agent.message.start-failed"),
         })
         return
@@ -321,7 +321,7 @@ export function useAgentConnect(useAgentProps: UseAgentProps) {
       onSendPrompt,
       onUpdateChatMessage,
       onUpdateGenerationMessage,
-      message,
+      messageAPI,
       t,
       collaModal,
     ],

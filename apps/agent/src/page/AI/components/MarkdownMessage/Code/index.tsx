@@ -1,10 +1,12 @@
+import Icon from "@ant-design/icons"
+import { CopyIcon } from "@illa-public/icon"
 import { copyToClipboard } from "@illa-public/utils"
+import { App, Typography } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { CodeProps } from "react-markdown/lib/ast-to-react"
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism"
-import { CopyIcon, Text, useMessage } from "@illa-design/react"
 import { getTextValue } from "../utils"
 import {
   codeBlockContainerStyle,
@@ -15,50 +17,46 @@ import {
 
 const Code: FC<CodeProps> = (props) => {
   const { t } = useTranslation()
-  const message = useMessage()
+  const { message: messageAPI } = App.useApp()
 
-  return (
-    <>
-      {!!props.inline ? (
-        <Text css={inlineCodeStyle} bg="#FAFAFA" colorScheme="grayBlue">
-          {getTextValue(props.children)}
-        </Text>
-      ) : (
-        <div css={codeBlockContainerStyle}>
-          <div css={codeBlockHeaderStyle}>
-            <span>
-              {/language-(\w+)/.exec(props.className || "")?.[1] ?? "markdown"}
-            </span>
-            <div
-              css={copyStyle}
-              onClick={() => {
-                copyToClipboard(props.children?.[0])
-                message.success({
-                  content: t("copied"),
-                })
-              }}
-            >
-              <CopyIcon size="16px" />
-              <span>{t("editor.ai-agent.copy_code")}</span>
-            </div>
-          </div>
-          <SyntaxHighlighter
-            {...props}
-            CodeTag="div"
-            PreTag="div"
-            customStyle={{
-              background: "transparent",
-            }}
-            language={
-              /language-(\w+)/.exec(props.className || "")?.[1] ?? "markdown"
-            }
-            style={oneLight}
-          >
-            {getTextValue(props.children)}
-          </SyntaxHighlighter>
+  return !!props.inline ? (
+    <Typography.Text css={inlineCodeStyle}>
+      {getTextValue(props.children)}
+    </Typography.Text>
+  ) : (
+    <div css={codeBlockContainerStyle}>
+      <div css={codeBlockHeaderStyle}>
+        <span>
+          {/language-(\w+)/.exec(props.className || "")?.[1] ?? "markdown"}
+        </span>
+        <div
+          css={copyStyle}
+          onClick={() => {
+            copyToClipboard(props.children?.[0])
+            messageAPI.success({
+              content: t("copied"),
+            })
+          }}
+        >
+          <Icon component={CopyIcon} size={16} />
+          <span>{t("editor.ai-agent.copy_code")}</span>
         </div>
-      )}
-    </>
+      </div>
+      <SyntaxHighlighter
+        {...props}
+        CodeTag="div"
+        PreTag="div"
+        customStyle={{
+          background: "transparent",
+        }}
+        language={
+          /language-(\w+)/.exec(props.className || "")?.[1] ?? "markdown"
+        }
+        style={oneLight}
+      >
+        {getTextValue(props.children)}
+      </SyntaxHighlighter>
+    </div>
   )
 }
 

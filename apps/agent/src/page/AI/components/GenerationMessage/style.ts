@@ -1,6 +1,6 @@
 import { css } from "@emotion/react"
+import { getColor } from "@illa-public/color-scheme"
 import { applyMobileStyle } from "@illa-public/utils"
-import { getColor } from "@illa-design/react"
 
 export const generationContainerStyle = css`
   position: relative;

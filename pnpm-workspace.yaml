@@ -1,5 +1,7 @@
 packages:
-  - 'apps/*'
-  - 'packages/illa-design/packages/*'
-  - 'packages/illa-public-component/*'
-  - 'packages/*'
+  - "apps/*"
+  - "packages/devConfigs/*"
+  - "packages/utils/*"
+  - "packages/components/*"
+  - "packages/others/*"
+  - "packages/illa-design/*"

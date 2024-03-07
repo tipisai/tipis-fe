@@ -1,6 +1,6 @@
 import { css } from "@emotion/react"
+import { getColor } from "@illa-public/color-scheme"
 import { applyMobileStyle } from "@illa-public/utils"
-import { getColor } from "@illa-design/react"
 
 export const aiAgentContainerStyle = css`
   display: flex;
@@ -150,6 +150,7 @@ export const agentMenuContainerStyle = css`
   display: inline-flex;
   flex-direction: row;
   margin-top: 24px;
+  gap: 8px;
 `
 
 export const buttonContainerStyle = css`

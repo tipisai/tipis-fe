@@ -1,8 +1,10 @@
+import Icon from "@ant-design/icons"
 import { Avatar } from "@illa-public/avatar"
+import { CopyIcon } from "@illa-public/icon"
 import { copyToClipboard } from "@illa-public/utils"
+import { App } from "antd"
 import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
-import { CopyIcon, useMessage } from "@illa-design/react"
 import { ChatContext } from "@/page/AI/components/ChatContext"
 import MarkdownMessage from "@/page/AI/components/MarkdownMessage"
 import { SenderType } from "@/page/AI/components/PreviewChat/interface"
@@ -19,7 +21,7 @@ import {
 export const AIAgentMessage: FC<AIAgentMessageProps> = (props) => {
   const { message, isMobile, canShowLongCopy } = props
   const chatContext = useContext(ChatContext)
-  const showMessage = useMessage()
+  const { message: messageAPI } = App.useApp()
   const { t } = useTranslation()
 
   const senderNickname =
@@ -57,12 +59,12 @@ export const AIAgentMessage: FC<AIAgentMessageProps> = (props) => {
             css={hoverCopyStyle}
             onClick={() => {
               copyToClipboard(message.message ?? "")
-              showMessage.success({
+              messageAPI.success({
                 content: t("copied"),
               })
             }}
           >
-            <CopyIcon size="14px" />
+            <Icon component={CopyIcon} size={14} />
           </span>
         )}
         <div css={senderNicknameStyle}>{senderNickname}</div>

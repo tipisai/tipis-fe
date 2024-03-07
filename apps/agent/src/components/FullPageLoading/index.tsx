@@ -1,12 +1,17 @@
+import { LoadingIcon } from "@illa-public/icon"
+import { Spin } from "antd"
 import { FC } from "react"
-import { Loading } from "@illa-design/react"
-import { fullPageLoadingWrapperStyle, maskStyle } from "./style"
+import {
+  fullPageLoadingWrapperStyle,
+  maskStyle,
+  rotateAnimation,
+} from "./style"
 
 export const FullPageLoading: FC<{ hasMask?: boolean }> = (props) => {
   return (
     <div css={fullPageLoadingWrapperStyle}>
       {props.hasMask && <div css={maskStyle} />}
-      <Loading colorScheme="techPurple" />
+      <Spin indicator={<LoadingIcon css={rotateAnimation} />} spinning />
     </div>
   )
 }

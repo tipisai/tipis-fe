@@ -1,7 +1,10 @@
+import Icon from "@ant-design/icons"
+import { getColor } from "@illa-public/color-scheme"
+import { AttachmentIcon, LoadingIcon } from "@illa-public/icon"
 import IconHotSpot from "@illa-public/icon-hot-spot"
+import { Tooltip } from "antd"
 import { forwardRef } from "react"
 import { useTranslation } from "react-i18next"
-import { AttachmentIcon, Loading, Trigger, getColor } from "@illa-design/react"
 import { ACCEPT } from "../../KnowledgeUpload/contants"
 import { sendFileContainerStyle, sendFileIconStyle } from "./style"
 
@@ -15,17 +18,22 @@ const UploadButton = forwardRef<HTMLInputElement, UploadButton>(
   ({ handleClick, handleFileChange, parseKnowledgeLoading }, ref) => {
     const { t } = useTranslation()
     return (
-      <Trigger
-        content={t("dashboard.message.support_for_uploadin")}
-        position="top"
-        maxW="300px"
+      <Tooltip
+        title={t("dashboard.message.support_for_uploadin")}
+        placement="top"
       >
         <div css={sendFileContainerStyle}>
           <IconHotSpot onClick={handleClick} css={sendFileIconStyle}>
             {parseKnowledgeLoading ? (
-              <Loading colorScheme="grayBlue" />
+              <Icon
+                component={LoadingIcon}
+                color={getColor("grayBlue", "02")}
+              />
             ) : (
-              <AttachmentIcon size="16px" color={getColor("grayBlue", "02")} />
+              <Icon
+                component={AttachmentIcon}
+                color={getColor("grayBlue", "02")}
+              />
             )}
           </IconHotSpot>
           <input
@@ -37,7 +45,7 @@ const UploadButton = forwardRef<HTMLInputElement, UploadButton>(
             onChange={handleFileChange}
           />
         </div>
-      </Trigger>
+      </Tooltip>
     )
   },
 )

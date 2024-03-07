@@ -1,5 +1,5 @@
 import { css } from "@emotion/react"
-import { getColor } from "@illa-design/react"
+import { getColor } from "@illa-public/color-scheme"
 
 export const inlineCodeStyle = css`
   display: inline-block;

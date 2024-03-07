@@ -1,11 +1,12 @@
+import { LoadingIcon } from "@illa-public/icon"
+import { Spin } from "antd"
 import { FC, memo } from "react"
-import { Loading } from "@illa-design/react"
-import { fullSectionStyle } from "./style"
+import { fullSectionStyle, rotateAnimation } from "./style"
 
 const FullSectionLoading: FC = memo(() => {
   return (
     <div css={fullSectionStyle}>
-      <Loading colorScheme="techPurple" />
+      <Spin indicator={<LoadingIcon css={rotateAnimation} />} spinning />
     </div>
   )
 })

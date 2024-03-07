@@ -1,8 +1,6 @@
 import { COPY_STATUS, copyToClipboard as copy } from "@illa-public/utils"
-import { createMessage } from "@illa-design/react"
 import i18n from "@/i18n"
-
-const message = createMessage()
+import { message } from "./antdStore"
 
 export const copyToClipboard = (text: string) => {
   const flag = copy(text)

@@ -1,17 +1,16 @@
+import Icon from "@ant-design/icons"
+import { getColor } from "@illa-public/color-scheme"
 import { getFileIconByContentType } from "@illa-public/icon"
-import { GCS_OBJECT_TYPE, KnowledgeFile } from "@illa-public/public-types"
-import { ChangeEvent, FC, useRef } from "react"
-import { useTranslation } from "react-i18next"
 import {
-  Button,
   DeleteIcon,
-  Loading,
+  LoadingIcon,
   SuccessIcon,
   UploadIcon,
-  getColor,
-  useMessage,
-  useModal,
-} from "@illa-design/react"
+} from "@illa-public/icon"
+import { GCS_OBJECT_TYPE, KnowledgeFile } from "@illa-public/public-types"
+import { App, Button } from "antd"
+import { ChangeEvent, FC, useRef } from "react"
+import { useTranslation } from "react-i18next"
 import { handleParseFile } from "@/utils/file"
 import { ACCEPT, MAX_FILE_SIZE, MAX_MESSAGE_FILES_LENGTH } from "./contants"
 import {
@@ -37,15 +36,15 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
 }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const { t } = useTranslation()
-  const modal = useModal()
-  const message = useMessage()
+  const { message: messageAPI, modal } = App.useApp()
+
   const handleOnChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     const file = files && files[0]
     if (!file) return
     try {
       if (file.size > MAX_FILE_SIZE) {
-        message.warning({
+        messageAPI.warning({
           content: t("dashboard.message.please_use_a_file_wi"),
         })
         return
@@ -57,7 +56,7 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
       addFile(fileItem)
       const value = await handleParseFile(file)
       if (value === "") {
-        message.warning({
+        messageAPI.warning({
           content: t("dashboard.message.no_usable_text_conte"),
         })
         removeFile(file.name)
@@ -70,7 +69,7 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
         addFile(fileItem, true)
       }
     } catch (e) {
-      message.error({
+      messageAPI.error({
         content: t("dashboard.message.no_usable_text_conte"),
       })
     }
@@ -78,22 +77,18 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
   }
 
   const handleDelete = (name: string) => {
-    modal.show({
-      z: 1020,
+    modal.confirm({
       title: t("drive.modal.delete_going_on_task.title"),
       content: t("drive.modal.delete_going_on_task.description"),
       okText: t("drive.modal.delete_going_on_task.delete"),
       cancelText: t("drive.modal.delete_going_on_task.cancel"),
-      okButtonProps: {
-        colorScheme: "red",
-      },
       onOk: () => removeFile(name),
     })
   }
 
   const handleUploadFile = () => {
     if (Array.isArray(values) && values.length >= MAX_MESSAGE_FILES_LENGTH) {
-      message.warning({
+      messageAPI.warning({
         content: t("dashboard.message.support_for_up_to_10"),
       })
       return
@@ -104,10 +99,9 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
     <>
       <div>
         <Button
-          colorScheme="grayBlue"
-          fullWidth
-          variant="dashed"
-          leftIcon={<UploadIcon />}
+          block
+          type="dashed"
+          icon={<Icon component={UploadIcon} />}
           onClick={handleUploadFile}
         >
           Upload
@@ -134,15 +128,22 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
               </div>
               <div css={opeationStyle}>
                 {fileInfo.value ? (
-                  <SuccessIcon color={getColor("green", "03")} />
+                  <Icon
+                    component={SuccessIcon}
+                    color={getColor("green", "03")}
+                  />
                 ) : (
-                  <Loading colorScheme="grayBlue" />
+                  <Icon
+                    component={LoadingIcon}
+                    color={getColor("grayBlue", "02")}
+                    spin
+                  />
                 )}
                 <span
                   css={iconHotSpotStyle}
                   onClick={() => handleDelete(fileInfo.name)}
                 >
-                  <DeleteIcon />
+                  <Icon component={DeleteIcon} />
                 </span>
               </div>
             </div>

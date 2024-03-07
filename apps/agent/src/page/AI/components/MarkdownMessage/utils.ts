@@ -1,4 +1,4 @@
-import { isString } from "@illa-design/react"
+import { isString } from "lodash-es"
 
 const markCodeBlocks = (markdownText: string) => {
   const codeBlockRegex = /```[\s\S]*?```/g

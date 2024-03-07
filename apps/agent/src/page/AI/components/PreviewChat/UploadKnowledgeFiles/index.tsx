@@ -1,7 +1,7 @@
 import { getFileIconByContentType } from "@illa-public/icon"
 import { GCS_OBJECT_TYPE, KnowledgeFile } from "@illa-public/public-types"
+import { Tag } from "antd"
 import { FC } from "react"
-import { Tag, getColor } from "@illa-design/react"
 import { fileItemContainerStyle, fileTypeIconStyle } from "./style"
 
 interface UploadKnowledgeFilesPops {
@@ -20,8 +20,8 @@ const UploadKnowledgeFiles: FC<UploadKnowledgeFilesPops> = ({
           key={item.name}
           closable
           onClose={() => handleDeleteFile(item.name)}
-          maxW="300px"
-          bg={getColor("grayBlue", "09")}
+          // maxW="300px"
+          // bg={getColor("grayBlue", "09")}
           icon={getFileIconByContentType(
             GCS_OBJECT_TYPE.FILE,
             item.type,

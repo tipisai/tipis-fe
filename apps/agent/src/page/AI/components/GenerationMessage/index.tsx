@@ -1,8 +1,10 @@
+import Icon from "@ant-design/icons"
 import { Avatar } from "@illa-public/avatar"
+import { CopyIcon } from "@illa-public/icon"
 import { copyToClipboard } from "@illa-public/utils"
+import { App } from "antd"
 import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
-import { CopyIcon, useMessage } from "@illa-design/react"
 import { ChatContext } from "@/page/AI/components/ChatContext"
 import { GenerationMessageProps } from "@/page/AI/components/GenerationMessage/interface"
 import {
@@ -18,7 +20,7 @@ import { SenderType } from "@/page/AI/components/PreviewChat/interface"
 export const GenerationMessage: FC<GenerationMessageProps> = (props) => {
   const { message } = props
 
-  const m = useMessage()
+  const { message: m } = App.useApp()
   const { t } = useTranslation()
 
   const chatContext = useContext(ChatContext)
@@ -60,7 +62,7 @@ export const GenerationMessage: FC<GenerationMessageProps> = (props) => {
           })
         }}
       >
-        <CopyIcon fs="16px" />
+        <Icon component={CopyIcon} size={16} />
       </div>
     </div>
   )

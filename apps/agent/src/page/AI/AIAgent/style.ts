@@ -1,6 +1,6 @@
 import { css } from "@emotion/react"
+import { getColor } from "@illa-public/color-scheme"
 import { applyMobileStyle } from "@illa-public/utils"
-import { getColor } from "@illa-design/react"
 
 export const aiAgentContainerStyle = css`
   display: flex;
@@ -12,7 +12,6 @@ export const aiAgentContainerStyle = css`
 export const backTextStyle = css`
   color: ${getColor("grayBlue", "02")};
   font-size: 14px;
-  margin-left: 8px;
   font-style: normal;
   font-weight: 500;
   line-height: 24px;
@@ -61,6 +60,7 @@ export const buttonContainerStyle = css`
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: 8px;
 `
 
 export const leftPanelTitleTextStyle = css`
@@ -70,6 +70,9 @@ export const leftPanelTitleTextStyle = css`
   font-style: normal;
   font-weight: 600;
   line-height: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `
 
 export const rightPanelContainerStyle = css`

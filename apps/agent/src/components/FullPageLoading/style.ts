@@ -1,4 +1,4 @@
-import { css } from "@emotion/react"
+import { css, keyframes } from "@emotion/react"
 
 export const fullPageLoadingWrapperStyle = css`
   width: 100%;
@@ -21,4 +21,17 @@ export const maskStyle = css`
   right: 0;
   opacity: 0.7;
   background-color: white;
+`
+
+export const rotateKeyframe = keyframes`
+  0% {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotateZ(360deg)
+  }
+`
+
+export const rotateAnimation = css`
+  animation: 1s linear infinite ${rotateKeyframe};
 `

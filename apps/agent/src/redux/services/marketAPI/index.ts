@@ -2,7 +2,7 @@ import {
   HTTP_REQUEST_PUBLIC_BASE_URL,
   MARKETPLACE_AUTH_PRODUCT_REQUEST_PREFIX,
 } from "@illa-public/illa-net"
-import { MarketAIAgent } from "@illa-public/market-agent"
+import { MarketAIAgent } from "@illa-public/public-types"
 import { getAuthToken } from "@illa-public/utils"
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 

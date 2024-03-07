@@ -1,8 +1,18 @@
+import Icon from "@ant-design/icons"
 import { Avatar } from "@illa-public/avatar"
 import { CodeEditor } from "@illa-public/code-editor"
+import {
+  ForkIcon,
+  LoadingIcon,
+  PlayFillIcon,
+  PreviousIcon,
+  ResetIcon,
+  ShareIcon,
+  StarFillIcon,
+  StarOutlineIcon,
+} from "@illa-public/icon"
 import { ShareAgentMobile } from "@illa-public/invite-modal"
 import {
-  MarketAIAgent,
   getAIAgentMarketplaceInfo,
   getLLM,
   isPremiumModel,
@@ -15,6 +25,7 @@ import {
 import {
   AI_AGENT_TYPE,
   Agent,
+  MarketAIAgent,
   MemberInfo,
   USER_ROLE,
   USER_STATUS,
@@ -42,6 +53,7 @@ import {
   getILLABuilderURL,
   getILLACloudURL,
 } from "@illa-public/utils"
+import { App, Button, Segmented } from "antd"
 import { motion } from "framer-motion"
 import { FC, useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
@@ -50,20 +62,6 @@ import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams, useSearchParams } from "react-router-dom"
 import { v4 } from "uuid"
-import {
-  Button,
-  DependencyIcon,
-  ForkIcon,
-  LoadingIcon,
-  PlayFillIcon,
-  PreviousIcon,
-  RadioGroup,
-  ResetIcon,
-  StarFillIcon,
-  StarOutlineIcon,
-  getColor,
-  useMessage,
-} from "@illa-design/react"
 import { TextSignal } from "@/api/ws/textSignal"
 import AIAgentBlock from "@/page/AI/components/AIAgentBlock"
 import { PreviewChat } from "@/page/AI/components/PreviewChat"
@@ -129,7 +127,7 @@ export const AIAgentRunMobile: FC<IAIAgentRunProps> = (props) => {
     control,
   })
 
-  const message = useMessage()
+  const { message: messageAPI } = App.useApp()
   const upgradeModal = useUpgradeModal()
 
   // page state
@@ -381,13 +379,9 @@ export const AIAgentRunMobile: FC<IAIAgentRunProps> = (props) => {
               title={t("editor.ai-agent.label.mode")}
               tips={t("editor.ai-agent.tips.mode")}
             >
-              <RadioGroup
+              <Segmented
                 value={field.value}
-                colorScheme={getColor("grayBlue", "02")}
-                type="button"
-                w="100%"
-                disp="flex"
-                forceEqualWidth={true}
+                block
                 options={[
                   {
                     value: AI_AGENT_TYPE.CHAT,
@@ -400,7 +394,7 @@ export const AIAgentRunMobile: FC<IAIAgentRunProps> = (props) => {
                 ]}
                 onChange={(value) => {
                   if (isReceiving || isConnecting) {
-                    message.info({
+                    messageAPI.info({
                       content: t("editor.ai-agent.message.generating"),
                     })
                     return
@@ -517,13 +511,10 @@ export const AIAgentRunMobile: FC<IAIAgentRunProps> = (props) => {
       >
         <div css={buttonContainerStyle}>
           <Button
-            flex="1"
             disabled={!isValid}
             size="large"
             loading={isConnecting}
-            ml="8px"
-            colorScheme={getColor("grayBlue", "02")}
-            leftIcon={isRunning ? <ResetIcon /> : <PlayFillIcon />}
+            icon={isRunning ? <ResetIcon /> : <PlayFillIcon />}
           >
             {!isRunning
               ? t("editor.ai-agent.start")
@@ -644,7 +635,7 @@ export const AIAgentRunMobile: FC<IAIAgentRunProps> = (props) => {
                         return (location.href = cloudUrl)
                       }}
                     >
-                      <PreviousIcon fs="24px" />
+                      <Icon component={PreviousIcon} size={24} />
                     </div>
                     <div
                       style={{
@@ -675,11 +666,11 @@ export const AIAgentRunMobile: FC<IAIAgentRunProps> = (props) => {
                                 teamID: currentTeamInfo.id,
                                 aiAgentID: agent.aiAgentID,
                               }).unwrap()
-                              message.success({
+                              messageAPI.success({
                                 content: t("dashboard.message.mobile-fork-suc"),
                               })
                             } catch (e) {
-                              message.error({
+                              messageAPI.error({
                                 content: t("dashboard.message.fork-failed"),
                               })
                             } finally {
@@ -688,9 +679,9 @@ export const AIAgentRunMobile: FC<IAIAgentRunProps> = (props) => {
                           }}
                         >
                           {forkLoading ? (
-                            <LoadingIcon spin={true} fs="24px" />
+                            <Icon component={LoadingIcon} size={24} spin />
                           ) : (
-                            <ForkIcon fs="24px" />
+                            <Icon component={ForkIcon} size={24} />
                           )}
                         </div>
                       )}
@@ -720,16 +711,20 @@ export const AIAgentRunMobile: FC<IAIAgentRunProps> = (props) => {
                             }
                           } catch (e) {
                             setStarState(currentState)
-                            message.error({
+                            messageAPI.error({
                               content: t("dashboard.message.star-failed"),
                             })
                           }
                         }}
                       >
                         {starState ? (
-                          <StarFillIcon c="#FFBB38" fs="24px" />
+                          <Icon
+                            component={StarFillIcon}
+                            size={24}
+                            color="#FFBB38"
+                          />
                         ) : (
-                          <StarOutlineIcon fs="24px" />
+                          <Icon component={StarOutlineIcon} size={24} />
                         )}
                       </div>
                     )}
@@ -771,7 +766,7 @@ export const AIAgentRunMobile: FC<IAIAgentRunProps> = (props) => {
                           )
                         }}
                       >
-                        <DependencyIcon fs="24px" />
+                        <Icon component={ShareIcon} size={24} />
                       </div>
                     )}
                   </div>
@@ -843,7 +838,7 @@ export const AIAgentRunMobile: FC<IAIAgentRunProps> = (props) => {
                     css={tabContainerStyle}
                     onClick={() => {
                       if (!isRunning || isDirty) {
-                        message.info({
+                        messageAPI.info({
                           content: t("editor.ai-agent.message.click-start"),
                         })
                         return

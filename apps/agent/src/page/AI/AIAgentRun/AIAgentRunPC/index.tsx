@@ -1,9 +1,19 @@
+import Icon from "@ant-design/icons"
 import { Avatar } from "@illa-public/avatar"
 import { CodeEditor } from "@illa-public/code-editor"
+import {
+  CloseIcon,
+  ForkIcon,
+  PlayFillIcon,
+  PreviousIcon,
+  ResetIcon,
+  ShareIcon,
+  StarFillIcon,
+  StarOutlineIcon,
+} from "@illa-public/icon"
 import IconHotSpot from "@illa-public/icon-hot-spot"
 import { ShareAgentPC } from "@illa-public/invite-modal"
 import {
-  MarketAIAgent,
   getAIAgentMarketplaceInfo,
   getLLM,
   isPremiumModel,
@@ -16,6 +26,7 @@ import {
 import {
   AI_AGENT_TYPE,
   Agent,
+  MarketAIAgent,
   MemberInfo,
   USER_ROLE,
   USER_STATUS,
@@ -45,33 +56,16 @@ import {
   getILLABuilderURL,
   getILLACloudURL,
 } from "@illa-public/utils"
+import { App, Button, Segmented } from "antd"
 import { AnimatePresence, motion } from "framer-motion"
-import { FC, useEffect, useRef, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { Controller, useForm, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { v4 } from "uuid"
-import {
-  Button,
-  CloseIcon,
-  DependencyIcon,
-  ForkIcon,
-  PlayFillIcon,
-  PreviousIcon,
-  RadioGroup,
-  ResetIcon,
-  StarFillIcon,
-  StarOutlineIcon,
-  getColor,
-  useMessage,
-} from "@illa-design/react"
-import { createAction } from "@/api/actions"
 import { TextSignal } from "@/api/ws/textSignal"
-import GridFillIcon from "@/assets/agent/gridFill.svg?react"
-import { FullPageLoading } from "@/components/FullPageLoading"
-import { buildActionInfo, buildAppWithAgentSchema } from "@/config/AppWithAgent"
 import AIAgentBlock from "@/page/AI/components/AIAgentBlock"
 import { PreviewChat } from "@/page/AI/components/PreviewChat"
 import {
@@ -84,7 +78,6 @@ import {
   useStarAIAgentMutation,
   useUnstarAIAgentMutation,
 } from "@/redux/services/marketAPI"
-import { fetchCreateApp } from "@/services/apps"
 import { copyToClipboard } from "@/utils/copyToClipboard"
 import { track } from "@/utils/mixpanelHelper"
 import { ChatContext } from "../../components/ChatContext"
@@ -129,7 +122,6 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
     mode: "onSubmit",
     defaultValues: agent,
   })
-  const formRef = useRef<HTMLFormElement>(null)
 
   const { isDirty, isValid } = useFormState({
     control,
@@ -138,7 +130,7 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!!
   const currentUserInfo = useSelector(getCurrentUser)
 
-  const message = useMessage()
+  const { message: messageAPI } = App.useApp()
 
   // page state
   const [isRunning, setIsRunning] = useState(false)
@@ -170,7 +162,6 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
   )
 
   // ui state
-  const [isFullPageLoading, setIsFullPageLoading] = useState(false)
   const canShowInviteButton = showShareAgentModal(
     currentTeamInfo,
     agent.teamID === currentTeamInfo.id
@@ -450,8 +441,7 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
         <div css={agentMenuContainerStyle}>
           {canShowInviteButton && (
             <Button
-              colorScheme="grayBlue"
-              leftIcon={<DependencyIcon />}
+              icon={<Icon component={ShareIcon} />}
               onClick={() => {
                 track(
                   ILLA_MIXPANEL_EVENT_TYPE.CLICK,
@@ -492,8 +482,6 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
           )}
           {field.value && (
             <Button
-              ml="8px"
-              colorScheme="grayBlue"
               onClick={async () => {
                 setStarLoading(true)
                 track(
@@ -516,7 +504,7 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
                   }
                   setStarState(!starState)
                 } catch (e) {
-                  message.error({
+                  messageAPI.error({
                     content: t("dashboard.message.star-failed"),
                   })
                 } finally {
@@ -524,8 +512,12 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
                 }
               }}
               loading={starLoading}
-              leftIcon={
-                starState ? <StarFillIcon c="#FFBB38" /> : <StarOutlineIcon />
+              icon={
+                starState ? (
+                  <Icon component={StarFillIcon} color="#FFBB38" />
+                ) : (
+                  <Icon component={StarOutlineIcon} color="#FFBB38" />
+                )
               }
             >
               <span>{t("marketplace.star")}</span>
@@ -540,10 +532,8 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
           ) &&
             field.value && (
               <Button
-                ml="8px"
-                colorScheme="grayBlue"
                 loading={forkLoading}
-                leftIcon={<ForkIcon />}
+                icon={<ForkIcon />}
                 onClick={async () => {
                   track(
                     ILLA_MIXPANEL_EVENT_TYPE.CLICK,
@@ -563,7 +553,7 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
                       `/${currentTeamInfo.identifier}/ai-agent/${newAgent.aiAgentID}`,
                     )
                   } catch (e) {
-                    message.error({
+                    messageAPI.error({
                       content: t("dashboard.message.fork-failed"),
                     })
                   } finally {
@@ -582,62 +572,6 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
                 )}
               </Button>
             )}
-          {canManage(
-            currentTeamInfo.myRole,
-            ATTRIBUTE_GROUP.APP,
-            getPlanUtils(currentTeamInfo),
-            ACTION_MANAGE.CREATE_APP,
-          ) && (
-            <Button
-              ml="8px"
-              colorScheme="grayBlue"
-              loading={forkLoading}
-              leftIcon={<GridFillIcon />}
-              onClick={async () => {
-                try {
-                  setIsFullPageLoading(true)
-                  const finalAgent =
-                    agent.teamID === currentTeamInfo.id
-                      ? agent
-                      : await forkAIAgentToTeam({
-                          teamID: currentTeamInfo.id,
-                          aiAgentID: agent.aiAgentID,
-                        }).unwrap()
-
-                  const variableKeys = finalAgent.variables.map((v) => v.key)
-                  const { appInfo, variableKeyMapInputNodeDisplayName } =
-                    buildAppWithAgentSchema(variableKeys)
-                  const appInfoResp = await fetchCreateApp(currentTeamInfo.id, {
-                    appName: "Untitled app",
-                    initScheme: appInfo,
-                  })
-                  const agentActionInfo = buildActionInfo(
-                    agent,
-                    variableKeyMapInputNodeDisplayName,
-                  )
-                  await createAction(
-                    appInfoResp.data.appId,
-                    currentTeamInfo.id,
-                    agentActionInfo,
-                  )
-                  window.open(
-                    `${getILLABuilderURL(window.customDomain)}/${
-                      currentTeamInfo.identifier
-                    }/app/${appInfoResp.data.appId}`,
-                    "_blank",
-                  )
-                } catch {
-                  message.error({
-                    content: t("create_fail"),
-                  })
-                } finally {
-                  setIsFullPageLoading(false)
-                }
-              }}
-            >
-              <span>{t("marketplace.agent.create_app")}</span>
-            </Button>
-          )}
         </div>
       )}
     />
@@ -674,14 +608,15 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
                 <div css={agentTopContainerStyle}>
                   <div css={backMenuStyle}>
                     <div onClick={handleClickBack}>
-                      <PreviousIcon fs="16px" />
+                      <Icon component={PreviousIcon} size={16} />
+
                       <div css={backTextStyle}>{t("back")}</div>
                     </div>
                     <IconHotSpot
                       onClick={handleCloseEditPanel}
                       css={closeIconStyle}
                     >
-                      <CloseIcon size="12px" />
+                      <Icon component={CloseIcon} size={12} />
                     </IconHotSpot>
                   </div>
                   <div css={agentTitleContainerStyle}>
@@ -741,12 +676,10 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
                         title={t("editor.ai-agent.label.mode")}
                         tips={t("editor.ai-agent.tips.mode")}
                       >
-                        <RadioGroup
+                        <Segmented
                           value={field.value}
-                          colorScheme={getColor("grayBlue", "02")}
-                          w="100%"
+                          block
                           type="button"
-                          forceEqualWidth={true}
                           options={[
                             {
                               value: AI_AGENT_TYPE.CHAT,
@@ -759,7 +692,7 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
                           ]}
                           onChange={(value) => {
                             if (isReceiving || isConnecting) {
-                              message.info({
+                              messageAPI.info({
                                 content: t(
                                   "editor.ai-agent.message.generating",
                                 ),
@@ -859,16 +792,15 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
                     )}
                   />
                 </div>
-                <form ref={formRef} onSubmit={handleSubmitClick}>
+                <form onSubmit={handleSubmitClick}>
                   <div css={buttonContainerStyle}>
                     <Button
                       size="large"
-                      flex="1"
                       disabled={!isValid}
                       loading={isConnecting}
-                      ml="8px"
-                      colorScheme={getColor("grayBlue", "02")}
-                      leftIcon={isRunning ? <ResetIcon /> : <PlayFillIcon />}
+                      icon={isRunning ? <ResetIcon /> : <PlayFillIcon />}
+                      block
+                      htmlType="submit"
                     >
                       {!isRunning
                         ? t("editor.ai-agent.start")
@@ -959,7 +891,6 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
           />
         </div>
         {dialog}
-        {isFullPageLoading && <FullPageLoading hasMask />}
       </ChatContext.Provider>
     </>
   )

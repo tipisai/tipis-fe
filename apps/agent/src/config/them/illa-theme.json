@@ -1,0 +1,111 @@
+{
+  "token": {
+    "colorPrimary": "#654aec",
+    "colorSuccess": "#0bc957",
+    "colorWarning": "#fa8214",
+    "colorError": "#ff4747",
+    "colorInfo": "#654aec",
+    "borderRadius": 8,
+    "wireframe": false,
+    "boxShadowSecondary": "      0 2px 6px 0 rgba(0, 0, 0, 0.06),      0 3px 6px -4px rgba(0, 0, 0, 0.08),      0 9px 28px 8px rgba(0, 0, 0, 0.05)    ",
+    "boxShadow": "      0 2px 8px 0 rgba(0, 0, 0, 0.08),      0 3px 6px -4px rgba(0, 0, 0, 0.08),      0 9px 28px 8px rgba(0, 0, 0, 0.05)    ",
+    "sizeStep": 4,
+    "sizeUnit": 4,
+    "borderRadiusSM": 4,
+    "colorTextBase": "#1d2129",
+    "colorBorder": "#E5E6EB",
+    "colorBgLayout": "#F7F8FA",
+    "colorPrimaryBg": "#f8f5ff"
+  },
+  "components": {
+    "Checkbox": {
+      "borderRadiusSM": 2,
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Steps": {
+      "colorTextDescription": "rgba(169, 174, 184, 1);",
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Menu": {
+      "colorItemBgHover": "rgba(29, 33, 41, 0.04)",
+      "colorSubItemBg": "rgba(0, 0, 0, 0.02)",
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Button": {
+      "paddingInlineSM": 6,
+      "borderRadius": 6
+    },
+    "Divider": {
+      "textPaddingInline": "1.25em",
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Switch": {
+      "colorTextQuaternary": "rgb(242, 243, 245)",
+      "colorTextTertiary": "rgb(227, 229, 233)",
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "TreeSelect": {
+      "borderRadius": 4,
+      "borderRadiusSM": 2
+    },
+    "Statistic": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Alert": {
+      "lineWidth": 0,
+      "borderRadiusLG": 8
+    },
+    "Result": {
+      "colorTextDescription": "rgba(29, 33, 41, 0.32)",
+      "titleFontSize": 24
+    },
+    "Tag": {
+      "lineWidth": 0
+    },
+    "Typography": {
+      "fontFamilyCode": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Anchor": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Breadcrumb": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Dropdown": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Pagination": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Cascader": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "DatePicker": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Form": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Input": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "InputNumber": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Mentions": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Radio": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Rate": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Select": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Slider": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    }
+  }
+}

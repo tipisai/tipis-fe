@@ -1,6 +1,3 @@
-[submodule "packages/illa-public-component"]
-	path = packages/illa-public-component
-	url = https://github.com/illacloud/illa-public-component.git
-[submodule "packages/illa-design"]
-	path = packages/illa-design
-	url = https://github.com/illacloud/illa-design.git
+[submodule "packages"]
+	path = packages
+	url = https://github.com/tipisai/tipsi-fe-public-packages.git

@@ -1,5 +1,5 @@
+import { Tooltip } from "antd"
 import { FC } from "react"
-import { Trigger } from "@illa-design/react"
 import RequireIcon from "@/assets/agent/require.svg?react"
 import { AIAgentBlockProps } from "./interface"
 import {
@@ -18,27 +18,18 @@ export const AIAgentBlock: FC<AIAgentBlockProps> = (props) => {
     <div css={agentBlockStyle} data-scroll-id={scrollId}>
       <div css={blockTitleContainer}>
         {title && (
-          <Trigger
-            disabled={tips === undefined}
-            content={tips}
-            trigger="hover"
-            position="top-start"
-          >
+          <Tooltip title={tips} trigger="hover" placement="top">
             <div css={applyBlockTextStyle(tips !== undefined)}>{title}</div>
-          </Trigger>
+          </Tooltip>
         )}
         {required && <RequireIcon css={blockRequireStyle} />}
         <div style={{ flex: 1 }} />
         {subtitle && (
-          <Trigger
-            disabled={subtitleTips === undefined}
-            content={subtitleTips}
-            trigger="hover"
-          >
+          <Tooltip title={subtitleTips} trigger="hover">
             <div css={applyBlockSubtitleStyle(subtitleTips !== undefined)}>
               {subtitle}
             </div>
-          </Trigger>
+          </Tooltip>
         )}
       </div>
       {children}
