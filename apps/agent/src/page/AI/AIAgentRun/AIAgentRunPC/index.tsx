@@ -1,4 +1,13 @@
-import Icon from "@ant-design/icons"
+import Icon, { StarOutlined } from "@ant-design/icons"
+import { App, Button, Segmented } from "antd"
+import { AnimatePresence, motion } from "framer-motion"
+import { FC, useEffect, useState } from "react"
+import { Helmet } from "react-helmet-async"
+import { Controller, useForm, useFormState } from "react-hook-form"
+import { useTranslation } from "react-i18next"
+import { useDispatch, useSelector } from "react-redux"
+import { useNavigate, useParams, useSearchParams } from "react-router-dom"
+import { v4 } from "uuid"
 import { Avatar } from "@illa-public/avatar"
 import { CodeEditor } from "@illa-public/code-editor"
 import {
@@ -9,7 +18,6 @@ import {
   ResetIcon,
   ShareIcon,
   StarFillIcon,
-  StarOutlineIcon,
 } from "@illa-public/icon"
 import IconHotSpot from "@illa-public/icon-hot-spot"
 import { ShareAgentPC } from "@illa-public/invite-modal"
@@ -56,15 +64,6 @@ import {
   getILLABuilderURL,
   getILLACloudURL,
 } from "@illa-public/utils"
-import { App, Button, Segmented } from "antd"
-import { AnimatePresence, motion } from "framer-motion"
-import { FC, useEffect, useState } from "react"
-import { Helmet } from "react-helmet-async"
-import { Controller, useForm, useFormState } from "react-hook-form"
-import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
-import { useNavigate, useParams, useSearchParams } from "react-router-dom"
-import { v4 } from "uuid"
 import { TextSignal } from "@/api/ws/textSignal"
 import AIAgentBlock from "@/page/AI/components/AIAgentBlock"
 import { PreviewChat } from "@/page/AI/components/PreviewChat"
@@ -514,9 +513,14 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
               loading={starLoading}
               icon={
                 starState ? (
-                  <Icon component={StarFillIcon} color="#FFBB38" />
+                  <Icon
+                    component={StarFillIcon}
+                    style={{
+                      color: "#FFBB38",
+                    }}
+                  />
                 ) : (
-                  <Icon component={StarOutlineIcon} color="#FFBB38" />
+                  <StarOutlined />
                 )
               }
             >
@@ -533,7 +537,7 @@ export const AIAgentRunPC: FC<IAIAgentRunProps> = (props) => {
             field.value && (
               <Button
                 loading={forkLoading}
-                icon={<ForkIcon />}
+                icon={<Icon component={ForkIcon} />}
                 onClick={async () => {
                   track(
                     ILLA_MIXPANEL_EVENT_TYPE.CLICK,

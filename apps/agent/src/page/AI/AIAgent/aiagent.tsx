@@ -1,4 +1,22 @@
 import Icon from "@ant-design/icons"
+import {
+  App,
+  Button,
+  Divider,
+  Image,
+  Input,
+  Segmented,
+  Select,
+  message,
+} from "antd"
+import { isEqual } from "lodash-es"
+import { FC, useCallback, useEffect, useMemo, useState } from "react"
+import { Helmet } from "react-helmet-async"
+import { Controller, useForm, useFormState, useWatch } from "react-hook-form"
+import { useTranslation } from "react-i18next"
+import { useDispatch, useSelector } from "react-redux"
+import { useParams } from "react-router-dom"
+import { v4 } from "uuid"
 import { CodeEditor } from "@illa-public/code-editor"
 import { getColor } from "@illa-public/color-scheme"
 import { AvatarUpload } from "@illa-public/cropper"
@@ -57,24 +75,6 @@ import {
   getILLACloudURL,
   sendTagEvent,
 } from "@illa-public/utils"
-import {
-  App,
-  Button,
-  Divider,
-  Image,
-  Input,
-  Segmented,
-  Select,
-  message,
-} from "antd"
-import { isEqual } from "lodash-es"
-import { FC, useCallback, useEffect, useMemo, useState } from "react"
-import { Helmet } from "react-helmet-async"
-import { Controller, useForm, useFormState, useWatch } from "react-hook-form"
-import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
-import { v4 } from "uuid"
 import { TextSignal } from "@/api/ws/textSignal"
 import AIIcon from "@/assets/agent/ai.svg?react"
 import { AIAgentBlock } from "@/page/AI/components/AIAgentBlock"
@@ -1195,6 +1195,7 @@ export const AIAgent: FC<AIAgentProps> = (props) => {
                     : t("editor.ai-agent.restart")}
                 </Button>
                 <Button
+                  htmlType="submit"
                   block
                   id="save-button"
                   onClick={handleVerifyOnSave}

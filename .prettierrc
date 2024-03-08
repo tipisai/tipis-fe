@@ -12,7 +12,7 @@
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
   "importOrder": [
     "<THIRD_PARTY_MODULES>",
-    "^@illa-design/(.*)$",
+    "^@illa-public/(.*)$",
     "^@/(.*)$",
     "^[./]"
   ],
