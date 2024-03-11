@@ -105,6 +105,9 @@ importers:
       '@illa-public/illa-net':
         specifier: workspace:^
         version: link:../../packages/utils/ILLANet
+      '@illa-public/illa-storage':
+        specifier: workspace:^
+        version: link:../../packages/utils/ILLAStorage
       '@illa-public/illa-web-socket':
         specifier: workspace:^
         version: link:../../packages/utils/ILLAWebSocket
@@ -8861,7 +8864,7 @@ packages:
     dev: false
 
   '@cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz':
-    resolution: {tarball: https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz}
+    resolution: {registry: https://registry.npmjs.org/, tarball: https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz}
     name: xlsx
     version: 0.20.1
     engines: {node: '>=0.8'}

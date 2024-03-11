@@ -1,8 +1,8 @@
+import { FC } from "react"
+import { Navigate, useParams, useSearchParams } from "react-router-dom"
 import { ILLAMixpanel } from "@illa-public/mixpanel-utils"
 import { useGetUserInfoAndTeamsInfoByTokenQuery } from "@illa-public/user-data"
 import { getILLACloudURL } from "@illa-public/utils"
-import { FC } from "react"
-import { Navigate, useParams, useSearchParams } from "react-router-dom"
 import i18n from "@/i18n"
 import { AuthProps } from "./interface"
 
@@ -17,7 +17,7 @@ const ProtectedComponent: FC<AuthProps> = (props) => {
   if (error && "status" in error) {
     if (error.status === 401) {
       ILLAMixpanel.reset()
-      window.location.href = `${getILLACloudURL()}/login?redirectURL=${encodeURIComponent(
+      window.location.href = `${getILLACloudURL(window.customDomain)}/login?redirectURL=${encodeURIComponent(
         window.location.href,
       )}`
       return null

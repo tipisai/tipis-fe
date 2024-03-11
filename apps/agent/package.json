@@ -39,6 +39,7 @@
     "@illa-public/user-data": "workspace:^",
     "@illa-public/user-role-utils": "workspace:^",
     "@illa-public/utils": "workspace:^",
+    "@illa-public/illa-storage": "workspace:^",
     "@mui/material": "^5.15.3",
     "@reduxjs/toolkit": "^2.2.1",
     "antd": "^5.15.0",
