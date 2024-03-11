@@ -30,29 +30,7 @@ export const previewChatContainerStyle = css`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-`
-
-export const previewTitleContainerStyle = css`
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  padding: 24px;
-  align-items: center;
-  border-bottom: 1px solid ${getColor("grayBlue", "08")};
-`
-
-export const menuIconStyle = css`
-  cursor: pointer;
-  margin-right: 16px;
-  flex: none;
-`
-
-export const previewTitleTextStyle = css`
-  color: ${getColor("grayBlue", "02")};
-  font-size: 18px;
-  flex: 1;
-  font-weight: 500;
-  line-height: 24px;
+  border-top: 1px solid ${getColor("grayBlue", "08")};
 `
 
 export const inputTextContainerStyle = css`

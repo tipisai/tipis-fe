@@ -1,11 +1,11 @@
-import { getFileIconByContentType } from "@illa-public/icon"
-import { GCS_OBJECT_TYPE, KnowledgeFile } from "@illa-public/public-types"
 import { Tag } from "antd"
 import { FC } from "react"
+import { getFileIconByContentType } from "@illa-public/icon"
+import { GCS_OBJECT_TYPE, IKnowledgeFile } from "@illa-public/public-types"
 import { fileItemContainerStyle, fileTypeIconStyle } from "./style"
 
 interface UploadKnowledgeFilesPops {
-  knowledgeFiles: KnowledgeFile[]
+  knowledgeFiles: IKnowledgeFile[]
   handleDeleteFile: (name: string) => void
 }
 

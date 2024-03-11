@@ -49,6 +49,7 @@
     "i18next-browser-languagedetector": "^7.2.0",
     "i18next-http-backend": "^2.5.0",
     "klona": "^2.0.6",
+    "localforage": "^1.10.0",
     "lodash-es": "^4.17.21",
     "mammoth": "^1.7.0",
     "pdfjs-dist": "2.16.105",

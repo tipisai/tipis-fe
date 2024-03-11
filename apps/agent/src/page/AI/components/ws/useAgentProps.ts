@@ -1,4 +1,9 @@
-import { AI_AGENT_TYPE } from "@illa-public/public-types"
+import {
+  AI_AGENT_MODEL,
+  AI_AGENT_TYPE,
+  AgentAdvanceConfig,
+  Params,
+} from "@illa-public/public-types"
 import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { TextSignal } from "@/api/ws/textSignal"
 import {
@@ -13,9 +18,15 @@ export interface UseAgentProps {
   onRunning: (isRunning: boolean) => void
   onReceiving: (isReceiving: boolean) => void
   onUpdateRoomUsers: (roomUsers: CollaboratorsInfo[]) => void
-  onSendPrompt: () => void
   onStartRunning: () => void
-  onSendClean: () => void
+  agentInfo: {
+    prompt: string
+    variables: Params[]
+    actionID: string
+    modelConfig: AgentAdvanceConfig
+    model: AI_AGENT_MODEL
+    agentType: AI_AGENT_TYPE
+  }
 }
 
 export interface UseAgentReturn {
@@ -30,6 +41,7 @@ export interface UseAgentReturn {
     messageContent?: ChatMessage,
   ) => void
   generationMessage: ChatMessage | undefined
+  leaveRoom: () => void
   chatMessages: ChatMessage[]
   wsStatus: ILLA_WEBSOCKET_STATUS
 }

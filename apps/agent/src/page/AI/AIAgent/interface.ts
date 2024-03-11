@@ -33,7 +33,3 @@ export enum SCROLL_ID {
   DESCRIPTION = "description",
   ICON = "icon",
 }
-
-export interface AIAgentProps {
-  agent: Agent
-}

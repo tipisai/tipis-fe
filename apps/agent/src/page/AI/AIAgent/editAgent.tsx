@@ -1,10 +1,16 @@
-import { getCurrentId } from "@illa-public/user-data"
 import { FC } from "react"
+import { FormProvider, useForm } from "react-hook-form"
 import { useSelector } from "react-redux"
 import { Navigate, useParams } from "react-router-dom"
+import { Agent } from "@illa-public/public-types"
+import { getCurrentId } from "@illa-public/user-data"
+import WorkspaceHeaderLayout from "@/Layout/Workspace/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { useGetAgentDetailQuery } from "@/redux/services/agentAPI"
+import { AgentWSProvider } from "../context/AgentWSContext"
 import { AIAgent } from "./aiagent"
+import FormContext from "./components/FormContext"
+import HeaderTools from "./components/HeaderTools"
 
 // import {
 //   track,
@@ -19,6 +25,18 @@ export const EditAIAgentPage: FC = () => {
   const { data, isLoading, isError } = useGetAgentDetailQuery({
     aiAgentID: agentID!,
     teamID: teamID!,
+  })
+
+  const methods = useForm<Agent>({
+    values: data
+      ? {
+          ...data,
+          variables:
+            data.variables.length === 0
+              ? [{ key: "", value: "" }]
+              : data.variables,
+        }
+      : undefined,
   })
 
   // useEffect(() => {
@@ -39,7 +57,16 @@ export const EditAIAgentPage: FC = () => {
   if (isError) return <Navigate to="/500" />
   if (isLoading) return <FullSectionLoading />
 
-  return <AIAgent agent={data!} />
+  return data ? (
+    <FormProvider {...methods}>
+      <AgentWSProvider>
+        <FormContext>
+          <WorkspaceHeaderLayout title={data.name} extra={<HeaderTools />} />
+          <AIAgent />
+        </FormContext>
+      </AgentWSProvider>
+    </FormProvider>
+  ) : null
 }
 
 EditAIAgentPage.displayName = "AIAgentRun"

@@ -1,6 +1,6 @@
-import { getFileIconByContentType } from "@illa-public/icon"
-import { GCS_OBJECT_TYPE, KnowledgeFile } from "@illa-public/public-types"
 import { FC } from "react"
+import { getFileIconByContentType } from "@illa-public/icon"
+import { GCS_OBJECT_TYPE, IKnowledgeFile } from "@illa-public/public-types"
 import {
   containerStyle,
   fileItemStyle,
@@ -10,7 +10,7 @@ import {
 } from "./style"
 
 interface ShowFilesProps {
-  knowledgeFiles: KnowledgeFile[]
+  knowledgeFiles: IKnowledgeFile[]
 }
 const ShowFiles: FC<ShowFilesProps> = ({ knowledgeFiles }) => {
   return (

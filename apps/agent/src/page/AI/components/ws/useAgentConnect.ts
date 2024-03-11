@@ -1,3 +1,8 @@
+import { App } from "antd"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
+import { useSelector } from "react-redux"
+import { v4 } from "uuid"
 import WebSocketClient from "@illa-public/illa-web-socket"
 import { isPremiumModel } from "@illa-public/market-agent"
 import { AI_AGENT_TYPE } from "@illa-public/public-types"
@@ -8,10 +13,6 @@ import {
 } from "@illa-public/upgrade-modal"
 import { getCurrentTeamInfo, getCurrentUser } from "@illa-public/user-data"
 import { getAuthToken } from "@illa-public/utils"
-import { App } from "antd"
-import { useCallback, useEffect, useRef, useState } from "react"
-import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { getTextMessagePayload } from "@/api/ws"
 import { Callback, ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { TextSignal, TextTarget } from "@/api/ws/textSignal"
@@ -37,11 +38,10 @@ export function useAgentConnect(useAgentProps: UseAgentProps) {
   const {
     onConnecting,
     onReceiving,
-    onSendClean,
     onUpdateRoomUsers,
     onRunning,
-    onSendPrompt,
     onStartRunning,
+    agentInfo,
   } = useAgentProps
 
   const [triggerGetAIAgentAnonymousAddressQuery] =
@@ -241,7 +241,13 @@ export function useAgentConnect(useAgentProps: UseAgentProps) {
                   }
                   onUpdateRoomUsers(inRoomUsers)
                   cleanMessage()
-                  onSendClean()
+                  sendMessage(
+                    {} as ChatSendRequestPayload,
+                    TextSignal.CLEAN,
+                    agentInfo.agentType,
+                    "clean",
+                    false,
+                  )
                   break
                 case "chat/remote":
                   let chatCallback = callback.broadcast
@@ -255,7 +261,16 @@ export function useAgentConnect(useAgentProps: UseAgentProps) {
                 case "stop_all/remote":
                   break
                 case "clean/remote":
-                  onSendPrompt()
+                  sendMessage(
+                    {
+                      ...agentInfo,
+                      threadID: v4(),
+                    } as ChatSendRequestPayload,
+                    TextSignal.RUN,
+                    agentInfo.agentType,
+                    "chat",
+                    false,
+                  )
                   break
               }
             } else {
@@ -308,22 +323,22 @@ export function useAgentConnect(useAgentProps: UseAgentProps) {
       }
     },
     [
-      onConnecting,
-      onRunning,
-      onReceiving,
-      onStartRunning,
-      triggerGetAIAgentAnonymousAddressQuery,
-      currentTeamInfo,
-      triggerGetAIAgentWsAddressQuery,
-      onUpdateRoomUsers,
+      agentInfo,
       cleanMessage,
-      onSendClean,
-      onSendPrompt,
+      collaModal,
+      currentTeamInfo,
+      messageAPI,
+      onConnecting,
+      onReceiving,
+      onRunning,
+      onStartRunning,
       onUpdateChatMessage,
       onUpdateGenerationMessage,
-      messageAPI,
+      onUpdateRoomUsers,
+      sendMessage,
       t,
-      collaModal,
+      triggerGetAIAgentAnonymousAddressQuery,
+      triggerGetAIAgentWsAddressQuery,
     ],
   )
 
@@ -373,5 +388,6 @@ export function useAgentConnect(useAgentProps: UseAgentProps) {
     generationMessage,
     sendMessage,
     wsStatus,
+    leaveRoom,
   } as UseAgentReturn
 }

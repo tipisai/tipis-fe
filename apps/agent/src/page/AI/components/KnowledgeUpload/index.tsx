@@ -1,4 +1,7 @@
 import Icon from "@ant-design/icons"
+import { App, Button } from "antd"
+import { ChangeEvent, FC, useRef } from "react"
+import { useTranslation } from "react-i18next"
 import { getColor } from "@illa-public/color-scheme"
 import { getFileIconByContentType } from "@illa-public/icon"
 import {
@@ -7,10 +10,7 @@ import {
   SuccessIcon,
   UploadIcon,
 } from "@illa-public/icon"
-import { GCS_OBJECT_TYPE, KnowledgeFile } from "@illa-public/public-types"
-import { App, Button } from "antd"
-import { ChangeEvent, FC, useRef } from "react"
-import { useTranslation } from "react-i18next"
+import { GCS_OBJECT_TYPE, IKnowledgeFile } from "@illa-public/public-types"
 import { handleParseFile } from "@/utils/file"
 import { ACCEPT, MAX_FILE_SIZE, MAX_MESSAGE_FILES_LENGTH } from "./contants"
 import {
@@ -24,9 +24,9 @@ import {
 } from "./style"
 
 interface KnowledgeUploadProps {
-  addFile: (file: KnowledgeFile, isUpdate?: boolean) => void
+  addFile: (file: IKnowledgeFile, isUpdate?: boolean) => void
   removeFile: (name: string) => void
-  values: KnowledgeFile[]
+  values: IKnowledgeFile[]
 }
 
 const KnowledgeUpload: FC<KnowledgeUploadProps> = ({

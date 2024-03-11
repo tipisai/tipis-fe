@@ -1,8 +1,8 @@
-import { KnowledgeFile } from "@illa-public/public-types"
+import { IKnowledgeFile } from "@illa-public/public-types"
 
 export const formatMessageString = (
   text: string,
-  knowledgeFiles?: KnowledgeFile[],
+  knowledgeFiles?: IKnowledgeFile[],
 ) => {
   let res = text
   if (!knowledgeFiles || knowledgeFiles.length === 0) return res

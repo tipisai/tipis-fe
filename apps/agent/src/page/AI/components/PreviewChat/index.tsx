@@ -1,19 +1,4 @@
-import Icon from "@ant-design/icons"
-import {
-  ContributeIcon,
-  PlayFillIcon,
-  ResetIcon,
-  ShareIcon,
-} from "@illa-public/icon"
-import IconHotSpot from "@illa-public/icon-hot-spot"
-import { isPremiumModel } from "@illa-public/market-agent"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  MixpanelTrackContext,
-} from "@illa-public/mixpanel-utils"
-import { AI_AGENT_TYPE, KnowledgeFile } from "@illa-public/public-types"
-import { getCurrentUser } from "@illa-public/user-data"
-import { App, Button, Flex } from "antd"
+import { App, Button } from "antd"
 import { AnimatePresence, motion } from "framer-motion"
 import {
   ChangeEvent,
@@ -25,18 +10,25 @@ import {
   useRef,
   useState,
 } from "react"
+import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { v4 } from "uuid"
+import { isPremiumModel } from "@illa-public/market-agent"
+import {
+  ILLA_MIXPANEL_BUILDER_PAGE_NAME,
+  ILLA_MIXPANEL_EVENT_TYPE,
+} from "@illa-public/mixpanel-utils"
+import { AI_AGENT_TYPE, Agent, IKnowledgeFile } from "@illa-public/public-types"
+import { getCurrentUser } from "@illa-public/user-data"
 import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import AgentBlockInput from "@/assets/agent/agent-block-input.svg?react"
-import GridFillIcon from "@/assets/agent/gridFill.svg?react"
-import MenuIcon from "@/assets/agent/menuIcon.svg?react"
 import StopIcon from "@/assets/agent/stop.svg?react"
 import AIAgentMessage from "@/page/AI/components/AIAgentMessage"
 import { GenerationMessage } from "@/page/AI/components/GenerationMessage"
 import {
   ChatMessage,
+  ChatSendRequestPayload,
   PreviewChatProps,
   SenderType,
 } from "@/page/AI/components/PreviewChat/interface"
@@ -50,19 +42,19 @@ import {
   generatingTextStyle,
   inputStyle,
   inputTextContainerStyle,
-  menuIconStyle,
   mobileInputContainerStyle,
   mobileInputElementStyle,
   mobileInputStyle,
   operationStyle,
   previewChatContainerStyle,
-  previewTitleContainerStyle,
-  previewTitleTextStyle,
   sendButtonStyle,
   stopIconStyle,
 } from "@/page/AI/components/PreviewChat/style"
 import UserMessage from "@/page/AI/components/UserMessage"
 import { handleParseFile } from "@/utils/file"
+import { TextSignal } from "../../../../api/ws/textSignal"
+import { track } from "../../../../utils/mixpanelHelper"
+import { AgentWSContext } from "../../context/AgentWSContext"
 import {
   MAX_FILE_SIZE,
   MAX_MESSAGE_FILES_LENGTH,
@@ -71,30 +63,63 @@ import UploadButton from "./UploadButton"
 import UploadKnowledgeFiles from "./UploadKnowledgeFiles"
 
 export const PreviewChat: FC<PreviewChatProps> = (props) => {
+  const { isMobile, agentType, blockInput, editState, model } = props
+
   const {
-    showShareDialog,
-    showContributeDialog,
-    hasCreated,
-    isMobile,
+    wsStatus,
     isRunning,
-    agentType,
     chatMessages,
     generationMessage,
-    onSendMessage,
     isReceiving,
-    blockInput,
-    editState,
-    model,
-    showEditPanel,
-    isConnecting,
-    wsStatus,
-    setShowEditPanel,
-    onCancelReceiving,
-    onShowShareDialog,
-    onShowContributeDialog,
-    onClickCreateApp,
-    onClickStartRunning,
-  } = props
+    sendMessage,
+    setIsReceiving,
+  } = useContext(AgentWSContext)
+  const { getValues, control } = useFormContext<Agent>()
+  const [aiAgentID] = useWatch({
+    control: control,
+    name: ["aiAgentID"],
+  })
+
+  const onSendMessage = useCallback(
+    (message: ChatMessage, agentType: AI_AGENT_TYPE) => {
+      track(
+        ILLA_MIXPANEL_EVENT_TYPE.CLICK,
+        ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_RUN,
+        {
+          element: "send",
+          parameter5: aiAgentID,
+        },
+      )
+      sendMessage(
+        {
+          threadID: message.threadID,
+          prompt: message.message,
+          variables: [],
+          actionID: getValues("aiAgentID"),
+          modelConfig: getValues("modelConfig"),
+          model: getValues("model"),
+          agentType: getValues("agentType"),
+        } as ChatSendRequestPayload,
+        TextSignal.RUN,
+        agentType,
+        "chat",
+        true,
+        message,
+      )
+    },
+    [aiAgentID, getValues, sendMessage],
+  )
+
+  const onCancelReceiving = useCallback(() => {
+    sendMessage(
+      {} as ChatSendRequestPayload,
+      TextSignal.STOP_ALL,
+      agentType,
+      "stop_all",
+      false,
+    )
+    setIsReceiving(false)
+  }, [agentType, sendMessage, setIsReceiving])
 
   const currentUserInfo = useSelector(getCurrentUser)
   const { message: messageAPI } = App.useApp()
@@ -102,15 +127,13 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const chatRef = useRef<HTMLDivElement>(null)
 
   const [textAreaVal, setTextAreaVal] = useState("")
-  const [knowledgeFiles, setKnowledgeFiles] = useState<KnowledgeFile[]>([])
+  const [knowledgeFiles, setKnowledgeFiles] = useState<IKnowledgeFile[]>([])
   const [parseKnowledgeLoading, setParseKnowledgeLoading] = useState(false)
 
   const inputRef = useRef<HTMLInputElement>(null)
   const canShowKnowledgeFiles = isPremiumModel(model)
 
   const { t } = useTranslation()
-
-  const { track } = useContext(MixpanelTrackContext)
 
   const messagesList = useMemo(() => {
     return chatMessages.map((message, i) => {
@@ -265,89 +288,8 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     )
   }, [generationMessage])
 
-  useEffect(() => {
-    editState === "EDIT" &&
-      showShareDialog &&
-      track?.(
-        ILLA_MIXPANEL_EVENT_TYPE.SHOW,
-        {
-          element: "invite_entry",
-        },
-        "both",
-      )
-  }, [editState, showShareDialog, track])
-
   return (
     <div css={previewChatContainerStyle}>
-      {!isMobile && (
-        <div css={previewTitleContainerStyle}>
-          {editState === "RUN" && !showEditPanel && (
-            <IconHotSpot
-              onClick={() => setShowEditPanel?.(!showEditPanel)}
-              css={menuIconStyle}
-            >
-              <MenuIcon />
-            </IconHotSpot>
-          )}
-          <div css={previewTitleTextStyle}>
-            {agentType === AI_AGENT_TYPE.CHAT
-              ? t("editor.ai-agent.title-preview.chat")
-              : t("editor.ai-agent.title-preview.text-generation")}
-          </div>
-          <Flex gap="small">
-            {editState === "EDIT" && showShareDialog && (
-              <Button
-                disabled={!hasCreated}
-                icon={<Icon component={ShareIcon} />}
-                onClick={() => {
-                  track?.(
-                    ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-                    {
-                      element: "invite_entry",
-                    },
-                    "both",
-                  )
-                  onShowShareDialog?.()
-                }}
-              >
-                {t("share")}
-              </Button>
-            )}
-            {editState === "EDIT" && showContributeDialog && (
-              <Button
-                disabled={!hasCreated}
-                icon={<Icon component={ContributeIcon} />}
-                onClick={() => {
-                  onShowContributeDialog?.()
-                }}
-              >
-                {t("editor.ai-agent.contribute")}
-              </Button>
-            )}
-            {editState === "EDIT" && (
-              <Button
-                icon={<GridFillIcon />}
-                onClick={() => {
-                  onClickCreateApp?.()
-                }}
-              >
-                {t("marketplace.agent.create_app")}
-              </Button>
-            )}
-            {editState === "RUN" && !showEditPanel && (
-              <Button
-                loading={isConnecting}
-                icon={<Icon component={isRunning ? ResetIcon : PlayFillIcon} />}
-                onClick={onClickStartRunning}
-              >
-                {!isRunning
-                  ? t("editor.ai-agent.start")
-                  : t("editor.ai-agent.restart")}
-              </Button>
-            )}
-          </Flex>
-        </div>
-      )}
       <div ref={chatRef} css={chatContainerStyle}>
         {agentType === AI_AGENT_TYPE.CHAT ? messagesList : generationBlock}
       </div>

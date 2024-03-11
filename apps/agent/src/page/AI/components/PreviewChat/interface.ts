@@ -2,10 +2,9 @@ import {
   AI_AGENT_MODEL,
   AI_AGENT_TYPE,
   AgentAdvanceConfig,
-  KnowledgeFile,
+  IKnowledgeFile,
 } from "@illa-public/public-types"
 import { Params } from "@illa-public/record-editor"
-import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 
 export type EDIT_STATE = "EDIT" | "RUN"
 
@@ -42,7 +41,7 @@ export interface ChatMessage {
   threadID: string
   message: string
   sender: ChatSender
-  knowledgeFiles?: KnowledgeFile[]
+  knowledgeFiles?: IKnowledgeFile[]
 }
 
 export interface ChatSendRequestPayload {
@@ -57,25 +56,8 @@ export interface ChatSendRequestPayload {
 
 export interface PreviewChatProps {
   model: AI_AGENT_MODEL
-  hasCreated: boolean
   editState: EDIT_STATE
   agentType: AI_AGENT_TYPE
-  chatMessages: ChatMessage[]
-  generationMessage?: ChatMessage
-  onSendMessage: (message: ChatMessage, agentType: AI_AGENT_TYPE) => void
-  onCancelReceiving: () => void
   blockInput: boolean
-  isReceiving: boolean
-  isRunning: boolean
-  isConnecting: boolean
   isMobile: boolean
-  showShareDialog: boolean
-  showContributeDialog: boolean
-  showEditPanel: boolean
-  wsStatus: ILLA_WEBSOCKET_STATUS
-  setShowEditPanel?: (show: boolean) => void
-  onShowShareDialog?: () => void
-  onShowContributeDialog?: () => void
-  onClickCreateApp?: () => void
-  onClickStartRunning?: () => void
 }
