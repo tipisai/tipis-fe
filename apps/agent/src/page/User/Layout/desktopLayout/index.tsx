@@ -23,11 +23,10 @@ export const UserLayout: FC<LayoutProps> = ({ children }) => {
   const { t } = useTranslation()
   const { track } = useContext(MixpanelTrackContext)
 
-  const handleLinkOpenClick = (link: string) => {
+  const handleLinkClick = (link: string) => {
     track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
       element: /privacy/.test(link) ? "privacy" : "terms",
     })
-    window.open(DOC_PREFIX + link, "_blank")
   }
 
   return (
@@ -60,14 +59,18 @@ export const UserLayout: FC<LayoutProps> = ({ children }) => {
             components={[
               <LinkButton
                 key="/privacy-policy"
+                href={`${DOC_PREFIX}/privacy-policy`}
+                target="__blank"
                 onClick={() => {
-                  handleLinkOpenClick("/privacy-policy")
+                  handleLinkClick("/privacy-policy")
                 }}
               />,
               <LinkButton
                 key="/terms-of-service"
+                href={`${DOC_PREFIX}/terms-of-service`}
+                target="__blank"
                 onClick={() => {
-                  handleLinkOpenClick("/terms-of-service")
+                  handleLinkClick("/terms-of-service")
                 }}
               />,
             ]}

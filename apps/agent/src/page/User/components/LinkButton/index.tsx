@@ -1,5 +1,5 @@
 import { Button, ConfigProvider } from "antd"
-import { CSSProperties, FC, ReactNode } from "react"
+import { AnchorHTMLAttributes, CSSProperties, FC, ReactNode } from "react"
 
 interface LinkButtonProps {
   children?: string | ReactNode
@@ -7,6 +7,7 @@ interface LinkButtonProps {
   onClick?: () => void
   href?: string
   fontSize?: number
+  target?: AnchorHTMLAttributes<HTMLElement>["target"]
 }
 
 const LinkButton: FC<LinkButtonProps> = ({
@@ -15,6 +16,7 @@ const LinkButton: FC<LinkButtonProps> = ({
   onClick,
   href,
   fontSize = 12,
+  target = "_self",
 }) => {
   return (
     <ConfigProvider
@@ -28,7 +30,13 @@ const LinkButton: FC<LinkButtonProps> = ({
         },
       }}
     >
-      <Button style={style} href={href} type="link" onClick={onClick}>
+      <Button
+        style={style}
+        href={href}
+        type="link"
+        onClick={onClick}
+        target={target}
+      >
         {children}
       </Button>
     </ConfigProvider>

@@ -14,7 +14,6 @@ import { getAuthToken, sendTagEvent, setAuthToken } from "@illa-public/utils"
 import { linkTrk, rdtSignUpTrk, twqTrk } from "@/utils/gaHelper"
 import { LINKEDIN_CONVERSION_ID, TWITTER_ID } from "@/utils/gaHelper/constent"
 import { track } from "@/utils/mixpanelHelper"
-import { TIPISStorage } from "@/utils/storage"
 import { mobilePageStyle, pageStyle } from "./style"
 
 const OAuth: FC = () => {
@@ -95,9 +94,6 @@ const OAuth: FC = () => {
                 linkTrk(LINKEDIN_CONVERSION_ID.SIGNUP)
                 twqTrk(TWITTER_ID.SIGNUP, res?.userID)
                 rdtSignUpTrk(res?.userID)
-              }
-              if (!TIPISStorage.getLocalStorage("hasOpenedSurvey")) {
-                TIPISStorage.setLocalStorage("operation", "open_survey")
               }
               message.success({
                 content: t("page.user.sign_in.tips.success"),
