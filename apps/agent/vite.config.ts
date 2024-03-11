@@ -2,6 +2,7 @@ import basicSsl from "@vitejs/plugin-basic-ssl"
 import react from "@vitejs/plugin-react-swc"
 import { resolve } from "path"
 import copy from "rollup-plugin-copy"
+import { visualizer } from "rollup-plugin-visualizer"
 import { PluginOption, defineConfig, loadEnv } from "vite"
 import checker from "vite-plugin-checker"
 import svgr from "vite-plugin-svgr"
@@ -66,10 +67,30 @@ export default defineConfig(({ mode }) => {
         root: process.cwd(),
       }) as unknown as PluginOption,
       basicSsl() as unknown as PluginOption,
+      visualizer({
+        template: "treemap",
+      }),
     ],
     resolve: {
       alias: {
         "@": resolve(__dirname, "src"),
+      },
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            "react-vendor": [
+              "react",
+              "react-dom",
+              "react-router-dom",
+              "@reduxjs/toolkit",
+              "react-redux",
+            ],
+            "lodash-lib": ["lodash-es"],
+            "antd-lib": ["antd"],
+          },
+        },
       },
     },
     server: {
