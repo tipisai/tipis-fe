@@ -17,10 +17,9 @@ import { getCurrentTeamInfo } from "@illa-public/user-data"
 import AIIcon from "@/assets/agent/ai.svg?react"
 import { useGenerateIconMutation } from "@/redux/services/agentAPI"
 import { track } from "@/utils/mixpanelHelper"
-import AIAgentBlock from "../../../../../components/AIAgentBlock"
 import AILoadingIcon from "../../../../../components/AILoading/aiLoading.svg?react"
 import { ErrorText } from "../../../../../components/ErrorText"
-import { SCROLL_ID } from "../../../../interface"
+import ModalEditorBlock from "../AIAgentBlock"
 import {
   descContainerStyle,
   descTextStyle,
@@ -45,15 +44,10 @@ const AvatarUploader: FC = memo(() => {
     <Controller
       name="icon"
       control={control}
-      rules={{
-        required: t("editor.ai-agent.validation_blank.icon"),
-      }}
       shouldUnregister={false}
       render={({ field }) => (
-        <AIAgentBlock
+        <ModalEditorBlock
           title={t("editor.ai-agent.label.icon")}
-          required
-          scrollId={SCROLL_ID.ICON}
           subtitle={
             <div
               css={descContainerStyle}
@@ -121,7 +115,6 @@ const AvatarUploader: FC = memo(() => {
               ) : (
                 <Icon
                   component={AIIcon}
-                  spin
                   style={{
                     fontSize: "12px",
                   }}
@@ -191,7 +184,7 @@ const AvatarUploader: FC = memo(() => {
           {errors.icon?.message && (
             <ErrorText errorMessage={errors.icon?.message} />
           )}
-        </AIAgentBlock>
+        </ModalEditorBlock>
       )}
     />
   )

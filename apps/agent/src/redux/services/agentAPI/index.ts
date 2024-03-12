@@ -1,11 +1,11 @@
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { v4 } from "uuid"
 import {
   AGENT_REQUEST_PREFIX,
   HTTP_REQUEST_PUBLIC_BASE_URL,
 } from "@illa-public/illa-net"
 import { Agent, AgentRaw } from "@illa-public/public-types"
 import { getAuthToken } from "@illa-public/utils"
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import { v4 } from "uuid"
 import { getFileExtensionFromBase64 } from "@/utils/file"
 
 export const agentAuthAPI = createApi({
@@ -83,18 +83,21 @@ export const agentAuthAPI = createApi({
       query: ({ teamID, aiAgentID, agentRaw }) => ({
         url: `/teams/${teamID}/aiAgent/${aiAgentID}`,
         method: "PUT",
-        data: agentRaw,
+        body: agentRaw,
       }),
     }),
     createAgent: builder.mutation<
       Agent,
       { teamID: string; agentRaw: AgentRaw }
     >({
-      query: ({ teamID, agentRaw }) => ({
-        url: `/teams/${teamID}/aiAgent`,
-        method: "POST",
-        data: agentRaw,
-      }),
+      query: ({ teamID, agentRaw }) => {
+        console.log("agentRaw", agentRaw)
+        return {
+          url: `/teams/${teamID}/aiAgent`,
+          method: "POST",
+          body: agentRaw,
+        }
+      },
     }),
     generatePromptDescription: builder.mutation<
       { payload: string },
@@ -104,7 +107,7 @@ export const agentAuthAPI = createApi({
         url: `/teams/${teamID}/aiAgent/generatePromptDescription`,
         method: "POST",
         timeout: 600000,
-        data: { prompt: encodeURIComponent(prompt) },
+        body: { prompt: encodeURIComponent(prompt) },
       }),
     }),
     generateIcon: builder.mutation<
@@ -112,9 +115,9 @@ export const agentAuthAPI = createApi({
       { teamID: string; name: string; description: string }
     >({
       query: ({ teamID, name, description }) => ({
-        url: `/teams/${teamID}/aiAgent/generateIcon`,
+        url: `/teams/${teamID}/aiAgent/generateAvatar`,
         method: "POST",
-        data: {
+        body: {
           name: encodeURIComponent(name),
           description: encodeURIComponent(description),
         },
@@ -129,8 +132,8 @@ export const agentAuthAPI = createApi({
         const fileName = v4()
         const type = getFileExtensionFromBase64(base64)
         return {
-          url: `teams/${teamID}/aiAgent/icon/uploadAddress/fileName/${fileName}.${type}`,
-          method: "POST",
+          url: `/teams/${teamID}/aiAgent/icon/uploadAddress/fileName/${fileName}.${type}`,
+          method: "GET",
         }
       },
     }),

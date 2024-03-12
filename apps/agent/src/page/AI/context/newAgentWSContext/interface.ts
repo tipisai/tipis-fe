@@ -1,7 +1,7 @@
 import { ReactNode } from "react"
 import { AI_AGENT_TYPE, Agent } from "@illa-public/public-types"
-import { ILLA_WEBSOCKET_STATUS } from "../../../../api/ws/interface"
-import { TextSignal } from "../../../../api/ws/textSignal"
+import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
+import { TextSignal } from "@/api/ws/textSignal"
 import {
   ChatMessage,
   ChatSendRequestPayload,

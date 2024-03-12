@@ -1,9 +1,10 @@
 import { Button } from "antd"
-import { memo } from "react"
+import { memo, useState } from "react"
 import { useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { Agent } from "@illa-public/public-types"
 import { SCROLL_ID } from "../../interface"
+import PublishModal from "../../modules/PublishModal"
 import { handleScrollToElement } from "../../utils"
 import { saveButtonContainerStyle } from "./style"
 
@@ -11,6 +12,7 @@ const SaveButton = memo(() => {
   const { control, trigger } = useFormContext<Agent>()
   const { isSubmitting, errors } = useFormState({ control })
   const { t } = useTranslation()
+  const [modalOpen, setModalOpen] = useState(false)
 
   const handleVerifyOnSave = async () => {
     await trigger()
@@ -24,15 +26,9 @@ const SaveButton = memo(() => {
     } else if (!!errors.variables) {
       handleScrollToElement(SCROLL_ID.VARIABLES)
       validate = false
-    } else if (!!errors.name) {
-      handleScrollToElement(SCROLL_ID.NAME)
-      validate = false
-    } else if (!!errors.description) {
-      handleScrollToElement(SCROLL_ID.DESCRIPTION)
-      validate = false
-    } else if (!!errors.icon) {
-      handleScrollToElement(SCROLL_ID.ICON)
-      validate = false
+    }
+    if (validate) {
+      setModalOpen(true)
     }
     return validate
   }
@@ -49,6 +45,7 @@ const SaveButton = memo(() => {
       >
         {t("editor.ai-agent.save")}
       </Button>
+      <PublishModal open={modalOpen} changeOpen={setModalOpen} />
     </div>
   )
 })

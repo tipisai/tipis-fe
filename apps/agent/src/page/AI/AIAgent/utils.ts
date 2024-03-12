@@ -121,6 +121,7 @@ export const useSubmitSaveAgent = () => {
           }).unwrap()
           agentInfo = serverAgent
         }
+        console.log("agentInfo", agentInfo)
         reset({
           ...agentInfo,
           variables:

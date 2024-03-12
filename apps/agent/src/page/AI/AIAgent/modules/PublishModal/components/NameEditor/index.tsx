@@ -3,8 +3,8 @@ import { FC, memo } from "react"
 import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { Agent } from "@illa-public/public-types"
-import AIAgentBlock from "../../../../../components/AIAgentBlock"
 import { ErrorText } from "../../../../../components/ErrorText"
+import ModalEditorBlock from "../AIAgentBlock"
 
 const NameEditor: FC = memo(() => {
   const { t } = useTranslation()
@@ -24,7 +24,7 @@ const NameEditor: FC = memo(() => {
       }}
       shouldUnregister={false}
       render={({ field }) => (
-        <AIAgentBlock title={t("editor.ai-agent.label.name")} required>
+        <ModalEditorBlock title={t("editor.ai-agent.label.name")} required>
           <Input
             {...field}
             placeholder={t("editor.ai-agent.placeholder.name")}
@@ -39,7 +39,7 @@ const NameEditor: FC = memo(() => {
           {errors.name?.message && (
             <ErrorText errorMessage={errors.name?.message} />
           )}
-        </AIAgentBlock>
+        </ModalEditorBlock>
       )}
     />
   )
