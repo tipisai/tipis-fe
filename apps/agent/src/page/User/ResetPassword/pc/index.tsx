@@ -45,7 +45,7 @@ export const PCReset: FC<ResetProps> = (props) => {
   const { handleSubmit, control, formState, getValues, trigger } =
     useFormContext<ResetPwdFields>()
   const backToLogin = () => {
-    navigate({ pathname: "/login", search: location.search })
+    navigate({ pathname: "/user/login", search: location.search })
   }
 
   const { track } = useContext(MixpanelTrackContext)

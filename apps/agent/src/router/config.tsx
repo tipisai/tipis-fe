@@ -1,9 +1,15 @@
 import { Suspense, lazy } from "react"
-import { RouterProvider, createBrowserRouter, redirect } from "react-router-dom"
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+  redirect,
+} from "react-router-dom"
 import { Page403, Page404, Page500 } from "@illa-public/status-page"
 import { getILLACloudURL } from "@illa-public/utils"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import PCWorkspaceLayout from "../Layout/Workspace/pc"
+import UserLayout from "../page/User/Layout/index"
 import { buildRouter } from "./buildRouter"
 import { RoutesObjectPro } from "./interface"
 
@@ -21,39 +27,47 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     loader: () => redirect(getILLACloudURL(window.customDomain)),
   },
   {
-    path: "/login",
-    element: (
-      <Suspense fallback={<FullSectionLoading />}>
-        <LoginPage />
-      </Suspense>
-    ),
+    path: "/user",
+    element: <UserLayout />,
     accessByMobile: true,
-  },
-  {
-    path: "/register",
-    element: (
-      <Suspense fallback={<FullSectionLoading />}>
-        <RegisterPage />
-      </Suspense>
-    ),
-    accessByMobile: true,
-  },
-  {
-    path: "/forgotPassword",
-    element: (
-      <Suspense fallback={<FullSectionLoading />}>
-        <ForgotPasswordPage />
-      </Suspense>
-    ),
-    accessByMobile: true,
-  },
-  {
-    path: "/oauth",
-    element: (
-      <Suspense fallback={<FullSectionLoading />}>
-        <OAuth />
-      </Suspense>
-    ),
+    children: [
+      {
+        index: true,
+        element: <Navigate to="./login" replace />,
+      },
+      {
+        path: "login",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <LoginPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "register",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <RegisterPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "forgotPassword",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <ForgotPasswordPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "oauth",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <OAuth />
+          </Suspense>
+        ),
+      },
+    ],
   },
   {
     path: "/workspace",

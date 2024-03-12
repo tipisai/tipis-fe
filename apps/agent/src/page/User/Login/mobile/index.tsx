@@ -67,7 +67,7 @@ export const MobileLogin: FC<LoginPageProps> = (props) => {
     track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
       element: "create_account",
     })
-    navigate({ pathname: "/register", search: location.search })
+    navigate({ pathname: "/user/register", search: location.search })
   }
   const handleClickForgotPassword = () => {
     track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
@@ -75,7 +75,7 @@ export const MobileLogin: FC<LoginPageProps> = (props) => {
     })
 
     navigate({
-      pathname: "/forgotPassword",
+      pathname: "/user/forgotPassword",
       search: location.search,
     })
   }

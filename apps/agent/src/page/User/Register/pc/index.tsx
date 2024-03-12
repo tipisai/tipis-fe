@@ -93,7 +93,7 @@ export const PCRegister: FC<RegisterProps> = (props) => {
       element: "sign_in",
     })
 
-    navigate({ pathname: "/login", search: location.search })
+    navigate({ pathname: "/user/login", search: location.search })
   }
 
   return (
