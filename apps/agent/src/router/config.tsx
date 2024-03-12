@@ -3,6 +3,7 @@ import { RouterProvider, createBrowserRouter, redirect } from "react-router-dom"
 import { Page403, Page404, Page500 } from "@illa-public/status-page"
 import { getILLACloudURL } from "@illa-public/utils"
 import FullSectionLoading from "@/components/FullSectionLoading"
+import PCWorkspaceLayout from "../Layout/Workspace/pc"
 import { buildRouter } from "./buildRouter"
 import { RoutesObjectPro } from "./interface"
 
@@ -13,7 +14,6 @@ const LoginPage = lazy(() => import("@/page/User/Login"))
 const RegisterPage = lazy(() => import("@/page/User/Register"))
 const ForgotPasswordPage = lazy(() => import("@/page/User/ResetPassword"))
 const OAuth = lazy(() => import("@/page/User/Oauth"))
-const Workspace = lazy(() => import("@/page/WorkSpace"))
 
 const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   {
@@ -57,40 +57,37 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   },
   {
     path: "/workspace",
-    element: (
-      <Suspense fallback={<FullSectionLoading />}>
-        <Workspace />
-      </Suspense>
-    ),
-  },
-  {
-    path: "/:ownerTeamIdentifier/ai-agent/:agentID/run",
-    element: (
-      <Suspense fallback={<FullSectionLoading />}>
-        <RunAgentPage />
-      </Suspense>
-    ),
+    element: <PCWorkspaceLayout />,
     needLogin: true,
-    accessByMobile: true,
+    children: [
+      {
+        path: ":ownerTeamIdentifier/ai-agent/:agentID/run",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <RunAgentPage />
+          </Suspense>
+        ),
+        accessByMobile: true,
+      },
+      {
+        path: ":teamIdentifier/ai-agent",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <CreateAgentPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: ":teamIdentifier/ai-agent/:agentID",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <EditAgentPage />
+          </Suspense>
+        ),
+      },
+    ],
   },
-  {
-    path: "/:teamIdentifier/ai-agent",
-    needLogin: true,
-    element: (
-      <Suspense fallback={<FullSectionLoading />}>
-        <CreateAgentPage />
-      </Suspense>
-    ),
-  },
-  {
-    path: "/:teamIdentifier/ai-agent/:agentID?",
-    needLogin: true,
-    element: (
-      <Suspense fallback={<FullSectionLoading />}>
-        <EditAgentPage />
-      </Suspense>
-    ),
-  },
+
   {
     path: "/403",
     element: <Page403 />,
