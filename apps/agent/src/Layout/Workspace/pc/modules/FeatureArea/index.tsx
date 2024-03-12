@@ -1,10 +1,13 @@
 import Icon from "@ant-design/icons"
 import { FC } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { v4 } from "uuid"
 import { PenIcon, PlusIcon } from "@illa-public/icon"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import MarketplaceIcon from "@/assets/workspace/marketplace.svg?react"
+import { ITabInfo, TAB_TYPE } from "@/redux/ui/recentTab/interface"
+import { recentTabActions } from "../../../../../redux/ui/recentTab/slice"
 import FeatureCard from "../../components/FeatureCard"
 import MenuItemButton from "../../components/MenuItemButton"
 import { featureAreaContainerStyle, featureCardsContainerStyle } from "./style"
@@ -12,9 +15,19 @@ import { featureAreaContainerStyle, featureCardsContainerStyle } from "./style"
 const FeatureArea: FC = () => {
   const navigate = useNavigate()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+  const dispatch = useDispatch()
 
   const handleClickCreateTipis = () => {
-    navigate(`/workspace/${currentTeamInfo?.identifier}/tipis`)
+    const tempID = v4()
+    const tabsInfo: ITabInfo = {
+      tabName: "",
+      tabIcon: "",
+      tabType: TAB_TYPE.CREATE_TIPIS,
+      tabID: tempID,
+      cacheID: tempID,
+    }
+    dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
+    navigate(`/workspace/${currentTeamInfo?.identifier}/tipis/create/${tempID}`)
   }
   return (
     <div css={featureAreaContainerStyle}>

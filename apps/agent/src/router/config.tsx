@@ -12,6 +12,7 @@ import PCWorkspaceLayout from "../Layout/Workspace/pc"
 import UserLayout from "../page/User/Layout/index"
 import { buildRouter } from "./buildRouter"
 import { RoutesObjectPro } from "./interface"
+import { workspaceLayoutLoader } from "./loader/workspaceLayoutLoader"
 
 const RunAgentPage = lazy(() => import("@/page/AI/AIAgentRun"))
 const EditAgentPage = lazy(() => import("@/page/AI/AIAgent/editAgent"))
@@ -73,6 +74,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     path: "/workspace",
     element: <PCWorkspaceLayout />,
     needLogin: true,
+    loader: workspaceLayoutLoader,
     children: [
       {
         path: ":ownerTeamIdentifier/tipis/:agentID/run",
@@ -84,7 +86,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         accessByMobile: true,
       },
       {
-        path: ":teamIdentifier/tipis",
+        path: ":teamIdentifier/tipis/create/:agentID",
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <CreateAgentPage />
@@ -92,7 +94,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         ),
       },
       {
-        path: ":teamIdentifier/tipis/:agentID",
+        path: ":teamIdentifier/tipis/edit/:agentID",
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <EditAgentPage />

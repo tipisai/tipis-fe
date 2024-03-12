@@ -2,6 +2,7 @@ import { FC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
+import { useParams } from "react-router-dom"
 import { Agent } from "@illa-public/public-types"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
@@ -19,15 +20,17 @@ import { AgentInitial } from "./interface"
 // } from "@/utils/mixpanelHelper"
 
 export const CreateAIAgentPage: FC = () => {
+  const { agentID } = useParams()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const agent = {
     ...AgentInitial,
+    agentID: agentID!,
     teamID: currentTeamInfo.id,
     teamIdentifier: currentTeamInfo.identifier,
     teamIcon: currentTeamInfo.icon,
   }
   const methods = useForm<Agent>({
-    defaultValues: {
+    values: {
       ...agent,
       variables:
         agent.variables.length === 0

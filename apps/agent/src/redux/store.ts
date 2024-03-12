@@ -7,11 +7,13 @@ import {
 } from "@illa-public/user-data"
 import { agentAuthAPI } from "./services/agentAPI"
 import { marketAPI } from "./services/marketAPI"
+import { uiReducer } from "./ui/slice"
 
 const store = configureStore({
   reducer: {
     team: teamReducer,
     currentUser: currentUserReducer,
+    ui: uiReducer,
     [authAPI.reducerPath]: authAPI.reducer,
     [agentAuthAPI.reducerPath]: agentAuthAPI.reducer,
     [marketAPI.reducerPath]: marketAPI.reducer,

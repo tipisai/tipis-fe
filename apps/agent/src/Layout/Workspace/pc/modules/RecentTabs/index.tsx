@@ -1,25 +1,23 @@
-import Icon from "@ant-design/icons"
 import { FC } from "react"
-import { PenIcon } from "@illa-public/icon"
-import MenuItemButton from "../../components/MenuItemButton"
+import { useSelector } from "react-redux"
+import { getRecentTabInfos } from "../../../../../redux/ui/recentTab/selector"
+import TipisTab from "../../components/TipisTab"
 import { recentTabsContainerStyle } from "./style"
 
 const RecentTabs: FC = () => {
+  const recentTabInfos = useSelector(getRecentTabInfos)
   return (
     <div css={recentTabsContainerStyle}>
-      <MenuItemButton text="Default Chat" icon={<Icon component={PenIcon} />} />
-      <MenuItemButton
-        text="Default Chat2"
-        icon={<Icon component={PenIcon} />}
-      />
-      <MenuItemButton
-        text="Default Chat3"
-        icon={<Icon component={PenIcon} />}
-      />
-      <MenuItemButton
-        text="Default Chat4"
-        icon={<Icon component={PenIcon} />}
-      />
+      {recentTabInfos.map((tabInfo) => (
+        <TipisTab
+          tabID={tabInfo.tabID}
+          tabType={tabInfo.tabType}
+          tabName={tabInfo.tabName}
+          icon={tabInfo.tabIcon}
+          key={tabInfo.tabID}
+          cacheID={tabInfo.cacheID}
+        />
+      ))}
     </div>
   )
 }
