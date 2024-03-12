@@ -1,8 +1,7 @@
-import { FC, useContext, useEffect } from "react"
+import { FC, useContext, useEffect, useRef } from "react"
 import { useFormContext, useFormState, useWatch } from "react-hook-form"
 import { Agent } from "@illa-public/public-types"
 import { PreviewChat } from "@/page/AI/components/PreviewChat"
-import { ILLA_WEBSOCKET_STATUS } from "../../../../api/ws/interface"
 import { ChatContext } from "../../components/ChatContext"
 import { AgentWSContext } from "../../context/AgentWSContext"
 import { rightPanelContainerStyle } from "./style"
@@ -14,19 +13,22 @@ export const AIAgentRunPC: FC = () => {
     control,
   })
 
-  const [model, agentType, aiAgentID] = useWatch({
+  const [model, agentType] = useWatch({
     control,
-    name: ["model", "agentType", "aiAgentID"],
+    name: ["model", "agentType"],
   })
 
-  const { inRoomUsers, isRunning, connect, wsStatus, isConnecting } =
+  const { inRoomUsers, isRunning, connect, wsStatus, leaveRoom } =
     useContext(AgentWSContext)
 
+  const onlyConnectOnce = useRef(false)
+
   useEffect(() => {
-    if (wsStatus === ILLA_WEBSOCKET_STATUS.INIT && !isConnecting) {
-      connect(aiAgentID, agentType)
+    if (onlyConnectOnce.current === false) {
+      connect()
+      onlyConnectOnce.current = true
     }
-  }, [agentType, aiAgentID, connect, isConnecting, wsStatus])
+  }, [connect, leaveRoom, wsStatus])
 
   return (
     <>

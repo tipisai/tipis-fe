@@ -105,9 +105,7 @@ const EditPanel: FC = () => {
         parameter5: getValues("aiAgentID") || "-1",
       },
     )
-    isRunning
-      ? await reconnect(getValues("aiAgentID"), getValues("agentType"))
-      : await connect(getValues("aiAgentID"), getValues("agentType"))
+    isRunning ? await reconnect() : await connect()
   }
 
   return (

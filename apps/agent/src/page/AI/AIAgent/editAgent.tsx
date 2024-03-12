@@ -8,6 +8,7 @@ import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { useGetAgentDetailQuery } from "@/redux/services/agentAPI"
 import { AgentWSProvider } from "../context/AgentWSContext"
+import { TipisWebSocketProvider } from "../context/newAgentWSContext"
 import { AIAgent } from "./aiagent"
 import FormContext from "./components/FormContext"
 import HeaderTools from "./components/HeaderTools"
@@ -59,12 +60,17 @@ export const EditAIAgentPage: FC = () => {
 
   return data ? (
     <FormProvider {...methods}>
-      <AgentWSProvider>
-        <FormContext>
-          <WorkspacePCHeaderLayout title={data.name} extra={<HeaderTools />} />
-          <AIAgent />
-        </FormContext>
-      </AgentWSProvider>
+      <TipisWebSocketProvider>
+        <AgentWSProvider>
+          <FormContext>
+            <WorkspacePCHeaderLayout
+              title={data.name}
+              extra={<HeaderTools />}
+            />
+            <AIAgent />
+          </FormContext>
+        </AgentWSProvider>
+      </TipisWebSocketProvider>
     </FormProvider>
   ) : null
 }

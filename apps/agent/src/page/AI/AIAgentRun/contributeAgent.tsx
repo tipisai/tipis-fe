@@ -9,6 +9,7 @@ import { useGetContributedAgentDetailQuery } from "@/redux/services/agentAPI"
 import { useGetAIAgentMarketplaceInfoQuery } from "@/redux/services/marketAPI"
 import WorkspaceMobileHeaderLayout from "../../../Layout/Workspace/mobile/Header"
 import { AgentWSProvider } from "../context/AgentWSContext"
+import { TipisWebSocketProvider } from "../context/newAgentWSContext"
 import AIAgentRunMobile from "./AIAgentRunMobile"
 import MobileMoreActionButton from "./AIAgentRunMobile/components/MoreActionButton"
 import AIAgentRunPC from "./AIAgentRunPC"
@@ -64,44 +65,46 @@ export const ContributedAgent: FC = () => {
 
   return contributeAgentDetail && aiAgentMarketPlaceInfo ? (
     <FormProvider {...methods}>
-      <AgentWSProvider>
-        <MarketplaceInfoProvider marketplaceInfo={aiAgentMarketPlaceInfo}>
-          <FormContext>
-            <LayoutAutoChange
-              desktopPage={
-                <>
-                  <WorkspacePCHeaderLayout
-                    title={contributeAgentDetail.name}
-                    extra={<HeaderTools />}
-                    customRenderTitle={(title) => (
-                      <CustomTitle
-                        title={title}
-                        iconURL={contributeAgentDetail.icon}
-                      />
-                    )}
-                  />
-                  <AIAgentRunPC />
-                </>
-              }
-              mobilePage={
-                <>
-                  <WorkspaceMobileHeaderLayout
-                    title={contributeAgentDetail.name}
-                    extra={<MobileMoreActionButton />}
-                    customRenderTitle={(title) => (
-                      <CustomTitle
-                        title={title}
-                        iconURL={contributeAgentDetail.icon}
-                      />
-                    )}
-                  />
-                  <AIAgentRunMobile />
-                </>
-              }
-            />
-          </FormContext>
-        </MarketplaceInfoProvider>
-      </AgentWSProvider>
+      <TipisWebSocketProvider>
+        <AgentWSProvider>
+          <MarketplaceInfoProvider marketplaceInfo={aiAgentMarketPlaceInfo}>
+            <FormContext>
+              <LayoutAutoChange
+                desktopPage={
+                  <>
+                    <WorkspacePCHeaderLayout
+                      title={contributeAgentDetail.name}
+                      extra={<HeaderTools />}
+                      customRenderTitle={(title) => (
+                        <CustomTitle
+                          title={title}
+                          iconURL={contributeAgentDetail.icon}
+                        />
+                      )}
+                    />
+                    <AIAgentRunPC />
+                  </>
+                }
+                mobilePage={
+                  <>
+                    <WorkspaceMobileHeaderLayout
+                      title={contributeAgentDetail.name}
+                      extra={<MobileMoreActionButton />}
+                      customRenderTitle={(title) => (
+                        <CustomTitle
+                          title={title}
+                          iconURL={contributeAgentDetail.icon}
+                        />
+                      )}
+                    />
+                    <AIAgentRunMobile />
+                  </>
+                }
+              />
+            </FormContext>
+          </MarketplaceInfoProvider>
+        </AgentWSProvider>
+      </TipisWebSocketProvider>
     </FormProvider>
   ) : null
 }

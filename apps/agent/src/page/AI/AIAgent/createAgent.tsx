@@ -6,6 +6,7 @@ import { Agent } from "@illa-public/public-types"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import { AgentWSProvider } from "../context/AgentWSContext"
+import { TipisWebSocketProvider } from "../context/newAgentWSContext"
 import { AIAgent } from "./aiagent"
 import FormContext from "./components/FormContext"
 import HeaderTools from "./components/HeaderTools"
@@ -53,15 +54,17 @@ export const CreateAIAgentPage: FC = () => {
 
   return (
     <FormProvider {...methods}>
-      <AgentWSProvider>
-        <FormContext>
-          <WorkspacePCHeaderLayout
-            title={t("new_dashboard.button.blank-agent")}
-            extra={<HeaderTools />}
-          />
-          <AIAgent />
-        </FormContext>
-      </AgentWSProvider>
+      <TipisWebSocketProvider>
+        <AgentWSProvider>
+          <FormContext>
+            <WorkspacePCHeaderLayout
+              title={t("new_dashboard.button.blank-agent")}
+              extra={<HeaderTools />}
+            />
+            <AIAgent />
+          </FormContext>
+        </AgentWSProvider>
+      </TipisWebSocketProvider>
     </FormProvider>
   )
 }

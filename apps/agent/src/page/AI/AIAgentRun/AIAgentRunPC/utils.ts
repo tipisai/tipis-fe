@@ -50,8 +50,7 @@ export const useReRerunAgent = () => {
           parameter5: aiAgentID,
         },
       )
-      console.log("rrrrrr")
-      await reconnect(data.aiAgentID, data.agentType)
+      await reconnect()
     },
     [aiAgentID, canUseBillingFeature, reconnect, reset, upgradeModal],
   )

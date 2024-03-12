@@ -24,7 +24,7 @@ export const AIAgentRunMobile: FC = () => {
 
   useEffect(() => {
     if (wsStatus === ILLA_WEBSOCKET_STATUS.INIT && !isConnecting) {
-      connect(aiAgentID, agentType)
+      connect()
     }
   }, [agentType, aiAgentID, connect, isConnecting, wsStatus])
 

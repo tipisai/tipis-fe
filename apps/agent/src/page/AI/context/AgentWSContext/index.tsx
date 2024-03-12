@@ -1,12 +1,19 @@
-import { FC, createContext, useCallback, useMemo, useState } from "react"
+import {
+  FC,
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react"
 import { useFormContext } from "react-hook-form"
 import { Agent } from "@illa-public/public-types"
 import {
   CollaboratorsInfo,
   SenderType,
 } from "../../components/PreviewChat/interface"
-import { useAgentConnect } from "../../components/ws/useAgentConnect"
-import { UseAgentProps } from "../../components/ws/useAgentProps"
+import { TipisWebSocketContext } from "../newAgentWSContext"
+import { IInitWSCallback } from "../newAgentWSContext/interface"
 import { IAgentWSInject, IAgentWSProviderProps } from "./interface"
 
 export const AgentWSContext = createContext({} as IAgentWSInject)
@@ -74,22 +81,10 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
   const [isRunning, setIsRunning] = useState(false)
   const [inRoomUsers, setInRoomUsers] = useState<CollaboratorsInfo[]>([])
 
-  const agentInfo = useMemo(
-    () => ({
-      prompt: getValues("prompt"),
-      variables: getValues("variables"),
-      // TODO: add knowledge
-      actionID: getValues("aiAgentID"),
-      modelConfig: getValues("modelConfig"),
-      model: getValues("model"),
-      agentType: getValues("agentType"),
-    }),
-    [getValues],
-  )
+  const getConnectParams = useCallback(() => {
+    const agentInfo = getValues()
 
-  const agentConnectOptions: UseAgentProps = useMemo(
-    () => ({
-      agentInfo: agentInfo,
+    const initConnectConfig: IInitWSCallback = {
       onStartRunning: () => {
         setLastRunAgent(getRunAgent())
       },
@@ -107,9 +102,12 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
         newRoomUsers = updateLocalName(getValues("name"), roomUsers)
         setInRoomUsers(newRoomUsers)
       },
-    }),
-    [agentInfo, getRunAgent, getValues, updateLocalIcon, updateLocalName],
-  )
+    }
+    return {
+      agentInfo,
+      initConnectConfig,
+    }
+  }, [getRunAgent, getValues, updateLocalIcon, updateLocalName])
 
   const {
     sendMessage,
@@ -119,15 +117,25 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
     connect,
     wsStatus,
     leaveRoom,
-  } = useAgentConnect(agentConnectOptions)
+  } = useContext(TipisWebSocketContext)
+
+  const innerConnect = useCallback(async () => {
+    const { agentInfo, initConnectConfig } = getConnectParams()
+    await connect(agentInfo, initConnectConfig)
+  }, [connect, getConnectParams])
+
+  const innerReconnect = useCallback(async () => {
+    const { agentInfo, initConnectConfig } = getConnectParams()
+    await reconnect(agentInfo, initConnectConfig)
+  }, [getConnectParams, reconnect])
 
   const value = useMemo(() => {
     return {
       sendMessage,
       generationMessage,
       chatMessages,
-      reconnect,
-      connect,
+      reconnect: innerReconnect,
+      connect: innerConnect,
       wsStatus,
       lastRunAgent,
       isConnecting,
@@ -139,15 +147,15 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
     }
   }, [
     chatMessages,
-    connect,
     generationMessage,
     inRoomUsers,
+    innerConnect,
+    innerReconnect,
     isConnecting,
     isReceiving,
     isRunning,
     lastRunAgent,
     leaveRoom,
-    reconnect,
     sendMessage,
     wsStatus,
   ])
