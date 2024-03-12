@@ -72,7 +72,7 @@ export const PCLogin: FC<LoginPageProps> = (props) => {
       element: "create_account",
     })
     navigate({
-      pathname: "/register",
+      pathname: "/user/register",
       search: location.search,
     })
   }
@@ -82,7 +82,7 @@ export const PCLogin: FC<LoginPageProps> = (props) => {
       element: "forget_password",
     })
     navigate({
-      pathname: "/forgotPassword",
+      pathname: "/user/forgotPassword",
       search: location.search,
     })
   }

@@ -13,8 +13,6 @@ import {
 import { useSignInMutation } from "@illa-public/user-data"
 import { setAuthToken } from "@illa-public/utils"
 import { track } from "@/utils/mixpanelHelper"
-import { UserLayout } from "../Layout/desktopLayout"
-import { MobileUserLayout } from "../Layout/mobileLayout"
 import { LoginFields } from "../interface"
 import { LoginErrorMsg } from "./interface"
 import { MobileLogin } from "./mobile"
@@ -110,24 +108,20 @@ const LoginPage: FC = () => {
       >
         <LayoutAutoChange
           desktopPage={
-            <UserLayout>
-              <PCLogin
-                loading={loading}
-                errorMsg={errorMsg}
-                onSubmit={onSubmit}
-                lockedEmail={email ?? searchParams.get("email") ?? ""}
-              />
-            </UserLayout>
+            <PCLogin
+              loading={loading}
+              errorMsg={errorMsg}
+              onSubmit={onSubmit}
+              lockedEmail={email ?? searchParams.get("email") ?? ""}
+            />
           }
           mobilePage={
-            <MobileUserLayout>
-              <MobileLogin
-                loading={loading}
-                errorMsg={errorMsg}
-                onSubmit={onSubmit}
-                lockedEmail={email ?? searchParams.get("email") ?? ""}
-              />
-            </MobileUserLayout>
+            <MobileLogin
+              loading={loading}
+              errorMsg={errorMsg}
+              onSubmit={onSubmit}
+              lockedEmail={email ?? searchParams.get("email") ?? ""}
+            />
           }
         />
       </MixpanelTrackProvider>

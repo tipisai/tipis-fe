@@ -20,8 +20,6 @@ import { linkTrk, rdtSignUpTrk, twqTrk } from "@/utils/gaHelper"
 import { LINKEDIN_CONVERSION_ID, TWITTER_ID } from "@/utils/gaHelper/constent"
 import { track } from "@/utils/mixpanelHelper"
 import { TIPISStorage } from "@/utils/storage"
-import { UserLayout } from "../Layout/desktopLayout"
-import { MobileUserLayout } from "../Layout/mobileLayout"
 import { RegisterFields } from "../interface"
 import { RegisterErrorMsg } from "./interface"
 import { MobileRegister } from "./mobile"
@@ -172,30 +170,26 @@ const RegisterPage: FC = () => {
       >
         <LayoutAutoChange
           desktopPage={
-            <UserLayout>
-              <PCRegister
-                loading={loading}
-                errorMsg={errorMsg}
-                onSubmit={onSubmit}
-                sendEmail={handleSendEmail}
-                lockedEmail={email ?? searchParams.get("email") ?? ""}
-                showCountDown={showCountDown}
-                onCountDownChange={setShowCountDown}
-              />
-            </UserLayout>
+            <PCRegister
+              loading={loading}
+              errorMsg={errorMsg}
+              onSubmit={onSubmit}
+              sendEmail={handleSendEmail}
+              lockedEmail={email ?? searchParams.get("email") ?? ""}
+              showCountDown={showCountDown}
+              onCountDownChange={setShowCountDown}
+            />
           }
           mobilePage={
-            <MobileUserLayout>
-              <MobileRegister
-                loading={loading}
-                errorMsg={errorMsg}
-                onSubmit={onSubmit}
-                sendEmail={handleSendEmail}
-                lockedEmail={email ?? searchParams.get("email") ?? ""}
-                showCountDown={showCountDown}
-                onCountDownChange={setShowCountDown}
-              />
-            </MobileUserLayout>
+            <MobileRegister
+              loading={loading}
+              errorMsg={errorMsg}
+              onSubmit={onSubmit}
+              sendEmail={handleSendEmail}
+              lockedEmail={email ?? searchParams.get("email") ?? ""}
+              showCountDown={showCountDown}
+              onCountDownChange={setShowCountDown}
+            />
           }
         />
       </MixpanelTrackProvider>

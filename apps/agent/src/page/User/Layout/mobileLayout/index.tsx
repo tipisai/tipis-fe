@@ -10,7 +10,7 @@ import { DOC_PREFIX } from "../../constants"
 import { LayoutProps } from "../interface"
 import { contentStyle, layoutStyle, policyStyle } from "./style"
 
-export const MobileUserLayout: FC<LayoutProps> = ({ children }) => {
+const MobileUserLayout: FC<LayoutProps> = ({ children }) => {
   const { t } = useTranslation()
   const { track } = useContext(MixpanelTrackContext)
 
@@ -65,4 +65,4 @@ export const MobileUserLayout: FC<LayoutProps> = ({ children }) => {
   )
 }
 
-MobileUserLayout.displayName = "MobileUserLayout"
+export default MobileUserLayout

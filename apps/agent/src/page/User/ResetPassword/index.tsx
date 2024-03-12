@@ -16,8 +16,6 @@ import {
 } from "@illa-public/user-data"
 import { track } from "@/utils/mixpanelHelper"
 import { TIPISStorage } from "@/utils/storage"
-import { UserLayout } from "../Layout/desktopLayout"
-import { MobileUserLayout } from "../Layout/mobileLayout"
 import { ResetPwdFields } from "../interface"
 import { ResetPwdErrorMsg } from "./interface"
 import { MobileReset } from "./mobile"
@@ -67,7 +65,7 @@ export const ResetPasswordPage: FC = () => {
         ILLA_MIXPANEL_PUBLIC_PAGE_NAME.FORGET_PASSWORD,
         { element: "reset_password", parameter2: "suc" },
       )
-      navigate("/login")
+      navigate("/user/login")
       message.success({
         content: t("page.user.forgot_password.tips.success"),
       })
@@ -135,30 +133,26 @@ export const ResetPasswordPage: FC = () => {
       >
         <LayoutAutoChange
           desktopPage={
-            <UserLayout>
-              <PCReset
-                loading={loading}
-                errorMsg={errorMsg}
-                onSubmit={onSubmit}
-                sendEmail={handleSendEmail}
-                lockedEmail={email ?? searchParams.get("email") ?? ""}
-                showCountDown={showCountDown}
-                onCountDownChange={setShowCountDown}
-              />
-            </UserLayout>
+            <PCReset
+              loading={loading}
+              errorMsg={errorMsg}
+              onSubmit={onSubmit}
+              sendEmail={handleSendEmail}
+              lockedEmail={email ?? searchParams.get("email") ?? ""}
+              showCountDown={showCountDown}
+              onCountDownChange={setShowCountDown}
+            />
           }
           mobilePage={
-            <MobileUserLayout>
-              <MobileReset
-                loading={loading}
-                errorMsg={errorMsg}
-                onSubmit={onSubmit}
-                sendEmail={handleSendEmail}
-                lockedEmail={email ?? searchParams.get("email") ?? ""}
-                showCountDown={showCountDown}
-                onCountDownChange={setShowCountDown}
-              />
-            </MobileUserLayout>
+            <MobileReset
+              loading={loading}
+              errorMsg={errorMsg}
+              onSubmit={onSubmit}
+              sendEmail={handleSendEmail}
+              lockedEmail={email ?? searchParams.get("email") ?? ""}
+              showCountDown={showCountDown}
+              onCountDownChange={setShowCountDown}
+            />
           }
         />
       </MixpanelTrackProvider>

@@ -19,7 +19,7 @@ import {
   topWrapperStyle,
 } from "./style"
 
-export const UserLayout: FC<LayoutProps> = ({ children }) => {
+const UserLayout: FC<LayoutProps> = ({ children }) => {
   const { t } = useTranslation()
   const { track } = useContext(MixpanelTrackContext)
 
@@ -80,5 +80,4 @@ export const UserLayout: FC<LayoutProps> = ({ children }) => {
     </div>
   )
 }
-
-UserLayout.displayName = "UserLayout"
+export default UserLayout

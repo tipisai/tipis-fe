@@ -75,7 +75,7 @@ export const MobileRegister: FC<RegisterProps> = (props) => {
     track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
       element: "sign_in",
     })
-    navigate({ pathname: "/login", search: location.search })
+    navigate({ pathname: "/user/login", search: location.search })
   }
 
   useEffect(() => {
