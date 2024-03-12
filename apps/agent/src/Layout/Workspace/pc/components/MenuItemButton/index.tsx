@@ -8,9 +8,9 @@ import {
 } from "./style"
 
 const MenuItemButton: FC<IMenuItemButtonProps> = (props) => {
-  const { icon, extra, text } = props
+  const { icon, extra, text, onClick } = props
   return (
-    <button css={menuItemButtonStyle}>
+    <button css={menuItemButtonStyle} onClick={onClick}>
       <div
         css={menuItemButtonContentContainerStyle}
         className="menu-item-inner-container"
