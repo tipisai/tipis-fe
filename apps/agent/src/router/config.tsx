@@ -61,7 +61,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     needLogin: true,
     children: [
       {
-        path: ":ownerTeamIdentifier/ai-agent/:agentID/run",
+        path: ":ownerTeamIdentifier/tipis/:agentID/run",
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <RunAgentPage />
@@ -70,7 +70,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         accessByMobile: true,
       },
       {
-        path: ":teamIdentifier/ai-agent",
+        path: ":teamIdentifier/tipis",
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <CreateAgentPage />
@@ -78,7 +78,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         ),
       },
       {
-        path: ":teamIdentifier/ai-agent/:agentID",
+        path: ":teamIdentifier/tipis/:agentID",
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <EditAgentPage />

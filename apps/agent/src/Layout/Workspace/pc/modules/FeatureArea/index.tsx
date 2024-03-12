@@ -14,7 +14,7 @@ const FeatureArea: FC = () => {
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
 
   const handleClickCreateTipis = () => {
-    navigate(`/workspace/${currentTeamInfo?.identifier}/ai-agent`)
+    navigate(`/workspace/${currentTeamInfo?.identifier}/tipis`)
   }
   return (
     <div css={featureAreaContainerStyle}>

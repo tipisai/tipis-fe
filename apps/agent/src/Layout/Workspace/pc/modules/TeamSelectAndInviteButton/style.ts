@@ -7,3 +7,7 @@ export const teamSelectAndInviteButtonContainerStyle = css`
   width: 100%;
   gap: 8px;
 `
+
+export const inviteButtonContainerStyle = css`
+  flex: none;
+`

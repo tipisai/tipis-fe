@@ -7,6 +7,7 @@ export const teamSelectContainerStyle = css`
   gap: 8px;
   width: 100%;
   overflow: hidden;
+  cursor: pointer;
 `
 
 export const teamNameStyle = css`
