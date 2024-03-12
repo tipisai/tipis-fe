@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 import { Navigate, useParams } from "react-router-dom"
 import { Agent } from "@illa-public/public-types"
 import { getCurrentId } from "@illa-public/user-data"
-import WorkspaceHeaderLayout from "@/Layout/Workspace/Header"
+import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { useGetAgentDetailQuery } from "@/redux/services/agentAPI"
 import { AgentWSProvider } from "../context/AgentWSContext"
@@ -61,7 +61,7 @@ export const EditAIAgentPage: FC = () => {
     <FormProvider {...methods}>
       <AgentWSProvider>
         <FormContext>
-          <WorkspaceHeaderLayout title={data.name} extra={<HeaderTools />} />
+          <WorkspacePCHeaderLayout title={data.name} extra={<HeaderTools />} />
           <AIAgent />
         </FormContext>
       </AgentWSProvider>

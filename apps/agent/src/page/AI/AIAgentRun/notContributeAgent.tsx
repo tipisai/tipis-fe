@@ -5,10 +5,13 @@ import { Navigate, useParams } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { Agent } from "@illa-public/public-types"
 import { getCurrentId } from "@illa-public/user-data"
+import WorkspaceMobileHeaderLayout from "@/Layout/Workspace/mobile/Header"
+import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { useGetAgentDetailQuery } from "@/redux/services/agentAPI"
-import WorkspaceHeaderLayout from "../../../Layout/Workspace/Header"
 import { AgentWSProvider } from "../context/AgentWSContext"
+import AIAgentRunMobile from "./AIAgentRunMobile"
+import MobileMoreActionButton from "./AIAgentRunMobile/components/MoreActionButton"
 import AIAgentRunPC from "./AIAgentRunPC"
 import CustomTitle from "./AIAgentRunPC/components/CustomTitle"
 import HeaderTools from "./AIAgentRunPC/components/HeaderTools"
@@ -52,7 +55,7 @@ export const NotContributedAgent: FC = () => {
             <LayoutAutoChange
               desktopPage={
                 <>
-                  <WorkspaceHeaderLayout
+                  <WorkspacePCHeaderLayout
                     title={data.name}
                     extra={<HeaderTools />}
                     customRenderTitle={(title) => (
@@ -64,7 +67,14 @@ export const NotContributedAgent: FC = () => {
               }
               mobilePage={
                 <>
-                  {/* <AIAgentRunMobile agent={data} marketplace={undefined} /> */}
+                  <WorkspaceMobileHeaderLayout
+                    title={data.name}
+                    extra={<MobileMoreActionButton />}
+                    customRenderTitle={(title) => (
+                      <CustomTitle title={title} iconURL={data.icon} />
+                    )}
+                  />
+                  <AIAgentRunMobile />
                 </>
               }
             />

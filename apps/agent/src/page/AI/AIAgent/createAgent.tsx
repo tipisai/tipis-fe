@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { Agent } from "@illa-public/public-types"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
-import WorkspaceHeaderLayout from "@/Layout/Workspace/Header"
+import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/Header"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import { AIAgent } from "./aiagent"
 import FormContext from "./components/FormContext"
@@ -55,7 +55,7 @@ export const CreateAIAgentPage: FC = () => {
     <FormProvider {...methods}>
       <AgentWSProvider>
         <FormContext>
-          <WorkspaceHeaderLayout
+          <WorkspacePCHeaderLayout
             title={t("new_dashboard.button.blank-agent")}
             extra={<HeaderTools />}
           />

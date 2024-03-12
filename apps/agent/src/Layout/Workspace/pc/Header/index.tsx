@@ -8,7 +8,7 @@ import {
   titleStyle,
 } from "./style"
 
-const WorkspaceHeaderLayout = memo((props: IWorkspaceHeaderLayoutProps) => {
+const WorkspacePCHeaderLayout = memo((props: IWorkspaceHeaderLayoutProps) => {
   const { title, titleDesc, extra, customRenderTitle } = props
   return (
     <>
@@ -30,6 +30,6 @@ const WorkspaceHeaderLayout = memo((props: IWorkspaceHeaderLayoutProps) => {
   )
 })
 
-WorkspaceHeaderLayout.displayName = "WorkspaceHeaderLayout"
+WorkspacePCHeaderLayout.displayName = "WorkspaceHeaderLayout"
 
-export default WorkspaceHeaderLayout
+export default WorkspacePCHeaderLayout
