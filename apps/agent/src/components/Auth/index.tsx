@@ -26,8 +26,7 @@ const ProtectedComponent: FC<AuthProps> = (props) => {
   }
 
   if (data) {
-    i18n.language
-    const currentLng = window.localStorage.getItem("i18nextLng")
+    const currentLng = i18n.language
     ILLAMixpanel.setUserID(data.user.userID)
     const reportedUserInfo: Record<string, any> = {}
     Object.entries(data.user).forEach(([key, value]) => {
@@ -36,7 +35,6 @@ const ProtectedComponent: FC<AuthProps> = (props) => {
     ILLAMixpanel.setUserProperties(reportedUserInfo)
     if (data.user.language && data.user.language !== currentLng) {
       i18n.changeLanguage(data.user.language)
-      window.location.reload()
       return null
     }
 

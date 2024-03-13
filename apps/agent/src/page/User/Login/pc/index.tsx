@@ -11,8 +11,8 @@ import {
   MixpanelTrackContext,
 } from "@illa-public/mixpanel-utils"
 import { EMAIL_FORMAT, isCloudVersion } from "@illa-public/utils"
-import ErrorMessage from "../../components/ErrorMessage"
-import LinkButton from "../../components/LinkButton"
+import ErrorMessage from "@/components/InputErrorMessage"
+import LinkButton from "@/components/LinkButton"
 import { OAuthButton } from "../../components/OAuthButton"
 import { LoginFields } from "../../interface"
 import { getValidReportParams } from "../../utils/getValidReportParams"

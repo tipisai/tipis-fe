@@ -8,6 +8,7 @@ import {
 import { Page403, Page404, Page500 } from "@illa-public/status-page"
 import { getILLACloudURL } from "@illa-public/utils"
 import FullSectionLoading from "@/components/FullSectionLoading"
+import SettingLayout from "@/page/SettingPage"
 import PCWorkspaceLayout from "../Layout/Workspace/pc"
 import UserLayout from "../page/User/Layout/index"
 import { buildRouter } from "./buildRouter"
@@ -29,6 +30,22 @@ const LoginPage = lazy(() => import("@/page/User/Login"))
 const RegisterPage = lazy(() => import("@/page/User/Register"))
 const ForgotPasswordPage = lazy(() => import("@/page/User/ResetPassword"))
 const OAuth = lazy(() => import("@/page/User/Oauth"))
+const PersonalSetting = lazy(
+  () => import("@/page/SettingPage/account/personal"),
+)
+const LanguageSetting = lazy(
+  () => import("@/page/SettingPage/account/language"),
+)
+const PasswordSettingPage = lazy(
+  () => import("@/page/SettingPage/account/password"),
+)
+const LinkedSettingPage = lazy(
+  () => import("@/page/SettingPage/account/linked"),
+)
+const SettingLanding = lazy(() => import("@/page/SettingPage/landing"))
+const TeamSetting = lazy(() => import("@/page/SettingPage/team/info"))
+const TeamBilling = lazy(() => import("@/page/SettingPage/team/billing"))
+const TeamMembers = lazy(() => import("@/page/SettingPage/team/member"))
 
 const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   {
@@ -51,6 +68,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
             <LoginPage />
           </Suspense>
         ),
+        accessByMobile: true,
       },
       {
         path: "register",
@@ -59,6 +77,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
             <RegisterPage />
           </Suspense>
         ),
+        accessByMobile: true,
       },
       {
         path: "forgotPassword",
@@ -67,6 +86,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
             <ForgotPasswordPage />
           </Suspense>
         ),
+        accessByMobile: true,
       },
       {
         path: "oauth",
@@ -75,6 +95,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
             <OAuth />
           </Suspense>
         ),
+        accessByMobile: true,
       },
     ],
   },
@@ -128,6 +149,86 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     ],
   },
 
+  {
+    path: "/setting/:teamIdentifier",
+    accessByMobile: true,
+    element: <SettingLayout />,
+    needLogin: true,
+    children: [
+      {
+        index: true,
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <SettingLanding />
+          </Suspense>
+        ),
+        accessByMobile: true,
+      },
+      {
+        path: "account",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <PersonalSetting />
+          </Suspense>
+        ),
+        accessByMobile: true,
+      },
+      {
+        path: "language",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <LanguageSetting />
+          </Suspense>
+        ),
+        accessByMobile: true,
+      },
+      {
+        path: "password",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <PasswordSettingPage />
+          </Suspense>
+        ),
+        accessByMobile: true,
+      },
+      {
+        path: "linked",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <LinkedSettingPage />
+          </Suspense>
+        ),
+        accessByMobile: true,
+      },
+      {
+        path: "team-settings",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <TeamSetting />
+          </Suspense>
+        ),
+        accessByMobile: true,
+      },
+      {
+        path: "members",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <TeamMembers />
+          </Suspense>
+        ),
+        accessByMobile: true,
+      },
+      {
+        path: "billing",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <TeamBilling />
+          </Suspense>
+        ),
+        accessByMobile: true,
+      },
+    ],
+  },
   {
     path: "/403",
     element: <Page403 />,

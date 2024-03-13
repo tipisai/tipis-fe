@@ -7,7 +7,7 @@ import {
   MixpanelTrackContext,
 } from "@illa-public/mixpanel-utils"
 import Logo from "@/assets/public/logo.svg?react"
-import LinkButton from "../../components/LinkButton"
+import LinkButton from "@/components/LinkButton"
 import { DOC_PREFIX } from "../../constants"
 import { LayoutProps } from "../interface"
 import {

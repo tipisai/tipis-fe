@@ -12,5 +12,5 @@ export interface ResetProps {
   loading: boolean
   errorMsg: ResetPwdErrorMsg
   onSubmit: SubmitHandler<ResetPwdFields>
-  sendEmail: (email: string) => void
+  sendEmail: (email: string) => Promise<void>
 }

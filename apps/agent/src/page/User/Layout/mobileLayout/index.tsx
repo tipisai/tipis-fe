@@ -5,7 +5,7 @@ import {
   ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackContext,
 } from "@illa-public/mixpanel-utils"
-import LinkButton from "../../components/LinkButton"
+import LinkButton from "@/components/LinkButton"
 import { DOC_PREFIX } from "../../constants"
 import { LayoutProps } from "../interface"
 import { contentStyle, layoutStyle, policyStyle } from "./style"

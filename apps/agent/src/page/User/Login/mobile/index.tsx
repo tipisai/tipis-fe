@@ -10,8 +10,8 @@ import {
   ILLA_MIXPANEL_PUBLIC_PAGE_NAME,
   MixpanelTrackContext,
 } from "@illa-public/mixpanel-utils"
-import ErrorMessage from "../../components/ErrorMessage"
-import LinkButton from "../../components/LinkButton"
+import ErrorMessage from "@/components/InputErrorMessage"
+import LinkButton from "@/components/LinkButton"
 import { OAuthButton } from "../../components/OAuthButton"
 import { EMAIL_FORMAT } from "../../constants"
 import { LoginFields } from "../../interface"

@@ -7,7 +7,7 @@ export interface RegisterProps {
   loading: boolean
   errorMsg: RegisterErrorMsg
   onSubmit: SubmitHandler<RegisterFields>
-  sendEmail: (email: string) => void
+  sendEmail: (email: string) => Promise<void>
   showCountDown: boolean
   lockedEmail?: string | null
   onCountDownChange: (showCountDown: boolean) => void
