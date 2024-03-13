@@ -1,4 +1,4 @@
-import { TAB_TYPE } from "../../../../../redux/ui/recentTab/interface"
+import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 
 export interface ITipsTab {
   icon: string

@@ -14,9 +14,13 @@ import { buildRouter } from "./buildRouter"
 import { RoutesObjectPro } from "./interface"
 import { workspaceLayoutLoader } from "./loader/workspaceLayoutLoader"
 
-const RunAgentPage = lazy(() => import("@/page/AI/AIAgentRun"))
-const EditAgentPage = lazy(() => import("@/page/AI/AIAgent/editAgent"))
-const CreateAgentPage = lazy(() => import("@/page/AI/AIAgent/createAgent"))
+const RunAgentPage = lazy(() => import("@/page/WorkSpace/AI/AIAgentRun"))
+const EditAgentPage = lazy(
+  () => import("@/page/WorkSpace/AI/AIAgent/editAgent"),
+)
+const CreateAgentPage = lazy(
+  () => import("@/page/WorkSpace/AI/AIAgent/createAgent"),
+)
 const LoginPage = lazy(() => import("@/page/User/Login"))
 const RegisterPage = lazy(() => import("@/page/User/Register"))
 const ForgotPasswordPage = lazy(() => import("@/page/User/ResetPassword"))
