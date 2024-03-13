@@ -21,6 +21,10 @@ const EditAgentPage = lazy(
 const CreateAgentPage = lazy(
   () => import("@/page/WorkSpace/AI/AIAgent/createAgent"),
 )
+const TipisDashboard = lazy(() => import("@/page/WorkSpace/TipisDashboard/pc"))
+const FunctionDashboard = lazy(
+  () => import("@/page/WorkSpace/FunctionDashboard/pc"),
+)
 const LoginPage = lazy(() => import("@/page/User/Login"))
 const RegisterPage = lazy(() => import("@/page/User/Register"))
 const ForgotPasswordPage = lazy(() => import("@/page/User/ResetPassword"))
@@ -81,13 +85,12 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     loader: workspaceLayoutLoader,
     children: [
       {
-        path: ":ownerTeamIdentifier/tipis/:agentID/run",
+        path: ":teamIdentifier/tipis",
         element: (
           <Suspense fallback={<FullSectionLoading />}>
-            <RunAgentPage />
+            <TipisDashboard />
           </Suspense>
         ),
-        accessByMobile: true,
       },
       {
         path: ":teamIdentifier/tipis/create/:agentID",
@@ -102,6 +105,23 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <EditAgentPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: ":teamIdentifier/tipis/run/:agentID",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <RunAgentPage />
+          </Suspense>
+        ),
+        accessByMobile: true,
+      },
+      {
+        path: ":teamIdentifier/function",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <FunctionDashboard />
           </Suspense>
         ),
       },

@@ -42,7 +42,7 @@
     "@illa-public/illa-storage": "workspace:^",
     "@mui/material": "^5.15.3",
     "@reduxjs/toolkit": "^2.2.1",
-    "antd": "^5.15.0",
+    "antd": "^5.15.2",
     "copy-to-clipboard": "^3.3.2",
     "framer-motion": "^11.0.8",
     "i18next": "^23.10.0",

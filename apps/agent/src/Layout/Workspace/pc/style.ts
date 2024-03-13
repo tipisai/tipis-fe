@@ -8,5 +8,6 @@ export const workspaceLayoutContainerStyle = css`
 
 export const contentContainerStyle = css`
   width: 100%;
+  height: 100%;
   padding-top: 16px;
 `

@@ -1,15 +1,15 @@
 import { Global } from "@emotion/react"
-import { UpgradeModalGroup } from "@illa-public/upgrade-modal"
-import { App as AntdContextProvider, ConfigProvider } from "antd"
+import { App as AntdContextProvider, ConfigProvider, ThemeConfig } from "antd"
 import { HelmetProvider } from "react-helmet-async"
-import ILLAThemConfig from "@/config/them/illa-theme.json"
+import { UpgradeModalGroup } from "@illa-public/upgrade-modal"
+import tipisThemConfig from "@/config/them/theme-tipis.json"
 import { ILLARouterProvider } from "./router/config"
 import { globalStyle } from "./style"
 
 function App() {
   return (
     <HelmetProvider>
-      <ConfigProvider theme={ILLAThemConfig}>
+      <ConfigProvider theme={tipisThemConfig as ThemeConfig}>
         <AntdContextProvider component={false}>
           <Global styles={globalStyle} />
           <ILLARouterProvider />

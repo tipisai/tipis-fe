@@ -1,7 +1,7 @@
+import { IndexRouteObject, NonIndexRouteObject } from "react-router-dom"
 import { USER_ROLE } from "@illa-public/public-types"
-import { RouteObject } from "react-router-dom"
 
-export type RoutesObjectPro = RouteObject & {
+export type ExtRoutesObjectAttr = {
   /**
    * @description need login, if use check role,can replace this
    */
@@ -13,3 +13,10 @@ export type RoutesObjectPro = RouteObject & {
   children?: RoutesObjectPro[]
   accessByMobile?: boolean
 }
+
+export type IndexRouteObjectPro = IndexRouteObject &
+  Omit<ExtRoutesObjectAttr, "children">
+export type NonIndexRouteObjectPro = Omit<NonIndexRouteObject, "children"> &
+  ExtRoutesObjectAttr
+
+export type RoutesObjectPro = IndexRouteObjectPro | NonIndexRouteObjectPro

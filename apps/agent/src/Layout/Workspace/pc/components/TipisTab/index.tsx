@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom"
 import { MinusIcon } from "@illa-public/icon"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { getCurrentTabID } from "@/redux/ui/recentTab/selector"
-import { recentTabActions } from "../../../../../redux/ui/recentTab/slice"
+import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { ITipsTab } from "./interface"
 import {
   deleteButtonContainerStyle,

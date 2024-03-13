@@ -1,6 +1,6 @@
 import { FC } from "react"
 import { useSelector } from "react-redux"
-import { getRecentTabInfos } from "../../../../../redux/ui/recentTab/selector"
+import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import TipisTab from "../../components/TipisTab"
 import { recentTabsContainerStyle } from "./style"
 
