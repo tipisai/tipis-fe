@@ -26,9 +26,14 @@ const TipisTab: FC<ITipsTab> = (props) => {
     dispatch(recentTabActions.deleteRecentTabReducer(tabID))
   }
 
+  const onClick = () => {
+    dispatch(recentTabActions.updateCurrentRecentTabIDReducer(tabID))
+  }
+
   return (
     <NavLink
       to={genTabNavigateLink(currentTeamInfo.identifier, tabType, cacheID)}
+      onClick={onClick}
       css={navLinkStyle}
       unstable_viewTransition
       end
