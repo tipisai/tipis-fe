@@ -1,4 +1,4 @@
-import { ConfigProvider } from "antd"
+// import { ConfigProvider } from "antd"
 import { FC, useContext } from "react"
 import { Trans, useTranslation } from "react-i18next"
 import {
@@ -23,7 +23,7 @@ const MobileUserLayout: FC<LayoutProps> = ({ children }) => {
   return (
     <div css={layoutStyle}>
       <div css={contentStyle}>
-        <ConfigProvider
+        {/* <ConfigProvider
           theme={{
             components: {
               Input: {
@@ -33,9 +33,9 @@ const MobileUserLayout: FC<LayoutProps> = ({ children }) => {
               },
             },
           }}
-        >
-          {children}
-        </ConfigProvider>
+        > */}
+        {children}
+        {/* </ConfigProvider> */}
       </div>
       <div css={policyStyle}>
         <Trans

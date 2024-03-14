@@ -8,11 +8,7 @@ import {
   ILLA_MIXPANEL_EVENT_TYPE,
 } from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
-import {
-  getCurrentMemberList,
-  getCurrentTeamInfo,
-  getCurrentUserID,
-} from "@illa-public/user-data"
+import { getCurrentTeamInfo, getCurrentUserID } from "@illa-public/user-data"
 import LeaveTeamModal from "@/page/SettingPage/team/components/LeaveTeamModal"
 import { track } from "@/utils/mixpanelHelper"
 import { CreateTeamFields } from "./interface"
@@ -20,13 +16,9 @@ import SettingLayout from "./layout/pc"
 
 export const Setting: FC = () => {
   const [modalVisible, setModalVisible] = useState(false)
-  const members = useSelector(getCurrentMemberList)
   const teamInfo = useSelector(getCurrentTeamInfo)
   const isOwner = teamInfo?.myRole === USER_ROLE.OWNER
-  const createFormProps = useForm<CreateTeamFields>({
-    mode: "onSubmit",
-    criteriaMode: "firstError",
-  })
+  const createFormProps = useForm<CreateTeamFields>({})
 
   const isLogin = useSelector(getCurrentUserID)
 
@@ -44,7 +36,6 @@ export const Setting: FC = () => {
       {
         element: "delete_modal",
         parameter1: isOwner ? "delete_button" : undefined,
-        parameter4: members?.length,
         team_id: teamInfo?.identifier || "-1",
       },
     )
@@ -57,7 +48,6 @@ export const Setting: FC = () => {
       {
         element: "delete_modal_cancel",
         parameter1: isOwner ? "delete_button" : undefined,
-        parameter4: members?.length,
         team_id: teamInfo?.identifier || "-1",
       },
     )

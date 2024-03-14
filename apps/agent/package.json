@@ -39,6 +39,8 @@
     "@illa-public/upgrade-modal": "workspace:^",
     "@illa-public/user-data": "workspace:^",
     "@illa-public/user-role-utils": "workspace:^",
+    "@illa-public/role-selector": "workspace:^",
+    "@illa-public/auth-shown": "workspace:^",
     "@illa-public/utils": "workspace:^",
     "@mui/material": "^5.15.3",
     "@reduxjs/toolkit": "^2.2.1",

@@ -1,5 +1,5 @@
 import Icon from "@ant-design/icons"
-import { ConfigProvider } from "antd"
+// import { ConfigProvider } from "antd"
 import { FC, useContext } from "react"
 import { Trans, useTranslation } from "react-i18next"
 import {
@@ -36,7 +36,7 @@ const UserLayout: FC<LayoutProps> = ({ children }) => {
         <span css={sloganStyle}>tipis.AI</span>
       </div>
       <div css={bottomWrapperStyle}>
-        <ConfigProvider
+        {/* <ConfigProvider
           theme={{
             components: {
               Input: {
@@ -49,9 +49,9 @@ const UserLayout: FC<LayoutProps> = ({ children }) => {
               },
             },
           }}
-        >
-          {children}
-        </ConfigProvider>
+        > */}
+        {children}
+        {/* </ConfigProvider> */}
         <span css={policyStyle}>
           <Trans
             i18nKey="page.user.policy"

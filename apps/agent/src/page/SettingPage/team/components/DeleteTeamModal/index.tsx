@@ -12,7 +12,6 @@ import {
 } from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
 import {
-  getCurrentMemberList,
   getCurrentTeamInfo,
   teamActions,
   useDeleteTeamByIDMutation,
@@ -33,7 +32,6 @@ const DeleteTeamModal: FC<DeleteTeamModalProps> = (props) => {
   const { t } = useTranslation()
   const { message } = App.useApp()
   const teamInfo = useSelector(getCurrentTeamInfo)
-  const memberList = useSelector(getCurrentMemberList)
   const { control, formState, trigger, watch, reset } = useForm<{
     name: string
   }>({
@@ -58,7 +56,6 @@ const DeleteTeamModal: FC<DeleteTeamModalProps> = (props) => {
         element: "delete",
         parameter1:
           teamInfo?.myRole === USER_ROLE.OWNER ? "delete_button" : undefined,
-        parameter4: memberList?.length,
         team_id: teamInfo?.identifier || "-1",
       },
       "team_id",
@@ -67,7 +64,6 @@ const DeleteTeamModal: FC<DeleteTeamModalProps> = (props) => {
       track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
         element: "delete_modal_delete",
         parameter1: "delete_select",
-        parameter4: memberList?.length,
       })
       deleteTeamByID(teamInfo?.id || "")
         .unwrap()

@@ -1,27 +1,22 @@
 import Icon from "@ant-design/icons"
 import { FC, useEffect, useMemo } from "react"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
-import { useNavigate, useOutletContext } from "react-router-dom"
+import { useSelector } from "react-redux"
+import { useOutletContext } from "react-router-dom"
 import {
-  ILLAMixpanel,
   ILLA_MIXPANEL_CLOUD_PAGE_NAME,
   ILLA_MIXPANEL_EVENT_TYPE,
 } from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
 import {
-  getCurrentMemberList,
   getCurrentTeamInfo,
   getPlanUtils,
   getTeamItems,
-  teamActions,
 } from "@illa-public/user-data"
 import { canAccessMember, canManagePayment } from "@illa-public/user-role-utils"
-import { getAuthToken, getILLACloudURL } from "@illa-public/utils"
 import ProfileIcon from "@/assets/setting/profile.svg?react"
 import TeamIcon from "@/assets/setting/team.svg?react"
 import { SettingContextType } from "@/page/SettingPage/team/interface"
-import { setLocalCurrentTeamID } from "@/utils/auth"
 import { track } from "@/utils/mixpanelHelper"
 import { useLogout } from "../hooks/useLogout"
 import { MobileMenuItems } from "./landingMenu"
@@ -37,7 +32,6 @@ const MobileEntrance: FC = () => {
   const currentTeamInfo = useSelector(getCurrentTeamInfo)
   const teams = useSelector(getTeamItems)
   const logout = useLogout()
-  const memberList = useSelector(getCurrentMemberList)
 
   const isOwner = currentTeamInfo?.myRole === USER_ROLE.OWNER
 
@@ -51,42 +45,12 @@ const MobileEntrance: FC = () => {
           : t("team_setting.left_panel.leave"),
     }
   }, [currentTeamInfo, t])
-  const navigate = useNavigate()
 
   const showBilling = canManagePayment(
     currentTeamInfo?.myRole,
     getPlanUtils(currentTeamInfo),
     currentTeamInfo?.totalTeamLicense?.teamLicenseAllPaid,
   )
-
-  const dispatch = useDispatch()
-
-  const switchTeamCallback = (teamID: string, targetIdentifier: string) => {
-    const targetTeam = teams?.find((item) => item.id === teamID)
-    if (!targetTeam) return
-    const currentUseCustomDomain = !!window.customDomain
-
-    if (targetTeam.customInfo.customDomain) {
-      const targetPrefixURL = getILLACloudURL(
-        targetTeam.customInfo.customDomain,
-      )
-      window.location.href = `${targetPrefixURL}?token=${getAuthToken()}&redirectURL=${encodeURIComponent(
-        `${targetPrefixURL}/setting`,
-      )}`
-    } else {
-      if (!currentUseCustomDomain) {
-        setLocalCurrentTeamID(teamID)
-        dispatch(teamActions.updateCurrentIdReducer(teamID))
-        ILLAMixpanel.setGroup(targetIdentifier)
-        navigate(`/setting`)
-      } else {
-        const targetPrefixURL = getILLACloudURL()
-        window.location.href = `${targetPrefixURL}?token=${getAuthToken()}&redirectURL=${encodeURIComponent(
-          `${targetPrefixURL}/setting`,
-        )}`
-      }
-    }
-  }
 
   const accountOptions = [
     {
@@ -145,7 +109,6 @@ const MobileEntrance: FC = () => {
             element: isOwner ? "delete" : "leave",
             parameter1: isOwner ? "delete_button" : undefined,
             parameter11: currentTeamInfo?.myRole,
-            parameter4: memberList?.length,
           },
         )
         onClickLeaveTeam && onClickLeaveTeam()
@@ -161,10 +124,9 @@ const MobileEntrance: FC = () => {
         element: isOwner ? "delete" : "leave",
         parameter1: isOwner ? "delete_button" : undefined,
         parameter11: currentTeamInfo?.myRole,
-        parameter4: memberList?.length,
       },
     )
-  }, [currentTeamInfo?.myRole, isOwner, memberList?.length])
+  }, [currentTeamInfo?.myRole, isOwner])
 
   useEffect(() => {
     track(

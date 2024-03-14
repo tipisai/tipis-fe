@@ -12,10 +12,7 @@ import {
   MixpanelTrackContext,
 } from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
-import {
-  getCurrentMemberList,
-  getCurrentTeamInfo,
-} from "@illa-public/user-data"
+import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { isBiggerThanTargetRole } from "@illa-public/user-role-utils"
 import { Header } from "@/page/SettingPage/components/Header"
 import { useUploadAvatar } from "@/page/SettingPage/hooks/uploadAvatar"
@@ -46,7 +43,6 @@ const Setting: FC<SettingProps> = (props) => {
   const { handleSubmit, control, formState, getValues, trigger } =
     useFormContext<TeamSettingFields>()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
-  const memberList = useSelector(getCurrentMemberList)
 
   const { uploadTeamIcon } = useUploadAvatar()
   const { track } = useContext(MixpanelTrackContext)
@@ -249,7 +245,6 @@ const Setting: FC<SettingProps> = (props) => {
                 track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
                   element: "delete_button",
                   parameter1: isOwner ? "delete_button" : undefined,
-                  parameter4: memberList?.length,
                   parameter11: teamInfo?.myRole,
                   team_id: teamInfo?.identifier || "-1",
                 })

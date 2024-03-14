@@ -81,6 +81,9 @@ importers:
       '@ant-design/icons':
         specifier: ^5.3.1
         version: 5.3.1(react-dom@18.2.0)(react@18.2.0)
+      '@illa-public/auth-shown':
+        specifier: workspace:^
+        version: link:../../packages/components/AuthShown
       '@illa-public/avatar':
         specifier: workspace:^
         version: link:../../packages/components/Avatar
@@ -129,6 +132,9 @@ importers:
       '@illa-public/record-editor':
         specifier: workspace:^
         version: link:../../packages/components/RecordEditor
+      '@illa-public/role-selector':
+        specifier: workspace:^
+        version: link:../../packages/components/RoleSelector
       '@illa-public/status-page':
         specifier: workspace:^
         version: link:../../packages/components/StatusPage

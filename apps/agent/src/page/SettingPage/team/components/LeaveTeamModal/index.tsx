@@ -9,7 +9,6 @@ import {
 } from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
 import {
-  getCurrentMemberList,
   getCurrentTeamInfo,
   teamActions,
   useRemoveTeamMemberByIDMutation,
@@ -25,7 +24,6 @@ const LeaveTeamModal: FC<LeaveTeamModalProps> = (props) => {
   const { visible, onCancel } = props
   const { t } = useTranslation()
   const teamInfo = useSelector(getCurrentTeamInfo)!
-  const memberList = useSelector(getCurrentMemberList)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { track } = useContext(MixpanelTrackContext)
@@ -44,7 +42,6 @@ const LeaveTeamModal: FC<LeaveTeamModalProps> = (props) => {
       element: "delete_modal_delete",
       parameter1:
         teamInfo?.myRole === USER_ROLE.OWNER ? "delete_button" : undefined,
-      parameter4: memberList?.length,
       team_id: teamInfo?.identifier || "-1",
     })
     try {
