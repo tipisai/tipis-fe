@@ -5,6 +5,15 @@ import FunctionIcon from "@/assets/workspace/function.svg?react"
 import MarketplaceIcon from "@/assets/workspace/marketplace.svg?react"
 import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import {
+  getCreateFunctionPath,
+  getCreateTipiPath,
+  getEditFunctionPath,
+  getEditTipiPath,
+  getExploreFunctionsPath,
+  getExploreTipisPath,
+  getRunTipiPath,
+} from "@/utils/routeHelper"
+import {
   menuItemButtonCustomIconContainerStyle,
   menuItemButtonIconContainerStyle,
 } from "./style"
@@ -73,19 +82,19 @@ export const genTabNavigateLink = (
 ) => {
   switch (tabType) {
     case TAB_TYPE.CREATE_TIPIS:
-      return `/workspace/${teamIdentifier}/tipis/create/${cacheID}`
+      return getCreateTipiPath(teamIdentifier, cacheID)
     case TAB_TYPE.EDIT_TIPIS:
-      return `/workspace/${teamIdentifier}/tipis/edit/${cacheID}`
+      return getEditTipiPath(teamIdentifier, cacheID)
     case TAB_TYPE.CHAT:
-      return `/workspace/${teamIdentifier}/tipis/create/${cacheID}`
+      return getRunTipiPath(teamIdentifier, cacheID)
     case TAB_TYPE.CREATE_FUNCTION:
-      return `/workspace/${teamIdentifier}/functions/create/${cacheID}`
+      return getCreateFunctionPath(teamIdentifier, cacheID)
     case TAB_TYPE.EDIT_FUNCTION:
-      return `/workspace/${teamIdentifier}/functions/edit/${cacheID}`
+      return getEditFunctionPath(teamIdentifier, cacheID)
     case TAB_TYPE.EXPLORE_TIPIS:
-      return `/workspace/${teamIdentifier}/tipis`
+      return getExploreTipisPath(teamIdentifier)
     case TAB_TYPE.EXPLORE_FUNCTION:
-      return `/workspace/${teamIdentifier}/function`
+      return getExploreFunctionsPath(teamIdentifier)
     case TAB_TYPE.EXPLORE_TIPIS_DETAIL:
     case TAB_TYPE.EXPLORE_FUNCTION_DETAIL:
       return ""

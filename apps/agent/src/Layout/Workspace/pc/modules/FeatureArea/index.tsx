@@ -7,8 +7,15 @@ import { PenIcon, PlusIcon } from "@illa-public/icon"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import FunctionIcon from "@/assets/workspace/function.svg?react"
 import MarketplaceIcon from "@/assets/workspace/marketplace.svg?react"
+import store from "@/redux/store"
 import { ITabInfo, TAB_TYPE } from "@/redux/ui/recentTab/interface"
+import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
+import {
+  getCreateTipiPath,
+  getExploreFunctionsPath,
+  getExploreTipisPath,
+} from "@/utils/routeHelper"
 import FeatureCard from "../../components/FeatureCard"
 import MenuItemButton from "../../components/MenuItemButton"
 import { featureAreaContainerStyle, featureCardsContainerStyle } from "./style"
@@ -28,35 +35,52 @@ const FeatureArea: FC = () => {
       cacheID: tempID,
     }
     dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
-    navigate(`/workspace/${currentTeamInfo?.identifier}/tipis/create/${tempID}`)
+    navigate(getCreateTipiPath(currentTeamInfo?.identifier, tempID))
   }
 
   const handleClickExploreTipis = () => {
-    // 查找并替换 不要新增。
-    const tempID = v4()
-    const tabsInfo: ITabInfo = {
-      tabName: "",
-      tabIcon: "",
-      tabType: TAB_TYPE.EXPLORE_TIPIS,
-      tabID: tempID,
-      cacheID: tempID,
+    const historyTabs = getRecentTabInfos(store.getState())
+    const tipisTab = historyTabs.find(
+      (item) => item.tabType === TAB_TYPE.EXPLORE_TIPIS,
+    )
+    if (tipisTab) {
+      dispatch(recentTabActions.updateCurrentRecentTabIDReducer(tipisTab.tabID))
+    } else {
+      const tempID = v4()
+      const tabsInfo: ITabInfo = {
+        tabName: "",
+        tabIcon: "",
+        tabType: TAB_TYPE.EXPLORE_TIPIS,
+        tabID: tempID,
+        cacheID: tempID,
+      }
+      dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
     }
-    dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
-    navigate(`/workspace/${currentTeamInfo?.identifier}/tipis`)
+    navigate(getExploreTipisPath(currentTeamInfo?.identifier))
   }
 
   const handleClickFunction = () => {
-    // 查找并替换 不要新增。
-    const tempID = v4()
-    const tabsInfo: ITabInfo = {
-      tabName: "",
-      tabIcon: "",
-      tabType: TAB_TYPE.EXPLORE_FUNCTION,
-      tabID: tempID,
-      cacheID: tempID,
+    const historyTabs = getRecentTabInfos(store.getState())
+    const functionTab = historyTabs.find(
+      (item) => item.tabType === TAB_TYPE.EXPLORE_FUNCTION,
+    )
+    if (functionTab) {
+      dispatch(
+        recentTabActions.updateCurrentRecentTabIDReducer(functionTab.tabID),
+      )
+    } else {
+      const tempID = v4()
+      const tabsInfo: ITabInfo = {
+        tabName: "",
+        tabIcon: "",
+        tabType: TAB_TYPE.EXPLORE_FUNCTION,
+        tabID: tempID,
+        cacheID: tempID,
+      }
+      dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
     }
-    dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
-    navigate(`/workspace/${currentTeamInfo?.identifier}/function`)
+
+    navigate(getExploreFunctionsPath(currentTeamInfo?.identifier))
   }
 
   return (

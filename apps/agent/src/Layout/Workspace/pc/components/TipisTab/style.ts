@@ -89,3 +89,46 @@ export const deleteButtonContainerStyle = (canShow: boolean) => css`
     transition: all 0.2s linear;
   }
 `
+
+export const navLinkStyle = css`
+  :-webkit-any-link {
+    text-decoration: none;
+    color: inherit;
+    &:active {
+      color: inherit;
+    }
+  }
+  @keyframes grow-x {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  @keyframes shrink-x {
+    from {
+      transform: scaleX(1);
+    }
+    to {
+      transform: scaleX(0);
+    }
+  }
+
+  ::view-transition-old(figure-caption),
+  ::view-transition-new(figure-caption) {
+    height: auto;
+    right: 0;
+    left: auto;
+    transform-origin: right center;
+  }
+
+  ::view-transition-old(figure-caption) {
+    animation: 0.25s linear both shrink-x;
+  }
+
+  ::view-transition-new(figure-caption) {
+    animation: 0.25s 0.25s linear both grow-x;
+  }
+`

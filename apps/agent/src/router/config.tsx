@@ -107,6 +107,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     children: [
       {
         path: ":teamIdentifier/tipis",
+        index: true,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <TipisDashboard />
@@ -114,7 +115,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         ),
       },
       {
-        path: ":teamIdentifier/tipis/create/:agentID",
+        path: ":teamIdentifier/tipi/:agentID/create",
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <CreateAgentPage />
@@ -122,7 +123,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         ),
       },
       {
-        path: ":teamIdentifier/tipis/edit/:agentID",
+        path: ":teamIdentifier/tipi/:agentID/edit",
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <EditAgentPage />
@@ -130,7 +131,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         ),
       },
       {
-        path: ":teamIdentifier/tipis/run/:agentID",
+        path: ":teamIdentifier/tipi/:agentID/run",
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <RunAgentPage />
@@ -139,7 +140,31 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         accessByMobile: true,
       },
       {
-        path: ":teamIdentifier/function",
+        path: ":teamIdentifier/functions",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <FunctionDashboard />
+          </Suspense>
+        ),
+      },
+      {
+        path: ":teamIdentifier/function/:functionID/create",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <FunctionDashboard />
+          </Suspense>
+        ),
+      },
+      {
+        path: ":teamIdentifier/function/:functionID/edit",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <FunctionDashboard />
+          </Suspense>
+        ),
+      },
+      {
+        path: ":teamIdentifier/function/:functionID/detail",
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <FunctionDashboard />
