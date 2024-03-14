@@ -1,41 +1,47 @@
 import { css } from "@emotion/react"
+import { getColor } from "@illa-public/color-scheme"
+import { applyMobileStyle } from "@illa-public/utils"
 
-export const mobileModalStyle = css`
-  width: 653rem;
-  min-width: 653rem;
-  border-radius: 16rem;
-
-  & > div {
-    &:last-child {
-      display: flex;
-      justify-content: flex-end;
-      padding: 48rem 32rem;
-    }
-  }
+export const modalTitleStyle = css`
+  padding: 16px 40px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 16px;
+  justify-content: center;
+  border-bottom: 1px solid ${getColor("grayBlue", "08")};
+  ${applyMobileStyle(css`
+    padding: 24px 24px 16px 24px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: start;
+    border-bottom: none;
+  `)}
 `
 
-export const mobileModalTitleStyle = css`
-  margin: 48rem 48rem 0;
-  font-weight: 500;
-  font-size: 32rem;
-  line-height: 48rem;
-  text-align: start;
-`
-
-export const mobileModalContentStyle = css`
-  margin: 32rem 48rem;
+export const modalContentStyle = css`
+  font-size: 14px;
+  color: ${getColor("grayBlue", "02")};
   font-weight: 400;
-  font-size: 28rem;
-  line-height: 44rem;
+  line-height: 22px;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  ${applyMobileStyle(css`
+    padding: 0 24px;
+  `)}
 `
 
-export const mobileModalButtonStyle = css`
-  padding: 10rem 32rem;
-  & > span {
-    font-size: 28rem;
-  }
-`
-
-export const descStyle = css`
-  margin-bottom: 16px;
+export const footerStyle = css`
+  display: flex;
+  gap: 8px;
+  flex-direction: row;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 24px 24px;
+  border-top: 1px solid ${getColor("grayBlue", "08")};
+  ${applyMobileStyle(css`
+    border-top: none;
+  `)}
 `

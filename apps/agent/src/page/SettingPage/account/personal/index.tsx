@@ -15,6 +15,7 @@ import {
   useUpdateNickNameMutation,
   useUpdateUserAvatarMutation,
 } from "@illa-public/user-data"
+import SettingMobileLayout from "@/page/SettingPage/layout/mobile"
 import { track } from "@/utils/mixpanelHelper"
 import { useUploadAvatar } from "../../hooks/uploadAvatar"
 import { AccountSettingFields } from "./interface"
@@ -95,11 +96,13 @@ export const PersonalSetting: FC = () => {
             />
           }
           mobilePage={
-            <MobileAccountSetting
-              loading={accountLoading}
-              onSubmit={onAccountSubmit}
-              handleUpdateAvatar={handleUpdateAvatar}
-            />
+            <SettingMobileLayout>
+              <MobileAccountSetting
+                loading={accountLoading}
+                onSubmit={onAccountSubmit}
+                handleUpdateAvatar={handleUpdateAvatar}
+              />
+            </SettingMobileLayout>
           }
         />
       </FormProvider>

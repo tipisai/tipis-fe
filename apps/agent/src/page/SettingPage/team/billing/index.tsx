@@ -11,6 +11,8 @@ import {
   useLazyGetTeamsInfoQuery,
 } from "@illa-public/user-data"
 import FullSectionLoading from "@/components/FullSectionLoading"
+import { GoToPortal } from "../../components/GoToPortal"
+import SettingMobileLayout from "../../layout/mobile"
 import { BillingContext } from "./context"
 import { BillingMobilePage } from "./mobile"
 import { BillingPCPage } from "./pc"
@@ -70,7 +72,14 @@ const Billing: FC = () => {
     >
       <LayoutAutoChange
         desktopPage={<BillingPCPage />}
-        mobilePage={<BillingMobilePage />}
+        mobilePage={
+          <SettingMobileLayout
+            withoutPadding
+            navRight={!isUnSubscribeWoo ? <GoToPortal /> : null}
+          >
+            <BillingMobilePage />
+          </SettingMobileLayout>
+        }
       />
     </BillingContext.Provider>
   ) : null

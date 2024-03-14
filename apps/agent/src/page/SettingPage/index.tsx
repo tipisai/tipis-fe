@@ -1,5 +1,4 @@
 import { FC, useState } from "react"
-import { FormProvider, useForm } from "react-hook-form"
 import { useSelector } from "react-redux"
 import { Navigate, Outlet } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
@@ -11,25 +10,17 @@ import { USER_ROLE } from "@illa-public/public-types"
 import { getCurrentTeamInfo, getCurrentUserID } from "@illa-public/user-data"
 import LeaveTeamModal from "@/page/SettingPage/team/components/LeaveTeamModal"
 import { track } from "@/utils/mixpanelHelper"
-import { CreateTeamFields } from "./interface"
 import SettingLayout from "./layout/pc"
 
 export const Setting: FC = () => {
   const [modalVisible, setModalVisible] = useState(false)
   const teamInfo = useSelector(getCurrentTeamInfo)
   const isOwner = teamInfo?.myRole === USER_ROLE.OWNER
-  const createFormProps = useForm<CreateTeamFields>({})
 
   const isLogin = useSelector(getCurrentUserID)
 
-  const handleModalVisible = (visible: boolean) => {
-    if (visible !== modalVisible) {
-      setModalVisible(visible)
-    }
-  }
-
   const openLeaveTeamModal = () => {
-    handleModalVisible(true)
+    setModalVisible(true)
     track(
       ILLA_MIXPANEL_EVENT_TYPE.SHOW,
       ILLA_MIXPANEL_CLOUD_PAGE_NAME.TEAM_SETTING,
@@ -41,7 +32,7 @@ export const Setting: FC = () => {
     )
   }
   const closeLeaveTeamModal = () => {
-    handleModalVisible(false)
+    setModalVisible(false)
     track(
       ILLA_MIXPANEL_EVENT_TYPE.CLICK,
       ILLA_MIXPANEL_CLOUD_PAGE_NAME.TEAM_SETTING,
@@ -54,7 +45,7 @@ export const Setting: FC = () => {
   }
 
   return isLogin ? (
-    <FormProvider {...createFormProps}>
+    <>
       <LayoutAutoChange
         desktopPage={
           <SettingLayout>
@@ -74,7 +65,7 @@ export const Setting: FC = () => {
         }
       />
       <LeaveTeamModal visible={modalVisible} onCancel={closeLeaveTeamModal} />
-    </FormProvider>
+    </>
   ) : (
     <Navigate to="/user/login" replace={true} />
   )

@@ -34,8 +34,6 @@ const LoginPage: FC = () => {
   const [signIn] = useSignInMutation()
 
   const formProps = useForm<LoginFields>({
-    mode: "onSubmit",
-    criteriaMode: "firstError",
     defaultValues: {
       email: email ?? searchParams.get("email") ?? "",
     },

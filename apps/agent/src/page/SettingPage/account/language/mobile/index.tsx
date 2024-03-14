@@ -5,13 +5,9 @@ import {
   ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackContext,
 } from "@illa-public/mixpanel-utils"
-import SettingMobileLayout from "@/page/SettingPage/layout/mobile"
 import { useLangOptions } from "../hook"
 import { LanguageSettingMobileProps } from "./interface"
-import {
-  controllerContainerStyle,
-  mobileContainerStyle, // mobileSelectStyle,
-} from "./style"
+import { controllerContainerStyle, mobileContainerStyle } from "./style"
 
 const MobileLanguageSetting: FC<LanguageSettingMobileProps> = (props) => {
   const { t } = useTranslation()
@@ -35,50 +31,48 @@ const MobileLanguageSetting: FC<LanguageSettingMobileProps> = (props) => {
   }, [buttonDisabled, track])
 
   return (
-    <SettingMobileLayout>
-      <div css={mobileContainerStyle}>
-        <section
-          onClick={(e) => {
-            if ((e.target as HTMLElement).nodeName !== "INPUT") return
-            track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-              element: "language",
-              parameter2: currentLanguage,
-            })
-          }}
-          css={controllerContainerStyle}
-        >
-          <label>{t("profile.setting.language")}</label>
-          <Select
-            value={currentLanguage}
-            size="large"
-            options={LANG_OPTIONS}
-            onChange={(value) => {
-              track(ILLA_MIXPANEL_EVENT_TYPE.CHANGE, {
-                element: "language",
-                parameter2: value,
-              })
-              onChangeLanguage(value as string)
-            }}
-          />
-        </section>
-        <Button
-          type="primary"
+    <div css={mobileContainerStyle}>
+      <section
+        onClick={(e) => {
+          if ((e.target as HTMLElement).nodeName !== "INPUT") return
+          track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
+            element: "language",
+            parameter2: currentLanguage,
+          })
+        }}
+        css={controllerContainerStyle}
+      >
+        <label>{t("profile.setting.language")}</label>
+        <Select
+          value={currentLanguage}
           size="large"
-          disabled={buttonDisabled}
-          loading={loading}
-          block
-          onClick={() => {
-            onSubmit()
-            track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-              element: "save_change",
-              parameter1: "language",
+          options={LANG_OPTIONS}
+          onChange={(value) => {
+            track(ILLA_MIXPANEL_EVENT_TYPE.CHANGE, {
+              element: "language",
+              parameter2: value,
             })
+            onChangeLanguage(value as string)
           }}
-        >
-          {t("profile.setting.save")}
-        </Button>
-      </div>
-    </SettingMobileLayout>
+        />
+      </section>
+      <Button
+        type="primary"
+        size="large"
+        disabled={buttonDisabled}
+        loading={loading}
+        block
+        onClick={() => {
+          onSubmit()
+          track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
+            element: "save_change",
+            parameter1: "language",
+          })
+        }}
+      >
+        {t("profile.setting.save")}
+      </Button>
+    </div>
   )
 }
 

@@ -1,8 +1,9 @@
-import { App, Modal } from "antd"
+import { App, Button, Modal } from "antd"
 import { FC, useContext, useMemo } from "react"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { getColor } from "@illa-public/color-scheme"
 import {
   ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackContext,
@@ -10,10 +11,10 @@ import {
 import { USER_ROLE } from "@illa-public/public-types"
 import {
   getCurrentTeamInfo,
-  teamActions,
   useRemoveTeamMemberByIDMutation,
 } from "@illa-public/user-data"
 import DeleteTeamModal from "../DeleteTeamModal"
+import { footerStyle, modalContentStyle, modalTitleStyle } from "./style"
 
 interface LeaveTeamModalProps {
   visible: boolean
@@ -25,7 +26,6 @@ const LeaveTeamModal: FC<LeaveTeamModalProps> = (props) => {
   const { t } = useTranslation()
   const teamInfo = useSelector(getCurrentTeamInfo)!
   const navigate = useNavigate()
-  const dispatch = useDispatch()
   const { track } = useContext(MixpanelTrackContext)
   const [removeTeamMemberByID] = useRemoveTeamMemberByIDMutation()
   const { message } = App.useApp()
@@ -51,7 +51,6 @@ const LeaveTeamModal: FC<LeaveTeamModalProps> = (props) => {
           teamMemberID,
         }))
       navigate("/workspace", { replace: true })
-      dispatch(teamActions.deleteTeamInfoReducer())
     } catch (error) {
       message.error(t("team_setting.mes.leave_fail"))
     }
@@ -63,13 +62,36 @@ const LeaveTeamModal: FC<LeaveTeamModalProps> = (props) => {
 
   return (
     <Modal
-      title={t("team_setting.leave_modal.title")}
-      okText={t("team_setting.leave_modal.leave")}
-      onOk={removeTeamMember}
       open={visible}
+      styles={{
+        content: {
+          padding: 24,
+        },
+        mask: {
+          backgroundColor: getColor("white", "05"),
+          backdropFilter: "blur(5px)",
+        },
+        footer: {
+          margin: 0,
+        },
+      }}
+      centered
       onCancel={onCancel}
+      footer={false}
+      closeIcon={false}
     >
-      {t("team_setting.leave_modal.description")}
+      <div css={modalContentStyle}>
+        <div css={modalTitleStyle}>{t("team_setting.leave_modal.title")}</div>
+        <span> {t("team_setting.leave_modal.description")}</span>
+        <div css={footerStyle}>
+          <Button block onClick={onCancel}>
+            {t("team_setting.delete_modal.cancel")}
+          </Button>
+          <Button block danger type="primary" onClick={removeTeamMember}>
+            {t("team_setting.leave_modal.leave")}
+          </Button>
+        </div>
+      </div>
     </Modal>
   )
 }

@@ -1,8 +1,6 @@
 import { useContext } from "react"
 import { useTranslation } from "react-i18next"
 import FullSectionLoading from "@/components/FullSectionLoading"
-import { GoToPortal } from "@/page/SettingPage/components/GoToPortal"
-import SettingMobileLayout from "@/page/SettingPage/layout/mobile"
 import { LicenseCard } from "@/page/SettingPage/team/billing/components/LicenseCard"
 import { Price } from "@/page/SettingPage/team/billing/components/Price"
 import { WooUsage } from "@/page/SettingPage/team/billing/components/WooUsage"
@@ -16,32 +14,26 @@ import {
 
 export const BillingMobilePage = () => {
   const { t } = useTranslation()
-  const { wooInfo, loading, isUnSubscribeWoo } = useContext(BillingContext)
-  !isUnSubscribeWoo
+  const { wooInfo, loading } = useContext(BillingContext)
   if (!wooInfo) return null
   return (
-    <SettingMobileLayout
-      withoutPadding
-      navRight={!isUnSubscribeWoo ? <GoToPortal /> : null}
-    >
-      <div css={pageWrapperStyle}>
-        {loading ? (
-          <FullSectionLoading />
-        ) : (
-          <>
-            <div css={billingHeaderStyle}>
-              <span>{t("billing.title.billing")}</span>
+    <div css={pageWrapperStyle}>
+      {loading ? (
+        <FullSectionLoading />
+      ) : (
+        <>
+          <div css={billingHeaderStyle}>
+            <span>{t("billing.title.billing")}</span>
+          </div>
+          <div css={billingMainContentStyle}>
+            <div css={contentContainerStyle}>
+              <LicenseCard />
+              <Price />
+              <WooUsage />
             </div>
-            <div css={billingMainContentStyle}>
-              <div css={contentContainerStyle}>
-                <LicenseCard />
-                <Price />
-                <WooUsage />
-              </div>
-            </div>
-          </>
-        )}
-      </div>
-    </SettingMobileLayout>
+          </div>
+        </>
+      )}
+    </div>
   )
 }

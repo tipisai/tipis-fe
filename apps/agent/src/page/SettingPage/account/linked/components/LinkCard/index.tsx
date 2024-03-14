@@ -19,8 +19,7 @@ import {
   containerStyle,
   descriptionStyle,
   headerContainerStyle,
-  iconContainerStyle, // maskStyle,
-  // modalWrapperStyle,
+  iconContainerStyle,
   titleContainerStyle,
   titleStyle,
 } from "./style"
@@ -43,8 +42,6 @@ export const LinkCard: FC<LinkCardProps> = (props) => {
       okText: t("profile.setting.oauth.modal.set_button"),
       cancelText: t("profile.setting.oauth.modal.cancel_button"),
       content: t("profile.setting.oauth.modal.description"),
-      // modalContentStyle: maskStyle,
-      // _css: modalWrapperStyle,
       onOk: () => {
         tipsModal.update({
           open: false,

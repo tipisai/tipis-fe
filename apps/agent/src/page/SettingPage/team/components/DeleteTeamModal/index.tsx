@@ -1,11 +1,11 @@
-import { App, Input, Modal } from "antd"
+import { App, Button, Input, Modal } from "antd"
 import { FC, useContext, useMemo } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { getColor } from "@illa-public/color-scheme"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
-import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
   ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackContext,
@@ -16,11 +16,7 @@ import {
   teamActions,
   useDeleteTeamByIDMutation,
 } from "@illa-public/user-data"
-import {
-  descStyle, // mobileModalButtonStyle,
-  mobileModalContentStyle, // mobileModalStyle,
-  mobileModalTitleStyle,
-} from "./style"
+import { footerStyle, modalContentStyle, modalTitleStyle } from "./style"
 
 interface DeleteTeamModalProps {
   visible: boolean
@@ -32,12 +28,9 @@ const DeleteTeamModal: FC<DeleteTeamModalProps> = (props) => {
   const { t } = useTranslation()
   const { message } = App.useApp()
   const teamInfo = useSelector(getCurrentTeamInfo)
-  const { control, formState, trigger, watch, reset } = useForm<{
+  const { control, trigger, watch, reset } = useForm<{
     name: string
-  }>({
-    mode: "onSubmit",
-    criteriaMode: "firstError",
-  })
+  }>({})
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { name } = watch()
@@ -104,91 +97,62 @@ const DeleteTeamModal: FC<DeleteTeamModalProps> = (props) => {
     reset()
   }
 
-  const config = {
-    title: t("team_setting.delete_modal.title"),
-    description: t("team_setting.leave_modal.description"),
-    okText: t("team_setting.delete_modal.delete"),
-    cancelText: t("team_setting.delete_modal.cancel"),
-    onOk: removeTeamMember,
-  }
-
   return (
-    <LayoutAutoChange
-      desktopPage={
-        <Modal
-          open={visible}
-          title={config.title}
-          okText={config.okText}
-          cancelText={config.cancelText}
-          okButtonProps={{
-            danger: true,
-            disabled,
+    <Modal
+      open={visible}
+      styles={{
+        content: {
+          padding: 0,
+        },
+        mask: {
+          backgroundColor: getColor("white", "05"),
+          backdropFilter: "blur(5px)",
+        },
+        footer: {
+          margin: 0,
+        },
+      }}
+      centered
+      onCancel={handleOnCancel}
+      footer={false}
+      closeIcon={false}
+    >
+      <div css={modalTitleStyle}>{t("team_setting.delete_modal.title")}</div>
+      <div css={modalContentStyle}>
+        <span>{t("team_setting.leave_modal.description")}</span>
+        <Controller
+          name="name"
+          control={control}
+          render={({ field }) => (
+            <Input
+              {...field}
+              size="large"
+              variant="filled"
+              placeholder={t("team_setting.team_info.team_name_placeholder")}
+              autoComplete="off"
+            />
+          )}
+          rules={{
+            required: t("team_setting.team_info.team_name_empty"),
           }}
-          onOk={config.onOk}
-          onCancel={handleOnCancel}
-          closable
+        />
+      </div>
+      <div css={footerStyle}>
+        <Button block onClick={handleOnCancel}>
+          {t("team_setting.delete_modal.cancel")}
+        </Button>
+        <Button
+          block
+          danger
+          type="primary"
+          disabled={disabled}
+          onClick={removeTeamMember}
         >
-          <span css={descStyle}>{config.description}</span>
-          <Controller
-            name="name"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                size="large"
-                variant="filled"
-                placeholder={t("team_setting.team_info.team_name_placeholder")}
-                autoComplete="off"
-              />
-            )}
-            rules={{
-              required: t("team_setting.team_info.team_name_empty"),
-            }}
-          />
-        </Modal>
-      }
-      mobilePage={
-        <Modal
-        // _css={mobileModalStyle}
-        // withoutPadding
-        // okText={config.okText}
-        // cancelText={config.cancelText}
-        // cancelButtonProps={{ _css: mobileModalButtonStyle }}
-        // okButtonProps={{
-        //   _css: mobileModalButtonStyle,
-        //   variant: "light",
-        //   colorScheme: "red",
-        //   disabled,
-        // }}
-        // onOk={config.onOk}
-        // onCancel={handleOnCancel}
-        // {...rest}
-        >
-          <div css={mobileModalTitleStyle}>{config.title}</div>
-          <div css={mobileModalContentStyle}>{config.description}</div>
-          <Controller
-            name="name"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                size="large"
-                status={!!formState?.errors.name ? "error" : undefined}
-                variant="filled"
-                placeholder={t("team_setting.team_info.team_name_placeholder")}
-                autoComplete="off"
-              />
-            )}
-            rules={{
-              required: t("team_setting.team_info.team_name_empty"),
-            }}
-          />
-        </Modal>
-      }
-    />
+          {t("team_setting.delete_modal.delete")}
+        </Button>
+      </div>
+    </Modal>
   )
 }
-
-DeleteTeamModal.displayName = "DeleteTeamModal"
 
 export default DeleteTeamModal

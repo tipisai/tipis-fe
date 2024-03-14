@@ -14,7 +14,7 @@ import { EmailCode } from "@/components/EmailCode"
 import ErrorMessage from "@/components/InputErrorMessage"
 import { EMAIL_FORMAT } from "../../constants"
 import { ResetPwdFields } from "../../interface"
-import { getValidReportParams } from "../../utils/getValidReportParams"
+import { getValidReportParams } from "../../utils"
 import { ResetProps } from "../interface"
 import {
   formItemStyle,

@@ -1,5 +1,5 @@
 import { App } from "antd"
-import { FC, useEffect, useMemo, useRef, useState } from "react"
+import { FC, useEffect, useMemo, useState } from "react"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
@@ -42,6 +42,7 @@ const TeamSetting: FC = () => {
   const { message } = App.useApp()
 
   const [changeTeamConfig] = useChangeTeamConfigMutation()
+
   const settingFormProps = useForm<TeamSettingFields>({
     defaultValues: {
       name: teamInfo?.name,
@@ -49,16 +50,6 @@ const TeamSetting: FC = () => {
     },
   })
 
-  useEffect(() => {
-    if (teamInfo) {
-      settingFormProps.reset({
-        name: teamInfo.name,
-        identifier: teamInfo.identifier,
-      })
-    }
-  }, [settingFormProps, teamInfo])
-
-  const formRef = useRef<HTMLFormElement>(null)
   const disableEdit = useMemo(() => {
     return teamInfo && isSmallThanTargetRole(USER_ROLE.ADMIN, teamInfo?.myRole)
   }, [teamInfo])
@@ -75,6 +66,10 @@ const TeamSetting: FC = () => {
         content: t("team_setting.message.save_suc"),
       })
       dispatch(teamActions.updateCurrentTeamInfoReducer(data))
+      settingFormProps.reset({
+        name: data.name,
+        identifier: data.identifier,
+      })
       if (data.identifier && data.identifier !== teamIdentifier) {
         navigate(`/setting/${data.identifier}/team-settings`)
       }
@@ -133,7 +128,6 @@ const TeamSetting: FC = () => {
           mobilePage={
             <SettingMobileLayout>
               <MobileSetting
-                ref={formRef}
                 disabled={disableEdit}
                 loading={loading}
                 errorMsg={errorMsg}

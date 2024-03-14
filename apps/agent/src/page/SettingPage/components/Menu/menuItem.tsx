@@ -1,8 +1,8 @@
-import { FC, HTMLAttributes, ReactNode } from "react"
+import { FC, ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
 import { applyLinkStyle, applyMobileLinkStyle } from "./style"
 
-interface MenuItem extends HTMLAttributes<HTMLDivElement> {
+interface MenuItem {
   selected: boolean
   isMobile?: boolean
   path?: string
@@ -11,7 +11,7 @@ interface MenuItem extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const MenuItem: FC<MenuItem> = (props) => {
-  const { isMobile, selected, label, path, onClickMenuItem, onClick } = props
+  const { isMobile, selected, label, path, onClickMenuItem } = props
   const navigate = useNavigate()
 
   const applyCurrentLinkStyle = isMobile ? applyMobileLinkStyle : applyLinkStyle
@@ -19,8 +19,7 @@ export const MenuItem: FC<MenuItem> = (props) => {
   return (
     <div
       css={applyCurrentLinkStyle(selected)}
-      onClick={(e) => {
-        onClick?.(e)
+      onClick={() => {
         onClickMenuItem?.(path)
         if (!selected && path) {
           navigate({

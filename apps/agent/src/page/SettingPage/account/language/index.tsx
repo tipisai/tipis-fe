@@ -13,6 +13,7 @@ import {
 } from "@illa-public/user-data"
 import { defaultLanguage } from "@/i18n"
 import { track } from "@/utils/mixpanelHelper"
+import SettingMobileLayout from "../../layout/mobile"
 import MobileLanguageSetting from "./mobile"
 import PCLanguageSetting from "./pc"
 
@@ -60,13 +61,15 @@ const LanguageSetting: FC = () => {
           />
         }
         mobilePage={
-          <MobileLanguageSetting
-            loading={languageLoading}
-            language={language}
-            currentLanguage={currentLanguage}
-            onChangeLanguage={setCurrentLanguage}
-            onSubmit={onSaveLanguageChange}
-          />
+          <SettingMobileLayout>
+            <MobileLanguageSetting
+              loading={languageLoading}
+              language={language}
+              currentLanguage={currentLanguage}
+              onChangeLanguage={setCurrentLanguage}
+              onSubmit={onSaveLanguageChange}
+            />
+          </SettingMobileLayout>
         }
       />
     </MixpanelTrackProvider>

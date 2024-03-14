@@ -15,7 +15,7 @@ import LinkButton from "@/components/LinkButton"
 import { OAuthButton } from "../../components/OAuthButton"
 import { EMAIL_FORMAT } from "../../constants"
 import { LoginFields } from "../../interface"
-import { getValidReportParams } from "../../utils/getValidReportParams"
+import { getValidReportParams } from "../../utils"
 import { LoginPageProps } from "../interface"
 import {
   containerStyle,

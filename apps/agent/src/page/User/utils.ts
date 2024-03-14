@@ -3,7 +3,7 @@ import {
   ILLA_MIXPANEL_PUBLIC_PAGE_NAME,
   ILLA_PAGE_NAME,
 } from "@illa-public/mixpanel-utils"
-import { IAllFormFields } from "../interface"
+import { IAllFormFields } from "./interface"
 
 export const getValidReportParams = (
   page: ILLA_PAGE_NAME,

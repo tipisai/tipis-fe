@@ -5,6 +5,7 @@ import {
   MixpanelTrackProvider,
 } from "@illa-public/mixpanel-utils"
 import { track } from "@/utils/mixpanelHelper"
+import SettingMobileLayout from "../../layout/mobile"
 import { MobileLinkedSetting } from "./mobile"
 import { PCLinkedSetting } from "./pc"
 
@@ -16,7 +17,11 @@ const LinkedSetting: FC = () => {
     >
       <LayoutAutoChange
         desktopPage={<PCLinkedSetting />}
-        mobilePage={<MobileLinkedSetting />}
+        mobilePage={
+          <SettingMobileLayout>
+            <MobileLinkedSetting />
+          </SettingMobileLayout>
+        }
       />
     </MixpanelTrackProvider>
   )

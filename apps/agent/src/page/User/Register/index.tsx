@@ -35,8 +35,6 @@ const RegisterPage: FC = () => {
   const [sendVerificationCodeToEmail] = useSendVerificationCodeToEmailMutation()
 
   const formProps = useForm<RegisterFields>({
-    mode: "onSubmit",
-    criteriaMode: "firstError",
     defaultValues: {
       isSubscribed: true,
       email: email ?? searchParams.get("email") ?? "",
@@ -85,6 +83,7 @@ const RegisterPage: FC = () => {
       message.success(t("page.user.sign_up.tips.success"))
       setAuthToken(token)
       searchParams.delete("inviteToken")
+      // TODO: WTF, need add workspace
       navigate(
         `/${searchParams.toString() ? "?" + searchParams.toString() : ""}`,
       )

@@ -46,7 +46,6 @@ export const UsageProvider: FC<UsageContextProviderProps> = (props) => {
 
   const handleDateChange = useCallback(
     async (date?: string) => {
-      console.log("first", date)
       if (!teamInfo?.id || !date) return
       setLoading(true)
       const fromDate = new Date(date)

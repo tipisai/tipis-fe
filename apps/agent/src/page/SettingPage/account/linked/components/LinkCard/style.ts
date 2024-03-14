@@ -1,6 +1,5 @@
 import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
-import { MOBILE_MAX_WIDTH } from "@illa-public/utils"
 
 export const containerStyle = css`
   display: flex;
@@ -47,17 +46,4 @@ export const descriptionStyle = css`
 export const buttonWrapperStyle = css`
   display: inline-block;
   padding-left: 40px;
-`
-
-export const maskStyle = css`
-  @media screen and (max-width: ${MOBILE_MAX_WIDTH}px) {
-    padding: 0 20px;
-  }
-`
-
-export const modalWrapperStyle = css`
-  @media screen and (max-width: ${MOBILE_MAX_WIDTH}px) {
-    min-width: unset;
-    width: unset;
-  }
 `

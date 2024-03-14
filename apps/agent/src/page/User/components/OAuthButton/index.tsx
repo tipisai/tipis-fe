@@ -46,7 +46,6 @@ export const OAuthButton: FC<OAuthButtonProps> = (props) => {
 
       openOAuthUrl(response.uri)
     } catch (e) {
-      console.error(e)
     } finally {
       setLoading(true)
     }
