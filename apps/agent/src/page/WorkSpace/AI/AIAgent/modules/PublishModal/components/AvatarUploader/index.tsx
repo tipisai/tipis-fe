@@ -14,12 +14,12 @@ import {
 } from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
+import { ErrorText } from "@/Layout/Form/ErrorText"
+import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import AIIcon from "@/assets/agent/ai.svg?react"
 import { useGenerateIconMutation } from "@/redux/services/agentAPI"
 import { track } from "@/utils/mixpanelHelper"
 import AILoadingIcon from "../../../../../components/AILoading/aiLoading.svg?react"
-import { ErrorText } from "../../../../../components/ErrorText"
-import ModalEditorBlock from "../AIAgentBlock"
 import {
   descContainerStyle,
   descTextStyle,
@@ -46,7 +46,8 @@ const AvatarUploader: FC = memo(() => {
       control={control}
       shouldUnregister={false}
       render={({ field }) => (
-        <ModalEditorBlock
+        <LayoutBlock
+          mode="modal"
           title={t("editor.ai-agent.label.icon")}
           subtitle={
             <div
@@ -184,7 +185,7 @@ const AvatarUploader: FC = memo(() => {
           {errors.icon?.message && (
             <ErrorText errorMessage={errors.icon?.message} />
           )}
-        </ModalEditorBlock>
+        </LayoutBlock>
       )}
     />
   )

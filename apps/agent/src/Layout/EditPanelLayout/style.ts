@@ -15,11 +15,14 @@ export const editPanelContainerStyle = css`
 export const editContentStyle = css`
   display: flex;
   width: 528px;
+  height: 100%;
   flex-direction: column;
   gap: 8px;
+  overflow: hidden;
+  overflow-y: auto;
 `
 
-export const startButtonContainerStyle = css`
+export const footerContainerStyle = css`
   width: 528px;
   padding: 24px 24px 8px 24px;
   border-top: 1px solid ${getColor("grayBlue", "08")};

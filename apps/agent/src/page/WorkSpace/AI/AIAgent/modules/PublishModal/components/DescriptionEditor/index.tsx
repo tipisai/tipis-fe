@@ -10,12 +10,12 @@ import {
 } from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
+import { ErrorText } from "@/Layout/Form/ErrorText"
+import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import AIIcon from "@/assets/agent/ai.svg?react"
 import { useGeneratePromptDescriptionMutation } from "@/redux/services/agentAPI"
 import { track } from "@/utils/mixpanelHelper"
 import AILoadingIcon from "../../../../../components/AILoading/aiLoading.svg?react"
-import { ErrorText } from "../../../../../components/ErrorText"
-import ModalEditorBlock from "../AIAgentBlock"
 import { descContainerStyle, descTextStyle } from "./style"
 
 const DescriptionEditor: FC = memo(() => {
@@ -42,7 +42,8 @@ const DescriptionEditor: FC = memo(() => {
       }}
       shouldUnregister={false}
       render={({ field }) => (
-        <ModalEditorBlock
+        <LayoutBlock
+          mode="modal"
           title={t("editor.ai-agent.label.desc")}
           subtitleTips={t("editor.ai-agent.generate-desc.tooltips")}
           subtitle={
@@ -131,7 +132,7 @@ const DescriptionEditor: FC = memo(() => {
           {errors.description?.message && (
             <ErrorText errorMessage={errors.description?.message} />
           )}
-        </ModalEditorBlock>
+        </LayoutBlock>
       )}
     />
   )

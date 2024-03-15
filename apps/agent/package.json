@@ -43,6 +43,7 @@
     "@illa-public/auth-shown": "workspace:^",
     "@illa-public/utils": "workspace:^",
     "@mui/material": "^5.15.3",
+    "@mui/x-data-grid-premium": "^6.19.6",
     "@reduxjs/toolkit": "^2.2.1",
     "antd": "^5.15.2",
     "axios": "^1.6.2",

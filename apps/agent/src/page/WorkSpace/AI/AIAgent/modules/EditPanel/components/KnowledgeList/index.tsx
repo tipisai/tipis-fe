@@ -3,7 +3,7 @@ import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { v4 } from "uuid"
 import { Agent, IKnowledgeFile } from "@illa-public/public-types"
-import AIAgentBlock from "../../../../../components/AIAgentBlock"
+import LayoutBlock from "../../../../../../../../Layout/Form/LayoutBlock"
 import KnowledgeUpload from "../../../../../components/KnowledgeUpload"
 import { SCROLL_ID } from "../../../../interface"
 
@@ -27,7 +27,7 @@ const KnowledgeList: FC = memo(() => {
       }}
       shouldUnregister={false}
       render={({ field }) => (
-        <AIAgentBlock title={t("knowledge")} scrollId={SCROLL_ID.KNOWLEDGE}>
+        <LayoutBlock title={t("knowledge")} scrollId={SCROLL_ID.KNOWLEDGE}>
           <KnowledgeUpload
             addFile={(file: IKnowledgeFile, isUpdate?: boolean) => {
               const { name, type } = file
@@ -64,7 +64,7 @@ const KnowledgeList: FC = memo(() => {
             }}
             values={field.value}
           />
-        </AIAgentBlock>
+        </LayoutBlock>
       )}
     />
   )

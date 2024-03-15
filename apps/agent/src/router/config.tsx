@@ -48,6 +48,7 @@ const MobileSettingNavPage = lazy(
 const TeamSetting = lazy(() => import("@/page/SettingPage/team/info"))
 const TeamBilling = lazy(() => import("@/page/SettingPage/team/billing"))
 const TeamMembers = lazy(() => import("@/page/SettingPage/team/member"))
+const EditFunctionPage = lazy(() => import("@/page/WorkSpace/Function/Edit"))
 
 const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   {
@@ -153,7 +154,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         path: ":teamIdentifier/function/:functionID/create",
         element: (
           <Suspense fallback={<FullSectionLoading />}>
-            <FunctionDashboard />
+            <EditFunctionPage />
           </Suspense>
         ),
       },

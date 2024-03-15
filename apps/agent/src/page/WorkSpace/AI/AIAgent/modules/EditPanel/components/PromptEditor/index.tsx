@@ -3,8 +3,8 @@ import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { CodeEditor } from "@illa-public/code-editor"
 import { Agent } from "@illa-public/public-types"
-import AIAgentBlock from "../../../../../components/AIAgentBlock"
-import { ErrorText } from "../../../../../components/ErrorText"
+import { ErrorText } from "../../../../../../../../Layout/Form/ErrorText"
+import LayoutBlock from "../../../../../../../../Layout/Form/LayoutBlock"
 import { SCROLL_ID } from "../../../../interface"
 import { codeEditorErrorStyle } from "./style"
 
@@ -28,7 +28,7 @@ const PromptEditor: FC = memo(() => {
       }}
       shouldUnregister={false}
       render={({ field: promptField }) => (
-        <AIAgentBlock title={"Prompt"} required scrollId={SCROLL_ID.PROMPT}>
+        <LayoutBlock title={"Prompt"} required scrollId={SCROLL_ID.PROMPT}>
           <div>
             <CodeEditor
               {...promptField}
@@ -41,7 +41,7 @@ const PromptEditor: FC = memo(() => {
               <ErrorText errorMessage={errors.prompt?.message} />
             )}
           </div>
-        </AIAgentBlock>
+        </LayoutBlock>
       )}
     />
   )

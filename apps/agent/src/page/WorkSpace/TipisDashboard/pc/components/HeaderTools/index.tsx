@@ -7,7 +7,8 @@ import { v4 } from "uuid"
 import { PlusIcon, SearchIcon } from "@illa-public/icon"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { ITabInfo, TAB_TYPE } from "@/redux/ui/recentTab/interface"
-import { recentTabActions } from "../../../../../../redux/ui/recentTab/slice"
+import { recentTabActions } from "@/redux/ui/recentTab/slice"
+import { getCreateTipiPath } from "@/utils/routeHelper"
 import { headerToolsContainerStyle } from "./style"
 
 const HeaderTools: FC = () => {
@@ -15,7 +16,7 @@ const HeaderTools: FC = () => {
   const navigate = useNavigate()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
 
-  const onClickCreateTipis = () => {
+  const onClickCreateTipi = () => {
     const tempID = v4()
     const tabsInfo: ITabInfo = {
       tabName: "",
@@ -25,7 +26,7 @@ const HeaderTools: FC = () => {
       cacheID: tempID,
     }
     dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
-    navigate(`/workspace/${currentTeamInfo?.identifier}/tipis/create/${tempID}`)
+    navigate(getCreateTipiPath(currentTeamInfo.identifier, tempID))
   }
 
   return (
@@ -39,7 +40,7 @@ const HeaderTools: FC = () => {
         type="primary"
         icon={<Icon component={PlusIcon} />}
         size="large"
-        onClick={onClickCreateTipis}
+        onClick={onClickCreateTipi}
       >
         Create
       </Button>

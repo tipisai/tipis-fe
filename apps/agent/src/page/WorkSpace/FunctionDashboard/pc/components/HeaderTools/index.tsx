@@ -8,6 +8,7 @@ import { PlusIcon, SearchIcon } from "@illa-public/icon"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { ITabInfo, TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
+import { getCreateFunctionPath } from "@/utils/routeHelper"
 import { headerToolsContainerStyle } from "./style"
 
 const HeaderTools: FC = () => {
@@ -25,9 +26,7 @@ const HeaderTools: FC = () => {
       cacheID: tempID,
     }
     dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
-    navigate(
-      `/workspace/${currentTeamInfo?.identifier}/function/create/${tempID}`,
-    )
+    navigate(getCreateFunctionPath(currentTeamInfo.identifier, tempID))
   }
   return (
     <div css={headerToolsContainerStyle}>

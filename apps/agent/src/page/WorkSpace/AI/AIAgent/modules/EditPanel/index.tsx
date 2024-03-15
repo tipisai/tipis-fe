@@ -14,6 +14,7 @@ import { Agent } from "@illa-public/public-types"
 import { useUpgradeModal } from "@illa-public/upgrade-modal"
 import { getCurrentTeamInfo, getPlanUtils } from "@illa-public/user-data"
 import { canUseUpgradeFeature } from "@illa-public/user-role-utils"
+import EditPanelLayout from "@/Layout/EditPanelLayout"
 import { track } from "@/utils/mixpanelHelper"
 import { AgentWSContext } from "../../../context/AgentWSContext"
 import { SCROLL_ID } from "../../interface"
@@ -21,11 +22,6 @@ import { agentData2JSONReport, handleScrollToElement } from "../../utils"
 import KnowledgeList from "./components/KnowledgeList"
 import PromptEditor from "./components/PromptEditor"
 import VariableEditor from "./components/VariableEditor"
-import {
-  editContentStyle,
-  editPanelContainerStyle,
-  startButtonContainerStyle,
-} from "./style"
 
 // TODO: WTF, can edit knowledge file
 const CAN_EDIT_KNOWLEDGE_FILE = false
@@ -109,13 +105,8 @@ const EditPanel: FC = () => {
   }
 
   return (
-    <div css={editPanelContainerStyle}>
-      <div css={editContentStyle}>
-        <PromptEditor />
-        <VariableEditor />
-        {CAN_EDIT_KNOWLEDGE_FILE && <KnowledgeList />}
-      </div>
-      <div css={startButtonContainerStyle}>
+    <EditPanelLayout
+      footerChildren={
         <Button
           block
           size="large"
@@ -134,8 +125,12 @@ const EditPanel: FC = () => {
             ? t("editor.ai-agent.start")
             : t("editor.ai-agent.restart")}
         </Button>
-      </div>
-    </div>
+      }
+    >
+      <PromptEditor />
+      <VariableEditor />
+      {CAN_EDIT_KNOWLEDGE_FILE && <KnowledgeList />}
+    </EditPanelLayout>
   )
 }
 

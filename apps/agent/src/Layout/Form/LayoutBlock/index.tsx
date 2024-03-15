@@ -1,7 +1,7 @@
 import { Tooltip } from "antd"
 import { FC } from "react"
 import RequireIcon from "@/assets/agent/require.svg?react"
-import { IModalEditorBlockProps } from "./interface"
+import { ILayoutBlock } from "./interface"
 import {
   agentBlockStyle,
   applyBlockSubtitleStyle,
@@ -10,11 +10,20 @@ import {
   blockTitleContainer,
 } from "./style"
 
-export const ModalEditorBlock: FC<IModalEditorBlockProps> = (props) => {
-  const { title, tips, children, subtitle, subtitleTips, required } = props
+export const LayoutBlock: FC<ILayoutBlock> = (props) => {
+  const {
+    title,
+    tips,
+    children,
+    subtitle,
+    subtitleTips,
+    required,
+    scrollId,
+    mode = "panel",
+  } = props
 
   return (
-    <div css={agentBlockStyle}>
+    <div css={agentBlockStyle(mode)} data-scroll-id={scrollId}>
       <div css={blockTitleContainer}>
         {title && (
           <Tooltip title={tips} trigger="hover" placement="top">
@@ -36,5 +45,5 @@ export const ModalEditorBlock: FC<IModalEditorBlockProps> = (props) => {
   )
 }
 
-export default ModalEditorBlock
-ModalEditorBlock.displayName = "AIAgentBlock"
+export default LayoutBlock
+LayoutBlock.displayName = "AIAgentBlock"

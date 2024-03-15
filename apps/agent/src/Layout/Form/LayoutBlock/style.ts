@@ -1,11 +1,17 @@
 import { SerializedStyles, css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
 
-export const agentBlockStyle = css`
-  margin-top: 8px;
-  padding: 8px 24px;
-  width: 100%;
-`
+export const agentBlockStyle = (mode: "panel" | "modal") => {
+  return mode === "panel"
+    ? css`
+        margin-top: 8px;
+        padding: 8px 24px;
+        width: 100%;
+      `
+    : css`
+        width: 100%;
+      `
+}
 
 export function applyBlockTextStyle(
   renderBottomLine?: boolean,

@@ -3,8 +3,8 @@ import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { Agent } from "@illa-public/public-types"
 import { RecordEditor } from "@illa-public/record-editor"
-import AIAgentBlock from "../../../../../components/AIAgentBlock"
-import { ErrorText } from "../../../../../components/ErrorText"
+import { ErrorText } from "../../../../../../../../Layout/Form/ErrorText"
+import LayoutBlock from "../../../../../../../../Layout/Form/LayoutBlock"
 import { SCROLL_ID } from "../../../../interface"
 
 const VariableEditor: FC = memo(() => {
@@ -34,7 +34,7 @@ const VariableEditor: FC = memo(() => {
       }}
       shouldUnregister={false}
       render={({ field }) => (
-        <AIAgentBlock
+        <LayoutBlock
           title={t("editor.ai-agent.label.variable")}
           scrollId={SCROLL_ID.VARIABLES}
         >
@@ -75,7 +75,7 @@ const VariableEditor: FC = memo(() => {
           {errors.variables?.message && (
             <ErrorText errorMessage={errors.variables?.message} />
           )}
-        </AIAgentBlock>
+        </LayoutBlock>
       )}
     />
   )
