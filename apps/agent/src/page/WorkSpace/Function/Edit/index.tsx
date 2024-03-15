@@ -1,5 +1,6 @@
 import { FC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
+import { aiFunctionResourceInit } from "@illa-public/public-configs"
 import { IAIFunctionResource } from "@illa-public/public-types"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import PublishButton from "./components/PublishButton"
@@ -8,7 +9,9 @@ import EditPanel from "./modules/EditPanel"
 import { contentContainerStyle } from "./style"
 
 const EditFunction: FC = () => {
-  const methods = useForm<IAIFunctionResource>({})
+  const methods = useForm<IAIFunctionResource>({
+    defaultValues: aiFunctionResourceInit,
+  })
   return (
     <FormProvider {...methods}>
       <FormContext>

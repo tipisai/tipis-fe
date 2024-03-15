@@ -87,6 +87,7 @@ const EditPanel: FC = () => {
 
   return (
     <EditPanelLayout
+      customWidth="900px"
       footerChildren={
         <Button
           block

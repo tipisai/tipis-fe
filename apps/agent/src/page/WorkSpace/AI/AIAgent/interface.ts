@@ -4,7 +4,7 @@ export const AgentInitial: Agent = {
   name: "",
   teamIdentifier: "",
   agentType: AI_AGENT_TYPE.CHAT,
-  model: AI_AGENT_MODEL.GPT_3_5,
+  model: AI_AGENT_MODEL.GPT_4,
   variables: [{ key: "", value: "" }],
   knowledge: [],
   prompt: "",

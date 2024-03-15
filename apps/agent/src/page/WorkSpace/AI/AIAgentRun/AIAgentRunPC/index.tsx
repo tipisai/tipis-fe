@@ -1,27 +1,97 @@
-import { FC, useContext, useEffect, useRef } from "react"
+import { FC, useCallback, useContext, useEffect, useMemo, useRef } from "react"
 import { useFormContext, useFormState, useWatch } from "react-hook-form"
+import {
+  ILLA_MIXPANEL_BUILDER_PAGE_NAME,
+  ILLA_MIXPANEL_EVENT_TYPE,
+} from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
-import { PreviewChat } from "@/page/WorkSpace/AI/components/PreviewChat"
+import { TextSignal } from "@/api/ws/textSignal"
+import { PreviewChat } from "@/components/PreviewChat"
+import {
+  ChatMessage,
+  ChatSendRequestPayload,
+} from "@/components/PreviewChat/interface"
+import { track } from "@/utils/mixpanelHelper"
 import { ChatContext } from "../../components/ChatContext"
 import { AgentWSContext } from "../../context/AgentWSContext"
 import { rightPanelContainerStyle } from "./style"
 
 export const AIAgentRunPC: FC = () => {
-  const { control } = useFormContext<Agent>()
+  const { control, getValues } = useFormContext<Agent>()
 
   const { isDirty } = useFormState({
     control,
   })
 
-  const [model, agentType] = useWatch({
+  const [model] = useWatch({
     control,
-    name: ["model", "agentType"],
+    name: ["model"],
   })
 
-  const { inRoomUsers, isRunning, connect, wsStatus, leaveRoom } =
-    useContext(AgentWSContext)
+  const {
+    inRoomUsers,
+    isRunning,
+    connect,
+    wsStatus,
+    leaveRoom,
+    chatMessages,
+    isReceiving,
+    sendMessage,
+    setIsReceiving,
+    lastRunAgent,
+  } = useContext(AgentWSContext)
 
   const onlyConnectOnce = useRef(false)
+
+  const wsContext = useMemo(
+    () => ({
+      wsStatus,
+      isRunning,
+      chatMessages,
+      isReceiving,
+      sendMessage,
+      setIsReceiving,
+      lastRunAgent,
+    }),
+    [
+      chatMessages,
+      isReceiving,
+      isRunning,
+      lastRunAgent,
+      sendMessage,
+      setIsReceiving,
+      wsStatus,
+    ],
+  )
+
+  const onSendMessage = useCallback(
+    (message: ChatMessage) => {
+      track(
+        ILLA_MIXPANEL_EVENT_TYPE.CLICK,
+        ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_RUN,
+        {
+          element: "send",
+          parameter5: getValues("aiAgentID"),
+        },
+      )
+      sendMessage(
+        {
+          threadID: message.threadID,
+          prompt: message.message,
+          variables: [],
+          actionID: getValues("aiAgentID"),
+          modelConfig: getValues("modelConfig"),
+          model: getValues("model"),
+          agentType: getValues("agentType"),
+        } as ChatSendRequestPayload,
+        TextSignal.RUN,
+        "chat",
+        true,
+        message,
+      )
+    },
+    [getValues, sendMessage],
+  )
 
   useEffect(() => {
     if (onlyConnectOnce.current === false) {
@@ -37,9 +107,10 @@ export const AIAgentRunPC: FC = () => {
           <PreviewChat
             isMobile={false}
             editState="RUN"
-            agentType={agentType}
             model={model}
             blockInput={!isRunning || isDirty}
+            wsContextValue={wsContext}
+            onSendMessage={onSendMessage}
           />
         </div>
       </ChatContext.Provider>

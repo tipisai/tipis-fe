@@ -12,9 +12,9 @@ export const editPanelContainerStyle = css`
   border-top: 1px solid ${getColor("grayBlue", "08")};
 `
 
-export const editContentStyle = css`
+export const editContentStyle = (width: string) => css`
   display: flex;
-  width: 528px;
+  width: ${width};
   height: 100%;
   flex-direction: column;
   gap: 8px;
@@ -22,8 +22,8 @@ export const editContentStyle = css`
   overflow-y: auto;
 `
 
-export const footerContainerStyle = css`
-  width: 528px;
+export const footerContainerStyle = (width: string) => css`
+  width: ${width};
   padding: 24px 24px 8px 24px;
   border-top: 1px solid ${getColor("grayBlue", "08")};
   background-color: ${getColor("white", "01")};

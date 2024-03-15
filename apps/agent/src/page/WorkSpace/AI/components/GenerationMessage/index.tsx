@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 import { Avatar } from "@illa-public/avatar"
 import { CopyIcon } from "@illa-public/icon"
 import { copyToClipboard } from "@illa-public/utils"
+import { SenderType } from "@/components/PreviewChat/interface"
 import { ChatContext } from "@/page/WorkSpace/AI/components/ChatContext"
 import { GenerationMessageProps } from "@/page/WorkSpace/AI/components/GenerationMessage/interface"
 import {
@@ -15,7 +16,6 @@ import {
   nickNameStyle,
 } from "@/page/WorkSpace/AI/components/GenerationMessage/style"
 import MarkdownMessage from "@/page/WorkSpace/AI/components/MarkdownMessage"
-import { SenderType } from "@/page/WorkSpace/AI/components/PreviewChat/interface"
 
 export const GenerationMessage: FC<GenerationMessageProps> = (props) => {
   const { message } = props

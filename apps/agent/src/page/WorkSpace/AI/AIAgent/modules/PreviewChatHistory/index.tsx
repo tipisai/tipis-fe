@@ -1,24 +1,33 @@
 import { isEqual } from "lodash-es"
-import { FC, memo, useContext, useMemo } from "react"
+import { FC, memo, useCallback, useContext, useMemo } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import {
   ILLA_MIXPANEL_BUILDER_PAGE_NAME,
+  ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackProvider,
 } from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
-import { track } from "../../../../../../utils/mixpanelHelper"
-import { PreviewChat } from "../../../components/PreviewChat"
+import { TextSignal } from "@/api/ws/textSignal"
+import { PreviewChat } from "@/components/PreviewChat"
+import {
+  ChatMessage,
+  ChatSendRequestPayload,
+} from "@/components/PreviewChat/interface"
+import { track } from "@/utils/mixpanelHelper"
 import { AgentWSContext } from "../../../context/AgentWSContext"
 import { rightPanelContainerStyle } from "./style"
 
 const PreviewChatHistory: FC = memo(() => {
   const { getValues, control } = useFormContext<Agent>()
-  const { isRunning, lastRunAgent } = useContext(AgentWSContext)
-
-  const [agentType] = useWatch({
-    control: control,
-    name: ["agentType"],
-  })
+  const {
+    wsStatus,
+    isRunning,
+    chatMessages,
+    isReceiving,
+    sendMessage,
+    setIsReceiving,
+    lastRunAgent,
+  } = useContext(AgentWSContext)
 
   const fieldArray = useWatch({
     control: control,
@@ -40,6 +49,56 @@ const PreviewChatHistory: FC = memo(() => {
     )
   }, [lastRunAgent, fieldArray])
 
+  const wsContext = useMemo(
+    () => ({
+      wsStatus,
+      isRunning,
+      chatMessages,
+      isReceiving,
+      sendMessage,
+      setIsReceiving,
+      lastRunAgent,
+    }),
+    [
+      chatMessages,
+      isReceiving,
+      isRunning,
+      lastRunAgent,
+      sendMessage,
+      setIsReceiving,
+      wsStatus,
+    ],
+  )
+
+  const onSendMessage = useCallback(
+    (message: ChatMessage) => {
+      track(
+        ILLA_MIXPANEL_EVENT_TYPE.CLICK,
+        ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_RUN,
+        {
+          element: "send",
+          parameter5: getValues("aiAgentID"),
+        },
+      )
+      sendMessage(
+        {
+          threadID: message.threadID,
+          prompt: message.message,
+          variables: [],
+          actionID: getValues("aiAgentID"),
+          modelConfig: getValues("modelConfig"),
+          model: getValues("model"),
+          agentType: getValues("agentType"),
+        } as ChatSendRequestPayload,
+        TextSignal.RUN,
+        "chat",
+        true,
+        message,
+      )
+    },
+    [getValues, sendMessage],
+  )
+
   return (
     <div css={rightPanelContainerStyle}>
       <MixpanelTrackProvider
@@ -50,8 +109,9 @@ const PreviewChatHistory: FC = memo(() => {
           isMobile={false}
           model={getValues("model")}
           editState="EDIT"
-          agentType={agentType}
           blockInput={!isRunning || blockInputDirty}
+          onSendMessage={onSendMessage}
+          wsContextValue={wsContext}
         />
       </MixpanelTrackProvider>
     </div>

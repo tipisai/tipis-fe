@@ -11,8 +11,12 @@ import {
   UploadIcon,
 } from "@illa-public/icon"
 import { GCS_OBJECT_TYPE, IKnowledgeFile } from "@illa-public/public-types"
+import {
+  ACCEPT,
+  MAX_FILE_SIZE,
+  MAX_MESSAGE_FILES_LENGTH,
+} from "@/config/constants/knowledge"
 import { handleParseFile } from "@/utils/file"
-import { ACCEPT, MAX_FILE_SIZE, MAX_MESSAGE_FILES_LENGTH } from "./contants"
 import {
   fileItemStyle,
   fileListContainerStyle,
