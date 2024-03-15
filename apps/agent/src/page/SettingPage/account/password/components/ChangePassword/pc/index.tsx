@@ -15,12 +15,7 @@ import {
   gridFormFieldStyle,
   innerContainerStyle,
 } from "./style"
-import {
-  // errorIconStyle,
-  // errorMsgStyle,
-  gridItemStyle,
-  passwordFormContainerStyle,
-} from "./style"
+import { gridItemStyle, passwordFormContainerStyle } from "./style"
 
 const { Password } = Input
 

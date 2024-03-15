@@ -17,7 +17,7 @@ export const pageStyle = css`
 
 export const mobilePageStyle = css`
   ${centerStyle};
-  gap: 32rem;
+  gap: 16px;
   font-weight: 600;
-  font-size: 32rem;
+  font-size: 16px;
 `

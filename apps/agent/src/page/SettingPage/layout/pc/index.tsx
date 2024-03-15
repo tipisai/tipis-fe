@@ -116,7 +116,7 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
         <div css={asideMenuStyle}>
           <div>
             <div css={menuWrapperTittleStyle}>
-              <ProfileIcon />
+              <Icon component={ProfileIcon} />
               <span>{t("profile.setting.group.account")}</span>
             </div>
             <Menu itemList={accountOptions} />
@@ -124,7 +124,7 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
           {currentTeamInfo && (
             <div css={teamSettingContainerStyle}>
               <div css={menuWrapperTittleStyle}>
-                <TeamIcon />
+                <Icon component={TeamIcon} />
                 <span>{t("profile.setting.group.team")}</span>
               </div>
               <div css={teamSwitchContainerStyle}>

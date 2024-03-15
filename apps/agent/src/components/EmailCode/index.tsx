@@ -74,5 +74,3 @@ export const EmailCode: FC<EmailCodeProps> = (props) => {
     </LinkButton>
   )
 }
-
-EmailCode.displayName = "EmailCode"
