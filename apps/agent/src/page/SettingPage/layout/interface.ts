@@ -1,8 +1,6 @@
 import { ReactNode } from "react"
 
-export interface SettingMobileLayoutProps {
+export interface SettingLayoutProps {
   children: ReactNode
-  navRight?: ReactNode
   withoutPadding?: boolean
-  title?: string
 }

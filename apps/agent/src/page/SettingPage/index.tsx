@@ -1,6 +1,6 @@
 import { FC, useState } from "react"
 import { useSelector } from "react-redux"
-import { Navigate, Outlet } from "react-router-dom"
+import { Navigate, Outlet, useMatch } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
   ILLA_MIXPANEL_CLOUD_PAGE_NAME,
@@ -10,12 +10,15 @@ import { USER_ROLE } from "@illa-public/public-types"
 import { getCurrentTeamInfo, getCurrentUserID } from "@illa-public/user-data"
 import LeaveTeamModal from "@/page/SettingPage/team/components/LeaveTeamModal"
 import { track } from "@/utils/mixpanelHelper"
+import SettingMobileLayout from "./layout/mobile"
 import SettingLayout from "./layout/pc"
 
 export const Setting: FC = () => {
   const [modalVisible, setModalVisible] = useState(false)
   const teamInfo = useSelector(getCurrentTeamInfo)
   const isOwner = teamInfo?.myRole === USER_ROLE.OWNER
+  const matchMobileSettingNav = useMatch("/setting/:teamIdentifier")
+  const matchMobileBilling = useMatch("/setting/:teamIdentifier/billing")
 
   const isLogin = useSelector(getCurrentUserID)
 
@@ -57,11 +60,15 @@ export const Setting: FC = () => {
           </SettingLayout>
         }
         mobilePage={
-          <Outlet
-            context={{
-              onClickLeaveTeam: openLeaveTeamModal,
-            }}
-          />
+          <SettingMobileLayout
+            withoutPadding={!!matchMobileSettingNav || !!matchMobileBilling}
+          >
+            <Outlet
+              context={{
+                onClickLeaveTeam: openLeaveTeamModal,
+              }}
+            />
+          </SettingMobileLayout>
         }
       />
       <LeaveTeamModal visible={modalVisible} onCancel={closeLeaveTeamModal} />
@@ -70,7 +77,5 @@ export const Setting: FC = () => {
     <Navigate to="/user/login" replace={true} />
   )
 }
-
-Setting.displayName = "Setting"
 
 export default Setting

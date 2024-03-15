@@ -16,7 +16,7 @@ import ProfileIcon from "@/assets/setting/profile.svg?react"
 import TeamIcon from "@/assets/setting/team.svg?react"
 import Menu from "@/page/SettingPage/components//Menu"
 import { GoToPortal } from "@/page/SettingPage/components/GoToPortal"
-import { SettingLayoutProps } from "./interface"
+import { SettingLayoutProps } from "../interface"
 import {
   asideMenuStyle,
   backIconStyle,

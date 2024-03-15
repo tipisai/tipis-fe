@@ -1,6 +1,7 @@
 import { useContext } from "react"
 import { useTranslation } from "react-i18next"
 import FullSectionLoading from "@/components/FullSectionLoading"
+import { GoToPortal } from "@/page/SettingPage/components/GoToPortal"
 import { LicenseCard } from "@/page/SettingPage/team/billing/components/LicenseCard"
 import { Price } from "@/page/SettingPage/team/billing/components/Price"
 import { WooUsage } from "@/page/SettingPage/team/billing/components/WooUsage"
@@ -22,6 +23,7 @@ export const BillingMobilePage = () => {
         <FullSectionLoading />
       ) : (
         <>
+          <GoToPortal />
           <div css={billingHeaderStyle}>
             <span>{t("billing.title.billing")}</span>
           </div>

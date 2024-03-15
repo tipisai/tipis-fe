@@ -8,7 +8,6 @@ export const pageWrapperStyle = css`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  position: relative;
 `
 
 export const billingHeaderStyle = css`

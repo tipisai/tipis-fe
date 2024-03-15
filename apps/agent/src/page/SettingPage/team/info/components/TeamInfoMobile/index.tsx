@@ -14,14 +14,14 @@ import {
 import { USER_ROLE } from "@illa-public/public-types"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { isBiggerThanTargetRole } from "@illa-public/user-role-utils"
+import ErrorMessage from "@/components/InputErrorMessage"
 import { useUploadAvatar } from "@/page/SettingPage/hooks/uploadAvatar"
-import { MobileSettingProps } from "@/page/SettingPage/team/info/components/MobileSetting/interface"
 import { TEAM_IDENTIFY_FORMAT } from "@/page/SettingPage/team/info/constants"
-import { TeamSettingFields } from "@/page/SettingPage/team/interface"
+import { TeamInfoFields } from "@/page/SettingPage/team/interface"
 import { getValidTeamSettingError } from "@/page/SettingPage/utils"
+import { TeamInfoMobileProps } from "./interface"
 import {
   cameraIconContainerStyle,
-  errorMsgStyle,
   forgotPwdContainerStyle,
   formLabelStyle,
   formStyle,
@@ -31,11 +31,11 @@ import {
   uploadTeamLogoContainerStyle,
 } from "./style"
 
-const MobileSetting: FC<MobileSettingProps> = (props) => {
+const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
   const { t } = useTranslation()
-  const { onSubmit, errorMsg, disabled, loading } = props
+  const { onSubmit, disabled, loading } = props
   const { handleSubmit, control, formState, getValues, trigger } =
-    useFormContext<TeamSettingFields>()
+    useFormContext<TeamInfoFields>()
   const { message } = App.useApp()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const { uploadTeamIcon } = useUploadAvatar()
@@ -48,7 +48,6 @@ const MobileSetting: FC<MobileSettingProps> = (props) => {
       const icon = await uploadTeamIcon(file)
       return (await onSubmit?.({ icon })) as boolean
     } catch {
-      console.error("upload team icon failed")
       message.error({
         content: t("profile.setting.message.save_fail"),
       })
@@ -118,11 +117,7 @@ const MobileSetting: FC<MobileSettingProps> = (props) => {
                     {...field}
                     size="large"
                     disabled={disabled}
-                    status={
-                      !!formState?.errors.name || !!errorMsg.name
-                        ? "error"
-                        : undefined
-                    }
+                    status={!!formState?.errors.name ? "error" : undefined}
                     variant="filled"
                     placeholder={t(
                       "team_setting.team_info.team_name_placeholder",
@@ -145,10 +140,8 @@ const MobileSetting: FC<MobileSettingProps> = (props) => {
                   required: t("team_setting.team_info.team_name_empty"),
                 }}
               />
-              {(formState?.errors.name || errorMsg.name) && (
-                <div css={errorMsgStyle}>
-                  {formState?.errors.name?.message || errorMsg.name}
-                </div>
+              {formState?.errors.name && (
+                <ErrorMessage message={formState?.errors.name?.message} />
               )}
             </div>
           </section>
@@ -168,9 +161,7 @@ const MobileSetting: FC<MobileSettingProps> = (props) => {
                     size="large"
                     disabled={disabled}
                     status={
-                      !!formState?.errors.identifier || !!errorMsg.identifier
-                        ? "error"
-                        : undefined
+                      !!formState?.errors.identifier ? "error" : undefined
                     }
                     variant="filled"
                     placeholder={t(
@@ -198,10 +189,8 @@ const MobileSetting: FC<MobileSettingProps> = (props) => {
                   },
                 }}
               />
-              {(formState?.errors.identifier || errorMsg.identifier) && (
-                <div css={errorMsgStyle}>
-                  {formState?.errors.identifier?.message || errorMsg.identifier}
-                </div>
+              {formState?.errors.identifier && (
+                <ErrorMessage message={formState?.errors.identifier?.message} />
               )}
             </div>
           </section>
@@ -222,6 +211,4 @@ const MobileSetting: FC<MobileSettingProps> = (props) => {
   )
 }
 
-MobileSetting.displayName = "MobileSetting"
-
-export default MobileSetting
+export default TeamInfoMobile

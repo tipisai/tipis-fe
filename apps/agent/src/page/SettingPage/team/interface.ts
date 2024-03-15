@@ -1,12 +1,8 @@
-export interface TeamSettingFields {
+export interface TeamInfoFields {
   name?: string
   identifier?: string
   icon?: string
 }
-
-export type TeamSettingErrorMsg = Partial<
-  Record<keyof TeamSettingFields, string>
->
 
 export interface SettingContextType {
   onClickLeaveTeam?: () => void

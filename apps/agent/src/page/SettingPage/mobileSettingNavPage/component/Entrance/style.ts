@@ -24,21 +24,6 @@ export const landingMenuTitleStyle = css`
   line-height: 22px;
 `
 
-export const menuItemStyle = css`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 11px 16px;
-  color: ${getColor("grayBlue", "02")};
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 22px;
-  &:hover {
-    background-color: ${getColor("grayBlue", "09")};
-  }
-`
-
 export const teamSwitchStyle = css`
   .teamSwitchContainer {
     display: flex;
@@ -62,28 +47,4 @@ export const teamSwitchStyle = css`
     height: 16px;
     box-sizing: content-box;
   }
-`
-
-export const rightIconStyle = css`
-  color: #a9aeb8;
-`
-
-// mobile
-export const landingWrapperStyle = css`
-  position: relative;
-  margin: 16px;
-  min-height: 500px;
-`
-export const avatarStyle = css`
-  margin: 0 auto 48px;
-  width: 100px;
-  height: 100px;
-`
-
-export const cameraIconStyle = css`
-  width: 28px;
-  height: 28px;
-  position: absolute;
-  top: 72px;
-  right: 113px;
 `

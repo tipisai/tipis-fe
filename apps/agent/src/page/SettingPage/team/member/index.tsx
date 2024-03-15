@@ -5,7 +5,6 @@ import {
 } from "@illa-public/mixpanel-utils"
 import { track } from "@/utils/mixpanelHelper"
 import MemberListPage from "../../components/Member"
-import SettingMobileLayout from "../../layout/mobile"
 
 const TeamMembers = () => {
   return (
@@ -15,11 +14,7 @@ const TeamMembers = () => {
     >
       <LayoutAutoChange
         desktopPage={<MemberListPage />}
-        mobilePage={
-          <SettingMobileLayout>
-            <MemberListPage />
-          </SettingMobileLayout>
-        }
+        mobilePage={<MemberListPage />}
       />
     </MixpanelTrackProvider>
   )

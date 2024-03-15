@@ -18,32 +18,26 @@ import {
   useChangeTeamConfigMutation,
 } from "@illa-public/user-data"
 import { isSmallThanTargetRole } from "@illa-public/user-role-utils"
-import SettingMobileLayout from "@/page/SettingPage/layout/mobile"
-import MobileSetting from "@/page/SettingPage/team/info/components/MobileSetting"
-import Setting from "@/page/SettingPage/team/info/components/Setting"
+import MobileSetting from "@/page/SettingPage/team/info/components/TeamInfoMobile"
+import Setting from "@/page/SettingPage/team/info/components/TeamInfoPC"
 import {
   SettingContextType,
-  TeamSettingErrorMsg,
-  TeamSettingFields,
+  TeamInfoFields,
 } from "@/page/SettingPage/team/interface"
 import { track } from "@/utils/mixpanelHelper"
 
-const TeamSetting: FC = () => {
+const TeamInfo: FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { teamIdentifier } = useParams()
   const { onClickLeaveTeam } = useOutletContext<SettingContextType>()
   const teamInfo = useSelector(getCurrentTeamInfo)
   const [loading, setLoading] = useState(false)
-  const [errorMsg, _setErrorMsg] = useState<TeamSettingErrorMsg>({
-    name: "",
-    identifier: "",
-  })
   const { message } = App.useApp()
 
   const [changeTeamConfig] = useChangeTeamConfigMutation()
 
-  const settingFormProps = useForm<TeamSettingFields>({
+  const settingFormProps = useForm<TeamInfoFields>({
     defaultValues: {
       name: teamInfo?.name,
       identifier: teamInfo?.identifier,
@@ -55,7 +49,7 @@ const TeamSetting: FC = () => {
   }, [teamInfo])
   const dispatch = useDispatch()
 
-  const onSubmit: SubmitHandler<TeamSettingFields> = async (data) => {
+  const onSubmit: SubmitHandler<TeamInfoFields> = async (data) => {
     try {
       setLoading(true)
       await changeTeamConfig({
@@ -119,21 +113,17 @@ const TeamSetting: FC = () => {
             <Setting
               disabled={disableEdit}
               loading={loading}
-              errorMsg={errorMsg}
               onSubmit={onSubmit}
               teamInfo={teamInfo}
               onClickLeaveTeam={onClickLeaveTeam}
             />
           }
           mobilePage={
-            <SettingMobileLayout>
-              <MobileSetting
-                disabled={disableEdit}
-                loading={loading}
-                errorMsg={errorMsg}
-                onSubmit={onSubmit}
-              />
-            </SettingMobileLayout>
+            <MobileSetting
+              disabled={disableEdit}
+              loading={loading}
+              onSubmit={onSubmit}
+            />
           }
         />
       </FormProvider>
@@ -141,4 +131,4 @@ const TeamSetting: FC = () => {
   )
 }
 
-export default TeamSetting
+export default TeamInfo

@@ -42,7 +42,9 @@ const PasswordSettingPage = lazy(
 const LinkedSettingPage = lazy(
   () => import("@/page/SettingPage/account/linked"),
 )
-const SettingLanding = lazy(() => import("@/page/SettingPage/landing"))
+const MobileSettingNavPage = lazy(
+  () => import("@/page/SettingPage/mobileSettingNavPage"),
+)
 const TeamSetting = lazy(() => import("@/page/SettingPage/team/info"))
 const TeamBilling = lazy(() => import("@/page/SettingPage/team/billing"))
 const TeamMembers = lazy(() => import("@/page/SettingPage/team/member"))
@@ -184,7 +186,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         index: true,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
-            <SettingLanding />
+            <MobileSettingNavPage />
           </Suspense>
         ),
         accessByMobile: true,

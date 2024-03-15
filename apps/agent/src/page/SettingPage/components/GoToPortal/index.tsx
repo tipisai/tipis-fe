@@ -3,7 +3,7 @@ import { FC, MouseEventHandler, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import OpenLinkIcon from "@/assets/setting/open-link.svg?react"
 import { RedirectPortalModal } from "../RedirectPortolModal"
-import { subMenuLabelStyle } from "./style"
+import { containerStyle, subMenuLabelStyle } from "./style"
 
 export const GoToPortal: FC = () => {
   const { t } = useTranslation()
@@ -18,7 +18,7 @@ export const GoToPortal: FC = () => {
     setPortalModalVisible(true)
   }
   return (
-    <>
+    <div css={containerStyle}>
       <div css={subMenuLabelStyle} onClick={handleOnClick}>
         <span>{t("billing.menu.billing_portal")}</span>
         <Icon component={OpenLinkIcon} />
@@ -27,6 +27,6 @@ export const GoToPortal: FC = () => {
         visible={portalModalVisible}
         onCancel={closePortalModal}
       />
-    </>
+    </div>
   )
 }

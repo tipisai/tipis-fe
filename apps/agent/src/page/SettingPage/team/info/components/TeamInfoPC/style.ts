@@ -52,22 +52,6 @@ export const leaveLabelStyle = css`
   ${formLabelStyle};
 `
 
-export const errorMsgStyle: SerializedStyles = css`
-  position: relative;
-  font-size: 14px;
-  padding-left: 24px;
-  line-height: 22px;
-  color: ${getColor("orange", "03")};
-`
-
-export const errorIconStyle: SerializedStyles = css`
-  position: absolute;
-  font-size: 16px;
-  line-height: 0;
-  top: 3px;
-  left: 0;
-`
-
 export const forgotPwdContainerStyle: SerializedStyles = css`
   display: flex;
   align-items: center;

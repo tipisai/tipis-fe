@@ -11,8 +11,7 @@ import {
   useLazyGetTeamsInfoQuery,
 } from "@illa-public/user-data"
 import FullSectionLoading from "@/components/FullSectionLoading"
-import { GoToPortal } from "../../components/GoToPortal"
-import SettingMobileLayout from "../../layout/mobile"
+// import { GoToPortal } from "../../components/GoToPortal"
 import { BillingContext } from "./context"
 import { BillingMobilePage } from "./mobile"
 import { BillingPCPage } from "./pc"
@@ -56,7 +55,7 @@ const Billing: FC = () => {
     wooInfo?.plan === SUBSCRIBE_PLAN.COLLA_SUBSCRIBE_CANCELED
 
   const isExpiredWoo = wooInfo?.plan === SUBSCRIBE_PLAN.COLLA_SUBSCRIBE_EXPIRED
-
+  // navRight={!isUnSubscribeWoo ? <GoToPortal /> : null}
   if (isError) return <Navigate to="/500" />
   if (isLoading) return <FullSectionLoading />
   return wooInfo ? (
@@ -72,14 +71,7 @@ const Billing: FC = () => {
     >
       <LayoutAutoChange
         desktopPage={<BillingPCPage />}
-        mobilePage={
-          <SettingMobileLayout
-            withoutPadding
-            navRight={!isUnSubscribeWoo ? <GoToPortal /> : null}
-          >
-            <BillingMobilePage />
-          </SettingMobileLayout>
-        }
+        mobilePage={<BillingMobilePage />}
       />
     </BillingContext.Provider>
   ) : null

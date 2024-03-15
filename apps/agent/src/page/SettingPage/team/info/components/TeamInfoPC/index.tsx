@@ -1,4 +1,3 @@
-import Icon from "@ant-design/icons"
 import { App, Button, Input } from "antd"
 import { FC, useContext } from "react"
 import { Controller, useFormContext } from "react-hook-form"
@@ -6,7 +5,6 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { Avatar } from "@illa-public/avatar"
 import { AvatarUpload } from "@illa-public/cropper"
-import { WarningCircleIcon } from "@illa-public/icon"
 import {
   ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackContext,
@@ -14,14 +12,16 @@ import {
 import { USER_ROLE } from "@illa-public/public-types"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { isBiggerThanTargetRole } from "@illa-public/user-role-utils"
+import ErrorMessage from "@/components/InputErrorMessage"
 import { Header } from "@/page/SettingPage/components/Header"
 import { useUploadAvatar } from "@/page/SettingPage/hooks/uploadAvatar"
-import { SettingProps } from "@/page/SettingPage/team/info/components/Setting/interface"
+import { TEAM_IDENTIFY_FORMAT } from "@/page/SettingPage/team/info/constants"
+import { TeamInfoFields } from "@/page/SettingPage/team/interface"
+import { getValidTeamSettingError } from "@/page/SettingPage/utils"
+import { TeamInfoPCProps } from "./interface"
 import {
   avatarStyle,
   editLabelStyle,
-  errorIconStyle,
-  errorMsgStyle,
   forgotPwdContainerStyle,
   formLabelStyle,
   formStyle,
@@ -30,18 +30,14 @@ import {
   gridItemStyle,
   leaveLabelStyle,
   settingWrapperStyle,
-} from "@/page/SettingPage/team/info/components/Setting/style"
-import { TEAM_IDENTIFY_FORMAT } from "@/page/SettingPage/team/info/constants"
-import { TeamSettingFields } from "@/page/SettingPage/team/interface"
-import { getValidTeamSettingError } from "@/page/SettingPage/utils"
+} from "./style"
 
-const Setting: FC<SettingProps> = (props) => {
+const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
   const { t } = useTranslation()
   const { message } = App.useApp()
-  const { onSubmit, errorMsg, loading, disabled, teamInfo, onClickLeaveTeam } =
-    props
+  const { onSubmit, loading, disabled, teamInfo, onClickLeaveTeam } = props
   const { handleSubmit, control, formState, getValues, trigger } =
-    useFormContext<TeamSettingFields>()
+    useFormContext<TeamInfoFields>()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
 
   const { uploadTeamIcon } = useUploadAvatar()
@@ -130,11 +126,7 @@ const Setting: FC<SettingProps> = (props) => {
                       autoComplete="new-name"
                       size="large"
                       disabled={disabled}
-                      status={
-                        !!formState?.errors.name || !!errorMsg.name
-                          ? "error"
-                          : undefined
-                      }
+                      status={!!formState?.errors.name ? "error" : undefined}
                       variant="filled"
                       placeholder={t(
                         "team_setting.team_info.team_name_placeholder",
@@ -157,11 +149,8 @@ const Setting: FC<SettingProps> = (props) => {
                     required: t("team_setting.team_info.team_name_empty"),
                   }}
                 />
-                {(formState?.errors.name || errorMsg.name) && (
-                  <div css={errorMsgStyle}>
-                    <Icon component={WarningCircleIcon} css={errorIconStyle} />
-                    {formState?.errors.name?.message || errorMsg.name}
-                  </div>
+                {formState?.errors.name && (
+                  <ErrorMessage message={formState?.errors.name?.message} />
                 )}
               </div>
             </section>
@@ -181,9 +170,7 @@ const Setting: FC<SettingProps> = (props) => {
                       size="large"
                       disabled={disabled}
                       status={
-                        !!formState?.errors.identifier || !!errorMsg.identifier
-                          ? "error"
-                          : undefined
+                        !!formState?.errors.identifier ? "error" : undefined
                       }
                       variant="filled"
                       placeholder={t(
@@ -211,12 +198,10 @@ const Setting: FC<SettingProps> = (props) => {
                     },
                   }}
                 />
-                {(formState?.errors.identifier || errorMsg.identifier) && (
-                  <div css={errorMsgStyle}>
-                    <WarningCircleIcon css={errorIconStyle} />
-                    {formState?.errors.identifier?.message ||
-                      errorMsg.identifier}
-                  </div>
+                {formState?.errors.identifier && (
+                  <ErrorMessage
+                    message={formState?.errors.identifier?.message}
+                  />
                 )}
               </div>
             </section>
@@ -262,6 +247,4 @@ const Setting: FC<SettingProps> = (props) => {
   )
 }
 
-Setting.displayName = "Setting"
-
-export default Setting
+export default TeamInfoPC

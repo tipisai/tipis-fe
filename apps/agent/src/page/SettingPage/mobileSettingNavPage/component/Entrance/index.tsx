@@ -16,10 +16,10 @@ import {
 import { canAccessMember, canManagePayment } from "@illa-public/user-role-utils"
 import ProfileIcon from "@/assets/setting/profile.svg?react"
 import TeamIcon from "@/assets/setting/team.svg?react"
+import { useLogout } from "@/page/SettingPage/hooks/useLogout"
 import { SettingContextType } from "@/page/SettingPage/team/interface"
 import { track } from "@/utils/mixpanelHelper"
-import { useLogout } from "../hooks/useLogout"
-import { MobileMenuItems } from "./landingMenu"
+import SettingMenu from "../Menu"
 import {
   landingMenuItemsStyle,
   landingMenuTitleStyle,
@@ -27,7 +27,7 @@ import {
   teamSwitchStyle,
 } from "./style"
 
-const MobileEntrance: FC = () => {
+const Entrance: FC = () => {
   const { t } = useTranslation()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)
   const teams = useSelector(getTeamItems)
@@ -143,7 +143,7 @@ const MobileEntrance: FC = () => {
         <Icon component={ProfileIcon} />
         <span>{t("profile.setting.group.account")}</span>
       </div>
-      <MobileMenuItems itemList={accountOptions} />
+      <SettingMenu itemList={accountOptions} />
       <div css={landingMenuItemsStyle} />
       {currentTeamInfo && (
         <>
@@ -165,11 +165,9 @@ const MobileEntrance: FC = () => {
           </div>
         </>
       )}
-      <MobileMenuItems itemList={teamOptions} />
+      <SettingMenu itemList={teamOptions} />
     </>
   )
 }
 
-MobileEntrance.displayName = "MobileEntrance"
-
-export default MobileEntrance
+export default Entrance

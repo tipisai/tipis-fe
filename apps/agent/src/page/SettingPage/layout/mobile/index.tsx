@@ -4,17 +4,16 @@ import { useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
 import { PreviousIcon } from "@illa-public/icon"
 import { getCurrentTeamIdentifier } from "@illa-public/user-data"
-import { SettingMobileLayoutProps } from "./interface"
+import { SettingLayoutProps } from "../interface"
 import {
   applyContentStyle,
-  mobileTitleStyle,
+  containerStyle,
   navStyle,
   prevIconStyle,
-  wrapperStyle,
 } from "./style"
 
-const SettingMobileLayout: FC<SettingMobileLayoutProps> = (props) => {
-  const { children, navRight, withoutPadding, title } = props
+const SettingMobileLayout: FC<SettingLayoutProps> = (props) => {
+  const { children, withoutPadding } = props
   const navigate = useNavigate()
   const history = useLocation()
 
@@ -32,23 +31,17 @@ const SettingMobileLayout: FC<SettingMobileLayoutProps> = (props) => {
   }
 
   return (
-    <div css={wrapperStyle}>
+    <div css={containerStyle}>
       <div css={navStyle}>
         <Icon
           component={PreviousIcon}
           css={prevIconStyle}
           onClick={clickBackBtn}
         />
-        {navRight}
       </div>
-      <div css={applyContentStyle(withoutPadding)}>
-        {title && <div css={mobileTitleStyle}>{title}</div>}
-        {children}
-      </div>
+      <div css={applyContentStyle(withoutPadding)}>{children}</div>
     </div>
   )
 }
-
-SettingMobileLayout.displayName = "SettingMobileLayout"
 
 export default SettingMobileLayout

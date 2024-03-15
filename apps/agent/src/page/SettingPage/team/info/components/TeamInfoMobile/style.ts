@@ -38,14 +38,6 @@ export const forgotPwdContainerStyle: SerializedStyles = css`
   justify-content: space-between;
 `
 
-export const errorMsgStyle: SerializedStyles = css`
-  position: relative;
-  font-size: 14px;
-  padding-left: 24px;
-  line-height: 22px;
-  color: ${getColor("orange", "03")};
-`
-
 export const mobileSettingContainerStyle = css`
   display: flex;
   flex-direction: column;
