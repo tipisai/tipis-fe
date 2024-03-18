@@ -5,7 +5,11 @@ import {
   teamActions,
   useLogoutMutation,
 } from "@illa-public/user-data"
-import { getAuthToken, getILLACloudURL } from "@illa-public/utils"
+import {
+  getAuthToken,
+  getILLACloudURL,
+  removeAuthToken,
+} from "@illa-public/utils"
 import store from "@/redux/store"
 import { TIPISStorage } from "@/utils/storage"
 
@@ -14,6 +18,7 @@ export const useLogout = () => {
   const logout = async () => {
     ILLAMixpanel.reset()
     const ILLAToken = getAuthToken()
+    removeAuthToken()
     TIPISStorage.clearLocalStorage()
     store.dispatch(
       currentUserActions.updateCurrentUserReducer(CurrentUserInitialState),

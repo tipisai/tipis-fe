@@ -1,18 +1,14 @@
 import { App, Button } from "antd"
 import { FC, useContext, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import {
   ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackContext,
 } from "@illa-public/mixpanel-utils"
-import {
-  currentUserActions,
-  getCurrentUser,
-  useCancelLinkedMutation,
-} from "@illa-public/user-data"
+import { useCancelLinkedMutation } from "@illa-public/user-data"
 import { useLazyGetOAuthURIQuery } from "@illa-public/user-data"
+import { getPasswordPath } from "@/utils/routeHelper"
 import { LinkCardProps } from "./interface"
 import {
   buttonWrapperStyle,
@@ -30,11 +26,10 @@ export const LinkCard: FC<LinkCardProps> = (props) => {
   const { message, modal } = App.useApp()
   const [connectedLoading, setConnectedLoading] = useState(false)
   const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const userInfo = useSelector(getCurrentUser)
   const { track } = useContext(MixpanelTrackContext)
   const [triggerGetOAuthURI] = useLazyGetOAuthURIQuery()
   const [cancelLinked] = useCancelLinkedMutation()
+  const { teamIdentifier } = useParams()
 
   const tipsNotHasPassword = () => {
     const tipsModal = modal.confirm({
@@ -49,7 +44,8 @@ export const LinkCard: FC<LinkCardProps> = (props) => {
         track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
           element: "github_connect_modal_set_password",
         })
-        navigate("/setting/password")
+        // TODO: WTF, replace
+        navigate(getPasswordPath(teamIdentifier!))
       },
       onCancel: () => {
         tipsModal.update({
@@ -74,14 +70,6 @@ export const LinkCard: FC<LinkCardProps> = (props) => {
     try {
       setConnectedLoading(true)
       await cancelLinked(type)
-      dispatch(
-        currentUserActions.updateUserInfoReducer({
-          ssoVerified: {
-            google: userInfo?.ssoVerified?.google ?? false,
-            github: false,
-          },
-        }),
-      )
       message.success({
         content: t("Disconnected"),
       })

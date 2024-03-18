@@ -45,3 +45,29 @@ export const getFunctionDetailPath = (
 ) => {
   return `/workspace/${teamIdentifier}/function/${functionID}/detail`
 }
+
+export const getSettingPath = (teamIdentifier: string) => {
+  return `/setting/${teamIdentifier}`
+}
+
+export const getPasswordPath = (teamIdentifier: string) => {
+  return `/setting/${teamIdentifier}/password`
+}
+
+export const getTeamInfoSetting = (teamIdentifier: string) => {
+  return `/setting/${teamIdentifier}/team-settings`
+}
+
+export const REGISTER_PATH = "/user/register"
+export const FORGOT_PASSWORD_PATH = "/user/forgotPassword"
+export const LOGIN_PATH = "/user/login"
+
+// TODO: WTF not need identifier
+export const getLinkedPath = (teamIdentifier: string) => {
+  return `/setting/${teamIdentifier}/linked`
+}
+
+// TODO: WTF not need identifier
+export const tempRootPath = (teamIdentifier: string) => {
+  return `/${teamIdentifier}`
+}

@@ -1,5 +1,4 @@
 import { FieldErrorsImpl } from "react-hook-form"
-import { SUBSCRIBE_PLAN } from "@illa-public/public-types"
 
 export enum ValidType {
   MAX_LENGTH = "maxLength",
@@ -74,20 +73,6 @@ export const getValidUserNameError = (error: string | undefined): string[] => {
     default:
   }
   return validErrors
-}
-
-export const isSubscribeForBilling = (subscribePlan?: SUBSCRIBE_PLAN) => {
-  return (
-    subscribePlan === SUBSCRIBE_PLAN.TEAM_LICENSE_ENTERPRISE ||
-    subscribePlan === SUBSCRIBE_PLAN.TEAM_LICENSE_PREMIUM ||
-    subscribePlan === SUBSCRIBE_PLAN.TEAM_LICENSE_INSUFFICIENT ||
-    subscribePlan === SUBSCRIBE_PLAN.TEAM_LICENSE_CANCELED ||
-    subscribePlan === SUBSCRIBE_PLAN.DRIVE_VOLUME_PAID ||
-    subscribePlan === SUBSCRIBE_PLAN.DRIVE_VOLUME_INSUFFICIENT ||
-    subscribePlan === SUBSCRIBE_PLAN.COLLA_SUBSCRIBE_INSUFFICIENT ||
-    subscribePlan === SUBSCRIBE_PLAN.COLLA_SUBSCRIBE_PAID ||
-    subscribePlan === SUBSCRIBE_PLAN.COLLA_SUBSCRIBE_CANCELED
-  )
 }
 
 export const getValidTeamSettingError = (

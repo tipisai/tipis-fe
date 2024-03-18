@@ -4,7 +4,7 @@ import {
   MixpanelTrackProvider,
 } from "@illa-public/mixpanel-utils"
 import { track } from "@/utils/mixpanelHelper"
-import MemberListPage from "../../components/Member"
+import MemberListPage from "../components/Member"
 
 const TeamMembers = () => {
   return (

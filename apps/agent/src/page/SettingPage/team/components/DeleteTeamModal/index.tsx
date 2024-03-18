@@ -1,8 +1,8 @@
 import { App, Button, Input, Modal } from "antd"
-import { FC, useContext, useMemo } from "react"
+import { FC, useContext, useMemo, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { getColor } from "@illa-public/color-scheme"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
@@ -12,10 +12,12 @@ import {
 } from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
 import {
+  getCurrentTeamIdentifier,
   getCurrentTeamInfo,
-  teamActions,
   useDeleteTeamByIDMutation,
 } from "@illa-public/user-data"
+import store from "@/redux/store"
+import { getExploreTipisPath } from "@/utils/routeHelper"
 import { footerStyle, modalContentStyle, modalTitleStyle } from "./style"
 
 interface DeleteTeamModalProps {
@@ -28,11 +30,11 @@ const DeleteTeamModal: FC<DeleteTeamModalProps> = (props) => {
   const { t } = useTranslation()
   const { message } = App.useApp()
   const teamInfo = useSelector(getCurrentTeamInfo)
+  const [loading, setLoading] = useState(false)
   const { control, trigger, watch, reset } = useForm<{
     name: string
   }>({})
   const navigate = useNavigate()
-  const dispatch = useDispatch()
   const { name } = watch()
   const { track } = useContext(MixpanelTrackContext)
   const disabled = useMemo(() => {
@@ -54,6 +56,7 @@ const DeleteTeamModal: FC<DeleteTeamModalProps> = (props) => {
       "team_id",
     )
     if (result) {
+      setLoading(true)
       track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
         element: "delete_modal_delete",
         parameter1: "delete_select",
@@ -64,8 +67,19 @@ const DeleteTeamModal: FC<DeleteTeamModalProps> = (props) => {
           message.success({
             content: t("team_setting.mes.delete_suc"),
           })
-          navigate("/workspace", { replace: true })
-          dispatch(teamActions.deleteTeamInfoReducer())
+          const currentIdentifier = getCurrentTeamIdentifier(store.getState())
+          // TODO: WTF, empty teams
+          // if (currentTeamItems.length === 0) {
+          //   navigate("/")
+          // }
+          // navigate(getExploreTipisPath(currentTeamItems[0].identifier), {
+          //   replace: true,
+          // })
+          if (currentIdentifier) {
+            navigate(getExploreTipisPath(currentIdentifier), {
+              replace: true,
+            })
+          }
         })
         .catch((e) => {
           if (isILLAAPiError(e)) {
@@ -81,6 +95,9 @@ const DeleteTeamModal: FC<DeleteTeamModalProps> = (props) => {
           message.error({
             content: t("team_setting.mes.delete_fail"),
           })
+        })
+        .finally(() => {
+          setLoading(false)
         })
     }
   }
@@ -144,6 +161,7 @@ const DeleteTeamModal: FC<DeleteTeamModalProps> = (props) => {
         <Button
           block
           danger
+          loading={loading}
           type="primary"
           disabled={disabled}
           onClick={removeTeamMember}

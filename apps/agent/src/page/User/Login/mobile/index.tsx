@@ -12,6 +12,7 @@ import {
 } from "@illa-public/mixpanel-utils"
 import ErrorMessage from "@/components/InputErrorMessage"
 import LinkButton from "@/components/LinkButton"
+import { FORGOT_PASSWORD_PATH, REGISTER_PATH } from "@/utils/routeHelper"
 import { OAuthButton } from "../../components/OAuthButton"
 import { EMAIL_FORMAT } from "../../constants"
 import { LoginFields } from "../../interface"
@@ -67,7 +68,7 @@ export const MobileLogin: FC<LoginPageProps> = (props) => {
     track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
       element: "create_account",
     })
-    navigate({ pathname: "/user/register", search: location.search })
+    navigate({ pathname: REGISTER_PATH, search: location.search })
   }
   const handleClickForgotPassword = () => {
     track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
@@ -75,7 +76,7 @@ export const MobileLogin: FC<LoginPageProps> = (props) => {
     })
 
     navigate({
-      pathname: "/user/forgotPassword",
+      pathname: FORGOT_PASSWORD_PATH,
       search: location.search,
     })
   }

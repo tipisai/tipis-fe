@@ -2,7 +2,7 @@ import { App } from "antd"
 import { FC, useEffect, useState } from "react"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
   ILLA_MIXPANEL_CLOUD_PAGE_NAME,
@@ -10,7 +10,6 @@ import {
   MixpanelTrackProvider,
 } from "@illa-public/mixpanel-utils"
 import {
-  currentUserActions,
   getCurrentUser,
   useUpdateNickNameMutation,
   useUpdateUserAvatarMutation,
@@ -23,7 +22,6 @@ import PCAccountSetting from "./pc"
 
 export const PersonalSetting: FC = () => {
   const { t } = useTranslation()
-  const dispatch = useDispatch()
   const [accountLoading, setAccountLoading] = useState(false)
   const userInfo = useSelector(getCurrentUser)!
   const [updateNickName] = useUpdateNickNameMutation()
@@ -52,12 +50,6 @@ export const PersonalSetting: FC = () => {
       setAccountLoading(true)
       await updateNickName(data.nickname)
       message.success(t("team_setting.message.save_suc"))
-      dispatch(
-        currentUserActions.updateUserInfoReducer({
-          ...userInfo,
-          nickname: data.nickname,
-        }),
-      )
       accountFormMethods.reset({
         nickname: data.nickname,
       })
@@ -71,7 +63,6 @@ export const PersonalSetting: FC = () => {
     try {
       const icon = await uploadUserAvatar(file)
       await updateUserAvatar(icon)
-      dispatch(currentUserActions.updateUserAvatarReducer(icon))
       message.success(t("profile.setting.message.save_suc"))
       return true
     } catch (e) {

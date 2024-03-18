@@ -45,11 +45,6 @@ export const WooUsagePC: FC = () => {
     }
   }
 
-  console.log(
-    'dayjs(date.current).format("YYYY-MM")',
-    dayjs(date.current).format("YYYY-MM"),
-  )
-
   const options = {
     plugins: {
       doughnutPlugin: {

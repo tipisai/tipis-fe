@@ -25,26 +25,5 @@ export const landingMenuTitleStyle = css`
 `
 
 export const teamSwitchStyle = css`
-  .teamSwitchContainer {
-    display: flex;
-    padding: 9px 16px;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 22px;
-    & > div {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-  }
-  .teamSwitchIcon {
-    margin-right: 0;
-    width: 16px;
-    height: 16px;
-    box-sizing: content-box;
-  }
+  padding: 9px 16px;
 `

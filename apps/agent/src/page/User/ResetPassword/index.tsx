@@ -15,6 +15,7 @@ import {
   useSendVerificationCodeToEmailMutation,
 } from "@illa-public/user-data"
 import { track } from "@/utils/mixpanelHelper"
+import { LOGIN_PATH } from "@/utils/routeHelper"
 import { TIPISStorage } from "@/utils/storage"
 import { ResetPwdFields } from "../interface"
 import { ResetPwdErrorMsg } from "./interface"
@@ -40,10 +41,7 @@ export const ResetPasswordPage: FC = () => {
   const navigate = useNavigate()
   const { message } = App.useApp()
   const [loading, setLoading] = useState(false)
-  const [errorMsg, setErrorMsg] = useState<ResetPwdErrorMsg>({
-    email: "",
-    verificationCode: "",
-  })
+  const [errorMsg, setErrorMsg] = useState<ResetPwdErrorMsg>({})
 
   const onSubmit: SubmitHandler<ResetPwdFields> = async (data) => {
     const verificationToken = TIPISStorage.getSessionStorage(
@@ -65,7 +63,7 @@ export const ResetPasswordPage: FC = () => {
         ILLA_MIXPANEL_PUBLIC_PAGE_NAME.FORGET_PASSWORD,
         { element: "reset_password", parameter2: "suc" },
       )
-      navigate("/user/login")
+      navigate(LOGIN_PATH)
       message.success({
         content: t("page.user.forgot_password.tips.success"),
       })
@@ -119,10 +117,11 @@ export const ResetPasswordPage: FC = () => {
 
   const handleSendEmail = async (email: string) => {
     try {
-      await sendVerificationCodeToEmail({
+      const verificationToken = await sendVerificationCodeToEmail({
         email,
         usage: "forgetpwd",
-      })
+      }).unwrap()
+      TIPISStorage.setSessionStorage("verificationToken", verificationToken)
     } catch (e) {}
   }
   return (

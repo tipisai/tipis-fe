@@ -7,8 +7,6 @@ import ErrorMessage from "@/components/InputErrorMessage"
 import { Header } from "@/page/SettingPage/components/Header"
 import { FirstSetPasswordProps, IFirstSetPasswordFields } from "../interface"
 import {
-  // errorIconStyle,
-  // errorMsgStyle,
   formContainerStyle,
   formLabelStyle,
   gridFormFieldStyle,

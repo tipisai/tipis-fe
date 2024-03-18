@@ -13,6 +13,7 @@ import {
 import { useSignInMutation } from "@illa-public/user-data"
 import { setAuthToken } from "@illa-public/utils"
 import { track } from "@/utils/mixpanelHelper"
+import { tempRootPath } from "@/utils/routeHelper"
 import { LoginFields } from "../interface"
 import { LoginErrorMsg } from "./interface"
 import { MobileLogin } from "./mobile"
@@ -53,7 +54,7 @@ const LoginPage: FC = () => {
       // navigate(
       //   `/${searchParams.toString() ? "?" + searchParams.toString() : ""}`,
       // )
-      navigate("/workspace")
+      navigate(tempRootPath(""))
     } catch (e) {
       if (isILLAAPiError(e)) {
         switch (e?.data?.errorFlag) {

@@ -14,6 +14,12 @@ import { getAuthToken, sendTagEvent, setAuthToken } from "@illa-public/utils"
 import { linkTrk, rdtSignUpTrk, twqTrk } from "@/utils/gaHelper"
 import { LINKEDIN_CONVERSION_ID, TWITTER_ID } from "@/utils/gaHelper/constent"
 import { track } from "@/utils/mixpanelHelper"
+import {
+  LOGIN_PATH,
+  REGISTER_PATH,
+  getLinkedPath,
+  tempRootPath,
+} from "@/utils/routeHelper"
 import { mobilePageStyle, pageStyle } from "./style"
 
 const OAuth: FC = () => {
@@ -45,7 +51,8 @@ const OAuth: FC = () => {
           switch (landing) {
             case "connect":
               message.success(t("profile.setting.oauth.message.github"))
-              navigate("/setting/linked")
+              // TODO: WTF, not need identifier
+              navigate(getLinkedPath(""))
               break
             case "signin": {
               track(
@@ -74,7 +81,7 @@ const OAuth: FC = () => {
                 finalRedirectURL.searchParams.set("token", getAuthToken() ?? "")
                 window.location.assign(finalRedirectURL.toString())
               } else {
-                navigate("/workspace")
+                navigate(tempRootPath(""))
               }
               break
             }
@@ -105,7 +112,7 @@ const OAuth: FC = () => {
                 finalRedirectURL.searchParams.set("token", getAuthToken() ?? "")
                 window.location.assign(finalRedirectURL.toString())
               } else {
-                navigate("/workspace")
+                navigate(tempRootPath(""))
               }
               break
             }
@@ -150,7 +157,7 @@ const OAuth: FC = () => {
                     parameter3: errorFlag,
                   },
                 )
-                navigate(`/login`)
+                navigate(LOGIN_PATH)
                 break
               case "signup":
                 track(
@@ -163,13 +170,13 @@ const OAuth: FC = () => {
                     parameter3: errorFlag,
                   },
                 )
-                navigate(`/register`)
+                navigate(REGISTER_PATH)
                 break
               case "connect":
-                navigate(`/setting/linked`)
+                navigate(getLinkedPath(""))
                 break
               default:
-                navigate("/workspace")
+                navigate(tempRootPath(""))
             }
           }
         })

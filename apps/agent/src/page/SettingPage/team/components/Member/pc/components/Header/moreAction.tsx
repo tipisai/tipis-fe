@@ -2,7 +2,7 @@ import Icon from "@ant-design/icons"
 import { App, Button, Dropdown, MenuProps, Switch } from "antd"
 import { FC, MouseEvent, useCallback, useContext, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { AuthShown, SHOW_RULES } from "@illa-public/auth-shown"
 import { MoreIcon } from "@illa-public/icon"
@@ -12,11 +12,13 @@ import {
 } from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
 import {
+  getCurrentTeamIdentifier,
   getCurrentTeamInfo,
-  teamActions,
   useRemoveTeamMemberByIDMutation,
   useUpdateTeamPermissionConfigMutation,
 } from "@illa-public/user-data"
+import store from "@/redux/store"
+import { tempRootPath } from "@/utils/routeHelper"
 import {
   allowEditorOrViewerInviteWrapperStyle,
   moreActionTextStyle,
@@ -40,14 +42,52 @@ export const MoreAction: FC = () => {
     currentTeamInfo.permission
   const [allowInviteLoading, setAllowInviteLoading] = useState(false)
 
-  const [removeTeamMember] = useRemoveTeamMemberByIDMutation()
+  const [removeTeamMemberByID] = useRemoveTeamMemberByIDMutation()
   const [updateTeamPermissionConfig] = useUpdateTeamPermissionConfigMutation()
-  const dispatch = useDispatch()
 
-  const handleAfterLeaveTeam = useCallback(() => {
-    navigate("/workspace", { replace: true })
-    dispatch(teamActions.deleteTeamInfoReducer())
-  }, [dispatch, navigate])
+  const handleLeaveTeam = useCallback(async () => {
+    track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
+      element: "leave_modal_leave",
+    })
+    try {
+      await removeTeamMemberByID({
+        teamID: currentTeamID,
+        teamMemberID: currentTeamMemberID,
+      })
+      message.success({
+        content: t("team_setting.mes.leave_suc"),
+      })
+      track?.(ILLA_MIXPANEL_EVENT_TYPE.REQUEST, {
+        element: "delete",
+        parameter1: "delete_select",
+      })
+      const currentIdentifier = getCurrentTeamIdentifier(store.getState())
+      // TODO: WTF, empty teams
+      // if (currentTeamItems.length === 0) {
+      //   navigate("/")
+      // }
+      // navigate(tempRootPath(currentTeamItems[0].identifier), {
+      //   replace: true,
+      // })
+      if (currentIdentifier) {
+        navigate(tempRootPath(currentIdentifier), {
+          replace: true,
+        })
+      }
+    } catch (e) {
+      message.error({
+        content: t("team_setting.mes.leave_fail"),
+      })
+    }
+  }, [
+    currentTeamID,
+    currentTeamMemberID,
+    message,
+    navigate,
+    removeTeamMemberByID,
+    t,
+    track,
+  ])
 
   const handleClickDeleteOrLeaveTeam = useCallback(() => {
     track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
@@ -64,45 +104,14 @@ export const MoreAction: FC = () => {
       okButtonProps: {
         danger: true,
       },
-      onOk: async () => {
-        track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-          element: "leave_modal_leave",
-        })
-        try {
-          await removeTeamMember({
-            teamID: currentTeamID,
-            teamMemberID: currentTeamMemberID,
-          })
-          message.success({
-            content: t("team_setting.mes.leave_suc"),
-          })
-          track?.(ILLA_MIXPANEL_EVENT_TYPE.REQUEST, {
-            element: "delete",
-            parameter1: "delete_select",
-          })
-          handleAfterLeaveTeam?.()
-        } catch (e) {
-          message.error({
-            content: t("team_setting.mes.leave_fail"),
-          })
-        }
-      },
+      onOk: handleLeaveTeam,
       onCancel: () => {
         track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
           element: "leave_modal_cancel",
         })
       },
     })
-  }, [
-    currentTeamID,
-    currentTeamMemberID,
-    handleAfterLeaveTeam,
-    message,
-    modal,
-    removeTeamMember,
-    t,
-    track,
-  ])
+  }, [handleLeaveTeam, modal, t, track])
 
   const handleChangeInviteByEditor = async (value: boolean) => {
     track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
@@ -118,15 +127,6 @@ export const MoreAction: FC = () => {
           allowViewerManageTeamMember: value,
         },
       })
-      dispatch(
-        teamActions.updateTeamMemberPermissionReducer({
-          teamID: currentTeamID,
-          newPermission: {
-            allowEditorManageTeamMember: value,
-            allowViewerManageTeamMember: value,
-          },
-        }),
-      )
     } catch (e) {
     } finally {
       setAllowInviteLoading(false)
@@ -150,7 +150,6 @@ export const MoreAction: FC = () => {
               {t("user_management.settings.allow_editors_invite")}
             </span>
             <Switch
-              // onClick={stopPropagation}
               onChange={handleChangeInviteByEditor}
               disabled={allowInviteLoading}
               checked={
@@ -168,7 +167,7 @@ export const MoreAction: FC = () => {
           {t("team_setting.left_panel.leave")}
         </span>
       ),
-      disabled: currentUserRole !== USER_ROLE.OWNER,
+      disabled: currentUserRole === USER_ROLE.OWNER,
     },
   ]
 
@@ -196,6 +195,7 @@ export const MoreAction: FC = () => {
       }}
       menu={{
         items: menuItems,
+        onClick: handleClickDeleteOrLeaveTeam,
       }}
     >
       <Button icon={<Icon component={MoreIcon} />} />

@@ -13,6 +13,7 @@ import {
 import { EmailCode } from "@/components/EmailCode"
 import ErrorMessage from "@/components/InputErrorMessage"
 import LinkButton from "@/components/LinkButton"
+import { LOGIN_PATH } from "@/utils/routeHelper"
 import { OAuthButton } from "../../components/OAuthButton"
 import { EMAIL_FORMAT } from "../../constants"
 import { RegisterFields } from "../../interface"
@@ -75,7 +76,7 @@ export const MobileRegister: FC<RegisterProps> = (props) => {
     track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
       element: "sign_in",
     })
-    navigate({ pathname: "/user/login", search: location.search })
+    navigate({ pathname: LOGIN_PATH, search: location.search })
   }
 
   useEffect(() => {

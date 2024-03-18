@@ -2,7 +2,7 @@ import Icon from "@ant-design/icons"
 import { FC, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { PreviousIcon } from "@illa-public/icon"
 import { SUBSCRIBE_PLAN } from "@illa-public/public-types"
 import { getCurrentTeamInfo, getPlanUtils } from "@illa-public/user-data"
@@ -11,11 +11,12 @@ import {
   canAccessMember,
   canManagePayment,
 } from "@illa-public/user-role-utils"
-import TeamSelect from "@/Layout/Workspace/pc/components/TeamSelect"
 import ProfileIcon from "@/assets/setting/profile.svg?react"
 import TeamIcon from "@/assets/setting/team.svg?react"
+import TeamSelect from "@/components/TeamSelect"
 import Menu from "@/page/SettingPage/components//Menu"
 import { GoToPortal } from "@/page/SettingPage/components/GoToPortal"
+import { getExploreTipisPath } from "@/utils/routeHelper"
 import { SettingLayoutProps } from "../interface"
 import {
   asideMenuStyle,
@@ -34,6 +35,8 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
   const { children } = props
   const { t } = useTranslation()
   const navigate = useNavigate()
+
+  const { teamIdentifier } = useParams()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
 
   const teamLicenseAllPaid = canAccessManage(
@@ -108,7 +111,7 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
             component={PreviousIcon}
             css={backIconStyle}
             onClick={() => {
-              navigate(`/workspace/${currentTeamInfo?.identifier}`)
+              navigate(getExploreTipisPath(teamIdentifier!))
             }}
           />
           {t("profile.setting.title")}

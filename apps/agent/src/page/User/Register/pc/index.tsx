@@ -13,6 +13,7 @@ import {
 import { EmailCode } from "@/components/EmailCode"
 import ErrorMessage from "@/components/InputErrorMessage"
 import LinkButton from "@/components/LinkButton"
+import { LOGIN_PATH } from "@/utils/routeHelper"
 import { OAuthButton } from "../../components/OAuthButton"
 import { EMAIL_FORMAT } from "../../constants"
 import { RegisterFields } from "../../interface"
@@ -93,7 +94,7 @@ export const PCRegister: FC<RegisterProps> = (props) => {
       element: "sign_in",
     })
 
-    navigate({ pathname: "/user/login", search: location.search })
+    navigate({ pathname: LOGIN_PATH, search: location.search })
   }
 
   return (

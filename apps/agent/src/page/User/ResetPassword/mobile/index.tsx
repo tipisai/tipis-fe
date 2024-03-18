@@ -12,6 +12,7 @@ import {
 } from "@illa-public/mixpanel-utils"
 import { EmailCode } from "@/components/EmailCode"
 import ErrorMessage from "@/components/InputErrorMessage"
+import { LOGIN_PATH } from "@/utils/routeHelper"
 import { EMAIL_FORMAT } from "../../constants"
 import { ResetPwdFields } from "../../interface"
 import { getValidReportParams } from "../../utils"
@@ -45,7 +46,7 @@ export const MobileReset: FC<ResetProps> = (props) => {
   const { handleSubmit, control, formState, getValues, trigger } =
     useFormContext<ResetPwdFields>()
   const backToLogin = () => {
-    navigate({ pathname: "/user/login", search: location.search })
+    navigate({ pathname: LOGIN_PATH, search: location.search })
   }
   const { errors } = formState
   const [asyncValid, setAsyncValid] = useState<

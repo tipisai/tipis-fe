@@ -16,6 +16,7 @@ import {
 import { canAccessMember, canManagePayment } from "@illa-public/user-role-utils"
 import ProfileIcon from "@/assets/setting/profile.svg?react"
 import TeamIcon from "@/assets/setting/team.svg?react"
+import TeamSelect from "@/components/TeamSelect"
 import { useLogout } from "@/page/SettingPage/hooks/useLogout"
 import { SettingContextType } from "@/page/SettingPage/team/interface"
 import { track } from "@/utils/mixpanelHelper"
@@ -152,16 +153,7 @@ const Entrance: FC = () => {
             <span>{t("profile.setting.group.team")}</span>
           </div>
           <div css={teamSwitchStyle}>
-            {/* <TeamSwitchMobile
-              teamInfo={currentTeamInfo}
-              createElement="setting_page_select"
-              reportPage={ILLA_MIXPANEL_CLOUD_PAGE_NAME.SETTING}
-              switchTeamCallback={switchTeamCallback}
-              showCreateTeam={false}
-              teamIconClassName="teamSwitchIcon"
-              infoContainerClassName="teamSwitchContainer"
-            /> */}
-            team switch
+            <TeamSelect />
           </div>
         </>
       )}

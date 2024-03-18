@@ -2,7 +2,7 @@ import { App } from "antd"
 import { FC, useEffect, useMemo, useState } from "react"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { useNavigate, useOutletContext, useParams } from "react-router-dom"
 import { isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
@@ -14,7 +14,6 @@ import {
 import { USER_ROLE } from "@illa-public/public-types"
 import {
   getCurrentTeamInfo,
-  teamActions,
   useChangeTeamConfigMutation,
 } from "@illa-public/user-data"
 import { isSmallThanTargetRole } from "@illa-public/user-role-utils"
@@ -25,6 +24,7 @@ import {
   TeamInfoFields,
 } from "@/page/SettingPage/team/interface"
 import { track } from "@/utils/mixpanelHelper"
+import { getTeamInfoSetting } from "@/utils/routeHelper"
 
 const TeamInfo: FC = () => {
   const { t } = useTranslation()
@@ -47,7 +47,6 @@ const TeamInfo: FC = () => {
   const disableEdit = useMemo(() => {
     return teamInfo && isSmallThanTargetRole(USER_ROLE.ADMIN, teamInfo?.myRole)
   }, [teamInfo])
-  const dispatch = useDispatch()
 
   const onSubmit: SubmitHandler<TeamInfoFields> = async (data) => {
     try {
@@ -59,13 +58,12 @@ const TeamInfo: FC = () => {
       message.success({
         content: t("team_setting.message.save_suc"),
       })
-      dispatch(teamActions.updateCurrentTeamInfoReducer(data))
       settingFormProps.reset({
         name: data.name,
         identifier: data.identifier,
       })
       if (data.identifier && data.identifier !== teamIdentifier) {
-        navigate(`/setting/${data.identifier}/team-settings`)
+        navigate(getTeamInfoSetting(data.identifier))
       }
       return true
     } catch (e) {

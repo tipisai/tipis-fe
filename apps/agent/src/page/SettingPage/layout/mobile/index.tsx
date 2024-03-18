@@ -1,9 +1,8 @@
 import Icon from "@ant-design/icons"
 import { FC } from "react"
-import { useSelector } from "react-redux"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useMatch, useNavigate, useParams } from "react-router-dom"
 import { PreviousIcon } from "@illa-public/icon"
-import { getCurrentTeamIdentifier } from "@illa-public/user-data"
+import { getExploreTipisPath, getSettingPath } from "@/utils/routeHelper"
 import { SettingLayoutProps } from "../interface"
 import {
   applyContentStyle,
@@ -15,18 +14,14 @@ import {
 const SettingMobileLayout: FC<SettingLayoutProps> = (props) => {
   const { children, withoutPadding } = props
   const navigate = useNavigate()
-  const history = useLocation()
-
-  const currentTeamIdentifier = useSelector(getCurrentTeamIdentifier)
-  const extraPath = history.pathname.split("/")[2]
+  const matchMobileSettingNav = useMatch("/setting/:teamIdentifier")
+  const { teamIdentifier } = useParams()
 
   const clickBackBtn = () => {
-    if (Boolean(extraPath)) {
-      navigate(`/setting/${currentTeamIdentifier}`)
+    if (matchMobileSettingNav) {
+      navigate(getExploreTipisPath(teamIdentifier!))
     } else {
-      currentTeamIdentifier
-        ? navigate(`/workspace/${currentTeamIdentifier}`)
-        : navigate("/workspace")
+      navigate(getSettingPath(teamIdentifier!))
     }
   }
 

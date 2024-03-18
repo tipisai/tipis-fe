@@ -1,17 +1,15 @@
 import { FC, useCallback, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { Navigate } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { SUBSCRIBE_PLAN } from "@illa-public/public-types"
 import { useCollarDrawer } from "@illa-public/upgrade-modal"
 import {
   getCurrentTeamInfo,
-  teamActions,
   useGetTeamSubscriptionQuery,
   useLazyGetTeamsInfoQuery,
 } from "@illa-public/user-data"
 import FullSectionLoading from "@/components/FullSectionLoading"
-// import { GoToPortal } from "../../components/GoToPortal"
 import { BillingContext } from "./context"
 import { BillingMobilePage } from "./mobile"
 import { BillingPCPage } from "./pc"
@@ -19,7 +17,6 @@ import { BillingPCPage } from "./pc"
 const Billing: FC = () => {
   const wooDrawer = useCollarDrawer()
   const [loading, setLoading] = useState(false)
-  const dispatch = useDispatch()
   const teamInfo = useSelector(getCurrentTeamInfo)!
   const { data, isError, isLoading, refetch } = useGetTeamSubscriptionQuery(
     teamInfo.id,
@@ -34,13 +31,12 @@ const Billing: FC = () => {
     setLoading(true)
     try {
       refetch()
-      const teamsInfo = await triggerGetTeamsInfo({}).unwrap()
-      dispatch(teamActions.updateTeamItemsReducer(teamsInfo))
+      await triggerGetTeamsInfo({}).unwrap()
     } catch (error) {
     } finally {
       setLoading(false)
     }
-  }, [dispatch, refetch, teamInfo?.id, triggerGetTeamsInfo])
+  }, [refetch, teamInfo?.id, triggerGetTeamsInfo])
 
   const openWooDrawer = useCallback(() => {
     wooDrawer("billing_manage_woo", {

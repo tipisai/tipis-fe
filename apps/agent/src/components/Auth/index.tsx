@@ -11,8 +11,11 @@ const ProtectedComponent: FC<AuthProps> = (props) => {
   const [searchParams] = useSearchParams()
   const myTeamIdentifier = searchParams.get("myTeamIdentifier")
   const mixedTeamIdentifier = myTeamIdentifier || teamIdentifier
-  const { data, isSuccess, error } =
+  const { data, isSuccess, isFetching, error } =
     useGetUserInfoAndTeamsInfoByTokenQuery(mixedTeamIdentifier)
+
+  // TODO: del it
+  isFetching
 
   if (error && "status" in error) {
     if (error.status === 401) {

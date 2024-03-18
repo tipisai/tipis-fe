@@ -13,6 +13,7 @@ import {
 import { EMAIL_FORMAT, isCloudVersion } from "@illa-public/utils"
 import ErrorMessage from "@/components/InputErrorMessage"
 import LinkButton from "@/components/LinkButton"
+import { FORGOT_PASSWORD_PATH, REGISTER_PATH } from "@/utils/routeHelper"
 import { OAuthButton } from "../../components/OAuthButton"
 import { LoginFields } from "../../interface"
 import { getValidReportParams } from "../../utils"
@@ -72,7 +73,7 @@ export const PCLogin: FC<LoginPageProps> = (props) => {
       element: "create_account",
     })
     navigate({
-      pathname: "/user/register",
+      pathname: REGISTER_PATH,
       search: location.search,
     })
   }
@@ -82,7 +83,7 @@ export const PCLogin: FC<LoginPageProps> = (props) => {
       element: "forget_password",
     })
     navigate({
-      pathname: "/user/forgotPassword",
+      pathname: FORGOT_PASSWORD_PATH,
       search: location.search,
     })
   }

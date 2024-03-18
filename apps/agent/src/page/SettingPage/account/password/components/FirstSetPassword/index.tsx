@@ -2,11 +2,10 @@ import { App } from "antd"
 import { useState } from "react"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
-  currentUserActions,
   getCurrentUser,
   useForgetPasswordMutation,
   useSendVerificationCodeToEmailMutation,
@@ -24,7 +23,6 @@ const FirstSetPassword = () => {
   const [passwordLoading, setPasswordLoading] = useState(false)
   const [forgetPassword] = useForgetPasswordMutation()
   const [sendVerificationCodeToEmail] = useSendVerificationCodeToEmailMutation()
-  const dispatch = useDispatch()
   const firstSetPasswordForm = useForm<IFirstSetPasswordFields>({
     defaultValues: {
       email: userInfo?.email,
@@ -47,13 +45,8 @@ const FirstSetPassword = () => {
       await forgetPassword({
         verificationToken,
         ...data,
-        email: userInfo?.email,
+        isFirstSet: true,
       })
-      dispatch(
-        currentUserActions.updateUserInfoReducer({
-          isPasswordSet: true,
-        }),
-      )
       message.success(t("profile.setting.message.save_suc"))
     } catch (e) {
       if (isILLAAPiError(e)) {

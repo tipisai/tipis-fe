@@ -19,6 +19,7 @@ import { getLocalLanguage } from "@/i18n"
 import { linkTrk, rdtSignUpTrk, twqTrk } from "@/utils/gaHelper"
 import { LINKEDIN_CONVERSION_ID, TWITTER_ID } from "@/utils/gaHelper/constent"
 import { track } from "@/utils/mixpanelHelper"
+import { tempRootPath } from "@/utils/routeHelper"
 import { TIPISStorage } from "@/utils/storage"
 import { RegisterFields } from "../interface"
 import { RegisterErrorMsg } from "./interface"
@@ -84,9 +85,10 @@ const RegisterPage: FC = () => {
       setAuthToken(token)
       searchParams.delete("inviteToken")
       // TODO: WTF, need add workspace
-      navigate(
-        `/${searchParams.toString() ? "?" + searchParams.toString() : ""}`,
-      )
+      // navigate(
+      //   `/${searchParams.toString() ? "?" + searchParams.toString() : ""}`,
+      // )
+      navigate(tempRootPath(""))
     } catch (e) {
       if (isILLAAPiError(e)) {
         track(
