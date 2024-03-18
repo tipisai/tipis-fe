@@ -1,8 +1,14 @@
+import Icon from "@ant-design/icons"
 import { Tag } from "antd"
 import { FC } from "react"
-import { getFileIconByContentType } from "@illa-public/icon"
+import { getColor } from "@illa-public/color-scheme"
+import { CloseIcon, getFileIconByContentType } from "@illa-public/icon"
 import { GCS_OBJECT_TYPE, IKnowledgeFile } from "@illa-public/public-types"
-import { fileItemContainerStyle, fileTypeIconStyle } from "./style"
+import {
+  closeIconStyle,
+  fileItemContainerStyle,
+  fileTypeIconStyle,
+} from "./style"
 
 interface UploadKnowledgeFilesPops {
   knowledgeFiles: IKnowledgeFile[]
@@ -17,18 +23,26 @@ const UploadKnowledgeFiles: FC<UploadKnowledgeFilesPops> = ({
     <div css={fileItemContainerStyle}>
       {knowledgeFiles.map((item) => (
         <Tag
-          key={item.name}
+          key={item.fileName}
           closable
-          onClose={() => handleDeleteFile(item.name)}
-          // maxW="300px"
-          // bg={getColor("grayBlue", "09")}
+          closeIcon={<Icon component={CloseIcon} css={closeIconStyle} />}
+          bordered
+          onClose={() => handleDeleteFile(item.fileName)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            border: `1px solid ${getColor("grayBlue", "08")}`,
+            padding: "5px 8px",
+            borderRadius: "12px",
+            backgroundColor: "white",
+          }}
           icon={getFileIconByContentType(
             GCS_OBJECT_TYPE.FILE,
-            item.type,
+            item.contentType,
             fileTypeIconStyle,
           )}
         >
-          {item.name}
+          {item.fileName}
         </Tag>
       ))}
     </div>

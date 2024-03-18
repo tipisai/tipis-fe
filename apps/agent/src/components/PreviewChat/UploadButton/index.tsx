@@ -3,8 +3,9 @@ import { Tooltip } from "antd"
 import { forwardRef } from "react"
 import { useTranslation } from "react-i18next"
 import { getColor } from "@illa-public/color-scheme"
-import { AttachmentIcon, LoadingIcon } from "@illa-public/icon"
+import { AttachmentIcon } from "@illa-public/icon"
 import IconHotSpot from "@illa-public/icon-hot-spot"
+import FullSectionLoading from "@/components/FullSectionLoading"
 import { ACCEPT } from "@/config/constants/knowledge"
 import { sendFileContainerStyle, sendFileIconStyle } from "./style"
 
@@ -25,10 +26,7 @@ const UploadButton = forwardRef<HTMLInputElement, UploadButton>(
         <div css={sendFileContainerStyle}>
           <IconHotSpot onClick={handleClick} css={sendFileIconStyle}>
             {parseKnowledgeLoading ? (
-              <Icon
-                component={LoadingIcon}
-                color={getColor("grayBlue", "02")}
-              />
+              <FullSectionLoading />
             ) : (
               <Icon
                 component={AttachmentIcon}
