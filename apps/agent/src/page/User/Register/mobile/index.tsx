@@ -328,6 +328,7 @@ export const MobileRegister: FC<RegisterProps> = (props) => {
           size="large"
           type="primary"
           loading={loading}
+          htmlType="submit"
           block
           onClick={validReport}
         >

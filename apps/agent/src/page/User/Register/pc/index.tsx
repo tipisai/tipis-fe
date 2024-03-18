@@ -130,7 +130,7 @@ export const PCRegister: FC<RegisterProps> = (props) => {
               control={control}
               render={({ field }) => (
                 <Input
-                  value={field.value}
+                  {...field}
                   style={{
                     width: "100%",
                   }}
@@ -177,7 +177,7 @@ export const PCRegister: FC<RegisterProps> = (props) => {
               control={control}
               render={({ field }) => (
                 <Input
-                  value={field.value}
+                  {...field}
                   style={{
                     width: "100%",
                   }}
@@ -342,6 +342,7 @@ export const PCRegister: FC<RegisterProps> = (props) => {
           type="primary"
           size="large"
           loading={loading}
+          htmlType="submit"
           block
           onClick={validReport}
         >

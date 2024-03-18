@@ -239,6 +239,7 @@ export const MobileLogin: FC<LoginPageProps> = (props) => {
           size="large"
           loading={loading}
           block
+          htmlType="submit"
           onClick={validReport}
         >
           {t("page.user.sign_in.actions.login")}

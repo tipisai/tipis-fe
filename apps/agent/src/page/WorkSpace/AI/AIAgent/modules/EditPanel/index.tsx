@@ -82,13 +82,13 @@ const EditPanel: FC = () => {
     if (!handleVerifyOnStart()) {
       return
     }
-    if (isPremiumModel(getValues("model")) && !canUseBillingFeature) {
-      upgradeModal({
-        modalType: "agent",
-        from: "agent_run_gpt4",
-      })
-      return
-    }
+    // if (isPremiumModel(getValues("model")) && !canUseBillingFeature) {
+    //   upgradeModal({
+    //     modalType: "agent",
+    //     from: "agent_run_gpt4",
+    //   })
+    //   return
+    // }
     track(
       ILLA_MIXPANEL_EVENT_TYPE.CLICK,
       ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_EDIT,

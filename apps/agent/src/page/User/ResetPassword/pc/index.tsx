@@ -274,6 +274,7 @@ export const PCReset: FC<ResetProps> = (props) => {
         type="primary"
         loading={loading}
         block
+        htmlType="submit"
         onClick={validReport}
       >
         {resetLabel ? resetLabel : t("page.user.forgot_password.actions.reset")}

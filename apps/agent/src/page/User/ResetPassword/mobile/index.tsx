@@ -250,6 +250,7 @@ export const MobileReset: FC<ResetProps> = (props) => {
         size="large"
         loading={loading}
         block
+        htmlType="submit"
         onClick={validReport}
       >
         {resetLabel ? resetLabel : t("page.user.forgot_password.actions.reset")}
