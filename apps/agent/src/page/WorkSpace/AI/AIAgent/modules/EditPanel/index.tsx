@@ -19,12 +19,9 @@ import { track } from "@/utils/mixpanelHelper"
 import { AgentWSContext } from "../../../context/AgentWSContext"
 import { SCROLL_ID } from "../../interface"
 import { agentData2JSONReport, handleScrollToElement } from "../../utils"
-import KnowledgeList from "./components/KnowledgeList"
+import KnowledgeEditor from "./components/KnowledgeEditor"
 import PromptEditor from "./components/PromptEditor"
 import VariableEditor from "./components/VariableEditor"
-
-// TODO: WTF, can edit knowledge file
-const CAN_EDIT_KNOWLEDGE_FILE = false
 
 const EditPanel: FC = () => {
   const { t } = useTranslation()
@@ -129,7 +126,7 @@ const EditPanel: FC = () => {
     >
       <PromptEditor />
       <VariableEditor />
-      {CAN_EDIT_KNOWLEDGE_FILE && <KnowledgeList />}
+      <KnowledgeEditor />
     </EditPanelLayout>
   )
 }

@@ -12,6 +12,13 @@ export const fileItemContainerStyle = css`
 
 export const fileTypeIconStyle = css`
   height: 16px;
+  margin-right: 4px;
 `
 
 export const fileNameStyle = css``
+
+export const closeIconStyle = css`
+  width: 8px;
+  height: 8px;
+  font-size: 8px;
+`

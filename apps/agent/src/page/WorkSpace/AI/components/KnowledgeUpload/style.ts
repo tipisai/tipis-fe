@@ -1,5 +1,6 @@
 import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
+import { FILE_ITEM_DETAIL_STATUS_IN_UI } from "@/utils/drive"
 
 export const fileListContainerStyle = css`
   display: flex;
@@ -13,13 +14,13 @@ export const fileListContainerStyle = css`
 `
 
 export const fileItemStyle = css`
+  border-radius: 12px;
+  background: ${getColor("grayBlue", "09")};
   display: flex;
-  padding: 7px 12px;
+  padding: 9px 12px;
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
-  border-radius: 2px;
-  background: ${getColor("grayBlue", "09")};
 `
 
 export const nameContainerStyle = css`
@@ -51,10 +52,23 @@ export const opeationStyle = css`
   gap: 16px;
 `
 
-export const iconHotSpotStyle = css`
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-`
+export const iconHotSpotStyle = (status: FILE_ITEM_DETAIL_STATUS_IN_UI) => {
+  const canClick =
+    status === FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR ||
+    status === FILE_ITEM_DETAIL_STATUS_IN_UI.SUCCESS
+  return css`
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: ${canClick
+      ? getColor("grayBlue", "02")
+      : getColor("grayBlue", "05")};
+    cursor: ${canClick ? "pointer" : "not-allowed"};
+  `
+}
+
+export const iconColorStyle = (color: string) => {
+  color
+}

@@ -22,10 +22,12 @@ import StopIcon from "@/assets/agent/stop.svg?react"
 import {
   MAX_FILE_SIZE,
   MAX_MESSAGE_FILES_LENGTH,
+  UPLOAD_PATH,
 } from "@/config/constants/knowledge"
 import AIAgentMessage from "@/page/WorkSpace/AI/components/AIAgentMessage"
 import UserMessage from "@/page/WorkSpace/AI/components/UserMessage"
-import { handleParseFile } from "@/utils/file"
+import { useUploadFileToDrive } from "@/utils/drive"
+import { multipleFileHandler } from "@/utils/drive/utils"
 import UploadButton from "./UploadButton"
 import UploadKnowledgeFiles from "./UploadKnowledgeFiles"
 import {
@@ -94,6 +96,8 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const canShowKnowledgeFiles = isPremiumModel(model)
 
+  const { uploadFileToDrive } = useUploadFileToDrive()
+
   const { t } = useTranslation()
 
   const messagesList = useMemo(() => {
@@ -122,11 +126,11 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   }, [chatMessages, currentUserInfo.userID, isMobile, isReceiving])
 
   const handleDeleteFile = (fileName: string) => {
-    const files = knowledgeFiles.filter((file) => file.name !== fileName)
+    const files = knowledgeFiles.filter((file) => file.fileName !== fileName)
     setKnowledgeFiles(files)
   }
 
-  const handleUploadFile = () => {
+  const handleClickUploadFile = () => {
     if (knowledgeFiles.length >= MAX_MESSAGE_FILES_LENGTH) {
       messageAPI.warning({
         content: t("dashboard.message.support_for_up_to_10"),
@@ -148,56 +152,67 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     }
     setParseKnowledgeLoading(true)
     const currentFiles = [...knowledgeFiles]
+    const uploadParams = {
+      folder: UPLOAD_PATH,
+      allowAnonymous: false,
+      replace: false,
+    }
+    const formatFiles = multipleFileHandler(
+      inputFiles,
+      currentFiles,
+      uploadParams,
+      true,
+    )
+    currentFiles.push(
+      ...formatFiles.map((item) => ({
+        fileName: item.fileName,
+        contentType: item.file.type,
+        value: "",
+      })),
+    )
+    setKnowledgeFiles(currentFiles)
     try {
-      for (let file of inputFiles) {
+      for (let item of formatFiles) {
+        const { fileName, file, abortController } = item
         if (!file) break
         if (file.size > MAX_FILE_SIZE) {
           messageAPI.warning({
             content: t("dashboard.message.please_use_a_file_wi"),
           })
+          setKnowledgeFiles(knowledgeFiles)
           return
         }
-        const index = currentFiles.findIndex(
-          (item) => item.name === file.name && item.type === file.type,
+        let uploadRes = await uploadFileToDrive(
+          fileName,
+          file,
+          uploadParams,
+          abortController.signal,
         )
-        const fileName =
-          index !== -1
-            ? `${file.name.split(".")[0]}(${v4().slice(0, 3)})`
-            : file.name
 
-        currentFiles.push({
-          name: fileName,
-          type: file.type,
-        })
-        setKnowledgeFiles(currentFiles)
-        const value = await handleParseFile(file, true)
-        if (value === "") {
-          messageAPI.warning({
-            content: t("dashboard.message.no_usable_text_conte"),
-          })
-          handleDeleteFile(fileName)
-          return
-        }
-        const afterParseFilesIndex = currentFiles.findIndex(
-          (item) => item.name === file.name && item.type === file.type,
-        )
-        if (afterParseFilesIndex !== -1) {
-          const needUpdateFile = currentFiles[afterParseFilesIndex]
-          if (!needUpdateFile.value) {
-            currentFiles.splice(afterParseFilesIndex, 1, {
-              ...needUpdateFile,
-              ...file,
-              value,
-            })
+        if (!!uploadRes) {
+          const res = {
+            fileName: fileName,
+            contentType: file.type,
+            value: uploadRes.id,
           }
+          setKnowledgeFiles((prev) => {
+            const currentItems = [...prev]
+            const index = currentItems.findIndex(
+              (item) => item.fileName === fileName,
+            )
+            currentItems.splice(index, 1, res)
+            return currentItems
+          })
         } else {
-          currentFiles.push({
-            name: fileName,
-            type: file.type,
-            value,
+          setKnowledgeFiles((prev) => {
+            const currentItems = [...prev]
+            const index = currentItems.findIndex(
+              (item) => item.fileName === fileName,
+            )
+            currentItems.splice(index, 1)
+            return currentItems
           })
         }
-        setKnowledgeFiles(currentFiles)
       }
     } catch (e) {
       messageAPI.error({
@@ -337,7 +352,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
               />
               {canShowKnowledgeFiles && (
                 <UploadButton
-                  handleClick={handleUploadFile}
+                  handleClick={handleClickUploadFile}
                   parseKnowledgeLoading={parseKnowledgeLoading}
                   handleFileChange={handleFileChange}
                   ref={inputRef}
@@ -388,7 +403,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
               <div css={sendButtonStyle}>
                 {canShowKnowledgeFiles && (
                   <UploadButton
-                    handleClick={handleUploadFile}
+                    handleClick={handleClickUploadFile}
                     parseKnowledgeLoading={parseKnowledgeLoading}
                     handleFileChange={handleFileChange}
                     ref={inputRef}

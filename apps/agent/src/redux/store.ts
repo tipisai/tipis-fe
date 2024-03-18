@@ -6,6 +6,7 @@ import {
   teamReducer,
 } from "@illa-public/user-data"
 import { agentAuthAPI } from "./services/agentAPI"
+import { driveAPI } from "./services/driveAPI"
 import { marketAPI } from "./services/marketAPI"
 import { uiReducer } from "./ui/slice"
 
@@ -17,6 +18,7 @@ const store = configureStore({
     [authAPI.reducerPath]: authAPI.reducer,
     [agentAuthAPI.reducerPath]: agentAuthAPI.reducer,
     [marketAPI.reducerPath]: marketAPI.reducer,
+    [driveAPI.reducerPath]: driveAPI.reducer,
   },
   devTools: import.meta.env.ILLA_APP_ENV === "development",
   middleware: (getDefaultMiddleware) =>
@@ -24,6 +26,7 @@ const store = configureStore({
       authAPI.middleware,
       agentAuthAPI.middleware,
       marketAPI.middleware,
+      driveAPI.middleware,
     ),
 })
 
