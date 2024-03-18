@@ -2,8 +2,8 @@ import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
 import { applyMobileStyle } from "@illa-public/utils"
 
-export const agentMessageContainer = css`
-  padding: 24px 88px 8px 40px;
+export const agentMessageContainer = (isResult: boolean) => css`
+  padding: ${isResult ? "0 88px 8px 40px" : "24px 88px 8px 40px"};
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -20,8 +20,9 @@ export const senderContainerStyle = css`
   position: relative;
 `
 
-export const senderAvatarStyle = css`
+export const senderAvatarStyle = (canShowUserAvatar: boolean) => css`
   margin-right: 16px;
+  visibility: ${canShowUserAvatar ? "visible" : "hidden"};
 `
 
 export const senderNicknameStyle = css`
@@ -34,29 +35,4 @@ export const senderNicknameStyle = css`
   font-style: normal;
   font-weight: 500;
   line-height: 22px;
-`
-
-export const messageContainerStyle = css`
-  border-radius: 8px;
-  background: ${getColor("grayBlue", "09")};
-  padding: 12px;
-  margin-top: 4px;
-  max-width: 100%;
-  ${applyMobileStyle(css`
-    margin-right: 0;
-  `)}
-`
-
-export const hoverCopyStyle = css`
-  display: inline-flex;
-  padding: 4px;
-  align-items: center;
-  border-radius: 4px;
-  border: 1px solid ${getColor("grayBlue", "08")};
-  background: ${getColor("white", "01")};
-  cursor: pointer;
-  color: ${getColor("grayBlue", "02")};
-  position: absolute;
-  bottom: 0;
-  right: -32px;
 `

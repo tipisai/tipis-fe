@@ -17,6 +17,13 @@ export enum SenderType {
   ANONYMOUS_AGENT = 3,
 }
 
+export enum MESSAGE_SYNC_TYPE {
+  GPT_CHAT_MESSAGE_TYPE_CHAT = 1,
+  GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST = 2,
+  GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_OK = 3,
+  GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_ERROR = 4,
+}
+
 export interface CollaboratorsInfo {
   id: string
   nickname: string
@@ -29,6 +36,7 @@ export interface ChatWsAppendResponse {
   threadID: string
   message: string
   actionID: string
+  messageType: MESSAGE_SYNC_TYPE
 }
 
 export interface ChatWsEndResponse {
@@ -44,6 +52,7 @@ export interface ChatMessage {
   threadID: string
   message: string
   sender: ChatSender
+  messageType: MESSAGE_SYNC_TYPE
   knowledgeFiles?: IKnowledgeFile[]
 }
 

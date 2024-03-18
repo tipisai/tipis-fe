@@ -135,6 +135,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
         sender: message.sender,
         message: message.message,
         threadID: message.threadID,
+        messageType: message.messageType,
       } as ChatMessage)
     } else {
       newMessageList[index].message =

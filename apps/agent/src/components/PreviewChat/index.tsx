@@ -33,6 +33,7 @@ import UploadKnowledgeFiles from "./UploadKnowledgeFiles"
 import {
   ChatMessage,
   ChatSendRequestPayload,
+  MESSAGE_SYNC_TYPE,
   PreviewChatProps,
   SenderType,
 } from "./interface"
@@ -100,8 +101,41 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
 
   const { t } = useTranslation()
 
+  const CHATMESSAGES = useMemo(
+    () => [
+      {
+        sender: {
+          senderType: SenderType.AGENT,
+          senderID: "",
+        },
+        threadID: v4(),
+        message: "12345543565",
+        messageType: MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_CHAT,
+      },
+      {
+        sender: {
+          senderType: SenderType.AGENT,
+          senderID: "",
+        },
+        threadID: v4(),
+        message: "```js\n\nasdasdfsdfsdf\n\n```",
+        messageType: MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST,
+      },
+      {
+        sender: {
+          senderType: SenderType.AGENT,
+          senderID: "",
+        },
+        threadID: v4(),
+        message: "aaa",
+        messageType: MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_OK,
+      },
+    ],
+    [],
+  )
+
   const messagesList = useMemo(() => {
-    return chatMessages.map((message, i) => {
+    return CHATMESSAGES.map((message, i) => {
       if (
         message.sender.senderType === SenderType.USER &&
         message.sender.senderID === currentUserInfo.userID
@@ -119,11 +153,18 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
           key={message.threadID}
           message={message}
           isMobile={isMobile}
-          canShowLongCopy={i === chatMessages.length - 1 && !isReceiving}
+          isLastMessage={i === chatMessages.length - 1}
+          isReceiving={isReceiving}
         />
       )
     })
-  }, [chatMessages, currentUserInfo.userID, isMobile, isReceiving])
+  }, [
+    CHATMESSAGES,
+    chatMessages.length,
+    currentUserInfo.userID,
+    isMobile,
+    isReceiving,
+  ])
 
   const handleDeleteFile = (fileName: string) => {
     const files = knowledgeFiles.filter((file) => file.fileName !== fileName)
