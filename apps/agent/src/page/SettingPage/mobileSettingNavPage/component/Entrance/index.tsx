@@ -30,7 +30,7 @@ import {
 
 const Entrance: FC = () => {
   const { t } = useTranslation()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)
+  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const teams = useSelector(getTeamItems)
   const logout = useLogout()
 
@@ -55,19 +55,19 @@ const Entrance: FC = () => {
 
   const accountOptions = [
     {
-      path: "account",
+      path: "/setting/account",
       label: t("profile.setting.personal_info"),
     },
     {
-      path: "password",
+      path: "/setting/password",
       label: t("profile.setting.password.title"),
     },
     {
-      path: "linked",
+      path: "/setting/linked",
       label: t("profile.setting.oauth.title.oauth"),
     },
     {
-      path: "language",
+      path: "/setting/language",
       label: t("profile.setting.language"),
     },
     {
@@ -86,16 +86,16 @@ const Entrance: FC = () => {
 
   const teamOptions = [
     {
-      path: "team-settings",
+      path: `/setting/${currentTeamInfo.identifier}/team-settings`,
       label: t("team_setting.team_info.title"),
     },
     {
-      path: "members",
+      path: `/setting/${currentTeamInfo.identifier}/members`,
       label: t("team_setting.left_panel.member"),
       hidden: showMember,
     },
     {
-      path: "billing",
+      path: `/setting/${currentTeamInfo.identifier}/billing`,
       label: t("billing.menu.billing"),
       hidden: !showBilling,
     },
