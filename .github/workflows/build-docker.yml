@@ -73,14 +73,14 @@ jobs:
           docker tag tipisai-fe "illasoft/tipisai-fe:$GITHUB_REF_NAME"
           docker push "illasoft/tipisai-fe:$GITHUB_REF_NAME"
 
-      # - uses: actions/checkout@v4
-      #   with:
-      #     repository: illacloud/k8s-application-do
-      #     token: ${{ secrets.ILLA_BOT_TOKEN }}
-      #     path: k8s-application-do
+      - uses: actions/checkout@v4
+        with:
+          repository: tipisai/k8s-application-do
+          token: ${{ secrets.ILLA_BOT_TOKEN }}
+          path: k8s-application-do
 
-      # - name: Deploy to Kubernetes
-      #   run: |
-      #     cd k8s-application-do/namespace-$ILLA_APP_ENV
-      #     kubectl apply -f ./illa-builder-frontend/ -n $ILLA_APP_ENV
-      #     kubectl -n $ILLA_APP_ENV rollout restart deployment illa-builder-frontend
+      - name: Deploy to Kubernetes
+        run: |
+          cd k8s-application-do/namespace-$ILLA_APP_ENV
+          kubectl apply -f ./tipisai-cloud-frontend/ -n $ILLA_APP_ENV
+          kubectl -n $ILLA_APP_ENV rollout restart deployment tipisai-cloud-frontend

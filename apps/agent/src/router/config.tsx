@@ -1,18 +1,13 @@
 import { Suspense, lazy } from "react"
-import {
-  Navigate,
-  RouterProvider,
-  createBrowserRouter,
-  redirect,
-} from "react-router-dom"
+import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom"
 import { Page403, Page404, Page500 } from "@illa-public/status-page"
-import { getILLACloudURL } from "@illa-public/utils"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import SettingLayout from "@/page/SettingPage"
 import PCWorkspaceLayout from "../Layout/Workspace/pc"
 import UserLayout from "../page/User/Layout/index"
 import { buildRouter } from "./buildRouter"
 import { RoutesObjectPro } from "./interface"
+import { rootLoader } from "./loader/rootLoader"
 import { workspaceLayoutLoader } from "./loader/workspaceLayoutLoader"
 
 const RunAgentPage = lazy(() => import("@/page/WorkSpace/AI/AIAgentRun"))
@@ -53,7 +48,7 @@ const EditFunctionPage = lazy(() => import("@/page/WorkSpace/Function/Edit"))
 const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   {
     index: true,
-    loader: () => redirect(getILLACloudURL(window.customDomain)),
+    loader: rootLoader,
   },
   {
     path: "/user",

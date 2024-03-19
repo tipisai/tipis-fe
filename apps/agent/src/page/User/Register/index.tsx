@@ -83,11 +83,9 @@ const RegisterPage: FC = () => {
       message.success(t("page.user.sign_up.tips.success"))
       setAuthToken(token)
       searchParams.delete("inviteToken")
-      // TODO: WTF, need add workspace
-      // navigate(
-      //   `/${searchParams.toString() ? "?" + searchParams.toString() : ""}`,
-      // )
-      navigate("/workspace")
+      navigate(
+        `/${searchParams.toString() ? "?" + searchParams.toString() : ""}`,
+      )
     } catch (e) {
       if (isILLAAPiError(e)) {
         track(
