@@ -1,12 +1,16 @@
-import { FC } from "react"
-import { FormProvider, useForm } from "react-hook-form"
+import { FC, useCallback, useEffect } from "react"
+import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useBeforeUnload, useParams } from "react-router-dom"
 import { Agent } from "@illa-public/public-types"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
-import { TipisWebSocketProvider } from "../../../../components/PreviewChat/TipisWebscoketContext"
+import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
+import {
+  getUiHistoryDataByCacheID,
+  setUiHistoryData,
+} from "@/utils/localForage/uiHistoryStore"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import { AIAgent } from "./aiagent"
 import FormContext from "./components/FormContext"
@@ -22,6 +26,7 @@ import { AgentInitial } from "./interface"
 export const CreateAIAgentPage: FC = () => {
   const { agentID } = useParams()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+
   const agent = {
     ...AgentInitial,
     agentID: agentID!,
@@ -29,6 +34,7 @@ export const CreateAIAgentPage: FC = () => {
     teamIdentifier: currentTeamInfo.identifier,
     teamIcon: currentTeamInfo.icon,
   }
+
   const methods = useForm<Agent>({
     values: {
       ...agent,
@@ -37,6 +43,10 @@ export const CreateAIAgentPage: FC = () => {
           ? [{ key: "", value: "" }]
           : agent.variables,
     },
+  })
+
+  const values = useWatch({
+    control: methods.control,
   })
 
   const { t } = useTranslation()
@@ -54,6 +64,48 @@ export const CreateAIAgentPage: FC = () => {
   // useBeforeUnload(() => {
   //   trackPageDurationEnd(ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_EDIT)
   // })
+
+  const setUiHistoryFormData = useCallback(async () => {
+    const cacheID = agent.agentID
+    const uiHistoryData = await getUiHistoryDataByCacheID(cacheID)
+    console.log("oldValues", values)
+    if (uiHistoryData) {
+      const { formData } = uiHistoryData
+      setUiHistoryData(cacheID!, {
+        ...uiHistoryData,
+        formData: {
+          ...(formData as Agent),
+          ...values,
+        },
+      })
+    } else {
+      setUiHistoryData(cacheID!, {
+        formData: values,
+      })
+    }
+  }, [agent.agentID, values])
+
+  useEffect(() => {
+    const getHistoryDataAndSetFormData = async () => {
+      const cacheID = agent.agentID
+      const uiHistoryData = await getUiHistoryDataByCacheID(cacheID)
+      if (uiHistoryData) {
+        const { formData } = uiHistoryData
+        if (formData) {
+          methods.reset(formData as Agent)
+        }
+      }
+    }
+    getHistoryDataAndSetFormData()
+  }, [agent.agentID, methods])
+
+  useBeforeUnload(setUiHistoryFormData)
+
+  useEffect(() => {
+    return () => {
+      setUiHistoryFormData()
+    }
+  }, [setUiHistoryFormData])
 
   return (
     <FormProvider {...methods}>
