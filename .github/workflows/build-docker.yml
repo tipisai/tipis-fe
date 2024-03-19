@@ -45,18 +45,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DO_TOKEN }}
+      # - name: Install doctl
+      #   uses: digitalocean/action-doctl@v2
+      #   with:
+      #     token: ${{ secrets.DO_TOKEN }}
 
-      - name: Setup kubectl
-        run: |
-          doctl kubernetes cluster kubeconfig save $DO_CLUSTER
+      # - name: Setup kubectl
+      #   run: |
+      #     doctl kubernetes cluster kubeconfig save $DO_CLUSTER
 
-      - name: Install kubectl
-        run: |
-          sudo snap install kubectl --classic
+      # - name: Install kubectl
+      #   run: |
+      #     sudo snap install kubectl --classic
 
       - name: Build website
         run: |
