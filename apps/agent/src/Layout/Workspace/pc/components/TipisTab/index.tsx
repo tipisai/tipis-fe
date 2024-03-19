@@ -23,6 +23,7 @@ const TipisTab: FC<ITipsTab> = (props) => {
 
   const onClickRemoveTab: MouseEventHandler<HTMLElement> = (e) => {
     e.stopPropagation()
+    e.preventDefault()
     dispatch(recentTabActions.deleteRecentTabReducer(tabID))
   }
 
@@ -37,6 +38,7 @@ const TipisTab: FC<ITipsTab> = (props) => {
       css={navLinkStyle}
       unstable_viewTransition
       end
+      reloadDocument={false}
     >
       {({ isActive }) => (
         <div css={menuItemButtonStyle(isActive)}>

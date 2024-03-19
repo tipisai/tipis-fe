@@ -1,5 +1,5 @@
 import { CaseReducer, PayloadAction } from "@reduxjs/toolkit"
-import { setTabs } from "../../../utils/localForage/tabsStore"
+import { setTabs } from "@/utils/localForage/tabsStore"
 import { IRecentTabState, ITabInfo } from "./interface"
 
 export const initRecentTabReducer: CaseReducer<
