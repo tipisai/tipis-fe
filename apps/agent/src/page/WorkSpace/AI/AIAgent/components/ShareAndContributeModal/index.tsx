@@ -31,7 +31,7 @@ import {
 import {
   getAgentPublicLink,
   getAuthToken,
-  getILLABuilderURL,
+  getILLACloudURL,
 } from "@illa-public/utils"
 import { copyToClipboard } from "@/utils/copyToClipboard"
 import { track } from "@/utils/mixpanelHelper"
@@ -90,7 +90,7 @@ const ShareAndContributeModal: FC<IShareAndContributeModalProps> = (props) => {
             title={t("user_management.modal.social_media.default_text.agent", {
               agentName: agentName,
             })}
-            redirectURL={`${getILLABuilderURL(
+            redirectURL={`${getILLACloudURL(
               window.customDomain,
             )}/${currentTeamInfo.identifier}/ai-agent/${aiAgentID}`}
             onClose={() => {
