@@ -50,14 +50,17 @@ jobs:
         with:
           token: ${{ secrets.DO_TOKEN }}
 
-      - name: Install kubectl
-        run: |
-          sudo snap install kubectl --classic
+      - name:
+          Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login
 
       - name: Setup kubectl
         run: |
           doctl kubernetes cluster kubeconfig save $DO_CLUSTER
-          kubectl version
+
+      - name: Install kubectl
+        run: |
+          sudo snap install kubectl --classic
 
       - name: Build website
         run: |
