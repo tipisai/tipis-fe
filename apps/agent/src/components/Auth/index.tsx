@@ -28,6 +28,7 @@ const ProtectedComponent: FC<AuthProps> = (props) => {
   }
 
   if (data) {
+    console.log("data", data)
     const currentLng = i18n.language
     ILLAMixpanel.setUserID(data.user.userID)
     const reportedUserInfo: Record<string, any> = {}
