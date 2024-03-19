@@ -1,12 +1,8 @@
 import Icon from "@ant-design/icons"
-import { App } from "antd"
 import { AnimatePresence } from "framer-motion"
 import { FC, useState } from "react"
-import { useTranslation } from "react-i18next"
-import { CopyIcon, DownIcon, UpIcon } from "@illa-public/icon"
-import { copyToClipboard } from "@illa-public/utils"
-import AnalyzeIcon from "@/assets/agent/message-analyze.svg?react"
-import { MESSAGE_SYNC_TYPE } from "@/components/PreviewChat/interface"
+import { DownIcon, UpIcon } from "@illa-public/icon"
+import { MESSAGE_STATUS } from "@/components/PreviewChat/interface"
 import MarkdownMessage from "../MarkdownMessage"
 import {
   PureMessageProps,
@@ -16,101 +12,63 @@ import {
 import {
   containerStyle,
   headerContainerStyle,
-  hoverCopyStyle,
-  infoIconStyle,
   messageContainerStyle,
 } from "./style"
+import { getInfoByStatus } from "./utils"
 
-export const PureMessage: FC<PureMessageProps> = ({
-  disableTrigger,
-  message,
-}) => {
-  const { message: messageAPI } = App.useApp()
-  const { t } = useTranslation()
+export const PureMessage: FC<PureMessageProps> = ({ message }) => {
   return (
     <div css={messageContainerStyle}>
-      <MarkdownMessage disableTrigger={disableTrigger}>
-        {message}
-      </MarkdownMessage>
-      {disableTrigger && message && (
-        <span
-          css={hoverCopyStyle}
-          onClick={() => {
-            copyToClipboard(message ?? "")
-            messageAPI.success({
-              content: t("copied"),
-            })
-          }}
-        >
-          <Icon component={CopyIcon} size={14} />
-        </span>
-      )}
+      <MarkdownMessage>{message}</MarkdownMessage>
     </div>
   )
 }
 
-export const SyncMessageResult: FC<SyncMessageResultProps> = ({
-  disableTrigger,
-  message,
-  syncType,
-}) => {
-  const { message: messageAPI } = App.useApp()
-  const { t } = useTranslation()
+export const SyncMessageResult: FC<SyncMessageResultProps> = ({ message }) => {
+  let formatMessage
+  try {
+    formatMessage = `\`\`\`json\n${JSON.stringify(JSON.parse(message) || {}, null, 2)}\n\`\`\``
+  } catch (e) {
+    formatMessage = `\`\`\`json\n${message}\n\`\`\``
+  }
   return (
     <div css={messageContainerStyle}>
-      {syncType ===
-      MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_ERROR ? (
-        <span>error</span>
-      ) : (
-        <span>success</span>
-      )}
-      <MarkdownMessage disableTrigger={disableTrigger}>
-        {message}
-      </MarkdownMessage>
-      {disableTrigger && message && (
-        <span
-          css={hoverCopyStyle}
-          onClick={() => {
-            copyToClipboard(message ?? "")
-            messageAPI.success({
-              content: t("copied"),
-            })
-          }}
-        >
-          <Icon component={CopyIcon} size={14} />
-        </span>
-      )}
+      <MarkdownMessage>{formatMessage}</MarkdownMessage>
     </div>
   )
 }
 
 export const SyncMessageCard: FC<SyncMessageCardProps> = ({
   message,
-  isReceiving,
-  isLastMessage,
+  messageStatus,
 }) => {
-  const isMessageReceiving = isReceiving && isLastMessage
-  const { t } = useTranslation()
   const [showMessage, setShowMessage] = useState(false)
+
+  let formatMessage
+  try {
+    formatMessage = `\`\`\`python\n${JSON.parse(message)?.["code"]}\n\`\`\``
+  } catch (e) {
+    formatMessage = `\`\`\`python\n${message}\n\`\`\``
+  }
+
+  const { InfoIcon, InfoTitle } = getInfoByStatus(messageStatus)
 
   return (
     <div css={containerStyle}>
       <div
-        css={headerContainerStyle(isMessageReceiving)}
+        css={headerContainerStyle(messageStatus)}
         onClick={() => setShowMessage(!showMessage)}
       >
-        <Icon component={AnalyzeIcon} css={infoIconStyle} />
-        {isReceiving ? t("analyzing") : t("analyze end")}
-        {!isMessageReceiving && (
+        {InfoIcon}
+        {InfoTitle}
+        {messageStatus === MESSAGE_STATUS.ANALYZE_SUCCESS && (
           <Icon component={showMessage ? UpIcon : DownIcon} />
         )}
       </div>
       <AnimatePresence>
-        {showMessage && (
+        {messageStatus === MESSAGE_STATUS.ANALYZE_SUCCESS && showMessage && (
           <div css={messageContainerStyle}>
-            <MarkdownMessage disableTrigger={isLastMessage && !isReceiving}>
-              {message}
-            </MarkdownMessage>
+            <MarkdownMessage>{formatMessage}</MarkdownMessage>
           </div>
         )}
       </AnimatePresence>

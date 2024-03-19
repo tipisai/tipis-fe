@@ -28,6 +28,9 @@ import {
   ChatSendRequestPayload,
   ChatWsAppendResponse,
   CollaboratorsInfo,
+  IGroupMessage,
+  MESSAGE_STATUS,
+  MESSAGE_SYNC_TYPE,
   SenderType,
 } from "@/components/PreviewChat/interface"
 import {
@@ -35,6 +38,7 @@ import {
   useLazyGetAIAgentWsAddressQuery,
 } from "@/redux/services/agentAPI"
 import { IAgentWSInject, IAgentWSProviderProps } from "./interface"
+import { isNormalMessage } from "./typeHelper"
 import { formatSendMessagePayload } from "./utils"
 
 export const AgentWSContext = createContext({} as IAgentWSInject)
@@ -113,8 +117,10 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
   const [isReceiving, setIsReceiving] = useState(false)
   const [isRunning, setIsRunning] = useState(false)
   const [inRoomUsers, setInRoomUsers] = useState<CollaboratorsInfo[]>([])
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
-  const chatMessagesRef = useRef<ChatMessage[]>([])
+  const [chatMessages, setChatMessages] = useState<
+    (IGroupMessage | ChatMessage)[]
+  >([])
+  const chatMessagesRef = useRef<(IGroupMessage | ChatMessage)[]>([])
 
   const onUpdateRoomUser = useCallback(
     (roomUsers: CollaboratorsInfo[]) => {
@@ -131,15 +137,62 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       return m.threadID === message.threadID
     })
     if (index === -1) {
-      newMessageList.push({
-        sender: message.sender,
-        message: message.message,
-        threadID: message.threadID,
-        messageType: message.messageType,
-      } as ChatMessage)
+      if (
+        message.messageType ===
+        MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
+      ) {
+        newMessageList.push({
+          threadID: message.threadID,
+          items: [
+            {
+              sender: message.sender,
+              message: message.message,
+              threadID: message.threadID,
+              messageType: message.messageType,
+              status:
+                message.messageType ===
+                MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
+                  ? MESSAGE_STATUS.ANALYZE_PENDING
+                  : undefined,
+            },
+          ],
+        } as IGroupMessage)
+      } else {
+        newMessageList.push({
+          sender: message.sender,
+          message: message.message,
+          threadID: message.threadID,
+          messageType: message.messageType,
+        } as ChatMessage)
+      }
     } else {
-      newMessageList[index].message =
-        newMessageList[index].message + message.message
+      const curMessage = newMessageList[index]
+      if (isNormalMessage(curMessage)) {
+        curMessage.message = curMessage.message + message.message
+      } else {
+        const needUpdateMessage = curMessage.items[curMessage.items.length - 1]
+        if (needUpdateMessage.messageType === message.messageType) {
+          needUpdateMessage.message =
+            needUpdateMessage.message + message.message
+        } else {
+          if (
+            message.messageType ===
+              MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_ERROR &&
+            needUpdateMessage.messageType ===
+              MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
+          ) {
+            needUpdateMessage.status = MESSAGE_STATUS.ANALYZE_ERROR
+          } else if (
+            message.messageType ===
+              MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_OK &&
+            needUpdateMessage.messageType ===
+              MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
+          ) {
+            needUpdateMessage.status = MESSAGE_STATUS.ANALYZE_SUCCESS
+          }
+          curMessage.items.push(message)
+        }
+      }
     }
     chatMessagesRef.current = newMessageList
     setChatMessages(newMessageList)
@@ -251,7 +304,6 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
           break
         case 15:
           setIsReceiving(false)
-
           break
         case 16:
           messageAPI.error({
