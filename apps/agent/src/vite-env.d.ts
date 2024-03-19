@@ -7,9 +7,7 @@ interface ImportMetaEnv {
   readonly ILLA_SENTRY_SERVER_API: string
   readonly ILLA_APP_VERSION: string
   readonly ILLA_APP_ENV: string
-  readonly ILLA_BUILDER_URL: string
   readonly ILLA_CLOUD_URL: string
-  readonly ILLA_FLOW_URL: string
 }
 
 interface ImportMeta {
