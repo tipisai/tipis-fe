@@ -25,7 +25,9 @@ import {
   UPLOAD_PATH,
 } from "@/config/constants/knowledge"
 import AIAgentMessage from "@/page/WorkSpace/AI/components/AIAgentMessage"
+import GroupAgentMessage from "@/page/WorkSpace/AI/components/GroupAgentMessage"
 import UserMessage from "@/page/WorkSpace/AI/components/UserMessage"
+import { isGroupMessage } from "@/page/WorkSpace/AI/context/AgentWSContext/typeHelper"
 import { useUploadFileToDrive } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
 import UploadButton from "./UploadButton"
@@ -102,7 +104,17 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
 
   const messagesList = useMemo(() => {
     return chatMessages.map((message, i) => {
-      if (
+      if (isGroupMessage(message)) {
+        return (
+          <GroupAgentMessage
+            key={message.threadID}
+            message={message}
+            isMobile={isMobile}
+            isLastMessage={i === chatMessages.length - 1}
+            isReceiving={isReceiving}
+          />
+        )
+      } else if (
         message.sender.senderType === SenderType.USER &&
         message.sender.senderID === currentUserInfo.userID
       ) {
@@ -113,16 +125,17 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
             isMobile={isMobile}
           />
         )
+      } else {
+        return (
+          <AIAgentMessage
+            key={message.threadID}
+            message={message}
+            isMobile={isMobile}
+            isLastMessage={i === chatMessages.length - 1}
+            isReceiving={isReceiving}
+          />
+        )
       }
-      return (
-        <AIAgentMessage
-          key={message.threadID}
-          message={message}
-          isMobile={isMobile}
-          isLastMessage={i === chatMessages.length - 1}
-          isReceiving={isReceiving}
-        />
-      )
     })
   }, [chatMessages, currentUserInfo.userID, isMobile, isReceiving])
 

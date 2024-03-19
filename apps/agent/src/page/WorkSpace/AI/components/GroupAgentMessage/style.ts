@@ -7,6 +7,9 @@ export const agentMessageContainer = css`
   display: flex;
   flex-direction: row;
   width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  flex: none;
   ${applyMobileStyle(css`
     padding: 24px 48px 8px 12px;
   `)}
@@ -18,6 +21,7 @@ export const senderContainerStyle = css`
   flex-direction: column;
   max-width: 100%;
   position: relative;
+  gap: 8px;
 `
 
 export const senderAvatarStyle = css`
@@ -34,29 +38,4 @@ export const senderNicknameStyle = css`
   font-style: normal;
   font-weight: 500;
   line-height: 22px;
-`
-
-export const messageContainerStyle = css`
-  border-radius: 8px;
-  background: ${getColor("grayBlue", "09")};
-  padding: 12px;
-  margin-top: 4px;
-  max-width: 100%;
-  ${applyMobileStyle(css`
-    margin-right: 0;
-  `)}
-`
-
-export const hoverCopyStyle = css`
-  display: inline-flex;
-  padding: 4px;
-  align-items: center;
-  border-radius: 4px;
-  border: 1px solid ${getColor("grayBlue", "08")};
-  background: ${getColor("white", "01")};
-  cursor: pointer;
-  color: ${getColor("grayBlue", "02")};
-  position: absolute;
-  bottom: 0;
-  right: -32px;
 `

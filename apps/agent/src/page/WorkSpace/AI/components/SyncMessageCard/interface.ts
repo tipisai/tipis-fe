@@ -1,10 +1,8 @@
-import { MESSAGE_SYNC_TYPE } from "@/components/PreviewChat/interface"
+import { MESSAGE_STATUS } from "@/components/PreviewChat/interface"
 
 export interface SyncMessageCardProps {
-  syncType?: MESSAGE_SYNC_TYPE
   message: string
-  isReceiving: boolean
-  isLastMessage: boolean
+  messageStatus: MESSAGE_STATUS
 }
 
 export interface PureMessageProps {
@@ -13,7 +11,5 @@ export interface PureMessageProps {
 }
 
 export interface SyncMessageResultProps {
-  disableTrigger: boolean
   message: string
-  syncType: MESSAGE_SYNC_TYPE
 }

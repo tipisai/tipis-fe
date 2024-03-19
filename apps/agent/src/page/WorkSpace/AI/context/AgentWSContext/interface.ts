@@ -9,6 +9,7 @@ import {
   ChatMessage,
   ChatSendRequestPayload,
   CollaboratorsInfo,
+  IGroupMessage,
 } from "@/components/PreviewChat/interface"
 
 export interface IAgentWSProviderProps {
@@ -25,7 +26,7 @@ export interface IAgentWSInject
   isReceiving: boolean
   isRunning: boolean
   inRoomUsers: CollaboratorsInfo[]
-  chatMessages: ChatMessage[]
+  chatMessages: (IGroupMessage | ChatMessage)[]
   setIsReceiving: (isReceiving: boolean) => void
   connect: () => Promise<void>
   reconnect: () => Promise<void>

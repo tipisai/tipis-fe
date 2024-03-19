@@ -1,6 +1,12 @@
 import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
 
+export const markdownMessageContainerStyle = css`
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+`
+
 export const markdownMessageStyle = css`
   max-width: 100%;
   overflow-x: hidden;

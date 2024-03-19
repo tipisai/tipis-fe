@@ -21,6 +21,7 @@ import { MarkdownMessageProps } from "@/page/WorkSpace/AI/components/MarkdownMes
 import {
   cellStyle,
   hoverCopyStyle,
+  markdownMessageContainerStyle,
   markdownMessageStyle,
   tableStyle,
 } from "@/page/WorkSpace/AI/components/MarkdownMessage/style"
@@ -33,7 +34,7 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
   const { message: messageAPI } = App.useApp()
 
   const contentBody = (
-    <div>
+    <div css={markdownMessageContainerStyle}>
       <Typography>
         <ReactMarkdown
           css={markdownMessageStyle}
@@ -114,6 +115,7 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
       showArrow={false}
       autoAdjustOverflow={false}
       trigger="hover"
+      getTooltipContainer={(node) => node}
     >
       {contentBody}
     </Tooltip>
