@@ -61,7 +61,7 @@ jobs:
       - name: Build website
         run: |
           echo "Building for $GITHUB_REF_NAME branch,ILLA APP ENV is $ILLA_APP_ENV"
-          pnpm build-cloud
+          pnpm build
       - name: Build Docker
         run: |
           docker build --cache-from=tipisai-fe -f Dockerfile -t tipisai-fe .
