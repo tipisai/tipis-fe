@@ -49,11 +49,9 @@ const LoginPage: FC = () => {
         content: t("page.user.sign_in.tips.success"),
       })
 
-      // TODO: WTF, temp replace
-      // navigate(
-      //   `/${searchParams.toString() ? "?" + searchParams.toString() : ""}`,
-      // )
-      navigate("/workspace")
+      navigate(
+        `/${searchParams.toString() ? "?" + searchParams.toString() : ""}`,
+      )
     } catch (e) {
       if (isILLAAPiError(e)) {
         switch (e?.data?.errorFlag) {
