@@ -46,6 +46,7 @@ const Code: FC<CodeProps> = (props) => {
         {...props}
         CodeTag="div"
         PreTag="div"
+        wrapLongLines={true}
         customStyle={{
           background: "transparent",
         }}

@@ -7,6 +7,8 @@ export const agentMessageContainer = css`
   display: flex;
   justify-content: end;
   width: 100%;
+  overflow: hidden;
+  flex: none;
   flex-direction: row;
   ${applyMobileStyle(css`
     padding: 24px 12px 8px 48px;
@@ -43,7 +45,8 @@ export const messageContainerStyle = css`
   border-radius: 8px;
   background: ${getColor("techPurple", "08")};
   padding: 12px;
-  max-width: 100%;
+  width: 100%;
+  overflow: hidden;
   ${applyMobileStyle(css`
     margin-left: 0;
   `)}

@@ -35,55 +35,54 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
 
   const contentBody = (
     <div css={markdownMessageContainerStyle}>
-      <Typography>
-        <ReactMarkdown
-          css={markdownMessageStyle}
-          remarkPlugins={[remarkGfm, remarkBreaks]}
-          components={{
-            h1: ({ children }) => (
-              <Typography.Title level={1}>{children}</Typography.Title>
-            ),
-            h2: ({ children }) => (
-              <Typography.Title level={2}>{children}</Typography.Title>
-            ),
-            h3: ({ children }) => (
-              <Typography.Title level={3}>{children}</Typography.Title>
-            ),
-            h4: ({ children }) => (
-              <Typography.Title level={4}>{children}</Typography.Title>
-            ),
-            h5: ({ children }) => (
-              <Typography.Title level={5}>{children}</Typography.Title>
-            ),
-            a: ({ href, children }) => (
-              <Typography.Link href={href} target="_blank">
-                {children}
-              </Typography.Link>
-            ),
-            p: ({ children }) => <Typography.Text>{children}</Typography.Text>,
-            tr: ({ children }) => <TableRow>{children}</TableRow>,
-            th: ({ children }) => (
-              <TableCell align="center">{children}</TableCell>
-            ),
-            td: ({ children }) => (
-              <TableCell align="left" css={cellStyle}>
-                {children}
-              </TableCell>
-            ),
-            thead: ({ children }) => <TableHead>{children}</TableHead>,
-            tbody: ({ children }) => <TableBody>{children}</TableBody>,
-            tfoot: ({ children }) => <TableFooter>{children}</TableFooter>,
-            table: ({ children }) => (
-              <TableContainer component={Paper} css={tableStyle}>
-                <Table sx={{ minWidth: 650 }}>{children}</Table>
-              </TableContainer>
-            ),
-            code: (props) => <Code {...props} />,
-          }}
-        >
-          {handleParseText(children ?? "", isOwnMessage)}
-        </ReactMarkdown>
-      </Typography>
+      <ReactMarkdown
+        css={markdownMessageStyle}
+        remarkPlugins={[remarkGfm, remarkBreaks]}
+        components={{
+          pre: ({ children }) => <Typography>{children}</Typography>,
+          h1: ({ children }) => (
+            <Typography.Title level={1}>{children}</Typography.Title>
+          ),
+          h2: ({ children }) => (
+            <Typography.Title level={2}>{children}</Typography.Title>
+          ),
+          h3: ({ children }) => (
+            <Typography.Title level={3}>{children}</Typography.Title>
+          ),
+          h4: ({ children }) => (
+            <Typography.Title level={4}>{children}</Typography.Title>
+          ),
+          h5: ({ children }) => (
+            <Typography.Title level={5}>{children}</Typography.Title>
+          ),
+          a: ({ href, children }) => (
+            <Typography.Link href={href} target="_blank">
+              {children}
+            </Typography.Link>
+          ),
+          p: ({ children }) => <Typography.Text>{children}</Typography.Text>,
+          tr: ({ children }) => <TableRow>{children}</TableRow>,
+          th: ({ children }) => (
+            <TableCell align="center">{children}</TableCell>
+          ),
+          td: ({ children }) => (
+            <TableCell align="left" css={cellStyle}>
+              {children}
+            </TableCell>
+          ),
+          thead: ({ children }) => <TableHead>{children}</TableHead>,
+          tbody: ({ children }) => <TableBody>{children}</TableBody>,
+          tfoot: ({ children }) => <TableFooter>{children}</TableFooter>,
+          table: ({ children }) => (
+            <TableContainer component={Paper} css={tableStyle}>
+              <Table sx={{ minWidth: 650 }}>{children}</Table>
+            </TableContainer>
+          ),
+          code: (props) => <Code {...props} />,
+        }}
+      >
+        {handleParseText(children ?? "", isOwnMessage)}
+      </ReactMarkdown>
     </div>
   )
 
