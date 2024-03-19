@@ -9,12 +9,7 @@ const FormContext: FC<IFormContextProps> = (props) => {
   const { handleSubmit } = useFormContext<IAIFunctionResource>()
 
   return (
-    <form
-      onSubmit={handleSubmit((data) => {
-        console.log("data", data)
-      })}
-      css={formStyle}
-    >
+    <form onSubmit={handleSubmit((data) => {})} css={formStyle}>
       {children}
     </form>
   )
