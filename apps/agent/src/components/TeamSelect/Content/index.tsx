@@ -63,7 +63,7 @@ const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
     <div css={containerStyle}>
       {teamItems?.map((item, index) => {
         const isCurrent = currentTeamId === item.id
-        const isFree = isSubscribeForBilling(item.colla.plan)
+        const isFree = isSubscribeForBilling(item.woo?.plan)
         return (
           <div
             css={switchItemStyle}

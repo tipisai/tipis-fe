@@ -55,7 +55,7 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
     currentTeamInfo?.totalTeamLicense?.teamLicenseAllPaid,
   )
 
-  const isPurchased = currentTeamInfo?.colla?.plan !== SUBSCRIBE_PLAN.COLLA_FREE
+  const isPurchased = currentTeamInfo?.woo?.plan !== SUBSCRIBE_PLAN.WOO_FREE
 
   const accountOptions = [
     {

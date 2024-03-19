@@ -3,17 +3,12 @@ import { Button } from "antd"
 import { FC, useContext } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { PlayFillIcon, ResetIcon } from "@illa-public/icon"
-import { isPremiumModel } from "@illa-public/market-agent"
 import {
   ILLA_MIXPANEL_BUILDER_PAGE_NAME,
   ILLA_MIXPANEL_EVENT_TYPE,
 } from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
-import { useUpgradeModal } from "@illa-public/upgrade-modal"
-import { getCurrentTeamInfo, getPlanUtils } from "@illa-public/user-data"
-import { canUseUpgradeFeature } from "@illa-public/user-role-utils"
 import EditPanelLayout from "@/Layout/EditPanelLayout"
 import { track } from "@/utils/mixpanelHelper"
 import { AgentWSContext } from "../../../context/AgentWSContext"
@@ -30,16 +25,6 @@ const EditPanel: FC = () => {
     useContext(AgentWSContext)
 
   const { clearErrors, getValues, setError } = useFormContext<Agent>()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!!
-
-  const upgradeModal = useUpgradeModal()
-
-  const canUseBillingFeature = canUseUpgradeFeature(
-    currentTeamInfo?.myRole,
-    getPlanUtils(currentTeamInfo),
-    currentTeamInfo?.totalTeamLicense?.teamLicensePurchased,
-    currentTeamInfo?.totalTeamLicense?.teamLicenseAllPaid,
-  )
 
   const handleVerifyOnStart = () => {
     clearErrors()

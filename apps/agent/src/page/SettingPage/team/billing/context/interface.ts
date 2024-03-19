@@ -1,7 +1,7 @@
-import { CollarInfo } from "@illa-public/public-types"
+import { IWooInfo } from "@illa-public/public-types"
 
 export interface BillingContextTypeProps {
-  wooInfo: CollarInfo
+  wooInfo: IWooInfo
   isUnSubscribeWoo: boolean
   isCancelSubscribedWoo: boolean
   isExpiredWoo: boolean

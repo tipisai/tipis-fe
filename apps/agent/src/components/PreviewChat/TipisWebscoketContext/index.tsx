@@ -11,8 +11,8 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import WebSocketClient from "@illa-public/illa-web-socket"
 import {
-  CollarModalType,
-  handleCollaPurchaseError,
+  WooModalType,
+  handleWooPurchaseError,
 } from "@illa-public/upgrade-modal"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { getAuthToken } from "@illa-public/utils"
@@ -122,11 +122,7 @@ export const TipisWebSocketProvider: FC<TipisWebSocketProviderProps> = (
         })
         tipisWSClient.current = webSocketClient
       } catch (e) {
-        const res = handleCollaPurchaseError(
-          e,
-          CollarModalType.TOKEN,
-          "agent_run",
-        )
+        const res = handleWooPurchaseError(e, WooModalType.TOKEN, "agent_run")
         if (res) return
         messageAPI.error({
           content: t("editor.ai-agent.message.start-failed"),

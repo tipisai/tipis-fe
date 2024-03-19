@@ -9,8 +9,8 @@ import {
   UPLOAD_FILE_STATUS,
 } from "@illa-public/public-types"
 import {
-  CollarModalType,
-  handleCollaPurchaseError,
+  WooModalType,
+  handleWooPurchaseError,
 } from "@illa-public/upgrade-modal"
 import { getCurrentId } from "@illa-public/user-data"
 import {
@@ -147,12 +147,8 @@ export const useUploadFileToDrive = () => {
         status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
       })
       // TODO: WTF  add  report from
-      const isCollaError = handleCollaPurchaseError(
-        e,
-        CollarModalType.STORAGE,
-        "",
-      )
-      !isCollaError &&
+      const isWooError = handleWooPurchaseError(e, WooModalType.STORAGE, "")
+      !isWooError &&
         message.error(t("editor.inspect.setter_message.uploadfail"))
     }
   }

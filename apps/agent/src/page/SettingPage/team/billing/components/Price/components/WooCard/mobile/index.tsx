@@ -2,9 +2,9 @@ import { Button } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { SUBSCRIPTION_CYCLE } from "@illa-public/public-types"
-import { COLLAR_UNIT_PRICE } from "@illa-public/upgrade-modal"
+import { WOO_UNIT_PRICE } from "@illa-public/upgrade-modal"
 import CollaCardMobileBg from "@/page/SettingPage/team/billing/assets/collaCardMobileBg.svg"
-import { COLLA_LIST } from "../constant"
+import { WOO_LIST } from "../constant"
 import { WooCardProps } from "../interface"
 import {
   bgStyle,
@@ -22,7 +22,7 @@ import {
 
 const WooCardMobile: FC<WooCardProps> = ({ openWooDrawer }) => {
   const { t } = useTranslation()
-  const price = COLLAR_UNIT_PRICE[SUBSCRIPTION_CYCLE.MONTHLY]
+  const price = WOO_UNIT_PRICE[SUBSCRIPTION_CYCLE.MONTHLY]
   return (
     <div css={containerStyle}>
       <span css={titleStyle}>{t("billing.new_pricing.colla")}</span>
@@ -35,7 +35,7 @@ const WooCardMobile: FC<WooCardProps> = ({ openWooDrawer }) => {
           </span>
         </div>
         <div css={cardContentStyle}>
-          {COLLA_LIST.map(({ label, desc }) => (
+          {WOO_LIST.map(({ label, desc }) => (
             <div key={label} css={cardItemContainerStyle}>
               <span css={cardItemLabelStyle}>{label}</span>
               <span css={cardItemDescStyle}>{desc}</span>

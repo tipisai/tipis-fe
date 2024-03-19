@@ -5,7 +5,7 @@ import { FC, useContext, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { DoubtIcon } from "@illa-public/icon"
 import { SUBSCRIPTION_CYCLE } from "@illa-public/public-types"
-import { COLLAR_UNIT_BY_CYCLE } from "@illa-public/upgrade-modal"
+import { WOO_UNIT_BY_CYCLE } from "@illa-public/upgrade-modal"
 import { BillingContext } from "@/page/SettingPage/team/billing/context"
 import { toThousands } from "@/utils/billing/toThousands"
 import {
@@ -39,7 +39,7 @@ export const WooCard: FC = () => {
   } ${t(`billing.subscription_general.billing_cyle.${cycleKey}`)}`
 
   const wooNum =
-    (wooInfo?.quantity ?? 0) * COLLAR_UNIT_BY_CYCLE[wooInfo?.cycle] * 1000
+    (wooInfo?.quantity ?? 0) * WOO_UNIT_BY_CYCLE[wooInfo?.cycle] * 1000
 
   const showBonus = wooInfo?.bonusConverted && wooInfo?.bonusConverted !== 0
 

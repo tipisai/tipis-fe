@@ -22,7 +22,7 @@ const Billing: FC = () => {
     teamInfo.id,
   )
 
-  const wooInfo = data?.colla?.current
+  const wooInfo = data?.woo?.current
 
   const [triggerGetTeamsInfo] = useLazyGetTeamsInfoQuery()
 
@@ -45,12 +45,12 @@ const Billing: FC = () => {
   }, [wooDrawer, fetchSubscriptionInfo])
 
   const isUnSubscribeWoo =
-    !wooInfo?.plan || wooInfo?.plan === SUBSCRIBE_PLAN.COLLA_FREE
+    !wooInfo?.plan || wooInfo?.plan === SUBSCRIBE_PLAN.WOO_FREE
 
   const isCancelSubscribedWoo =
-    wooInfo?.plan === SUBSCRIBE_PLAN.COLLA_SUBSCRIBE_CANCELED
+    wooInfo?.plan === SUBSCRIBE_PLAN.WOO_SUBSCRIBE_CANCELED
 
-  const isExpiredWoo = wooInfo?.plan === SUBSCRIBE_PLAN.COLLA_SUBSCRIBE_EXPIRED
+  const isExpiredWoo = wooInfo?.plan === SUBSCRIBE_PLAN.WOO_SUBSCRIBE_EXPIRED
   if (isError) return <Navigate to="/500" />
   if (isLoading) return <FullSectionLoading />
   return wooInfo ? (

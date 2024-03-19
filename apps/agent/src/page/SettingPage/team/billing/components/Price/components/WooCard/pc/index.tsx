@@ -3,9 +3,9 @@ import { FC, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { getColor } from "@illa-public/color-scheme"
 import { SUBSCRIPTION_CYCLE } from "@illa-public/public-types"
-import { COLLAR_UNIT_PRICE } from "@illa-public/upgrade-modal"
+import { WOO_UNIT_PRICE } from "@illa-public/upgrade-modal"
 import CollaCardPcBg from "@/page/SettingPage/team/billing/assets/collaCardPcBg.svg?react"
-import { COLLA_LIST } from "../constant"
+import { WOO_LIST } from "../constant"
 import { WooCardProps } from "../interface"
 import {
   bgStyle,
@@ -30,8 +30,8 @@ const WooCardPC: FC<WooCardProps> = ({ openWooDrawer }) => {
   const [cycle, setCycle] = useState(SUBSCRIPTION_CYCLE.MONTHLY)
   const price =
     cycle === SUBSCRIPTION_CYCLE.MONTHLY
-      ? COLLAR_UNIT_PRICE[cycle]
-      : (COLLAR_UNIT_PRICE[cycle] / 12).toFixed(1)
+      ? WOO_UNIT_PRICE[cycle]
+      : (WOO_UNIT_PRICE[cycle] / 12).toFixed(1)
 
   return (
     <div css={containerStyle}>
@@ -80,7 +80,7 @@ const WooCardPC: FC<WooCardProps> = ({ openWooDrawer }) => {
           </Button>
         </div>
         <div css={cardContentStyle}>
-          {COLLA_LIST.map(({ label, desc }) => (
+          {WOO_LIST.map(({ label, desc }) => (
             <div key={label} css={cardItemContainerStyle}>
               <span css={cardItemLabelStyle}>{label}</span>
               <span css={cardItemDescStyle}>{desc}</span>

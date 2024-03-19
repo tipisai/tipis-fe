@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { v4 } from "uuid"
 import { Agent } from "@illa-public/public-types"
-import { CollarModalType, useCollarModal } from "@illa-public/upgrade-modal"
+import { WooModalType, useCollarModal } from "@illa-public/upgrade-modal"
 import { getCurrentTeamInfo, getCurrentUser } from "@illa-public/user-data"
 import { getTextMessagePayload } from "@/api/ws"
 import { Callback } from "@/api/ws/interface"
@@ -261,7 +261,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
         case 17:
         case 18:
           collaModal({
-            modalType: CollarModalType.TOKEN,
+            modalType: WooModalType.TOKEN,
             from: "agent_run",
           })
           break
