@@ -18,7 +18,6 @@ import {
   useUpdateTeamPermissionConfigMutation,
 } from "@illa-public/user-data"
 import store from "@/redux/store"
-import { tempRootPath } from "@/utils/routeHelper"
 import {
   allowEditorOrViewerInviteWrapperStyle,
   moreActionTextStyle,
@@ -70,7 +69,7 @@ export const MoreAction: FC = () => {
       //   replace: true,
       // })
       if (currentIdentifier) {
-        navigate(tempRootPath(currentIdentifier), {
+        navigate("workspace", {
           replace: true,
         })
       }

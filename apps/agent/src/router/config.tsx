@@ -109,8 +109,11 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     loader: workspaceLayoutLoader,
     children: [
       {
+        path: ":teamIdentifier",
+        element: <Navigate to="tipis" replace />,
+      },
+      {
         path: ":teamIdentifier/tipis",
-        index: true,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <TipisDashboard />

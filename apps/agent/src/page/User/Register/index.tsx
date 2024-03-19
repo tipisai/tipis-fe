@@ -19,7 +19,6 @@ import { getLocalLanguage } from "@/i18n"
 import { linkTrk, rdtSignUpTrk, twqTrk } from "@/utils/gaHelper"
 import { LINKEDIN_CONVERSION_ID, TWITTER_ID } from "@/utils/gaHelper/constent"
 import { track } from "@/utils/mixpanelHelper"
-import { tempRootPath } from "@/utils/routeHelper"
 import { TIPISStorage } from "@/utils/storage"
 import { RegisterFields } from "../interface"
 import { RegisterErrorMsg } from "./interface"
@@ -88,7 +87,7 @@ const RegisterPage: FC = () => {
       // navigate(
       //   `/${searchParams.toString() ? "?" + searchParams.toString() : ""}`,
       // )
-      navigate(tempRootPath(""))
+      navigate("/workspace")
     } catch (e) {
       if (isILLAAPiError(e)) {
         track(

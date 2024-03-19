@@ -1,7 +1,6 @@
 import { Global } from "@emotion/react"
 import { App as AntdContextProvider, ConfigProvider, ThemeConfig } from "antd"
 import { HelmetProvider } from "react-helmet-async"
-import { UpgradeModalGroup } from "@illa-public/upgrade-modal"
 import tipisThemConfig from "@/config/them/theme-tipis.json"
 import { illaCodeMirrorTooltipStyle } from "./components/CodeEditor/CodeMirror/theme"
 import { ILLARouterProvider } from "./router/config"
@@ -14,7 +13,6 @@ function App() {
         <AntdContextProvider component={false}>
           <Global styles={globalStyle} />
           <ILLARouterProvider />
-          <UpgradeModalGroup />
           <div
             className="illaCodeMirrorWrapper"
             css={illaCodeMirrorTooltipStyle}

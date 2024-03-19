@@ -136,6 +136,7 @@ export const PCLogin: FC<LoginPageProps> = (props) => {
                   style={{
                     width: "100%",
                   }}
+                  tabIndex={1}
                   size="large"
                   status={
                     !!formState?.errors.email || !!errorMsg.email
@@ -207,6 +208,7 @@ export const PCLogin: FC<LoginPageProps> = (props) => {
                   style={{
                     width: "100%",
                   }}
+                  tabIndex={2}
                   status={
                     !!formState?.errors.password || !!errorMsg.password
                       ? "error"

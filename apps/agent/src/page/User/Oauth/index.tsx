@@ -14,12 +14,7 @@ import { getAuthToken, sendTagEvent, setAuthToken } from "@illa-public/utils"
 import { linkTrk, rdtSignUpTrk, twqTrk } from "@/utils/gaHelper"
 import { LINKEDIN_CONVERSION_ID, TWITTER_ID } from "@/utils/gaHelper/constent"
 import { track } from "@/utils/mixpanelHelper"
-import {
-  LOGIN_PATH,
-  REGISTER_PATH,
-  getLinkedPath,
-  tempRootPath,
-} from "@/utils/routeHelper"
+import { LOGIN_PATH, REGISTER_PATH, getLinkedPath } from "@/utils/routeHelper"
 import { mobilePageStyle, pageStyle } from "./style"
 
 const OAuth: FC = () => {
@@ -81,7 +76,7 @@ const OAuth: FC = () => {
                 finalRedirectURL.searchParams.set("token", getAuthToken() ?? "")
                 window.location.assign(finalRedirectURL.toString())
               } else {
-                navigate(tempRootPath(""))
+                navigate("/workspace")
               }
               break
             }
@@ -112,7 +107,7 @@ const OAuth: FC = () => {
                 finalRedirectURL.searchParams.set("token", getAuthToken() ?? "")
                 window.location.assign(finalRedirectURL.toString())
               } else {
-                navigate(tempRootPath(""))
+                navigate("/workspace")
               }
               break
             }
@@ -176,7 +171,7 @@ const OAuth: FC = () => {
                 navigate(getLinkedPath(""))
                 break
               default:
-                navigate(tempRootPath(""))
+                navigate("/workspace")
             }
           }
         })

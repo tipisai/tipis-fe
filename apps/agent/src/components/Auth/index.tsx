@@ -1,6 +1,7 @@
 import { FC } from "react"
 import { Navigate, useParams, useSearchParams } from "react-router-dom"
 import { ILLAMixpanel } from "@illa-public/mixpanel-utils"
+import { UpgradeModalGroup } from "@illa-public/upgrade-modal"
 import { useGetUserInfoAndTeamsInfoByTokenQuery } from "@illa-public/user-data"
 import { getILLACloudURL } from "@illa-public/utils"
 import i18n from "@/i18n"
@@ -11,8 +12,9 @@ const ProtectedComponent: FC<AuthProps> = (props) => {
   const [searchParams] = useSearchParams()
   const myTeamIdentifier = searchParams.get("myTeamIdentifier")
   const mixedTeamIdentifier = myTeamIdentifier || teamIdentifier
-  const { data, isSuccess, isFetching, error } =
-    useGetUserInfoAndTeamsInfoByTokenQuery(mixedTeamIdentifier)
+  const { data, isSuccess, error } = useGetUserInfoAndTeamsInfoByTokenQuery({
+    teamIdentifier: mixedTeamIdentifier,
+  })
 
   if (error && "status" in error) {
     if (error.status === 401) {
@@ -25,7 +27,7 @@ const ProtectedComponent: FC<AuthProps> = (props) => {
     return <Navigate to="/404" />
   }
 
-  if (data && !isFetching) {
+  if (data) {
     const currentLng = i18n.language
     ILLAMixpanel.setUserID(data.user.userID)
     const reportedUserInfo: Record<string, any> = {}
@@ -38,17 +40,28 @@ const ProtectedComponent: FC<AuthProps> = (props) => {
       return null
     }
 
-    let currentTeam = data.teams.find(
-      (team) => team.identifier === mixedTeamIdentifier,
-    )
-    if (window.currentTeamIdentifier) {
+    let currentTeam
+    if (mixedTeamIdentifier) {
       currentTeam = data.teams.find(
-        (team) => team.identifier === window.currentTeamIdentifier,
+        (team) => team.identifier === mixedTeamIdentifier,
       )
+      if (window.currentTeamIdentifier) {
+        currentTeam = data.teams.find(
+          (team) => team.identifier === window.currentTeamIdentifier,
+        )
+      }
+      if (!currentTeam) {
+        return <Navigate to="/403" />
+      }
+    } else {
+      if (data.teams.length >= 0) {
+        currentTeam = data.teams[0]
+        return <Navigate to={`${currentTeam.identifier}`} />
+      } else {
+        return <Navigate to="/403" />
+      }
     }
-    if (!currentTeam) {
-      return <Navigate to="/403" />
-    }
+
     ILLAMixpanel.setGroup(currentTeam.identifier)
     if (
       Array.isArray(props.needRole) &&
@@ -59,7 +72,12 @@ const ProtectedComponent: FC<AuthProps> = (props) => {
     }
   }
 
-  return isSuccess ? props.children : null
+  return isSuccess ? (
+    <>
+      {props.children}
+      <UpgradeModalGroup />
+    </>
+  ) : null
 }
 
 export default ProtectedComponent

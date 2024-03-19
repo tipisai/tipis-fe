@@ -66,8 +66,3 @@ export const LOGIN_PATH = "/user/login"
 export const getLinkedPath = (teamIdentifier: string) => {
   return `/setting/${teamIdentifier}/linked`
 }
-
-// TODO: WTF not need identifier
-export const tempRootPath = (teamIdentifier: string) => {
-  return `/${teamIdentifier}`
-}
