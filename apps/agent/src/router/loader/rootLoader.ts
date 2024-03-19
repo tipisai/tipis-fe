@@ -33,8 +33,8 @@ export const rootLoader = async (args: LoaderFunctionArgs) => {
     }
   } else {
     if (inviteToken) {
-      return redirect(`/register${url.search ?? ""}`)
+      return redirect(`/user/register${url.search ?? ""}`)
     }
-    return redirect(`/login${url.search ?? ""}`)
+    return redirect(`/user/login${url.search ?? ""}`)
   }
 }
