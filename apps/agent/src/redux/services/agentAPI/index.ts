@@ -91,7 +91,6 @@ export const agentAuthAPI = createApi({
       { teamID: string; agentRaw: AgentRaw }
     >({
       query: ({ teamID, agentRaw }) => {
-        console.log("agentRaw", agentRaw)
         return {
           url: `/teams/${teamID}/aiAgent`,
           method: "POST",

@@ -24,7 +24,6 @@ const CustomGroupingCell: FC<GridRenderCellParams> = (props) => {
     if (rowNode.type !== "group") {
       return
     }
-    console.log("apiRef.current", apiRef.current.getExpandedDetailPanels())
     apiRef.current.setRowChildrenExpansion(id, !rowNode.childrenExpanded)
     apiRef.current.setCellFocus(id, field)
     event.stopPropagation()
