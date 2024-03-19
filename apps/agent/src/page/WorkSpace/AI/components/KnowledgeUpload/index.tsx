@@ -95,7 +95,7 @@ const mergeUploadValues = (
 }
 
 const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
-  values,
+  values = [],
   removeFile,
   addFile,
 }) => {
