@@ -81,5 +81,5 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           cd k8s-application-do/namespace-$ILLA_APP_ENV
-          kubectl apply -f ./illa-builder-frontend/ -n $ILLA_APP_ENV
-          kubectl -n $ILLA_APP_ENV rollout restart deployment illa-builder-frontend
+          kubectl apply -f ./tipisai-cloud-frontend/ -n $ILLA_APP_ENV
+          kubectl -n $ILLA_APP_ENV rollout restart deployment tipisai-cloud-frontend
