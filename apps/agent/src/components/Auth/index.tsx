@@ -6,10 +6,6 @@ import { getILLACloudURL } from "@illa-public/utils"
 import i18n from "@/i18n"
 import { AuthProps } from "./interface"
 
-// 两个状态
-// 1. 有teamidentifier, 但当前未更新或未及时更新
-// 2. 没有teamidentifier, 需要重定向的
-
 const ProtectedComponent: FC<AuthProps> = (props) => {
   const { teamIdentifier } = useParams()
   const [searchParams] = useSearchParams()
@@ -17,11 +13,6 @@ const ProtectedComponent: FC<AuthProps> = (props) => {
   const mixedTeamIdentifier = myTeamIdentifier || teamIdentifier
   const { data, isSuccess, isFetching, error } =
     useGetUserInfoAndTeamsInfoByTokenQuery(mixedTeamIdentifier)
-
-  // TODO: del it
-  isFetching
-
-  console.log("1111")
 
   if (error && "status" in error) {
     if (error.status === 401) {
@@ -34,7 +25,7 @@ const ProtectedComponent: FC<AuthProps> = (props) => {
     return <Navigate to="/404" />
   }
 
-  if (data) {
+  if (data && !isFetching) {
     const currentLng = i18n.language
     ILLAMixpanel.setUserID(data.user.userID)
     const reportedUserInfo: Record<string, any> = {}

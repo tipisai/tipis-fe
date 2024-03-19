@@ -44,7 +44,13 @@ const CreateTeamModal: FC<CreateTeamModalProps> = (props) => {
   const onSubmitCreateTeam: SubmitHandler<CreateTeamFields> = async (data) => {
     try {
       setLoading(true)
-      const { currentTeamID } = await createTeam(data).unwrap()
+      const res = await createTeam(data).unwrap()
+      if (!res.currentTeamID) {
+        message.error({
+          content: t("team_create_fail"),
+        })
+        return
+      }
       onCloseCreateModal()
       message.success({
         content: t("team_create_suc"),
@@ -53,17 +59,10 @@ const CreateTeamModal: FC<CreateTeamModalProps> = (props) => {
         element: "team_modal_create_button",
         parameter2: "suc",
       })
-      if (!currentTeamID) {
-        message.error({
-          content: t("team_create_fail"),
-        })
-        return
-      }
       const url = getExploreTipisPath(data.identifier)
       navigate(url, { replace: true })
     } catch (e) {
       if (isILLAAPiError(e)) {
-        // TODO: WTF only one owner
         const res = handleFreeTeamLimitError(e, FREE_TEAM_LIMIT_TYPE.CREATE)
         if (res) return
         switch (e?.data?.errorFlag) {
