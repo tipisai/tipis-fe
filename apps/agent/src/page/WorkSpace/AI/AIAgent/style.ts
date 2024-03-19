@@ -4,5 +4,4 @@ export const editAIAgentContainerStyle = css`
   width: 100%;
   display: flex;
   height: 100%;
-  overflow: hidden;
 `
