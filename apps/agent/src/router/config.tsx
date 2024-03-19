@@ -4,6 +4,7 @@ import { Page403, Page404, Page500 } from "@illa-public/status-page"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import SettingLayout from "@/page/SettingPage"
 import PCWorkspaceLayout from "../Layout/Workspace/pc"
+import SettingProtectedComponent from "../components/SettingProtectedComponent"
 import UserLayout from "../page/User/Layout/index"
 import { buildRouter } from "./buildRouter"
 import { RoutesObjectPro } from "./interface"
@@ -174,12 +175,14 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
       },
     ],
   },
-
   {
-    path: "/setting/:teamIdentifier",
+    path: "/setting",
     accessByMobile: true,
-    element: <SettingLayout />,
-    needLogin: true,
+    element: (
+      <SettingProtectedComponent>
+        <SettingLayout />
+      </SettingProtectedComponent>
+    ),
     children: [
       {
         index: true,
@@ -226,6 +229,15 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         ),
         accessByMobile: true,
       },
+    ],
+  },
+
+  {
+    path: "/setting/:teamIdentifier",
+    accessByMobile: true,
+    element: <SettingLayout />,
+    needLogin: true,
+    children: [
       {
         path: "team-settings",
         element: (

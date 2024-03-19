@@ -2,12 +2,11 @@ import Icon from "@ant-design/icons"
 import { Avatar, Dropdown } from "antd"
 import { FC, forwardRef } from "react"
 import { useSelector } from "react-redux"
-import { Link, useParams } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { getCurrentUser } from "@illa-public/user-data"
 import DiscordIcon from "@/assets/public/discord.svg?react"
 import DocumentIcon from "@/assets/public/document.svg?react"
 import SettingIcon from "@/assets/public/setting.svg?react"
-import { getSettingPath } from "@/utils/routeHelper"
 import {
   avatarContainerStyle,
   emailStyle,
@@ -18,14 +17,6 @@ import {
 
 const UserInfoContent: FC = forwardRef<HTMLDivElement>((_props, ref) => {
   const userInfo = useSelector(getCurrentUser)
-
-  const { teamIdentifier } = useParams()
-
-  const toSettingPage = () => {
-    if (!teamIdentifier) return ""
-    const url = getSettingPath(teamIdentifier)
-    return url
-  }
 
   const menuItems = [
     {
@@ -53,7 +44,7 @@ const UserInfoContent: FC = forwardRef<HTMLDivElement>((_props, ref) => {
     {
       key: "3",
       icon: <Icon component={SettingIcon} />,
-      label: <Link to={toSettingPage()}>Setting</Link>,
+      label: <Link to="/setting">Setting</Link>,
     },
   ]
 
