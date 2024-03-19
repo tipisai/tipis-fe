@@ -57,22 +57,22 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
 
   const accountOptions = [
     {
-      path: "account",
+      path: "/setting/account",
       label: t("profile.setting.personal_info"),
       icon: <></>,
     },
     {
-      path: "password",
+      path: "/setting/password",
       label: t("profile.setting.password.title"),
       icon: <></>,
     },
     {
-      path: "linked",
+      path: "/setting/linked",
       label: t("profile.setting.oauth.title.oauth"),
       icon: <></>,
     },
     {
-      path: "language",
+      path: "/setting/language",
       label: t("profile.setting.language"),
       icon: <></>,
     },
@@ -80,17 +80,17 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
 
   const teamOptions = [
     {
-      path: "team-settings",
+      path: `/setting/${currentTeamInfo.identifier}/team-settings`,
       label: t("team_setting.team_info.title"),
       hidden: !teamLicenseAllPaid,
     },
     {
-      path: "members",
+      path: `/setting/${currentTeamInfo.identifier}/members`,
       label: t("team_setting.left_panel.member"),
       hidden: showMember,
     },
     {
-      path: "billing",
+      path: `/setting/${currentTeamInfo.identifier}/billing`,
       label: t("billing.menu.billing"),
       hidden: !showBilling,
     },
