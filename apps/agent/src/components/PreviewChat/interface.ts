@@ -11,6 +11,12 @@ import { AgentMessageType } from "./TipisWebscoketContext/interface"
 
 export type EDIT_STATE = "EDIT" | "RUN"
 
+export enum MESSAGE_STATUS {
+  ANALYZE_SUCCESS = "analyze_success",
+  ANALYZE_ERROR = "analyze_error",
+  ANALYZE_PENDING = "analyze_pending",
+}
+
 export enum SenderType {
   USER = 1,
   AGENT = 2,
@@ -54,6 +60,12 @@ export interface ChatMessage {
   sender: ChatSender
   messageType: MESSAGE_SYNC_TYPE
   knowledgeFiles?: IKnowledgeFile[]
+  status?: MESSAGE_STATUS
+}
+
+export interface IGroupMessage {
+  threadID: string
+  items: ChatMessage[]
 }
 
 export interface ChatSendRequestPayload {
@@ -75,7 +87,7 @@ export interface PreviewChatProps {
   wsContextValue: {
     wsStatus: ILLA_WEBSOCKET_STATUS
     isRunning: boolean
-    chatMessages: ChatMessage[]
+    chatMessages: (IGroupMessage | ChatMessage)[]
     isReceiving: boolean
     sendMessage: (
       payload: ChatSendRequestPayload,

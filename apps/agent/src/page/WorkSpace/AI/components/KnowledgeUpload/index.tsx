@@ -1,5 +1,5 @@
 import Icon from "@ant-design/icons"
-import { App, Button, ConfigProvider, Progress } from "antd"
+import { App, Button, Progress } from "antd"
 import { ChangeEvent, FC, useMemo, useRef, useSyncExternalStore } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
@@ -212,26 +212,14 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
   return (
     <>
       <div>
-        <ConfigProvider
-          theme={{
-            components: {
-              Button: {
-                paddingBlockLG: 8,
-                paddingInlineLG: 16,
-                fontSizeLG: 14,
-              },
-            },
-          }}
+        <Button
+          block
+          size="large"
+          icon={<Icon component={UploadIcon} />}
+          onClick={handleClickUpload}
         >
-          <Button
-            block
-            size="large"
-            icon={<Icon component={UploadIcon} />}
-            onClick={handleClickUpload}
-          >
-            Upload
-          </Button>
-        </ConfigProvider>
+          Upload
+        </Button>
         <input
           style={{ display: "none" }}
           type="file"

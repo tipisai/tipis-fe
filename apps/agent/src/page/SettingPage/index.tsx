@@ -17,7 +17,7 @@ export const Setting: FC = () => {
   const [modalVisible, setModalVisible] = useState(false)
   const teamInfo = useSelector(getCurrentTeamInfo)
   const isOwner = teamInfo?.myRole === USER_ROLE.OWNER
-  const matchMobileSettingNav = useMatch("/setting/:teamIdentifier")
+  const matchMobileSettingNav = useMatch("/setting")
   const matchMobileBilling = useMatch("/setting/:teamIdentifier/billing")
 
   const isLogin = useSelector(getCurrentUserID)
