@@ -8,17 +8,10 @@ import {
   ILLA_MIXPANEL_CLOUD_PAGE_NAME,
   ILLA_MIXPANEL_EVENT_TYPE,
 } from "@illa-public/mixpanel-utils"
-import {
-  MemberInfo,
-  SUBSCRIBE_PLAN,
-  USER_ROLE,
-  USER_STATUS,
-} from "@illa-public/public-types"
-import { useUpgradeModal } from "@illa-public/upgrade-modal"
+import { MemberInfo, USER_ROLE, USER_STATUS } from "@illa-public/public-types"
 import {
   getCurrentTeamInfo,
   getCurrentUser,
-  getPlanUtils,
   teamActions,
 } from "@illa-public/user-data"
 import { canManageInvite } from "@illa-public/user-role-utils"
@@ -44,8 +37,6 @@ const TeamSelectAndInviteButton: FC<TeamSelectAndInviteButton> = ({
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const userInfo = useSelector(getCurrentUser)
-  const teamPlan = getPlanUtils(currentTeamInfo)
-  const upgradeModal = useUpgradeModal()
 
   const handleClickInvite = () => {
     track(
@@ -53,19 +44,7 @@ const TeamSelectAndInviteButton: FC<TeamSelectAndInviteButton> = ({
       ILLA_MIXPANEL_CLOUD_PAGE_NAME.HOMEPAGE,
       { element: "invite_entry" },
     )
-    if (teamPlan === SUBSCRIBE_PLAN.TEAM_LICENSE_FREE) {
-      upgradeModal({
-        modalType: "upgrade",
-        from: "homepage_invite",
-      })
-    } else if ((currentTeamInfo?.totalTeamLicense.balance ?? 0) <= 0) {
-      upgradeModal({
-        modalType: "add-license",
-        from: "homepage_invite",
-      })
-    } else {
-      setInviteModalVisible(true)
-    }
+    setInviteModalVisible(true)
   }
 
   return (
