@@ -10,7 +10,7 @@ const SettingProtectedComponent: FC<SettingProtectedAuthProps> = (props) => {
 
   if (error && "status" in error) {
     if (error.status === 401) {
-      window.location.href = `${getILLACloudURL(window.customDomain)}/login?redirectURL=${encodeURIComponent(
+      window.location.href = `${getILLACloudURL(window.customDomain)}/user/login?redirectURL=${encodeURIComponent(
         window.location.href,
       )}`
       return null

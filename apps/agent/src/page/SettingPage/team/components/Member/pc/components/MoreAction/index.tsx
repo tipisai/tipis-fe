@@ -163,7 +163,7 @@ export const MoreAction: FC<MoreActionProps> = (props) => {
       ),
       disabled:
         currentUserRole !== USER_ROLE.OWNER ||
-        userStatus !== USER_STATUS.PENDING,
+        userStatus === USER_STATUS.PENDING,
     },
     {
       key: "remove",

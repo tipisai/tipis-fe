@@ -1,16 +1,12 @@
 import Icon from "@ant-design/icons"
-import { FC, useMemo } from "react"
+import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { PreviousIcon } from "@illa-public/icon"
 import { SUBSCRIBE_PLAN } from "@illa-public/public-types"
 import { getCurrentTeamInfo, getPlanUtils } from "@illa-public/user-data"
-import {
-  canAccessManage,
-  canAccessMember,
-  canManagePayment,
-} from "@illa-public/user-role-utils"
+import { canManagePayment } from "@illa-public/user-role-utils"
 import ProfileIcon from "@/assets/setting/profile.svg?react"
 import TeamIcon from "@/assets/setting/team.svg?react"
 import TeamSelect from "@/components/TeamSelect"
@@ -37,15 +33,15 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
 
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
 
-  const teamLicenseAllPaid = canAccessManage(
-    currentTeamInfo?.myRole,
-    getPlanUtils(currentTeamInfo),
-    currentTeamInfo?.totalTeamLicense?.teamLicenseAllPaid,
-  )
+  // const teamLicenseAllPaid = canAccessManage(
+  //   currentTeamInfo?.myRole,
+  //   getPlanUtils(currentTeamInfo),
+  //   currentTeamInfo?.totalTeamLicense?.teamLicenseAllPaid,
+  // )
 
-  const showMember = useMemo(() => {
-    return !canAccessMember(currentTeamInfo) || !teamLicenseAllPaid
-  }, [currentTeamInfo, teamLicenseAllPaid])
+  // const showMember = useMemo(() => {
+  //   return !canAccessMember(currentTeamInfo) || !teamLicenseAllPaid
+  // }, [currentTeamInfo, teamLicenseAllPaid])
 
   const showBilling = canManagePayment(
     currentTeamInfo?.myRole,
@@ -82,12 +78,12 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
     {
       path: `/setting/${currentTeamInfo.identifier}/team-settings`,
       label: t("team_setting.team_info.title"),
-      hidden: !teamLicenseAllPaid,
+      // hidden: !teamLicenseAllPaid,
     },
     {
       path: `/setting/${currentTeamInfo.identifier}/members`,
       label: t("team_setting.left_panel.member"),
-      hidden: showMember,
+      // hidden: showMember,
     },
     {
       path: `/setting/${currentTeamInfo.identifier}/billing`,
