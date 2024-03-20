@@ -59,12 +59,15 @@ export const getTabName = (tabName: string, tabType: TAB_TYPE) => {
   if (tabName) return tabName
   switch (tabType) {
     case TAB_TYPE.CREATE_TIPIS:
+      return "Create tipi"
     case TAB_TYPE.EDIT_TIPIS:
       return "Edit tipi"
     case TAB_TYPE.CHAT:
       return "Default chat"
     case TAB_TYPE.CREATE_FUNCTION:
+      return "Create Function"
     case TAB_TYPE.EDIT_FUNCTION:
+      return "Edit Function"
     case TAB_TYPE.EXPLORE_TIPIS:
       return "Explore tipis"
     case TAB_TYPE.EXPLORE_FUNCTION:

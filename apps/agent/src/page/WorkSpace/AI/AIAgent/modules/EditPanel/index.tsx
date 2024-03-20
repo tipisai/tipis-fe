@@ -8,11 +8,10 @@ import {
   ILLA_MIXPANEL_BUILDER_PAGE_NAME,
   ILLA_MIXPANEL_EVENT_TYPE,
 } from "@illa-public/mixpanel-utils"
-import { Agent } from "@illa-public/public-types"
 import EditPanelLayout from "@/Layout/EditPanelLayout"
 import { track } from "@/utils/mixpanelHelper"
 import { AgentWSContext } from "../../../context/AgentWSContext"
-import { SCROLL_ID } from "../../interface"
+import { IAgentForm, SCROLL_ID } from "../../interface"
 import { agentData2JSONReport, handleScrollToElement } from "../../utils"
 import KnowledgeEditor from "./components/KnowledgeEditor"
 import PromptEditor from "./components/PromptEditor"
@@ -24,7 +23,7 @@ const EditPanel: FC = () => {
   const { isConnecting, isRunning, reconnect, connect } =
     useContext(AgentWSContext)
 
-  const { clearErrors, getValues, setError } = useFormContext<Agent>()
+  const { clearErrors, getValues, setError } = useFormContext<IAgentForm>()
 
   const handleVerifyOnStart = () => {
     clearErrors()

@@ -5,10 +5,10 @@ import { useDispatch, useSelector } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom"
 import { MinusIcon } from "@illa-public/icon"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
+import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
+import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
-import { TAB_TYPE } from "../../../../../redux/ui/recentTab/interface"
-import { getRecentTabInfos } from "../../../../../redux/ui/recentTab/selector"
-import { getExploreTipisPath } from "../../../../../utils/routeHelper"
+import { getExploreTipisPath } from "@/utils/routeHelper"
 import { ITipsTab } from "./interface"
 import {
   deleteButtonContainerStyle,
