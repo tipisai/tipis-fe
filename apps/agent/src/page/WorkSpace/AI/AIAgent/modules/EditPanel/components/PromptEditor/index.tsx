@@ -34,7 +34,7 @@ const PromptEditor: FC = memo(() => {
               {...promptField}
               css={codeEditorErrorStyle(!!errors.prompt)}
               placeholder={t("editor.ai-agent.placeholder.prompt")}
-              minHeight="200px"
+              height="600px"
               completionOptions={variables}
             />
             {errors.prompt?.message && (

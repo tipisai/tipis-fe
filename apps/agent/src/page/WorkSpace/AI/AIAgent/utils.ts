@@ -158,6 +158,7 @@ export const useSubmitSaveAgent = () => {
         message.error({
           content: t("dashboard.message.create-failed"),
         })
+        throw e
       }
     },
     [

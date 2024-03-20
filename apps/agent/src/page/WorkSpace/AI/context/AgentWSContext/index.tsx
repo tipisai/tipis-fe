@@ -203,7 +203,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
     setChatMessages([])
   }, [])
 
-  const { sendMessage, reconnect, connect, wsStatus, leaveRoom } = useContext(
+  const { sendMessage, connect, wsStatus, leaveRoom } = useContext(
     TipisWebSocketContext,
   )
 
@@ -393,11 +393,10 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
   }, [cleanMessage, leaveRoom])
 
   const innerReconnect = useCallback(async () => {
-    const initConnectConfig = getConnectParams()
     innerLeaveRoom()
     setIsRunning(false)
-    await reconnect(initConnectConfig)
-  }, [getConnectParams, innerLeaveRoom, reconnect])
+    await innerConnect()
+  }, [innerConnect, innerLeaveRoom])
 
   const value = useMemo(() => {
     return {
