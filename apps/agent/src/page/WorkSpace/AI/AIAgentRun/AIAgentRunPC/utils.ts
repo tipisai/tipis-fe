@@ -10,7 +10,7 @@ import { Agent } from "@illa-public/public-types"
 import { useUpgradeModal } from "@illa-public/upgrade-modal"
 import { getCurrentTeamInfo, getPlanUtils } from "@illa-public/user-data"
 import { canUseUpgradeFeature } from "@illa-public/user-role-utils"
-import { track } from "../../../../../utils/mixpanelHelper"
+import { track } from "@/utils/mixpanelHelper"
 import { AgentWSContext } from "../../context/AgentWSContext"
 
 export const useReRerunAgent = () => {

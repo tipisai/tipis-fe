@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom"
 import { MinusIcon } from "@illa-public/icon"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
+import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
+import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
-import { TAB_TYPE } from "../../../../../redux/ui/recentTab/interface"
-import { getRecentTabInfos } from "../../../../../redux/ui/recentTab/selector"
-import { getExploreTipisPath } from "../../../../../utils/routeHelper"
+import { getExploreTipisPath } from "@/utils/routeHelper"
+import { DEFAULT_CHAT_ID } from "../../../../../redux/ui/recentTab/state"
 import { ITipsTab } from "./interface"
 import {
   deleteButtonContainerStyle,
@@ -80,17 +81,19 @@ const TipisTab: FC<ITipsTab> = (props) => {
             <span css={menuItemButtonContentStyle}>
               {getTabName(tabName, tabType)}
             </span>
-            <div
-              css={deleteButtonContainerStyle(isActive)}
-              className="delete-button"
-            >
-              <Button
-                size="small"
-                icon={<Icon component={MinusIcon} />}
-                onClick={onClickRemoveTab}
-                type="text"
-              />
-            </div>
+            {tabID !== DEFAULT_CHAT_ID && (
+              <div
+                css={deleteButtonContainerStyle(isActive)}
+                className="delete-button"
+              >
+                <Button
+                  size="small"
+                  icon={<Icon component={MinusIcon} />}
+                  onClick={onClickRemoveTab}
+                  type="text"
+                />
+              </div>
+            )}
           </div>
         </div>
       )}

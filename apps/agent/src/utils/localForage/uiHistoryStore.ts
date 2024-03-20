@@ -1,4 +1,4 @@
-import { tabStore } from "."
+import { uiHistoryDataStore } from "."
 import { ChatMessage } from "../../components/PreviewChat/interface"
 
 export interface IUiHistoryData {
@@ -8,12 +8,26 @@ export interface IUiHistoryData {
 }
 
 export const getUiHistoryDataByCacheID = async (cacheID: string) => {
-  return ((await tabStore.getItem(cacheID)) ?? {}) as IUiHistoryData
+  return ((await uiHistoryDataStore.getItem(cacheID)) ?? {}) as IUiHistoryData
 }
 
-export const setUiHistoryData = async (
+export const setUiHistoryData = (
   cacheID: string,
   uiHistoryData: IUiHistoryData,
 ) => {
-  tabStore.setItem(cacheID, uiHistoryData)
+  uiHistoryDataStore.setItem(cacheID, uiHistoryData)
+}
+
+export const deleteUiHistoryData = (cacheID: string) => {
+  uiHistoryDataStore.removeItem(cacheID)
+}
+
+export const updateUiHistoryData = async (
+  oldCacheID: string,
+  newCacheID: string,
+  uiHistoryData: IUiHistoryData,
+) => {
+  const oldData = (await getUiHistoryDataByCacheID(oldCacheID)) ?? {}
+  setUiHistoryData(newCacheID, { ...oldData, ...uiHistoryData })
+  deleteUiHistoryData(oldCacheID)
 }

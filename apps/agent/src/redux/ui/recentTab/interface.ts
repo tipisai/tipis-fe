@@ -1,6 +1,7 @@
 export enum TAB_TYPE {
   "CREATE_TIPIS",
   "EDIT_TIPIS",
+  "RUN_TIPIS",
   "CHAT",
   "CREATE_FUNCTION",
   "EDIT_FUNCTION",

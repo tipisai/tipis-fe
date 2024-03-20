@@ -13,6 +13,7 @@ import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import {
   getCreateTipiPath,
+  getDefaultChatPath,
   getExploreFunctionsPath,
   getExploreTipisPath,
 } from "@/utils/routeHelper"
@@ -36,6 +37,19 @@ const FeatureArea: FC = () => {
     }
     dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
     navigate(getCreateTipiPath(currentTeamInfo?.identifier, tempID))
+  }
+
+  const handleClickCreateChat = () => {
+    const tempID = v4()
+    const tabsInfo: ITabInfo = {
+      tabName: "",
+      tabIcon: "",
+      tabType: TAB_TYPE.CHAT,
+      tabID: tempID,
+      cacheID: tempID,
+    }
+    dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
+    navigate(getDefaultChatPath(currentTeamInfo?.identifier, tempID))
   }
 
   const handleClickExploreTipis = () => {
@@ -99,7 +113,11 @@ const FeatureArea: FC = () => {
           onClick={handleClickFunction}
         />
       </div>
-      <MenuItemButton text="New Chat" icon={<Icon component={PlusIcon} />} />
+      <MenuItemButton
+        text="New Chat"
+        icon={<Icon component={PlusIcon} />}
+        onClick={handleClickCreateChat}
+      />
       <MenuItemButton
         text="Create a tipis"
         icon={<Icon component={PenIcon} />}

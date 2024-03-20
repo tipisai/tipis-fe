@@ -1,10 +1,8 @@
-import { FC, useCallback, useEffect } from "react"
+import { FC, useCallback, useEffect, useMemo } from "react"
 import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { useBeforeUnload, useParams } from "react-router-dom"
 import { Agent } from "@illa-public/public-types"
-import { getCurrentTeamInfo } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
 import {
@@ -15,7 +13,7 @@ import { AgentWSProvider } from "../context/AgentWSContext"
 import { AIAgent } from "./aiagent"
 import FormContext from "./components/FormContext"
 import HeaderTools from "./components/HeaderTools"
-import { AgentInitial } from "./interface"
+import { AgentInitial, IAgentForm } from "./interface"
 
 // import {
 //   track,
@@ -25,24 +23,17 @@ import { AgentInitial } from "./interface"
 
 export const CreateAIAgentPage: FC = () => {
   const { agentID } = useParams()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
 
-  const agent = {
-    ...AgentInitial,
-    agentID: agentID!,
-    teamID: currentTeamInfo.id,
-    teamIdentifier: currentTeamInfo.identifier,
-    teamIcon: currentTeamInfo.icon,
-  }
+  const initAgent: IAgentForm = useMemo(
+    () => ({
+      ...AgentInitial,
+      cacheID: agentID!,
+    }),
+    [agentID],
+  )
 
-  const methods = useForm<Agent>({
-    values: {
-      ...agent,
-      variables:
-        agent.variables.length === 0
-          ? [{ key: "", value: "" }]
-          : agent.variables,
-    },
+  const methods = useForm<IAgentForm>({
+    values: initAgent,
   })
 
   const values = useWatch({
@@ -66,9 +57,8 @@ export const CreateAIAgentPage: FC = () => {
   // })
 
   const setUiHistoryFormData = useCallback(async () => {
-    const cacheID = agent.agentID
+    const cacheID = initAgent.cacheID
     const uiHistoryData = await getUiHistoryDataByCacheID(cacheID)
-    console.log("oldValues", values)
     if (uiHistoryData) {
       const { formData } = uiHistoryData
       setUiHistoryData(cacheID!, {
@@ -83,11 +73,11 @@ export const CreateAIAgentPage: FC = () => {
         formData: values,
       })
     }
-  }, [agent.agentID, values])
+  }, [initAgent.cacheID, values])
 
   useEffect(() => {
     const getHistoryDataAndSetFormData = async () => {
-      const cacheID = agent.agentID
+      const cacheID = initAgent.cacheID
       const uiHistoryData = await getUiHistoryDataByCacheID(cacheID)
       if (uiHistoryData) {
         const { formData } = uiHistoryData
@@ -97,7 +87,7 @@ export const CreateAIAgentPage: FC = () => {
       }
     }
     getHistoryDataAndSetFormData()
-  }, [agent.agentID, methods])
+  }, [initAgent.cacheID, methods])
 
   useBeforeUnload(setUiHistoryFormData)
 
@@ -109,7 +99,7 @@ export const CreateAIAgentPage: FC = () => {
 
   return (
     <FormProvider {...methods}>
-      <TipisWebSocketProvider>
+      <TipisWebSocketProvider key={agentID}>
         <AgentWSProvider>
           <FormContext>
             <WorkspacePCHeaderLayout

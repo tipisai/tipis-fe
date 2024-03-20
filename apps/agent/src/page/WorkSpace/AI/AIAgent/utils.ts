@@ -2,7 +2,7 @@ import { App } from "antd"
 import { useCallback } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { isPremiumModel } from "@illa-public/market-agent"
 import {
   ILLA_MIXPANEL_BUILDER_PAGE_NAME,
@@ -16,10 +16,14 @@ import {
   useGetAgentIconUploadAddressMutation,
   usePutAgentDetailMutation,
 } from "@/redux/services/agentAPI"
+import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
+import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { fetchUploadBase64 } from "@/utils/file"
+import { updateUiHistoryData } from "@/utils/localForage/uiHistoryStore"
 import { track } from "@/utils/mixpanelHelper"
+import { IAgentForm } from "./interface"
 
-export const agentData2JSONReport = (agent: Agent) => {
+export const agentData2JSONReport = (agent: IAgentForm) => {
   try {
     const {
       agentType,
@@ -52,11 +56,12 @@ export const useSubmitSaveAgent = () => {
 
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const currentUserInfo = useSelector(getCurrentUser)
-  const { reset } = useFormContext<Agent>()
+  const { reset } = useFormContext<IAgentForm>()
+  const dispatch = useDispatch()
 
   const handleSubmitSave = useCallback(
-    async (data: Agent) => {
-      let currentData: Agent = { ...data }
+    async (data: IAgentForm) => {
+      let currentData: IAgentForm = { ...data }
       if (
         !isPremiumModel(currentData.model) &&
         currentData.knowledge?.length > 0
@@ -121,12 +126,30 @@ export const useSubmitSaveAgent = () => {
           }).unwrap()
           agentInfo = serverAgent
         }
-        reset({
+        const newFormData: Agent = {
           ...agentInfo,
           variables:
             agentInfo.variables.length === 0
               ? [{ key: "", value: "" }]
               : agentInfo.variables,
+          knowledge: Array.isArray(agentInfo.knowledge)
+            ? agentInfo.knowledge
+            : [],
+        }
+        reset(newFormData)
+        dispatch(
+          recentTabActions.updateRecentTabReducer({
+            oldTabID: data.cacheID,
+            newTabInfo: {
+              tabName: newFormData.name,
+              tabIcon: newFormData.icon,
+              tabType: TAB_TYPE.EDIT_TIPIS,
+              cacheID: newFormData.aiAgentID,
+            },
+          }),
+        )
+        updateUiHistoryData(data.cacheID, newFormData.aiAgentID, {
+          formData: newFormData,
         })
         message.success({
           content: t("dashboard.message.create-suc"),
@@ -135,12 +158,14 @@ export const useSubmitSaveAgent = () => {
         message.error({
           content: t("dashboard.message.create-failed"),
         })
+        throw e
       }
     },
     [
       createAgent,
       currentTeamInfo.id,
       currentUserInfo.userID,
+      dispatch,
       getAgentIconUploadAddress,
       message,
       putAgentDetail,

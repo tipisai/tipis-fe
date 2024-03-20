@@ -3,8 +3,8 @@ import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { CodeEditor } from "@illa-public/code-editor"
 import { Agent } from "@illa-public/public-types"
-import { ErrorText } from "../../../../../../../../Layout/Form/ErrorText"
-import LayoutBlock from "../../../../../../../../Layout/Form/LayoutBlock"
+import { ErrorText } from "@/Layout/Form/ErrorText"
+import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { SCROLL_ID } from "../../../../interface"
 import { codeEditorErrorStyle } from "./style"
 
@@ -34,7 +34,7 @@ const PromptEditor: FC = memo(() => {
               {...promptField}
               css={codeEditorErrorStyle(!!errors.prompt)}
               placeholder={t("editor.ai-agent.placeholder.prompt")}
-              minHeight="200px"
+              height="600px"
               completionOptions={variables}
             />
             {errors.prompt?.message && (
