@@ -23,7 +23,7 @@ import {
   FILE_ITEM_DETAIL_STATUS_IN_UI,
   GET_SINGED_URL_ERROR_CODE,
 } from "./interface"
-import { updateFileDetailStore } from "./store"
+import { UploadFileStore } from "./store"
 
 export const useUploadFileToDrive = () => {
   const { message } = App.useApp()
@@ -89,10 +89,11 @@ export const useUploadFileToDrive = () => {
       replace: boolean
     },
     abortSignal: AbortSignal,
+    store: UploadFileStore,
   ) => {
     const { folder, replace } = fileOptions
     try {
-      updateFileDetailStore.updateFileDetailInfo(queryID, {
+      store.updateFileDetailInfo(queryID, {
         loaded: 0,
         total: needUploadFile.size,
         status: FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING,
@@ -104,14 +105,14 @@ export const useUploadFileToDrive = () => {
         replace,
       })
 
-      updateFileDetailStore.updateFileDetailInfo(queryID, {
+      store.updateFileDetailInfo(queryID, {
         loaded: 0,
         total: needUploadFile.size,
         status: FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING,
       })
 
       const processCallback = (loaded: number) => {
-        updateFileDetailStore.updateFileDetailInfo(queryID!, {
+        store.updateFileDetailInfo(queryID!, {
           loaded: loaded,
           status: FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING,
         })
@@ -128,7 +129,7 @@ export const useUploadFileToDrive = () => {
         teamID,
       })
       if (status === UPLOAD_FILE_STATUS.COMPLETE) {
-        updateFileDetailStore.updateFileDetailInfo(queryID, {
+        store.updateFileDetailInfo(queryID, {
           status: FILE_ITEM_DETAIL_STATUS_IN_UI.SUCCESS,
         })
         message.success(t("editor.inspect.setter_message.uploadsuc"))
@@ -137,13 +138,13 @@ export const useUploadFileToDrive = () => {
           name: uploadURLResponse.fileName,
         }
       } else {
-        updateFileDetailStore.updateFileDetailInfo(queryID, {
+        store.updateFileDetailInfo(queryID, {
           status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
         })
         message.error(t("editor.inspect.setter_message.uploadfail"))
       }
     } catch (e) {
-      updateFileDetailStore.updateFileDetailInfo(queryID, {
+      store.updateFileDetailInfo(queryID, {
         status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
       })
       // TODO: WTF  add  report from

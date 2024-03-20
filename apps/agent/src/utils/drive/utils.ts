@@ -3,7 +3,7 @@ import { IKnowledgeFile } from "@illa-public/public-types"
 import {
   FILE_ITEM_DETAIL_STATUS_IN_UI,
   IUploadParams,
-  updateFileDetailStore,
+  UploadFileStore,
 } from "."
 
 export const getPathForSignedUrl = (path: string) => {
@@ -18,7 +18,7 @@ export const multipleFileHandler = (
   files: File[],
   currentFiles: Omit<IKnowledgeFile, "value">[],
   uploadParams: Omit<IUploadParams, "fileData">,
-  unAddStore?: boolean,
+  fileStore: UploadFileStore,
 ) => {
   const res = files.map((file) => {
     const abortController = new AbortController()
@@ -32,20 +32,19 @@ export const multipleFileHandler = (
         ? `${file.name.split(".")[0]}(${v4().slice(0, 3)})`
         : file.name
 
-    !unAddStore &&
-      updateFileDetailStore.addFileDetailInfo({
-        loaded: 0,
-        total: 0,
-        status: FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING,
-        fileName: fileName,
-        contentType: file.type,
-        queryID,
-        abortController,
-        uploadParams: {
-          ...uploadParams,
-          fileData: file,
-        },
-      })
+    fileStore.addFileDetailInfo({
+      loaded: 0,
+      total: 0,
+      status: FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING,
+      fileName: fileName,
+      contentType: file.type,
+      queryID,
+      abortController,
+      uploadParams: {
+        ...uploadParams,
+        fileData: file,
+      },
+    })
     return {
       fileName,
       abortController,

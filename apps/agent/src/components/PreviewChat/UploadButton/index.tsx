@@ -5,18 +5,16 @@ import { useTranslation } from "react-i18next"
 import { getColor } from "@illa-public/color-scheme"
 import { AttachmentIcon } from "@illa-public/icon"
 import IconHotSpot from "@illa-public/icon-hot-spot"
-import FullSectionLoading from "@/components/FullSectionLoading"
 import { ACCEPT } from "@/config/constants/knowledge"
 import { sendFileContainerStyle, sendFileIconStyle } from "./style"
 
 interface UploadButton {
   handleClick: () => void
-  parseKnowledgeLoading: boolean
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const UploadButton = forwardRef<HTMLInputElement, UploadButton>(
-  ({ handleClick, handleFileChange, parseKnowledgeLoading }, ref) => {
+  ({ handleClick, handleFileChange }, ref) => {
     const { t } = useTranslation()
     return (
       <Tooltip
@@ -25,14 +23,10 @@ const UploadButton = forwardRef<HTMLInputElement, UploadButton>(
       >
         <div css={sendFileContainerStyle}>
           <IconHotSpot onClick={handleClick} css={sendFileIconStyle}>
-            {parseKnowledgeLoading ? (
-              <FullSectionLoading />
-            ) : (
-              <Icon
-                component={AttachmentIcon}
-                color={getColor("grayBlue", "02")}
-              />
-            )}
+            <Icon
+              component={AttachmentIcon}
+              color={getColor("grayBlue", "02")}
+            />
           </IconHotSpot>
           <input
             style={{ display: "none" }}
