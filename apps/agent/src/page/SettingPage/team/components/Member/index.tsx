@@ -49,13 +49,6 @@ export const MemberListPage: FC = () => {
           teamMemberID,
           userRole,
         })
-        // not need redux
-        // dispatch(
-        //   teamActions.updateTeamMemberUserRoleReducer({
-        //     teamMemberID: teamMemberID,
-        //     userRole: userRole,
-        //   }),
-        // )
         message.success({
           content: t("user_management.mes.change_role_suc"),
         })
