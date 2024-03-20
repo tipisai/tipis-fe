@@ -8,6 +8,7 @@ import { getCurrentId } from "@illa-public/user-data"
 import WorkspaceMobileHeaderLayout from "@/Layout/Workspace/mobile/Header"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
+import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
 import { useGetAgentDetailQuery } from "@/redux/services/agentAPI"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import AIAgentRunMobile from "./AIAgentRunMobile"
@@ -49,38 +50,40 @@ export const NotContributedAgent: FC = () => {
 
   return data ? (
     <FormProvider {...methods}>
-      <AgentWSProvider>
-        <MarketplaceInfoProvider marketplaceInfo={undefined}>
-          <FormContext>
-            <LayoutAutoChange
-              desktopPage={
-                <>
-                  <WorkspacePCHeaderLayout
-                    title={data.name}
-                    extra={<HeaderTools />}
-                    customRenderTitle={(title) => (
-                      <CustomTitle title={title} iconURL={data.icon} />
-                    )}
-                  />
-                  <AIAgentRunPC />
-                </>
-              }
-              mobilePage={
-                <>
-                  <WorkspaceMobileHeaderLayout
-                    title={data.name}
-                    extra={<MobileMoreActionButton />}
-                    customRenderTitle={(title) => (
-                      <CustomTitle title={title} iconURL={data.icon} />
-                    )}
-                  />
-                  <AIAgentRunMobile />
-                </>
-              }
-            />
-          </FormContext>
-        </MarketplaceInfoProvider>
-      </AgentWSProvider>
+      <TipisWebSocketProvider>
+        <AgentWSProvider>
+          <MarketplaceInfoProvider marketplaceInfo={undefined}>
+            <FormContext>
+              <LayoutAutoChange
+                desktopPage={
+                  <>
+                    <WorkspacePCHeaderLayout
+                      title={data.name}
+                      extra={<HeaderTools />}
+                      customRenderTitle={(title) => (
+                        <CustomTitle title={title} iconURL={data.icon} />
+                      )}
+                    />
+                    <AIAgentRunPC />
+                  </>
+                }
+                mobilePage={
+                  <>
+                    <WorkspaceMobileHeaderLayout
+                      title={data.name}
+                      extra={<MobileMoreActionButton />}
+                      customRenderTitle={(title) => (
+                        <CustomTitle title={title} iconURL={data.icon} />
+                      )}
+                    />
+                    <AIAgentRunMobile />
+                  </>
+                }
+              />
+            </FormContext>
+          </MarketplaceInfoProvider>
+        </AgentWSProvider>
+      </TipisWebSocketProvider>
     </FormProvider>
   ) : null
 }

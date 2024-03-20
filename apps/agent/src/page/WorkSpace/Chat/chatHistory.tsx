@@ -1,33 +1,18 @@
 import { FC, useCallback, useContext, useEffect, useMemo, useRef } from "react"
-import { useFormContext, useFormState, useWatch } from "react-hook-form"
-import {
-  ILLA_MIXPANEL_BUILDER_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
-} from "@illa-public/mixpanel-utils"
-import { Agent } from "@illa-public/public-types"
 import { TextSignal } from "@/api/ws/textSignal"
 import { PreviewChat } from "@/components/PreviewChat"
 import {
   ChatMessage,
   ChatSendRequestPayload,
 } from "@/components/PreviewChat/interface"
-import { track } from "@/utils/mixpanelHelper"
-import { ChatContext } from "../../components/ChatContext"
-import { AgentWSContext } from "../../context/AgentWSContext"
+import { ChatContext } from "../AI/components/ChatContext"
+import { INIT_CHAT_CONFIG } from "./constants"
+import { ChatWSContext } from "./context"
 import { rightPanelContainerStyle } from "./style"
 
-export const AIAgentRunPC: FC = () => {
-  const { control, getValues } = useFormContext<Agent>()
-
-  const { isDirty } = useFormState({
-    control,
-  })
-
-  const [model] = useWatch({
-    control,
-    name: ["model"],
-  })
-
+export const DefaultChat: FC<{ isMobile: boolean }> = ({
+  isMobile = false,
+}) => {
   const {
     inRoomUsers,
     isRunning,
@@ -38,8 +23,7 @@ export const AIAgentRunPC: FC = () => {
     isReceiving,
     sendMessage,
     setIsReceiving,
-    lastRunAgent,
-  } = useContext(AgentWSContext)
+  } = useContext(ChatWSContext)
 
   const onlyConnectOnce = useRef(false)
 
@@ -51,13 +35,11 @@ export const AIAgentRunPC: FC = () => {
       isReceiving,
       sendMessage,
       setIsReceiving,
-      lastRunAgent,
     }),
     [
       chatMessages,
       isReceiving,
       isRunning,
-      lastRunAgent,
       sendMessage,
       setIsReceiving,
       wsStatus,
@@ -66,23 +48,19 @@ export const AIAgentRunPC: FC = () => {
 
   const onSendMessage = useCallback(
     (message: ChatMessage) => {
-      track(
-        ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-        ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_RUN,
-        {
-          element: "send",
-          parameter5: getValues("aiAgentID"),
-        },
-      )
+      // track(
+      //   ILLA_MIXPANEL_EVENT_TYPE.CLICK,
+      //   ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_RUN,
+      //   {
+      //     element: "send",
+      //     parameter5: getValues("aiAgentID"),
+      //   },
+      // )
       sendMessage(
         {
           threadID: message.threadID,
           prompt: message.message,
-          variables: [],
-          actionID: getValues("aiAgentID"),
-          modelConfig: getValues("modelConfig"),
-          model: getValues("model"),
-          agentType: getValues("agentType"),
+          ...INIT_CHAT_CONFIG,
         } as ChatSendRequestPayload,
         TextSignal.RUN,
         "chat",
@@ -90,7 +68,7 @@ export const AIAgentRunPC: FC = () => {
         message,
       )
     },
-    [getValues, sendMessage],
+    [sendMessage],
   )
 
   useEffect(() => {
@@ -104,10 +82,10 @@ export const AIAgentRunPC: FC = () => {
     <ChatContext.Provider value={{ inRoomUsers }}>
       <div css={rightPanelContainerStyle}>
         <PreviewChat
-          isMobile={false}
+          isMobile={isMobile}
           editState="RUN"
-          model={model}
-          blockInput={!isRunning || isDirty}
+          model={INIT_CHAT_CONFIG.model}
+          blockInput={!isRunning}
           wsContextValue={wsContext}
           onSendMessage={onSendMessage}
         />
@@ -116,6 +94,6 @@ export const AIAgentRunPC: FC = () => {
   )
 }
 
-export default AIAgentRunPC
+export default DefaultChat
 
-AIAgentRunPC.displayName = "AIAgentRunPC"
+DefaultChat.displayName = "DefaultChat"
