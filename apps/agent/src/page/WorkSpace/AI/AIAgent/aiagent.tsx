@@ -1,6 +1,7 @@
 import { FC, useContext, useEffect } from "react"
 import { useFormContext, useFormState } from "react-hook-form"
 import { Agent } from "@illa-public/public-types"
+import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { ChatContext } from "../components/ChatContext"
 import { AgentWSContext } from "../context/AgentWSContext"
 import EditPanel from "./modules/EditPanel"
@@ -14,7 +15,7 @@ export const AIAgent: FC = () => {
     control,
   })
 
-  const { inRoomUsers } = useContext(AgentWSContext)
+  const { inRoomUsers, wsStatus, leaveRoom } = useContext(AgentWSContext)
 
   useEffect(() => {
     const unload = (e: BeforeUnloadEvent) => {
@@ -30,6 +31,14 @@ export const AIAgent: FC = () => {
       window.removeEventListener("onunload", unload)
     }
   }, [isDirty])
+
+  useEffect(() => {
+    return () => {
+      if (wsStatus === ILLA_WEBSOCKET_STATUS.CONNECTED) {
+        leaveRoom()
+      }
+    }
+  }, [leaveRoom, wsStatus])
 
   return (
     <ChatContext.Provider value={{ inRoomUsers }}>

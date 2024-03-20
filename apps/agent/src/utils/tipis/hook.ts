@@ -22,8 +22,9 @@ export const useGetTipiContributed = () => {
       data,
       isLoading,
       isError,
+      agentID,
     }),
-    [data, isError, isLoading],
+    [agentID, data, isError, isLoading],
   )
 
   return returnValue

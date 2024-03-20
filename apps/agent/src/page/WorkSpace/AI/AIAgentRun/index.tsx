@@ -6,7 +6,7 @@ import { ContributedAgent } from "./contributeAgent"
 import { NotContributedAgent } from "./notContributeAgent"
 
 export const AIAgentRun: FC = () => {
-  const { data, isLoading, isError } = useGetTipiContributed()
+  const { data, isLoading, isError, agentID } = useGetTipiContributed()
 
   // useEffect(() => {
   //   track(
@@ -33,9 +33,9 @@ export const AIAgentRun: FC = () => {
 
   return data ? (
     data.isPublishedToMarketplace ? (
-      <ContributedAgent />
+      <ContributedAgent key={agentID} />
     ) : (
-      <NotContributedAgent />
+      <NotContributedAgent key={agentID} />
     )
   ) : null
 }
