@@ -1,3 +1,5 @@
+import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
+
 export const getExploreTipisPath = (teamIdentifier: string) => {
   return `/workspace/${teamIdentifier}/tipis`
 }
@@ -22,7 +24,10 @@ export const getExploreFunctionsPath = (teamIdentifier: string) => {
   return `/workspace/${teamIdentifier}/functions`
 }
 
-export const getDefaultChatPath = (teamIdentifier: string, chatID: string) => {
+export const getDefaultChatPath = (
+  teamIdentifier: string,
+  chatID: string = DEFAULT_CHAT_ID,
+) => {
   return `/workspace/${teamIdentifier}/chat/${chatID}`
 }
 

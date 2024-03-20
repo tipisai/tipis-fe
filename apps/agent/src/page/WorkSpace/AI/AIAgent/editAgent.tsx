@@ -127,7 +127,7 @@ export const EditAIAgentPage: FC = () => {
 
   return data ? (
     <FormProvider {...methods}>
-      <TipisWebSocketProvider>
+      <TipisWebSocketProvider key={agentID}>
         <AgentWSProvider>
           <FormContext>
             <WorkspacePCHeaderLayout

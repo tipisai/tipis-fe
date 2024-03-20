@@ -99,7 +99,7 @@ export const CreateAIAgentPage: FC = () => {
 
   return (
     <FormProvider {...methods}>
-      <TipisWebSocketProvider>
+      <TipisWebSocketProvider key={agentID}>
         <AgentWSProvider>
           <FormContext>
             <WorkspacePCHeaderLayout

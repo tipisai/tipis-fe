@@ -5,6 +5,7 @@ import {
   ILLA_MIXPANEL_EVENT_TYPE,
 } from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
+import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { TextSignal } from "@/api/ws/textSignal"
 import { PreviewChat } from "@/components/PreviewChat"
 import {
@@ -94,11 +95,26 @@ export const AIAgentRunPC: FC = () => {
   )
 
   useEffect(() => {
-    if (onlyConnectOnce.current === false) {
+    return () => {
+      if (
+        wsStatus === ILLA_WEBSOCKET_STATUS.CONNECTED &&
+        onlyConnectOnce.current === true
+      ) {
+        leaveRoom()
+        onlyConnectOnce.current = false
+      }
+    }
+  }, [leaveRoom, wsStatus])
+
+  useEffect(() => {
+    if (
+      onlyConnectOnce.current === false &&
+      wsStatus === ILLA_WEBSOCKET_STATUS.INIT
+    ) {
       connect()
       onlyConnectOnce.current = true
     }
-  }, [connect, leaveRoom, wsStatus])
+  }, [connect, wsStatus])
 
   return (
     <ChatContext.Provider value={{ inRoomUsers }}>
