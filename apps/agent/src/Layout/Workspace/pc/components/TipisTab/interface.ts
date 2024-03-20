@@ -6,4 +6,5 @@ export interface ITipsTab {
   tabName: string
   tabID: string
   cacheID: string
+  isMiniSize: boolean
 }

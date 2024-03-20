@@ -32,7 +32,7 @@ const PCWorkspaceMenu: FC = () => {
                 }}
               />
             </div>
-            <RecentTabs />
+            <RecentTabs isMiniSize={false} />
           </div>
           <MenuFooter />
         </div>
