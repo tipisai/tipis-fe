@@ -11,7 +11,6 @@ import {
   ILLA_MIXPANEL_EVENT_TYPE,
 } from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
-import { useUpgradeModal } from "@illa-public/upgrade-modal"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { openShareAgentModal } from "@illa-public/user-role-utils"
 import { track } from "@/utils/mixpanelHelper"
@@ -23,7 +22,6 @@ const ContributeButton: FC = () => {
     control: control,
     name: ["aiAgentID", "publishedToMarketplace"],
   })
-  const upgradeModal = useUpgradeModal()
 
   const [shareDialogVisible, setShareDialogVisible] = useState(false)
   const [defaultShareTag, setDefaultShareTag] = useState<ShareAgentTab>(
@@ -55,10 +53,11 @@ const ContributeButton: FC = () => {
           publishedToMarketplace,
         )
       ) {
-        upgradeModal({
-          modalType: "upgrade",
-          from: "agent_edit_contribute",
-        })
+        // TODO: billing
+        // upgradeModal({
+        //   modalType: "upgrade",
+        //   from: "agent_edit_contribute",
+        // })
         return
       }
       setContributedDialogVisible(true)

@@ -66,6 +66,7 @@ const EditPanel: FC = () => {
     if (!handleVerifyOnStart()) {
       return
     }
+    // TODO: billing
     // if (isPremiumModel(getValues("model")) && !canUseBillingFeature) {
     //   upgradeModal({
     //     modalType: "agent",
