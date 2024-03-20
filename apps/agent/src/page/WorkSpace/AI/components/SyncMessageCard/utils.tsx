@@ -1,6 +1,7 @@
 import Icon from "@ant-design/icons"
 import AnalyzeIcon from "@/assets/agent/message-analyze.svg?react"
 import AnalyzeErrorIcon from "@/assets/agent/message-error.svg?react"
+import AnalyzeStopIcon from "@/assets/agent/message-stop.svg?react"
 import { MESSAGE_STATUS } from "@/components/PreviewChat/interface"
 import { infoIconStyle } from "./style"
 
@@ -15,14 +16,18 @@ export const getInfoByStatus = (status: MESSAGE_STATUS) => {
 
     case MESSAGE_STATUS.ANALYZE_SUCCESS: {
       InfoIcon = <Icon component={AnalyzeIcon} css={infoIconStyle} />
-      InfoTitle = "analyze end"
+      InfoTitle = "Analyze end"
       break
     }
-
+    case MESSAGE_STATUS.ANALYZE_STOP: {
+      InfoIcon = <Icon component={AnalyzeStopIcon} css={infoIconStyle} />
+      InfoTitle = "Stopped analyzing"
+      break
+    }
     default:
     case MESSAGE_STATUS.ANALYZE_PENDING: {
       InfoIcon = <Icon component={AnalyzeIcon} css={infoIconStyle} />
-      InfoTitle = "analyzing..."
+      InfoTitle = "Analyzing..."
       break
     }
   }
