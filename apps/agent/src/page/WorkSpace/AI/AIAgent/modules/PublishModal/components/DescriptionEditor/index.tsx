@@ -35,6 +35,7 @@ const DescriptionEditor: FC = memo(() => {
       name="description"
       control={control}
       rules={{
+        required: t("editor.ai-agent.validation_blank.description"),
         maxLength: {
           value: 160,
           message: t("editor.ai-agent.length_invalid.description"),
@@ -46,6 +47,7 @@ const DescriptionEditor: FC = memo(() => {
           mode="modal"
           title={t("editor.ai-agent.label.desc")}
           subtitleTips={t("editor.ai-agent.generate-desc.tooltips")}
+          required
           subtitle={
             <div
               css={descContainerStyle}

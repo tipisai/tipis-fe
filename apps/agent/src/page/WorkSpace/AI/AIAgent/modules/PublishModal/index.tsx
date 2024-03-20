@@ -1,5 +1,5 @@
 import { Modal } from "antd"
-import { FC } from "react"
+import { FC, useState } from "react"
 import { useFormContext, useFormState } from "react-hook-form"
 import { IAgentForm } from "../../interface"
 import { useSubmitSaveAgent } from "../../utils"
@@ -13,10 +13,12 @@ const PublishModal: FC<IPublishModalProps> = (props) => {
   const { open, changeOpen } = props
   const { control, trigger, getValues } = useFormContext<IAgentForm>()
   const { errors } = useFormState({ control })
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmitSave = useSubmitSaveAgent()
 
   const handleVerifyOnSave = async () => {
+    setIsLoading(true)
     await trigger()
     let validate = true
     const agentInfo = getValues()
@@ -29,9 +31,12 @@ const PublishModal: FC<IPublishModalProps> = (props) => {
       validate = false
     }
     if (validate) {
-      await handleSubmitSave(agentInfo)
-      changeOpen(false)
+      try {
+        await handleSubmitSave(agentInfo)
+        changeOpen(false)
+      } catch {}
     }
+    setIsLoading(false)
   }
 
   return (
@@ -44,6 +49,7 @@ const PublishModal: FC<IPublishModalProps> = (props) => {
       }}
       okButtonProps={{
         htmlType: "submit",
+        loading: isLoading,
       }}
     >
       <div css={publishModalContentStyle}>

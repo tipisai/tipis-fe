@@ -172,7 +172,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     setChatMessages([])
   }, [])
 
-  const { sendMessage, reconnect, connect, wsStatus, leaveRoom } = useContext(
+  const { sendMessage, connect, wsStatus, leaveRoom } = useContext(
     TipisWebSocketContext,
   )
 
@@ -337,11 +337,10 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
   }, [cleanMessage, leaveRoom])
 
   const innerReconnect = useCallback(async () => {
-    const initConnectConfig = getConnectParams()
     innerLeaveRoom()
     setIsRunning(false)
-    await reconnect(initConnectConfig)
-  }, [getConnectParams, innerLeaveRoom, reconnect])
+    await innerConnect()
+  }, [innerConnect, innerLeaveRoom])
 
   const value = useMemo(() => {
     return {

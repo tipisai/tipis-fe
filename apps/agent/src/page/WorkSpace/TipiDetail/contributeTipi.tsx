@@ -45,7 +45,9 @@ const ContributeTipiDetail: FC = () => {
       <ContributeInfo
         teamName={aiAgentMarketPlaceInfo.marketplace.contributorTeam.name}
         teamAvatar={aiAgentMarketPlaceInfo.marketplace.contributorTeam.icon}
-        contributorAvatars={[]}
+        contributorAvatars={contributeAgentDetail.editedBy.map(
+          (item) => item.avatar,
+        )}
       />
       <Prompt
         parameters={contributeAgentDetail.variables ?? []}
