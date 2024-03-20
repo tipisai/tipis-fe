@@ -20,6 +20,7 @@ export const agentAuthAPI = createApi({
       return headers
     },
   }),
+  tagTypes: ["Agents"],
   endpoints: (builder) => ({
     getAgentDetail: builder.query<
       Agent,
@@ -136,6 +137,32 @@ export const agentAuthAPI = createApi({
         }
       },
     }),
+    getAIAgentListByPage: builder.query<
+      {
+        aiAgentList: Agent[]
+        hasMore: boolean
+      },
+      {
+        teamID: string
+        keywords?: string
+      }
+    >({
+      query: ({ teamID, keywords }) => {
+        return keywords
+          ? `/teams/${teamID}/aiAgent/list/sortBy/updatedAt/like/keywords/${keywords}`
+          : `/teams/${teamID}/aiAgent/list/sortBy/updatedAt`
+      },
+      providesTags: (result, error, { teamID }) =>
+        result?.aiAgentList
+          ? [
+              ...result?.aiAgentList.map(({ aiAgentID }) => ({
+                type: "Agents" as const,
+                id: aiAgentID,
+              })),
+              { type: "Agents", id: `${teamID}-LIST-PAGE` },
+            ]
+          : [{ type: "Agents", id: `${teamID}-LIST-PAGE` }],
+    }),
   }),
 })
 
@@ -152,4 +179,5 @@ export const {
   useGeneratePromptDescriptionMutation,
   useGenerateIconMutation,
   useGetAgentIconUploadAddressMutation,
+  useGetAIAgentListByPageQuery,
 } = agentAuthAPI

@@ -1,7 +1,7 @@
 import { Modal } from "antd"
 import { FC } from "react"
 import { useFormContext, useFormState } from "react-hook-form"
-import { Agent } from "@illa-public/public-types"
+import { IAgentForm } from "../../interface"
 import { useSubmitSaveAgent } from "../../utils"
 import AvatarUploader from "./components/AvatarUploader"
 import DescriptionEditor from "./components/DescriptionEditor"
@@ -11,7 +11,7 @@ import { publishModalContentStyle } from "./style"
 
 const PublishModal: FC<IPublishModalProps> = (props) => {
   const { open, changeOpen } = props
-  const { control, trigger, getValues } = useFormContext<Agent>()
+  const { control, trigger, getValues } = useFormContext<IAgentForm>()
   const { errors } = useFormState({ control })
 
   const handleSubmitSave = useSubmitSaveAgent()

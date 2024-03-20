@@ -1,8 +1,24 @@
 import { AI_AGENT_MODEL, AI_AGENT_TYPE, Agent } from "@illa-public/public-types"
 
-export const AgentInitial: Agent = {
+export interface IAgentForm
+  extends Omit<
+    Agent,
+    | "teamID"
+    | "teamIcon"
+    | "teamName"
+    | "publishedToMarketplace"
+    | "teamIdentifier"
+    | "createdAt"
+    | "createdBy"
+    | "updatedBy"
+    | "updatedAt"
+    | "editedBy"
+  > {
+  cacheID: string
+}
+
+export const AgentInitial: IAgentForm = {
   name: "",
-  teamIdentifier: "",
   agentType: AI_AGENT_TYPE.CHAT,
   model: AI_AGENT_MODEL.GPT_4,
   variables: [{ key: "", value: "" }],
@@ -14,15 +30,7 @@ export const AgentInitial: Agent = {
   icon: "",
   description: "",
   aiAgentID: "",
-  teamID: "",
-  teamIcon: "",
-  teamName: "",
-  publishedToMarketplace: false,
-  createdAt: "",
-  createdBy: "",
-  updatedBy: "",
-  updatedAt: "",
-  editedBy: [],
+  cacheID: "",
 }
 
 export enum SCROLL_ID {
