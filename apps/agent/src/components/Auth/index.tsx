@@ -19,7 +19,7 @@ const ProtectedComponent: FC<AuthProps> = (props) => {
   if (error && "status" in error) {
     if (error.status === 401) {
       ILLAMixpanel.reset()
-      window.location.href = `${getILLACloudURL(window.customDomain)}/login?redirectURL=${encodeURIComponent(
+      window.location.href = `${getILLACloudURL(window.customDomain)}/user/login?redirectURL=${encodeURIComponent(
         window.location.href,
       )}`
       return null
