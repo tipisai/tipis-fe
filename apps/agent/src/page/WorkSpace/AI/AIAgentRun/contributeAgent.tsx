@@ -1,47 +1,25 @@
 import { FC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { Navigate, useParams } from "react-router-dom"
+import { Navigate } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { Agent } from "@illa-public/public-types"
+import WorkspaceMobileHeaderLayout from "@/Layout/Workspace/mobile/Header"
+import CustomTitle from "@/Layout/Workspace/pc/components/CustomTitle"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
-import { useGetContributedAgentDetailQuery } from "@/redux/services/agentAPI"
-import { useGetAIAgentMarketplaceInfoQuery } from "@/redux/services/marketAPI"
-import WorkspaceMobileHeaderLayout from "../../../../Layout/Workspace/mobile/Header"
-import { TipisWebSocketProvider } from "../../../../components/PreviewChat/TipisWebscoketContext"
+import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
+import { useGetTipiContributedDetail } from "@/utils/tipis/hook"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import AIAgentRunMobile from "./AIAgentRunMobile"
 import MobileMoreActionButton from "./AIAgentRunMobile/components/MoreActionButton"
 import AIAgentRunPC from "./AIAgentRunPC"
-import CustomTitle from "./AIAgentRunPC/components/CustomTitle"
 import HeaderTools from "./AIAgentRunPC/components/HeaderTools"
 import FormContext from "./AIAgentRunPC/context/FormContext"
 import { MarketplaceInfoProvider } from "./contexts/MarketplaceInfoContext"
 
 export const ContributedAgent: FC = () => {
-  const { agentID, ownerTeamIdentifier } = useParams()
-
-  const {
-    data: contributeAgentDetail,
-    isLoading: isGetContributedAgentDetailLoading,
-    isError: isGetContributedAgentDetailError,
-  } = useGetContributedAgentDetailQuery({
-    aiAgentID: agentID!,
-    ownerTeamIdentifier: ownerTeamIdentifier!,
-  })
-
-  const {
-    data: aiAgentMarketPlaceInfo,
-    isLoading: isGetAIAgentMarketplaceInfoLoading,
-    isError: isGetAIAgentMarketplaceInfoError,
-  } = useGetAIAgentMarketplaceInfoQuery({
-    aiAgentID: agentID!,
-  })
-
-  const mixedIsLoading =
-    isGetContributedAgentDetailLoading || isGetAIAgentMarketplaceInfoLoading
-  const mixedIsError =
-    isGetContributedAgentDetailError || isGetAIAgentMarketplaceInfoError
+  const { contributeAgentDetail, isError, isLoading, aiAgentMarketPlaceInfo } =
+    useGetTipiContributedDetail()
 
   const methods = useForm<Agent>({
     values: contributeAgentDetail
@@ -55,11 +33,11 @@ export const ContributedAgent: FC = () => {
       : undefined,
   })
 
-  if (mixedIsLoading) {
+  if (isLoading) {
     return <FullSectionLoading />
   }
 
-  if (mixedIsError) {
+  if (isError) {
     return <Navigate to="/404" />
   }
 
