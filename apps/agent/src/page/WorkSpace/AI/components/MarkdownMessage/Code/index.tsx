@@ -54,6 +54,8 @@ const Code: FC<CodeProps> = (props) => {
           /language-(\w+)/.exec(props.className || "")?.[1] ?? "markdown"
         }
         style={oneLight}
+        wrapLines
+        lineProps={{ style: { wordBreak: "break-all" } }}
       >
         {getTextValue(props.children)}
       </SyntaxHighlighter>
