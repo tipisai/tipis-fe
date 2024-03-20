@@ -12,6 +12,22 @@ export const containerStyle = css`
 `
 
 export const headerContainerStyle = (status: MESSAGE_STATUS) => {
+  let textColor = getColor("techPurple", "03")
+  switch (status) {
+    case MESSAGE_STATUS.ANALYZE_ERROR:
+      textColor = getColor("red", "03")
+      break
+    case MESSAGE_STATUS.ANALYZE_SUCCESS:
+      textColor = getColor("grayBlue", "02")
+      break
+    case MESSAGE_STATUS.ANALYZE_STOP:
+      textColor = getColor("grayBlue", "04")
+      break
+    default:
+    case MESSAGE_STATUS.ANALYZE_PENDING:
+      textColor = getColor("techPurple", "03")
+      break
+  }
   return css`
     display: flex;
     padding: 8px;
@@ -19,11 +35,7 @@ export const headerContainerStyle = (status: MESSAGE_STATUS) => {
     gap: 8px;
     border-radius: 16px;
     background: ${getColor("white", "01")};
-    color: ${status === MESSAGE_STATUS.ANALYZE_ERROR
-      ? getColor("red", "03")
-      : status === MESSAGE_STATUS.ANALYZE_PENDING
-        ? getColor("techPurple", "03")
-        : getColor("grayBlue", "02")};
+    color: ${textColor};
     font-size: 14px;
     font-weight: 400;
     line-height: 22px;

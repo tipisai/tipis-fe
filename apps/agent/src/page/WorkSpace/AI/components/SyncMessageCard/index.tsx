@@ -53,6 +53,10 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
 
   const { InfoIcon, InfoTitle } = getInfoByStatus(messageStatus)
 
+  const hasResult =
+    messageStatus === MESSAGE_STATUS.ANALYZE_SUCCESS ||
+    messageStatus === MESSAGE_STATUS.ANALYZE_ERROR
+
   return (
     <div css={containerStyle}>
       <div
@@ -61,12 +65,10 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
       >
         {InfoIcon}
         {InfoTitle}
-        {messageStatus === MESSAGE_STATUS.ANALYZE_SUCCESS && (
-          <Icon component={showMessage ? UpIcon : DownIcon} />
-        )}
+        {hasResult && <Icon component={showMessage ? UpIcon : DownIcon} />}
       </div>
       <AnimatePresence>
-        {messageStatus === MESSAGE_STATUS.ANALYZE_SUCCESS && showMessage && (
+        {hasResult && showMessage && (
           <div css={messageContainerStyle}>
             <MarkdownMessage>{formatMessage}</MarkdownMessage>
           </div>

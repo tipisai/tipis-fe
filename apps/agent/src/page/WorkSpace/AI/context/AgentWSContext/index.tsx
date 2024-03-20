@@ -39,7 +39,7 @@ import {
 } from "@/redux/services/agentAPI"
 import { IAgentWSInject, IAgentWSProviderProps } from "./interface"
 import { isNormalMessage } from "./typeHelper"
-import { formatSendMessagePayload } from "./utils"
+import { cancelPendingMessage, formatSendMessagePayload } from "./utils"
 
 export const AgentWSContext = createContext({} as IAgentWSInject)
 
@@ -156,14 +156,14 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
                   : undefined,
             },
           ],
-        } as IGroupMessage)
+        })
       } else {
         newMessageList.push({
           sender: message.sender,
           message: message.message,
           threadID: message.threadID,
           messageType: message.messageType,
-        } as ChatMessage)
+        })
       }
     } else {
       const curMessage = newMessageList[index]
@@ -303,6 +303,13 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
           })
           break
         case 15:
+          const needUpdateMessageList = cancelPendingMessage(
+            chatMessagesRef.current,
+          )
+          if (needUpdateMessageList) {
+            chatMessagesRef.current = needUpdateMessageList
+            setChatMessages(needUpdateMessageList)
+          }
           setIsReceiving(false)
           break
         case 16:
