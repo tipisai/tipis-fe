@@ -61,13 +61,6 @@ export const MoreAction: FC = () => {
         parameter1: "delete_select",
       })
       const currentIdentifier = getCurrentTeamIdentifier(store.getState())
-      // TODO: WTF, empty teams
-      // if (currentTeamItems.length === 0) {
-      //   navigate("/")
-      // }
-      // navigate(tempRootPath(currentTeamItems[0].identifier), {
-      //   replace: true,
-      // })
       if (currentIdentifier) {
         navigate("workspace", {
           replace: true,

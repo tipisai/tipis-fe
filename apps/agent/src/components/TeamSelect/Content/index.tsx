@@ -50,8 +50,13 @@ const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
     const currentTeamInfo = teamItems?.find(
       (item) => item.identifier === currentIdentifier,
     )
-    if (teamIdentifier && currentTeamInfo) {
-      const toURL = pathname.replace(teamIdentifier, currentIdentifier)
+    if (currentTeamInfo) {
+      let toURL
+      if (teamIdentifier) {
+        toURL = pathname.replace(teamIdentifier, currentIdentifier)
+      } else {
+        toURL = `/setting/${currentIdentifier}/team-settings`
+      }
       dispatch(teamActions.updateCurrentIdReducer(currentId))
       dispatch(teamActions.updateCurrentTeamInfoReducer(currentTeamInfo))
       navigate(toURL, { replace: true })
