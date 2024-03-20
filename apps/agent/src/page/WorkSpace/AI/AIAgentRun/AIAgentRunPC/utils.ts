@@ -7,7 +7,6 @@ import {
   ILLA_MIXPANEL_EVENT_TYPE,
 } from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
-import { useUpgradeModal } from "@illa-public/upgrade-modal"
 import { getCurrentTeamInfo, getPlanUtils } from "@illa-public/user-data"
 import { canUseUpgradeFeature } from "@illa-public/user-role-utils"
 import { track } from "@/utils/mixpanelHelper"
@@ -15,7 +14,6 @@ import { AgentWSContext } from "../../context/AgentWSContext"
 
 export const useReRerunAgent = () => {
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!!
-  const upgradeModal = useUpgradeModal()
   const { reset, control } = useFormContext<Agent>()
   const [aiAgentID] = useWatch({
     control,
@@ -34,10 +32,11 @@ export const useReRerunAgent = () => {
   const rerunAgent = useCallback(
     async (data: Agent) => {
       if (isPremiumModel(data.model) && !canUseBillingFeature) {
-        upgradeModal({
-          modalType: "agent",
-          from: "agent_run_gpt4",
-        })
+        // TODO: billing
+        // upgradeModal({
+        //   modalType: "agent",
+        //   from: "agent_run_gpt4",
+        // })
         return
       }
       reset(data)
@@ -52,7 +51,7 @@ export const useReRerunAgent = () => {
       )
       await reconnect()
     },
-    [aiAgentID, canUseBillingFeature, reconnect, reset, upgradeModal],
+    [aiAgentID, canUseBillingFeature, reconnect, reset],
   )
 
   return rerunAgent

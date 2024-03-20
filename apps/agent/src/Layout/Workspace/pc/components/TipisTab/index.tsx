@@ -28,7 +28,7 @@ const shouldModelTipTabTypes = [
 ]
 
 const TipisTab: FC<ITipsTab> = (props) => {
-  const { icon, tabName, tabType, tabID, cacheID } = props
+  const { icon, tabName, tabType, tabID, cacheID, isMiniSize } = props
   const dispatch = useDispatch()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const { modal } = App.useApp()
@@ -72,16 +72,18 @@ const TipisTab: FC<ITipsTab> = (props) => {
       reloadDocument={false}
     >
       {({ isActive }) => (
-        <div css={menuItemButtonStyle(isActive)}>
+        <div css={menuItemButtonStyle(isActive, isMiniSize)}>
           <div
-            css={menuItemButtonContentContainerStyle}
+            css={menuItemButtonContentContainerStyle(isMiniSize)}
             className="menu-item-inner-container"
           >
             {getIconByTabInfo(icon, tabType)}
-            <span css={menuItemButtonContentStyle}>
-              {getTabName(tabName, tabType)}
-            </span>
-            {tabID !== DEFAULT_CHAT_ID && (
+            {!isMiniSize && (
+              <span css={menuItemButtonContentStyle}>
+                {getTabName(tabName, tabType)}
+              </span>
+            )}
+            {!isMiniSize && tabID !== DEFAULT_CHAT_ID && (
               <div
                 css={deleteButtonContainerStyle(isActive)}
                 className="delete-button"

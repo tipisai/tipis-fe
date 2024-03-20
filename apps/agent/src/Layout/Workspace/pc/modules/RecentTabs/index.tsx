@@ -4,7 +4,7 @@ import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import TipisTab from "../../components/TipisTab"
 import { recentTabsContainerStyle } from "./style"
 
-const RecentTabs: FC = () => {
+const RecentTabs: FC<{ isMiniSize: boolean }> = ({ isMiniSize = false }) => {
   const recentTabInfos = useSelector(getRecentTabInfos)
   return (
     <div css={recentTabsContainerStyle}>
@@ -16,6 +16,7 @@ const RecentTabs: FC = () => {
           icon={tabInfo.tabIcon}
           key={tabInfo.tabID}
           cacheID={tabInfo.cacheID}
+          isMiniSize={isMiniSize}
         />
       ))}
     </div>

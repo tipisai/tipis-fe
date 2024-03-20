@@ -1,7 +1,10 @@
 import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
 
-export const menuItemButtonStyle = (isSelected: boolean) => {
+export const menuItemButtonStyle = (
+  isSelected: boolean,
+  isMiniSize: boolean,
+) => {
   const menuItemInnerContainerStyle = isSelected
     ? css`
         .menu-item-inner-container {
@@ -19,7 +22,7 @@ export const menuItemButtonStyle = (isSelected: boolean) => {
 
   return css`
     display: block;
-    padding: 4px 16px;
+    padding: ${isMiniSize ? "4px 12px" : "4px 16px"};
     border: unset;
     width: 100%;
     background-color: transparent;
@@ -34,15 +37,33 @@ export const menuItemButtonStyle = (isSelected: boolean) => {
   `
 }
 
-export const menuItemButtonContentContainerStyle = css`
-  display: flex;
-  width: 100%;
-  padding: 8px;
-  gap: 8px;
-  align-items: center;
-  transition: background-color 0.2s linear;
-  border-radius: 16px;
-`
+export const menuItemButtonContentContainerStyle = (isMiniSize: boolean) => {
+  const baseStyle = css`
+    display: flex;
+    width: 100%;
+    align-items: center;
+    transition: background-color 0.2s linear;
+  `
+
+  const miniStyle = css`
+    ${baseStyle};
+    height: 32px;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 8px;
+  `
+
+  const manualStyle = css`
+    ${baseStyle}
+    display: flex;
+    width: 100%;
+    padding: 8px;
+    gap: 8px;
+    border-radius: 16px;
+  `
+
+  return isMiniSize ? miniStyle : manualStyle
+}
 
 export const menuItemButtonContentStyle = css`
   color: ${getColor("grayBlue", "02")};

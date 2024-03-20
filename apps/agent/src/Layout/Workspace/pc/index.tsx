@@ -1,12 +1,18 @@
-import { FC } from "react"
+import { FC, useContext } from "react"
 import { Outlet } from "react-router-dom"
 import PCWorkspaceMenu from "./modules/Menu"
+import MiniMenu from "./modules/Menu/MiniMenu"
+import {
+  MenuStatusUIContext,
+  MenuStatusUIProvider,
+} from "./modules/Menu/context"
 import { contentContainerStyle, workspaceLayoutContainerStyle } from "./style"
 
 const PCWorkspaceLayout: FC = () => {
+  const { collapsed } = useContext(MenuStatusUIContext)
   return (
     <div css={workspaceLayoutContainerStyle}>
-      <PCWorkspaceMenu />
+      {collapsed ? <MiniMenu /> : <PCWorkspaceMenu />}
       <section css={contentContainerStyle}>
         <Outlet />
       </section>
@@ -14,4 +20,12 @@ const PCWorkspaceLayout: FC = () => {
   )
 }
 
-export default PCWorkspaceLayout
+const PCWorkspaceWithMenuLayout: FC = () => {
+  return (
+    <MenuStatusUIProvider>
+      <PCWorkspaceLayout />
+    </MenuStatusUIProvider>
+  )
+}
+
+export default PCWorkspaceWithMenuLayout
