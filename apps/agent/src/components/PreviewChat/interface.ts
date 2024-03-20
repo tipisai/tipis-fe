@@ -15,6 +15,7 @@ export enum MESSAGE_STATUS {
   ANALYZE_SUCCESS = "analyze_success",
   ANALYZE_ERROR = "analyze_error",
   ANALYZE_PENDING = "analyze_pending",
+  ANALYZE_STOP = "analyze_stop",
 }
 
 export enum SenderType {
