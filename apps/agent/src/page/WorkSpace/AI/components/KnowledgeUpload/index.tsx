@@ -18,8 +18,9 @@ import {
 import { useDeleteFileMutation } from "@/redux/services/driveAPI"
 import {
   FILE_ITEM_DETAIL_STATUS_IN_UI,
-  FileDetailInfos,
-  updateFileDetailStore,
+  IFileDetailInfo,
+  IListener,
+  UploadFileStore,
   useUploadFileToDrive,
 } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
@@ -32,6 +33,8 @@ import {
   nameContainerStyle,
   opeationStyle,
 } from "./style"
+
+const editPanelUpdateFileDetailStore = new UploadFileStore()
 
 interface KnowledgeUploadProps {
   addFile: (file: IKnowledgeFile, isUpdate?: boolean) => void
@@ -80,8 +83,8 @@ const getIconByStatus = (
 
 const mergeUploadValues = (
   values: IKnowledgeFile[],
-  uploadFiles: FileDetailInfos[],
-): FileDetailInfos[] => {
+  uploadFiles: IFileDetailInfo[],
+): IFileDetailInfo[] => {
   const mergeValues = values.map((item) => {
     return {
       ...item,
@@ -105,10 +108,16 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
   const { uploadFileToDrive } = useUploadFileToDrive()
   const [deleteFile] = useDeleteFileMutation()
   const teamID = useSelector(getCurrentId)!
+  const subscribeRef = useRef((listener: IListener) =>
+    editPanelUpdateFileDetailStore.subscribe(listener),
+  )
+  const getSnapshotRef = useRef(() =>
+    editPanelUpdateFileDetailStore.getSnapshot(),
+  )
 
   const uploadFiles = useSyncExternalStore(
-    updateFileDetailStore.subscribe,
-    updateFileDetailStore.getSnapshot,
+    subscribeRef.current,
+    getSnapshotRef.current,
   )
 
   const currentValue = useMemo(
@@ -136,6 +145,7 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
       inputFiles,
       currentFiles,
       uploadParams,
+      editPanelUpdateFileDetailStore,
     )
     try {
       for (let item of formatFiles) {
@@ -153,6 +163,7 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
           file,
           uploadParams,
           abortController.signal,
+          editPanelUpdateFileDetailStore,
         )
         if (!!uploadRes) {
           const res = {
@@ -160,7 +171,7 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
             contentType: file.type,
             value: uploadRes.id,
           }
-          updateFileDetailStore.deleteFileDetailInfo(queryID)
+          editPanelUpdateFileDetailStore.deleteFileDetailInfo(queryID)
           addFile(res)
         }
       }
@@ -184,7 +195,7 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
       onOk: () => {
         try {
           removeFile(name)
-          updateFileDetailStore.deleteFileDetailInfo(queryID)
+          editPanelUpdateFileDetailStore.deleteFileDetailInfo(queryID)
           needDelFromDrive &&
             deleteFile({
               fileID: queryID,
@@ -206,7 +217,9 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
   }
 
   const handleClickRetry = (queryId: string) => {
-    updateFileDetailStore.retryUpload(queryId, uploadFileToDrive)
+    editPanelUpdateFileDetailStore.retryUpload(queryId, (...params) => {
+      uploadFileToDrive(...params, editPanelUpdateFileDetailStore)
+    })
   }
 
   return (
@@ -246,7 +259,7 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
                   fileInfo.status,
                   fileInfo?.total,
                   fileInfo?.loaded,
-                  () => handleClickRetry(fileInfo.fileName),
+                  () => handleClickRetry(fileInfo.queryID),
                 )}
                 <span
                   css={iconHotSpotStyle(fileInfo.status)}

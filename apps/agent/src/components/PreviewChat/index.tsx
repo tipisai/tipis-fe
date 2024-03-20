@@ -28,7 +28,7 @@ import AIAgentMessage from "@/page/WorkSpace/AI/components/AIAgentMessage"
 import GroupAgentMessage from "@/page/WorkSpace/AI/components/GroupAgentMessage"
 import UserMessage from "@/page/WorkSpace/AI/components/UserMessage"
 import { isGroupMessage } from "@/page/WorkSpace/AI/context/AgentWSContext/typeHelper"
-import { useUploadFileToDrive } from "@/utils/drive"
+import { UploadFileStore, useUploadFileToDrive } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
 import UploadButton from "./UploadButton"
 import UploadKnowledgeFiles from "./UploadKnowledgeFiles"
@@ -56,6 +56,8 @@ import {
   sendButtonStyle,
   stopIconStyle,
 } from "./style"
+
+const chatUploadStore = new UploadFileStore()
 
 export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const {
@@ -93,10 +95,10 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
 
   const [textAreaVal, setTextAreaVal] = useState("")
   const [knowledgeFiles, setKnowledgeFiles] = useState<IKnowledgeFile[]>([])
-  const [parseKnowledgeLoading, setParseKnowledgeLoading] = useState(false)
+  const [uploadKnowledgeLoading, setUploadKnowledgeLoading] = useState(false)
 
   const inputRef = useRef<HTMLInputElement>(null)
-  const canShowKnowledgeFiles = isPremiumModel(model)
+  const canShowKnowledgeFiles = isPremiumModel(model) || true
 
   const { uploadFileToDrive } = useUploadFileToDrive()
 
@@ -139,9 +141,10 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     })
   }, [chatMessages, currentUserInfo.userID, isMobile, isReceiving])
 
-  const handleDeleteFile = (fileName: string) => {
+  const handleDeleteFile = (fileName: string, queryID?: string) => {
     const files = knowledgeFiles.filter((file) => file.fileName !== fileName)
     setKnowledgeFiles(files)
+    queryID && chatUploadStore.deleteFileDetailInfo(queryID)
   }
 
   const handleClickUploadFile = () => {
@@ -164,7 +167,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       })
       return
     }
-    setParseKnowledgeLoading(true)
+    setUploadKnowledgeLoading(true)
     const currentFiles = [...knowledgeFiles]
     const uploadParams = {
       folder: UPLOAD_PATH,
@@ -175,7 +178,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       inputFiles,
       currentFiles,
       uploadParams,
-      true,
+      chatUploadStore,
     )
     currentFiles.push(
       ...formatFiles.map((item) => ({
@@ -194,13 +197,17 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
             content: t("dashboard.message.please_use_a_file_wi"),
           })
           setKnowledgeFiles(knowledgeFiles)
+          chatUploadStore.mulDeleteFileDetailInfo(
+            formatFiles.map((item) => item.queryID),
+          )
           return
         }
         let uploadRes = await uploadFileToDrive(
-          fileName,
+          item.queryID,
           file,
           uploadParams,
           abortController.signal,
+          chatUploadStore,
         )
 
         if (!!uploadRes) {
@@ -217,15 +224,6 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
             currentItems.splice(index, 1, res)
             return currentItems
           })
-        } else {
-          setKnowledgeFiles((prev) => {
-            const currentItems = [...prev]
-            const index = currentItems.findIndex(
-              (item) => item.fileName === fileName,
-            )
-            currentItems.splice(index, 1)
-            return currentItems
-          })
         }
       }
     } catch (e) {
@@ -233,7 +231,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
         content: t("dashboard.message.bad_file"),
       })
     } finally {
-      setParseKnowledgeLoading(false)
+      setUploadKnowledgeLoading(false)
     }
   }
 
@@ -246,11 +244,11 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const sendAndClearMessage = useCallback(() => {
     if (
       (textAreaVal !== "" || knowledgeFiles.length > 0) &&
-      !parseKnowledgeLoading
+      !uploadKnowledgeLoading
     ) {
       onSendMessage({
         threadID: v4(),
-        message: textAreaVal,
+        message: textAreaVal, // add format knowledge filter value
         sender: {
           senderID: currentUserInfo.userID,
           senderType: SenderType.USER,
@@ -264,7 +262,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     currentUserInfo.userID,
     knowledgeFiles,
     onSendMessage,
-    parseKnowledgeLoading,
+    uploadKnowledgeLoading,
     textAreaVal,
   ])
 
@@ -367,7 +365,6 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
               {canShowKnowledgeFiles && (
                 <UploadButton
                   handleClick={handleClickUploadFile}
-                  parseKnowledgeLoading={parseKnowledgeLoading}
                   handleFileChange={handleFileChange}
                   ref={inputRef}
                 />
@@ -385,6 +382,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
               <UploadKnowledgeFiles
                 knowledgeFiles={knowledgeFiles}
                 handleDeleteFile={handleDeleteFile}
+                chatUploadStore={chatUploadStore}
               />
             )}
           </div>
@@ -412,13 +410,13 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
                 <UploadKnowledgeFiles
                   knowledgeFiles={knowledgeFiles}
                   handleDeleteFile={handleDeleteFile}
+                  chatUploadStore={chatUploadStore}
                 />
               )}
               <div css={sendButtonStyle}>
                 {canShowKnowledgeFiles && (
                   <UploadButton
                     handleClick={handleClickUploadFile}
-                    parseKnowledgeLoading={parseKnowledgeLoading}
                     handleFileChange={handleFileChange}
                     ref={inputRef}
                   />
