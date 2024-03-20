@@ -87,7 +87,7 @@
     "react-use": "^17.4.0",
     "react-use-measure": "^2.1.1",
     "remark-breaks": "^4.0.0",
-    "remark-gfm": "^4.0.0",
+    "remark-gfm": "^3.0.0",
     "tern": "^0.24.3",
     "uuid": "^9.0.1",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz"

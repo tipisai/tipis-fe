@@ -1,6 +1,18 @@
-import { IRecentTabState } from "./interface"
+import { IRecentTabState, ITabInfo, TAB_TYPE } from "./interface"
+
+export const DEFAULT_CHAT_ID = "DEFAULT_CHAT"
+
+export const INIT_TABS: ITabInfo[] = [
+  {
+    tabName: "Default Chat",
+    tabIcon: "",
+    tabType: TAB_TYPE.CHAT,
+    tabID: DEFAULT_CHAT_ID,
+    cacheID: DEFAULT_CHAT_ID,
+  },
+]
 
 export const recentTabInitState: IRecentTabState = {
-  currentTabID: "",
-  tabs: [],
+  currentTabID: DEFAULT_CHAT_ID,
+  tabs: INIT_TABS,
 }

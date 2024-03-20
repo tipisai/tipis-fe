@@ -43,7 +43,7 @@ const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
     const tabsInfo: ITabInfo = {
       tabName: "",
       tabIcon: "",
-      tabType: TAB_TYPE.CHAT,
+      tabType: TAB_TYPE.RUN_TIPIS,
       tabID: id,
       cacheID: id,
     }

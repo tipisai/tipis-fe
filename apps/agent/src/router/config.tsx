@@ -45,6 +45,7 @@ const TeamSetting = lazy(() => import("@/page/SettingPage/team/info"))
 const TeamBilling = lazy(() => import("@/page/SettingPage/team/billing"))
 const TeamMembers = lazy(() => import("@/page/SettingPage/team/member"))
 const EditFunctionPage = lazy(() => import("@/page/WorkSpace/Function/Edit"))
+const ChatPage = lazy(() => import("@/page/WorkSpace/Chat"))
 
 const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   {
@@ -106,7 +107,16 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     children: [
       {
         path: ":teamIdentifier",
-        element: <Navigate to="tipis" replace />,
+        element: <Navigate to="chat/DEFAULT_CHAT" replace />,
+      },
+      {
+        path: ":teamIdentifier/chat/:chatID",
+        needLogin: true,
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <ChatPage />
+          </Suspense>
+        ),
       },
       {
         path: ":teamIdentifier/tipis",
