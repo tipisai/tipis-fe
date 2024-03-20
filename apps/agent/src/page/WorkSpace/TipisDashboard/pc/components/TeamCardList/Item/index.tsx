@@ -7,7 +7,11 @@ import { MoreIcon, PenIcon, PlayFillIcon } from "@illa-public/icon"
 import TeamCard from "@/components/TeamCard"
 import { ITabInfo, TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
-import { getEditTipiPath, getRunTipiPath } from "@/utils/routeHelper"
+import {
+  getEditTipiPath,
+  getRunTipiPath,
+  getTipiDetailPath,
+} from "@/utils/routeHelper"
 import { ITeamCardListItemProps } from "./interface"
 
 const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
@@ -22,7 +26,7 @@ const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
   const dispatch = useDispatch()
 
   const onClickCard = () => {
-    navigate(getRunTipiPath(teamIdentifier!, id))
+    navigate(getTipiDetailPath(teamIdentifier!, id))
   }
 
   const onClickEditButton: MouseEventHandler<HTMLElement> = (e) => {

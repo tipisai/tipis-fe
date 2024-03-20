@@ -46,6 +46,7 @@ const TeamBilling = lazy(() => import("@/page/SettingPage/team/billing"))
 const TeamMembers = lazy(() => import("@/page/SettingPage/team/member"))
 const EditFunctionPage = lazy(() => import("@/page/WorkSpace/Function/Edit"))
 const ChatPage = lazy(() => import("@/page/WorkSpace/Chat"))
+const TipiDetailPage = lazy(() => import("@/page/WorkSpace/TipiDetail"))
 
 const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   {
@@ -139,6 +140,14 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <EditAgentPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: ":teamIdentifier/tipi/:agentID/detail",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <TipiDetailPage />
           </Suspense>
         ),
       },

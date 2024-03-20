@@ -1,17 +1,12 @@
 import { FC } from "react"
-import { Navigate, useParams } from "react-router-dom"
+import { Navigate } from "react-router-dom"
 import FullSectionLoading from "@/components/FullSectionLoading"
-import { useGetAgentContributeStateQuery } from "@/redux/services/agentAPI"
+import { useGetTipiContributed } from "@/utils/tipis/hook"
 import { ContributedAgent } from "./contributeAgent"
 import { NotContributedAgent } from "./notContributeAgent"
 
 export const AIAgentRun: FC = () => {
-  const { agentID, ownerTeamIdentifier } = useParams()
-
-  const { data, isLoading, isError } = useGetAgentContributeStateQuery({
-    aiAgentID: agentID!,
-    ownerTeamIdentifier: ownerTeamIdentifier!,
-  })
+  const { data, isLoading, isError } = useGetTipiContributed()
 
   // useEffect(() => {
   //   track(
