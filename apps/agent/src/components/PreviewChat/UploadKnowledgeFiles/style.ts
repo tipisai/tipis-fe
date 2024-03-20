@@ -4,7 +4,6 @@ export const fileItemContainerStyle = css`
   display: flex;
   width: 100%;
   align-items: center;
-  gap: 8px;
   flex-wrap: wrap;
   max-height: 150px;
   overflow-y: auto;

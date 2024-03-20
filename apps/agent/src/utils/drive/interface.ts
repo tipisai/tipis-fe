@@ -10,7 +10,20 @@ export interface IUploadParams {
   folder: string
   replace: boolean
 }
-export interface FileDetailInfos {
+
+export type IListener = () => void
+
+export type IUploadToDrive = (
+  queryID: string,
+  needUploadFile: File,
+  fileOptions: {
+    folder: string
+    replace: boolean
+  },
+  abortSignal: AbortSignal,
+) => void
+
+export interface IFileDetailInfo {
   loaded: number
   total: number
   status: FILE_ITEM_DETAIL_STATUS_IN_UI
@@ -20,35 +33,10 @@ export interface FileDetailInfos {
   abortController?: AbortController
   uploadParams?: IUploadParams
 }
-export interface IUploadDetailStore {
-  fileDetailInfos: FileDetailInfos[]
-  listeners: (() => void)[]
-  subscribe: (onStoreChange: () => void) => () => void
-  addFileDetailInfo: (fileDetailInfo: FileDetailInfos) => void
-  updateFileDetailInfo: (
-    queryID: string,
-    fileDetailInfo: Partial<{
-      loaded: number
-      total: number
-      status: FILE_ITEM_DETAIL_STATUS_IN_UI
-      uploadParams: IUploadParams
-    }>,
-  ) => void
-  deleteFileDetailInfo: (queryID: string) => void
-  retryUpload: (
-    queryID: string,
-    uploadFileToDrive: (
-      queryID: string,
-      needUploadFile: File,
-      fileOptions: {
-        folder: string
-        replace: boolean
-      },
-      abortSignal: AbortSignal,
-    ) => void,
-  ) => void
-  getSnapshot: () => FileDetailInfos[]
-}
+
+export type IUpdateFileUploadInfo = Partial<
+  Pick<IFileDetailInfo, "loaded" | "total" | "status" | "uploadParams">
+>
 
 export enum GET_SINGED_URL_ERROR_CODE {
   NOT_HAS_ROOT_FOLDER = "NOT_HAS_ROOT_FOLDER",
