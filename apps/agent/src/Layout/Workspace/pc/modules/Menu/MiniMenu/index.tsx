@@ -3,8 +3,8 @@ import { Button, Divider } from "antd"
 import { FC, useContext } from "react"
 import { NextDoubleIcon } from "@illa-public/icon"
 import LogoIcon from "@/assets/public/logo.svg?react"
-import UserInfoContent from "../../../components/UserInfoContent"
-import RecentTabs from "../../RecentTabs"
+import UserInfoContent from "../../../../components/UserInfoContent"
+import RecentTabs from "../../../../modules/RecentTabs"
 import { MenuStatusUIContext } from "../context"
 import {
   dividerContainerStyle,

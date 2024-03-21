@@ -7,7 +7,7 @@ import {
   useGetAgentDetailQuery,
   useGetContributedAgentDetailQuery,
 } from "@/redux/services/agentAPI"
-import { useGetAIAgentMarketplaceInfoQuery } from "../../redux/services/marketAPI"
+import { useGetAIAgentMarketplaceInfoQuery } from "@/redux/services/marketAPI"
 
 export const useGetTipiContributed = () => {
   const { agentID, teamIdentifier } = useParams()

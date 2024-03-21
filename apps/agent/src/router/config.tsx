@@ -1,8 +1,10 @@
 import { Suspense, lazy } from "react"
 import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom"
+import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { Page403, Page404, Page500 } from "@illa-public/status-page"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import SettingLayout from "@/page/SettingPage"
+import { MobileWorkspaceLayout } from "../Layout/Workspace/mobile"
 import PCWorkspaceLayout from "../Layout/Workspace/pc"
 import SettingProtectedComponent from "../components/SettingProtectedComponent"
 import UserLayout from "../page/User/Layout/index"
@@ -102,17 +104,25 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   },
   {
     path: "/workspace",
-    element: <PCWorkspaceLayout />,
+    element: (
+      <LayoutAutoChange
+        desktopPage={<PCWorkspaceLayout />}
+        mobilePage={<MobileWorkspaceLayout />}
+      />
+    ),
     needLogin: true,
     loader: workspaceLayoutLoader,
+    accessByMobile: true,
     children: [
       {
         path: ":teamIdentifier",
+        accessByMobile: true,
         element: <Navigate to="chat/DEFAULT_CHAT" replace />,
       },
       {
         path: ":teamIdentifier/chat/:chatID",
         needLogin: true,
+        accessByMobile: true,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <ChatPage />

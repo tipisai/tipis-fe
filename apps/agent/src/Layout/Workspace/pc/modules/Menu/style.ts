@@ -33,3 +33,8 @@ export const dividerContainerStyle = css`
   width: 100%;
   padding: 0 16px;
 `
+
+export const teamSelectAndInviteButtonContainerStyle = css`
+  width: 100%;
+  padding: 8px 16px 8px 24px;
+`

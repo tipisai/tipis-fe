@@ -1,16 +1,17 @@
 import { Divider } from "antd"
 import { FC, useState } from "react"
+import MenuFooter from "../../../modules/MenuFooter"
+import RecentTabs from "../../../modules/RecentTabs"
+import TeamSelectAndInviteButton from "../../../modules/TeamSelectAndInviteButton"
 import CreateTeamModal from "../../components/CreateTeamModal"
 import FeatureArea from "../FeatureArea"
-import MenuFooter from "../MenuFooter"
 import MenuHeader from "../MenuHeader"
-import RecentTabs from "../RecentTabs"
-import TeamSelectAndInviteButton from "../TeamSelectAndInviteButton"
 import {
   dividerContainerStyle,
   menuContainerStyle,
   menuContentStyle,
   menuInnerContainerStyle,
+  teamSelectAndInviteButtonContainerStyle,
 } from "./style"
 
 const PCWorkspaceMenu: FC = () => {
@@ -21,9 +22,11 @@ const PCWorkspaceMenu: FC = () => {
         <div css={menuInnerContainerStyle}>
           <div css={menuContentStyle}>
             <MenuHeader />
-            <TeamSelectAndInviteButton
-              openCreateModal={() => setCreateTeamVisible(true)}
-            />
+            <div css={teamSelectAndInviteButtonContainerStyle}>
+              <TeamSelectAndInviteButton
+                openCreateModal={() => setCreateTeamVisible(true)}
+              />
+            </div>
             <FeatureArea />
             <div css={dividerContainerStyle}>
               <Divider

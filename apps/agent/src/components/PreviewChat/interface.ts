@@ -5,8 +5,8 @@ import {
   IKnowledgeFile,
 } from "@illa-public/public-types"
 import { Params } from "@illa-public/record-editor"
-import { ILLA_WEBSOCKET_STATUS } from "../../api/ws/interface"
-import { TextSignal } from "../../api/ws/textSignal"
+import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
+import { TextSignal } from "@/api/ws/textSignal"
 import { AgentMessageType } from "./TipisWebscoketContext/interface"
 
 export type EDIT_STATE = "EDIT" | "RUN"

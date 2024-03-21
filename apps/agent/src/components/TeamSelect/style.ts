@@ -23,6 +23,9 @@ export const teamAvatarContainerStyle = css`
   flex: none;
   width: 24px;
   height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 export const iconContainerStyle = css`

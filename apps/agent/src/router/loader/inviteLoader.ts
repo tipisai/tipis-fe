@@ -3,9 +3,9 @@ import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { authAPI } from "@illa-public/user-data"
 import { getAuthToken } from "@illa-public/utils"
 import i18n from "@/i18n"
+import store from "@/redux/store"
 import { message } from "@/utils/antdStore"
 import { setLocalCurrentTeamID } from "@/utils/auth"
-import store from "../../redux/store"
 
 export const inviteLoader = async (args: LoaderFunctionArgs) => {
   const { request } = args
