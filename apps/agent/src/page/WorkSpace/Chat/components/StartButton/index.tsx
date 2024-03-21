@@ -1,8 +1,8 @@
 import Icon from "@ant-design/icons"
-import { Button } from "antd"
 import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { PlayFillIcon, ResetIcon } from "@illa-public/icon"
+import BlackButton from "@/components/BlackButton"
 import { ChatUnStableWSContext } from "../../context"
 
 const StartButton: FC = () => {
@@ -11,10 +11,11 @@ const StartButton: FC = () => {
   const { t } = useTranslation()
 
   return (
-    <Button
+    <BlackButton
       size="large"
       htmlType="submit"
       type="primary"
+      disabled
       loading={isConnecting}
       icon={
         isRunning ? (
@@ -25,7 +26,7 @@ const StartButton: FC = () => {
       }
     >
       {!isRunning ? t("editor.ai-agent.start") : t("editor.ai-agent.restart")}
-    </Button>
+    </BlackButton>
   )
 }
 

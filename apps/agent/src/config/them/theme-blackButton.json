@@ -1,0 +1,240 @@
+{
+  "token": {
+    "colorPrimary": "#654aec",
+    "colorSuccess": "#0bc957",
+    "colorWarning": "#fa8214",
+    "colorError": "#ff4747",
+    "colorInfo": "#654aec",
+    "borderRadius": 16,
+    "wireframe": false,
+    "boxShadowSecondary": "\n         0 2px 4px 0 rgba(0, 0, 0, 0.10),\n            0 0px 2px 0 rgba(0, 0, 0, 0.06)\n    ",
+    "sizeStep": 4,
+    "sizeUnit": 4,
+    "borderRadiusSM": 4,
+    "colorTextBase": "#1d2129",
+    "colorBorder": "#E5E6EB",
+    "colorBgLayout": "#F7F8FA",
+    "colorPrimaryBg": "#f8f5ff",
+    "boxShadow": "\n         0 2px 4px 0 rgba(0, 0, 0, 0.10),\n            0 0px 2px 0 rgba(0, 0, 0, 0.06)\n    "
+  },
+  "components": {
+    "Checkbox": {
+      "borderRadiusSM": 2,
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Steps": {
+      "colorTextDescription": "rgba(169, 174, 184, 1);",
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif",
+      "iconSize": 24,
+      "fontSizeLG": 16,
+      "fontSizeSM": 12,
+      "fontSizeIcon": 12,
+      "titleLineHeight": 24,
+      "lineHeight": 1.25,
+      "lineHeightSM": 15
+    },
+    "Menu": {
+      "colorItemBgHover": "rgba(29, 33, 41, 0.04)",
+      "colorSubItemBg": "rgba(0, 0, 0, 0.02)",
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Button": {
+      "paddingInlineSM": 6,
+      "borderRadius": 10,
+      "contentFontSizeLG": 14,
+      "contentFontSizeSM": 12,
+      "onlyIconSize": 14,
+      "onlyIconSizeLG": 14,
+      "onlyIconSizeSM": 14,
+      "borderRadiusLG": 12,
+      "borderRadiusSM": 8,
+      "colorBgContainerDisabled": "rgb(29, 33, 41)",
+      "paddingBlock": 4,
+      "paddingBlockSM": 1,
+      "paddingBlockLG": 8,
+      "colorPrimary": "rgb(29, 33, 41)",
+      "colorPrimaryActive": "rgb(11, 12, 15)",
+      "colorPrimaryHover": "rgba(29, 33, 41, 0.8)",
+      "colorTextDisabled": "rgba(255, 255, 255, 0.31)",
+      "lineWidth": 0
+    },
+    "Divider": {
+      "textPaddingInline": "1.25em",
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif",
+      "colorSplit": "rgb(229, 230, 235)"
+    },
+    "Switch": {
+      "colorTextQuaternary": "rgb(242, 243, 245)",
+      "colorTextTertiary": "rgb(227, 229, 233)",
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif",
+      "handleSize": 16,
+      "trackPadding": 3,
+      "trackHeight": 24,
+      "trackMinWidth": 40,
+      "trackMinWidthSM": 26,
+      "handleSizeSM": 10
+    },
+    "TreeSelect": {
+      "borderRadius": 10,
+      "borderRadiusSM": 8
+    },
+    "Statistic": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Alert": {
+      "borderRadiusLG": 8,
+      "lineWidth": 0
+    },
+    "Result": {
+      "colorTextDescription": "rgba(29, 33, 41, 0.32)",
+      "titleFontSize": 24
+    },
+    "Tag": {
+      "lineWidth": 0,
+      "borderRadiusSM": 12
+    },
+    "Typography": {
+      "fontFamilyCode": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Anchor": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Breadcrumb": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif",
+      "borderRadiusSM": 8
+    },
+    "Dropdown": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif",
+      "borderRadiusLG": 12,
+      "borderRadiusSM": 8,
+      "borderRadiusXS": 4,
+      "paddingBlock": 4,
+      "marginXXS": 4,
+      "marginXS": 8,
+      "lineWidthFocus": 4,
+      "boxShadowSecondary": "      0 2px 6px 0 rgba(0, 0, 0, 0.10)"
+    },
+    "Pagination": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif",
+      "borderRadius": 8,
+      "borderRadiusLG": 8,
+      "borderRadiusSM": 6
+    },
+    "Cascader": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "DatePicker": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif",
+      "borderRadius": 10,
+      "borderRadiusLG": 12,
+      "borderRadiusSM": 6,
+      "borderRadiusXS": 4,
+      "colorBgContainerDisabled": "rgba(29, 33, 41, 0)"
+    },
+    "Form": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Input": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif",
+      "borderRadius": 10,
+      "borderRadiusLG": 12,
+      "borderRadiusSM": 8,
+      "colorBgContainerDisabled": "rgba(29, 33, 41, 0)",
+      "inputFontSizeLG": 14,
+      "inputFontSizeSM": 12,
+      "paddingBlock": 4,
+      "paddingBlockSM": 1,
+      "paddingBlockLG": 8,
+      "paddingInline": 11,
+      "paddingInlineSM": 11
+    },
+    "InputNumber": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif",
+      "borderRadius": 10,
+      "borderRadiusLG": 12,
+      "borderRadiusSM": 8,
+      "colorBgContainerDisabled": "rgba(29, 33, 41, 0)",
+      "paddingBlockLG": 8,
+      "paddingBlockSM": 1
+    },
+    "Mentions": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif",
+      "borderRadius": 10,
+      "borderRadiusLG": 12,
+      "borderRadiusSM": 8,
+      "colorBgContainerDisabled": "rgba(29, 33, 41, 0)"
+    },
+    "Radio": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif",
+      "borderRadius": 10,
+      "borderRadiusLG": 12,
+      "borderRadiusSM": 8
+    },
+    "Rate": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Select": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif",
+      "borderRadius": 10,
+      "borderRadiusLG": 12,
+      "colorBgContainerDisabled": "rgba(29, 33, 41, 0)",
+      "borderRadiusSM": 8
+    },
+    "Slider": {
+      "fontFamily": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
+    },
+    "Segmented": {
+      "borderRadiusSM": 10,
+      "borderRadius": 12,
+      "boxShadowTertiary": "      0 0px 2px 0 rgba(0, 0, 0, 0.24),      0 1px 6px -1px rgba(0, 0, 0, 0.02),      0 2px 4px 0 rgba(0, 0, 0, 0.02)    "
+    },
+    "Card": {
+      "boxShadowCard": "      0 2px 6px 0 rgba(0, 0, 0, 0.08)"
+    },
+    "Transfer": {
+      "borderRadiusLG": 12
+    },
+    "Upload": {
+      "borderRadiusLG": 12,
+      "lineWidth": 1
+    },
+    "Avatar": {
+      "colorText": "rgba(29, 33, 41, 0.6)",
+      "colorTextPlaceholder": "rgba(29, 33, 41, 0.12)",
+      "borderRadiusSM": 8,
+      "borderRadiusLG": 12,
+      "borderRadius": 12
+    },
+    "Descriptions": {
+      "labelBg": "rgb(242, 243, 245)"
+    },
+    "Image": {
+      "colorBgMask": "rgba(0, 0, 0, 0.5)"
+    },
+    "List": {
+      "colorText": "rgb(29, 33, 41)"
+    },
+    "Popover": {
+      "borderRadiusLG": 12,
+      "boxShadowPopoverArrow": "      0 2px 6px 0 rgba(0, 0, 0, 0.10)",
+      "boxShadowSecondary": "      0 2px 6px 0 rgba(0, 0, 0, 0.10)"
+    },
+    "Notification": {
+      "colorIcon": "rgb(29, 33, 41)",
+      "lineHeight": 1.25,
+      "colorText": "rgb(169, 174, 184)"
+    },
+    "Tabs": {
+      "borderRadius": 10,
+      "borderRadiusLG": 12,
+      "cardGutter": 4
+    },
+    "Tooltip": {
+      "colorText": "rgb(29, 33, 41)",
+      "colorBgSpotlight": "rgb(29, 33, 41)",
+      "borderRadius": 8,
+      "borderRadiusXS": 4,
+      "paddingXS": 8
+    }
+  }
+}
