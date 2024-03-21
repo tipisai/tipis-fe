@@ -11,6 +11,7 @@ export const menuHeaderStyle = css`
 export const logoAndProjectNameContainerStyle = css`
   display: flex;
   align-items: center;
+  font-size: 24px;
 `
 
 export const projectNameStyle = css`

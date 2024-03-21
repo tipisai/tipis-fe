@@ -68,6 +68,56 @@ export const agentAuthAPI = createApi({
       query: ({ teamID, aiAgentID }) =>
         `/teams/${teamID}/aiAgent/${aiAgentID}/connectionAddress`,
     }),
+    duplicateAIAgent: builder.mutation<
+      Agent,
+      {
+        teamID: string
+        aiAgentID: string
+      }
+    >({
+      query: ({ teamID, aiAgentID }) => ({
+        url: `/teams/${teamID}/aiAgent/${aiAgentID}/duplicate`,
+        method: "POST",
+      }),
+      async onQueryStarted(
+        { teamID, aiAgentID },
+        { dispatch, queryFulfilled },
+      ) {
+        const templateID = v4()
+        const patchResult = dispatch(
+          agentAuthAPI.util.updateQueryData(
+            "getAIAgentListByPage",
+            { teamID },
+            (draft) => {
+              const targetAgent = draft.aiAgentList?.find(
+                (agent) => agent.aiAgentID === aiAgentID,
+              )
+              if (targetAgent) {
+                draft.aiAgentList?.unshift({
+                  ...targetAgent,
+                  aiAgentID: templateID,
+                })
+              }
+            },
+          ),
+        )
+        try {
+          const { data: agentDetail } = await queryFulfilled
+          patchResult.undo()
+          dispatch(
+            agentAuthAPI.util.updateQueryData(
+              "getAIAgentListByPage",
+              { teamID },
+              (draft) => {
+                draft.aiAgentList?.unshift(agentDetail)
+              },
+            ),
+          )
+        } catch {
+          patchResult.undo()
+        }
+      },
+    }),
     forkAIAgentToTeam: builder.mutation<
       Agent,
       { teamID: string; aiAgentID: string }
@@ -163,6 +213,40 @@ export const agentAuthAPI = createApi({
             ]
           : [{ type: "Agents", id: `${teamID}-LIST-PAGE` }],
     }),
+    deleteAIAgent: builder.mutation<
+      {
+        aiAgentID: string
+      },
+      { teamID: string; aiAgentID: string }
+    >({
+      query: ({ teamID, aiAgentID }) => ({
+        url: `/teams/${teamID}/aiAgent/${aiAgentID}`,
+        method: "DELETE",
+      }),
+      async onQueryStarted(
+        { teamID, aiAgentID },
+        { dispatch, queryFulfilled },
+      ) {
+        const patchResult = dispatch(
+          agentAuthAPI.util.updateQueryData(
+            "getAIAgentListByPage",
+            {
+              teamID,
+            },
+            (draft) => {
+              draft.aiAgentList = draft.aiAgentList?.filter(
+                (agent) => agent.aiAgentID !== aiAgentID,
+              )
+            },
+          ),
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.undo()
+        }
+      },
+    }),
   }),
 })
 
@@ -180,4 +264,6 @@ export const {
   useGenerateIconMutation,
   useGetAgentIconUploadAddressMutation,
   useGetAIAgentListByPageQuery,
+  useDuplicateAIAgentMutation,
+  useDeleteAIAgentMutation,
 } = agentAuthAPI

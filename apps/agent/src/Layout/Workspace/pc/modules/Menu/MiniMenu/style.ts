@@ -21,7 +21,9 @@ export const miniMenuFooterContainerStyle = css`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   width: 100%;
+  padding-bottom: 4px;
 `
 
 export const miniMenuUserAvatarContainerStyle = css`
@@ -32,6 +34,7 @@ export const miniMenuUserAvatarContainerStyle = css`
   width: 100%;
   height: 56px;
   flex: none;
+  font-size: 24px;
 `
 
 export const miniMenuTopAreaContainerStyle = css`
@@ -56,9 +59,9 @@ export const dividerContainerStyle = css`
   padding: 0 12px;
 `
 
-export const popoverContentContainerStyle = css`
-  display: flex;
-  flex-direction: column;
-  width: 208px;
-  gap: 2px;
+export const userInfoContainerStyle = css`
+  width: 100%;
+  height: 48px;
+  flex: none;
+  padding: 8px 12px;
 `

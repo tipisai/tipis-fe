@@ -1,12 +1,9 @@
 import Icon from "@ant-design/icons"
-import { Avatar, Button, Divider, Popover } from "antd"
+import { Button, Divider } from "antd"
 import { FC, useContext } from "react"
-import { useSelector } from "react-redux"
 import { NextDoubleIcon } from "@illa-public/icon"
-import { getCurrentUser } from "@illa-public/user-data"
-import DiscordIcon from "@/assets/public/discord.svg?react"
-import DocumentIcon from "@/assets/public/document.svg?react"
-import SettingIcon from "@/assets/public/setting.svg?react"
+import LogoIcon from "@/assets/public/logo.svg?react"
+import UserInfoContent from "../../../components/UserInfoContent"
 import RecentTabs from "../../RecentTabs"
 import { MenuStatusUIContext } from "../context"
 import {
@@ -17,11 +14,10 @@ import {
   miniMenuLockSideBarContainerStyle,
   miniMenuTopAreaContainerStyle,
   miniMenuUserAvatarContainerStyle,
-  popoverContentContainerStyle,
+  userInfoContainerStyle,
 } from "./style"
 
 const MiniMenu: FC = () => {
-  const userInfo = useSelector(getCurrentUser)
   const { changeCollapsed } = useContext(MenuStatusUIContext)
 
   return (
@@ -29,7 +25,7 @@ const MiniMenu: FC = () => {
       <div css={miniMenuInnerContainerStyle}>
         <div css={miniMenuTopAreaContainerStyle}>
           <div css={miniMenuUserAvatarContainerStyle}>
-            <Avatar src={userInfo.avatar} shape="circle" size={24} />
+            <Icon component={LogoIcon} />
           </div>
           <div css={miniMenuLockSideBarContainerStyle}>
             <Button
@@ -57,51 +53,9 @@ const MiniMenu: FC = () => {
               }}
             />
           </div>
-          <Popover
-            arrow={false}
-            autoAdjustOverflow
-            placement="right"
-            trigger={["click"]}
-            align={{
-              offset: [8, -16],
-            }}
-            content={
-              <div css={popoverContentContainerStyle}>
-                <Button
-                  type="text"
-                  block
-                  icon={<Icon component={DiscordIcon} />}
-                >
-                  Click me!
-                </Button>
-                <Button
-                  type="text"
-                  block
-                  icon={<Icon component={DocumentIcon} />}
-                >
-                  Click me!
-                </Button>
-                <Button
-                  type="text"
-                  block
-                  icon={<Icon component={SettingIcon} />}
-                >
-                  Click me!
-                </Button>
-              </div>
-            }
-          >
-            <div css={miniMenuUserAvatarContainerStyle}>
-              <Avatar
-                src={userInfo.avatar}
-                shape="circle"
-                size={32}
-                style={{
-                  cursor: "pointer",
-                }}
-              />
-            </div>
-          </Popover>
+          <div css={userInfoContainerStyle}>
+            <UserInfoContent isMiniSize />
+          </div>
         </div>
       </div>
     </section>
