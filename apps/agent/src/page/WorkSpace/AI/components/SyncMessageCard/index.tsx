@@ -17,6 +17,7 @@ import {
 import { getInfoByStatus } from "./utils"
 
 export const PureMessage: FC<PureMessageProps> = ({ message }) => {
+  if (!message) return null
   return (
     <div css={messageContainerStyle}>
       <MarkdownMessage>{message}</MarkdownMessage>
@@ -50,17 +51,13 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
     if ("code" in res && !!res.code) {
       formatMessage = `\`\`\`python\n${res.code}\n\`\`\``
     } else {
-      formatMessage = `\`\`\`json\n${JSON.parse(message)}\n\`\`\``
+      formatMessage = `\`\`\`json\n${JSON.stringify(res, null, 2)}\n\`\`\``
     }
   } catch (e) {
     formatMessage = `\`\`\`json\n${message}\n\`\`\``
   }
 
   const { InfoIcon, InfoTitle } = getInfoByStatus(messageStatus)
-
-  // const hasResult =
-  //   messageStatus === MESSAGE_STATUS.ANALYZE_SUCCESS ||
-  //   messageStatus === MESSAGE_STATUS.ANALYZE_ERROR
 
   return (
     <div css={containerStyle}>
@@ -70,7 +67,6 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
       >
         {InfoIcon}
         {InfoTitle}
-        {/* {hasResult && <Icon component={showMessage ? UpIcon : DownIcon} />} */}
         <Icon component={showMessage ? UpIcon : DownIcon} />
       </div>
       <AnimatePresence>
