@@ -48,7 +48,7 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
   let formatMessage
   try {
     const res = JSON.parse(message)
-    if ("code" in res && !!res.code) {
+    if ("function_arguments" in res && !!res["function_arguments"]?.["code"]) {
       formatMessage = `\`\`\`python\n${res.code}\n\`\`\``
     } else {
       formatMessage = `\`\`\`json\n${JSON.stringify(res, null, 2)}\n\`\`\``
