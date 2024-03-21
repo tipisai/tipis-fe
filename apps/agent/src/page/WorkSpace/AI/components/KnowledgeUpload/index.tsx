@@ -54,6 +54,7 @@ const getIconByStatus = (
       return (
         <Progress
           type="circle"
+          size={16}
           percent={percent > 90 ? 90 : parseFloat(percent.toFixed(2))}
         />
       )
