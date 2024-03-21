@@ -103,6 +103,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
 
   const onUpdateRoomUser = useCallback(
     (roomUsers: CollaboratorsInfo[]) => {
+      // TODO: userName & botName
       let newRoomUsers = updateLocalIcon("ddddddddd", roomUsers)
       newRoomUsers = updateLocalName("ChatBot", roomUsers)
       setInRoomUsers(newRoomUsers)

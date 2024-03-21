@@ -3,8 +3,9 @@ import { FormProvider, useForm } from "react-hook-form"
 import { Navigate } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { Agent } from "@illa-public/public-types"
-import CustomTitle from "@/Layout/Workspace/pc/components/CustomTitle"
-import WorkspaceMobileHeaderLayout from "@/Layout/Workspace/pc/components/Header"
+import MobileCustomTitle from "@/Layout/Workspace/mobile/components/CustomTitle"
+import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayout/fistPageLayout"
+import PCCustomTitle from "@/Layout/Workspace/pc/components/CustomTitle"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
@@ -54,7 +55,7 @@ export const ContributedAgent: FC = () => {
                       title={contributeAgentDetail.name}
                       extra={<HeaderTools />}
                       customRenderTitle={(title) => (
-                        <CustomTitle
+                        <PCCustomTitle
                           title={title}
                           iconURL={contributeAgentDetail.icon}
                         />
@@ -65,17 +66,18 @@ export const ContributedAgent: FC = () => {
                 }
                 mobilePage={
                   <>
-                    <WorkspaceMobileHeaderLayout
+                    <MobileFirstPageLayout
                       title={contributeAgentDetail.name}
-                      extra={<MobileMoreActionButton />}
+                      headerExtra={<MobileMoreActionButton />}
                       customRenderTitle={(title) => (
-                        <CustomTitle
+                        <MobileCustomTitle
                           title={title}
                           iconURL={contributeAgentDetail.icon}
                         />
                       )}
-                    />
-                    <AIAgentRunMobile />
+                    >
+                      <AIAgentRunMobile />
+                    </MobileFirstPageLayout>
                   </>
                 }
               />

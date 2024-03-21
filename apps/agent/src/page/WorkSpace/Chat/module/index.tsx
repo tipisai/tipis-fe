@@ -1,6 +1,6 @@
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
-import CustomTitle from "@/Layout/Workspace/pc/components/CustomTitle"
+import PCCustomTitle from "@/Layout/Workspace/pc/components/CustomTitle"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import HeaderTools from "../components/HeaderTools"
 import DefaultChat from "./chatHistory"
@@ -14,7 +14,7 @@ const ChatContent: FC = () => {
         title={t("Tipi")}
         extra={<HeaderTools />}
         customRenderTitle={(title) => (
-          <CustomTitle title={title} iconURL={""} />
+          <PCCustomTitle title={title} iconURL={""} />
         )}
       />
       <DefaultChat isMobile={false} />
