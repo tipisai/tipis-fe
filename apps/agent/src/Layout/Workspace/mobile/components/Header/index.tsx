@@ -20,6 +20,7 @@ const WorkspaceMobileHeaderLayout = memo(
       extra,
       closeIcon = PreviousIcon,
       onClickClose,
+      customRenderTitle,
     } = props
     return (
       <>
@@ -34,10 +35,14 @@ const WorkspaceMobileHeaderLayout = memo(
             onClick={onClickClose}
             size="large"
           />
-          <div css={titleAndTitleDescContainerStyle}>
-            <h1 css={titleStyle}>{title}</h1>
-            {titleDesc && <span css={titleDescStyle}>{titleDesc}</span>}
-          </div>
+          {customRenderTitle ? (
+            customRenderTitle(title)
+          ) : (
+            <div css={titleAndTitleDescContainerStyle}>
+              <h1 css={titleStyle}>{title}</h1>
+              {titleDesc && <span css={titleDescStyle}>{titleDesc}</span>}
+            </div>
+          )}
           {extra}
         </header>
       </>

@@ -1,11 +1,11 @@
 import { Divider, Drawer } from "antd"
 import { FC, useState } from "react"
+import MenuFooter from "@/Layout/Workspace/modules/MenuFooter"
+import RecentTabs from "@/Layout/Workspace/modules/RecentTabs"
+import TeamSelectAndInviteButton from "@/Layout/Workspace/modules/TeamSelectAndInviteButton"
+import CreateTeamModal from "@/Layout/Workspace/pc/components/CreateTeamModal"
+import FeatureArea from "@/Layout/Workspace/pc/modules/FeatureArea"
 import MobileMenuIcon from "@/assets/workspace/mobileMenu.svg?react"
-import MenuFooter from "../../../modules/MenuFooter"
-import RecentTabs from "../../../modules/RecentTabs"
-import TeamSelectAndInviteButton from "../../../modules/TeamSelectAndInviteButton"
-import CreateTeamModal from "../../../pc/components/CreateTeamModal"
-import FeatureArea from "../../../pc/modules/FeatureArea"
 import WorkspaceMobileHeaderLayout from "../../components/Header"
 import { IFirstPageLayoutProps } from "./interface"
 import {
@@ -15,7 +15,7 @@ import {
 } from "./style"
 
 const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
-  const { headerExtra, children } = props
+  const { headerExtra, children, customRenderTitle, title } = props
   const [openDrawer, setOpenDrawer] = useState(false)
   const [createTeamVisible, setCreateTeamVisible] = useState(false)
 
@@ -30,10 +30,11 @@ const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
   return (
     <>
       <WorkspaceMobileHeaderLayout
-        title="Chat"
+        title={title}
         extra={headerExtra}
         closeIcon={MobileMenuIcon}
         onClickClose={showDrawer}
+        customRenderTitle={customRenderTitle}
       />
       {children}
       <Drawer

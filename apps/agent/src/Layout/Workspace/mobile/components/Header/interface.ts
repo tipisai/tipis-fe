@@ -7,4 +7,5 @@ export interface IWorkspaceHeaderLayoutProps {
   extra?: ReactNode
   closeIcon?: IconComponentProps["component"]
   onClickClose?: () => void
+  customRenderTitle?: (title: string) => ReactNode
 }
