@@ -46,9 +46,14 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
 
   let formatMessage
   try {
-    formatMessage = `\`\`\`python\n${JSON.parse(message)?.["code"]}\n\`\`\``
+    const res = JSON.parse(message)
+    if ("code" in res && !!res.code) {
+      formatMessage = `\`\`\`python\n${res.code}\n\`\`\``
+    } else {
+      formatMessage = `\`\`\`json\n${JSON.parse(message)}\n\`\`\``
+    }
   } catch (e) {
-    formatMessage = `\`\`\`python\n${message}\n\`\`\``
+    formatMessage = `\`\`\`json\n${message}\n\`\`\``
   }
 
   const { InfoIcon, InfoTitle } = getInfoByStatus(messageStatus)
