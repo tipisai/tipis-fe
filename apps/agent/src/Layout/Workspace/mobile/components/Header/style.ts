@@ -7,7 +7,7 @@ export const headerLayoutContainerStyle = css`
   width: 100%;
   padding: 12px 6px;
   align-items: center;
-  gap: 24px;
+  gap: 12px;
   justify-content: space-between;
 `
 
