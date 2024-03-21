@@ -9,10 +9,13 @@ import {
   useState,
 } from "react"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { v4 } from "uuid"
-import { WooModalType, useCollarModal } from "@illa-public/upgrade-modal"
-import { getCurrentTeamInfo, getCurrentUser } from "@illa-public/user-data"
+import {
+  WooModalType,
+  handleWooPurchaseError,
+  useCollarModal,
+} from "@illa-public/upgrade-modal"
+import { getCurrentId } from "@illa-public/user-data"
 import { getTextMessagePayload } from "@/api/ws"
 import { Callback } from "@/api/ws/interface"
 import { TextSignal, TextTarget } from "@/api/ws/textSignal"
@@ -32,12 +35,18 @@ import {
   SenderType,
 } from "@/components/PreviewChat/interface"
 import { useLazyGetAIAgentAnonymousAddressQuery } from "@/redux/services/agentAPI"
+import store from "../../../../redux/store"
 import { DEFAULT_PROMO, INIT_CHAT_CONFIG } from "../constants"
-import { IAgentWSInject, IChatWSProviderProps } from "./interface"
+import {
+  IChatStableWSInject,
+  IChatUnStableWSInject,
+  IChatWSProviderProps,
+} from "./interface"
 import { isNormalMessage } from "./typeHelper"
 import { cancelPendingMessage, formatSendMessagePayload } from "./utils"
 
-export const ChatWSContext = createContext({} as IAgentWSInject)
+export const ChatStableWSContext = createContext({} as IChatStableWSInject)
+export const ChatUnStableWSContext = createContext({} as IChatUnStableWSInject)
 
 export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
   const { children } = props
@@ -48,8 +57,14 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
 
   const collaModal = useCollarModal()
 
-  const currentUserInfo = useSelector(getCurrentUser)
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)
+  const [isConnecting, setIsConnecting] = useState(false)
+  const [isReceiving, setIsReceiving] = useState(false)
+  const [isRunning, setIsRunning] = useState(false)
+  const [inRoomUsers, setInRoomUsers] = useState<CollaboratorsInfo[]>([])
+  const [chatMessages, setChatMessages] = useState<
+    (IGroupMessage | ChatMessage)[]
+  >([])
+  const chatMessagesRef = useRef<(IGroupMessage | ChatMessage)[]>([])
 
   const [triggerGetAIAgentAnonymousAddressQuery] =
     useLazyGetAIAgentAnonymousAddressQuery()
@@ -81,15 +96,6 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     },
     [],
   )
-
-  const [isConnecting, setIsConnecting] = useState(false)
-  const [isReceiving, setIsReceiving] = useState(false)
-  const [isRunning, setIsRunning] = useState(false)
-  const [inRoomUsers, setInRoomUsers] = useState<CollaboratorsInfo[]>([])
-  const [chatMessages, setChatMessages] = useState<
-    (IGroupMessage | ChatMessage)[]
-  >([])
-  const chatMessagesRef = useRef<(IGroupMessage | ChatMessage)[]>([])
 
   const onUpdateRoomUser = useCallback(
     (roomUsers: CollaboratorsInfo[]) => {
@@ -196,18 +202,18 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           type: type,
           payload: {},
         },
-        currentTeamInfo?.id ?? "",
-        currentUserInfo.userID,
+        "",
+        "",
         [encodePayload],
       )
       sendMessage(textMessage)
 
       if (updateMessage && messageContent) {
         chatMessagesRef.current = [...chatMessagesRef.current, messageContent]
-        setChatMessages([...chatMessages, messageContent])
+        setChatMessages((prevMessage) => [...prevMessage, messageContent])
       }
     },
-    [chatMessages, currentTeamInfo?.id, currentUserInfo.userID, sendMessage],
+    [sendMessage],
   )
 
   const onMessageSuccessCallback = useCallback(
@@ -294,43 +300,49 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     [collaModal, messageAPI, t],
   )
 
-  const getConnectAddress = useCallback(async () => {
+  const getConnectParams = useCallback(async () => {
+    const currentTeamID = getCurrentId(store.getState())!
     try {
       const { aiAgentConnectionAddress } =
-        await triggerGetAIAgentAnonymousAddressQuery(
-          currentTeamInfo!.id,
-        ).unwrap()
+        await triggerGetAIAgentAnonymousAddressQuery(currentTeamID).unwrap()
 
-      return aiAgentConnectionAddress
+      const initConnectConfig: IInitWSCallback = {
+        onConnecting: (isConnecting) => {
+          setIsConnecting(isConnecting)
+        },
+        onReceiving: (isReceiving) => {
+          setIsReceiving(isReceiving)
+        },
+
+        onMessageSuccessCallback,
+        onMessageFailedCallback,
+        address: aiAgentConnectionAddress,
+      }
+      return initConnectConfig
     } catch (e) {
-      setIsConnecting(true)
-      throw e
+      const res = handleWooPurchaseError(e, WooModalType.TOKEN, "agent_run")
+      if (res) return
+      messageAPI.error({
+        content: t("editor.ai-agent.message.start-failed"),
+      })
     }
-  }, [currentTeamInfo, triggerGetAIAgentAnonymousAddressQuery])
-
-  const getConnectParams = useCallback(() => {
-    const initConnectConfig: IInitWSCallback = {
-      onConnecting: (isConnecting) => {
-        setIsConnecting(isConnecting)
-      },
-      onReceiving: (isReceiving) => {
-        setIsReceiving(isReceiving)
-      },
-
-      onMessageSuccessCallback,
-      onMessageFailedCallback,
-      getConnectAddress: getConnectAddress,
-    }
-    return initConnectConfig
-  }, [getConnectAddress, onMessageFailedCallback, onMessageSuccessCallback])
+  }, [
+    messageAPI,
+    onMessageFailedCallback,
+    onMessageSuccessCallback,
+    t,
+    triggerGetAIAgentAnonymousAddressQuery,
+  ])
 
   const innerConnect = useCallback(async () => {
-    const initConnectConfig = getConnectParams()
+    const initConnectConfig = await getConnectParams()
+    if (!initConnectConfig) return
     await connect?.(initConnectConfig)
     setIsConnecting(false)
     setIsRunning(true)
     setIsReceiving(true)
   }, [connect, getConnectParams])
+
   const innerLeaveRoom = useCallback(() => {
     cleanMessage()
     leaveRoom()
@@ -342,34 +354,33 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     await innerConnect()
   }, [innerConnect, innerLeaveRoom])
 
-  const value = useMemo(() => {
+  const stableValue = useMemo(() => {
     return {
       sendMessage: innerSendMessage,
-      chatMessages,
       reconnect: innerReconnect,
       connect: innerConnect,
+      setIsReceiving,
+      leaveRoom: innerLeaveRoom,
+    }
+  }, [innerConnect, innerLeaveRoom, innerReconnect, innerSendMessage])
+
+  const unStableValue = useMemo(
+    () => ({
       wsStatus,
       isConnecting,
       isReceiving,
       isRunning,
       inRoomUsers,
-      setIsReceiving,
-      leaveRoom: innerLeaveRoom,
-    }
-  }, [
-    chatMessages,
-    inRoomUsers,
-    innerConnect,
-    innerLeaveRoom,
-    innerReconnect,
-    innerSendMessage,
-    isConnecting,
-    isReceiving,
-    isRunning,
-    wsStatus,
-  ])
+      chatMessages,
+    }),
+    [chatMessages, inRoomUsers, isConnecting, isReceiving, isRunning, wsStatus],
+  )
 
   return (
-    <ChatWSContext.Provider value={value}>{children}</ChatWSContext.Provider>
+    <ChatStableWSContext.Provider value={stableValue}>
+      <ChatUnStableWSContext.Provider value={unStableValue}>
+        {children}
+      </ChatUnStableWSContext.Provider>
+    </ChatStableWSContext.Provider>
   )
 }

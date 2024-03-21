@@ -10,11 +10,14 @@ import {
 } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { v4 } from "uuid"
 import { Agent } from "@illa-public/public-types"
-import { WooModalType, useCollarModal } from "@illa-public/upgrade-modal"
-import { getCurrentTeamInfo, getCurrentUser } from "@illa-public/user-data"
+import {
+  WooModalType,
+  handleWooPurchaseError,
+  useCollarModal,
+} from "@illa-public/upgrade-modal"
+import { getCurrentId } from "@illa-public/user-data"
 import { getTextMessagePayload } from "@/api/ws"
 import { Callback } from "@/api/ws/interface"
 import { TextSignal, TextTarget } from "@/api/ws/textSignal"
@@ -37,6 +40,7 @@ import {
   useLazyGetAIAgentAnonymousAddressQuery,
   useLazyGetAIAgentWsAddressQuery,
 } from "@/redux/services/agentAPI"
+import store from "../../../../../redux/store"
 import { IAgentWSInject, IAgentWSProviderProps } from "./interface"
 import { isNormalMessage } from "./typeHelper"
 import { cancelPendingMessage, formatSendMessagePayload } from "./utils"
@@ -52,9 +56,6 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
 
   const { getValues } = useFormContext<Agent>()
   const collaModal = useCollarModal()
-
-  const currentUserInfo = useSelector(getCurrentUser)
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)
 
   const [triggerGetAIAgentAnonymousAddressQuery] =
     useLazyGetAIAgentAnonymousAddressQuery()
@@ -227,8 +228,8 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
           type: type,
           payload: {},
         },
-        currentTeamInfo?.id ?? "",
-        currentUserInfo.userID,
+        "",
+        "",
         [encodePayload],
       )
       sendMessage(textMessage)
@@ -238,7 +239,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
         setChatMessages([...chatMessages, messageContent])
       }
     },
-    [chatMessages, currentTeamInfo?.id, currentUserInfo.userID, sendMessage],
+    [chatMessages, sendMessage],
   )
 
   const onMessageSuccessCallback = useCallback(
@@ -331,56 +332,58 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
     [collaModal, messageAPI, t],
   )
 
-  const getConnectAddress = useCallback(async () => {
+  const getConnectParams = useCallback(async () => {
     const aiAgentID = getValues("aiAgentID")
     let address = ""
+    const currentTeamID = getCurrentId(store.getState())!
     try {
       if (aiAgentID === "" || aiAgentID === undefined) {
         const { aiAgentConnectionAddress } =
-          await triggerGetAIAgentAnonymousAddressQuery(
-            currentTeamInfo!.id,
-          ).unwrap()
+          await triggerGetAIAgentAnonymousAddressQuery(currentTeamID).unwrap()
 
         address = aiAgentConnectionAddress
       } else {
         const { aiAgentConnectionAddress } =
           await triggerGetAIAgentWsAddressQuery({
-            teamID: currentTeamInfo!.id,
+            teamID: currentTeamID,
             aiAgentID: aiAgentID,
           }).unwrap()
 
         address = aiAgentConnectionAddress
       }
-      return address
+      const initConnectConfig: IInitWSCallback = {
+        onConnecting: (isConnecting) => {
+          setIsConnecting(isConnecting)
+        },
+        onReceiving: (isReceiving) => {
+          setIsReceiving(isReceiving)
+        },
+
+        onMessageSuccessCallback,
+        onMessageFailedCallback,
+        address: address,
+      }
+      return initConnectConfig
     } catch (e) {
-      setIsConnecting(true)
-      throw e
+      const res = handleWooPurchaseError(e, WooModalType.TOKEN, "agent_run")
+      if (res) return
+      messageAPI.error({
+        content: t("editor.ai-agent.message.start-failed"),
+      })
     }
   }, [
-    currentTeamInfo,
     getValues,
+    messageAPI,
+    onMessageFailedCallback,
+    onMessageSuccessCallback,
+    t,
     triggerGetAIAgentAnonymousAddressQuery,
     triggerGetAIAgentWsAddressQuery,
   ])
 
-  const getConnectParams = useCallback(() => {
-    const initConnectConfig: IInitWSCallback = {
-      onConnecting: (isConnecting) => {
-        setIsConnecting(isConnecting)
-      },
-      onReceiving: (isReceiving) => {
-        setIsReceiving(isReceiving)
-      },
-
-      onMessageSuccessCallback,
-      onMessageFailedCallback,
-      getConnectAddress: getConnectAddress,
-    }
-    return initConnectConfig
-  }, [getConnectAddress, onMessageFailedCallback, onMessageSuccessCallback])
-
   const innerConnect = useCallback(async () => {
-    const initConnectConfig = getConnectParams()
+    const initConnectConfig = await getConnectParams()
+    if (!initConnectConfig) return
     await connect(initConnectConfig)
     setIsConnecting(false)
     setIsRunning(true)

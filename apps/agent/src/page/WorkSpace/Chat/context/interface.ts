@@ -1,4 +1,5 @@
 import { ReactNode } from "react"
+import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { TextSignal } from "@/api/ws/textSignal"
 import {
   AgentMessageType,
@@ -25,6 +26,9 @@ export interface IAgentWSInject
   isRunning: boolean
   inRoomUsers: CollaboratorsInfo[]
   chatMessages: (IGroupMessage | ChatMessage)[]
+}
+
+export interface IChatStableWSInject {
   setIsReceiving: (isReceiving: boolean) => void
   connect: () => Promise<void>
   reconnect: () => Promise<void>
@@ -35,4 +39,14 @@ export interface IAgentWSInject
     updateMessage?: boolean,
     messageContent?: ChatMessage,
   ) => void
+  leaveRoom: () => void
+}
+
+export interface IChatUnStableWSInject {
+  isConnecting: boolean
+  isReceiving: boolean
+  isRunning: boolean
+  inRoomUsers: CollaboratorsInfo[]
+  chatMessages: (IGroupMessage | ChatMessage)[]
+  wsStatus: ILLA_WEBSOCKET_STATUS
 }

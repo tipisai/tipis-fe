@@ -3,10 +3,10 @@ import { Button } from "antd"
 import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { PlayFillIcon, ResetIcon } from "@illa-public/icon"
-import { ChatWSContext } from "../../context"
+import { ChatUnStableWSContext } from "../../context"
 
 const StartButton: FC = () => {
-  const { isConnecting, isRunning } = useContext(ChatWSContext)
+  const { isConnecting, isRunning } = useContext(ChatUnStableWSContext)
 
   const { t } = useTranslation()
 

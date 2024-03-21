@@ -1,5 +1,4 @@
-import { FC, useCallback, useContext, useEffect, useMemo, useRef } from "react"
-import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
+import { FC, useCallback, useContext, useEffect, useMemo } from "react"
 import { TextSignal } from "@/api/ws/textSignal"
 import { PreviewChat } from "@/components/PreviewChat"
 import {
@@ -8,25 +7,17 @@ import {
 } from "@/components/PreviewChat/interface"
 import { ChatContext } from "../AI/components/ChatContext"
 import { INIT_CHAT_CONFIG } from "./constants"
-import { ChatWSContext } from "./context"
+import { ChatStableWSContext, ChatUnStableWSContext } from "./context"
 import { rightPanelContainerStyle } from "./style"
 
 export const DefaultChat: FC<{ isMobile: boolean }> = ({
   isMobile = false,
 }) => {
-  const {
-    inRoomUsers,
-    isRunning,
-    connect,
-    wsStatus,
-    leaveRoom,
-    chatMessages,
-    isReceiving,
-    sendMessage,
-    setIsReceiving,
-  } = useContext(ChatWSContext)
+  const { connect, leaveRoom, sendMessage, setIsReceiving } =
+    useContext(ChatStableWSContext)
 
-  const onlyConnectOnce = useRef(false)
+  const { wsStatus, isRunning, chatMessages, isReceiving, inRoomUsers } =
+    useContext(ChatUnStableWSContext)
 
   const wsContext = useMemo(
     () => ({
@@ -73,26 +64,11 @@ export const DefaultChat: FC<{ isMobile: boolean }> = ({
   )
 
   useEffect(() => {
+    connect()
     return () => {
-      if (
-        wsStatus === ILLA_WEBSOCKET_STATUS.CONNECTED &&
-        onlyConnectOnce.current === true
-      ) {
-        leaveRoom()
-        onlyConnectOnce.current = false
-      }
+      leaveRoom()
     }
-  }, [leaveRoom, wsStatus])
-
-  useEffect(() => {
-    if (
-      onlyConnectOnce.current === false &&
-      wsStatus === ILLA_WEBSOCKET_STATUS.INIT
-    ) {
-      connect()
-      onlyConnectOnce.current = true
-    }
-  }, [connect, wsStatus])
+  }, [connect, leaveRoom])
 
   return (
     <ChatContext.Provider value={{ inRoomUsers }}>
