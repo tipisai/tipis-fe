@@ -12,10 +12,10 @@ import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketC
 import { useGetTipiContributedDetail } from "@/utils/tipis/hook"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import AIAgentRunMobile from "./AIAgentRunMobile"
-import MobileMoreActionButton from "./AIAgentRunMobile/components/MoreActionButton"
 import AIAgentRunPC from "./AIAgentRunPC"
 import HeaderTools from "./AIAgentRunPC/components/HeaderTools"
 import FormContext from "./AIAgentRunPC/context/FormContext"
+import MoreActionButton from "./components/MoreActionButton"
 import { MarketplaceInfoProvider } from "./contexts/MarketplaceInfoContext"
 
 export const ContributedAgent: FC = () => {
@@ -68,7 +68,16 @@ export const ContributedAgent: FC = () => {
                   <>
                     <MobileFirstPageLayout
                       title={contributeAgentDetail.name}
-                      headerExtra={<MobileMoreActionButton />}
+                      headerExtra={
+                        <MoreActionButton
+                          agentID={contributeAgentDetail.aiAgentID}
+                          agentName={contributeAgentDetail.name}
+                          publishToMarketplace={
+                            contributeAgentDetail.publishedToMarketplace
+                          }
+                          isMobile
+                        />
+                      }
                       customRenderTitle={(title) => (
                         <MobileCustomTitle
                           title={title}
