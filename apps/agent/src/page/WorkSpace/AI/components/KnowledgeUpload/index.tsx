@@ -19,7 +19,6 @@ import { useDeleteFileMutation } from "@/redux/services/driveAPI"
 import {
   FILE_ITEM_DETAIL_STATUS_IN_UI,
   IFileDetailInfo,
-  IListener,
   UploadFileStore,
   useUploadFileToDrive,
 } from "@/utils/drive"
@@ -55,6 +54,7 @@ const getIconByStatus = (
         <Progress
           type="circle"
           size={16}
+          strokeLinecap="square"
           percent={percent > 90 ? 90 : parseFloat(percent.toFixed(2))}
         />
       )
@@ -109,16 +109,10 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
   const { uploadFileToDrive } = useUploadFileToDrive()
   const [deleteFile] = useDeleteFileMutation()
   const teamID = useSelector(getCurrentId)!
-  const subscribeRef = useRef((listener: IListener) =>
-    editPanelUpdateFileDetailStore.subscribe(listener),
-  )
-  const getSnapshotRef = useRef(() =>
-    editPanelUpdateFileDetailStore.getSnapshot(),
-  )
 
   const uploadFiles = useSyncExternalStore(
-    subscribeRef.current,
-    getSnapshotRef.current,
+    (listener) => editPanelUpdateFileDetailStore.subscribe(listener),
+    () => editPanelUpdateFileDetailStore.getSnapshot(),
   )
 
   const currentValue = useMemo(
