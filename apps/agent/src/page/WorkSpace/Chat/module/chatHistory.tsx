@@ -5,9 +5,9 @@ import {
   ChatMessage,
   ChatSendRequestPayload,
 } from "@/components/PreviewChat/interface"
-import { ChatContext } from "../AI/components/ChatContext"
+import { ChatContext } from "../../AI/components/ChatContext"
+import { ChatStableWSContext, ChatUnStableWSContext } from "../context"
 import { INIT_CHAT_CONFIG } from "./constants"
-import { ChatStableWSContext, ChatUnStableWSContext } from "./context"
 import { rightPanelContainerStyle } from "./style"
 
 export const DefaultChat: FC<{ isMobile: boolean }> = ({

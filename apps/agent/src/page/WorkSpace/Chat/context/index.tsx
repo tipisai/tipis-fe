@@ -42,7 +42,7 @@ import {
   formatSendMessagePayload,
   handleUpdateMessageList,
 } from "@/utils/agent/wsUtils"
-import { DEFAULT_PROMO, INIT_CHAT_CONFIG } from "../constants"
+import { DEFAULT_PROMO, INIT_CHAT_CONFIG } from "../module/constants"
 import {
   IChatStableWSInject,
   IChatUnStableWSInject,
