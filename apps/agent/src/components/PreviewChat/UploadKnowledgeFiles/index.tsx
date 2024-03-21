@@ -29,6 +29,7 @@ const getIconByStatus = (fileInfo?: IFileDetailInfo) => {
       return (
         <Progress
           type="circle"
+          size={16}
           percent={percent > 90 ? 90 : parseFloat(percent.toFixed(2))}
         />
       )
@@ -59,13 +60,18 @@ const UploadKnowledgeFiles: FC<UploadKnowledgeFilesPops> = ({
           <Tag
             key={item.fileName}
             closable
-            closeIcon={<Icon component={CloseIcon} css={closeIconStyle} />}
+            closeIcon={
+              <Icon component={CloseIcon} css={closeIconStyle(isError)} />
+            }
             bordered
             onClose={() => handleDeleteFile(item.fileName, fileInfo?.queryID)}
             style={{
               display: "flex",
               alignItems: "center",
               border: `1px solid ${isError ? getColor("red", "03") : getColor("grayBlue", "08")}`,
+              color: isError
+                ? getColor("red", "03")
+                : getColor("grayBlue", "02"),
               padding: "5px 8px",
               borderRadius: "12px",
               backgroundColor: "white",

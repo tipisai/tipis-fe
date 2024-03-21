@@ -1,4 +1,5 @@
 import { css } from "@emotion/react"
+import { getColor } from "@illa-public/color-scheme"
 
 export const fileItemContainerStyle = css`
   display: flex;
@@ -16,8 +17,10 @@ export const fileTypeIconStyle = css`
 
 export const fileNameStyle = css``
 
-export const closeIconStyle = css`
+export const closeIconStyle = (isError: boolean) => css`
+  display: flex;
   width: 8px;
   height: 8px;
   font-size: 8px;
+  color: ${isError ? getColor("red", "03") : getColor("grayBlue", "02")};
 `
