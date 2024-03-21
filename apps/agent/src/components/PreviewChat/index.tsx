@@ -27,7 +27,7 @@ import {
 import AIAgentMessage from "@/page/WorkSpace/AI/components/AIAgentMessage"
 import GroupAgentMessage from "@/page/WorkSpace/AI/components/GroupAgentMessage"
 import UserMessage from "@/page/WorkSpace/AI/components/UserMessage"
-import { isGroupMessage } from "@/page/WorkSpace/AI/context/AgentWSContext/typeHelper"
+import { isGroupMessage } from "@/utils/agent/typeHelper"
 import { UploadFileStore, useUploadFileToDrive } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
 import UploadButton from "./UploadButton"
@@ -105,8 +105,6 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const { uploadFileToDrive } = useUploadFileToDrive()
 
   const { t } = useTranslation()
-
-  console.log("chatMessages", chatMessages)
 
   const messagesList = useMemo(() => {
     return chatMessages.map((message, i) => {
