@@ -241,7 +241,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           break
         case "chat/remote":
           let chatCallback = callback.broadcast.payload as ChatWsAppendResponse
-          onUpdateChatMessage(chatCallback)
+          onUpdateChatMessage(chatCallback, callback.errorCode)
           break
         case "stop_all/remote":
           break
@@ -302,13 +302,9 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           break
         case 3:
           break
-        case 21:
-          let chatCallback = callback.broadcast.payload as ChatWsAppendResponse
-          onUpdateChatMessage(chatCallback, callback.errorCode)
-          break
       }
     },
-    [collaModal, messageAPI, onUpdateChatMessage, t],
+    [collaModal, messageAPI, t],
   )
 
   const getConnectParams = useCallback(async () => {

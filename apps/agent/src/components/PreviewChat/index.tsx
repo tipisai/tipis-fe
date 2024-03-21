@@ -106,6 +106,8 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
 
   const { t } = useTranslation()
 
+  console.log("chatMessages", chatMessages)
+
   const messagesList = useMemo(() => {
     return chatMessages.map((message, i) => {
       if (isGroupMessage(message)) {

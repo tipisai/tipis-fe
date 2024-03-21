@@ -2,7 +2,7 @@ import Icon from "@ant-design/icons"
 import { AnimatePresence } from "framer-motion"
 import { FC, useState } from "react"
 import { DownIcon, UpIcon } from "@illa-public/icon"
-import { MESSAGE_STATUS } from "@/components/PreviewChat/interface"
+// import { MESSAGE_STATUS } from "@/components/PreviewChat/interface"
 import MarkdownMessage from "../MarkdownMessage"
 import {
   PureMessageProps,
@@ -58,9 +58,9 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
 
   const { InfoIcon, InfoTitle } = getInfoByStatus(messageStatus)
 
-  const hasResult =
-    messageStatus === MESSAGE_STATUS.ANALYZE_SUCCESS ||
-    messageStatus === MESSAGE_STATUS.ANALYZE_ERROR
+  // const hasResult =
+  //   messageStatus === MESSAGE_STATUS.ANALYZE_SUCCESS ||
+  //   messageStatus === MESSAGE_STATUS.ANALYZE_ERROR
 
   return (
     <div css={containerStyle}>
@@ -70,10 +70,11 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
       >
         {InfoIcon}
         {InfoTitle}
-        {hasResult && <Icon component={showMessage ? UpIcon : DownIcon} />}
+        {/* {hasResult && <Icon component={showMessage ? UpIcon : DownIcon} />} */}
+        <Icon component={showMessage ? UpIcon : DownIcon} />
       </div>
       <AnimatePresence>
-        {hasResult && showMessage && (
+        {showMessage && (
           <div css={messageContainerStyle}>
             <MarkdownMessage>{formatMessage}</MarkdownMessage>
           </div>
