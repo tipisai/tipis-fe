@@ -1,19 +1,38 @@
 import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
 
-export const userInfoContentContainerStyle = css`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 8px;
-  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-  cursor: pointer;
-  :hover {
-    background: rgba(16, 9, 116, 0.08);
-    border-radius: 16px;
-  }
-`
+export const userInfoContentContainerStyle = (isMiniSize: boolean) => {
+  const basicStyle = css`
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    cursor: pointer;
+    gap: 8px;
+  `
+
+  const defaultStyle = css`
+    ${basicStyle};
+    padding: 8px;
+    :hover {
+      background: rgba(16, 9, 116, 0.08);
+      border-radius: 16px;
+    }
+  `
+
+  const miniStyle = css`
+    ${basicStyle};
+    padding: 4px;
+    justify-content: center;
+    :hover {
+      background: rgba(16, 9, 116, 0.06);
+      border-radius: 8px;
+    }
+  `
+
+  return isMiniSize ? miniStyle : defaultStyle
+}
 
 export const avatarContainerStyle = css`
   flex: none;

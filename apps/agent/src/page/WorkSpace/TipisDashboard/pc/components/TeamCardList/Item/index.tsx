@@ -1,7 +1,7 @@
 import Icon from "@ant-design/icons"
 import { Button, List, Tag } from "antd"
 import { FC, MouseEventHandler } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import { MoreIcon, PenIcon, PlayFillIcon } from "@illa-public/icon"
 import TeamCard from "@/components/TeamCard"
@@ -12,12 +12,15 @@ import {
   getRunTipiPath,
   getTipiDetailPath,
 } from "@/utils/routeHelper"
+import { getRecentTabInfos } from "../../../../../../../redux/ui/recentTab/selector"
 import { ITeamCardListItemProps } from "./interface"
 
 const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
   const { icon, title, description, id, publishToMarketplace } = props
 
   const { teamIdentifier } = useParams()
+
+  const recentTabs = useSelector(getRecentTabInfos)
   const tags = publishToMarketplace ? (
     <Tag color="purple">Marketplace</Tag>
   ) : undefined
@@ -31,14 +34,18 @@ const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
 
   const onClickEditButton: MouseEventHandler<HTMLElement> = (e) => {
     e.stopPropagation()
-    const tabsInfo: ITabInfo = {
-      tabName: "",
-      tabIcon: "",
-      tabType: TAB_TYPE.EDIT_TIPIS,
-      tabID: id,
-      cacheID: id,
+    let currentTab = recentTabs.find((tab) => tab.tabID === id)
+    if (!currentTab) {
+      currentTab = {
+        tabName: "",
+        tabIcon: "",
+        tabType: TAB_TYPE.EDIT_TIPIS,
+        tabID: id,
+        cacheID: id,
+      }
+      dispatch(recentTabActions.addRecentTabReducer(currentTab))
     }
-    dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
+
     navigate(getEditTipiPath(teamIdentifier!, id))
   }
 
