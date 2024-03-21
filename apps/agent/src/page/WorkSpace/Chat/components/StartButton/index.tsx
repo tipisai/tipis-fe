@@ -16,7 +16,6 @@ const StartButton: FC = () => {
       size="large"
       htmlType="submit"
       type="primary"
-      disabled
       loading={isConnecting}
       onClick={isRunning ? reconnect : connect}
       icon={
