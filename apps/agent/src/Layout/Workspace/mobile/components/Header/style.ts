@@ -32,3 +32,7 @@ export const titleDescStyle = css`
   font-weight: 400;
   line-height: 18px;
 `
+
+export const closeIconStyle = css`
+  font-size: 20px !important;
+`

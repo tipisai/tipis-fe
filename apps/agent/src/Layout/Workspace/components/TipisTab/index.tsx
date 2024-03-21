@@ -9,7 +9,7 @@ import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { getExploreTipisPath } from "@/utils/routeHelper"
-import { DEFAULT_CHAT_ID } from "../../../../../redux/ui/recentTab/state"
+import { DEFAULT_CHAT_ID } from "../../../../redux/ui/recentTab/state"
 import { ITipsTab } from "./interface"
 import {
   deleteButtonContainerStyle,
