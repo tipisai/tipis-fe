@@ -1,8 +1,8 @@
-import { Button } from "antd"
 import { memo, useState } from "react"
 import { useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { Agent } from "@illa-public/public-types"
+import BlackButton from "@/components/BlackButton"
 import { SCROLL_ID } from "../../interface"
 import PublishModal from "../../modules/PublishModal"
 import { handleScrollToElement } from "../../utils"
@@ -35,7 +35,7 @@ const SaveButton = memo(() => {
 
   return (
     <div css={saveButtonContainerStyle}>
-      <Button
+      <BlackButton
         id="save-button"
         onClick={handleVerifyOnSave}
         size="large"
@@ -44,7 +44,7 @@ const SaveButton = memo(() => {
         type="primary"
       >
         {t("editor.ai-agent.save")}
-      </Button>
+      </BlackButton>
       <PublishModal open={modalOpen} changeOpen={setModalOpen} />
     </div>
   )

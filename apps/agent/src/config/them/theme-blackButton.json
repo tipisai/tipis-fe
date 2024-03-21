@@ -48,10 +48,15 @@
       "onlyIconSizeSM": 14,
       "borderRadiusLG": 12,
       "borderRadiusSM": 8,
-      "colorBgContainerDisabled": "rgba(29, 33, 41, 0)",
+      "colorBgContainerDisabled": "rgb(29, 33, 41)",
       "paddingBlock": 4,
       "paddingBlockSM": 1,
-      "paddingBlockLG": 8
+      "paddingBlockLG": 8,
+      "colorPrimary": "rgb(29, 33, 41)",
+      "colorPrimaryActive": "rgb(11, 12, 15)",
+      "colorPrimaryHover": "rgba(29, 33, 41, 0.8)",
+      "colorTextDisabled": "rgba(255, 255, 255, 0.31)",
+      "lineWidth": 0
     },
     "Divider": {
       "textPaddingInline": "1.25em",
