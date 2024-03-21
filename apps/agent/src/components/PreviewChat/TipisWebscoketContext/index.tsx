@@ -67,7 +67,6 @@ export const TipisWebSocketProvider: FC<TipisWebSocketProviderProps> = (
     )
     tipisWSClient.current?.close()
     tipisWSClient.current = null
-    setWSStatus(ILLA_WEBSOCKET_STATUS.INIT)
   }, [currentTeamInfo, tipisWSClient])
 
   const connect = useCallback(
