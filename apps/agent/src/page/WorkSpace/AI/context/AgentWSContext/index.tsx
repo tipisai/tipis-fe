@@ -20,7 +20,7 @@ import {
 import { getCurrentId } from "@illa-public/user-data"
 import { getTextMessagePayload } from "@/api/ws"
 import { Callback } from "@/api/ws/interface"
-import { TextSignal, TextTarget } from "@/api/ws/textSignal"
+import { ErrorCode, TextSignal, TextTarget } from "@/api/ws/textSignal"
 import { TipisWebSocketContext } from "@/components/PreviewChat/TipisWebscoketContext"
 import {
   AgentMessageType,
@@ -132,72 +132,79 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
     [getValues, updateLocalIcon, updateLocalName],
   )
 
-  const onUpdateChatMessage = useCallback((message: ChatMessage) => {
-    const newMessageList = [...chatMessagesRef.current]
-    const index = newMessageList.findIndex((m) => {
-      return m.threadID === message.threadID
-    })
-    if (index === -1) {
-      if (
-        message.messageType ===
-        MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
-      ) {
-        newMessageList.push({
-          threadID: message.threadID,
-          items: [
-            {
-              sender: message.sender,
-              message: message.message,
-              threadID: message.threadID,
-              messageType: message.messageType,
-              status:
-                message.messageType ===
-                MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
-                  ? MESSAGE_STATUS.ANALYZE_PENDING
-                  : undefined,
-            },
-          ],
-        })
-      } else {
-        newMessageList.push({
-          sender: message.sender,
-          message: message.message,
-          threadID: message.threadID,
-          messageType: message.messageType,
-        })
-      }
-    } else {
-      const curMessage = newMessageList[index]
-      if (isNormalMessage(curMessage)) {
-        curMessage.message = curMessage.message + message.message
-      } else {
-        const needUpdateMessage = curMessage.items[curMessage.items.length - 1]
-        if (needUpdateMessage.messageType === message.messageType) {
-          needUpdateMessage.message =
-            needUpdateMessage.message + message.message
+  const onUpdateChatMessage = useCallback(
+    (message: ChatMessage, code?: ErrorCode) => {
+      const newMessageList = [...chatMessagesRef.current]
+      const index = newMessageList.findIndex((m) => {
+        return m.threadID === message.threadID
+      })
+      if (index === -1) {
+        if (
+          message.messageType ===
+          MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
+        ) {
+          newMessageList.push({
+            threadID: message.threadID,
+            items: [
+              {
+                sender: message.sender,
+                message: message.message,
+                threadID: message.threadID,
+                messageType: message.messageType,
+                status:
+                  message.messageType ===
+                  MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
+                    ? MESSAGE_STATUS.ANALYZE_PENDING
+                    : undefined,
+              },
+            ],
+          })
         } else {
+          newMessageList.push({
+            sender: message.sender,
+            message: message.message,
+            threadID: message.threadID,
+            messageType: message.messageType,
+          })
+        }
+      } else {
+        const curMessage = newMessageList[index]
+        if (isNormalMessage(curMessage)) {
+          curMessage.message = curMessage.message + message.message
+        } else {
+          const needUpdateMessage =
+            curMessage.items[curMessage.items.length - 1]
           if (
-            message.messageType ===
-              MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_ERROR &&
-            needUpdateMessage.messageType ===
-              MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
+            needUpdateMessage.messageType === message.messageType &&
+            code !== ErrorCode.ERROR_CHAT_BUBBLE_END
           ) {
-            needUpdateMessage.status = MESSAGE_STATUS.ANALYZE_ERROR
-          } else if (
-            message.messageType ===
-              MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_OK &&
-            needUpdateMessage.messageType ===
-              MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
-          ) {
-            needUpdateMessage.status = MESSAGE_STATUS.ANALYZE_SUCCESS
+            needUpdateMessage.message =
+              needUpdateMessage.message + message.message
+          } else {
+            if (
+              message.messageType ===
+                MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_ERROR &&
+              needUpdateMessage.messageType ===
+                MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
+            ) {
+              needUpdateMessage.status = MESSAGE_STATUS.ANALYZE_ERROR
+            } else if (
+              message.messageType ===
+                MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_OK &&
+              needUpdateMessage.messageType ===
+                MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
+            ) {
+              needUpdateMessage.status = MESSAGE_STATUS.ANALYZE_SUCCESS
+            }
+            curMessage.items.push(message)
           }
-          curMessage.items.push(message)
         }
       }
-    }
-    chatMessagesRef.current = newMessageList
-    setChatMessages(newMessageList)
-  }, [])
+      chatMessagesRef.current = newMessageList
+      setChatMessages(newMessageList)
+    },
+    [],
+  )
 
   const cleanMessage = useCallback(() => {
     chatMessagesRef.current = []
@@ -260,7 +267,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
           break
         case "chat/remote":
           let chatCallback = callback.broadcast.payload as ChatWsAppendResponse
-          onUpdateChatMessage(chatCallback)
+          onUpdateChatMessage(chatCallback, callback.errorCode)
           break
         case "stop_all/remote":
           break
