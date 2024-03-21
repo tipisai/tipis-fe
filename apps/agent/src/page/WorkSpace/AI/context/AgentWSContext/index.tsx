@@ -40,7 +40,7 @@ import {
   useLazyGetAIAgentAnonymousAddressQuery,
   useLazyGetAIAgentWsAddressQuery,
 } from "@/redux/services/agentAPI"
-import store from "../../../../../redux/store"
+import store from "@/redux/store"
 import { IAgentWSInject, IAgentWSProviderProps } from "./interface"
 import { isNormalMessage } from "./typeHelper"
 import { cancelPendingMessage, formatSendMessagePayload } from "./utils"

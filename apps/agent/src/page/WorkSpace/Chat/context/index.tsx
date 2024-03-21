@@ -35,7 +35,7 @@ import {
   SenderType,
 } from "@/components/PreviewChat/interface"
 import { useLazyGetAIAgentAnonymousAddressQuery } from "@/redux/services/agentAPI"
-import store from "../../../../redux/store"
+import store from "@/redux/store"
 import { DEFAULT_PROMO, INIT_CHAT_CONFIG } from "../module/constants"
 import {
   IChatStableWSInject,

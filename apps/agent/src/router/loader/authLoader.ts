@@ -1,7 +1,7 @@
 import { ILLAMixpanel } from "@illa-public/mixpanel-utils"
 import { authAPI } from "@illa-public/user-data"
 import { getAuthToken, sendConfigEvent } from "@illa-public/utils"
-import store from "../../redux/store"
+import store from "@/redux/store"
 
 export const getUserInfoLoader = async () => {
   const { data: userInfo } = authAPI.endpoints.getUserInfo.select()(
