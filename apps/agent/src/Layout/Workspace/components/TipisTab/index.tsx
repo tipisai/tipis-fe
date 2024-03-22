@@ -64,7 +64,12 @@ const TipisTab: FC<ITipsTab> = (props) => {
 
   return (
     <NavLink
-      to={genTabNavigateLink(currentTeamInfo.identifier, tabType, cacheID)}
+      to={genTabNavigateLink(
+        currentTeamInfo.identifier,
+        tabType,
+        cacheID,
+        tabID,
+      )}
       onClick={onClick}
       css={navLinkStyle}
       unstable_viewTransition

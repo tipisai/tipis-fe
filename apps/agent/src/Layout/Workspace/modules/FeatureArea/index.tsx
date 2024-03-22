@@ -17,8 +17,8 @@ import {
   getExploreFunctionsPath,
   getExploreTipisPath,
 } from "@/utils/routeHelper"
-import FeatureCard from "../../components/FeatureCard"
-import MenuItemButton from "../../components/MenuItemButton"
+import FeatureCard from "../../pc/components/FeatureCard"
+import MenuItemButton from "../../pc/components/MenuItemButton"
 import { featureAreaContainerStyle, featureCardsContainerStyle } from "./style"
 
 const FeatureArea: FC = () => {
@@ -27,16 +27,29 @@ const FeatureArea: FC = () => {
   const dispatch = useDispatch()
 
   const handleClickCreateTipis = () => {
-    const tempID = v4()
-    const tabsInfo: ITabInfo = {
-      tabName: "",
-      tabIcon: "",
-      tabType: TAB_TYPE.CREATE_TIPIS,
-      tabID: tempID,
-      cacheID: tempID,
+    const historyTabs = getRecentTabInfos(store.getState())
+    const createTipisTab = historyTabs.find(
+      (tab) => tab.tabType === TAB_TYPE.CREATE_TIPIS,
+    )
+    if (!createTipisTab) {
+      const tempID = v4()
+      const tabsInfo: ITabInfo = {
+        tabName: "",
+        tabIcon: "",
+        tabType: TAB_TYPE.CREATE_TIPIS,
+        tabID: tempID,
+        cacheID: tempID,
+      }
+      dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
+      navigate(getCreateTipiPath(currentTeamInfo?.identifier, tempID))
+    } else {
+      dispatch(
+        recentTabActions.updateCurrentRecentTabIDReducer(createTipisTab.tabID),
+      )
+      navigate(
+        getCreateTipiPath(currentTeamInfo?.identifier, createTipisTab.cacheID),
+      )
     }
-    dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
-    navigate(getCreateTipiPath(currentTeamInfo?.identifier, tempID))
   }
 
   const handleClickCreateChat = () => {
