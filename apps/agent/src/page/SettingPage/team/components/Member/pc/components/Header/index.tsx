@@ -86,7 +86,6 @@ export const Header: FC = () => {
             )
           }}
           teamID={teamInfo.id}
-          // TODO: WTF, not limit invite
           onBalanceChange={() => {}}
           onInvitedChange={(userList) => {
             const memberListInfo: MemberInfo[] = userList.map((user) => {

@@ -71,7 +71,9 @@ export const Setting: FC = () => {
           </SettingMobileLayout>
         }
       />
-      <LeaveTeamModal visible={modalVisible} onCancel={closeLeaveTeamModal} />
+      {!!teamInfo && (
+        <LeaveTeamModal visible={modalVisible} onCancel={closeLeaveTeamModal} />
+      )}
     </>
   ) : (
     <Navigate to="/user/login" replace={true} />

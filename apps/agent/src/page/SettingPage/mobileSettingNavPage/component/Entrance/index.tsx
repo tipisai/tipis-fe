@@ -84,38 +84,40 @@ const Entrance: FC = () => {
     },
   ]
 
-  const teamOptions = [
-    {
-      path: `/setting/${currentTeamInfo.identifier}/team-settings`,
-      label: t("team_setting.team_info.title"),
-    },
-    {
-      path: `/setting/${currentTeamInfo.identifier}/members`,
-      label: t("team_setting.left_panel.member"),
-      hidden: showMember,
-    },
-    {
-      path: `/setting/${currentTeamInfo.identifier}/billing`,
-      label: t("billing.menu.billing"),
-      hidden: !showBilling,
-    },
-    {
-      path: "",
-      label: leaveLabel,
-      onClick: () => {
-        track(
-          ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-          ILLA_MIXPANEL_CLOUD_PAGE_NAME.TEAM_SETTING,
-          {
-            element: isOwner ? "delete" : "leave",
-            parameter1: isOwner ? "delete_button" : undefined,
-            parameter11: currentTeamInfo?.myRole,
+  const teamOptions = currentTeamInfo?.identifier
+    ? [
+        {
+          path: `/setting/${currentTeamInfo.identifier}/team-settings`,
+          label: t("team_setting.team_info.title"),
+        },
+        {
+          path: `/setting/${currentTeamInfo.identifier}/members`,
+          label: t("team_setting.left_panel.member"),
+          hidden: showMember,
+        },
+        {
+          path: `/setting/${currentTeamInfo.identifier}/billing`,
+          label: t("billing.menu.billing"),
+          hidden: !showBilling || true, // TODO: WTF not support yet
+        },
+        {
+          path: "",
+          label: leaveLabel,
+          onClick: () => {
+            track(
+              ILLA_MIXPANEL_EVENT_TYPE.CLICK,
+              ILLA_MIXPANEL_CLOUD_PAGE_NAME.TEAM_SETTING,
+              {
+                element: isOwner ? "delete" : "leave",
+                parameter1: isOwner ? "delete_button" : undefined,
+                parameter11: currentTeamInfo?.myRole,
+              },
+            )
+            onClickLeaveTeam && onClickLeaveTeam()
           },
-        )
-        onClickLeaveTeam && onClickLeaveTeam()
-      },
-    },
-  ]
+        },
+      ]
+    : []
 
   useEffect(() => {
     track(

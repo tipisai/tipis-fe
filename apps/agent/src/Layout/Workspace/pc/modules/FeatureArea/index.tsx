@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { v4 } from "uuid"
 import { PenIcon, PlusIcon } from "@illa-public/icon"
-import { getCurrentTeamInfo } from "@illa-public/user-data"
+import { getCurrentTeamInfo, getTeamItems } from "@illa-public/user-data"
 import FunctionIcon from "@/assets/workspace/function.svg?react"
 import MarketplaceIcon from "@/assets/workspace/marketplace.svg?react"
 import store from "@/redux/store"
@@ -21,12 +21,21 @@ import FeatureCard from "../../components/FeatureCard"
 import MenuItemButton from "../../components/MenuItemButton"
 import { featureAreaContainerStyle, featureCardsContainerStyle } from "./style"
 
-const FeatureArea: FC = () => {
+interface FeatureAreaProps {
+  openCreateModal?: () => void
+}
+const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
   const navigate = useNavigate()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const dispatch = useDispatch()
+  const teams = useSelector(getTeamItems)
+  const isEmptyTeam = !Array.isArray(teams) || teams.length === 0
 
   const handleClickCreateTipis = () => {
+    if (isEmptyTeam) {
+      openCreateModal?.()
+      return
+    }
     const tempID = v4()
     const tabsInfo: ITabInfo = {
       tabName: "",
@@ -40,6 +49,10 @@ const FeatureArea: FC = () => {
   }
 
   const handleClickCreateChat = () => {
+    if (isEmptyTeam) {
+      openCreateModal?.()
+      return
+    }
     const tempID = v4()
     const tabsInfo: ITabInfo = {
       tabName: "",
@@ -53,6 +66,10 @@ const FeatureArea: FC = () => {
   }
 
   const handleClickExploreTipis = () => {
+    if (isEmptyTeam) {
+      openCreateModal?.()
+      return
+    }
     const historyTabs = getRecentTabInfos(store.getState())
     const tipisTab = historyTabs.find(
       (item) => item.tabType === TAB_TYPE.EXPLORE_TIPIS,
@@ -74,6 +91,10 @@ const FeatureArea: FC = () => {
   }
 
   const handleClickFunction = () => {
+    if (isEmptyTeam) {
+      openCreateModal?.()
+      return
+    }
     const historyTabs = getRecentTabInfos(store.getState())
     const functionTab = historyTabs.find(
       (item) => item.tabType === TAB_TYPE.EXPLORE_FUNCTION,

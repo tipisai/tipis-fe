@@ -1,23 +1,19 @@
 import { Divider, Drawer } from "antd"
 import { FC, useState } from "react"
 import MenuFooter from "@/Layout/Workspace/modules/MenuFooter"
-import RecentTabs from "@/Layout/Workspace/modules/RecentTabs"
-import TeamSelectAndInviteButton from "@/Layout/Workspace/modules/TeamSelectAndInviteButton"
-import CreateTeamModal from "@/Layout/Workspace/pc/components/CreateTeamModal"
 import FeatureArea from "@/Layout/Workspace/pc/modules/FeatureArea"
 import MobileMenuIcon from "@/assets/workspace/mobileMenu.svg?react"
 import WorkspaceMobileHeaderLayout from "../../components/Header"
-import { IFirstPageLayoutProps } from "./interface"
+import { IEmptyPageLayoutMobile } from "./interface"
 import {
   customDrawStyle,
   dividerContainerStyle,
   menuContentStyle,
 } from "./style"
 
-const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
-  const { headerExtra, children, customRenderTitle, title } = props
+const EmptyPageLayoutMobile: FC<IEmptyPageLayoutMobile> = (props) => {
+  const { children, title, openCreateModal } = props
   const [openDrawer, setOpenDrawer] = useState(false)
-  const [createTeamVisible, setCreateTeamVisible] = useState(false)
 
   const showDrawer = () => {
     setOpenDrawer(true)
@@ -31,20 +27,11 @@ const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
     <>
       <WorkspaceMobileHeaderLayout
         title={title}
-        extra={headerExtra}
         closeIcon={MobileMenuIcon}
         onClickClose={showDrawer}
-        customRenderTitle={customRenderTitle}
       />
       {children}
       <Drawer
-        title={
-          <TeamSelectAndInviteButton
-            openCreateModal={() => {
-              setCreateTeamVisible(true)
-            }}
-          />
-        }
         onClose={onClose}
         open={openDrawer}
         placement="left"
@@ -53,11 +40,7 @@ const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
         css={customDrawStyle}
       >
         <div css={menuContentStyle}>
-          <FeatureArea
-            openCreateModal={() => {
-              setCreateTeamVisible(true)
-            }}
-          />
+          <FeatureArea openCreateModal={openCreateModal} />
           <div css={dividerContainerStyle}>
             <Divider
               style={{
@@ -65,16 +48,11 @@ const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
               }}
             />
           </div>
-          <RecentTabs isMiniSize={false} />
         </div>
         <MenuFooter />
       </Drawer>
-      <CreateTeamModal
-        visible={createTeamVisible}
-        onCancel={() => setCreateTeamVisible(false)}
-      />
     </>
   )
 }
 
-export default MobileFirstPageLayout
+export default EmptyPageLayoutMobile

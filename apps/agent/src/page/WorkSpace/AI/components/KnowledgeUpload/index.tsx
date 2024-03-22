@@ -24,6 +24,7 @@ import {
 } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
 import {
+  containerStyle,
   fileItemStyle,
   fileListContainerStyle,
   fileNameStyle,
@@ -218,7 +219,7 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
   }
 
   return (
-    <>
+    <div css={containerStyle}>
       <div>
         <Button
           block
@@ -273,7 +274,7 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
           ))}
         </div>
       )}
-    </>
+    </div>
   )
 }
 

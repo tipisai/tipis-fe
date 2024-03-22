@@ -74,28 +74,30 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
     },
   ]
 
-  const teamOptions = [
-    {
-      path: `/setting/${currentTeamInfo.identifier}/team-settings`,
-      label: t("team_setting.team_info.title"),
-      // hidden: !teamLicenseAllPaid,
-    },
-    {
-      path: `/setting/${currentTeamInfo.identifier}/members`,
-      label: t("team_setting.left_panel.member"),
-      // hidden: showMember,
-    },
-    {
-      path: `/setting/${currentTeamInfo.identifier}/billing`,
-      label: t("billing.menu.billing"),
-      hidden: !showBilling,
-    },
-    {
-      path: "",
-      label: <GoToPortal />,
-      hidden: !showBilling || !isPurchased,
-    },
-  ]
+  const teamOptions = currentTeamInfo?.identifier
+    ? [
+        {
+          path: `/setting/${currentTeamInfo.identifier}/team-settings`,
+          label: t("team_setting.team_info.title"),
+          // hidden: !teamLicenseAllPaid,
+        },
+        {
+          path: `/setting/${currentTeamInfo.identifier}/members`,
+          label: t("team_setting.left_panel.member"),
+          // hidden: showMember,
+        },
+        {
+          path: `/setting/${currentTeamInfo.identifier}/billing`,
+          label: t("billing.menu.billing"),
+          hidden: !showBilling || true, // TODO: WTF not support yet
+        },
+        {
+          path: "",
+          label: <GoToPortal />,
+          hidden: !showBilling || !isPurchased || true, // TODO: WTF not support yet
+        },
+      ]
+    : []
 
   return (
     <div css={layoutWrapperStyle}>
