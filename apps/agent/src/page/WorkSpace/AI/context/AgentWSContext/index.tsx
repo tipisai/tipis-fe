@@ -20,7 +20,7 @@ import {
 import { getCurrentId } from "@illa-public/user-data"
 import { getTextMessagePayload } from "@/api/ws"
 import { Callback } from "@/api/ws/interface"
-import { ErrorCode, TextSignal, TextTarget } from "@/api/ws/textSignal"
+import { TextSignal, TextTarget } from "@/api/ws/textSignal"
 import { TipisWebSocketContext } from "@/components/PreviewChat/TipisWebscoketContext"
 import {
   AgentMessageType,
@@ -33,7 +33,6 @@ import {
   CollaboratorsInfo,
   IGroupMessage,
   MESSAGE_STATUS,
-  MESSAGE_SYNC_TYPE,
   SenderType,
 } from "@/components/PreviewChat/interface"
 import {
@@ -46,6 +45,7 @@ import {
   cancelPendingMessage,
   formatSendMessagePayload,
   handleUpdateMessageList,
+  isRequestMessage,
 } from "@/utils/agent/wsUtils"
 import { IAgentWSInject, IAgentWSProviderProps } from "./interface"
 
@@ -136,54 +136,44 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
     [getValues, updateLocalIcon, updateLocalName],
   )
 
-  const onUpdateChatMessage = useCallback(
-    (message: ChatMessage, code?: ErrorCode) => {
-      const newMessageList = [...chatMessagesRef.current]
-      const index = newMessageList.findIndex((m) => {
-        return m.threadID === message.threadID
-      })
-      if (index === -1) {
-        if (
-          message.messageType ===
-          MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
-        ) {
-          newMessageList.push({
-            threadID: message.threadID,
-            items: [
-              {
-                sender: message.sender,
-                message: message.message,
-                threadID: message.threadID,
-                messageType: message.messageType,
-                status:
-                  message.messageType ===
-                  MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
-                    ? MESSAGE_STATUS.ANALYZE_PENDING
-                    : undefined,
-              },
-            ],
-          })
-        } else {
-          newMessageList.push({
-            sender: message.sender,
-            message: message.message,
-            threadID: message.threadID,
-            messageType: message.messageType,
-          })
-        }
+  const onUpdateChatMessage = useCallback((message: ChatMessage) => {
+    const newMessageList = [...chatMessagesRef.current]
+    const index = newMessageList.findIndex((m) => {
+      return m.threadID === message.threadID
+    })
+    if (index === -1) {
+      if (isRequestMessage(message)) {
+        newMessageList.push({
+          threadID: message.threadID,
+          items: [
+            {
+              sender: message.sender,
+              message: message.message,
+              threadID: message.threadID,
+              messageType: message.messageType,
+              status: MESSAGE_STATUS.ANALYZE_PENDING,
+            },
+          ],
+        })
       } else {
-        const curMessage = newMessageList[index]
-        if (isNormalMessage(curMessage)) {
-          curMessage.message = curMessage.message + message.message
-        } else {
-          handleUpdateMessageList(curMessage, message, code)
-        }
+        newMessageList.push({
+          sender: message.sender,
+          message: message.message,
+          threadID: message.threadID,
+          messageType: message.messageType,
+        })
       }
-      chatMessagesRef.current = newMessageList
-      setChatMessages(newMessageList)
-    },
-    [],
-  )
+    } else {
+      const curMessage = newMessageList[index]
+      if (isNormalMessage(curMessage)) {
+        curMessage.message = curMessage.message + message.message
+      } else {
+        handleUpdateMessageList(curMessage, message)
+      }
+    }
+    chatMessagesRef.current = newMessageList
+    setChatMessages(newMessageList)
+  }, [])
 
   const cleanMessage = useCallback(() => {
     chatMessagesRef.current = []
@@ -243,11 +233,6 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
             "clean",
           )
 
-          break
-        case "chat":
-          if (callback.errorCode === ErrorCode.ERROR_CHAT_BUBBLE_END) {
-            onUpdateChatMessage(callback.broadcast.payload, callback.errorCode)
-          }
           break
         case "chat/remote":
           let chatCallback = callback.broadcast.payload as ChatWsAppendResponse

@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@mui/material"
 import { App, Tooltip, Typography } from "antd"
-import { FC } from "react"
+import { FC, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import ReactMarkdown from "react-markdown"
 import remarkBreaks from "remark-breaks"
@@ -32,9 +32,10 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
   const { children, isOwnMessage, disableTrigger } = props
   const { t } = useTranslation()
   const { message: messageAPI } = App.useApp()
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const contentBody = (
-    <div css={markdownMessageContainerStyle}>
+    <div ref={containerRef} css={markdownMessageContainerStyle}>
       <ReactMarkdown
         css={markdownMessageStyle}
         remarkPlugins={[remarkGfm, remarkBreaks]}
@@ -91,6 +92,7 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
   ) : (
     <Tooltip
       color="transparent"
+      zIndex={0}
       overlayInnerStyle={{
         padding: 0,
         minHeight: "24px",
@@ -114,7 +116,7 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
       showArrow={false}
       autoAdjustOverflow={false}
       trigger="hover"
-      getTooltipContainer={(node) => node}
+      getTooltipContainer={() => containerRef.current!}
     >
       {contentBody}
     </Tooltip>
