@@ -26,7 +26,10 @@ const KnowledgeEditor: FC = memo(() => {
       }}
       shouldUnregister={false}
       render={({ field }) => (
-        <LayoutBlock title={t("knowledge")} scrollId={SCROLL_ID.KNOWLEDGE}>
+        <LayoutBlock
+          title={t("homepage.tipi_detail.label.knowledge")}
+          scrollId={SCROLL_ID.KNOWLEDGE}
+        >
           <KnowledgeUpload
             addFile={(file: IKnowledgeFile) => {
               const files = field.value || []

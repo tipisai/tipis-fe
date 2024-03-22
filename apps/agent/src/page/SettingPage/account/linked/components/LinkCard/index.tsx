@@ -71,7 +71,7 @@ export const LinkCard: FC<LinkCardProps> = (props) => {
       setConnectedLoading(true)
       await cancelLinked(type)
       message.success({
-        content: t("Disconnected"),
+        content: t("profile.setting.oauth.message.disconnect_suc"),
       })
     } catch (e) {
       message.error({

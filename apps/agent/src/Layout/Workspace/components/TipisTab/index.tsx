@@ -18,7 +18,7 @@ import {
   menuItemButtonStyle,
   navLinkStyle,
 } from "./style"
-import { genTabNavigateLink, getIconByTabInfo, getTabName } from "./utils"
+import { genTabNavigateLink, getIconByTabInfo, useGetTabName } from "./utils"
 
 const shouldModelTipTabTypes = [
   TAB_TYPE.CREATE_FUNCTION,
@@ -34,6 +34,8 @@ const TipisTab: FC<ITipsTab> = (props) => {
   const { modal } = App.useApp()
   const allRecentTabs = useSelector(getRecentTabInfos)
   const navigate = useNavigate()
+
+  const getTabName = useGetTabName()
 
   const onClickRemoveTab: MouseEventHandler<HTMLElement> = (e) => {
     e.stopPropagation()

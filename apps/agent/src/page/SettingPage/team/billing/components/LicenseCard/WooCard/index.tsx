@@ -64,7 +64,7 @@ export const WooCard: FC = () => {
           <span css={payInfoExpiredStyle}>{t("billing.label.expired")}</span>
         )}
         {isCancelSubscribedWoo && (
-          <span css={payInfoCancelStyle}>{t("canceled")}</span>
+          <span css={payInfoCancelStyle}>{t("billing.label.canceled")}</span>
         )}
       </div>
       <div css={cardPayDetailStyle}>

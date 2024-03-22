@@ -8,11 +8,7 @@ import checker from "vite-plugin-checker"
 import svgr from "vite-plugin-svgr"
 import pkg from "./package.json"
 
-const I18N_SOURCE_PATH = resolve(
-  __dirname,
-  "../../packages/illa-public-component",
-  "locales/*.json",
-)
+const I18N_SOURCE_PATH = resolve(__dirname, "../../packages/", "locales/*.json")
 const I18N_TARGET_PATH = resolve(__dirname, "public/locales")
 const getUsedEnv = (env: Record<string, string>) => {
   const usedEnv: Record<string, string> = {}

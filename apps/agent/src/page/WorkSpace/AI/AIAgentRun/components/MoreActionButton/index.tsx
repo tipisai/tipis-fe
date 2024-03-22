@@ -52,22 +52,22 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
   const items: MenuProps["items"] = [
     {
       key: "pin",
-      label: t("Pin"),
+      label: t("homepage.run_tipi.more.pin"),
       icon: <Icon component={PinIcon} />,
     },
     {
       key: "edit",
-      label: t("Edit"),
+      label: t("dashboard.common.edit"),
       icon: <Icon component={PenIcon} />,
     },
     {
       key: "share",
-      label: t("Share"),
+      label: t("share"),
       icon: <Icon component={ShareIcon} />,
     },
     {
       key: "detail",
-      label: t("Detail"),
+      label: t("homepage.run_tipi.more.detail"),
       icon: <Icon component={InfoIcon} />,
     },
   ]
