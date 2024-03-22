@@ -109,10 +109,7 @@ export const TipisWebSocketProvider: FC<TipisWebSocketProviderProps> = (
           },
           onMessage: (data) => {
             let callback: Callback<unknown> = JSON.parse(data)
-            if (
-              callback.errorCode === ErrorCode.ERROR_CODE_OK ||
-              callback.errorCode === ErrorCode.ERROR_CHAT_BUBBLE_END
-            ) {
+            if (callback.errorCode === ErrorCode.ERROR_CODE_OK) {
               onMessageSuccessCallback(callback)
             } else {
               onMessageFailedCallback(callback)

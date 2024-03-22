@@ -2,7 +2,6 @@ import Icon from "@ant-design/icons"
 import { AnimatePresence } from "framer-motion"
 import { FC, useState } from "react"
 import { DownIcon, UpIcon } from "@illa-public/icon"
-// import { MESSAGE_STATUS } from "@/components/PreviewChat/interface"
 import MarkdownMessage from "../MarkdownMessage"
 import {
   PureMessageProps,
@@ -44,12 +43,12 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
   messageStatus,
 }) => {
   const [showMessage, setShowMessage] = useState(false)
-
   let formatMessage
   try {
     const res = JSON.parse(message)
-    if ("function_arguments" in res && !!res["function_arguments"]?.["code"]) {
-      formatMessage = `\`\`\`python\n${res.code}\n\`\`\``
+    const code = res?.["function_arguments"]?.["code"]
+    if (code) {
+      formatMessage = `\`\`\`python\n${code}\n\`\`\``
     } else {
       formatMessage = `\`\`\`json\n${JSON.stringify(res, null, 2)}\n\`\`\``
     }

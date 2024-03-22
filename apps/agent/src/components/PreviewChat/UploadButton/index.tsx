@@ -20,6 +20,7 @@ const UploadButton = forwardRef<HTMLInputElement, UploadButton>(
       <Tooltip
         title={t("dashboard.message.support_for_uploadin")}
         placement="top"
+        trigger="hover"
       >
         <div css={sendFileContainerStyle}>
           <IconHotSpot onClick={handleClick} css={sendFileIconStyle}>

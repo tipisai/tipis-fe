@@ -12,6 +12,8 @@ import { AgentMessageType } from "./TipisWebscoketContext/interface"
 export type EDIT_STATE = "EDIT" | "RUN"
 
 export enum MESSAGE_STATUS {
+  ANALYZE_SUCCESS = "analyze_success",
+  ANALYZE_FAILED = "analyze_failed",
   ANALYZE_PENDING = "analyze_pending",
   ANALYZE_STOP = "analyze_stop",
   ANALYZE_END = "analyze_end",

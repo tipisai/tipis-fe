@@ -244,11 +244,8 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   }, [chatMessages])
 
   const sendAndClearMessage = useCallback(() => {
-    if (textAreaVal !== "" || knowledgeFiles.length > 0) {
-      const realSendKnowledgeFiles = knowledgeFiles.filter(
-        (item) => !!item.value,
-      )
-
+    const realSendKnowledgeFiles = knowledgeFiles.filter((item) => !!item.value)
+    if (textAreaVal !== "" || realSendKnowledgeFiles.length > 0) {
       realSendKnowledgeFiles //
       onSendMessage({
         threadID: v4(),
