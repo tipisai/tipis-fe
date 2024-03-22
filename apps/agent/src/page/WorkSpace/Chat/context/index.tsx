@@ -141,24 +141,6 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     } else {
       const curMessage = newMessageList[index]
       if (isNormalMessage(curMessage)) {
-        // function call start with normal type
-        // if (isRequestMessage(message)) {
-        //   newMessageList[index] = {
-        //     threadID: message.threadID,
-        //     items: [
-        //       curMessage,
-        //       {
-        //         sender: message.sender,
-        //         message: message.message,
-        //         threadID: message.threadID,
-        //         messageType: message.messageType,
-        //         status: MESSAGE_STATUS.ANALYZE_PENDING,
-        //       },
-        //     ],
-        //   }
-        // } else {
-        //   curMessage.message = curMessage.message + message.message
-        // }
         curMessage.message = curMessage.message + message.message
       } else {
         handleUpdateMessageList(curMessage, message)
