@@ -5,9 +5,10 @@ import { UpgradeModalGroup } from "@illa-public/upgrade-modal"
 import { useGetUserInfoAndTeamsInfoByTokenQuery } from "@illa-public/user-data"
 import { getILLACloudURL } from "@illa-public/utils"
 import i18n from "@/i18n"
-import { AuthProps } from "./interface"
+import { BaseProtectComponentProps } from "@/router/interface"
+import { EMPTY_TEAM_PATH } from "@/utils/routeHelper"
 
-const ProtectedComponent: FC<AuthProps> = (props) => {
+const ProtectedComponent: FC<BaseProtectComponentProps> = (props) => {
   const { teamIdentifier } = useParams()
   const [searchParams] = useSearchParams()
   const myTeamIdentifier = searchParams.get("myTeamIdentifier")
@@ -42,7 +43,9 @@ const ProtectedComponent: FC<AuthProps> = (props) => {
     }
 
     let currentTeam
-    if (mixedTeamIdentifier) {
+    if (!Array.isArray(data.teams) || data.teams.length === 0) {
+      return <Navigate to={EMPTY_TEAM_PATH} />
+    } else if (mixedTeamIdentifier) {
       currentTeam = data.teams.find(
         (team) => team.identifier === mixedTeamIdentifier,
       )
@@ -55,12 +58,8 @@ const ProtectedComponent: FC<AuthProps> = (props) => {
         return <Navigate to="/403" />
       }
     } else {
-      if (data.teams.length >= 0) {
-        currentTeam = data.teams[0]
-        return <Navigate to={`${currentTeam.identifier}`} />
-      } else {
-        return <Navigate to="/403" />
-      }
+      currentTeam = data.teams[0]
+      return <Navigate to={`${currentTeam.identifier}`} />
     }
 
     ILLAMixpanel.setGroup(currentTeam.identifier)

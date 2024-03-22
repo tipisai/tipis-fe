@@ -14,7 +14,7 @@ import { getAuthToken, sendTagEvent, setAuthToken } from "@illa-public/utils"
 import { linkTrk, rdtSignUpTrk, twqTrk } from "@/utils/gaHelper"
 import { LINKEDIN_CONVERSION_ID, TWITTER_ID } from "@/utils/gaHelper/constent"
 import { track } from "@/utils/mixpanelHelper"
-import { LOGIN_PATH, REGISTER_PATH, getLinkedPath } from "@/utils/routeHelper"
+import { LINKED_PATH, LOGIN_PATH, REGISTER_PATH } from "@/utils/routeHelper"
 import { mobilePageStyle, pageStyle } from "./style"
 
 const OAuth: FC = () => {
@@ -46,8 +46,7 @@ const OAuth: FC = () => {
           switch (landing) {
             case "connect":
               message.success(t("profile.setting.oauth.message.github"))
-              // TODO: WTF, not need identifier
-              navigate(getLinkedPath(""))
+              navigate(LINKED_PATH)
               break
             case "signin": {
               track(
@@ -168,7 +167,7 @@ const OAuth: FC = () => {
                 navigate(REGISTER_PATH)
                 break
               case "connect":
-                navigate(getLinkedPath(""))
+                navigate(LINKED_PATH)
                 break
               default:
                 navigate("/workspace")

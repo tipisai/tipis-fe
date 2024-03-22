@@ -79,7 +79,6 @@ export const MobileMemberPage: FC = () => {
             )
           }}
           teamID={teamInfo.id}
-          //TODO: WTF not limit invite
           onBalanceChange={() => {}}
           onInvitedChange={(userList) => {
             const memberListInfo: MemberInfo[] = userList.map((user) => {

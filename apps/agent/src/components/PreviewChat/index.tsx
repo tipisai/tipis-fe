@@ -98,7 +98,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const [uploadKnowledgeLoading, setUploadKnowledgeLoading] = useState(false)
 
   const inputRef = useRef<HTMLInputElement>(null)
-  const canShowKnowledgeFiles = isPremiumModel(model) || true
+  const canShowKnowledgeFiles = isPremiumModel(model) || true // TODO: WTF need update after billing
 
   const disableSend = isReceiving || blockInput || uploadKnowledgeLoading
 
@@ -249,7 +249,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       realSendKnowledgeFiles //
       onSendMessage({
         threadID: v4(),
-        message: textAreaVal, // add format knowledge filter value
+        message: textAreaVal, // TODO: WTF add format knowledge filter value
         sender: {
           senderID: currentUserInfo.userID,
           senderType: SenderType.USER,

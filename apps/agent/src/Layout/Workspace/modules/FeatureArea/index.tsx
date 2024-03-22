@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { v4 } from "uuid"
 import { PenIcon, PlusIcon } from "@illa-public/icon"
-import { getCurrentTeamInfo } from "@illa-public/user-data"
+import { getCurrentTeamInfo, getIsEmptyTeam } from "@illa-public/user-data"
 import FunctionIcon from "@/assets/workspace/function.svg?react"
 import MarketplaceIcon from "@/assets/workspace/marketplace.svg?react"
 import store from "@/redux/store"
@@ -22,13 +22,21 @@ import FeatureCard from "../../pc/components/FeatureCard"
 import MenuItemButton from "../../pc/components/MenuItemButton"
 import { featureAreaContainerStyle, featureCardsContainerStyle } from "./style"
 
-const FeatureArea: FC = () => {
+interface FeatureAreaProps {
+  openCreateModal?: () => void
+}
+const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
   const navigate = useNavigate()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const dispatch = useDispatch()
   const { t } = useTranslation()
 
   const handleClickCreateTipis = () => {
+    const isEmptyTeam = getIsEmptyTeam(store.getState())
+    if (isEmptyTeam) {
+      openCreateModal?.()
+      return
+    }
     const historyTabs = getRecentTabInfos(store.getState())
     const createTipisTab = historyTabs.find(
       (tab) => tab.tabType === TAB_TYPE.CREATE_TIPIS,
@@ -55,6 +63,11 @@ const FeatureArea: FC = () => {
   }
 
   const handleClickCreateChat = () => {
+    const isEmptyTeam = getIsEmptyTeam(store.getState())
+    if (isEmptyTeam) {
+      openCreateModal?.()
+      return
+    }
     const tempID = v4()
     const tabsInfo: ITabInfo = {
       tabName: "",
@@ -68,6 +81,11 @@ const FeatureArea: FC = () => {
   }
 
   const handleClickExploreTipis = () => {
+    const isEmptyTeam = getIsEmptyTeam(store.getState())
+    if (isEmptyTeam) {
+      openCreateModal?.()
+      return
+    }
     const historyTabs = getRecentTabInfos(store.getState())
     const tipisTab = historyTabs.find(
       (item) => item.tabType === TAB_TYPE.EXPLORE_TIPIS,
@@ -89,6 +107,11 @@ const FeatureArea: FC = () => {
   }
 
   const handleClickFunction = () => {
+    const isEmptyTeam = getIsEmptyTeam(store.getState())
+    if (isEmptyTeam) {
+      openCreateModal?.()
+      return
+    }
     const historyTabs = getRecentTabInfos(store.getState())
     const functionTab = historyTabs.find(
       (item) => item.tabType === TAB_TYPE.EXPLORE_FUNCTION,

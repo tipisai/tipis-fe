@@ -2,11 +2,13 @@ import { Suspense, lazy } from "react"
 import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { Page403, Page404, Page500 } from "@illa-public/status-page"
+import AuthProtect from "@/components/Auth"
+import EmptyTeamProtectedComponent from "@/components/EmptyTeamProtectedComponent"
 import FullSectionLoading from "@/components/FullSectionLoading"
+import SettingProtectedComponent from "@/components/SettingProtectedComponent"
 import SettingLayout from "@/page/SettingPage"
 import { MobileWorkspaceLayout } from "../Layout/Workspace/mobile"
 import PCWorkspaceLayout from "../Layout/Workspace/pc"
-import SettingProtectedComponent from "../components/SettingProtectedComponent"
 import UserLayout from "../page/User/Layout/index"
 import { buildRouter } from "./buildRouter"
 import { RoutesObjectPro } from "./interface"
@@ -49,6 +51,7 @@ const TeamMembers = lazy(() => import("@/page/SettingPage/team/member"))
 const EditFunctionPage = lazy(() => import("@/page/WorkSpace/Function/Edit"))
 const ChatPage = lazy(() => import("@/page/WorkSpace/Chat"))
 const TipiDetailPage = lazy(() => import("@/page/WorkSpace/TipiDetail"))
+const EmptyTeam = lazy(() => import("@/page/WorkSpace/EmptyTeam"))
 
 const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   {
@@ -103,6 +106,16 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     ],
   },
   {
+    path: "/empty",
+    ProtectComponent: EmptyTeamProtectedComponent,
+    accessByMobile: true,
+    element: (
+      <Suspense fallback={<FullSectionLoading />}>
+        <EmptyTeam />
+      </Suspense>
+    ),
+  },
+  {
     path: "/workspace",
     element: (
       <LayoutAutoChange
@@ -110,7 +123,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         mobilePage={<MobileWorkspaceLayout />}
       />
     ),
-    needLogin: true,
+    ProtectComponent: AuthProtect,
     loader: workspaceLayoutLoader,
     accessByMobile: true,
     children: [
@@ -121,7 +134,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
       },
       {
         path: ":teamIdentifier/chat/:chatID",
-        needLogin: true,
+        ProtectComponent: AuthProtect,
         accessByMobile: true,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
@@ -210,11 +223,8 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   {
     path: "/setting",
     accessByMobile: true,
-    element: (
-      <SettingProtectedComponent>
-        <SettingLayout />
-      </SettingProtectedComponent>
-    ),
+    ProtectComponent: SettingProtectedComponent,
+    element: <SettingLayout />,
     children: [
       {
         index: true,
@@ -268,7 +278,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     path: "/setting/:teamIdentifier",
     accessByMobile: true,
     element: <SettingLayout />,
-    needLogin: true,
+    ProtectComponent: AuthProtect,
     children: [
       {
         path: "team-settings",

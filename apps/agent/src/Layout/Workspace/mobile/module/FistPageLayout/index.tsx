@@ -54,7 +54,11 @@ const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
         css={customDrawStyle}
       >
         <div css={menuContentStyle}>
-          <FeatureArea />
+          <FeatureArea
+            openCreateModal={() => {
+              setCreateTeamVisible(true)
+            }}
+          />
           <div css={dividerContainerStyle}>
             <Divider
               style={{

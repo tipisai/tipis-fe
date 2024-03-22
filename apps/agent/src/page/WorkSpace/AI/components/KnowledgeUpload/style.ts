@@ -2,9 +2,16 @@ import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
 import { FILE_ITEM_DETAIL_STATUS_IN_UI } from "@/utils/drive"
 
+export const containerStyle = css`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+`
+
 export const fileListContainerStyle = css`
   display: flex;
-  padding: 8px 0px;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
