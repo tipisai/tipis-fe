@@ -27,7 +27,7 @@ import {
 import AIAgentMessage from "@/page/WorkSpace/AI/components/AIAgentMessage"
 import GroupAgentMessage from "@/page/WorkSpace/AI/components/GroupAgentMessage"
 import UserMessage from "@/page/WorkSpace/AI/components/UserMessage"
-import { isGroupMessage } from "@/page/WorkSpace/AI/context/AgentWSContext/typeHelper"
+import { isGroupMessage } from "@/utils/agent/typeHelper"
 import { UploadFileStore, useUploadFileToDrive } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
 import UploadButton from "./UploadButton"
@@ -99,6 +99,8 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
 
   const inputRef = useRef<HTMLInputElement>(null)
   const canShowKnowledgeFiles = isPremiumModel(model) || true
+
+  const disableSend = isReceiving || blockInput || uploadKnowledgeLoading
 
   const { uploadFileToDrive } = useUploadFileToDrive()
 
@@ -242,10 +244,9 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   }, [chatMessages])
 
   const sendAndClearMessage = useCallback(() => {
-    if (
-      (textAreaVal !== "" || knowledgeFiles.length > 0) &&
-      !uploadKnowledgeLoading
-    ) {
+    const realSendKnowledgeFiles = knowledgeFiles.filter((item) => !!item.value)
+    if (textAreaVal !== "" || realSendKnowledgeFiles.length > 0) {
+      realSendKnowledgeFiles //
       onSendMessage({
         threadID: v4(),
         message: textAreaVal, // add format knowledge filter value
@@ -253,18 +254,12 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
           senderID: currentUserInfo.userID,
           senderType: SenderType.USER,
         },
-        knowledgeFiles: knowledgeFiles,
+        knowledgeFiles: realSendKnowledgeFiles,
       } as ChatMessage)
       setTextAreaVal("")
       setKnowledgeFiles([])
     }
-  }, [
-    currentUserInfo.userID,
-    knowledgeFiles,
-    onSendMessage,
-    uploadKnowledgeLoading,
-    textAreaVal,
-  ])
+  }, [currentUserInfo.userID, knowledgeFiles, onSendMessage, textAreaVal])
 
   return (
     <div css={previewChatContainerStyle}>
@@ -352,7 +347,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
                 onKeyDown={(event) => {
                   if (event.keyCode === 13 && !event.shiftKey) {
                     event.preventDefault()
-                    if (isReceiving || blockInput) {
+                    if (disableSend) {
                       return
                     }
                     sendAndClearMessage()
@@ -370,7 +365,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
                 />
               )}
               <Button
-                disabled={isReceiving || blockInput}
+                disabled={disableSend}
                 onClick={() => {
                   sendAndClearMessage()
                 }}
@@ -395,7 +390,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
               onKeyDown={(event) => {
                 if (event.keyCode === 13 && !event.shiftKey) {
                   event.preventDefault()
-                  if (isReceiving || blockInput) {
+                  if (disableSend) {
                     return
                   }
                   sendAndClearMessage()
@@ -422,7 +417,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
                   />
                 )}
                 <Button
-                  disabled={isReceiving || blockInput}
+                  disabled={disableSend}
                   onClick={() => {
                     sendAndClearMessage()
                   }}

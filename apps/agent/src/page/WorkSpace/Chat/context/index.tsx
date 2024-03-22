@@ -31,19 +31,23 @@ import {
   CollaboratorsInfo,
   IGroupMessage,
   MESSAGE_STATUS,
-  MESSAGE_SYNC_TYPE,
   SenderType,
 } from "@/components/PreviewChat/interface"
 import { useLazyGetAIAgentAnonymousAddressQuery } from "@/redux/services/agentAPI"
 import store from "@/redux/store"
+import { isNormalMessage } from "@/utils/agent/typeHelper"
+import {
+  cancelPendingMessage,
+  formatSendMessagePayload,
+  handleUpdateMessageList,
+  isRequestMessage,
+} from "@/utils/agent/wsUtils"
 import { DEFAULT_PROMO, INIT_CHAT_CONFIG } from "../module/constants"
 import {
   IChatStableWSInject,
   IChatUnStableWSInject,
   IChatWSProviderProps,
 } from "./interface"
-import { isNormalMessage } from "./typeHelper"
-import { cancelPendingMessage, formatSendMessagePayload } from "./utils"
 
 export const ChatStableWSContext = createContext({} as IChatStableWSInject)
 export const ChatUnStableWSContext = createContext({} as IChatUnStableWSInject)
@@ -113,10 +117,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       return m.threadID === message.threadID
     })
     if (index === -1) {
-      if (
-        message.messageType ===
-        MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
-      ) {
+      if (isRequestMessage(message)) {
         newMessageList.push({
           threadID: message.threadID,
           items: [
@@ -125,11 +126,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
               message: message.message,
               threadID: message.threadID,
               messageType: message.messageType,
-              status:
-                message.messageType ===
-                MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
-                  ? MESSAGE_STATUS.ANALYZE_PENDING
-                  : undefined,
+              status: MESSAGE_STATUS.ANALYZE_PENDING,
             },
           ],
         })
@@ -146,28 +143,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       if (isNormalMessage(curMessage)) {
         curMessage.message = curMessage.message + message.message
       } else {
-        const needUpdateMessage = curMessage.items[curMessage.items.length - 1]
-        if (needUpdateMessage.messageType === message.messageType) {
-          needUpdateMessage.message =
-            needUpdateMessage.message + message.message
-        } else {
-          if (
-            message.messageType ===
-              MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_ERROR &&
-            needUpdateMessage.messageType ===
-              MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
-          ) {
-            needUpdateMessage.status = MESSAGE_STATUS.ANALYZE_ERROR
-          } else if (
-            message.messageType ===
-              MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_OK &&
-            needUpdateMessage.messageType ===
-              MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
-          ) {
-            needUpdateMessage.status = MESSAGE_STATUS.ANALYZE_SUCCESS
-          }
-          curMessage.items.push(message)
-        }
+        handleUpdateMessageList(curMessage, message)
       }
     }
     chatMessagesRef.current = newMessageList
@@ -231,7 +207,6 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
             TextSignal.CLEAN,
             "clean",
           )
-
           break
         case "chat/remote":
           let chatCallback = callback.broadcast.payload as ChatWsAppendResponse

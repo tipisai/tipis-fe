@@ -16,7 +16,7 @@ import {
 import { getAuthToken } from "@illa-public/utils"
 import { getTextMessagePayload } from "@/api/ws"
 import { Callback, ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
-import { TextSignal, TextTarget } from "@/api/ws/textSignal"
+import { ErrorCode, TextSignal, TextTarget } from "@/api/ws/textSignal"
 import {
   IInitWSCallback,
   TipisWebSocketContextType,
@@ -109,7 +109,7 @@ export const TipisWebSocketProvider: FC<TipisWebSocketProviderProps> = (
           },
           onMessage: (data) => {
             let callback: Callback<unknown> = JSON.parse(data)
-            if (callback.errorCode === 0) {
+            if (callback.errorCode === ErrorCode.ERROR_CODE_OK) {
               onMessageSuccessCallback(callback)
             } else {
               onMessageFailedCallback(callback)

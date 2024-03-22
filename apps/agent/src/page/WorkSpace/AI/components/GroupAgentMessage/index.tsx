@@ -3,10 +3,10 @@ import { Avatar } from "@illa-public/avatar"
 import {
   IGroupMessage,
   MESSAGE_STATUS,
-  MESSAGE_SYNC_TYPE,
   SenderType,
 } from "@/components/PreviewChat/interface"
 import { ChatContext } from "@/page/WorkSpace/AI/components/ChatContext"
+import { isChatMessage, isRequestMessage } from "@/utils/agent/wsUtils"
 import {
   PureMessage,
   SyncMessageCard,
@@ -61,25 +61,19 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
       )}
       <div css={senderContainerStyle}>
         <div css={senderNicknameStyle}>{senderNickname}</div>
-        {message.items.map((messageItem) => {
-          if (
-            messageItem.messageType ===
-            MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_CHAT
-          ) {
+        {message.items.map((messageItem, i) => {
+          if (isChatMessage(messageItem)) {
             return (
               <PureMessage
-                key={`${messageItem.messageType}${messageItem.message}`}
+                key={`${messageItem.messageType}${i}`}
                 message={messageItem.message}
                 disableTrigger={isLastMessage && !isReceiving}
               />
             )
-          } else if (
-            messageItem.messageType ===
-            MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
-          ) {
+          } else if (isRequestMessage(messageItem)) {
             return (
               <SyncMessageCard
-                key={`${messageItem.messageType}${messageItem.message}`}
+                key={`${messageItem.messageType}${i}`}
                 message={messageItem.message}
                 messageStatus={
                   messageItem.status ?? MESSAGE_STATUS.ANALYZE_PENDING
@@ -89,7 +83,7 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
           } else {
             return (
               <SyncMessageResult
-                key={`${messageItem.messageType}${messageItem.message}`}
+                key={`${messageItem.messageType}${i}`}
                 message={messageItem.message}
               />
             )

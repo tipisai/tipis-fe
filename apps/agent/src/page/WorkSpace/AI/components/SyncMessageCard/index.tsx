@@ -2,7 +2,6 @@ import Icon from "@ant-design/icons"
 import { AnimatePresence } from "framer-motion"
 import { FC, useState } from "react"
 import { DownIcon, UpIcon } from "@illa-public/icon"
-import { MESSAGE_STATUS } from "@/components/PreviewChat/interface"
 import MarkdownMessage from "../MarkdownMessage"
 import {
   PureMessageProps,
@@ -17,6 +16,7 @@ import {
 import { getInfoByStatus } from "./utils"
 
 export const PureMessage: FC<PureMessageProps> = ({ message }) => {
+  if (!message) return null
   return (
     <div css={messageContainerStyle}>
       <MarkdownMessage>{message}</MarkdownMessage>
@@ -43,19 +43,20 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
   messageStatus,
 }) => {
   const [showMessage, setShowMessage] = useState(false)
-
   let formatMessage
   try {
-    formatMessage = `\`\`\`python\n${JSON.parse(message)?.["code"]}\n\`\`\``
+    const res = JSON.parse(message)
+    const code = res?.["function_arguments"]?.["code"]
+    if (code) {
+      formatMessage = `\`\`\`python\n${code}\n\`\`\``
+    } else {
+      formatMessage = `\`\`\`json\n${JSON.stringify(res, null, 2)}\n\`\`\``
+    }
   } catch (e) {
-    formatMessage = `\`\`\`python\n${message}\n\`\`\``
+    formatMessage = `\`\`\`json\n${message}\n\`\`\``
   }
 
   const { InfoIcon, InfoTitle } = getInfoByStatus(messageStatus)
-
-  const hasResult =
-    messageStatus === MESSAGE_STATUS.ANALYZE_SUCCESS ||
-    messageStatus === MESSAGE_STATUS.ANALYZE_ERROR
 
   return (
     <div css={containerStyle}>
@@ -65,10 +66,10 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
       >
         {InfoIcon}
         {InfoTitle}
-        {hasResult && <Icon component={showMessage ? UpIcon : DownIcon} />}
+        <Icon component={showMessage ? UpIcon : DownIcon} />
       </div>
       <AnimatePresence>
-        {hasResult && showMessage && (
+        {showMessage && (
           <div css={messageContainerStyle}>
             <MarkdownMessage>{formatMessage}</MarkdownMessage>
           </div>

@@ -14,7 +14,7 @@ export const containerStyle = css`
 export const headerContainerStyle = (status: MESSAGE_STATUS) => {
   let textColor = getColor("techPurple", "03")
   switch (status) {
-    case MESSAGE_STATUS.ANALYZE_ERROR:
+    case MESSAGE_STATUS.ANALYZE_FAILED:
       textColor = getColor("red", "03")
       break
     case MESSAGE_STATUS.ANALYZE_SUCCESS:

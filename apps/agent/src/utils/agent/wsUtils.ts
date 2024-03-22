@@ -54,6 +54,70 @@ export const formatSendMessagePayload = (
   return encodePayload
 }
 
+export const isChatMessage = (message: ChatMessage) => {
+  return message.messageType === MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_CHAT
+}
+
+export const isRequestMessage = (message: ChatMessage) => {
+  return (
+    message.messageType === MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
+  )
+}
+
+export const isPendingRequestMessage = (message: ChatMessage) => {
+  return (
+    isRequestMessage(message) &&
+    message.status == MESSAGE_STATUS.ANALYZE_PENDING
+  )
+}
+export const isErrorMessageRes = (message: ChatMessage) => {
+  return (
+    message.messageType ===
+    MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_ERROR
+  )
+}
+
+export const isSuccessMessageRes = (message: ChatMessage) => {
+  return (
+    message.messageType ===
+    MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_OK
+  )
+}
+
+export const handleUpdateMessageList = (
+  curMessage: IGroupMessage,
+  message: ChatMessage,
+) => {
+  const needUpdateMessage = curMessage.items[curMessage.items.length - 1]
+  if (needUpdateMessage.messageType === message.messageType) {
+    needUpdateMessage.message = needUpdateMessage.message + message.message
+  } else {
+    if (
+      isPendingRequestMessage(needUpdateMessage) &&
+      (isErrorMessageRes(message) || isSuccessMessageRes(message))
+    ) {
+      needUpdateMessage.status = isErrorMessageRes(message)
+        ? MESSAGE_STATUS.ANALYZE_FAILED
+        : MESSAGE_STATUS.ANALYZE_SUCCESS
+    }
+
+    curMessage.items.push({
+      ...message,
+      status: isRequestMessage(message)
+        ? MESSAGE_STATUS.ANALYZE_PENDING
+        : undefined,
+    })
+  }
+}
+
+export const markAnalyzeMessageEnd = (messageList: ChatMessage[]) => {
+  messageList.forEach((message) => {
+    if (isPendingRequestMessage(message)) {
+      message.status = MESSAGE_STATUS.ANALYZE_END
+    }
+  })
+}
+
 export const cancelPendingMessage = (
   messageList: (IGroupMessage | ChatMessage)[],
 ) => {
@@ -61,19 +125,10 @@ export const cancelPendingMessage = (
   const cancelUpdateList = messageList.map((message) => {
     if (
       isGroupMessage(message) &&
-      message.items.some(
-        (messageItem) =>
-          messageItem.messageType ===
-            MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST &&
-          messageItem.status === MESSAGE_STATUS.ANALYZE_PENDING,
-      )
+      message.items.some((messageItem) => isPendingRequestMessage(messageItem))
     ) {
       let updateMessageItem = message.items.map((messageItem) => {
-        if (
-          messageItem.messageType ===
-            MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST &&
-          messageItem.status === MESSAGE_STATUS.ANALYZE_PENDING
-        ) {
+        if (isPendingRequestMessage(messageItem)) {
           needUpdateMessageList = true
           return {
             ...messageItem,
