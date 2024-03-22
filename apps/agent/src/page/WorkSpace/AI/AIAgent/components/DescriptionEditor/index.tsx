@@ -15,7 +15,7 @@ import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import AIIcon from "@/assets/agent/ai.svg?react"
 import { useGeneratePromptDescriptionMutation } from "@/redux/services/agentAPI"
 import { track } from "@/utils/mixpanelHelper"
-import AILoadingIcon from "../../../../../components/AILoading/aiLoading.svg?react"
+import AILoadingIcon from "../../../components/AILoading/aiLoading.svg?react"
 import { descContainerStyle, descTextStyle } from "./style"
 
 const DescriptionEditor: FC = memo(() => {
