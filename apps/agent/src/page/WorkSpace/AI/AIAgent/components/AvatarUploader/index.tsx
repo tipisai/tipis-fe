@@ -59,6 +59,7 @@ const AvatarUploader: FC = memo(() => {
             >
               <div
                 onClick={() => {
+                  console.log("field.value", field.value)
                   track(
                     ILLA_MIXPANEL_EVENT_TYPE.CLICK,
                     ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_EDIT,

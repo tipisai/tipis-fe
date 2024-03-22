@@ -12,6 +12,7 @@ import {
   customDrawStyle,
   dividerContainerStyle,
   menuContentStyle,
+  mobileFirstPageLayoutContainerStyle,
 } from "./style"
 
 const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
@@ -28,7 +29,7 @@ const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
   }
 
   return (
-    <>
+    <div css={mobileFirstPageLayoutContainerStyle}>
       <WorkspaceMobileHeaderLayout
         title={title}
         extra={headerExtra}
@@ -69,7 +70,7 @@ const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
         visible={createTeamVisible}
         onCancel={() => setCreateTeamVisible(false)}
       />
-    </>
+    </div>
   )
 }
 

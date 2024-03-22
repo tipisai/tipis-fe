@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect, useMemo } from "react"
 import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useSelector } from "react-redux"
 import { Navigate, useBeforeUnload, useParams } from "react-router-dom"
+import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { getCurrentId } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
@@ -130,9 +131,13 @@ export const EditAIAgentPage: FC = () => {
       <TipisWebSocketProvider key={agentID}>
         <AgentWSProvider>
           <FormContext>
-            <WorkspacePCHeaderLayout
-              title={data.name}
-              extra={<HeaderTools />}
+            <LayoutAutoChange
+              desktopPage={
+                <WorkspacePCHeaderLayout
+                  title={data.name}
+                  extra={<HeaderTools />}
+                />
+              }
             />
             <AIAgent />
           </FormContext>

@@ -1,6 +1,6 @@
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
-import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayout/fistPageLayout"
+import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayout"
 import HeaderTools from "../components/HeaderTools"
 import DefaultChat from "../module/chatHistory"
 

@@ -144,6 +144,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
             <CreateAgentPage />
           </Suspense>
         ),
+        accessByMobile: true,
       },
       {
         path: ":teamIdentifier/tipi/:agentID/edit",
@@ -152,6 +153,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
             <EditAgentPage />
           </Suspense>
         ),
+        accessByMobile: true,
       },
       {
         path: ":teamIdentifier/tipi/:agentID/detail",

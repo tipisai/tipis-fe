@@ -5,7 +5,7 @@ import { Agent } from "@illa-public/public-types"
 import { RecordEditor } from "@illa-public/record-editor"
 import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
-import { SCROLL_ID } from "../../../../interface"
+import { SCROLL_ID } from "../../interface"
 
 const VariableEditor: FC = memo(() => {
   const { t } = useTranslation()
