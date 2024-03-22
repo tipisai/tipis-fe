@@ -232,12 +232,6 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
             TextSignal.CLEAN,
             "clean",
           )
-
-          break
-        case "chat":
-          if (callback.errorCode === ErrorCode.ERROR_CHAT_BUBBLE_END) {
-            onUpdateChatMessage(callback.broadcast.payload, callback.errorCode)
-          }
           break
         case "chat/remote":
           let chatCallback = callback.broadcast.payload as ChatWsAppendResponse
