@@ -207,7 +207,6 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
             TextSignal.CLEAN,
             "clean",
           )
-
           break
         case "chat/remote":
           let chatCallback = callback.broadcast.payload as ChatWsAppendResponse
