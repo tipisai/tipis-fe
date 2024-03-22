@@ -205,23 +205,23 @@ const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
   const menuItems: MenuProps["items"] = useMemo(() => {
     return [
       {
-        label: "Duplicate",
+        label: t("dashboard.common.duplicate"),
         key: "duplicate",
         icon: <Icon component={CopyIcon} />,
       },
       {
-        label: "Share",
+        label: t("dashboard.common.share"),
         key: "share",
         icon: <Icon component={ShareIcon} />,
       },
       {
-        label: "Delete",
+        label: t("dashboard.common.delete"),
         key: "delete",
         danger: true,
         icon: <Icon component={DeleteIcon} />,
       },
     ]
-  }, [])
+  }, [t])
 
   return (
     <>
@@ -256,14 +256,14 @@ const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
                 icon={<Icon component={PenIcon} />}
                 onClick={onClickEditButton}
               >
-                Edit
+                {t("dashboard.common.edit")}
               </Button>
               <Button
                 type="text"
                 icon={<Icon component={PlayFillIcon} />}
                 onClick={onClickRunButton}
               >
-                Run
+                {t("dashboard.common.run")}
               </Button>
             </>
           }

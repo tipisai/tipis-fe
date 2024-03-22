@@ -1,5 +1,7 @@
 import Icon from "@ant-design/icons"
 import { Avatar } from "antd"
+import { useCallback } from "react"
+import { useTranslation } from "react-i18next"
 import { PenIcon } from "@illa-public/icon"
 import ChatIcon from "@/assets/workspace/chat.svg?react"
 import FunctionIcon from "@/assets/workspace/function.svg?react"
@@ -70,29 +72,37 @@ export const getIconByTabInfo = (icon: string, tabType: TAB_TYPE) => {
   }
 }
 
-export const getTabName = (tabName: string, tabType: TAB_TYPE) => {
-  if (tabName) return tabName
-  switch (tabType) {
-    case TAB_TYPE.CREATE_TIPIS:
-      return "Create tipi"
-    case TAB_TYPE.EDIT_TIPIS:
-      return "Edit tipi"
-    case TAB_TYPE.RUN_TIPIS:
-      return "Run tipi"
-    case TAB_TYPE.CHAT:
-      return "Default chat"
-    case TAB_TYPE.CREATE_FUNCTION:
-      return "Create Function"
-    case TAB_TYPE.EDIT_FUNCTION:
-      return "Edit Function"
-    case TAB_TYPE.EXPLORE_TIPIS:
-      return "Explore tipis"
-    case TAB_TYPE.EXPLORE_FUNCTION:
-      return "Explore function"
-    case TAB_TYPE.EXPLORE_TIPIS_DETAIL:
-    case TAB_TYPE.EXPLORE_FUNCTION_DETAIL:
-      return "xxxxx"
-  }
+export const useGetTabName = () => {
+  const { t } = useTranslation()
+
+  const getTabName = useCallback(
+    (tabName: string, tabType: TAB_TYPE) => {
+      if (tabName) return tabName
+      switch (tabType) {
+        case TAB_TYPE.CREATE_TIPIS:
+          return t("homepage.left_panel.tab.create_tipi")
+        case TAB_TYPE.EDIT_TIPIS:
+          return "Edit tipi"
+        case TAB_TYPE.RUN_TIPIS:
+          return "Run tipi"
+        case TAB_TYPE.CHAT:
+          return t("homepage.left_panel.tab.tipi_chat")
+        case TAB_TYPE.CREATE_FUNCTION:
+          return "Create Function"
+        case TAB_TYPE.EDIT_FUNCTION:
+          return "Edit Function"
+        case TAB_TYPE.EXPLORE_TIPIS_DETAIL:
+        case TAB_TYPE.EXPLORE_TIPIS:
+          return t("homepage.left_panel.tab.explore_tipi")
+        case TAB_TYPE.EXPLORE_FUNCTION_DETAIL:
+        case TAB_TYPE.EXPLORE_FUNCTION:
+          return "Explore function"
+      }
+    },
+    [t],
+  )
+
+  return getTabName
 }
 
 export const genTabNavigateLink = (

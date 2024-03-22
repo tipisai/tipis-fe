@@ -1,5 +1,6 @@
 import Icon from "@ant-design/icons"
 import { Button, Input } from "antd"
+import { t } from "i18next"
 import { FC } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -42,7 +43,7 @@ const HeaderTools: FC = () => {
         size="large"
         onClick={onClickCreateTipi}
       >
-        Create
+        {t("dashboard.create")}
       </Button>
     </div>
   )
