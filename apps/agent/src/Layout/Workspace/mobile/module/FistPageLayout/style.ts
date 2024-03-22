@@ -27,3 +27,10 @@ export const menuContentStyle = css`
   height: 100%;
   overflow: hidden;
 `
+
+export const mobileFirstPageLayoutContainerStyle = css`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`

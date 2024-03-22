@@ -1,5 +1,6 @@
 import { FC, useContext, useEffect } from "react"
 import { useFormContext, useFormState } from "react-hook-form"
+import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { Agent } from "@illa-public/public-types"
 import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { ChatContext } from "../components/ChatContext"
@@ -44,7 +45,10 @@ export const AIAgent: FC = () => {
     <ChatContext.Provider value={{ inRoomUsers }}>
       <div css={editAIAgentContainerStyle}>
         <EditPanel />
-        <PreviewChatHistory />
+        <LayoutAutoChange
+          desktopPage={<PreviewChatHistory />}
+          mobilePage={null}
+        />
       </div>
     </ChatContext.Provider>
   )

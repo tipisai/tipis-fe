@@ -1,15 +1,14 @@
 import { memo, useState } from "react"
 import { useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { Agent } from "@illa-public/public-types"
 import BlackButton from "@/components/BlackButton"
-import { SCROLL_ID } from "../../interface"
-import PublishModal from "../../modules/PublishModal"
+import { IAgentForm, SCROLL_ID } from "../../interface"
+import PublishModal from "../../pc/modules/PublishModal"
 import { handleScrollToElement } from "../../utils"
 import { saveButtonContainerStyle } from "./style"
 
 const SaveButton = memo(() => {
-  const { control, trigger } = useFormContext<Agent>()
+  const { control, trigger } = useFormContext<IAgentForm>()
   const { isSubmitting, errors } = useFormState({ control })
   const { t } = useTranslation()
   const [modalOpen, setModalOpen] = useState(false)

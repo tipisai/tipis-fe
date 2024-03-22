@@ -5,7 +5,7 @@ import { CodeEditor } from "@illa-public/code-editor"
 import { Agent } from "@illa-public/public-types"
 import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
-import { SCROLL_ID } from "../../../../interface"
+import { SCROLL_ID } from "../../interface"
 import { codeEditorErrorStyle } from "./style"
 
 const PromptEditor: FC = memo(() => {
