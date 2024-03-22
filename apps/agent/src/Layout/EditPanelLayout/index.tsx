@@ -7,11 +7,18 @@ import {
 } from "./style"
 
 const EditPanelLayout: FC<IEditPanelLayoutProps> = (props) => {
-  const { children, footerChildren, customWidth = "528px" } = props
+  const {
+    children,
+    footerChildren,
+    customWidth = "528px",
+    canResize = false,
+  } = props
   return (
-    <div css={editPanelContainerStyle}>
+    <div css={editPanelContainerStyle(customWidth, canResize)}>
       <div css={editContentStyle(customWidth)}>{children}</div>
-      <div css={footerContainerStyle(customWidth)}>{footerChildren}</div>
+      {footerChildren && (
+        <div css={footerContainerStyle(customWidth)}>{footerChildren}</div>
+      )}
     </div>
   )
 }

@@ -1,10 +1,18 @@
 import { FC } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { Navigate, useNavigate } from "react-router-dom"
+import { v4 } from "uuid"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import DetailLayout from "@/Layout/DetailLayout"
 import DetailHeader from "@/Layout/DetailLayout/components/DetailHeader"
 import FullSectionLoading from "@/components/FullSectionLoading"
+import store from "@/redux/store"
+import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
+import {
+  getCurrentTabID,
+  getRecentTabInfos,
+} from "@/redux/ui/recentTab/selector"
+import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { getExploreTipisPath } from "@/utils/routeHelper"
 import { useGetNotContributeTipDetail } from "@/utils/tipis/hook"
 import ActionGroup from "./components/ActionGroup"
@@ -16,8 +24,32 @@ const NotContributeTipiDetail: FC = () => {
 
   const navigate = useNavigate()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+  const dispatch = useDispatch()
 
   const onClickBack = () => {
+    const currentTabID = getCurrentTabID(store.getState())
+    const recentTabs = getRecentTabInfos(store.getState())
+    const currentTab = recentTabs.find((tab) => tab.tabID === currentTabID)
+    const cacheID = v4()
+    const newTab = {
+      ...currentTab,
+      tabName: "",
+      tabIcon: "",
+      tabType: TAB_TYPE.EXPLORE_TIPIS,
+      tabID: cacheID,
+      cacheID: cacheID,
+    }
+    if (currentTab) {
+      dispatch(
+        recentTabActions.updateRecentTabReducer({
+          oldTabID: currentTabID,
+          newTabInfo: newTab,
+        }),
+      )
+      dispatch(recentTabActions.updateCurrentRecentTabIDReducer(cacheID))
+    } else {
+      dispatch(recentTabActions.addRecentTabReducer(newTab))
+    }
     navigate(getExploreTipisPath(currentTeamInfo.identifier))
   }
 

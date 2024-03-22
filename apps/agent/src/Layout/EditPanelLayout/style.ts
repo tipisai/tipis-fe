@@ -1,7 +1,10 @@
 import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
 
-export const editPanelContainerStyle = css`
+export const editPanelContainerStyle = (
+  width: string,
+  canResize: boolean,
+) => css`
   padding: 16px 0;
   height: 100%;
   display: flex;
@@ -10,6 +13,9 @@ export const editPanelContainerStyle = css`
   border-right: 1px solid ${getColor("grayBlue", "08")};
   background-color: ${getColor("white", "01")};
   border-top: 1px solid ${getColor("grayBlue", "08")};
+  width: ${width};
+  overflow: hidden;
+  ${!canResize ? "flex: none;" : ""}
 `
 
 export const editContentStyle = (width: string) => css`

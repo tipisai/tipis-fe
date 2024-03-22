@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect, useMemo } from "react"
 import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useBeforeUnload, useParams } from "react-router-dom"
+import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { Agent } from "@illa-public/public-types"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
@@ -102,9 +103,13 @@ export const CreateAIAgentPage: FC = () => {
       <TipisWebSocketProvider key={agentID}>
         <AgentWSProvider>
           <FormContext>
-            <WorkspacePCHeaderLayout
-              title={t("new_dashboard.button.blank-agent")}
-              extra={<HeaderTools />}
+            <LayoutAutoChange
+              desktopPage={
+                <WorkspacePCHeaderLayout
+                  title={t("new_dashboard.button.blank-agent")}
+                  extra={<HeaderTools />}
+                />
+              }
             />
             <AIAgent />
           </FormContext>

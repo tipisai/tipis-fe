@@ -1,5 +1,7 @@
 import Icon from "@ant-design/icons"
 import { Avatar } from "antd"
+import { useCallback } from "react"
+import { useTranslation } from "react-i18next"
 import { PenIcon } from "@illa-public/icon"
 import ChatIcon from "@/assets/workspace/chat.svg?react"
 import FunctionIcon from "@/assets/workspace/function.svg?react"
@@ -14,6 +16,7 @@ import {
   getExploreFunctionsPath,
   getExploreTipisPath,
   getRunTipiPath,
+  getTipiDetailPath,
 } from "@/utils/routeHelper"
 import {
   menuItemButtonCustomIconContainerStyle,
@@ -69,35 +72,44 @@ export const getIconByTabInfo = (icon: string, tabType: TAB_TYPE) => {
   }
 }
 
-export const getTabName = (tabName: string, tabType: TAB_TYPE) => {
-  if (tabName) return tabName
-  switch (tabType) {
-    case TAB_TYPE.CREATE_TIPIS:
-      return "Create tipi"
-    case TAB_TYPE.EDIT_TIPIS:
-      return "Edit tipi"
-    case TAB_TYPE.RUN_TIPIS:
-      return "Run tipi"
-    case TAB_TYPE.CHAT:
-      return "Default chat"
-    case TAB_TYPE.CREATE_FUNCTION:
-      return "Create Function"
-    case TAB_TYPE.EDIT_FUNCTION:
-      return "Edit Function"
-    case TAB_TYPE.EXPLORE_TIPIS:
-      return "Explore tipis"
-    case TAB_TYPE.EXPLORE_FUNCTION:
-      return "Explore function"
-    case TAB_TYPE.EXPLORE_TIPIS_DETAIL:
-    case TAB_TYPE.EXPLORE_FUNCTION_DETAIL:
-      return "xxxxx"
-  }
+export const useGetTabName = () => {
+  const { t } = useTranslation()
+
+  const getTabName = useCallback(
+    (tabName: string, tabType: TAB_TYPE) => {
+      if (tabName) return tabName
+      switch (tabType) {
+        case TAB_TYPE.CREATE_TIPIS:
+          return t("homepage.left_panel.tab.create_tipi")
+        case TAB_TYPE.EDIT_TIPIS:
+          return "Edit tipi"
+        case TAB_TYPE.RUN_TIPIS:
+          return "Run tipi"
+        case TAB_TYPE.CHAT:
+          return t("homepage.left_panel.tab.tipi_chat")
+        case TAB_TYPE.CREATE_FUNCTION:
+          return "Create Function"
+        case TAB_TYPE.EDIT_FUNCTION:
+          return "Edit Function"
+        case TAB_TYPE.EXPLORE_TIPIS_DETAIL:
+        case TAB_TYPE.EXPLORE_TIPIS:
+          return t("homepage.left_panel.tab.explore_tipi")
+        case TAB_TYPE.EXPLORE_FUNCTION_DETAIL:
+        case TAB_TYPE.EXPLORE_FUNCTION:
+          return "Explore function"
+      }
+    },
+    [t],
+  )
+
+  return getTabName
 }
 
 export const genTabNavigateLink = (
   teamIdentifier: string,
   tabType: TAB_TYPE,
   cacheID: string,
+  tabID: string,
 ) => {
   switch (tabType) {
     case TAB_TYPE.CREATE_TIPIS:
@@ -105,7 +117,7 @@ export const genTabNavigateLink = (
     case TAB_TYPE.EDIT_TIPIS:
       return getEditTipiPath(teamIdentifier, cacheID)
     case TAB_TYPE.RUN_TIPIS:
-      return getRunTipiPath(teamIdentifier, cacheID)
+      return `${getRunTipiPath(teamIdentifier, cacheID)}/${tabID ? tabID : ""}`
     case TAB_TYPE.CHAT:
       return getDefaultChatPath(teamIdentifier, cacheID)
     case TAB_TYPE.CREATE_FUNCTION:
@@ -117,6 +129,7 @@ export const genTabNavigateLink = (
     case TAB_TYPE.EXPLORE_FUNCTION:
       return getExploreFunctionsPath(teamIdentifier)
     case TAB_TYPE.EXPLORE_TIPIS_DETAIL:
+      return getTipiDetailPath(teamIdentifier, cacheID)
     case TAB_TYPE.EXPLORE_FUNCTION_DETAIL:
       return ""
   }
