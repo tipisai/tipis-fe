@@ -1,7 +1,7 @@
 import { Divider } from "antd"
 import { FC } from "react"
+import FeatureArea from "@/Layout/Workspace/modules/FeatureArea"
 import MenuFooter from "../../../modules/MenuFooter"
-import FeatureArea from "../FeatureArea"
 import MenuHeader from "../MenuHeader"
 import {
   dividerContainerStyle,
