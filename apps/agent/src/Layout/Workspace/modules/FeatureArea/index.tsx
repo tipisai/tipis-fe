@@ -1,5 +1,6 @@
 import Icon from "@ant-design/icons"
 import { FC } from "react"
+import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { v4 } from "uuid"
@@ -17,26 +18,40 @@ import {
   getExploreFunctionsPath,
   getExploreTipisPath,
 } from "@/utils/routeHelper"
-import FeatureCard from "../../components/FeatureCard"
-import MenuItemButton from "../../components/MenuItemButton"
+import FeatureCard from "../../pc/components/FeatureCard"
+import MenuItemButton from "../../pc/components/MenuItemButton"
 import { featureAreaContainerStyle, featureCardsContainerStyle } from "./style"
 
 const FeatureArea: FC = () => {
   const navigate = useNavigate()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const dispatch = useDispatch()
+  const { t } = useTranslation()
 
   const handleClickCreateTipis = () => {
-    const tempID = v4()
-    const tabsInfo: ITabInfo = {
-      tabName: "",
-      tabIcon: "",
-      tabType: TAB_TYPE.CREATE_TIPIS,
-      tabID: tempID,
-      cacheID: tempID,
+    const historyTabs = getRecentTabInfos(store.getState())
+    const createTipisTab = historyTabs.find(
+      (tab) => tab.tabType === TAB_TYPE.CREATE_TIPIS,
+    )
+    if (!createTipisTab) {
+      const tempID = v4()
+      const tabsInfo: ITabInfo = {
+        tabName: "",
+        tabIcon: "",
+        tabType: TAB_TYPE.CREATE_TIPIS,
+        tabID: tempID,
+        cacheID: tempID,
+      }
+      dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
+      navigate(getCreateTipiPath(currentTeamInfo?.identifier, tempID))
+    } else {
+      dispatch(
+        recentTabActions.updateCurrentRecentTabIDReducer(createTipisTab.tabID),
+      )
+      navigate(
+        getCreateTipiPath(currentTeamInfo?.identifier, createTipisTab.cacheID),
+      )
     }
-    dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
-    navigate(getCreateTipiPath(currentTeamInfo?.identifier, tempID))
   }
 
   const handleClickCreateChat = () => {
@@ -102,24 +117,24 @@ const FeatureArea: FC = () => {
       <div css={featureCardsContainerStyle}>
         <FeatureCard
           icon={<Icon component={MarketplaceIcon} />}
-          title="Explore tipi"
+          title={t("homepage.left_panel.feature.explore_tipi")}
           position="left"
           onClick={handleClickExploreTipis}
         />
         <FeatureCard
           icon={<Icon component={FunctionIcon} />}
-          title="Function"
+          title={t("homepage.left_panel.feature.function")}
           position="right"
           onClick={handleClickFunction}
         />
       </div>
       <MenuItemButton
-        text="New Chat"
+        text={t("homepage.left_panel.feature.new_chat")}
         icon={<Icon component={PlusIcon} />}
         onClick={handleClickCreateChat}
       />
       <MenuItemButton
-        text="Create a tipis"
+        text={t("homepage.left_panel.feature.create_tipi")}
         icon={<Icon component={PenIcon} />}
         onClick={handleClickCreateTipis}
       />

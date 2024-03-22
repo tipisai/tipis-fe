@@ -11,7 +11,7 @@ const ChatContent: FC = () => {
   return (
     <div css={chatContainerStyle}>
       <WorkspacePCHeaderLayout
-        title={t("Tipi")}
+        title={t("homepage.left_panel.tab.tipi_chat")}
         extra={<HeaderTools />}
         customRenderTitle={(title) => (
           <PCCustomTitle title={title} iconURL={""} />

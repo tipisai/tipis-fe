@@ -27,9 +27,7 @@ const VariableEditor: FC = memo(() => {
           )
           return isValidate
             ? isValidate
-            : t(
-                "Please ensure that both the key and value are either empty or not empty.",
-              )
+            : t("editor.ai-agent.validation_blank.variable_value")
         },
       }}
       shouldUnregister={false}

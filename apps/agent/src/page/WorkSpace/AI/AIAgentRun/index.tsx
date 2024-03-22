@@ -1,11 +1,12 @@
 import { FC } from "react"
-import { Navigate } from "react-router-dom"
+import { Navigate, useParams } from "react-router-dom"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { useGetTipiContributed } from "@/utils/tipis/hook"
 import { ContributedAgent } from "./contributeAgent"
 import { NotContributedAgent } from "./notContributeAgent"
 
 export const AIAgentRun: FC = () => {
+  const { tabID } = useParams()
   const { data, isLoading, isError, agentID } = useGetTipiContributed()
 
   // useEffect(() => {
@@ -33,9 +34,9 @@ export const AIAgentRun: FC = () => {
 
   return data ? (
     data.isPublishedToMarketplace ? (
-      <ContributedAgent key={agentID} />
+      <ContributedAgent key={`${agentID}-${tabID}`} />
     ) : (
-      <NotContributedAgent key={agentID} />
+      <NotContributedAgent key={`${agentID}-${tabID}`} />
     )
   ) : null
 }
