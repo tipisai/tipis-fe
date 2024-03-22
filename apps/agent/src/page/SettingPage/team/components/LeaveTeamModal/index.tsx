@@ -15,7 +15,7 @@ import {
   useRemoveTeamMemberByIDMutation,
 } from "@illa-public/user-data"
 import store from "@/redux/store"
-import { getExploreTipisPath } from "@/utils/routeHelper"
+import { EMPTY_TEAM_PATH, getExploreTipisPath } from "@/utils/routeHelper"
 import DeleteTeamModal from "../DeleteTeamModal"
 import { footerStyle, modalContentStyle, modalTitleStyle } from "./style"
 
@@ -48,15 +48,12 @@ const LeaveTeamModal: FC<LeaveTeamModalProps> = (props) => {
         teamMemberID: teamInfo?.teamMemberID,
       })
       const currentIdentifier = getCurrentTeamIdentifier(store.getState())
-      // TODO: WTF, empty teams
-      // if (currentTeamItems.length === 0) {
-      //   navigate("/")
-      // }
-      // navigate(tempRootPath(currentTeamItems[0].identifier), {
-      //   replace: true,
-      // })
       if (currentIdentifier) {
         navigate(getExploreTipisPath(currentIdentifier), {
+          replace: true,
+        })
+      } else {
+        navigate(EMPTY_TEAM_PATH, {
           replace: true,
         })
       }

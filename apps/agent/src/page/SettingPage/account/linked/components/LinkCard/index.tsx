@@ -1,14 +1,14 @@
 import { App, Button } from "antd"
 import { FC, useContext, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import {
   ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackContext,
 } from "@illa-public/mixpanel-utils"
 import { useCancelLinkedMutation } from "@illa-public/user-data"
 import { useLazyGetOAuthURIQuery } from "@illa-public/user-data"
-import { getPasswordPath } from "@/utils/routeHelper"
+import { PASSWORD_PATH } from "@/utils/routeHelper"
 import { LinkCardProps } from "./interface"
 import {
   buttonWrapperStyle,
@@ -29,7 +29,6 @@ export const LinkCard: FC<LinkCardProps> = (props) => {
   const { track } = useContext(MixpanelTrackContext)
   const [triggerGetOAuthURI] = useLazyGetOAuthURIQuery()
   const [cancelLinked] = useCancelLinkedMutation()
-  const { teamIdentifier } = useParams()
 
   const tipsNotHasPassword = () => {
     const tipsModal = modal.confirm({
@@ -44,8 +43,7 @@ export const LinkCard: FC<LinkCardProps> = (props) => {
         track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
           element: "github_connect_modal_set_password",
         })
-        // TODO: WTF, replace
-        navigate(getPasswordPath(teamIdentifier!))
+        navigate(PASSWORD_PATH)
       },
       onCancel: () => {
         tipsModal.update({

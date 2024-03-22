@@ -1,6 +1,5 @@
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { MobileForbidden } from "@illa-public/status-page"
-import ProtectedComponent from "@/components/Auth"
 import { RoutesObjectPro } from "./interface"
 import { saveTokenToLocalStorageLoader } from "./loader/beautifyURLLoader"
 
@@ -9,7 +8,7 @@ export const buildRouter = (config: RoutesObjectPro[]) => {
     const {
       element,
       children,
-      needLogin,
+      ProtectComponent,
       loader: originLoader,
       needRole,
       ...otherRouterParams
@@ -27,21 +26,21 @@ export const buildRouter = (config: RoutesObjectPro[]) => {
         />
       )
     }
-    if (needLogin) {
-      newRouteItem.loader = async (args) => {
-        // check login
-        const saveTokenLoader = saveTokenToLocalStorageLoader(args)
-        if (saveTokenLoader) {
-          return saveTokenLoader
-        }
-        return originLoader?.(args) || null
+
+    newRouteItem.loader = async (args) => {
+      // check login
+      const saveTokenLoader = saveTokenToLocalStorageLoader(args)
+      if (saveTokenLoader) {
+        return saveTokenLoader
       }
-      newRouteItem.element = (
-        <ProtectedComponent needRole={needRole}>
-          {newRouteItem.element}
-        </ProtectedComponent>
-      )
+      return originLoader?.(args) || null
     }
+    ProtectComponent &&
+      (newRouteItem.element = (
+        <ProtectComponent needRole={needRole}>
+          {newRouteItem.element}
+        </ProtectComponent>
+      ))
 
     if (Array.isArray(children) && children.length) {
       newRouteItem.children = buildRouter(children)

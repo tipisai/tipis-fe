@@ -17,7 +17,7 @@ import {
   useDeleteTeamByIDMutation,
 } from "@illa-public/user-data"
 import store from "@/redux/store"
-import { getExploreTipisPath } from "@/utils/routeHelper"
+import { EMPTY_TEAM_PATH, getExploreTipisPath } from "@/utils/routeHelper"
 import { footerStyle, modalContentStyle, modalTitleStyle } from "./style"
 
 interface DeleteTeamModalProps {
@@ -68,15 +68,12 @@ const DeleteTeamModal: FC<DeleteTeamModalProps> = (props) => {
             content: t("team_setting.mes.delete_suc"),
           })
           const currentIdentifier = getCurrentTeamIdentifier(store.getState())
-          // TODO: WTF, empty teams
-          // if (currentTeamItems.length === 0) {
-          //   navigate("/")
-          // }
-          // navigate(getExploreTipisPath(currentTeamItems[0].identifier), {
-          //   replace: true,
-          // })
           if (currentIdentifier) {
             navigate(getExploreTipisPath(currentIdentifier), {
+              replace: true,
+            })
+          } else {
+            navigate(EMPTY_TEAM_PATH, {
               replace: true,
             })
           }

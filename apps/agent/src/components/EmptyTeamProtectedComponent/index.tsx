@@ -1,15 +1,17 @@
 import { FC } from "react"
 import { Navigate } from "react-router-dom"
+import { ILLAMixpanel } from "@illa-public/mixpanel-utils"
 import { UpgradeModalGroup } from "@illa-public/upgrade-modal"
 import { useGetUserInfoAndTeamsInfoByTokenQuery } from "@illa-public/user-data"
 import { getILLACloudURL } from "@illa-public/utils"
 import { BaseProtectComponentProps } from "@/router/interface"
 
-const SettingProtectedComponent: FC<BaseProtectComponentProps> = (props) => {
+const EmptyTeamProtectedComponent: FC<BaseProtectComponentProps> = (props) => {
   const { isSuccess, error } = useGetUserInfoAndTeamsInfoByTokenQuery({})
 
   if (error && "status" in error) {
     if (error.status === 401) {
+      ILLAMixpanel.reset()
       window.location.href = `${getILLACloudURL(window.customDomain)}/user/login?redirectURL=${encodeURIComponent(
         window.location.href,
       )}`
@@ -26,4 +28,4 @@ const SettingProtectedComponent: FC<BaseProtectComponentProps> = (props) => {
   ) : null
 }
 
-export default SettingProtectedComponent
+export default EmptyTeamProtectedComponent
