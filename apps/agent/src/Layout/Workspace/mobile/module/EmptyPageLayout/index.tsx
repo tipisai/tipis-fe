@@ -1,7 +1,7 @@
 import { Divider, Drawer } from "antd"
 import { FC, useState } from "react"
+import FeatureArea from "@/Layout/Workspace/modules/FeatureArea"
 import MenuFooter from "@/Layout/Workspace/modules/MenuFooter"
-import FeatureArea from "@/Layout/Workspace/pc/modules/FeatureArea"
 import MobileMenuIcon from "@/assets/workspace/mobileMenu.svg?react"
 import WorkspaceMobileHeaderLayout from "../../components/Header"
 import { IEmptyPageLayoutMobile } from "./interface"
