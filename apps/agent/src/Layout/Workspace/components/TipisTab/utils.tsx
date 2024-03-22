@@ -14,6 +14,7 @@ import {
   getExploreFunctionsPath,
   getExploreTipisPath,
   getRunTipiPath,
+  getTipiDetailPath,
 } from "@/utils/routeHelper"
 import {
   menuItemButtonCustomIconContainerStyle,
@@ -98,6 +99,7 @@ export const genTabNavigateLink = (
   teamIdentifier: string,
   tabType: TAB_TYPE,
   cacheID: string,
+  tabID: string,
 ) => {
   switch (tabType) {
     case TAB_TYPE.CREATE_TIPIS:
@@ -105,7 +107,7 @@ export const genTabNavigateLink = (
     case TAB_TYPE.EDIT_TIPIS:
       return getEditTipiPath(teamIdentifier, cacheID)
     case TAB_TYPE.RUN_TIPIS:
-      return getRunTipiPath(teamIdentifier, cacheID)
+      return `${getRunTipiPath(teamIdentifier, cacheID)}/${tabID ? tabID : ""}`
     case TAB_TYPE.CHAT:
       return getDefaultChatPath(teamIdentifier, cacheID)
     case TAB_TYPE.CREATE_FUNCTION:
@@ -117,6 +119,7 @@ export const genTabNavigateLink = (
     case TAB_TYPE.EXPLORE_FUNCTION:
       return getExploreFunctionsPath(teamIdentifier)
     case TAB_TYPE.EXPLORE_TIPIS_DETAIL:
+      return getTipiDetailPath(teamIdentifier, cacheID)
     case TAB_TYPE.EXPLORE_FUNCTION_DETAIL:
       return ""
   }

@@ -162,7 +162,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         ),
       },
       {
-        path: ":teamIdentifier/tipi/:agentID/run",
+        path: ":teamIdentifier/tipi/:agentID/run/:tabID?",
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <RunAgentPage />
