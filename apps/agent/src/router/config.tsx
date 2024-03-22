@@ -136,6 +136,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
             <TipisDashboard />
           </Suspense>
         ),
+        accessByMobile: true,
       },
       {
         path: ":teamIdentifier/tipi/:agentID/create",
