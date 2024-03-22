@@ -3,18 +3,19 @@ import { FormProvider, useForm } from "react-hook-form"
 import { Navigate } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { Agent } from "@illa-public/public-types"
-import CustomTitle from "@/Layout/Workspace/pc/components/CustomTitle"
-import WorkspaceMobileHeaderLayout from "@/Layout/Workspace/pc/components/Header"
+import MobileCustomTitle from "@/Layout/Workspace/mobile/components/CustomTitle"
+import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayout/fistPageLayout"
+import PCCustomTitle from "@/Layout/Workspace/pc/components/CustomTitle"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
 import { useGetNotContributeTipDetail } from "@/utils/tipis/hook"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import AIAgentRunMobile from "./AIAgentRunMobile"
-import MobileMoreActionButton from "./AIAgentRunMobile/components/MoreActionButton"
 import AIAgentRunPC from "./AIAgentRunPC"
 import HeaderTools from "./AIAgentRunPC/components/HeaderTools"
 import FormContext from "./AIAgentRunPC/context/FormContext"
+import MoreActionButton from "./components/MoreActionButton"
 import { MarketplaceInfoProvider } from "./contexts/MarketplaceInfoContext"
 
 export const NotContributedAgent: FC = () => {
@@ -52,7 +53,7 @@ export const NotContributedAgent: FC = () => {
                       title={data.name}
                       extra={<HeaderTools />}
                       customRenderTitle={(title) => (
-                        <CustomTitle title={title} iconURL={data.icon} />
+                        <PCCustomTitle title={title} iconURL={data.icon} />
                       )}
                     />
                     <AIAgentRunPC />
@@ -60,14 +61,26 @@ export const NotContributedAgent: FC = () => {
                 }
                 mobilePage={
                   <>
-                    <WorkspaceMobileHeaderLayout
-                      title={data.name}
-                      extra={<MobileMoreActionButton />}
+                    <MobileFirstPageLayout
+                      headerExtra={
+                        <MoreActionButton
+                          agentID={data.aiAgentID}
+                          agentName={data.name}
+                          publishToMarketplace={data.publishedToMarketplace}
+                          isMobile
+                        />
+                      }
                       customRenderTitle={(title) => (
-                        <CustomTitle title={title} iconURL={data.icon} />
+                        <MobileCustomTitle title={title} iconURL={data.icon} />
                       )}
-                    />
-                    <AIAgentRunMobile />
+                      title={data.name}
+                    >
+                      {/* <WorkspaceMobileHeaderLayout
+                        title={data.name}
+                        extra={}
+                      /> */}
+                      <AIAgentRunMobile />
+                    </MobileFirstPageLayout>
                   </>
                 }
               />

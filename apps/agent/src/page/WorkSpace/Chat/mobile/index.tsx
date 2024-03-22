@@ -6,7 +6,7 @@ import DefaultChat from "../module/chatHistory"
 const MobileChatPage: FC = () => {
   return (
     <>
-      <MobileFirstPageLayout headerExtra={<HeaderTools />}>
+      <MobileFirstPageLayout headerExtra={<HeaderTools />} title="Chat">
         <DefaultChat isMobile />
       </MobileFirstPageLayout>
     </>
