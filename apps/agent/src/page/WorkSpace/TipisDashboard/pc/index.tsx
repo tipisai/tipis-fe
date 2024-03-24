@@ -2,8 +2,8 @@ import { Tabs } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
+import TeamCardList from "../components/TeamCardList"
 import HeaderTools from "./components/HeaderTools"
-import TeamCardList from "./components/TeamCardList"
 import { tabsContainerStyle, tipisPCDashboardContainerStyle } from "./style"
 
 const TipisPCDashboard: FC = () => {
