@@ -4,7 +4,6 @@ import { FC, MouseEventHandler, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
-import { v4 } from "uuid"
 import {
   CopyIcon,
   DeleteIcon,
@@ -41,23 +40,17 @@ import {
   useDeleteAIAgentMutation,
   useDuplicateAIAgentMutation,
 } from "@/redux/services/agentAPI"
-import { ITabInfo, TAB_TYPE } from "@/redux/ui/recentTab/interface"
-import {
-  getExploreTipisTab,
-  getRecentTabInfos,
-} from "@/redux/ui/recentTab/selector"
-import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { copyToClipboard } from "@/utils/copyToClipboard"
 import { track } from "@/utils/mixpanelHelper"
 import {
-  getEditTipiPath,
-  getRunTipiPath,
-  getTipiDetailPath,
-} from "@/utils/routeHelper"
-import store from "../../../../../../../redux/store"
-import { ITeamCardListItemProps } from "./interface"
+  useDetailTipis,
+  useEditTipis,
+  useRunTipis,
+} from "@/utils/recentTabs/hook"
+import { getEditTipiPath } from "@/utils/routeHelper"
+import { ITeamCardListItemProps } from "../../../components/TeamCardList/interface"
 
-const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
+const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
   const { icon, title, description, id, publishToMarketplace } = props
   const { modal, message } = App.useApp()
   const { t } = useTranslation()
@@ -74,29 +67,17 @@ const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const editTipis = useEditTipis()
+  const runTipis = useRunTipis()
+  const detailTipis = useDetailTipis()
   const [shareVisible, setShareVisible] = useState(false)
 
   const onClickCard = () => {
-    const exploreTipiTab = getExploreTipisTab(store.getState())
-    const newTab = {
-      tabName: title,
+    detailTipis({
+      tipisID: id,
+      title: title,
       tabIcon: icon,
-      tabType: TAB_TYPE.EXPLORE_TIPIS_DETAIL,
-      tabID: v4(),
-      cacheID: id,
-    }
-    if (exploreTipiTab) {
-      dispatch(
-        recentTabActions.updateRecentTabReducer({
-          oldTabID: exploreTipiTab.tabID,
-          newTabInfo: newTab,
-        }),
-      )
-      dispatch(recentTabActions.updateCurrentRecentTabIDReducer(newTab.tabID))
-    } else {
-      dispatch(recentTabActions.addRecentTabReducer(newTab))
-    }
-    navigate(getTipiDetailPath(teamIdentifier!, id))
+    })
   }
 
   const [duplicateAIAgent] = useDuplicateAIAgentMutation()
@@ -113,39 +94,12 @@ const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
 
   const onClickEditButton: MouseEventHandler<HTMLElement> = (e) => {
     e.stopPropagation()
-    const historyTabs = getRecentTabInfos(store.getState())
-
-    let currentTab = historyTabs.find(
-      (tab) => tab.cacheID === id && tab.tabType === TAB_TYPE.EDIT_TIPIS,
-    )
-    if (!currentTab) {
-      currentTab = {
-        tabName: "",
-        tabIcon: "",
-        tabType: TAB_TYPE.EDIT_TIPIS,
-        tabID: v4(),
-        cacheID: id,
-      }
-      dispatch(recentTabActions.addRecentTabReducer(currentTab))
-    }
-
-    navigate(getEditTipiPath(teamIdentifier!, id))
+    editTipis(id)
   }
 
   const onClickRunButton: MouseEventHandler<HTMLElement> = (e) => {
     e.stopPropagation()
-
-    const tabID = v4()
-
-    const tabsInfo: ITabInfo = {
-      tabName: "",
-      tabIcon: "",
-      tabType: TAB_TYPE.RUN_TIPIS,
-      tabID: tabID,
-      cacheID: id,
-    }
-    dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
-    navigate(`${getRunTipiPath(teamIdentifier!, id)}/${tabID}`)
+    runTipis(id)
   }
 
   const onClickMoreAction: MouseEventHandler<HTMLElement> = (e) => {
@@ -397,4 +351,4 @@ const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
   )
 }
 
-export default TeamCardListItem
+export default PCTeamCardListItem

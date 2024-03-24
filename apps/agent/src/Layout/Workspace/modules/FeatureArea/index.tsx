@@ -12,14 +12,14 @@ import store from "@/redux/store"
 import { ITabInfo, TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
+import { useCreateTipis } from "@/utils/recentTabs/hook"
 import {
-  getCreateTipiPath,
   getDefaultChatPath,
   getExploreFunctionsPath,
   getExploreTipisPath,
 } from "@/utils/routeHelper"
-import FeatureCard from "../../pc/components/FeatureCard"
-import MenuItemButton from "../../pc/components/MenuItemButton"
+import FeatureCard from "../../components/FeatureCard"
+import MenuItemButton from "../../components/MenuItemButton"
 import { featureAreaContainerStyle, featureCardsContainerStyle } from "./style"
 
 interface FeatureAreaProps {
@@ -30,6 +30,7 @@ const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const dispatch = useDispatch()
   const { t } = useTranslation()
+  const createTipi = useCreateTipis()
 
   const handleClickCreateTipis = () => {
     const isEmptyTeam = getIsEmptyTeam(store.getState())
@@ -37,29 +38,7 @@ const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
       openCreateModal?.()
       return
     }
-    const historyTabs = getRecentTabInfos(store.getState())
-    const createTipisTab = historyTabs.find(
-      (tab) => tab.tabType === TAB_TYPE.CREATE_TIPIS,
-    )
-    if (!createTipisTab) {
-      const tempID = v4()
-      const tabsInfo: ITabInfo = {
-        tabName: "",
-        tabIcon: "",
-        tabType: TAB_TYPE.CREATE_TIPIS,
-        tabID: tempID,
-        cacheID: tempID,
-      }
-      dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
-      navigate(getCreateTipiPath(currentTeamInfo?.identifier, tempID))
-    } else {
-      dispatch(
-        recentTabActions.updateCurrentRecentTabIDReducer(createTipisTab.tabID),
-      )
-      navigate(
-        getCreateTipiPath(currentTeamInfo?.identifier, createTipisTab.cacheID),
-      )
-    }
+    createTipi()
   }
 
   const handleClickCreateChat = () => {

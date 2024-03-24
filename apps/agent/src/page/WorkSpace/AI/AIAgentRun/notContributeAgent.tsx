@@ -67,6 +67,7 @@ export const NotContributedAgent: FC = () => {
                           agentID={data.aiAgentID}
                           agentName={data.name}
                           publishToMarketplace={data.publishedToMarketplace}
+                          agentIcon={data.icon}
                           isMobile
                         />
                       }
