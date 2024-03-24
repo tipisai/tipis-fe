@@ -35,7 +35,7 @@ const TeamCard: FC<ITeamCardProps> = (props) => {
             </div>
             <span css={cardTitleStyle}>{title}</span>
           </div>
-          <div css={moreButtonContainerStyle}>{moreButton}</div>
+          {moreButton && <div css={moreButtonContainerStyle}>{moreButton}</div>}
         </div>
         <Typography.Paragraph
           css={descriptionsStyle}
@@ -46,10 +46,14 @@ const TeamCard: FC<ITeamCardProps> = (props) => {
         >
           {description}
         </Typography.Paragraph>
-        <div css={teamCardFooterContainerStyle}>
-          <div>{tags}</div>
-          <div css={footerButtonContainerStyle}>{editButton}</div>
-        </div>
+        {(tags || editButton) && (
+          <div css={teamCardFooterContainerStyle}>
+            {tags && <div>{tags}</div>}
+            {editButton && (
+              <div css={footerButtonContainerStyle}>{editButton}</div>
+            )}
+          </div>
+        )}
       </div>
     </Card>
   )

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import TeamCardList from "../components/TeamCardList"
 import HeaderTools from "./components/HeaderTools"
+import PCTeamCardListItem from "./components/TeamCardListItem"
 import { tabsContainerStyle, tipisPCDashboardContainerStyle } from "./style"
 
 const TipisPCDashboard: FC = () => {
@@ -20,7 +21,7 @@ const TipisPCDashboard: FC = () => {
             {
               label: t("homepage.tipi_dashboard.tab.team"),
               key: "team",
-              children: <TeamCardList />,
+              children: <TeamCardList RenderItem={PCTeamCardListItem} />,
             },
             {
               label: t("homepage.tipi_dashboard.tab.marketplace"),

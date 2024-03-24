@@ -33,15 +33,19 @@ import {
 } from "@illa-public/utils"
 import { copyToClipboard } from "@/utils/copyToClipboard"
 import { track } from "@/utils/mixpanelHelper"
+import { useDetailTipis, useEditTipis } from "@/utils/recentTabs/hook"
 import { IMoreActionButtonProps } from "./interface"
 
 const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
-  const { agentID, agentName, publishToMarketplace, isMobile } = props
+  const { agentID, agentName, publishToMarketplace, isMobile, agentIcon } =
+    props
   const { t } = useTranslation()
   const [shareVisible, setShareVisible] = useState(false)
   const dispatch = useDispatch()
   const teamInfo = useSelector(getCurrentTeamInfo)!
   const currentUser = useSelector(getCurrentUser)
+  const editTipis = useEditTipis()
+  const detailTipis = useDetailTipis()
 
   const canInvite = canManageInvite(
     teamInfo.myRole,
@@ -81,9 +85,15 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
         }
         break
       case "edit": {
+        editTipis(agentID)
         break
       }
       case "detail": {
+        detailTipis({
+          tipisID: agentID,
+          title: agentName,
+          tabIcon: agentIcon,
+        })
         break
       }
       default:

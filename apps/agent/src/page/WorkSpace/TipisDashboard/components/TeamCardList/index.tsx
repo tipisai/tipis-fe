@@ -4,9 +4,10 @@ import { useSelector } from "react-redux"
 import { getCurrentId } from "@illa-public/user-data"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { useGetAIAgentListByPageQuery } from "@/redux/services/agentAPI"
-import TeamCardListItem from "./Item"
+import { ITeamCardListProps } from "./interface"
 
-const TeamCardList: FC = () => {
+const TeamCardList: FC<ITeamCardListProps> = (props) => {
+  const { RenderItem } = props
   const currentTeamID = useSelector(getCurrentId)!
 
   const agentQuery = useMemo(
@@ -39,7 +40,7 @@ const TeamCardList: FC = () => {
       }}
       dataSource={data.aiAgentList}
       renderItem={(item) => (
-        <TeamCardListItem
+        <RenderItem
           icon={item.icon}
           title={item.name}
           description={item.description}

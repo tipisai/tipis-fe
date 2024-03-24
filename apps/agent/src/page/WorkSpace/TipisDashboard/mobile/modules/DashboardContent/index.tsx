@@ -3,18 +3,26 @@ import { Input } from "antd"
 import { FC } from "react"
 import { SearchIcon } from "@illa-public/icon"
 import TeamCardList from "../../../components/TeamCardList"
-import { cardListContainerStyle, dashboardContentStyle } from "./style"
+import MobileTeamCardListItem from "../../components/TeamCardListItem"
+import {
+  cardListContainerStyle,
+  dashboardContentStyle,
+  searchInputStyle,
+} from "./style"
 
 const DashboardContent: FC = () => {
   return (
     <div css={dashboardContentStyle}>
-      <Input
-        placeholder="Search"
-        prefix={<Icon component={SearchIcon} />}
-        size="large"
-      />
+      <div css={searchInputStyle}>
+        <Input
+          placeholder="Search"
+          prefix={<Icon component={SearchIcon} />}
+          size="large"
+        />
+      </div>
+
       <div css={cardListContainerStyle}>
-        <TeamCardList />
+        <TeamCardList RenderItem={MobileTeamCardListItem} />
       </div>
     </div>
   )

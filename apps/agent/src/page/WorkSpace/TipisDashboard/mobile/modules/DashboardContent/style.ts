@@ -7,7 +7,6 @@ export const dashboardContentStyle = css`
   height: 100%;
   overflow: hidden;
   gap: 16px;
-  padding: 0 20px;
 `
 
 export const cardListContainerStyle = css`
@@ -15,4 +14,10 @@ export const cardListContainerStyle = css`
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+  padding: 0 20px;
+`
+
+export const searchInputStyle = css`
+  width: 100%;
+  padding: 0 20px;
 `
