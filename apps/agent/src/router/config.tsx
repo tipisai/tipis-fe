@@ -51,6 +51,9 @@ const EditFunctionPage = lazy(() => import("@/page/WorkSpace/Function/Edit"))
 const ChatPage = lazy(() => import("@/page/WorkSpace/Chat"))
 const TipiDetailPage = lazy(() => import("@/page/WorkSpace/TipiDetail"))
 const EmptyTeam = lazy(() => import("@/page/WorkSpace/EmptyTeam"))
+const SubScribeRedirect = lazy(
+  () => import("@/page/SettingPage/subscribedRedirect"),
+)
 
 const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   {
@@ -306,6 +309,14 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         accessByMobile: true,
       },
     ],
+  },
+  {
+    path: "landing/subscribed",
+    element: (
+      <Suspense fallback={<FullSectionLoading />}>
+        <SubScribeRedirect />
+      </Suspense>
+    ),
   },
   {
     path: "/403",

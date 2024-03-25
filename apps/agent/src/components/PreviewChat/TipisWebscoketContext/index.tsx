@@ -10,8 +10,8 @@ import {
 import { useTranslation } from "react-i18next"
 import WebSocketClient from "@illa-public/illa-web-socket"
 import {
-  WooModalType,
-  handleWooPurchaseError,
+  CreditModalType,
+  handleCreditPurchaseError,
 } from "@illa-public/upgrade-modal"
 import { getAuthToken } from "@illa-public/utils"
 import { getTextMessagePayload } from "@/api/ws"
@@ -117,7 +117,11 @@ export const TipisWebSocketProvider: FC<TipisWebSocketProviderProps> = (
           },
         })
       } catch (e) {
-        const res = handleWooPurchaseError(e, WooModalType.TOKEN, "agent_run")
+        const res = handleCreditPurchaseError(
+          e,
+          CreditModalType.TOKEN,
+          "agent_run",
+        )
         if (res) return
         messageAPI.error({
           content: t("editor.ai-agent.message.start-failed"),

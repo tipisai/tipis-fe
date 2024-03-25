@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import { Navigate } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { SUBSCRIBE_PLAN } from "@illa-public/public-types"
-import { useCollarDrawer } from "@illa-public/upgrade-modal"
+import { useCreditDrawer } from "@illa-public/upgrade-modal"
 import {
   getCurrentTeamInfo,
   useGetTeamSubscriptionQuery,
@@ -15,14 +15,14 @@ import { BillingMobilePage } from "./mobile"
 import { BillingPCPage } from "./pc"
 
 const Billing: FC = () => {
-  const wooDrawer = useCollarDrawer()
+  const creditDrawer = useCreditDrawer()
   const [loading, setLoading] = useState(false)
   const teamInfo = useSelector(getCurrentTeamInfo)!
   const { data, isError, isLoading, refetch } = useGetTeamSubscriptionQuery(
     teamInfo.id,
   )
 
-  const wooInfo = data?.woo?.current
+  const creditInfo = data?.credit?.current
 
   const [triggerGetTeamsInfo] = useLazyGetTeamsInfoQuery()
 
@@ -38,30 +38,31 @@ const Billing: FC = () => {
     }
   }, [refetch, teamInfo?.id, triggerGetTeamsInfo])
 
-  const openWooDrawer = useCallback(() => {
-    wooDrawer("billing_manage_woo", {
+  const openCreditDrawer = useCallback(() => {
+    creditDrawer("billing_manage_credit", {
       onSuccessCallback: fetchSubscriptionInfo,
     })
-  }, [wooDrawer, fetchSubscriptionInfo])
+  }, [creditDrawer, fetchSubscriptionInfo])
 
-  const isUnSubscribeWoo =
-    !wooInfo?.plan || wooInfo?.plan === SUBSCRIBE_PLAN.WOO_FREE
+  const isUnSubscribeCredit =
+    !creditInfo?.plan || creditInfo?.plan === SUBSCRIBE_PLAN.CREDIT_FREE
 
-  const isCancelSubscribedWoo =
-    wooInfo?.plan === SUBSCRIBE_PLAN.WOO_SUBSCRIBE_CANCELED
+  const isCancelSubscribedCredit =
+    creditInfo?.plan === SUBSCRIBE_PLAN.CREDIT_SUBSCRIBE_CANCELED
 
-  const isExpiredWoo = wooInfo?.plan === SUBSCRIBE_PLAN.WOO_SUBSCRIBE_EXPIRED
+  const isExpiredCredit =
+    creditInfo?.plan === SUBSCRIBE_PLAN.CREDIT_SUBSCRIBE_EXPIRED
   if (isError) return <Navigate to="/500" />
   if (isLoading) return <FullSectionLoading />
-  return wooInfo ? (
+  return creditInfo ? (
     <BillingContext.Provider
       value={{
-        wooInfo,
-        isExpiredWoo,
-        isUnSubscribeWoo,
-        isCancelSubscribedWoo,
+        creditInfo,
+        isExpiredCredit,
+        isUnSubscribeCredit,
+        isCancelSubscribedCredit,
         loading,
-        openWooDrawer,
+        openCreditDrawer,
       }}
     >
       <LayoutAutoChange

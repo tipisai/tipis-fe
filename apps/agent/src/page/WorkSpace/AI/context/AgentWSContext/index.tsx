@@ -13,9 +13,9 @@ import { useTranslation } from "react-i18next"
 import { v4 } from "uuid"
 import { Agent } from "@illa-public/public-types"
 import {
-  WooModalType,
-  handleWooPurchaseError,
-  useCollarModal,
+  CreditModalType,
+  handleCreditPurchaseError,
+  useCreditModal,
 } from "@illa-public/upgrade-modal"
 import { getCurrentId } from "@illa-public/user-data"
 import { getTextMessagePayload } from "@/api/ws"
@@ -62,7 +62,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
   const { t } = useTranslation()
 
   const { getValues } = useFormContext<Agent>()
-  const collaModal = useCollarModal()
+  const collaModal = useCreditModal()
 
   const [triggerGetAIAgentAnonymousAddressQuery] =
     useLazyGetAIAgentAnonymousAddressQuery()
@@ -294,7 +294,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
         case 17:
         case 18:
           collaModal({
-            modalType: WooModalType.TOKEN,
+            modalType: CreditModalType.TOKEN,
             from: "agent_run",
           })
           break
@@ -338,7 +338,11 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       }
       return initConnectConfig
     } catch (e) {
-      const res = handleWooPurchaseError(e, WooModalType.TOKEN, "agent_run")
+      const res = handleCreditPurchaseError(
+        e,
+        CreditModalType.TOKEN,
+        "agent_run",
+      )
       if (res) return
       messageAPI.error({
         content: t("editor.ai-agent.message.start-failed"),

@@ -1,9 +1,9 @@
 import { useContext } from "react"
 import { useTranslation } from "react-i18next"
 import FullSectionLoading from "@/components/FullSectionLoading"
+import { CreditUsage } from "@/page/SettingPage/team/billing/components/CreditUsage"
 import { LicenseCard } from "@/page/SettingPage/team/billing/components/LicenseCard"
 import { Price } from "@/page/SettingPage/team/billing/components/Price"
-import { WooUsage } from "@/page/SettingPage/team/billing/components/WooUsage"
 import { BillingContext } from "@/page/SettingPage/team/billing/context"
 import {
   billingHeaderStyle,
@@ -28,7 +28,7 @@ export const BillingPCPage = () => {
             <div css={contentContainerStyle}>
               <LicenseCard />
               <Price />
-              <WooUsage />
+              <CreditUsage />
             </div>
           </div>
         </>

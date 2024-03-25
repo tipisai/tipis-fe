@@ -1,5 +1,5 @@
 import { SUBSCRIPTION_CYCLE } from "@illa-public/public-types"
 
-export interface WooCardProps {
-  openWooDrawer: (cycle?: SUBSCRIPTION_CYCLE) => void
+export interface CreditCardProps {
+  openCreditDrawer: (cycle?: SUBSCRIPTION_CYCLE) => void
 }

@@ -10,9 +10,9 @@ import {
 } from "react"
 import { useTranslation } from "react-i18next"
 import {
-  WooModalType,
-  handleWooPurchaseError,
-  useCollarModal,
+  CreditModalType,
+  handleCreditPurchaseError,
+  useCreditModal,
 } from "@illa-public/upgrade-modal"
 import { getCurrentId } from "@illa-public/user-data"
 import { getTextMessagePayload } from "@/api/ws"
@@ -61,7 +61,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
 
   const { t } = useTranslation()
 
-  const collaModal = useCollarModal()
+  const collaModal = useCreditModal()
 
   const [isConnecting, setIsConnecting] = useState(false)
   const [isReceiving, setIsReceiving] = useState(false)
@@ -229,7 +229,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
         case 17:
         case 18:
           collaModal({
-            modalType: WooModalType.TOKEN,
+            modalType: CreditModalType.TOKEN,
             from: "agent_run",
           })
           break
@@ -260,7 +260,11 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       }
       return initConnectConfig
     } catch (e) {
-      const res = handleWooPurchaseError(e, WooModalType.TOKEN, "agent_run")
+      const res = handleCreditPurchaseError(
+        e,
+        CreditModalType.TOKEN,
+        "agent_run",
+      )
       if (res) return
       messageAPI.error({
         content: t("editor.ai-agent.message.start-failed"),

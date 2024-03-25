@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { infoTitleStyle } from "@/page/SettingPage/team/billing/style"
-import { WooCard } from "./WooCard"
+import { CreditCard } from "./CreditCard"
 import {
   cardDetailContainerStyle,
   licenseCardContainerStyle,
@@ -22,7 +22,7 @@ export const LicenseCard: FC = () => {
         <span>{currentTeamInfo?.name}</span>
       </div>
       <div css={cardDetailContainerStyle}>
-        <WooCard />
+        <CreditCard />
       </div>
     </section>
   )

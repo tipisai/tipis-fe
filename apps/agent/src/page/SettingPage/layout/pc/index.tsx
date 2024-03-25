@@ -1,12 +1,12 @@
 import Icon from "@ant-design/icons"
-import { FC } from "react"
+import { FC, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { PreviousIcon } from "@illa-public/icon"
 import { SUBSCRIBE_PLAN } from "@illa-public/public-types"
 import { getCurrentTeamInfo, getPlanUtils } from "@illa-public/user-data"
-import { canManagePayment } from "@illa-public/user-role-utils"
+import { canAccessMember, canManagePayment } from "@illa-public/user-role-utils"
 import ProfileIcon from "@/assets/setting/profile.svg?react"
 import TeamIcon from "@/assets/setting/team.svg?react"
 import TeamSelect from "@/components/TeamSelect"
@@ -33,15 +33,9 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
 
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
 
-  // const teamLicenseAllPaid = canAccessManage(
-  //   currentTeamInfo?.myRole,
-  //   getPlanUtils(currentTeamInfo),
-  //   currentTeamInfo?.totalTeamLicense?.teamLicenseAllPaid,
-  // )
-
-  // const showMember = useMemo(() => {
-  //   return !canAccessMember(currentTeamInfo) || !teamLicenseAllPaid
-  // }, [currentTeamInfo, teamLicenseAllPaid])
+  const hiddenMember = useMemo(() => {
+    return !canAccessMember(currentTeamInfo)
+  }, [currentTeamInfo])
 
   const showBilling = canManagePayment(
     currentTeamInfo?.myRole,
@@ -49,7 +43,8 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
     currentTeamInfo?.totalTeamLicense?.teamLicenseAllPaid,
   )
 
-  const isPurchased = currentTeamInfo?.woo?.plan !== SUBSCRIBE_PLAN.WOO_FREE
+  const isPurchased =
+    currentTeamInfo?.credit?.plan !== SUBSCRIBE_PLAN.CREDIT_FREE
 
   const accountOptions = [
     {
@@ -79,12 +74,11 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
         {
           path: `/setting/${currentTeamInfo.identifier}/team-settings`,
           label: t("team_setting.team_info.title"),
-          // hidden: !teamLicenseAllPaid,
         },
         {
           path: `/setting/${currentTeamInfo.identifier}/members`,
           label: t("team_setting.left_panel.member"),
-          // hidden: showMember,
+          hidden: hiddenMember,
         },
         {
           path: `/setting/${currentTeamInfo.identifier}/billing`,
