@@ -9,7 +9,6 @@ import {
   useState,
 } from "react"
 import { useTranslation } from "react-i18next"
-import { v4 } from "uuid"
 import {
   WooModalType,
   handleWooPurchaseError,
@@ -19,11 +18,16 @@ import { getCurrentId } from "@illa-public/user-data"
 import { getTextMessagePayload } from "@/api/ws"
 import { Callback } from "@/api/ws/interface"
 import { TextSignal, TextTarget } from "@/api/ws/textSignal"
+import defaultChatIconURL from "@/assets/public/logo.svg"
 import { TipisWebSocketContext } from "@/components/PreviewChat/TipisWebscoketContext"
 import {
   AgentMessageType,
   IInitWSCallback,
 } from "@/components/PreviewChat/TipisWebscoketContext/interface"
+import {
+  useUpdateAnonymousAvatar,
+  useUpdateAnonymousName,
+} from "@/components/PreviewChat/hooks"
 import {
   ChatMessage,
   ChatSendRequestPayload,
@@ -31,7 +35,6 @@ import {
   CollaboratorsInfo,
   IGroupMessage,
   MESSAGE_STATUS,
-  SenderType,
 } from "@/components/PreviewChat/interface"
 import { useLazyGetAIAgentAnonymousAddressQuery } from "@/redux/services/agentAPI"
 import store from "@/redux/store"
@@ -42,7 +45,6 @@ import {
   handleUpdateMessageList,
   isRequestMessage,
 } from "@/utils/agent/wsUtils"
-import { DEFAULT_PROMO, INIT_CHAT_CONFIG } from "../module/constants"
 import {
   IChatStableWSInject,
   IChatUnStableWSInject,
@@ -73,42 +75,19 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
   const [triggerGetAIAgentAnonymousAddressQuery] =
     useLazyGetAIAgentAnonymousAddressQuery()
 
-  const updateLocalIcon = useCallback(
-    (icon: string, newRoomUsers: CollaboratorsInfo[]) => {
-      const updateRoomUsers = [...newRoomUsers]
-      let index = updateRoomUsers.findIndex(
-        (user) => user.roomRole === SenderType.ANONYMOUS_AGENT,
-      )
-      if (index != -1) {
-        updateRoomUsers[index].avatar = icon
-      }
-      return updateRoomUsers
-    },
-    [],
-  )
-
-  const updateLocalName = useCallback(
-    (name: string, newRoomUsers: CollaboratorsInfo[]) => {
-      const updateRoomUsers = [...newRoomUsers]
-      let index = updateRoomUsers.findIndex(
-        (user) => user.roomRole === SenderType.ANONYMOUS_AGENT,
-      )
-      if (index != -1) {
-        updateRoomUsers[index].nickname = name
-      }
-      return updateRoomUsers
-    },
-    [],
-  )
+  const updateLocalIcon = useUpdateAnonymousAvatar()
+  const updateLocalName = useUpdateAnonymousName()
 
   const onUpdateRoomUser = useCallback(
     (roomUsers: CollaboratorsInfo[]) => {
-      // TODO: userName & botName
-      let newRoomUsers = updateLocalIcon("ddddddddd", roomUsers)
-      newRoomUsers = updateLocalName("ChatBot", roomUsers)
+      let newRoomUsers = updateLocalIcon(defaultChatIconURL, roomUsers)
+      newRoomUsers = updateLocalName(
+        t("homepage.left_panel.tab.tipi_chat"),
+        roomUsers,
+      )
       setInRoomUsers(newRoomUsers)
     },
-    [updateLocalIcon, updateLocalName],
+    [t, updateLocalIcon, updateLocalName],
   )
 
   const onUpdateChatMessage = useCallback((message: ChatMessage) => {
@@ -215,22 +194,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
         case "stop_all/remote":
           break
         case "clean/remote":
-          const partAgentInfo = {
-            prompt: DEFAULT_PROMO,
-            actionID: "",
-            modelConfig: INIT_CHAT_CONFIG.modelConfig,
-            model: INIT_CHAT_CONFIG.model,
-            agentType: INIT_CHAT_CONFIG.agentType,
-          }
-          innerSendMessage(
-            {
-              ...partAgentInfo,
-              threadID: v4(),
-            } as ChatSendRequestPayload,
-            TextSignal.RUN,
-            "chat",
-          )
-
+          setIsReceiving(false)
           break
       }
     },
@@ -316,7 +280,6 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     await connect?.(initConnectConfig)
     setIsConnecting(false)
     setIsRunning(true)
-    setIsReceiving(true)
   }, [connect, getConnectParams])
 
   const innerLeaveRoom = useCallback(() => {

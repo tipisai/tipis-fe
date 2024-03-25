@@ -1,11 +1,28 @@
 import { useTranslation } from "react-i18next"
-import { languageKeys } from "@illa-public/utils"
 
 export const useLangOptions = () => {
   const { t } = useTranslation()
 
-  return languageKeys.map((key) => ({
-    label: t(`language.${key}`),
-    value: key,
-  }))
+  return [
+    {
+      label: t("language.en-US"),
+      value: "en-US",
+    },
+    {
+      label: t("language.zh-CN"),
+      value: "zh-CN",
+    },
+    {
+      label: t("language.ja-JP"),
+      value: "ja-JP",
+    },
+    {
+      label: t("language.de-DE"),
+      value: "de-DE",
+    },
+    {
+      label: t("language.zh-TW"),
+      value: "zh-TW",
+    },
+  ]
 }
