@@ -75,6 +75,7 @@ export const ContributedAgent: FC = () => {
                           publishToMarketplace={
                             contributeAgentDetail.publishedToMarketplace
                           }
+                          agentIcon={contributeAgentDetail.icon}
                           isMobile
                         />
                       }

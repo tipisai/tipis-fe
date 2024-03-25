@@ -22,7 +22,7 @@ const EditAgentPage = lazy(
 const CreateAgentPage = lazy(
   () => import("@/page/WorkSpace/AI/AIAgent/createAgent"),
 )
-const TipisDashboard = lazy(() => import("@/page/WorkSpace/TipisDashboard/pc"))
+const TipisDashboard = lazy(() => import("@/page/WorkSpace/TipisDashboard"))
 const FunctionDashboard = lazy(
   () => import("@/page/WorkSpace/FunctionDashboard/pc"),
 )

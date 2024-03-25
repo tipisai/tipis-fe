@@ -19,9 +19,9 @@ const HeaderTools: FC = () => {
   const { control } = useFormContext<Agent>()
 
   // agentID, agentName, publishToMarketplace, isMobile
-  const [publishedToMarketplace, agentID, agentName] = useWatch({
+  const [publishedToMarketplace, agentID, agentName, agentIcon] = useWatch({
     control: control,
-    name: ["publishedToMarketplace", "aiAgentID", "name"],
+    name: ["publishedToMarketplace", "aiAgentID", "name", "icon"],
   })
 
   const canManageFork = canManage(
@@ -38,6 +38,7 @@ const HeaderTools: FC = () => {
         agentID={agentID}
         agentName={agentName}
         isMobile={false}
+        agentIcon={agentIcon}
       />
       {canManageFork && publishedToMarketplace && <ForkButton />}
       {publishedToMarketplace && <StarButton />}
