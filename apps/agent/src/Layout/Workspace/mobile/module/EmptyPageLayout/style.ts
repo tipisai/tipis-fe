@@ -20,8 +20,9 @@ export const dividerContainerStyle = css`
 export const menuContentStyle = css`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  padding-top: 32px;
   gap: 8px;
   width: 100%;
   height: 100%;

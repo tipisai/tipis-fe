@@ -7,7 +7,7 @@ import { getILLACloudURL } from "@illa-public/utils"
 import { BaseProtectComponentProps } from "@/router/interface"
 
 const EmptyTeamProtectedComponent: FC<BaseProtectComponentProps> = (props) => {
-  const { isSuccess, error } = useGetUserInfoAndTeamsInfoByTokenQuery({})
+  const { isSuccess, error, data } = useGetUserInfoAndTeamsInfoByTokenQuery({})
 
   if (error && "status" in error) {
     if (error.status === 401) {
@@ -18,6 +18,10 @@ const EmptyTeamProtectedComponent: FC<BaseProtectComponentProps> = (props) => {
       return null
     }
     return <Navigate to="/404" />
+  }
+
+  if (Array.isArray(data?.teams) && data.teams.length > 0) {
+    return <Navigate to="/workspace" />
   }
 
   return isSuccess ? (
