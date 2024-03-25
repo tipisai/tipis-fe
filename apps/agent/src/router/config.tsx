@@ -13,7 +13,6 @@ import UserLayout from "../page/User/Layout/index"
 import { buildRouter } from "./buildRouter"
 import { RoutesObjectPro } from "./interface"
 import { rootLoader } from "./loader/rootLoader"
-import { workspaceLayoutLoader } from "./loader/workspaceLayoutLoader"
 
 const RunAgentPage = lazy(() => import("@/page/WorkSpace/AI/AIAgentRun"))
 const EditAgentPage = lazy(
@@ -124,7 +123,6 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
       />
     ),
     ProtectComponent: AuthProtect,
-    loader: workspaceLayoutLoader,
     accessByMobile: true,
     children: [
       {
