@@ -89,12 +89,12 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
         {
           path: `/setting/${currentTeamInfo.identifier}/billing`,
           label: t("billing.menu.billing"),
-          hidden: !showBilling || true, // TODO: WTF not support yet
+          hidden: !showBilling,
         },
         {
           path: "",
           label: <GoToPortal />,
-          hidden: !showBilling || !isPurchased || true, // TODO: WTF not support yet
+          hidden: !showBilling || !isPurchased,
         },
       ]
     : []
