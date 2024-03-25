@@ -37,9 +37,9 @@ const Entrance: FC = () => {
   const isOwner = currentTeamInfo?.myRole === USER_ROLE.OWNER
 
   const { onClickLeaveTeam } = useOutletContext<SettingContextType>()
-  const { showMember, leaveLabel } = useMemo(() => {
+  const { hiddenMember, leaveLabel } = useMemo(() => {
     return {
-      showMember: !canAccessMember(currentTeamInfo),
+      hiddenMember: !canAccessMember(currentTeamInfo),
       leaveLabel:
         currentTeamInfo?.myRole === USER_ROLE.OWNER
           ? t("team_setting.left_panel.delete")
@@ -93,12 +93,12 @@ const Entrance: FC = () => {
         {
           path: `/setting/${currentTeamInfo.identifier}/members`,
           label: t("team_setting.left_panel.member"),
-          hidden: showMember,
+          hidden: hiddenMember,
         },
         {
           path: `/setting/${currentTeamInfo.identifier}/billing`,
           label: t("billing.menu.billing"),
-          hidden: !showBilling || true, // TODO: WTF not support yet
+          hidden: !showBilling,
         },
         {
           path: "",

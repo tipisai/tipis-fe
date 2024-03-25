@@ -26,16 +26,14 @@ import {
   doughnutContainerStyle,
 } from "./style"
 
-ChartJS.register(DoughnutController, ArcElement, DoughnutPlugin, Title, Tooltip)
-
 const { MonthPicker } = DatePicker
 
-export const WooUsagePC: FC = () => {
+ChartJS.register(DoughnutController, ArcElement, DoughnutPlugin, Title, Tooltip)
+
+export const CreditUsageMobile: FC = () => {
   const { t } = useTranslation()
-
-  const { usageData, percentNum, handleDateChange, allNum, loading, dataNums } =
+  const { usageData, handleDateChange, allNum, percentNum, loading, dataNums } =
     useContext(UsageContext)
-
   const date = useRef(new Date())
   const getDisabledDate = (current: Dayjs) => {
     if (current.year() === date.current.getFullYear()) {
@@ -49,7 +47,6 @@ export const WooUsagePC: FC = () => {
     plugins: {
       doughnutPlugin: {
         total: toThousands(allNum),
-        title: t("billing.colla_usage.used"),
       },
     },
   }

@@ -100,13 +100,14 @@ export const handleUpdateMessageList = (
         ? MESSAGE_STATUS.ANALYZE_FAILED
         : MESSAGE_STATUS.ANALYZE_SUCCESS
     }
-
-    curMessage.items.push({
-      ...message,
-      status: isRequestMessage(message)
-        ? MESSAGE_STATUS.ANALYZE_PENDING
-        : undefined,
-    })
+    if (!isErrorMessageRes(message) && !isSuccessMessageRes(message)) {
+      curMessage.items.push({
+        ...message,
+        status: isRequestMessage(message)
+          ? MESSAGE_STATUS.ANALYZE_PENDING
+          : undefined,
+      })
+    }
   }
 }
 

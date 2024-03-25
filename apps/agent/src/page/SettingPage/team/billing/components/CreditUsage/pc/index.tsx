@@ -1,6 +1,5 @@
 import { DatePicker } from "antd"
 import {
-  ArcElement,
   Chart as ChartJS,
   ChartOptions,
   DoughnutController,
@@ -26,14 +25,16 @@ import {
   doughnutContainerStyle,
 } from "./style"
 
+ChartJS.register(DoughnutController, DoughnutPlugin, Title, Tooltip)
+
 const { MonthPicker } = DatePicker
 
-ChartJS.register(DoughnutController, ArcElement, DoughnutPlugin, Title, Tooltip)
-
-export const WooUsageMobile: FC = () => {
+export const CreditUsagePC: FC = () => {
   const { t } = useTranslation()
-  const { usageData, handleDateChange, allNum, percentNum, loading, dataNums } =
+
+  const { usageData, percentNum, handleDateChange, allNum, loading, dataNums } =
     useContext(UsageContext)
+
   const date = useRef(new Date())
   const getDisabledDate = (current: Dayjs) => {
     if (current.year() === date.current.getFullYear()) {
@@ -47,6 +48,7 @@ export const WooUsageMobile: FC = () => {
     plugins: {
       doughnutPlugin: {
         total: toThousands(allNum),
+        title: t("billing.colla_usage.used"),
       },
     },
   }

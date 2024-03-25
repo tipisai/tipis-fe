@@ -3,10 +3,10 @@ import { FC, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { getColor } from "@illa-public/color-scheme"
 import { SUBSCRIPTION_CYCLE } from "@illa-public/public-types"
-import { WOO_UNIT_PRICE } from "@illa-public/upgrade-modal"
+import { CREDIT_UNIT_PRICE } from "@illa-public/upgrade-modal"
 import CollaCardPcBg from "@/page/SettingPage/team/billing/assets/collaCardPcBg.svg?react"
-import { WOO_LIST } from "../constant"
-import { WooCardProps } from "../interface"
+import { CREDIT_LIST } from "../constant"
+import { CreditCardProps } from "../interface"
 import {
   bgStyle,
   cardContainerStyle,
@@ -25,13 +25,13 @@ import {
   titleStyle,
 } from "./style"
 
-const WooCardPC: FC<WooCardProps> = ({ openWooDrawer }) => {
+const CreditCardPC: FC<CreditCardProps> = ({ openCreditDrawer }) => {
   const { t } = useTranslation()
   const [cycle, setCycle] = useState(SUBSCRIPTION_CYCLE.MONTHLY)
   const price =
     cycle === SUBSCRIPTION_CYCLE.MONTHLY
-      ? WOO_UNIT_PRICE[cycle]
-      : (WOO_UNIT_PRICE[cycle] / 12).toFixed(1)
+      ? CREDIT_UNIT_PRICE[cycle]
+      : (CREDIT_UNIT_PRICE[cycle] / 12).toFixed(1)
 
   return (
     <div css={containerStyle}>
@@ -74,13 +74,13 @@ const WooCardPC: FC<WooCardProps> = ({ openWooDrawer }) => {
           <Button
             type="primary"
             size="large"
-            onClick={() => openWooDrawer(cycle)}
+            onClick={() => openCreditDrawer(cycle)}
           >
             {t("billing.new_pricing.upgrade")}
           </Button>
         </div>
         <div css={cardContentStyle}>
-          {WOO_LIST.map(({ label, desc }) => (
+          {CREDIT_LIST.map(({ label, desc }) => (
             <div key={label} css={cardItemContainerStyle}>
               <span css={cardItemLabelStyle}>{label}</span>
               <span css={cardItemDescStyle}>{desc}</span>
@@ -92,4 +92,4 @@ const WooCardPC: FC<WooCardProps> = ({ openWooDrawer }) => {
   )
 }
 
-export default WooCardPC
+export default CreditCardPC

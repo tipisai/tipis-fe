@@ -49,12 +49,8 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
     const code = res?.["function_arguments"]?.["code"]
     if (code) {
       formatMessage = `\`\`\`python\n${code}\n\`\`\``
-    } else {
-      formatMessage = `\`\`\`json\n${JSON.stringify(res, null, 2)}\n\`\`\``
     }
-  } catch (e) {
-    formatMessage = `\`\`\`json\n${message}\n\`\`\``
-  }
+  } catch (e) {}
 
   const { InfoIcon, InfoTitle } = getInfoByStatus(messageStatus)
 
@@ -66,10 +62,10 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
       >
         {InfoIcon}
         {InfoTitle}
-        <Icon component={showMessage ? UpIcon : DownIcon} />
+        {formatMessage && <Icon component={showMessage ? UpIcon : DownIcon} />}
       </div>
       <AnimatePresence>
-        {showMessage && (
+        {formatMessage && showMessage && (
           <div css={messageContainerStyle}>
             <MarkdownMessage>{formatMessage}</MarkdownMessage>
           </div>
