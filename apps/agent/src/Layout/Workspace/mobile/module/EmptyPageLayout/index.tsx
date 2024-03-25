@@ -29,6 +29,9 @@ const EmptyPageLayoutMobile: FC<IEmptyPageLayoutMobile> = (props) => {
         title={title}
         closeIcon={MobileMenuIcon}
         onClickClose={showDrawer}
+        customRenderTitle={() => {
+          return <></>
+        }}
       />
       {children}
       <Drawer

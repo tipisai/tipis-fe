@@ -9,6 +9,7 @@ const EmptyTeam: FC = () => {
   const openCreateModal = () => {
     setCreateTeamVisible(true)
   }
+
   return (
     <>
       <LayoutAutoChange
