@@ -12,8 +12,8 @@ import {
 } from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
 import {
-  getCurrentTeamIdentifier,
   getCurrentTeamInfo,
+  getTeamItems,
   useDeleteTeamByIDMutation,
 } from "@illa-public/user-data"
 import store from "@/redux/store"
@@ -61,41 +61,42 @@ const DeleteTeamModal: FC<DeleteTeamModalProps> = (props) => {
         element: "delete_modal_delete",
         parameter1: "delete_select",
       })
-      deleteTeamByID(teamInfo?.id || "")
-        .unwrap()
-        .then(() => {
-          message.success({
-            content: t("team_setting.mes.delete_suc"),
-          })
-          const currentIdentifier = getCurrentTeamIdentifier(store.getState())
-          if (currentIdentifier) {
-            navigate(getExploreTipisPath(currentIdentifier), {
-              replace: true,
-            })
-          } else {
-            navigate(EMPTY_TEAM_PATH, {
-              replace: true,
-            })
-          }
+      try {
+        const teams = getTeamItems(store.getState()) || []
+        const currentIdentifier = teams.filter(
+          (info) => info.id !== teamInfo?.id,
+        )[0]?.identifier
+
+        deleteTeamByID(teamInfo?.id || "")
+        message.success({
+          content: t("team_setting.mes.delete_suc"),
         })
-        .catch((e) => {
-          if (isILLAAPiError(e)) {
-            switch (e.data.errorFlag) {
-              case ERROR_FLAG.ERROR_FLAG_CAN_NOT_DELETE_TEAM_DUE_TO_LICENSE_REMAINS: {
-                message.error({
-                  content: t("billing.message.in_subscription_can_not_delete"),
-                })
-                return
-              }
+        if (currentIdentifier) {
+          navigate(getExploreTipisPath(currentIdentifier), {
+            replace: true,
+          })
+        } else {
+          navigate(EMPTY_TEAM_PATH, {
+            replace: true,
+          })
+        }
+      } catch (e) {
+        if (isILLAAPiError(e)) {
+          switch (e.data.errorFlag) {
+            case ERROR_FLAG.ERROR_FLAG_CAN_NOT_DELETE_TEAM_DUE_TO_LICENSE_REMAINS: {
+              message.error({
+                content: t("billing.message.in_subscription_can_not_delete"),
+              })
+              return
             }
           }
-          message.error({
-            content: t("team_setting.mes.delete_fail"),
-          })
+        }
+        message.error({
+          content: t("team_setting.mes.delete_fail"),
         })
-        .finally(() => {
-          setLoading(false)
-        })
+      } finally {
+        setLoading(false)
+      }
     }
   }
 

@@ -13,8 +13,10 @@ import {
   FREE_TEAM_LIMIT_TYPE,
   handleFreeTeamLimitError,
 } from "@illa-public/upgrade-modal"
-import { useCreateTeamMutation } from "@illa-public/user-data"
-import { getExploreTipisPath } from "@/utils/routeHelper"
+import {
+  useCreateTeamMutation,
+  useGetUserInfoAndTeamsInfoByTokenQuery,
+} from "@illa-public/user-data"
 import { CreateTeamFields } from "./interface"
 import CreateTeamMobileModal from "./mobile"
 import CreateTeamPCModal from "./pc"
@@ -29,6 +31,7 @@ const CreateTeamModal: FC<CreateTeamModalProps> = (props) => {
   const { message } = App.useApp()
   const { visible, onCancel } = props
   const navigate = useNavigate()
+  const { data: cacheData } = useGetUserInfoAndTeamsInfoByTokenQuery({})
 
   const [createTeam] = useCreateTeamMutation()
 
@@ -59,7 +62,14 @@ const CreateTeamModal: FC<CreateTeamModalProps> = (props) => {
         element: "team_modal_create_button",
         parameter2: "suc",
       })
-      const url = getExploreTipisPath(data.identifier)
+      const currentTeamIdentifier = cacheData?.teams.find(
+        (team) => team.id === res.currentTeamID,
+      )?.identifier
+
+      const url = currentTeamIdentifier
+        ? `/workspace/${currentTeamIdentifier}`
+        : "/workspace"
+
       navigate(url, { replace: true })
     } catch (e) {
       if (isILLAAPiError(e)) {
