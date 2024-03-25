@@ -1,10 +1,10 @@
-import { IWooInfo } from "@illa-public/public-types"
+import { ICreditInfo } from "@illa-public/public-types"
 
 export interface BillingContextTypeProps {
-  wooInfo: IWooInfo
-  isUnSubscribeWoo: boolean
-  isCancelSubscribedWoo: boolean
-  isExpiredWoo: boolean
+  creditInfo: ICreditInfo
+  isUnSubscribeCredit: boolean
+  isCancelSubscribedCredit: boolean
+  isExpiredCredit: boolean
   loading: boolean
-  openWooDrawer?: () => void
+  openCreditDrawer?: () => void
 }

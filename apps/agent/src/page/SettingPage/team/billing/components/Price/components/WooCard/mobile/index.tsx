@@ -2,10 +2,10 @@ import { Button } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { SUBSCRIPTION_CYCLE } from "@illa-public/public-types"
-import { WOO_UNIT_PRICE } from "@illa-public/upgrade-modal"
+import { CREDIT_UNIT_PRICE } from "@illa-public/upgrade-modal"
 import CollaCardMobileBg from "@/page/SettingPage/team/billing/assets/collaCardMobileBg.svg"
-import { WOO_LIST } from "../constant"
-import { WooCardProps } from "../interface"
+import { CREDIT_LIST } from "../constant"
+import { CreditCardProps } from "../interface"
 import {
   bgStyle,
   cardContainerStyle,
@@ -20,9 +20,9 @@ import {
   titleStyle,
 } from "./style"
 
-const WooCardMobile: FC<WooCardProps> = ({ openWooDrawer }) => {
+const CreditCardMobile: FC<CreditCardProps> = ({ openCreditDrawer }) => {
   const { t } = useTranslation()
-  const price = WOO_UNIT_PRICE[SUBSCRIPTION_CYCLE.MONTHLY]
+  const price = CREDIT_UNIT_PRICE[SUBSCRIPTION_CYCLE.MONTHLY]
   return (
     <div css={containerStyle}>
       <span css={titleStyle}>{t("billing.new_pricing.colla")}</span>
@@ -35,7 +35,7 @@ const WooCardMobile: FC<WooCardProps> = ({ openWooDrawer }) => {
           </span>
         </div>
         <div css={cardContentStyle}>
-          {WOO_LIST.map(({ label, desc }) => (
+          {CREDIT_LIST.map(({ label, desc }) => (
             <div key={label} css={cardItemContainerStyle}>
               <span css={cardItemLabelStyle}>{label}</span>
               <span css={cardItemDescStyle}>{desc}</span>
@@ -46,7 +46,7 @@ const WooCardMobile: FC<WooCardProps> = ({ openWooDrawer }) => {
           type="primary"
           block
           size="large"
-          onClick={() => openWooDrawer()}
+          onClick={() => openCreditDrawer()}
         >
           {t("billing.new_pricing.upgrade")}
         </Button>
@@ -55,4 +55,4 @@ const WooCardMobile: FC<WooCardProps> = ({ openWooDrawer }) => {
   )
 }
 
-export default WooCardMobile
+export default CreditCardMobile

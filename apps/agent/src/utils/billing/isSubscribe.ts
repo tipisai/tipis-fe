@@ -8,8 +8,8 @@ export const isSubscribeForBilling = (subscribePlan?: SUBSCRIBE_PLAN) => {
     subscribePlan === SUBSCRIBE_PLAN.TEAM_LICENSE_CANCELED ||
     subscribePlan === SUBSCRIBE_PLAN.DRIVE_VOLUME_PAID ||
     subscribePlan === SUBSCRIBE_PLAN.DRIVE_VOLUME_INSUFFICIENT ||
-    subscribePlan === SUBSCRIBE_PLAN.WOO_SUBSCRIBE_INSUFFICIENT ||
-    subscribePlan === SUBSCRIBE_PLAN.WOO_SUBSCRIBE_PAID ||
-    subscribePlan === SUBSCRIBE_PLAN.WOO_SUBSCRIBE_CANCELED
+    subscribePlan === SUBSCRIBE_PLAN.CREDIT_SUBSCRIBE_INSUFFICIENT ||
+    subscribePlan === SUBSCRIBE_PLAN.CREDIT_SUBSCRIBE_PAID ||
+    subscribePlan === SUBSCRIBE_PLAN.CREDIT_SUBSCRIBE_CANCELED
   )
 }

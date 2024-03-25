@@ -30,7 +30,7 @@ const { MonthPicker } = DatePicker
 
 ChartJS.register(DoughnutController, ArcElement, DoughnutPlugin, Title, Tooltip)
 
-export const WooUsageMobile: FC = () => {
+export const CreditUsageMobile: FC = () => {
   const { t } = useTranslation()
   const { usageData, handleDateChange, allNum, percentNum, loading, dataNums } =
     useContext(UsageContext)

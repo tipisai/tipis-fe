@@ -1,6 +1,6 @@
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
-import { LABEL_CONFIG } from "@/page/SettingPage/team/billing/components/WooUsage/constants"
+import { LABEL_CONFIG } from "@/page/SettingPage/team/billing/components/CreditUsage/constants"
 import { toThousands } from "@/utils/billing/toThousands"
 import {
   itemContainerStyle,

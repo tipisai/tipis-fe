@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import {
   getCurrentTeamInfo,
-  useLazyGetWooUsageInfoQuery,
+  useLazyGetCreditUsageInfoQuery,
 } from "@illa-public/user-data"
 import { DATE_FORMAT, LABEL_CONFIG } from "../constants"
 import { UsageContextProps, UsageContextProviderProps } from "./interface"
@@ -28,7 +28,7 @@ export const UsageProvider: FC<UsageContextProviderProps> = (props) => {
   const [percentNum, setPercentNum] = useState<number[]>([0, 0, 0])
   const [loading, setLoading] = useState(false)
 
-  const [triggerGetWooUsageInfo] = useLazyGetWooUsageInfoQuery()
+  const [triggerGetCreditUsageInfo] = useLazyGetCreditUsageInfoQuery()
 
   const translationLabelName = useMemo(() => {
     return LABEL_CONFIG.NAME.map((item) => t(item))
@@ -52,7 +52,7 @@ export const UsageProvider: FC<UsageContextProviderProps> = (props) => {
       const endDate = new Date(date)
       endDate.setMonth(endDate.getMonth() + 1)
       try {
-        const res = await triggerGetWooUsageInfo({
+        const res = await triggerGetCreditUsageInfo({
           teamID: teamInfo?.id,
           fromDate: dayjs(fromDate).format(DATE_FORMAT),
           toDate: dayjs(endDate).format(DATE_FORMAT),
@@ -84,7 +84,7 @@ export const UsageProvider: FC<UsageContextProviderProps> = (props) => {
         setLoading(false)
       }
     },
-    [teamInfo?.id, triggerGetWooUsageInfo],
+    [teamInfo?.id, triggerGetCreditUsageInfo],
   )
 
   useEffect(() => {

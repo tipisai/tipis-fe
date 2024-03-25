@@ -5,7 +5,7 @@ import { FC, useContext, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { DoubtIcon } from "@illa-public/icon"
 import { SUBSCRIPTION_CYCLE } from "@illa-public/public-types"
-import { WOO_UNIT_BY_CYCLE } from "@illa-public/upgrade-modal"
+import { CREDIT_UNIT_BY_CYCLE } from "@illa-public/upgrade-modal"
 import { BillingContext } from "@/page/SettingPage/team/billing/context"
 import { toThousands } from "@/utils/billing/toThousands"
 import {
@@ -24,30 +24,35 @@ import {
   payInfoStyle,
 } from "../style"
 
-export const WooCard: FC = () => {
+export const CreditCard: FC = () => {
   const { t } = useTranslation()
-  const { openWooDrawer } = useContext(BillingContext)
+  const { openCreditDrawer } = useContext(BillingContext)
   const titleRef = useRef<HTMLSpanElement>(null)
-  const { wooInfo, isCancelSubscribedWoo, isExpiredWoo, isUnSubscribeWoo } =
-    useContext(BillingContext)
+  const {
+    creditInfo,
+    isCancelSubscribedCredit,
+    isExpiredCredit,
+    isUnSubscribeCredit,
+  } = useContext(BillingContext)
 
   const cycleKey =
-    wooInfo?.cycle === SUBSCRIPTION_CYCLE.MONTHLY ? "month" : "year"
+    creditInfo?.cycle === SUBSCRIPTION_CYCLE.MONTHLY ? "month" : "year"
 
-  const wooPayedInfo = `$${
-    wooInfo?.totalAmount ?? 0
+  const creditPayedInfo = `$${
+    creditInfo?.totalAmount ?? 0
   } ${t(`billing.subscription_general.billing_cyle.${cycleKey}`)}`
 
-  const wooNum =
-    (wooInfo?.quantity ?? 0) * WOO_UNIT_BY_CYCLE[wooInfo?.cycle] * 1000
+  const creditNum =
+    (creditInfo?.quantity ?? 0) * CREDIT_UNIT_BY_CYCLE[creditInfo?.cycle] * 1000
 
-  const showBonus = wooInfo?.bonusConverted && wooInfo?.bonusConverted !== 0
+  const showBonus =
+    creditInfo?.bonusConverted && creditInfo?.bonusConverted !== 0
 
   return (
     <div css={cardStyle}>
       <div css={cardTitleStyle}>
         <div css={collarCardNameStyle}>
-          <span>Woo</span>
+          <span>Credit</span>
           <Tooltip
             trigger="hover"
             title={t("billing.subscription_general.colla.desc")}
@@ -57,41 +62,41 @@ export const WooCard: FC = () => {
             </span>
           </Tooltip>
         </div>
-        {!isUnSubscribeWoo && !isCancelSubscribedWoo && !isExpiredWoo && (
-          <span css={payInfoStyle}>{wooPayedInfo}</span>
-        )}
-        {isExpiredWoo && (
+        {!isUnSubscribeCredit &&
+          !isCancelSubscribedCredit &&
+          !isExpiredCredit && <span css={payInfoStyle}>{creditPayedInfo}</span>}
+        {isExpiredCredit && (
           <span css={payInfoExpiredStyle}>{t("billing.label.expired")}</span>
         )}
-        {isCancelSubscribedWoo && (
+        {isCancelSubscribedCredit && (
           <span css={payInfoCancelStyle}>{t("billing.label.canceled")}</span>
         )}
       </div>
       <div css={cardPayDetailStyle}>
         <div css={cardPayDetailItemStyle}>
           <span css={cardPayDetailNameStyle}>
-            {isUnSubscribeWoo || isExpiredWoo
+            {isUnSubscribeCredit || isExpiredCredit
               ? t("billing.subscription_general.table_title.colla_unsub")
               : t("billing.subscription_general.table_title.colla_sub")}
           </span>
           <span css={cardPayDetailNumStyle}>
             {toThousands(
-              (isUnSubscribeWoo || isExpiredWoo
-                ? wooInfo?.balanceConverted
-                : wooNum) || 0,
+              (isUnSubscribeCredit || isExpiredCredit
+                ? creditInfo?.balanceConverted
+                : creditNum) || 0,
             )}
           </span>
         </div>
         <div css={cardPayDetailItemStyle}>
           <span css={cardPayDetailNameStyle}>
-            {isCancelSubscribedWoo
+            {isCancelSubscribedCredit
               ? t("billing.subscription_general.table_title.expiration_date")
               : t("drive.capacity_usage.next_renewal_date")}
           </span>
           <span css={cardPayDetailNumStyle}>
-            {isUnSubscribeWoo || isExpiredWoo
+            {isUnSubscribeCredit || isExpiredCredit
               ? "--"
-              : dayjs(wooInfo?.invoiceIssueDate).format("L")}
+              : dayjs(creditInfo?.invoiceIssueDate).format("L")}
           </span>
         </div>
         {!!showBonus && (
@@ -106,13 +111,13 @@ export const WooCard: FC = () => {
               </Tooltip>
             </div>
             <span css={cardPayDetailNumStyle}>
-              {toThousands(wooInfo?.bonusConverted)}
+              {toThousands(creditInfo?.bonusConverted)}
             </span>
           </div>
         )}
       </div>
-      {!isExpiredWoo && !isUnSubscribeWoo && (
-        <Button onClick={openWooDrawer}>
+      {!isExpiredCredit && !isUnSubscribeCredit && (
+        <Button onClick={openCreditDrawer}>
           {t("billing.subscription_general.table_button.colla")}
         </Button>
       )}
