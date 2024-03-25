@@ -1,23 +1,17 @@
 import Icon from "@ant-design/icons"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
-import { v4 } from "uuid"
 import { PenIcon, PlusIcon } from "@illa-public/icon"
-import { getCurrentTeamInfo, getIsEmptyTeam } from "@illa-public/user-data"
+import { getIsEmptyTeam } from "@illa-public/user-data"
 import FunctionIcon from "@/assets/workspace/function.svg?react"
 import MarketplaceIcon from "@/assets/workspace/marketplace.svg?react"
 import store from "@/redux/store"
-import { ITabInfo, TAB_TYPE } from "@/redux/ui/recentTab/interface"
-import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
-import { recentTabActions } from "@/redux/ui/recentTab/slice"
-import { useCreateTipis } from "@/utils/recentTabs/hook"
 import {
-  getDefaultChatPath,
-  getExploreFunctionsPath,
-  getExploreTipisPath,
-} from "@/utils/routeHelper"
+  useCreateChat,
+  useCreateTipis,
+  useGoToExploreFunctions,
+  useGoToExploreTipis,
+} from "@/utils/recentTabs/hook"
 import FeatureCard from "../../components/FeatureCard"
 import MenuItemButton from "../../components/MenuItemButton"
 import { featureAreaContainerStyle, featureCardsContainerStyle } from "./style"
@@ -26,11 +20,11 @@ interface FeatureAreaProps {
   openCreateModal?: () => void
 }
 const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
-  const navigate = useNavigate()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
-  const dispatch = useDispatch()
   const { t } = useTranslation()
   const createTipi = useCreateTipis()
+  const createChat = useCreateChat()
+  const gotoExploreTipi = useGoToExploreTipis()
+  const gotoExploreFunction = useGoToExploreFunctions()
 
   const handleClickCreateTipis = () => {
     const isEmptyTeam = getIsEmptyTeam(store.getState())
@@ -47,16 +41,7 @@ const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
       openCreateModal?.()
       return
     }
-    const tempID = v4()
-    const tabsInfo: ITabInfo = {
-      tabName: "",
-      tabIcon: "",
-      tabType: TAB_TYPE.CHAT,
-      tabID: tempID,
-      cacheID: tempID,
-    }
-    dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
-    navigate(getDefaultChatPath(currentTeamInfo?.identifier, tempID))
+    createChat()
   }
 
   const handleClickExploreTipis = () => {
@@ -65,24 +50,7 @@ const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
       openCreateModal?.()
       return
     }
-    const historyTabs = getRecentTabInfos(store.getState())
-    const tipisTab = historyTabs.find(
-      (item) => item.tabType === TAB_TYPE.EXPLORE_TIPIS,
-    )
-    if (tipisTab) {
-      dispatch(recentTabActions.updateCurrentRecentTabIDReducer(tipisTab.tabID))
-    } else {
-      const tempID = v4()
-      const tabsInfo: ITabInfo = {
-        tabName: "",
-        tabIcon: "",
-        tabType: TAB_TYPE.EXPLORE_TIPIS,
-        tabID: tempID,
-        cacheID: tempID,
-      }
-      dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
-    }
-    navigate(getExploreTipisPath(currentTeamInfo?.identifier))
+    gotoExploreTipi()
   }
 
   const handleClickFunction = () => {
@@ -91,27 +59,7 @@ const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
       openCreateModal?.()
       return
     }
-    const historyTabs = getRecentTabInfos(store.getState())
-    const functionTab = historyTabs.find(
-      (item) => item.tabType === TAB_TYPE.EXPLORE_FUNCTION,
-    )
-    if (functionTab) {
-      dispatch(
-        recentTabActions.updateCurrentRecentTabIDReducer(functionTab.tabID),
-      )
-    } else {
-      const tempID = v4()
-      const tabsInfo: ITabInfo = {
-        tabName: "",
-        tabIcon: "",
-        tabType: TAB_TYPE.EXPLORE_FUNCTION,
-        tabID: tempID,
-        cacheID: tempID,
-      }
-      dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
-    }
-
-    navigate(getExploreFunctionsPath(currentTeamInfo?.identifier))
+    gotoExploreFunction()
   }
 
   return (

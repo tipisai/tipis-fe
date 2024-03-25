@@ -1,5 +1,6 @@
 import { FC, useContext } from "react"
 import { Outlet } from "react-router-dom"
+import { useInitRecentTab } from "@/utils/recentTabs/hook"
 import PCWorkspaceMenu from "./modules/Menu"
 import MiniMenu from "./modules/Menu/MiniMenu"
 import {
@@ -21,6 +22,7 @@ const PCWorkspaceLayout: FC = () => {
 }
 
 const PCWorkspaceWithMenuLayout: FC = () => {
+  useInitRecentTab()
   return (
     <MenuStatusUIProvider>
       <PCWorkspaceLayout />
