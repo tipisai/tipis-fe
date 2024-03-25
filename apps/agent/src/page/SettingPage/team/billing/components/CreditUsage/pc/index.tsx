@@ -2,14 +2,13 @@ import { DatePicker } from "antd"
 import {
   Chart as ChartJS,
   ChartOptions,
-  LineController,
-  LineElement,
+  DoughnutController,
   Title,
   Tooltip,
 } from "chart.js"
 import dayjs, { Dayjs } from "dayjs"
 import { FC, useContext, useRef } from "react"
-import { Line } from "react-chartjs-2"
+import { Doughnut } from "react-chartjs-2"
 import { useTranslation } from "react-i18next"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { infoTitleStyle } from "@/page/SettingPage/team/billing/style"
@@ -26,7 +25,7 @@ import {
   doughnutContainerStyle,
 } from "./style"
 
-ChartJS.register(LineController, LineElement, DoughnutPlugin, Title, Tooltip)
+ChartJS.register(DoughnutController, DoughnutPlugin, Title, Tooltip)
 
 const { MonthPicker } = DatePicker
 
@@ -71,10 +70,10 @@ export const CreditUsagePC: FC = () => {
           <div css={detailStyle}>
             {allNum !== 0 ? (
               <div css={doughnutContainerStyle}>
-                <Line
+                <Doughnut
                   datasetIdKey="id"
                   data={usageData}
-                  options={options as ChartOptions<"line">}
+                  options={options as ChartOptions<"doughnut">}
                 />
               </div>
             ) : (

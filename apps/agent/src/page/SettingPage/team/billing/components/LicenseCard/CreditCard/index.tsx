@@ -4,12 +4,10 @@ import dayjs from "dayjs"
 import { FC, useContext, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { DoubtIcon } from "@illa-public/icon"
-import { SUBSCRIPTION_CYCLE } from "@illa-public/public-types"
 import { CREDIT_UNIT_BY_CYCLE } from "@illa-public/upgrade-modal"
 import { BillingContext } from "@/page/SettingPage/team/billing/context"
 import { toThousands } from "@/utils/billing/toThousands"
 import {
-  bonusStyle, // cardManageButtonStyle,
   cardPayDetailItemStyle,
   cardPayDetailNameStyle,
   cardPayDetailNumStyle,
@@ -17,11 +15,9 @@ import {
   cardStyle,
   cardTitleStyle,
   collarCardNameStyle,
-  collarCardPayDetailNameStyle,
   doubtColorStyle,
   payInfoCancelStyle,
   payInfoExpiredStyle,
-  payInfoStyle,
 } from "../style"
 
 export const CreditCard: FC = () => {
@@ -35,18 +31,8 @@ export const CreditCard: FC = () => {
     isUnSubscribeCredit,
   } = useContext(BillingContext)
 
-  const cycleKey =
-    creditInfo?.cycle === SUBSCRIPTION_CYCLE.MONTHLY ? "month" : "year"
-
-  const creditPayedInfo = `$${
-    creditInfo?.totalAmount ?? 0
-  } ${t(`billing.subscription_general.billing_cyle.${cycleKey}`)}`
-
   const creditNum =
     (creditInfo?.quantity ?? 0) * CREDIT_UNIT_BY_CYCLE[creditInfo?.cycle] * 1000
-
-  const showBonus =
-    creditInfo?.bonusConverted && creditInfo?.bonusConverted !== 0
 
   return (
     <div css={cardStyle}>
@@ -62,9 +48,14 @@ export const CreditCard: FC = () => {
             </span>
           </Tooltip>
         </div>
-        {!isUnSubscribeCredit &&
-          !isCancelSubscribedCredit &&
-          !isExpiredCredit && <span css={payInfoStyle}>{creditPayedInfo}</span>}
+        {!isExpiredCredit &&
+          !isUnSubscribeCredit &&
+          !isCancelSubscribedCredit && (
+            <Button onClick={openCreditDrawer}>
+              {t("billing.subscription_general.table_button.colla")}
+            </Button>
+          )}
+
         {isExpiredCredit && (
           <span css={payInfoExpiredStyle}>{t("billing.label.expired")}</span>
         )}
@@ -75,16 +66,10 @@ export const CreditCard: FC = () => {
       <div css={cardPayDetailStyle}>
         <div css={cardPayDetailItemStyle}>
           <span css={cardPayDetailNameStyle}>
-            {isUnSubscribeCredit || isExpiredCredit
-              ? t("billing.subscription_general.table_title.colla_unsub")
-              : t("billing.subscription_general.table_title.colla_sub")}
+            {t("billing.subscription_general.table_title.colla_unsub")}
           </span>
           <span css={cardPayDetailNumStyle}>
-            {toThousands(
-              (isUnSubscribeCredit || isExpiredCredit
-                ? creditInfo?.balanceConverted
-                : creditNum) || 0,
-            )}
+            {toThousands(creditInfo?.balanceConverted || 0)}
           </span>
         </div>
         <div css={cardPayDetailItemStyle}>
@@ -99,28 +84,19 @@ export const CreditCard: FC = () => {
               : dayjs(creditInfo?.invoiceIssueDate).format("L")}
           </span>
         </div>
-        {!!showBonus && (
-          <div css={bonusStyle}>
-            <div css={collarCardPayDetailNameStyle}>
-              <span>{t("billing.subscription_general.table_title.bouns")}</span>
-              <Tooltip
-                trigger="hover"
-                title={t("billing.subscription_general.table_desc.bouns")}
-              >
-                <Icon component={DoubtIcon} css={doubtColorStyle} />
-              </Tooltip>
+        {!isUnSubscribeCredit &&
+          !isExpiredCredit &&
+          !isCancelSubscribedCredit && (
+            <div css={cardPayDetailItemStyle}>
+              <span css={cardPayDetailNameStyle}>
+                {t("billing.subscription_general.table_title.colla_sub")}
+              </span>
+              <span css={cardPayDetailNumStyle}>
+                {toThousands(creditNum || 0)}
+              </span>
             </div>
-            <span css={cardPayDetailNumStyle}>
-              {toThousands(creditInfo?.bonusConverted)}
-            </span>
-          </div>
-        )}
+          )}
       </div>
-      {!isExpiredCredit && !isUnSubscribeCredit && (
-        <Button onClick={openCreditDrawer}>
-          {t("billing.subscription_general.table_button.colla")}
-        </Button>
-      )}
     </div>
   )
 }
