@@ -98,7 +98,7 @@ const Entrance: FC = () => {
         {
           path: `/setting/${currentTeamInfo.identifier}/billing`,
           label: t("billing.menu.billing"),
-          hidden: !showBilling || true, // TODO: WTF not support yet
+          hidden: !showBilling,
         },
         {
           path: "",
