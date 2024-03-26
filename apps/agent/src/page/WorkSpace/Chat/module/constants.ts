@@ -9,5 +9,3 @@ export const INIT_CHAT_CONFIG = {
   model: AI_AGENT_MODEL.GPT_3_5,
   agentType: AI_AGENT_TYPE.CHAT,
 }
-
-export const DEFAULT_PROMO = "You are a helpful assistant."

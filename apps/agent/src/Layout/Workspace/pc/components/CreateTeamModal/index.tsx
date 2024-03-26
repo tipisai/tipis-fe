@@ -13,10 +13,7 @@ import {
   FREE_TEAM_LIMIT_TYPE,
   handleFreeTeamLimitError,
 } from "@illa-public/upgrade-modal"
-import {
-  useCreateTeamMutation,
-  useGetUserInfoAndTeamsInfoByTokenQuery,
-} from "@illa-public/user-data"
+import { useCreateTeamMutation } from "@illa-public/user-data"
 import { CreateTeamFields } from "./interface"
 import CreateTeamMobileModal from "./mobile"
 import CreateTeamPCModal from "./pc"
@@ -31,7 +28,6 @@ const CreateTeamModal: FC<CreateTeamModalProps> = (props) => {
   const { message } = App.useApp()
   const { visible, onCancel } = props
   const navigate = useNavigate()
-  const { data: cacheData } = useGetUserInfoAndTeamsInfoByTokenQuery({})
 
   const [createTeam] = useCreateTeamMutation()
 
@@ -48,12 +44,6 @@ const CreateTeamModal: FC<CreateTeamModalProps> = (props) => {
     try {
       setLoading(true)
       const res = await createTeam(data).unwrap()
-      if (!res.currentTeamID) {
-        message.error({
-          content: t("team_create_fail"),
-        })
-        return
-      }
       onCloseCreateModal()
       message.success({
         content: t("team_create_suc"),
@@ -62,15 +52,8 @@ const CreateTeamModal: FC<CreateTeamModalProps> = (props) => {
         element: "team_modal_create_button",
         parameter2: "suc",
       })
-      const currentTeamIdentifier = cacheData?.teams.find(
-        (team) => team.id === res.currentTeamID,
-      )?.identifier
 
-      const url = currentTeamIdentifier
-        ? `/workspace/${currentTeamIdentifier}`
-        : "/workspace"
-
-      navigate(url, { replace: true })
+      navigate(`/workspace/${res.identifier}`, { replace: true })
     } catch (e) {
       if (isILLAAPiError(e)) {
         const res = handleFreeTeamLimitError(e, FREE_TEAM_LIMIT_TYPE.CREATE)

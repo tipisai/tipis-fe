@@ -13,6 +13,10 @@ import {
   getRecentTabInfos,
 } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
+import {
+  useAddRecentTabReducer,
+  useUpdateRecentTabReducer,
+} from "@/utils/recentTabs/hook"
 import { getExploreTipisPath } from "@/utils/routeHelper"
 import { useGetNotContributeTipDetail } from "@/utils/tipis/hook"
 import ActionGroup from "../components/ActionGroup"
@@ -25,6 +29,8 @@ const NotContributeTipiDetail: FC = () => {
   const navigate = useNavigate()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const dispatch = useDispatch()
+  const updateRecentTab = useUpdateRecentTabReducer()
+  const addRecentTab = useAddRecentTabReducer()
 
   const onClickBack = () => {
     const currentTabID = getCurrentTabID(store.getState())
@@ -40,15 +46,11 @@ const NotContributeTipiDetail: FC = () => {
       cacheID: cacheID,
     }
     if (currentTab) {
-      dispatch(
-        recentTabActions.updateRecentTabReducer({
-          oldTabID: currentTabID,
-          newTabInfo: newTab,
-        }),
-      )
+      updateRecentTab(currentTabID, newTab)
+
       dispatch(recentTabActions.updateCurrentRecentTabIDReducer(cacheID))
     } else {
-      dispatch(recentTabActions.addRecentTabReducer(newTab))
+      addRecentTab(newTab)
     }
     navigate(getExploreTipisPath(currentTeamInfo.identifier))
   }
