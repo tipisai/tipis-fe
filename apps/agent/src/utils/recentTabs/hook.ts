@@ -28,6 +28,7 @@ import {
   getRunTipiPath,
   getTipiDetailPath,
 } from "../routeHelper"
+import { EXPLORE_TIPIS_ID } from "./constants"
 
 export const useAddRecentTabReducer = () => {
   const dispatch = useDispatch()
@@ -204,7 +205,7 @@ export const useDetailTipis = () => {
         tabName: title,
         tabIcon: tabIcon,
         tabType: TAB_TYPE.EXPLORE_TIPIS_DETAIL,
-        tabID: v4(),
+        tabID: EXPLORE_TIPIS_ID,
         cacheID: tipisID,
       }
       if (exploreTipiTab) {
@@ -243,7 +244,7 @@ export const useMarketDetailTipis = () => {
         tabName: title,
         tabIcon: tabIcon,
         tabType: TAB_TYPE.EXPLORE_MARKET_TIPIS_DETAIL,
-        tabID: v4(),
+        tabID: EXPLORE_TIPIS_ID,
         cacheID: tipisID,
       }
       if (exploreTipiTab) {
@@ -332,9 +333,7 @@ export const useGoToExploreTipis = () => {
   const goToExploreTipis = useCallback(() => {
     const historyTabs = getRecentTabInfos(store.getState())
     const currentTeamInfo = getCurrentTeamInfo(store.getState())!
-    const tipisTab = historyTabs.find(
-      (item) => item.tabType === TAB_TYPE.EXPLORE_TIPIS,
-    )
+    const tipisTab = historyTabs.find((item) => item.tabID === EXPLORE_TIPIS_ID)
     if (tipisTab) {
       dispatch(recentTabActions.updateCurrentRecentTabIDReducer(tipisTab.tabID))
     } else {
@@ -343,7 +342,7 @@ export const useGoToExploreTipis = () => {
         tabName: "",
         tabIcon: "",
         tabType: TAB_TYPE.EXPLORE_TIPIS,
-        tabID: tempID,
+        tabID: EXPLORE_TIPIS_ID,
         cacheID: tempID,
       }
       addRecentTab(tabsInfo)

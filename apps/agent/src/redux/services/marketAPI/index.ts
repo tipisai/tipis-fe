@@ -49,14 +49,12 @@ export const marketAPI = createApi({
       MarketAgentListData,
       {
         params: ProductListParams
-        signal?: AbortSignal
       }
     >({
-      query: ({ params, signal }) => ({
+      query: ({ params }) => ({
         url: "/aiAgents",
         method: "GET",
         params: params,
-        signal,
       }),
       providesTags: (result) =>
         result?.products
