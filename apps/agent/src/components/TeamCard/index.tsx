@@ -47,7 +47,7 @@ const TeamCard: FC<ITeamCardProps> = (props) => {
           {description}
         </Typography.Paragraph>
         {(tags || editButton) && (
-          <div css={teamCardFooterContainerStyle}>
+          <div css={teamCardFooterContainerStyle(!!tags)}>
             {tags && <div>{tags}</div>}
             {editButton && (
               <div css={footerButtonContainerStyle}>{editButton}</div>

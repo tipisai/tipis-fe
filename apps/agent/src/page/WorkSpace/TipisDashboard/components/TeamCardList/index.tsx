@@ -3,12 +3,15 @@ import { FC, useMemo } from "react"
 import { useSelector } from "react-redux"
 import { getCurrentId } from "@illa-public/user-data"
 import FullSectionLoading from "@/components/FullSectionLoading"
+import TeamNoData from "@/components/TeamNoData"
 import { useGetAIAgentListByPageQuery } from "@/redux/services/agentAPI"
+import { useCreateTipis } from "@/utils/recentTabs/hook"
 import { ITeamCardListProps } from "./interface"
 
 const TeamCardList: FC<ITeamCardListProps> = (props) => {
   const { RenderItem } = props
   const currentTeamID = useSelector(getCurrentId)!
+  const createTipi = useCreateTipis()
 
   const agentQuery = useMemo(
     () => ({
@@ -24,7 +27,7 @@ const TeamCardList: FC<ITeamCardListProps> = (props) => {
   }
 
   if (!data?.aiAgentList || data.aiAgentList.length === 0) {
-    return <div>No Data</div>
+    return <TeamNoData showCreate onClickButton={createTipi} />
   }
 
   return (

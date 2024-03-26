@@ -18,9 +18,9 @@ import {
   updateTabs,
 } from "../localForage/teamData"
 import {
+  getChatPath,
   getCreateFunctionPath,
   getCreateTipiPath,
-  getDefaultChatPath,
   getEditTipiPath,
   getExploreFunctionsPath,
   getExploreTipisPath,
@@ -244,7 +244,7 @@ export const useCreateChat = () => {
     }
     addRecentTab(tabsInfo)
 
-    navigate(getDefaultChatPath(currentTeamInfo?.identifier, tempID))
+    navigate(getChatPath(currentTeamInfo?.identifier, tempID))
   }, [addRecentTab, navigate])
 
   return createChat
