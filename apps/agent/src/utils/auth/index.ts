@@ -3,7 +3,7 @@ import { TIPISStorage } from "@/utils/storage"
 
 const CURRENT_TEAM_ID_KEY = "currentTeamID"
 
-export const setLocalTeam = (teamIdentifier: string) => {
+export const setLocalTeamIdentifier = (teamIdentifier: string) => {
   return TIPISStorage.setLocalStorage("teamIdentifier", teamIdentifier)
 }
 
@@ -15,11 +15,11 @@ export const getLocalCurrentTeamID = () => {
   return TIPISStorage.getLocalStorage(CURRENT_TEAM_ID_KEY)
 }
 
-export const getLocalTeam = () => {
+export const getLocalTeamIdentifier = () => {
   return TIPISStorage.getLocalStorage("teamIdentifier")
 }
 
-export const removeLocalTeam = () => {
+export const removeLocalTeamIdentifier = () => {
   return TIPISStorage.removeLocalStorage("teamIdentifier")
 }
 

@@ -27,13 +27,16 @@ import {
   IInitWSCallback,
 } from "@/components/PreviewChat/TipisWebscoketContext/interface"
 import {
+  useUpdateAnonymousAvatar,
+  useUpdateAnonymousName,
+} from "@/components/PreviewChat/hooks"
+import {
   ChatMessage,
   ChatSendRequestPayload,
   ChatWsAppendResponse,
   CollaboratorsInfo,
   IGroupMessage,
   MESSAGE_STATUS,
-  SenderType,
 } from "@/components/PreviewChat/interface"
 import {
   useLazyGetAIAgentAnonymousAddressQuery,
@@ -64,6 +67,8 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
   const [triggerGetAIAgentAnonymousAddressQuery] =
     useLazyGetAIAgentAnonymousAddressQuery()
   const [triggerGetAIAgentWsAddressQuery] = useLazyGetAIAgentWsAddressQuery()
+  const updateAnonymousLocalIcon = useUpdateAnonymousAvatar()
+  const updateAnonymousLocalName = useUpdateAnonymousName()
 
   const getRunAgent = useCallback(() => {
     return {
@@ -78,43 +83,36 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
   const updateLocalIcon = useCallback(
     (icon: string, newRoomUsers: CollaboratorsInfo[]) => {
       const updateRoomUsers = [...newRoomUsers]
-      let index = -1
       if (getValues("aiAgentID")) {
-        index = updateRoomUsers.findIndex(
+        const index = updateRoomUsers.findIndex(
           (user) => user.id === getValues("aiAgentID"),
         )
-      } else {
-        index = updateRoomUsers.findIndex(
-          (user) => user.roomRole === SenderType.ANONYMOUS_AGENT,
-        )
+        if (index != -1) {
+          updateRoomUsers[index].avatar = icon
+        }
+        return updateRoomUsers
       }
-      if (index != -1) {
-        updateRoomUsers[index].avatar = icon
-      }
-      return updateRoomUsers
+      return updateAnonymousLocalIcon(icon, newRoomUsers)
     },
-    [getValues],
+    [getValues, updateAnonymousLocalIcon],
   )
 
   const updateLocalName = useCallback(
     (name: string, newRoomUsers: CollaboratorsInfo[]) => {
       const updateRoomUsers = [...newRoomUsers]
-      let index = -1
       if (getValues("aiAgentID")) {
-        index = updateRoomUsers.findIndex(
+        const index = updateRoomUsers.findIndex(
           (user) => user.id === getValues("aiAgentID"),
         )
+        if (index != -1) {
+          updateRoomUsers[index].nickname = name
+        }
+        return updateRoomUsers
       } else {
-        index = updateRoomUsers.findIndex(
-          (user) => user.roomRole === SenderType.ANONYMOUS_AGENT,
-        )
+        return updateAnonymousLocalName(name, newRoomUsers)
       }
-      if (index != -1) {
-        updateRoomUsers[index].nickname = name
-      }
-      return updateRoomUsers
     },
-    [getValues],
+    [getValues, updateAnonymousLocalName],
   )
 
   const [lastRunAgent, setLastRunAgent] = useState<Agent | undefined>()

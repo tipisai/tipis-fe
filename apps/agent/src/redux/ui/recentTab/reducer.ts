@@ -1,5 +1,4 @@
 import { CaseReducer, PayloadAction } from "@reduxjs/toolkit"
-import { removeTabs, setTabs } from "@/utils/localForage/tabsStore"
 import { IRecentTabState, ITabInfo } from "./interface"
 
 export const initRecentTabReducer: CaseReducer<
@@ -16,7 +15,6 @@ export const addRecentTabReducer: CaseReducer<
   const newTabs = [action.payload, ...state.tabs]
   state.tabs = newTabs
   state.currentTabID = action.payload.tabID
-  setTabs(newTabs)
 }
 
 export const deleteRecentTabReducer: CaseReducer<
@@ -39,7 +37,6 @@ export const deleteRecentTabReducer: CaseReducer<
       state.currentTabID = newTabs[index - 1].tabID
     }
   }
-  removeTabs(action.payload)
 }
 
 export const updateRecentTabReducer: CaseReducer<
@@ -60,8 +57,6 @@ export const updateRecentTabReducer: CaseReducer<
   })
 
   state.tabs = newTabs
-
-  setTabs(newTabs)
 }
 
 export const updateCurrentRecentTabIDReducer: CaseReducer<
