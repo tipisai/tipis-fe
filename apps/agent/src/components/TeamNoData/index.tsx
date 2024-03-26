@@ -20,10 +20,10 @@ const TeamNoData: FC<ITeamNoDataProps> = (props) => {
         <div css={iconContainerStyle}>
           <Icon component={ResultEmptyIcon} />
         </div>
-        <p css={emptyDescStyle}>{t("new_dashboard.desc.blank")}</p>
+        <p css={emptyDescStyle}>{t("dashboard.desc.blank")}</p>
         {showCreate && (
           <Button icon={<Icon component={PlusIcon} />} onClick={onClickButton}>
-            {t("new_dashboard.button.blank")}
+            {t("dashboard.button.blank")}
           </Button>
         )}
       </div>

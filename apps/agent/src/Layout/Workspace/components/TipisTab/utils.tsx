@@ -8,9 +8,9 @@ import FunctionIcon from "@/assets/workspace/function.svg?react"
 import MarketplaceIcon from "@/assets/workspace/marketplace.svg?react"
 import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import {
+  getChatPath,
   getCreateFunctionPath,
   getCreateTipiPath,
-  getDefaultChatPath,
   getEditFunctionPath,
   getEditTipiPath,
   getExploreFunctionsPath,
@@ -119,7 +119,7 @@ export const genTabNavigateLink = (
     case TAB_TYPE.RUN_TIPIS:
       return `${getRunTipiPath(teamIdentifier, cacheID)}/${tabID ? tabID : ""}`
     case TAB_TYPE.CHAT:
-      return getDefaultChatPath(teamIdentifier, cacheID)
+      return getChatPath(teamIdentifier, cacheID)
     case TAB_TYPE.CREATE_FUNCTION:
       return getCreateFunctionPath(teamIdentifier, cacheID)
     case TAB_TYPE.EDIT_FUNCTION:

@@ -20,7 +20,7 @@ import InviteIcon from "@/assets/workspace/invite.svg?react"
 import TeamSelect from "@/components/TeamSelect"
 import { copyToClipboard } from "@/utils/copyToClipboard"
 import { track } from "@/utils/mixpanelHelper"
-import { getDefaultChatPath } from "@/utils/routeHelper"
+import { getChatPath } from "@/utils/routeHelper"
 import {
   inviteButtonContainerStyle,
   teamSelectAndInviteButtonContainerStyle,
@@ -51,7 +51,7 @@ const TeamSelectAndInviteButton: FC<TeamSelectAndInviteButton> = ({
   }
 
   const handleSwitchTeam = (teamID: string, teamIdentifier: string) => {
-    navigate(getDefaultChatPath(teamIdentifier))
+    navigate(getChatPath(teamIdentifier))
   }
 
   return (

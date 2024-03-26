@@ -110,7 +110,7 @@ export const CreateAIAgentPage: FC = () => {
             <LayoutAutoChange
               desktopPage={
                 <WorkspacePCHeaderLayout
-                  title={t("new_dashboard.button.blank-agent")}
+                  title={t("dashboard.button.blank-agent")}
                   extra={<HeaderTools />}
                 />
               }
