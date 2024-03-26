@@ -2,72 +2,59 @@ import Icon from "@ant-design/icons"
 import { Avatar, Divider, Tag } from "antd"
 import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
-import { useDispatch } from "react-redux"
-import { useLocation, useNavigate, useParams } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
 import { SuccessIcon } from "@illa-public/icon"
 import {
   ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackContext,
 } from "@illa-public/mixpanel-utils"
-import { TeamInfo } from "@illa-public/public-types"
-import { teamActions } from "@illa-public/user-data"
+import {
+  getCurrentTeamInfo,
+  teamActions,
+  useGetTeamsInfoQuery,
+} from "@illa-public/user-data"
+import { setLocalTeamIdentifier } from "@/utils/auth"
 import { isSubscribeForBilling } from "@/utils/billing/isSubscribe"
 import { TeamSelectProps } from "../interface"
 import { containerStyle, switchItemStyle, teamInfoStyle } from "./style"
 
 interface TeamSelectContentProps extends TeamSelectProps {
-  teams: TeamInfo[]
-  currentID: string
   closePopover: () => void
 }
 
 const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
-  const {
-    closePopover,
-    openCreateModal,
-    showCreateTeamButton,
-    teams,
-    currentID,
-  } = props
+  const { closePopover, openCreateModal, showCreateTeamButton, onChangeTeam } =
+    props
   const { t } = useTranslation()
+  const teamInfo = useSelector(getCurrentTeamInfo)!
   const { track } = useContext(MixpanelTrackContext)
-  const { pathname } = useLocation()
-  const { teamIdentifier } = useParams()
-  const navigate = useNavigate()
+
+  const currentTeamId = teamInfo?.id
+  const { data } = useGetTeamsInfoQuery(null)
+  const teamItems = data ?? []
   const dispatch = useDispatch()
 
   const handleClickCreateTeam = () => {
     track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
       element: "create_team",
       parameter2: "homepage_select",
-      parameter3: teams?.length,
+      parameter3: teamItems?.length,
     })
     openCreateModal?.()
     closePopover()
   }
 
   const switchCurrentTeam = (currentId: string, currentIdentifier: string) => {
-    const currentTeamInfo = teams?.find(
-      (item) => item.identifier === currentIdentifier,
-    )
-    if (currentTeamInfo) {
-      let toURL
-      if (teamIdentifier) {
-        toURL = pathname.replace(teamIdentifier, currentIdentifier)
-      } else {
-        toURL = `/setting/${currentIdentifier}/team-settings`
-      }
-      dispatch(teamActions.updateCurrentIdReducer(currentId))
-      dispatch(teamActions.updateCurrentTeamInfoReducer(currentTeamInfo))
-      navigate(toURL, { replace: true })
-      closePopover()
-    }
+    onChangeTeam?.(currentId, currentIdentifier)
+    setLocalTeamIdentifier(currentIdentifier)
+    dispatch(teamActions.updateCurrentIdReducer(currentId))
+    closePopover()
   }
 
   return (
     <div css={containerStyle}>
-      {teams?.map((item, index) => {
-        const isCurrent = currentID === item.id
+      {teamItems?.map((item, index) => {
+        const isCurrent = currentTeamId === item.id
         const isFree = isSubscribeForBilling(item.credit?.plan)
         return (
           <div

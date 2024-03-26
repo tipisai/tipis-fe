@@ -1,7 +1,8 @@
 import Icon from "@ant-design/icons"
 import { Avatar, Popover } from "antd"
 import { FC, useState } from "react"
-import { useGetUserInfoAndTeamsInfoByTokenQuery } from "@illa-public/user-data"
+import { useSelector } from "react-redux"
+import { getCurrentTeamInfo } from "@illa-public/user-data"
 import UpAndDownArrowIcon from "@/assets/workspace/upAndDownArrow.svg?react"
 import TeamSelectContent from "./Content"
 import { TeamSelectProps } from "./interface"
@@ -14,17 +15,15 @@ import {
 
 const TeamSelect: FC<TeamSelectProps> = (props) => {
   const [openPopover, setOpenPopover] = useState(false)
-  const { data } = useGetUserInfoAndTeamsInfoByTokenQuery({})
-  const currentTeam = data?.teams.find((team) => team.id === data.currentTeamID)
+  const currentTeam = useSelector(getCurrentTeamInfo)!
 
-  if (!data?.teams || !currentTeam) return null
   return (
     <Popover
       content={
         <TeamSelectContent
-          {...props}
-          teams={data.teams}
-          currentID={data.currentTeamID!}
+          showCreateTeamButton={props.showCreateTeamButton}
+          openCreateModal={props.openCreateModal}
+          onChangeTeam={props.onChangeTeam}
           closePopover={() => setOpenPopover(false)}
         />
       }

@@ -12,6 +12,7 @@ import TeamIcon from "@/assets/setting/team.svg?react"
 import TeamSelect from "@/components/TeamSelect"
 import Menu from "@/page/SettingPage/components//Menu"
 import { GoToPortal } from "@/page/SettingPage/components/GoToPortal"
+import { getTeamInfoSetting } from "@/utils/routeHelper"
 import { SettingLayoutProps } from "../interface"
 import {
   asideMenuStyle,
@@ -93,6 +94,10 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
       ]
     : []
 
+  const handleSwitchTeam = (teamID: string, teamIdentifier: string) => {
+    navigate(getTeamInfoSetting(teamIdentifier))
+  }
+
   return (
     <div css={layoutWrapperStyle}>
       <aside css={leftAsideWrapperStyle}>
@@ -121,7 +126,7 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
                 <span>{t("profile.setting.group.team")}</span>
               </div>
               <div css={teamSwitchContainerStyle}>
-                <TeamSelect />
+                <TeamSelect onChangeTeam={handleSwitchTeam} />
               </div>
               <Menu itemList={teamOptions} />
             </div>
