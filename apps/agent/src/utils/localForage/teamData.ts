@@ -49,14 +49,14 @@ export const updateUiHistoryData = async (
   uiHistoryData: IUiHistoryData,
 ) => {
   const oldData = await getUiHistoryDataByCacheID(teamID, oldCacheID)
-  setUiHistoryData(teamID, newCacheID, { ...oldData, ...uiHistoryData })
-  deleteUiHistoryData(teamID, oldCacheID)
+  await setUiHistoryData(teamID, newCacheID, { ...oldData, ...uiHistoryData })
+  await deleteUiHistoryData(teamID, oldCacheID)
 }
 
 export const getTabs = async (teamID: string) => {
   const teamData = await getTeamDataByTeamID(teamID)
   if (!teamData) {
-    setTabs(teamID, INIT_TABS)
+    await setTabs(teamID, INIT_TABS)
     return INIT_TABS
   }
   const tabsInfo = teamData.tabsInfo ?? INIT_TABS
@@ -73,7 +73,7 @@ export const setTabs = async (teamID: string, tabInfos: ITabInfo[]) => {
 export const addTabs = async (teamID: string, tabInfo: ITabInfo) => {
   const tabs = await getTabs(teamID)
   const newTabs = [tabInfo, ...tabs]
-  setTabs(teamID, newTabs)
+  await setTabs(teamID, newTabs)
 }
 
 export const removeTabs = async (teamID: string, tabID: string) => {
@@ -81,9 +81,10 @@ export const removeTabs = async (teamID: string, tabID: string) => {
   const targetTab = tabs.find((tab) => tab.tabID === tabID)
   if (!targetTab) return
   const cacheID = targetTab.cacheID
-  deleteUiHistoryData(teamID, cacheID)
+
   const newTabs = tabs.filter((tab) => tab.tabID !== tabID)
-  setTabs(teamID, newTabs)
+  await setTabs(teamID, newTabs)
+  await deleteUiHistoryData(teamID, cacheID)
 }
 
 export const updateTabs = async (
@@ -101,5 +102,5 @@ export const updateTabs = async (
     }
     return tab
   })
-  setTabs(teamID, newTabs)
+  await setTabs(teamID, newTabs)
 }
