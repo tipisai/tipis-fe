@@ -1,6 +1,5 @@
 import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
-import { FILE_ITEM_DETAIL_STATUS_IN_UI } from "@/utils/drive"
 
 export const containerStyle = css`
   width: 100%;
@@ -59,23 +58,11 @@ export const opeationStyle = css`
   gap: 16px;
 `
 
-export const iconHotSpotStyle = (status: FILE_ITEM_DETAIL_STATUS_IN_UI) => {
-  const canClick =
-    status === FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR ||
-    status === FILE_ITEM_DETAIL_STATUS_IN_UI.SUCCESS
-  return css`
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    color: ${canClick
-      ? getColor("grayBlue", "02")
-      : getColor("grayBlue", "05")};
-    cursor: ${canClick ? "pointer" : "not-allowed"};
-  `
-}
-
-export const iconColorStyle = (color: string) => {
-  color
-}
+export const iconHotSpotStyle = css`
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: ${getColor("grayBlue", "02")};
+`

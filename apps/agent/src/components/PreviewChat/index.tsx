@@ -14,19 +14,20 @@ import { useSelector } from "react-redux"
 import { v4 } from "uuid"
 import { isPremiumModel } from "@illa-public/market-agent"
 import { IKnowledgeFile } from "@illa-public/public-types"
-import { getCurrentUser } from "@illa-public/user-data"
+import { getCurrentId, getCurrentUser } from "@illa-public/user-data"
 import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { TextSignal } from "@/api/ws/textSignal"
 import AgentBlockInput from "@/assets/agent/agent-block-input.svg?react"
 import StopIcon from "@/assets/agent/stop.svg?react"
 import {
+  CHAT_UPLOAD_PATH,
   MAX_FILE_SIZE,
   MAX_MESSAGE_FILES_LENGTH,
-  UPLOAD_PATH,
 } from "@/config/constants/knowledge"
 import AIAgentMessage from "@/page/WorkSpace/AI/components/AIAgentMessage"
 import GroupAgentMessage from "@/page/WorkSpace/AI/components/GroupAgentMessage"
 import UserMessage from "@/page/WorkSpace/AI/components/UserMessage"
+import { useDeleteFileMutation } from "@/redux/services/driveAPI"
 import { isGroupMessage } from "@/utils/agent/typeHelper"
 import { UploadFileStore, useUploadFileToDrive } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
@@ -89,6 +90,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   }, [sendMessage, setIsReceiving])
 
   const currentUserInfo = useSelector(getCurrentUser)
+  const teamID = useSelector(getCurrentId)!
   const { message: messageAPI } = App.useApp()
 
   const chatRef = useRef<HTMLDivElement>(null)
@@ -103,6 +105,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const disableSend = isReceiving || blockInput || uploadKnowledgeLoading
 
   const { uploadFileToDrive } = useUploadFileToDrive()
+  const [deleteFile] = useDeleteFileMutation()
 
   const { t } = useTranslation()
 
@@ -143,10 +146,23 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     })
   }, [chatMessages, currentUserInfo.userID, isMobile, isReceiving])
 
-  const handleDeleteFile = (fileName: string, queryID?: string) => {
+  const handleDeleteFile = (
+    fileName: string,
+    needDelFromDrive: boolean,
+    queryID?: string,
+  ) => {
     const files = knowledgeFiles.filter((file) => file.fileName !== fileName)
     setKnowledgeFiles(files)
-    queryID && chatUploadStore.deleteFileDetailInfo(queryID)
+    if (queryID) {
+      chatUploadStore.deleteFileDetailInfo(queryID)
+      try {
+        needDelFromDrive &&
+          deleteFile({
+            fileID: queryID,
+            teamID,
+          })
+      } catch (e) {}
+    }
   }
 
   const handleClickUploadFile = () => {
@@ -172,7 +188,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     setUploadKnowledgeLoading(true)
     const currentFiles = [...knowledgeFiles]
     const uploadParams = {
-      folder: UPLOAD_PATH,
+      folder: CHAT_UPLOAD_PATH,
       allowAnonymous: false,
       replace: false,
     }
