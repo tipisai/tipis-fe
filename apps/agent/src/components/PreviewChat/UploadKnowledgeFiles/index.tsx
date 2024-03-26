@@ -17,13 +17,18 @@ import {
 
 interface UploadKnowledgeFilesPops {
   knowledgeFiles: IKnowledgeFile[]
-  handleDeleteFile: (name: string, queryID?: string) => void
+  handleDeleteFile: (
+    name: string,
+    needDelFromDrive: boolean,
+    queryID?: string,
+  ) => void
   chatUploadStore: UploadFileStore
 }
 
 const getIconByStatus = (fileInfo?: IFileDetailInfo) => {
   const { loaded = 1, total = 1, status, contentType } = fileInfo || {}
   switch (status) {
+    case FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING:
     case FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING:
       const percent = (loaded / total) * 100
       return (
@@ -31,6 +36,9 @@ const getIconByStatus = (fileInfo?: IFileDetailInfo) => {
           type="circle"
           size={16}
           percent={percent > 90 ? 90 : parseFloat(percent.toFixed(2))}
+          style={{
+            marginRight: "4px",
+          }}
         />
       )
 
@@ -64,7 +72,13 @@ const UploadKnowledgeFiles: FC<UploadKnowledgeFilesPops> = ({
               <Icon component={CloseIcon} css={closeIconStyle(isError)} />
             }
             bordered
-            onClose={() => handleDeleteFile(item.fileName, fileInfo?.queryID)}
+            onClose={() =>
+              handleDeleteFile(
+                item.fileName,
+                fileInfo?.status === FILE_ITEM_DETAIL_STATUS_IN_UI.SUCCESS,
+                fileInfo?.queryID,
+              )
+            }
             style={{
               display: "flex",
               alignItems: "center",

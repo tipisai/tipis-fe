@@ -311,12 +311,13 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     ],
   },
   {
-    path: "landing/subscribed",
+    path: "/landing/subscribed",
     element: (
       <Suspense fallback={<FullSectionLoading />}>
         <SubScribeRedirect />
       </Suspense>
     ),
+    accessByMobile: true,
   },
   {
     path: "/403",
