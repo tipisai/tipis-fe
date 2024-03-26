@@ -57,9 +57,9 @@ export const descriptionsStyle = css`
   margin-bottom: 0 !important;
 `
 
-export const teamCardFooterContainerStyle = css`
+export const teamCardFooterContainerStyle = (hasTag: boolean) => css`
   display: flex;
-  justify-content: space-between;
+  justify-content: ${hasTag ? "space-between" : "flex-end"};
   width: 100%;
   align-items: center;
 `

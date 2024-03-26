@@ -1,6 +1,7 @@
 import Icon from "@ant-design/icons"
 import { App, Button } from "antd"
 import { FC, MouseEventHandler } from "react"
+import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom"
 import { MinusIcon } from "@illa-public/icon"
@@ -10,7 +11,7 @@ import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 import { useRemoveRecentTabReducer } from "@/utils/recentTabs/hook"
-import { getExploreTipisPath } from "@/utils/routeHelper"
+import { getChatPath } from "@/utils/routeHelper"
 import { ITipsTab } from "./interface"
 import {
   deleteButtonContainerStyle,
@@ -36,6 +37,7 @@ const TipisTab: FC<ITipsTab> = (props) => {
   const allRecentTabs = useSelector(getRecentTabInfos)
   const navigate = useNavigate()
   const deleteTab = useRemoveRecentTabReducer()
+  const { t } = useTranslation()
 
   const getTabName = useGetTabName()
 
@@ -46,16 +48,25 @@ const TipisTab: FC<ITipsTab> = (props) => {
     function removeTab() {
       deleteTab(tabID)
 
-      if (newTabs.length === 0) {
-        navigate(getExploreTipisPath(currentTeamInfo.identifier))
+      if (newTabs.length === 1) {
+        navigate(getChatPath(currentTeamInfo.identifier))
+        return
       }
+      const latestTab = newTabs[0]
+      const newPath = genTabNavigateLink(
+        currentTeamInfo.identifier,
+        latestTab.tabType,
+        latestTab.cacheID,
+        latestTab.tabID,
+      )
+      navigate(newPath)
     }
     if (shouldModelTipTabTypes.includes(tabType)) {
       modal.confirm({
-        content: "delete",
-        onOk: () => {
-          removeTab()
-        },
+        content: t("homepage.edit_tipi.modal.not_save_desc"),
+        okText: t("homepage.edit_tipi.modal.not_save_ok"),
+        cancelText: t("homepage.edit_tipi.modal.not_save_cancel"),
+        onOk: removeTab,
       })
       return
     }

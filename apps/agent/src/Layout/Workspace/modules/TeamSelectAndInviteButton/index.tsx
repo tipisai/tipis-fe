@@ -3,6 +3,7 @@ import { Button } from "antd"
 import { FC, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import { InviteMemberPC } from "@illa-public/invite-modal"
 import {
   ILLA_MIXPANEL_CLOUD_PAGE_NAME,
@@ -19,6 +20,7 @@ import InviteIcon from "@/assets/workspace/invite.svg?react"
 import TeamSelect from "@/components/TeamSelect"
 import { copyToClipboard } from "@/utils/copyToClipboard"
 import { track } from "@/utils/mixpanelHelper"
+import { getChatPath } from "@/utils/routeHelper"
 import {
   inviteButtonContainerStyle,
   teamSelectAndInviteButtonContainerStyle,
@@ -37,6 +39,7 @@ const TeamSelectAndInviteButton: FC<TeamSelectAndInviteButton> = ({
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const userInfo = useSelector(getCurrentUser)
+  const navigate = useNavigate()
 
   const handleClickInvite = () => {
     track(
@@ -47,10 +50,18 @@ const TeamSelectAndInviteButton: FC<TeamSelectAndInviteButton> = ({
     setInviteModalVisible(true)
   }
 
+  const handleSwitchTeam = (teamID: string, teamIdentifier: string) => {
+    navigate(getChatPath(teamIdentifier))
+  }
+
   return (
     <>
       <div css={teamSelectAndInviteButtonContainerStyle}>
-        <TeamSelect openCreateModal={openCreateModal} showCreateTeamButton />
+        <TeamSelect
+          openCreateModal={openCreateModal}
+          showCreateTeamButton
+          onChangeTeam={handleSwitchTeam}
+        />
         <div css={inviteButtonContainerStyle}>
           <Button
             icon={<Icon component={InviteIcon} />}

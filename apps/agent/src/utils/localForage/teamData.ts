@@ -55,7 +55,10 @@ export const updateUiHistoryData = async (
 
 export const getTabs = async (teamID: string) => {
   const teamData = await getTeamDataByTeamID(teamID)
-  if (!teamData) return INIT_TABS
+  if (!teamData) {
+    setTabs(teamID, INIT_TABS)
+    return INIT_TABS
+  }
   const tabsInfo = teamData.tabsInfo ?? INIT_TABS
   return tabsInfo
 }
