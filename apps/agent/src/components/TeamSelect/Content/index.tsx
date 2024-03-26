@@ -2,7 +2,7 @@ import Icon from "@ant-design/icons"
 import { Avatar, Divider, Tag } from "antd"
 import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { SuccessIcon } from "@illa-public/icon"
 import {
@@ -11,8 +11,7 @@ import {
 } from "@illa-public/mixpanel-utils"
 import {
   getCurrentTeamInfo,
-  getTeamItems,
-  teamActions,
+  useGetTeamsInfoQuery,
 } from "@illa-public/user-data"
 import { isSubscribeForBilling } from "@/utils/billing/isSubscribe"
 import { TeamSelectProps } from "../interface"
@@ -33,8 +32,8 @@ const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
   const navigate = useNavigate()
 
   const currentTeamId = teamInfo?.id
-  const teamItems = useSelector(getTeamItems)
-  const dispatch = useDispatch()
+  const { data } = useGetTeamsInfoQuery(null)
+  const teamItems = data ?? []
 
   const handleClickCreateTeam = () => {
     track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
@@ -57,8 +56,6 @@ const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
       } else {
         toURL = `/setting/${currentIdentifier}/team-settings`
       }
-      dispatch(teamActions.updateCurrentIdReducer(currentId))
-      dispatch(teamActions.updateCurrentTeamInfoReducer(currentTeamInfo))
       navigate(toURL, { replace: true })
       closePopover()
     }
