@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { v4 } from "uuid"
 import { getCurrentId, getCurrentTeamInfo } from "@illa-public/user-data"
@@ -81,13 +81,12 @@ export const useUpdateRecentTabReducer = () => {
 
 export const useInitRecentTab = () => {
   const dispatch = useDispatch()
-
+  const currentTeamID = useSelector(getCurrentId)
   const initRecentTab = useCallback(async () => {
-    const currentTeamID = getCurrentId(store.getState())
     const tabsInfo = await getTabs(currentTeamID!)
     dispatch(recentTabActions.initRecentTabReducer(tabsInfo))
     dispatch(recentTabActions.updateCurrentRecentTabIDReducer(DEFAULT_CHAT_ID))
-  }, [dispatch])
+  }, [currentTeamID, dispatch])
 
   useEffect(() => {
     initRecentTab()

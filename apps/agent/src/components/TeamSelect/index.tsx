@@ -23,6 +23,7 @@ const TeamSelect: FC<TeamSelectProps> = (props) => {
         <TeamSelectContent
           showCreateTeamButton={props.showCreateTeamButton}
           openCreateModal={props.openCreateModal}
+          onChangeTeam={props.onChangeTeam}
           closePopover={() => setOpenPopover(false)}
         />
       }
