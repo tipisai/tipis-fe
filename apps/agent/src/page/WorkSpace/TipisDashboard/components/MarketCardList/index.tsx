@@ -7,7 +7,7 @@ import { MarketListContext } from "../../context/marketListContext"
 import { MARKET_ACTION_TYPE } from "../../context/reducer"
 import { useGetShowData } from "./hook"
 import { IMarketCardListProps } from "./interface"
-import { contentStyle, moreLoadingStyle } from "./style"
+import { contentStyle, listContainerStyle, moreLoadingStyle } from "./style"
 import { TEMP_DATA } from "./temp"
 
 const MarketCardList: FC<IMarketCardListProps> = (props) => {
@@ -45,33 +45,31 @@ const MarketCardList: FC<IMarketCardListProps> = (props) => {
   }
 
   return (
-    <div css={contentStyle} onScroll={handleListLoadMore}>
+    <div css={contentStyle}>
       <RenderSortBy tagList={tagList} />
       {isLoading && !isMoreLoading ? (
         <FullSectionLoading />
       ) : (
-        <>
+        <div css={listContainerStyle} onScroll={handleListLoadMore}>
           <List
             grid={{
               gutter: 16,
-              xs: 1,
-              sm: 1,
+              xs: 2,
+              sm: 2,
               md: 2,
               lg: 3,
               xl: 4,
               xxl: 5,
             }}
             dataSource={data.products}
-            renderItem={(item) => (
-              <RenderItem marketAIAgent={item} onClick={() => {}} />
-            )}
+            renderItem={(item) => <RenderItem marketAIAgent={item} />}
           />
           {isMoreLoading && (
             <div css={moreLoadingStyle}>
               <FullSectionLoading />
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   )

@@ -15,6 +15,7 @@ import {
   getEditTipiPath,
   getExploreFunctionsPath,
   getExploreTipisPath,
+  getMarketTipiDetailPath,
   getRunTipiPath,
   getTipiDetailPath,
 } from "@/utils/routeHelper"
@@ -67,6 +68,7 @@ export const getIconByTabInfo = (icon: string, tabType: TAB_TYPE) => {
         </span>
       )
     case TAB_TYPE.EXPLORE_TIPIS_DETAIL:
+    case TAB_TYPE.EXPLORE_MARKET_TIPIS_DETAIL:
     case TAB_TYPE.EXPLORE_FUNCTION_DETAIL:
       return <div />
   }
@@ -92,6 +94,7 @@ export const useGetTabName = () => {
         case TAB_TYPE.EDIT_FUNCTION:
           return "Edit Function"
         case TAB_TYPE.EXPLORE_TIPIS_DETAIL:
+        case TAB_TYPE.EXPLORE_MARKET_TIPIS_DETAIL:
         case TAB_TYPE.EXPLORE_TIPIS:
           return t("homepage.left_panel.tab.explore_tipi")
         case TAB_TYPE.EXPLORE_FUNCTION_DETAIL:
@@ -130,6 +133,8 @@ export const genTabNavigateLink = (
       return getExploreFunctionsPath(teamIdentifier)
     case TAB_TYPE.EXPLORE_TIPIS_DETAIL:
       return getTipiDetailPath(teamIdentifier, cacheID)
+    case TAB_TYPE.EXPLORE_MARKET_TIPIS_DETAIL:
+      return getMarketTipiDetailPath(teamIdentifier, cacheID)
     case TAB_TYPE.EXPLORE_FUNCTION_DETAIL:
       return ""
   }

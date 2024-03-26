@@ -3,7 +3,6 @@ import { MarketAIAgent } from "@illa-public/public-types"
 
 export interface IMarketCardListItemProps {
   marketAIAgent: MarketAIAgent
-  onClick: () => void
 }
 
 export interface IMarketCardEmptyListProps {

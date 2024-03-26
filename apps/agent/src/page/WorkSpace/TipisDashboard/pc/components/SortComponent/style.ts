@@ -8,9 +8,6 @@ export const sortWrapperStyle = css`
   gap: 24px;
   justify-content: flex-start;
   flex-shrink: 0;
-  position: sticky;
-  top: 0;
-  z-index: 1;
   background: ${getColor("white", "01")};
   padding-bottom: 8px;
 `

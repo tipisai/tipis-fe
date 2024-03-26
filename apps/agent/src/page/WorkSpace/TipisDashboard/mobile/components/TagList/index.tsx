@@ -7,6 +7,7 @@ const TagList: FC<TagListContainerProps> = ({
   tagList,
   activeTag,
   isEmptyRecommend,
+  isCardTag,
   limitTagNum,
   handleTagChange,
 }) => {
@@ -25,7 +26,7 @@ const TagList: FC<TagListContainerProps> = ({
 
   if (!tagList || tagLength < 1) return null
   return (
-    <div css={containerStyle(isEmptyRecommend)}>
+    <div css={containerStyle(isEmptyRecommend, isCardTag)}>
       {tagList &&
         tagList
           .slice(0, limitTagNum ?? tagLength)

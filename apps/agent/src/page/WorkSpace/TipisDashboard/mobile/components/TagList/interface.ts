@@ -3,6 +3,7 @@ export interface TagListContainerProps {
   clickable?: boolean
   activeTag?: string | null
   isEmptyRecommend?: boolean
+  isCardTag?: boolean
   limitTagNum?: number
   handleTagChange?: (tag?: string) => void
 }

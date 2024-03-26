@@ -50,7 +50,13 @@ const TeamBilling = lazy(() => import("@/page/SettingPage/team/billing"))
 const TeamMembers = lazy(() => import("@/page/SettingPage/team/member"))
 const EditFunctionPage = lazy(() => import("@/page/WorkSpace/Function/Edit"))
 const ChatPage = lazy(() => import("@/page/WorkSpace/Chat"))
-const TipiDetailPage = lazy(() => import("@/page/WorkSpace/TipiDetail"))
+const TipiDetailPage = lazy(
+  () => import("@/page/WorkSpace/TipiDetail/TeamTipiDetail"),
+)
+const MarketTipiDetailPage = lazy(
+  () => import("@/page/WorkSpace/TipiDetail/MarketTipiDetail"),
+)
+
 const EmptyTeam = lazy(() => import("@/page/WorkSpace/EmptyTeam"))
 const SubScribeRedirect = lazy(
   () => import("@/page/SettingPage/subscribedRedirect"),
@@ -179,6 +185,15 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
             <TipiDetailPage />
           </Suspense>
         ),
+      },
+      {
+        path: ":teamIdentifier/marketTipi/:agentID/detail",
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <MarketTipiDetailPage />
+          </Suspense>
+        ),
+        accessByMobile: true,
       },
       {
         path: ":teamIdentifier/tipi/:agentID/run/:tabID?",

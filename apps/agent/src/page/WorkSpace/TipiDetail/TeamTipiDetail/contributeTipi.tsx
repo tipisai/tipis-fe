@@ -4,6 +4,7 @@ import { Navigate, useNavigate } from "react-router-dom"
 import { v4 } from "uuid"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import DetailLayout from "@/Layout/DetailLayout"
+import ContributeInfo from "@/Layout/DetailLayout/components/ContributeInfo"
 import DetailHeader from "@/Layout/DetailLayout/components/DetailHeader"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import store from "@/redux/store"
@@ -14,14 +15,14 @@ import {
 } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { getExploreTipisPath } from "@/utils/routeHelper"
-import { useGetNotContributeTipDetail } from "@/utils/tipis/hook"
-import ActionGroup from "./components/ActionGroup"
-import Parameters from "./components/Parameters"
-import Prompt from "./components/Prompt"
+import { useGetTipiContributedDetail } from "@/utils/tipis/hook"
+import ActionGroup from "../components/ActionGroup"
+import Parameters from "../components/Parameters"
+import Prompt from "../components/Prompt"
 
-const NotContributeTipiDetail: FC = () => {
-  const { data, isLoading, isError } = useGetNotContributeTipDetail()
-
+const ContributeTipiDetail: FC = () => {
+  const { contributeAgentDetail, isError, isLoading, aiAgentMarketPlaceInfo } =
+    useGetTipiContributedDetail()
   const navigate = useNavigate()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const dispatch = useDispatch()
@@ -60,20 +61,35 @@ const NotContributeTipiDetail: FC = () => {
   if (isError) {
     return <Navigate to="/404" />
   }
-  return data ? (
-    <DetailLayout title={data.name} onClickBack={onClickBack}>
+  return contributeAgentDetail && aiAgentMarketPlaceInfo ? (
+    <DetailLayout title={contributeAgentDetail?.name} onClickBack={onClickBack}>
       <DetailHeader
-        avatarURL={data.icon}
-        title={data.name}
-        description={data.description}
+        avatarURL={contributeAgentDetail.icon}
+        title={contributeAgentDetail.name}
+        description={contributeAgentDetail.description}
       />
-      <ActionGroup isContribute={false} />
-      <Prompt parameters={data.variables ?? []} prompt={data.prompt} />
-      <Parameters parameters={data.variables ?? []} />
+      <ActionGroup
+        isContribute
+        runNumber={aiAgentMarketPlaceInfo.marketplace.numRuns}
+        forkNumber={aiAgentMarketPlaceInfo.marketplace.numForks}
+        starNumber={aiAgentMarketPlaceInfo.marketplace.numStars}
+      />
+      <ContributeInfo
+        teamName={aiAgentMarketPlaceInfo.marketplace.contributorTeam.name}
+        teamAvatar={aiAgentMarketPlaceInfo.marketplace.contributorTeam.icon}
+        contributorAvatars={contributeAgentDetail.editedBy.map(
+          (item) => item.avatar,
+        )}
+      />
+      <Prompt
+        parameters={contributeAgentDetail.variables ?? []}
+        prompt={contributeAgentDetail.prompt}
+      />
+      <Parameters parameters={contributeAgentDetail.variables ?? []} />
     </DetailLayout>
   ) : null
 }
 
-NotContributeTipiDetail.displayName = "NotContributeTipiDetail"
+ContributeTipiDetail.displayName = "ContributeTipiDetail"
 
-export default NotContributeTipiDetail
+export default ContributeTipiDetail

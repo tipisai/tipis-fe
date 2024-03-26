@@ -4,6 +4,7 @@ import { FC } from "react"
 import { ForkIcon, PlayOutlineIcon, StarOutlineIcon } from "@illa-public/icon"
 import { getLLM } from "@illa-public/market-agent"
 import { formatNumForAgent } from "@illa-public/utils"
+import { useMarketDetailTipis } from "@/utils/recentTabs/hook"
 import TagList from "../TagList"
 import { MarketAgentCardProps } from "./interface"
 import {
@@ -23,12 +24,22 @@ import {
 } from "./style"
 
 const MarketCard: FC<MarketAgentCardProps> = (props) => {
-  const { marketAIAgent, onClick } = props
+  const { marketAIAgent } = props
   const { aiAgent, marketplace } = marketAIAgent ?? {}
 
+  const detailTipis = useMarketDetailTipis()
+
+  const onClickCard = () => {
+    detailTipis({
+      tipisID: aiAgent?.aiAgentID,
+      title: aiAgent?.name,
+      tabIcon: aiAgent?.icon,
+    })
+  }
+
   return (
-    <List.Item>
-      <div css={cardStyle} onClick={onClick}>
+    <List.Item onClick={onClickCard}>
+      <div css={cardStyle}>
         <div css={headerStyle}>
           <img css={agentIconStyle} src={aiAgent.icon} alt={aiAgent.name} />
           <div css={actionContainerStyle}>
@@ -56,7 +67,11 @@ const MarketCard: FC<MarketAgentCardProps> = (props) => {
           </div>
           <div css={descriptionStyle}>{aiAgent?.description}</div>
           {!!(marketplace?.hashtags && marketplace?.hashtags.length) && (
-            <TagList tagList={marketplace?.hashtags} limitTagNum={2} />
+            <TagList
+              tagList={marketplace?.hashtags}
+              limitTagNum={2}
+              isCardTag
+            />
           )}
         </div>
       </div>

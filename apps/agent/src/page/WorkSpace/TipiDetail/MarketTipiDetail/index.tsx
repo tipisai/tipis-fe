@@ -1,12 +1,12 @@
 import { FC } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Navigate, useNavigate } from "react-router-dom"
+import { Navigate, useNavigate, useParams } from "react-router-dom"
 import { v4 } from "uuid"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import DetailLayout from "@/Layout/DetailLayout"
 import ContributeInfo from "@/Layout/DetailLayout/components/ContributeInfo"
 import DetailHeader from "@/Layout/DetailLayout/components/DetailHeader"
-import FullSectionLoading from "@/components/FullSectionLoading"
+import { useGetAIAgentMarketplaceInfoQuery } from "@/redux/services/marketAPI"
 import store from "@/redux/store"
 import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import {
@@ -15,14 +15,20 @@ import {
 } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { getExploreTipisPath } from "@/utils/routeHelper"
-import { useGetTipiContributedDetail } from "@/utils/tipis/hook"
-import ActionGroup from "./components/ActionGroup"
-import Parameters from "./components/Parameters"
-import Prompt from "./components/Prompt"
+import FullSectionLoading from "../../../../components/FullSectionLoading"
+import ActionGroup from "../components/ActionGroup"
+import Parameters from "../components/Parameters"
+import Prompt from "../components/Prompt"
 
-const ContributeTipiDetail: FC = () => {
-  const { contributeAgentDetail, isError, isLoading, aiAgentMarketPlaceInfo } =
-    useGetTipiContributedDetail()
+const MarketTipiDetailPage: FC = () => {
+  const { agentID } = useParams()
+  const {
+    data: aiAgentMarketPlaceInfo,
+    isLoading,
+    isError,
+  } = useGetAIAgentMarketplaceInfoQuery({
+    aiAgentID: agentID!,
+  })
   const navigate = useNavigate()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const dispatch = useDispatch()
@@ -61,35 +67,39 @@ const ContributeTipiDetail: FC = () => {
   if (isError) {
     return <Navigate to="/404" />
   }
-  return contributeAgentDetail && aiAgentMarketPlaceInfo ? (
-    <DetailLayout title={contributeAgentDetail?.name} onClickBack={onClickBack}>
+
+  return aiAgentMarketPlaceInfo ? (
+    <DetailLayout
+      title={aiAgentMarketPlaceInfo?.aiAgent.name}
+      onClickBack={onClickBack}
+    >
       <DetailHeader
-        avatarURL={contributeAgentDetail.icon}
-        title={contributeAgentDetail.name}
-        description={contributeAgentDetail.description}
+        avatarURL={aiAgentMarketPlaceInfo?.aiAgent?.icon}
+        title={aiAgentMarketPlaceInfo?.aiAgent?.name}
+        description={aiAgentMarketPlaceInfo?.aiAgent?.description}
       />
       <ActionGroup
         isContribute
-        runNumber={aiAgentMarketPlaceInfo.marketplace.numRuns}
-        forkNumber={aiAgentMarketPlaceInfo.marketplace.numForks}
+        runNumber={aiAgentMarketPlaceInfo?.marketplace?.numRuns}
+        forkNumber={aiAgentMarketPlaceInfo?.marketplace?.numForks}
         starNumber={aiAgentMarketPlaceInfo.marketplace.numStars}
       />
       <ContributeInfo
-        teamName={aiAgentMarketPlaceInfo.marketplace.contributorTeam.name}
-        teamAvatar={aiAgentMarketPlaceInfo.marketplace.contributorTeam.icon}
-        contributorAvatars={contributeAgentDetail.editedBy.map(
+        teamName={aiAgentMarketPlaceInfo?.marketplace?.contributorTeam?.name}
+        teamAvatar={aiAgentMarketPlaceInfo?.marketplace?.contributorTeam?.icon}
+        contributorAvatars={aiAgentMarketPlaceInfo?.aiAgent?.editedBy.map(
           (item) => item.avatar,
         )}
       />
       <Prompt
-        parameters={contributeAgentDetail.variables ?? []}
-        prompt={contributeAgentDetail.prompt}
+        parameters={aiAgentMarketPlaceInfo?.aiAgent?.variables ?? []}
+        prompt={aiAgentMarketPlaceInfo?.aiAgent?.prompt}
       />
-      <Parameters parameters={contributeAgentDetail.variables ?? []} />
+      <Parameters
+        parameters={aiAgentMarketPlaceInfo?.aiAgent?.variables ?? []}
+      />
     </DetailLayout>
   ) : null
 }
 
-ContributeTipiDetail.displayName = "ContributeTipiDetail"
-
-export default ContributeTipiDetail
+export default MarketTipiDetailPage
