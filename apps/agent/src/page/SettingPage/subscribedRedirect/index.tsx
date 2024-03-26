@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
 import { PURCHASE_TYPE } from "@illa-public/upgrade-modal"
 import { sendTagEvent } from "@illa-public/utils"
-import ModalDecorate from "@/assets/public/success-bg.svg?react"
+import SuccessBg from "@/assets/subscribeRedirect/success-bg.svg"
 import BlackButton from "@/components/BlackButton"
 import { linkTrk, rdtPurchaseTrk, twqTrk } from "@/utils/gaHelper"
 import { LINKEDIN_CONVERSION_ID, TWITTER_ID } from "@/utils/gaHelper/constent"
@@ -58,7 +58,7 @@ const SubscribedLanding: FC = () => {
   return (
     <div css={containerStyle}>
       <div css={subscribedContentStyle}>
-        <ModalDecorate css={decorateStyle} />
+        <img src={SuccessBg} css={decorateStyle} />
         <div css={headerStyle}>
           <div css={titleStyle}>{t("billing.redirect_page.title")}</div>
           <div css={descriptionStyle}>
@@ -70,6 +70,7 @@ const SubscribedLanding: FC = () => {
         </div>
         <div css={actionAreaStyle}>
           <BlackButton
+            type="primary"
             size="large"
             onClick={() => {
               window.location.href =
