@@ -124,7 +124,7 @@ const MobileEditPanel: FC = () => {
     <>
       {currentStep === MOBILE_EDIT_PAGE_STEP.BASIC && (
         <MobileFirstPageLayout
-          title={aiAgentID ? agentName : t("new_dashboard.button.blank-agent")}
+          title={aiAgentID ? agentName : t("dashboard.button.blank-agent")}
           headerExtra={
             <PreviewButton onClickPreviewCallback={handleClickStart} />
           }

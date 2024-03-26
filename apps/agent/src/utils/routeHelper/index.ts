@@ -31,7 +31,7 @@ export const getExploreFunctionsPath = (teamIdentifier: string) => {
   return `/workspace/${teamIdentifier}/functions`
 }
 
-export const getDefaultChatPath = (
+export const getChatPath = (
   teamIdentifier: string,
   chatID: string = DEFAULT_CHAT_ID,
 ) => {
