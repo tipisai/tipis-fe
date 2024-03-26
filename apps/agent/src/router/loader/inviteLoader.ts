@@ -11,6 +11,7 @@ export const inviteLoader = async (args: LoaderFunctionArgs) => {
   const { request } = args
   const url = new URL(request.url)
   const inviteToken = url.searchParams.get("inviteToken")
+  console.log("message", message)
   if (!inviteToken) return null
   try {
     const response = await store

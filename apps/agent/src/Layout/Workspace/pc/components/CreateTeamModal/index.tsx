@@ -47,13 +47,7 @@ const CreateTeamModal: FC<CreateTeamModalProps> = (props) => {
   const onSubmitCreateTeam: SubmitHandler<CreateTeamFields> = async (data) => {
     try {
       setLoading(true)
-      const res = await createTeam(data).unwrap()
-      if (!res.currentTeamID) {
-        message.error({
-          content: t("team_create_fail"),
-        })
-        return
-      }
+      await createTeam(data).unwrap()
       onCloseCreateModal()
       message.success({
         content: t("team_create_suc"),

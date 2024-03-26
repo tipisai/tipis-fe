@@ -13,7 +13,7 @@ import {
   headerContainerStyle,
   messageContainerStyle,
 } from "./style"
-import { getInfoByStatus } from "./utils"
+import { useGetInfoByStatus } from "./utils"
 
 export const PureMessage: FC<PureMessageProps> = ({ message }) => {
   if (!message) return null
@@ -51,6 +51,8 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
       formatMessage = `\`\`\`python\n${code}\n\`\`\``
     }
   } catch (e) {}
+
+  const getInfoByStatus = useGetInfoByStatus()
 
   const { InfoIcon, InfoTitle } = getInfoByStatus(messageStatus)
 
