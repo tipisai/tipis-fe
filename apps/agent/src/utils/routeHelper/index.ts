@@ -20,6 +20,13 @@ export const getTipiDetailPath = (teamIdentifier: string, tipiID: string) => {
   return `/workspace/${teamIdentifier}/tipi/${tipiID}/detail`
 }
 
+export const getMarketTipiDetailPath = (
+  teamIdentifier: string,
+  tipiID: string,
+) => {
+  return `/workspace/${teamIdentifier}/marketTipi/${tipiID}/detail`
+}
+
 export const getExploreFunctionsPath = (teamIdentifier: string) => {
   return `/workspace/${teamIdentifier}/functions`
 }

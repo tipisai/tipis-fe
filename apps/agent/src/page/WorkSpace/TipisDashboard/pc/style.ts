@@ -4,6 +4,7 @@ export const tabsContainerStyle = css`
   width: 100%;
   height: 100%;
   padding: 0 24px;
+  overflow: hidden;
 `
 
 export const tipisPCDashboardContainerStyle = css`
@@ -11,4 +12,8 @@ export const tipisPCDashboardContainerStyle = css`
   height: 100%;
   display: flex;
   flex-direction: column;
+  & .ant-tabs-content,
+  & .ant-tabs-tabpane-active {
+    height: 100%;
+  }
 `

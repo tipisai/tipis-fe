@@ -24,6 +24,7 @@ import {
   getEditTipiPath,
   getExploreFunctionsPath,
   getExploreTipisPath,
+  getMarketTipiDetailPath,
   getRunTipiPath,
   getTipiDetailPath,
 } from "../routeHelper"
@@ -226,6 +227,79 @@ export const useDetailTipis = () => {
   )
 
   return detailTipis
+}
+
+export const useMarketDetailTipis = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const detailTipis = useCallback(
+    (tabInfo: { tipisID: string; title: string; tabIcon: string }) => {
+      const { tipisID, title, tabIcon } = tabInfo
+      const exploreTipiTab = getExploreTipisTab(store.getState())
+      const currentTeamInfo = getCurrentTeamInfo(store.getState())!
+
+      const newTab = {
+        tabName: title,
+        tabIcon: tabIcon,
+        tabType: TAB_TYPE.EXPLORE_MARKET_TIPIS_DETAIL,
+        tabID: v4(),
+        cacheID: tipisID,
+      }
+      if (exploreTipiTab) {
+        dispatch(
+          recentTabActions.updateRecentTabReducer({
+            oldTabID: exploreTipiTab.tabID,
+            newTabInfo: newTab,
+          }),
+        )
+        dispatch(recentTabActions.updateCurrentRecentTabIDReducer(newTab.tabID))
+      } else {
+        const recentTabs = getRecentTabInfos(store.getState())
+        const currentTipiTab = recentTabs.find(
+          (tab) =>
+            tab.cacheID === tipisID &&
+            tab.tabType === TAB_TYPE.EXPLORE_MARKET_TIPIS_DETAIL,
+        )
+        if (!currentTipiTab) {
+          dispatch(recentTabActions.addRecentTabReducer(newTab))
+        }
+      }
+
+      navigate(getMarketTipiDetailPath(currentTeamInfo.identifier, tipisID))
+    },
+    [dispatch, navigate],
+  )
+
+  return detailTipis
+}
+
+export const useRunMarketTipis = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const runTipis = useCallback(
+    (tipisID: string, ownerTeamIdentifier: string) => {
+      const currentTeamInfo = getCurrentTeamInfo(store.getState())!
+
+      const tabID = v4()
+
+      const tabsInfo: ITabInfo = {
+        tabName: "",
+        tabIcon: "",
+        tabType: TAB_TYPE.RUN_TIPIS,
+        tabID: tabID,
+        cacheID: tipisID,
+      }
+      dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
+      navigate(
+        `${getRunTipiPath(ownerTeamIdentifier, tipisID)}/${tabID}?myTeamIdentifier=${currentTeamInfo.identifier}`,
+      )
+    },
+    [dispatch, navigate],
+  )
+
+  return runTipis
 }
 
 export const useCreateChat = () => {
