@@ -364,12 +364,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
                   ref={inputRef}
                 />
               )}
-              <Button
-                disabled={disableSend}
-                onClick={() => {
-                  sendAndClearMessage()
-                }}
-              >
+              <Button disabled={disableSend} onClick={sendAndClearMessage}>
                 {t("editor.ai-agent.button.send")}
               </Button>
             </div>
@@ -416,12 +411,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
                     ref={inputRef}
                   />
                 )}
-                <Button
-                  disabled={disableSend}
-                  onClick={() => {
-                    sendAndClearMessage()
-                  }}
-                >
+                <Button disabled={disableSend} onClick={sendAndClearMessage}>
                   {t("editor.ai-agent.button.send")}
                 </Button>
               </div>

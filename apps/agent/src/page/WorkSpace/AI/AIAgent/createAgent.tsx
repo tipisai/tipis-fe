@@ -4,12 +4,14 @@ import { useTranslation } from "react-i18next"
 import { useBeforeUnload, useParams } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { Agent } from "@illa-public/public-types"
+import { getCurrentId } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
 import {
   getUiHistoryDataByCacheID,
   setUiHistoryData,
-} from "@/utils/localForage/uiHistoryStore"
+} from "@/utils/localForage/teamData"
+import store from "../../../../redux/store"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import { AIAgent } from "./aiagent"
 import FormContext from "./components/FormContext"
@@ -59,10 +61,11 @@ export const CreateAIAgentPage: FC = () => {
 
   const setUiHistoryFormData = useCallback(async () => {
     const cacheID = initAgent.cacheID
-    const uiHistoryData = await getUiHistoryDataByCacheID(cacheID)
+    const teamID = getCurrentId(store.getState())!
+    const uiHistoryData = await getUiHistoryDataByCacheID(teamID, cacheID)
     if (uiHistoryData) {
       const { formData } = uiHistoryData
-      setUiHistoryData(cacheID!, {
+      setUiHistoryData(teamID, cacheID!, {
         ...uiHistoryData,
         formData: {
           ...(formData as Agent),
@@ -70,7 +73,7 @@ export const CreateAIAgentPage: FC = () => {
         },
       })
     } else {
-      setUiHistoryData(cacheID!, {
+      setUiHistoryData(teamID, cacheID!, {
         formData: values,
       })
     }
@@ -79,7 +82,8 @@ export const CreateAIAgentPage: FC = () => {
   useEffect(() => {
     const getHistoryDataAndSetFormData = async () => {
       const cacheID = initAgent.cacheID
-      const uiHistoryData = await getUiHistoryDataByCacheID(cacheID)
+      const teamID = getCurrentId(store.getState())!
+      const uiHistoryData = await getUiHistoryDataByCacheID(teamID, cacheID)
       if (uiHistoryData) {
         const { formData } = uiHistoryData
         if (formData) {

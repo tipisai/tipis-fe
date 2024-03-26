@@ -11,7 +11,8 @@ import { useGetAgentDetailQuery } from "@/redux/services/agentAPI"
 import {
   getUiHistoryDataByCacheID,
   setUiHistoryData,
-} from "@/utils/localForage/uiHistoryStore"
+} from "@/utils/localForage/teamData"
+import store from "../../../../redux/store"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import { AIAgent } from "./aiagent"
 import FormContext from "./components/FormContext"
@@ -61,12 +62,12 @@ export const EditAIAgentPage: FC = () => {
 
   const setUiHistoryFormData = useCallback(async () => {
     const cacheID = values.cacheID!
-    const uiHistoryData = await getUiHistoryDataByCacheID(cacheID)
+    const uiHistoryData = await getUiHistoryDataByCacheID(teamID!, cacheID)
 
     if (uiHistoryData) {
       const { formData } = uiHistoryData
       if (values.aiAgentID) {
-        setUiHistoryData(cacheID!, {
+        setUiHistoryData(teamID!, cacheID!, {
           ...uiHistoryData,
           formData: {
             ...(formData as IAgentForm),
@@ -76,17 +77,18 @@ export const EditAIAgentPage: FC = () => {
       }
     } else {
       if (values.aiAgentID) {
-        setUiHistoryData(cacheID!, {
+        setUiHistoryData(teamID!, cacheID!, {
           formData: values,
         })
       }
     }
-  }, [values])
+  }, [teamID, values])
 
   useEffect(() => {
     const getHistoryDataAndSetFormData = async () => {
       const cacheID = values.aiAgentID!
-      const uiHistoryData = await getUiHistoryDataByCacheID(cacheID)
+      const teamID = getCurrentId(store.getState())!
+      const uiHistoryData = await getUiHistoryDataByCacheID(teamID, cacheID)
       if (uiHistoryData) {
         const { formData } = uiHistoryData
         if (formData) {

@@ -3,7 +3,9 @@ import { setupListeners } from "@reduxjs/toolkit/query"
 import {
   authAPI,
   currentUserReducer,
+  teamAPI,
   teamReducer,
+  userAPI,
 } from "@illa-public/user-data"
 import { agentAuthAPI } from "./services/agentAPI"
 import { driveAPI } from "./services/driveAPI"
@@ -19,6 +21,8 @@ const store = configureStore({
     [agentAuthAPI.reducerPath]: agentAuthAPI.reducer,
     [marketAPI.reducerPath]: marketAPI.reducer,
     [driveAPI.reducerPath]: driveAPI.reducer,
+    [userAPI.reducerPath]: userAPI.reducer,
+    [teamAPI.reducerPath]: teamAPI.reducer,
   },
   devTools: import.meta.env.ILLA_APP_ENV === "development",
   middleware: (getDefaultMiddleware) =>
@@ -27,6 +31,8 @@ const store = configureStore({
       agentAuthAPI.middleware,
       marketAPI.middleware,
       driveAPI.middleware,
+      userAPI.middleware,
+      teamAPI.middleware,
     ),
 })
 

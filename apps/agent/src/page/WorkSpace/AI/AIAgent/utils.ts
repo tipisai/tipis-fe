@@ -2,7 +2,7 @@ import { App } from "antd"
 import { useCallback } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { isPremiumModel } from "@illa-public/market-agent"
 import {
   ILLA_MIXPANEL_BUILDER_PAGE_NAME,
@@ -17,10 +17,10 @@ import {
   usePutAgentDetailMutation,
 } from "@/redux/services/agentAPI"
 import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
-import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { fetchUploadBase64 } from "@/utils/file"
-import { updateUiHistoryData } from "@/utils/localForage/uiHistoryStore"
+import { updateUiHistoryData } from "@/utils/localForage/teamData"
 import { track } from "@/utils/mixpanelHelper"
+import { useUpdateRecentTabReducer } from "@/utils/recentTabs/hook"
 import { IAgentForm } from "./interface"
 
 export const agentData2JSONReport = (agent: IAgentForm) => {
@@ -57,7 +57,7 @@ export const useSubmitSaveAgent = () => {
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const currentUserInfo = useSelector(getCurrentUser)
   const { reset } = useFormContext<IAgentForm>()
-  const dispatch = useDispatch()
+  const updateTabInfo = useUpdateRecentTabReducer()
 
   const handleSubmitSave = useCallback(
     async (data: IAgentForm) => {
@@ -137,20 +137,21 @@ export const useSubmitSaveAgent = () => {
             : [],
         }
         reset(newFormData)
-        dispatch(
-          recentTabActions.updateRecentTabReducer({
-            oldTabID: data.cacheID,
-            newTabInfo: {
-              tabName: newFormData.name,
-              tabIcon: newFormData.icon,
-              tabType: TAB_TYPE.EDIT_TIPIS,
-              cacheID: newFormData.aiAgentID,
-            },
-          }),
-        )
-        updateUiHistoryData(data.cacheID, newFormData.aiAgentID, {
-          formData: newFormData,
+        updateTabInfo(data.cacheID, {
+          tabName: newFormData.name,
+          tabIcon: newFormData.icon,
+          tabType: TAB_TYPE.EDIT_TIPIS,
+          cacheID: newFormData.aiAgentID,
         })
+
+        updateUiHistoryData(
+          currentTeamInfo.id,
+          data.cacheID,
+          newFormData.aiAgentID,
+          {
+            formData: newFormData,
+          },
+        )
         message.success({
           content: t("dashboard.message.create-suc"),
         })
@@ -165,12 +166,12 @@ export const useSubmitSaveAgent = () => {
       createAgent,
       currentTeamInfo.id,
       currentUserInfo.userID,
-      dispatch,
       getAgentIconUploadAddress,
       message,
       putAgentDetail,
       reset,
       t,
+      updateTabInfo,
     ],
   )
 

@@ -9,6 +9,7 @@ import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
+import { useRemoveRecentTabReducer } from "@/utils/recentTabs/hook"
 import { getExploreTipisPath } from "@/utils/routeHelper"
 import { ITipsTab } from "./interface"
 import {
@@ -34,6 +35,7 @@ const TipisTab: FC<ITipsTab> = (props) => {
   const { modal } = App.useApp()
   const allRecentTabs = useSelector(getRecentTabInfos)
   const navigate = useNavigate()
+  const deleteTab = useRemoveRecentTabReducer()
 
   const getTabName = useGetTabName()
 
@@ -42,7 +44,7 @@ const TipisTab: FC<ITipsTab> = (props) => {
     e.preventDefault()
     const newTabs = allRecentTabs.filter((tab) => tab.tabID !== tabID)
     function removeTab() {
-      dispatch(recentTabActions.deleteRecentTabReducer(tabID))
+      deleteTab(tabID)
 
       if (newTabs.length === 0) {
         navigate(getExploreTipisPath(currentTeamInfo.identifier))
