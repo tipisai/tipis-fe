@@ -1,4 +1,5 @@
 import {
+  FILE_ITEM_DETAIL_STATUS_IN_UI,
   IFileDetailInfo,
   IListener,
   IUpdateFileUploadInfo,
@@ -41,9 +42,19 @@ export class UploadFileStore {
   }
 
   deleteFileDetailInfo(queryID: string) {
-    this.fileDetailInfos = this.fileDetailInfos.filter(
-      (item) => item.queryID !== queryID,
+    const index = this.fileDetailInfos.findIndex(
+      (item) => item.queryID === queryID,
     )
+    if (index !== -1) {
+      const needDelFile = this.fileDetailInfos[index]
+      if (
+        needDelFile.status === FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING ||
+        needDelFile.status === FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING
+      ) {
+        needDelFile.abortController?.abort()
+      }
+      this.fileDetailInfos.splice(index, 1)
+    }
     this.listeners.forEach((listener) => listener())
   }
 

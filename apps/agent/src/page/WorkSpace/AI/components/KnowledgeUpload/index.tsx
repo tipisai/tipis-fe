@@ -11,9 +11,9 @@ import { GCS_OBJECT_TYPE, IKnowledgeFile } from "@illa-public/public-types"
 import { getCurrentId } from "@illa-public/user-data"
 import {
   ACCEPT,
+  KNOWLEDGE_UPLOAD_PATH,
   MAX_FILE_SIZE,
   MAX_MESSAGE_FILES_LENGTH,
-  UPLOAD_PATH,
 } from "@/config/constants/knowledge"
 import { useDeleteFileMutation } from "@/redux/services/driveAPI"
 import {
@@ -49,6 +49,7 @@ const getIconByStatus = (
   onClickRetry?: () => void,
 ) => {
   switch (status) {
+    case FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING:
     case FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING:
       const percent = (loaded! / total!) * 100
       return (
@@ -133,7 +134,7 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
     }
     const currentFiles = [...currentValue]
     const uploadParams = {
-      folder: UPLOAD_PATH,
+      folder: KNOWLEDGE_UPLOAD_PATH,
       allowAnonymous: false,
       replace: false,
     }
@@ -227,7 +228,7 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
           icon={<Icon component={UploadIcon} />}
           onClick={handleClickUpload}
         >
-          Upload
+          {t("upload")}
         </Button>
         <input
           style={{ display: "none" }}
@@ -258,7 +259,7 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
                   () => handleClickRetry(fileInfo.queryID),
                 )}
                 <span
-                  css={iconHotSpotStyle(fileInfo.status)}
+                  css={iconHotSpotStyle}
                   onClick={() =>
                     handleDelete(
                       fileInfo.fileName,
