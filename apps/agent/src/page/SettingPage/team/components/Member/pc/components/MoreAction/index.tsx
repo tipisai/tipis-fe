@@ -1,5 +1,5 @@
 import Icon from "@ant-design/icons"
-import { App, Button, Dropdown } from "antd"
+import { App, Button, Dropdown, MenuProps } from "antd"
 import { FC, useCallback, useContext, useEffect, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { AuthShown, SHOW_RULES } from "@illa-public/auth-shown"
@@ -64,7 +64,7 @@ export const MoreAction: FC<MoreActionProps> = (props) => {
           element: "remove_modal_remove",
         })
         try {
-          await removeTeamMember({ teamID, teamMemberID })
+          removeTeamMember({ teamID, teamMemberID }).unwrap()
           message.success({
             content: t("user_management.mes.remove_suc"),
           })
@@ -114,7 +114,7 @@ export const MoreAction: FC<MoreActionProps> = (props) => {
             teamID,
             teamMemberID,
             userRole: USER_ROLE.OWNER,
-          })
+          }).unwrap()
           message.success({
             content: t("user_management.mes.transfer_suc"),
           })
@@ -140,6 +140,25 @@ export const MoreAction: FC<MoreActionProps> = (props) => {
     })
   }, [changeTeamMemberRole, message, modal, t, teamID, teamMemberID, track])
 
+  const onClickMenuItems: MenuProps["onClick"] = ({ key }) => {
+    switch (key) {
+      case "transfer": {
+        track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
+          element: "transfer",
+        })
+        handleClickTransOwner()
+        break
+      }
+      case "remove": {
+        track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
+          element: "remove",
+        })
+        handleClickRemoveMember()
+        break
+      }
+    }
+  }
+
   const dropItems = [
     {
       key: "transfer",
@@ -149,16 +168,7 @@ export const MoreAction: FC<MoreActionProps> = (props) => {
           allowRoles={[USER_ROLE.OWNER]}
           rules={SHOW_RULES.EQUAL}
         >
-          <span
-            onClick={() => {
-              track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-                element: "transfer",
-              })
-              handleClickTransOwner()
-            }}
-          >
-            {t("user_management.page.transfer")}
-          </span>
+          <span>{t("user_management.page.transfer")}</span>
         </AuthShown>
       ),
       disabled:
@@ -173,16 +183,7 @@ export const MoreAction: FC<MoreActionProps> = (props) => {
           allowRoles={[userRole]}
           rules={SHOW_RULES.BIGGER}
         >
-          <span
-            onClick={() => {
-              track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-                element: "remove",
-              })
-              handleClickRemoveMember()
-            }}
-          >
-            {t("user_management.page.remove")}
-          </span>
+          <span>{t("user_management.page.remove")}</span>
         </AuthShown>
       ),
     },
@@ -218,6 +219,7 @@ export const MoreAction: FC<MoreActionProps> = (props) => {
         }}
         menu={{
           items: dropItems.filter((item) => !item.disabled),
+          onClick: onClickMenuItems,
         }}
       >
         <Button

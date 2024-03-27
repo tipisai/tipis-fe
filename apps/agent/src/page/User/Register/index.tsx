@@ -2,7 +2,7 @@ import { App } from "antd"
 import { FC, useState } from "react"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useNavigate, useParams, useSearchParams } from "react-router-dom"
+import { useParams, useSearchParams } from "react-router-dom"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
@@ -19,6 +19,7 @@ import { getLocalLanguage } from "@/i18n"
 import { linkTrk, rdtSignUpTrk, twqTrk } from "@/utils/gaHelper"
 import { LINKEDIN_CONVERSION_ID, TWITTER_ID } from "@/utils/gaHelper/constent"
 import { track } from "@/utils/mixpanelHelper"
+import { useNavigateTargetWorkspace } from "@/utils/routeHelper/hook"
 import { TIPISStorage } from "@/utils/storage"
 import { RegisterFields } from "../interface"
 import { RegisterErrorMsg } from "./interface"
@@ -33,6 +34,7 @@ const RegisterPage: FC = () => {
 
   const [signUp] = useSignUpMutation()
   const [sendVerificationCodeToEmail] = useSendVerificationCodeToEmailMutation()
+  const navigateToWorkspace = useNavigateTargetWorkspace()
 
   const formProps = useForm<RegisterFields>({
     defaultValues: {
@@ -41,7 +43,6 @@ const RegisterPage: FC = () => {
     },
   })
 
-  const navigate = useNavigate()
   const { message } = App.useApp()
 
   const [loading, setLoading] = useState(false)
@@ -83,9 +84,7 @@ const RegisterPage: FC = () => {
       message.success(t("page.user.sign_up.tips.success"))
       setAuthToken(token)
       searchParams.delete("inviteToken")
-      navigate(
-        `/${searchParams.toString() ? "?" + searchParams.toString() : ""}`,
-      )
+      await navigateToWorkspace()
     } catch (e) {
       if (isILLAAPiError(e)) {
         track(

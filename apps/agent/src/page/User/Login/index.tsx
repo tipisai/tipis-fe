@@ -2,7 +2,7 @@ import { App } from "antd"
 import { FC, useEffect, useState } from "react"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useNavigate, useParams, useSearchParams } from "react-router-dom"
+import { useParams, useSearchParams } from "react-router-dom"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
@@ -13,6 +13,7 @@ import {
 import { useSignInMutation } from "@illa-public/user-data"
 import { setAuthToken } from "@illa-public/utils"
 import { track } from "@/utils/mixpanelHelper"
+import { useNavigateTargetWorkspace } from "@/utils/routeHelper/hook"
 import { LoginFields } from "../interface"
 import { LoginErrorMsg } from "./interface"
 import { MobileLogin } from "./mobile"
@@ -22,8 +23,7 @@ const LoginPage: FC = () => {
   const { email } = useParams()
   const [searchParams] = useSearchParams()
   const { t } = useTranslation()
-  const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
+  const navigateToWorkspace = useNavigateTargetWorkspace()
 
   const [errorMsg, setErrorMsg] = useState<LoginErrorMsg>({
     email: "",
@@ -31,7 +31,7 @@ const LoginPage: FC = () => {
   })
 
   const { message } = App.useApp()
-  const [signIn] = useSignInMutation()
+  const [signIn, { isLoading }] = useSignInMutation()
 
   const formProps = useForm<LoginFields>({
     defaultValues: {
@@ -40,7 +40,6 @@ const LoginPage: FC = () => {
   })
 
   const onSubmit: SubmitHandler<LoginFields> = async (data) => {
-    setLoading(true)
     try {
       const { token } = await signIn(data).unwrap()
       if (!token) return
@@ -48,10 +47,7 @@ const LoginPage: FC = () => {
       message.success({
         content: t("page.user.sign_in.tips.success"),
       })
-
-      navigate(
-        `/${searchParams.toString() ? "?" + searchParams.toString() : ""}`,
-      )
+      await navigateToWorkspace()
     } catch (e) {
       if (isILLAAPiError(e)) {
         switch (e?.data?.errorFlag) {
@@ -87,8 +83,6 @@ const LoginPage: FC = () => {
           content: t("network_error"),
         })
       }
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -105,7 +99,7 @@ const LoginPage: FC = () => {
         <LayoutAutoChange
           desktopPage={
             <PCLogin
-              loading={loading}
+              loading={isLoading}
               errorMsg={errorMsg}
               onSubmit={onSubmit}
               lockedEmail={email ?? searchParams.get("email") ?? ""}
@@ -113,7 +107,7 @@ const LoginPage: FC = () => {
           }
           mobilePage={
             <MobileLogin
-              loading={loading}
+              loading={isLoading}
               errorMsg={errorMsg}
               onSubmit={onSubmit}
               lockedEmail={email ?? searchParams.get("email") ?? ""}

@@ -37,7 +37,11 @@ export const MemberListPage: FC = () => {
     data: memberList,
     isError,
     isLoading,
-  } = useGetMemberListQuery(teamInfo.id)
+  } = useGetMemberListQuery(teamInfo.id, {
+    refetchOnFocus: true,
+    refetchOnReconnect: true,
+    refetchOnMountOrArgChange: true,
+  })
 
   const [changeTeamMembersRole] = useChangeTeamMemberRoleMutation()
 
@@ -113,7 +117,6 @@ export const MemberListPage: FC = () => {
   return Array.isArray(memberList) ? (
     <MemberContext.Provider
       value={{
-        memberList,
         handleCopy,
         handleClickInviteButton,
         showInviteButton,

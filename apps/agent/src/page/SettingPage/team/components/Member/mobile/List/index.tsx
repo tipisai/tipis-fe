@@ -1,10 +1,16 @@
-import { FC, useContext } from "react"
-import { MemberContext } from "../../context"
+import { FC } from "react"
+import { useSelector } from "react-redux"
+import {
+  getCurrentTeamInfo,
+  useGetMemberListQuery,
+} from "@illa-public/user-data"
 import { MobileMemberListItem } from "../ListItem"
 import { listContainerStyle } from "./style"
 
 export const MobileMemberList: FC = () => {
-  const { memberList } = useContext(MemberContext)
+  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+
+  const { data: memberList } = useGetMemberListQuery(currentTeamInfo.id)
   return (
     <div css={listContainerStyle}>
       {memberList?.map((item) => {

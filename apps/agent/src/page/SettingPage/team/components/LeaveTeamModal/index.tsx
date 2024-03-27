@@ -1,7 +1,7 @@
 import { App, Button, Modal } from "antd"
 import { FC, useContext, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { getColor } from "@illa-public/color-scheme"
 import {
@@ -10,12 +10,14 @@ import {
 } from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
 import {
-  getCurrentTeamIdentifier,
   getCurrentTeamInfo,
+  getTeamItems,
+  teamActions,
   useRemoveTeamMemberByIDMutation,
 } from "@illa-public/user-data"
 import store from "@/redux/store"
-import { EMPTY_TEAM_PATH, getExploreTipisPath } from "@/utils/routeHelper"
+import { setLocalTeamIdentifier } from "@/utils/auth"
+import { EMPTY_TEAM_PATH, getChatPath } from "@/utils/routeHelper"
 import DeleteTeamModal from "../DeleteTeamModal"
 import { footerStyle, modalContentStyle, modalTitleStyle } from "./style"
 
@@ -33,6 +35,7 @@ const LeaveTeamModal: FC<LeaveTeamModalProps> = (props) => {
   const { track } = useContext(MixpanelTrackContext)
   const [removeTeamMemberByID] = useRemoveTeamMemberByIDMutation()
   const { message } = App.useApp()
+  const dispatch = useDispatch()
 
   const leaveTeam = async () => {
     if (!teamInfo?.teamMemberID) return
@@ -46,10 +49,13 @@ const LeaveTeamModal: FC<LeaveTeamModalProps> = (props) => {
       await removeTeamMemberByID({
         teamID: teamInfo.id,
         teamMemberID: teamInfo?.teamMemberID,
-      })
-      const currentIdentifier = getCurrentTeamIdentifier(store.getState())
-      if (currentIdentifier) {
-        navigate(getExploreTipisPath(currentIdentifier), {
+      }).unwrap()
+      const teamItems = getTeamItems(store.getState()) ?? []
+      const newTeamItems = teamItems.filter((team) => team.id !== teamInfo.id)
+      if (Array.isArray(newTeamItems) && newTeamItems.length > 0) {
+        setLocalTeamIdentifier(newTeamItems[0].identifier)
+        dispatch(teamActions.updateCurrentIdReducer(newTeamItems[0].id))
+        navigate(getChatPath(newTeamItems[0].identifier), {
           replace: true,
         })
       } else {
