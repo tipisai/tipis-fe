@@ -20,7 +20,10 @@ import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { fetchUploadBase64 } from "@/utils/file"
 import { updateUiHistoryData } from "@/utils/localForage/teamData"
 import { track } from "@/utils/mixpanelHelper"
-import { useUpdateRecentTabReducer } from "@/utils/recentTabs/hook"
+import {
+  useCreateTipiToEditTipi,
+  useUpdateRecentTabReducer,
+} from "@/utils/recentTabs/hook"
 import { IAgentForm } from "./interface"
 
 export const agentData2JSONReport = (agent: IAgentForm) => {
@@ -53,6 +56,7 @@ export const useSubmitSaveAgent = () => {
   const [getAgentIconUploadAddress] = useGetAgentIconUploadAddressMutation()
   const [putAgentDetail] = usePutAgentDetailMutation()
   const [createAgent] = useCreateAgentMutation()
+  const changeCreateToEdit = useCreateTipiToEditTipi()
 
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const currentUserInfo = useSelector(getCurrentUser)
@@ -110,6 +114,7 @@ export const useSubmitSaveAgent = () => {
               ),
             },
           }).unwrap()
+          changeCreateToEdit(currentData.cacheID, serverAgent.aiAgentID)
           sendTagEvent("create_agent", currentUserInfo.userID)
           agentInfo = serverAgent
         } else {
@@ -163,6 +168,7 @@ export const useSubmitSaveAgent = () => {
       }
     },
     [
+      changeCreateToEdit,
       createAgent,
       currentTeamInfo.id,
       currentUserInfo.userID,

@@ -16,20 +16,22 @@ const HeaderTools: FC = () => {
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const { control } = useFormContext<Agent>()
 
-  const [publishedToMarketplace] = useWatch({
+  const [publishedToMarketplace, aiAgentID] = useWatch({
     control: control,
-    name: ["publishedToMarketplace"],
+    name: ["publishedToMarketplace", "aiAgentID"],
   })
+
   const showShareDialog = showShareAgentModalOnlyForShare(currentTeamInfo)
   const showContributeDialog = showShareAgentModal(
     currentTeamInfo,
     currentTeamInfo.myRole,
     publishedToMarketplace,
   )
+
   return (
     <div css={headerToolsContainerStyle}>
-      {showShareDialog && <ShareButton />}
-      {showContributeDialog && <ContributeButton />}
+      {!!aiAgentID && showShareDialog && <ShareButton />}
+      {!!aiAgentID && showContributeDialog && <ContributeButton />}
       <SaveButton />
     </div>
   )

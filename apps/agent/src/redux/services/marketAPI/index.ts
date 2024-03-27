@@ -5,7 +5,7 @@ import {
 } from "@illa-public/illa-net"
 import { MarketAgentListData } from "@illa-public/market-agent"
 import { MarketAIAgent } from "@illa-public/public-types"
-import { getAuthToken } from "@illa-public/utils"
+import { prepareHeaders } from "@illa-public/user-data"
 import { ProductListParams } from "./interface"
 
 HTTP_REQUEST_PUBLIC_BASE_URL
@@ -14,13 +14,7 @@ export const marketAPI = createApi({
   reducerPath: "marketAPI",
   baseQuery: fetchBaseQuery({
     baseUrl: `${HTTP_REQUEST_PUBLIC_BASE_URL}${MARKETPLACE_AUTH_PRODUCT_REQUEST_PREFIX}`,
-    prepareHeaders: (headers) => {
-      const token = getAuthToken()
-      if (token) {
-        headers.set("Authorization", token)
-      }
-      return headers
-    },
+    prepareHeaders: prepareHeaders,
   }),
   tagTypes: ["MarketProducts"],
   endpoints: (builder) => ({
