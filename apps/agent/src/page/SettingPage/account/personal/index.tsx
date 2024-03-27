@@ -1,5 +1,6 @@
 import { App } from "antd"
 import { FC, useEffect, useState } from "react"
+import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
@@ -72,29 +73,34 @@ export const PersonalSetting: FC = () => {
   }
 
   return (
-    <MixpanelTrackProvider
-      basicTrack={track}
-      pageName={ILLA_MIXPANEL_CLOUD_PAGE_NAME.ACCOUNT_SETTING}
-    >
-      <FormProvider {...accountFormMethods}>
-        <LayoutAutoChange
-          desktopPage={
-            <PCAccountSetting
-              loading={accountLoading}
-              onSubmit={onAccountSubmit}
-              handleUpdateAvatar={handleUpdateAvatar}
-            />
-          }
-          mobilePage={
-            <MobileAccountSetting
-              loading={accountLoading}
-              onSubmit={onAccountSubmit}
-              handleUpdateAvatar={handleUpdateAvatar}
-            />
-          }
-        />
-      </FormProvider>
-    </MixpanelTrackProvider>
+    <>
+      <Helmet>
+        <title>{t("profile.setting.personal_info")}</title>
+      </Helmet>
+      <MixpanelTrackProvider
+        basicTrack={track}
+        pageName={ILLA_MIXPANEL_CLOUD_PAGE_NAME.ACCOUNT_SETTING}
+      >
+        <FormProvider {...accountFormMethods}>
+          <LayoutAutoChange
+            desktopPage={
+              <PCAccountSetting
+                loading={accountLoading}
+                onSubmit={onAccountSubmit}
+                handleUpdateAvatar={handleUpdateAvatar}
+              />
+            }
+            mobilePage={
+              <MobileAccountSetting
+                loading={accountLoading}
+                onSubmit={onAccountSubmit}
+                handleUpdateAvatar={handleUpdateAvatar}
+              />
+            }
+          />
+        </FormProvider>
+      </MixpanelTrackProvider>
+    </>
   )
 }
 

@@ -1,5 +1,5 @@
 import { FC, useCallback, useContext, useEffect, useMemo, useRef } from "react"
-import { useFormContext, useFormState, useWatch } from "react-hook-form"
+import { useFormContext, useFormState } from "react-hook-form"
 import {
   ILLA_MIXPANEL_BUILDER_PAGE_NAME,
   ILLA_MIXPANEL_EVENT_TYPE,
@@ -22,11 +22,6 @@ export const AIAgentRunPC: FC = () => {
 
   const { isDirty } = useFormState({
     control,
-  })
-
-  const [model] = useWatch({
-    control,
-    name: ["model"],
   })
 
   const {
@@ -122,7 +117,6 @@ export const AIAgentRunPC: FC = () => {
         <PreviewChat
           isMobile={false}
           editState="RUN"
-          model={model}
           blockInput={!isRunning || isDirty}
           wsContextValue={wsContext}
           onSendMessage={onSendMessage}

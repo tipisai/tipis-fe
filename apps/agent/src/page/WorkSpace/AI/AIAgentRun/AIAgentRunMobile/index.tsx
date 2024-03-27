@@ -24,9 +24,9 @@ export const AIAgentRunMobile: FC = () => {
     control,
   })
 
-  const [agentType, model, aiAgentID] = useWatch({
+  const [agentType, aiAgentID] = useWatch({
     control,
-    name: ["agentType", "model", "aiAgentID"],
+    name: ["agentType", "aiAgentID"],
   })
 
   const {
@@ -105,7 +105,6 @@ export const AIAgentRunMobile: FC = () => {
           <PreviewChat
             editState="RUN"
             isMobile
-            model={model}
             blockInput={!isRunning || isDirty}
             onSendMessage={onSendMessage}
             wsContextValue={wsContext}

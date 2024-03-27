@@ -2,8 +2,8 @@ import { useContext } from "react"
 import { useTranslation } from "react-i18next"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { GoToPortal } from "@/page/SettingPage/components/GoToPortal"
+import CreditCard from "@/page/SettingPage/team/billing/components/CreditCard"
 import { CreditUsage } from "@/page/SettingPage/team/billing/components/CreditUsage"
-import { LicenseCard } from "@/page/SettingPage/team/billing/components/LicenseCard"
 import { Price } from "@/page/SettingPage/team/billing/components/Price"
 import { BillingContext } from "@/page/SettingPage/team/billing/context"
 import {
@@ -29,7 +29,7 @@ export const BillingMobilePage = () => {
           </div>
           <div css={billingMainContentStyle}>
             <div css={contentContainerStyle}>
-              <LicenseCard />
+              <CreditCard />
               <Price />
               <CreditUsage />
             </div>

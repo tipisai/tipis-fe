@@ -1,23 +1,10 @@
 import { v4 } from "uuid"
 import { IKnowledgeFile } from "@illa-public/public-types"
-import {
-  FILE_ITEM_DETAIL_STATUS_IN_UI,
-  IUploadParams,
-  UploadFileStore,
-} from "."
-
-export const getPathForSignedUrl = (path: string) => {
-  if (path === "root") {
-    return ""
-  } else {
-    return path.replace("root/", "")
-  }
-}
+import { FILE_ITEM_DETAIL_STATUS_IN_UI, UploadFileStore } from "."
 
 export const multipleFileHandler = (
   files: File[],
   currentFiles: Omit<IKnowledgeFile, "value">[],
-  uploadParams: Omit<IUploadParams, "fileData">,
   fileStore: UploadFileStore,
 ) => {
   const res = files.map((file) => {
@@ -33,17 +20,12 @@ export const multipleFileHandler = (
         : file.name
 
     fileStore.addFileDetailInfo({
-      loaded: 0,
-      total: 0,
       status: FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING,
       fileName: fileName,
       contentType: file.type,
       queryID,
       abortController,
-      uploadParams: {
-        ...uploadParams,
-        fileData: file,
-      },
+      needUploadFile: file,
     })
     return {
       fileName,

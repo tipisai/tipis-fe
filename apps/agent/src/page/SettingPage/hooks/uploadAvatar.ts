@@ -21,7 +21,7 @@ export const useUploadAvatar = () => {
     return new Promise<string>(async (resolve, reject) => {
       try {
         const type = file.type.split("/")[1]
-        const { data } = await await triggerGetUserAvatarUploadAddress({
+        const { data } = await triggerGetUserAvatarUploadAddress({
           fileName,
           type,
         })

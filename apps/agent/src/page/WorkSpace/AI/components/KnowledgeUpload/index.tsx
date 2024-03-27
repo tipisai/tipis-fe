@@ -3,6 +3,7 @@ import { App, Button, Progress } from "antd"
 import { ChangeEvent, FC, useMemo, useRef, useSyncExternalStore } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
+import { useRaf } from "react-use"
 import { getColor } from "@illa-public/color-scheme"
 import { getFileIconByContentType } from "@illa-public/icon"
 import { DeleteIcon, SuccessIcon, UploadIcon } from "@illa-public/icon"
@@ -11,11 +12,10 @@ import { GCS_OBJECT_TYPE, IKnowledgeFile } from "@illa-public/public-types"
 import { getCurrentId } from "@illa-public/user-data"
 import {
   ACCEPT,
-  KNOWLEDGE_UPLOAD_PATH,
   MAX_FILE_SIZE,
   MAX_MESSAGE_FILES_LENGTH,
 } from "@/config/constants/knowledge"
-import { useDeleteFileMutation } from "@/redux/services/driveAPI"
+import { useDeleteKnowledgeFileMutation } from "@/redux/services/driveAPI"
 import {
   FILE_ITEM_DETAIL_STATUS_IN_UI,
   IFileDetailInfo,
@@ -23,6 +23,7 @@ import {
   useUploadFileToDrive,
 } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
+import { IKnowledgeUploadProps, IStatusIconProps } from "./interface"
 import {
   containerStyle,
   fileItemStyle,
@@ -36,28 +37,18 @@ import {
 
 const editPanelUpdateFileDetailStore = new UploadFileStore()
 
-interface KnowledgeUploadProps {
-  addFile: (file: IKnowledgeFile, isUpdate?: boolean) => void
-  removeFile: (name: string) => void
-  values: IKnowledgeFile[]
-}
-
-const getIconByStatus = (
-  status: FILE_ITEM_DETAIL_STATUS_IN_UI,
-  total?: number,
-  loaded?: number,
-  onClickRetry?: () => void,
-) => {
+const StatusIcon: FC<IStatusIconProps> = ({ status, onClickRetry }) => {
+  const loadedNum = useRaf(3000, 0)
   switch (status) {
     case FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING:
+      return <Progress type="circle" size={16} percent={0} />
     case FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING:
-      const percent = (loaded! / total!) * 100
       return (
         <Progress
           type="circle"
           size={16}
           strokeLinecap="square"
-          percent={percent > 90 ? 90 : parseFloat(percent.toFixed(2))}
+          percent={parseFloat((loadedNum * 85).toFixed(2))}
         />
       )
 
@@ -92,15 +83,13 @@ const mergeUploadValues = (
     return {
       ...item,
       status: FILE_ITEM_DETAIL_STATUS_IN_UI.SUCCESS,
-      loaded: 0,
-      total: 0,
       queryID: item.value,
     }
   })
   return [...mergeValues, ...uploadFiles]
 }
 
-const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
+const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
   values = [],
   removeFile,
   addFile,
@@ -108,8 +97,8 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
   const inputRef = useRef<HTMLInputElement>(null)
   const { t } = useTranslation()
   const { message: messageAPI, modal } = App.useApp()
-  const { uploadFileToDrive } = useUploadFileToDrive()
-  const [deleteFile] = useDeleteFileMutation()
+  const { uploadKnowledgeFile } = useUploadFileToDrive()
+  const [deleteKnowledgeFile] = useDeleteKnowledgeFileMutation()
   const teamID = useSelector(getCurrentId)!
 
   const uploadFiles = useSyncExternalStore(
@@ -133,15 +122,9 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
       return
     }
     const currentFiles = [...currentValue]
-    const uploadParams = {
-      folder: KNOWLEDGE_UPLOAD_PATH,
-      allowAnonymous: false,
-      replace: false,
-    }
     const formatFiles = multipleFileHandler(
       inputFiles,
       currentFiles,
-      uploadParams,
       editPanelUpdateFileDetailStore,
     )
     try {
@@ -154,19 +137,17 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
           })
           return
         }
-        let uploadRes
-        uploadRes = await uploadFileToDrive(
+        const fileID = await uploadKnowledgeFile(
           queryID,
           file,
-          uploadParams,
           abortController.signal,
           editPanelUpdateFileDetailStore,
         )
-        if (!!uploadRes) {
+        if (!!fileID) {
           const res = {
             fileName: fileName,
             contentType: file.type,
-            value: uploadRes.id,
+            value: fileID,
           }
           editPanelUpdateFileDetailStore.deleteFileDetailInfo(queryID)
           addFile(res)
@@ -194,7 +175,7 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
           removeFile(name)
           editPanelUpdateFileDetailStore.deleteFileDetailInfo(queryID)
           needDelFromDrive &&
-            deleteFile({
+            deleteKnowledgeFile({
               fileID: queryID,
               teamID,
             })
@@ -215,7 +196,7 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
 
   const handleClickRetry = (queryId: string) => {
     editPanelUpdateFileDetailStore.retryUpload(queryId, (...params) => {
-      uploadFileToDrive(...params, editPanelUpdateFileDetailStore)
+      uploadKnowledgeFile(...params, editPanelUpdateFileDetailStore)
     })
   }
 
@@ -252,12 +233,10 @@ const KnowledgeUpload: FC<KnowledgeUploadProps> = ({
                 <span css={fileNameStyle}>{fileInfo.fileName}</span>
               </div>
               <div css={opeationStyle}>
-                {getIconByStatus(
-                  fileInfo.status,
-                  fileInfo?.total,
-                  fileInfo?.loaded,
-                  () => handleClickRetry(fileInfo.queryID),
-                )}
+                <StatusIcon
+                  status={fileInfo.status}
+                  onClickRetry={() => handleClickRetry(fileInfo.queryID)}
+                />
                 <span
                   css={iconHotSpotStyle}
                   onClick={() =>

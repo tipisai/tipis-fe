@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react"
+import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
 import { PURCHASE_TYPE } from "@illa-public/upgrade-modal"
@@ -56,32 +57,37 @@ const SubscribedLanding: FC = () => {
   }, [searchParams])
 
   return (
-    <div css={containerStyle}>
-      <div css={subscribedContentStyle}>
-        <img src={SuccessBg} css={decorateStyle} />
-        <div css={headerStyle}>
-          <div css={titleStyle}>{t("billing.redirect_page.title")}</div>
-          <div css={descriptionStyle}>
-            {t("billing.redirect_page.desc1")}
-            {returnTo && (
-              <p>{t("billing.redirect_page.desc2", { time: counter })}</p>
-            )}
+    <>
+      <Helmet>
+        <title> {t("billing.redirect_page.title")}</title>
+      </Helmet>
+      <div css={containerStyle}>
+        <div css={subscribedContentStyle}>
+          <img src={SuccessBg} css={decorateStyle} />
+          <div css={headerStyle}>
+            <div css={titleStyle}>{t("billing.redirect_page.title")}</div>
+            <div css={descriptionStyle}>
+              {t("billing.redirect_page.desc1")}
+              {returnTo && (
+                <p>{t("billing.redirect_page.desc2", { time: counter })}</p>
+              )}
+            </div>
+          </div>
+          <div css={actionAreaStyle}>
+            <BlackButton
+              type="primary"
+              size="large"
+              onClick={() => {
+                window.location.href =
+                  returnTo ?? `${window.location.origin}/workspace`
+              }}
+            >
+              {t("billing.redirect_page.button")}
+            </BlackButton>
           </div>
         </div>
-        <div css={actionAreaStyle}>
-          <BlackButton
-            type="primary"
-            size="large"
-            onClick={() => {
-              window.location.href =
-                returnTo ?? `${window.location.origin}/workspace`
-            }}
-          >
-            {t("billing.redirect_page.button")}
-          </BlackButton>
-        </div>
       </div>
-    </div>
+    </>
   )
 }
 

@@ -1,5 +1,6 @@
 import { App } from "antd"
 import { FC, useEffect, useState } from "react"
+import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useParams, useSearchParams } from "react-router-dom"
@@ -91,31 +92,36 @@ const LoginPage: FC = () => {
   }, [])
 
   return (
-    <FormProvider {...formProps}>
-      <MixpanelTrackProvider
-        basicTrack={track}
-        pageName={ILLA_MIXPANEL_PUBLIC_PAGE_NAME.LOGIN}
-      >
-        <LayoutAutoChange
-          desktopPage={
-            <PCLogin
-              loading={isLoading}
-              errorMsg={errorMsg}
-              onSubmit={onSubmit}
-              lockedEmail={email ?? searchParams.get("email") ?? ""}
-            />
-          }
-          mobilePage={
-            <MobileLogin
-              loading={isLoading}
-              errorMsg={errorMsg}
-              onSubmit={onSubmit}
-              lockedEmail={email ?? searchParams.get("email") ?? ""}
-            />
-          }
-        />
-      </MixpanelTrackProvider>
-    </FormProvider>
+    <>
+      <Helmet>
+        <title>{t("page.user.sign_in.title")}</title>
+      </Helmet>
+      <FormProvider {...formProps}>
+        <MixpanelTrackProvider
+          basicTrack={track}
+          pageName={ILLA_MIXPANEL_PUBLIC_PAGE_NAME.LOGIN}
+        >
+          <LayoutAutoChange
+            desktopPage={
+              <PCLogin
+                loading={isLoading}
+                errorMsg={errorMsg}
+                onSubmit={onSubmit}
+                lockedEmail={email ?? searchParams.get("email") ?? ""}
+              />
+            }
+            mobilePage={
+              <MobileLogin
+                loading={isLoading}
+                errorMsg={errorMsg}
+                onSubmit={onSubmit}
+                lockedEmail={email ?? searchParams.get("email") ?? ""}
+              />
+            }
+          />
+        </MixpanelTrackProvider>
+      </FormProvider>
+    </>
   )
 }
 

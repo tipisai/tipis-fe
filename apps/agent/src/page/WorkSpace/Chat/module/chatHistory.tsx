@@ -76,7 +76,6 @@ export const DefaultChat: FC<{ isMobile: boolean }> = ({
         <PreviewChat
           isMobile={isMobile}
           editState="RUN"
-          model={INIT_CHAT_CONFIG.model}
           blockInput={!isRunning}
           wsContextValue={wsContext}
           onSendMessage={onSendMessage}

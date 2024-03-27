@@ -18,5 +18,3 @@ export const ACCEPT = [
 
 export const MAX_MESSAGE_FILES_LENGTH = 10
 export const MAX_FILE_SIZE = 20971520 // 20MB
-export const KNOWLEDGE_UPLOAD_PATH = "knowledge"
-export const CHAT_UPLOAD_PATH = "chat"
