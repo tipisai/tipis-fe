@@ -8,18 +8,18 @@ import { globalStyle } from "./style"
 
 function App() {
   return (
-    <HelmetProvider>
-      <ConfigProvider theme={tipisThemConfig as ThemeConfig}>
-        <AntdContextProvider component={false}>
+    <ConfigProvider theme={tipisThemConfig as ThemeConfig}>
+      <AntdContextProvider component={false}>
+        <HelmetProvider>
           <Global styles={globalStyle} />
           <ILLARouterProvider />
           <div
             className="illaCodeMirrorWrapper"
             css={illaCodeMirrorTooltipStyle}
           />
-        </AntdContextProvider>
-      </ConfigProvider>
-    </HelmetProvider>
+        </HelmetProvider>
+      </AntdContextProvider>
+    </ConfigProvider>
   )
 }
 

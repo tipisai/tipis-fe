@@ -4,7 +4,10 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { MemberInfo, USER_ROLE } from "@illa-public/public-types"
 import { RoleSelector } from "@illa-public/role-selector"
-import { getCurrentTeamInfo } from "@illa-public/user-data"
+import {
+  getCurrentTeamInfo,
+  useGetMemberListQuery,
+} from "@illa-public/user-data"
 import { MemberContext } from "../../../context"
 import { MoreAction } from "../MoreAction"
 import { NameSpace } from "../NameSpace"
@@ -12,8 +15,8 @@ import { tableListContainerStyle } from "./style"
 
 export const PCMemberList: FC = () => {
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
-  const { memberList } = useContext(MemberContext)
   const { teamMemberID, myRole, id: currentTeamID } = currentTeamInfo
+  const { data: memberList } = useGetMemberListQuery(currentTeamID)
   const { t } = useTranslation()
   const { handleChangeTeamMembersRole } = useContext(MemberContext)
 

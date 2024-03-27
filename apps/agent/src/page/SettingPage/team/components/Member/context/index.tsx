@@ -1,8 +1,7 @@
 import { createContext } from "react"
-import { MemberInfo, USER_ROLE } from "@illa-public/public-types"
+import { USER_ROLE } from "@illa-public/public-types"
 
 interface IMemberContext {
-  memberList: MemberInfo[]
   handleCopy: (inviteLink: string) => void
   handleClickInviteButton: () => void
   showInviteButton: boolean

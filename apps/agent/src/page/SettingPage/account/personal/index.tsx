@@ -31,7 +31,7 @@ export const PersonalSetting: FC = () => {
 
   const { message } = App.useApp()
   const accountFormMethods = useForm<AccountSettingFields>({
-    defaultValues: {
+    values: {
       nickname: userInfo.nickname,
     },
   })

@@ -109,7 +109,7 @@ export const useGetTabName = () => {
 }
 
 export const genTabNavigateLink = (
-  teamIdentifier: string,
+  teamIdentifier: string = "",
   tabType: TAB_TYPE,
   cacheID: string,
   tabID: string,

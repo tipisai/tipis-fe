@@ -39,7 +39,7 @@ const TeamInfo: FC = () => {
   const [changeTeamConfig] = useChangeTeamConfigMutation()
 
   const settingFormProps = useForm<TeamInfoFields>({
-    defaultValues: {
+    values: {
       name: teamInfo?.name,
       identifier: teamInfo?.identifier,
     },

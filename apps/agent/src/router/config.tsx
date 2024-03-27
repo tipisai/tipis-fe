@@ -8,6 +8,7 @@ import { MobileWorkspaceLayout } from "../Layout/Workspace/mobile"
 import PCWorkspaceLayout from "../Layout/Workspace/pc"
 import LoginAuth from "../components/Auth/LoginAuth"
 import TeamAndLoginCheck from "../components/Auth/TeamAndLoginCheck"
+import RootPage from "../page/RootPage"
 import UserLayout from "../page/User/Layout/index"
 import { buildRouter } from "./buildRouter"
 import { RoutesObjectPro } from "./interface"
@@ -64,6 +65,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   {
     index: true,
     loader: rootLoader,
+    element: <RootPage />,
   },
   {
     path: "/user",

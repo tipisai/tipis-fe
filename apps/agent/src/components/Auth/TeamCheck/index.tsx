@@ -4,17 +4,13 @@ import { ILLAMixpanel } from "@illa-public/mixpanel-utils"
 import { useGetTeamsInfoAndCurrentIDQuery } from "@illa-public/user-data"
 import { getILLACloudURL } from "@illa-public/utils"
 import { BaseProtectComponentProps } from "@/router/interface"
-import { getLocalTeamIdentifier, setLocalTeamIdentifier } from "@/utils/auth"
 import { EMPTY_TEAM_PATH } from "@/utils/routeHelper"
 
 const TeamCheck: FC<BaseProtectComponentProps> = (props) => {
   const { teamIdentifier } = useParams()
   const [searchParams] = useSearchParams()
   const myTeamIdentifier = searchParams.get("myTeamIdentifier")
-  const localTeamIdentifier = getLocalTeamIdentifier() as string | undefined
-  const mixedTeamIdentifier =
-    myTeamIdentifier || teamIdentifier || localTeamIdentifier
-
+  const mixedTeamIdentifier = myTeamIdentifier || teamIdentifier
   const { data, isSuccess, error } = useGetTeamsInfoAndCurrentIDQuery(
     mixedTeamIdentifier,
     {
@@ -39,17 +35,12 @@ const TeamCheck: FC<BaseProtectComponentProps> = (props) => {
     if (!Array.isArray(data.teams) || data.teams.length === 0) {
       return <Navigate to={EMPTY_TEAM_PATH} />
     }
-    if (!teamIdentifier) {
-      return <Navigate to={`${data.teams[0].identifier}`} />
-    }
 
-    if (!data.currentTeamID) {
-      return <Navigate to="/403" />
+    if (!data.currentTeamID || !teamIdentifier) {
+      return <Navigate to="/404" />
     }
 
     const currentTeam = data.currentTeamInfo!
-
-    setLocalTeamIdentifier(currentTeam.identifier)
 
     ILLAMixpanel.setGroup(currentTeam.identifier)
     if (

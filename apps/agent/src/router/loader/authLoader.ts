@@ -1,35 +1,52 @@
 import { ILLAMixpanel } from "@illa-public/mixpanel-utils"
-import { authAPI } from "@illa-public/user-data"
+import { teamAPI, userAPI } from "@illa-public/user-data"
 import { getAuthToken, sendConfigEvent } from "@illa-public/utils"
 import store from "@/redux/store"
+import { findRecentTeamInfo } from "../../utils/team"
 
 export const getUserInfoLoader = async () => {
-  const { data: userInfo } = authAPI.endpoints.getUserInfo.select()(
-    store.getState(),
-  )
-  if (!userInfo) {
-    const token = getAuthToken()
-    if (!token) {
+  const token = getAuthToken()
+  if (!token) {
+    ILLAMixpanel.reset()
+    return false
+  } else {
+    try {
+      const promise = store.dispatch(userAPI.endpoints.getUserInfo.initiate())
+      const currentUserInfo = await promise.unwrap()
+      sendConfigEvent(currentUserInfo.userID)
+      ILLAMixpanel.setUserID(currentUserInfo.userID)
+      const reportedUserInfo: Record<string, any> = {}
+      Object.entries(currentUserInfo).forEach(([key, value]) => {
+        reportedUserInfo[`illa_${key}`] = value
+      })
+      ILLAMixpanel.setUserProperties(reportedUserInfo)
+
+      return true
+    } catch {
       ILLAMixpanel.reset()
       return false
-    } else {
-      try {
-        const promise = store.dispatch(authAPI.endpoints.getUserInfo.initiate())
-        const currentUserInfo = await promise.unwrap()
-        sendConfigEvent(currentUserInfo?.userID)
-        ILLAMixpanel.setUserID(currentUserInfo.userID)
-        const reportedUserInfo: Record<string, any> = {}
-        Object.entries(currentUserInfo).forEach(([key, value]) => {
-          reportedUserInfo[`illa_${key}`] = value
-        })
-        ILLAMixpanel.setUserProperties(reportedUserInfo)
-
-        return true
-      } catch {
-        ILLAMixpanel.reset()
-        return false
-      }
     }
   }
-  return true
+}
+
+export const getRecentTeamsInfoLoader = async () => {
+  const token = getAuthToken()
+  if (!token) {
+    ILLAMixpanel.reset()
+    return undefined
+  } else {
+    try {
+      const promise = store.dispatch(
+        teamAPI.endpoints.getTeamsInfo.initiate(null),
+      )
+      const teamInfos = await promise.unwrap()
+      const recentTeamInfo = findRecentTeamInfo(teamInfos)
+      if (recentTeamInfo) {
+        return recentTeamInfo
+      }
+      return undefined
+    } catch {
+      return undefined
+    }
+  }
 }

@@ -5,13 +5,13 @@ import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom"
 import { MinusIcon } from "@illa-public/icon"
-import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 import { useRemoveRecentTabReducer } from "@/utils/recentTabs/hook"
 import { getChatPath } from "@/utils/routeHelper"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { ITipsTab } from "./interface"
 import {
   deleteButtonContainerStyle,
@@ -32,7 +32,7 @@ const shouldModelTipTabTypes = [
 const TipisTab: FC<ITipsTab> = (props) => {
   const { icon, tabName, tabType, tabID, cacheID, isMiniSize } = props
   const dispatch = useDispatch()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+  const currentTeamInfo = useGetCurrentTeamInfo()
   const { modal } = App.useApp()
   const allRecentTabs = useSelector(getRecentTabInfos)
   const navigate = useNavigate()
@@ -49,12 +49,12 @@ const TipisTab: FC<ITipsTab> = (props) => {
       deleteTab(tabID)
 
       if (newTabs.length === 1) {
-        navigate(getChatPath(currentTeamInfo.identifier))
+        navigate(getChatPath(currentTeamInfo?.identifier ?? ""))
         return
       }
       const latestTab = newTabs[0]
       const newPath = genTabNavigateLink(
-        currentTeamInfo.identifier,
+        currentTeamInfo?.identifier ?? "",
         latestTab.tabType,
         latestTab.cacheID,
         latestTab.tabID,
@@ -80,7 +80,7 @@ const TipisTab: FC<ITipsTab> = (props) => {
   return (
     <NavLink
       to={genTabNavigateLink(
-        currentTeamInfo.identifier,
+        currentTeamInfo?.identifier,
         tabType,
         cacheID,
         tabID,
