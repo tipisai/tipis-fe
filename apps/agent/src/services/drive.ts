@@ -1,10 +1,9 @@
 import axios from "axios"
 import { UPLOAD_FILE_STATUS } from "@illa-public/public-types"
 
-export const updateFilesToDrive = async (
+export const uploadFileToObjectStorage = async (
   url: string,
   uploadFile: File,
-  processCall?: (loaded: number) => void,
   abortSignal?: AbortSignal,
 ) => {
   try {
@@ -23,9 +22,6 @@ export const updateFilesToDrive = async (
         },
         withCredentials: false,
         signal: abortSignal,
-        onUploadProgress: (progressEvent) => {
-          if (processCall) processCall(progressEvent.loaded)
-        },
       })
       return Promise.resolve(UPLOAD_FILE_STATUS.COMPLETE)
     }

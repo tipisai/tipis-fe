@@ -1,5 +1,6 @@
 import { App } from "antd"
 import { FC, useEffect, useMemo, useState } from "react"
+import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
@@ -17,8 +18,8 @@ import {
   useChangeTeamConfigMutation,
 } from "@illa-public/user-data"
 import { isSmallThanTargetRole } from "@illa-public/user-role-utils"
-import MobileSetting from "@/page/SettingPage/team/info/components/TeamInfoMobile"
-import Setting from "@/page/SettingPage/team/info/components/TeamInfoPC"
+import TeamInfoMobile from "@/page/SettingPage/team/info/components/TeamInfoMobile"
+import TeamInfoPC from "@/page/SettingPage/team/info/components/TeamInfoPC"
 import {
   SettingContextType,
   TeamInfoFields,
@@ -101,31 +102,36 @@ const TeamInfo: FC = () => {
   }, [disableEdit])
 
   return (
-    <MixpanelTrackProvider
-      basicTrack={track}
-      pageName={ILLA_MIXPANEL_CLOUD_PAGE_NAME.TEAM_SETTING}
-    >
-      <FormProvider {...settingFormProps}>
-        <LayoutAutoChange
-          desktopPage={
-            <Setting
-              disabled={disableEdit}
-              loading={loading}
-              onSubmit={onSubmit}
-              teamInfo={teamInfo}
-              onClickLeaveTeam={onClickLeaveTeam}
-            />
-          }
-          mobilePage={
-            <MobileSetting
-              disabled={disableEdit}
-              loading={loading}
-              onSubmit={onSubmit}
-            />
-          }
-        />
-      </FormProvider>
-    </MixpanelTrackProvider>
+    <>
+      <Helmet>
+        <title>{t("team_setting.team_info.title")}</title>
+      </Helmet>
+      <MixpanelTrackProvider
+        basicTrack={track}
+        pageName={ILLA_MIXPANEL_CLOUD_PAGE_NAME.TEAM_SETTING}
+      >
+        <FormProvider {...settingFormProps}>
+          <LayoutAutoChange
+            desktopPage={
+              <TeamInfoPC
+                disabled={disableEdit}
+                loading={loading}
+                onSubmit={onSubmit}
+                teamInfo={teamInfo}
+                onClickLeaveTeam={onClickLeaveTeam}
+              />
+            }
+            mobilePage={
+              <TeamInfoMobile
+                disabled={disableEdit}
+                loading={loading}
+                onSubmit={onSubmit}
+              />
+            }
+          />
+        </FormProvider>
+      </MixpanelTrackProvider>
+    </>
   )
 }
 

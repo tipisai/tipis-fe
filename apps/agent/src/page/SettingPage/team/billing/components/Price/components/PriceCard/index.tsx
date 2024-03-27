@@ -4,7 +4,7 @@ import { useCreditDrawer } from "@illa-public/upgrade-modal"
 import CreditCardMobile from "./mobile"
 import CreditCardPC from "./pc"
 
-const CreditCard = () => {
+const PriceCard = () => {
   const creditDrawer = useCreditDrawer()
   const openCreditDrawer = (subCycle?: SUBSCRIPTION_CYCLE) => {
     creditDrawer("pricing", { subCycle })
@@ -17,4 +17,4 @@ const CreditCard = () => {
   )
 }
 
-export default CreditCard
+export default PriceCard

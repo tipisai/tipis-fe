@@ -1,4 +1,6 @@
 import { FC, useCallback, useState } from "react"
+import { Helmet } from "react-helmet-async"
+import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { Navigate } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
@@ -21,6 +23,7 @@ const Billing: FC = () => {
   const { data, isError, isLoading, refetch } = useGetTeamSubscriptionQuery(
     teamInfo.id,
   )
+  const { t } = useTranslation()
 
   const [triggerGetTeamsInfo] = useLazyGetTeamsInfoQuery()
   const creditInfo = data?.credit?.current
@@ -54,21 +57,26 @@ const Billing: FC = () => {
   if (isError) return <Navigate to="/500" />
   if (isLoading) return <FullSectionLoading />
   return creditInfo ? (
-    <BillingContext.Provider
-      value={{
-        creditInfo,
-        isExpiredCredit,
-        isUnSubscribeCredit,
-        isCancelSubscribedCredit,
-        loading,
-        openCreditDrawer,
-      }}
-    >
-      <LayoutAutoChange
-        desktopPage={<BillingPCPage />}
-        mobilePage={<BillingMobilePage />}
-      />
-    </BillingContext.Provider>
+    <>
+      <Helmet>
+        <title>{t("billing.title.billing")}</title>
+      </Helmet>
+      <BillingContext.Provider
+        value={{
+          creditInfo,
+          isExpiredCredit,
+          isUnSubscribeCredit,
+          isCancelSubscribedCredit,
+          loading,
+          openCreditDrawer,
+        }}
+      >
+        <LayoutAutoChange
+          desktopPage={<BillingPCPage />}
+          mobilePage={<BillingMobilePage />}
+        />
+      </BillingContext.Provider>
+    </>
   ) : null
 }
 

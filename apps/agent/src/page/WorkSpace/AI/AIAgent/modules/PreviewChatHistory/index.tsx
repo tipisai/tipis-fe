@@ -109,7 +109,6 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
         >
           <PreviewChat
             isMobile={!!props.isMobile}
-            model={getValues("model")}
             editState="EDIT"
             blockInput={!isRunning || blockInputDirty}
             onSendMessage={onSendMessage}

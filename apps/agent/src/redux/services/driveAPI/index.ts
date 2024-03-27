@@ -1,22 +1,17 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import { stringify } from "qs"
 import {
-  DRIVE_REQUEST_PREFIX,
   HTTP_REQUEST_PUBLIC_BASE_URL,
+  OBJECT_STORAGE_REQUEST_PREFIX,
 } from "@illa-public/illa-net"
 import { UPLOAD_FILE_STATUS } from "@illa-public/public-types"
 import { getAuthToken } from "@illa-public/utils"
-import {
-  IGetFileListRequestData,
-  IGetFileListResponseData,
-  IGetUploadFileURLRequest,
-  IGetUploadFileURLResponse,
-} from "./interface"
+
+const FOLDER_ID = "ILAfx4p1C7dZ"
 
 export const driveAPI = createApi({
   reducerPath: "driveAPI",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${HTTP_REQUEST_PUBLIC_BASE_URL}${DRIVE_REQUEST_PREFIX}`,
+    baseUrl: `${HTTP_REQUEST_PUBLIC_BASE_URL}${OBJECT_STORAGE_REQUEST_PREFIX}`,
     prepareHeaders: (headers) => {
       const token = getAuthToken()
       if (token) {
@@ -26,41 +21,62 @@ export const driveAPI = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getFileList: builder.query<
-      IGetFileListResponseData,
+    getChatUploadAddress: builder.query<
       {
-        req: IGetFileListRequestData
+        uploadAddress: string
+        fileID: string
+      },
+      {
+        name: string
+        contentType: string
         teamID: string
+        size: number
       }
     >({
-      query: ({ req, teamID }) => {
-        const qs = stringify(req)
+      query: ({ contentType, name, teamID, size }) => {
         return {
-          url: `/teams/${teamID}/files?${qs}`,
-          method: "GET",
+          url: `/teams/${teamID}/temporaryFiles`,
+          method: "POST",
+          body: {
+            name,
+            folderID: FOLDER_ID,
+            type: "file",
+            contentType,
+            size,
+          },
         }
       },
     }),
 
-    getUploadURL: builder.query<
-      IGetUploadFileURLResponse,
+    getKnowledgeUploadAddress: builder.query<
       {
-        req: IGetUploadFileURLRequest
+        uploadAddress: string
+        fileID: string
+      },
+      {
+        name: string
+        contentType: string
         teamID: string
+        size: number
       }
     >({
-      query: ({ req, teamID }) => ({
-        url: `/teams/${teamID}/files`,
-        method: "POST",
-        body: {
-          ...req,
-          resumable: true,
-        },
-      }),
+      query: ({ contentType, name, teamID, size }) => {
+        return {
+          url: `/teams/${teamID}/files`,
+          method: "POST",
+          body: {
+            name,
+            folderID: FOLDER_ID,
+            type: "file",
+            contentType,
+            size,
+          },
+        }
+      },
     }),
 
-    putUploadStatus: builder.mutation<
-      IGetUploadFileURLResponse,
+    putChatFileUploadStatus: builder.mutation<
+      {},
       {
         fileID: string
         status: UPLOAD_FILE_STATUS
@@ -68,7 +84,7 @@ export const driveAPI = createApi({
       }
     >({
       query: ({ fileID, status, teamID }) => ({
-        url: `/teams/${teamID}/files/${fileID}/status`,
+        url: `/teams/${teamID}/temporaryFiles/${fileID}`,
         method: "PUT",
         body: {
           status,
@@ -76,7 +92,24 @@ export const driveAPI = createApi({
       }),
     }),
 
-    deleteFile: builder.mutation<
+    putKnowledgeFileUploadStatus: builder.mutation<
+      {},
+      {
+        fileID: string
+        status: UPLOAD_FILE_STATUS
+        teamID: string
+      }
+    >({
+      query: ({ fileID, status, teamID }) => ({
+        url: `/teams/${teamID}/files/${fileID}`,
+        method: "PUT",
+        body: {
+          status,
+        },
+      }),
+    }),
+
+    deleteKnowledgeFile: builder.mutation<
       undefined,
       {
         fileID: string
@@ -88,14 +121,13 @@ export const driveAPI = createApi({
         method: "DELETE",
       }),
     }),
-
-    // ---
   }),
 })
 
 export const {
-  useLazyGetFileListQuery,
-  useLazyGetUploadURLQuery,
-  usePutUploadStatusMutation,
-  useDeleteFileMutation,
+  useLazyGetChatUploadAddressQuery,
+  useLazyGetKnowledgeUploadAddressQuery,
+  usePutChatFileUploadStatusMutation,
+  usePutKnowledgeFileUploadStatusMutation,
+  useDeleteKnowledgeFileMutation,
 } = driveAPI

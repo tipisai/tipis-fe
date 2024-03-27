@@ -1,4 +1,6 @@
 import { FC } from "react"
+import { Helmet } from "react-helmet-async"
+import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import {
   ILLA_MIXPANEL_CLOUD_PAGE_NAME,
@@ -11,14 +13,20 @@ import FirstSetPassword from "./components/FirstSetPassword"
 
 const PasswordSettingPage: FC = () => {
   const userInfo = useSelector(getCurrentUser)
+  const { t } = useTranslation()
 
   return (
-    <MixpanelTrackProvider
-      basicTrack={track}
-      pageName={ILLA_MIXPANEL_CLOUD_PAGE_NAME.PASSWORD_SETTING}
-    >
-      {userInfo.isPasswordSet ? <ChangePassword /> : <FirstSetPassword />}
-    </MixpanelTrackProvider>
+    <>
+      <Helmet>
+        <title>{t("profile.setting.password.title")}</title>
+      </Helmet>
+      <MixpanelTrackProvider
+        basicTrack={track}
+        pageName={ILLA_MIXPANEL_CLOUD_PAGE_NAME.PASSWORD_SETTING}
+      >
+        {userInfo.isPasswordSet ? <ChangePassword /> : <FirstSetPassword />}
+      </MixpanelTrackProvider>
+    </>
   )
 }
 

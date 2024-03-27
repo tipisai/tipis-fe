@@ -1,5 +1,6 @@
 import Icon from "@ant-design/icons"
 import { FC, useEffect, useMemo } from "react"
+import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useOutletContext } from "react-router-dom"
@@ -141,6 +142,9 @@ const Entrance: FC = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{t("profile.setting.title")}</title>
+      </Helmet>
       <div css={landingTitleStyle}>{t("profile.setting.title")}</div>
       <div css={landingMenuTitleStyle}>
         <Icon component={ProfileIcon} />

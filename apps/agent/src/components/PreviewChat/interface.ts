@@ -81,7 +81,6 @@ export interface ChatSendRequestPayload {
 }
 
 export interface PreviewChatProps {
-  model: AI_AGENT_MODEL
   editState: EDIT_STATE
   blockInput: boolean
   isMobile: boolean
