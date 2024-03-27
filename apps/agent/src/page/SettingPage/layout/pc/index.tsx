@@ -11,7 +11,7 @@ import TeamIcon from "@/assets/setting/team.svg?react"
 import TeamSelect from "@/components/TeamSelect"
 import Menu from "@/page/SettingPage/components//Menu"
 import { GoToPortal } from "@/page/SettingPage/components/GoToPortal"
-import { getTeamInfoSetting } from "@/utils/routeHelper"
+import { getChatPath, getTeamInfoSetting } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import { SettingLayoutProps } from "../interface"
 import {
@@ -106,7 +106,7 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
             component={PreviousIcon}
             css={backIconStyle}
             onClick={() => {
-              navigate("/workspace")
+              navigate(getChatPath(currentTeamInfo?.identifier ?? ""))
             }}
           />
           {t("profile.setting.title")}
