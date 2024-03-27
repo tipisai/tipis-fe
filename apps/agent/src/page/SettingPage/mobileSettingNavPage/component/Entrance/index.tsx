@@ -2,18 +2,13 @@ import Icon from "@ant-design/icons"
 import { FC, useEffect, useMemo } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { useOutletContext } from "react-router-dom"
 import {
   ILLA_MIXPANEL_CLOUD_PAGE_NAME,
   ILLA_MIXPANEL_EVENT_TYPE,
 } from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
-import {
-  getCurrentTeamInfo,
-  getPlanUtils,
-  getTeamItems,
-} from "@illa-public/user-data"
+import { getPlanUtils, useGetTeamsInfoQuery } from "@illa-public/user-data"
 import { canAccessMember, canManagePayment } from "@illa-public/user-role-utils"
 import ProfileIcon from "@/assets/setting/profile.svg?react"
 import TeamIcon from "@/assets/setting/team.svg?react"
@@ -21,6 +16,7 @@ import TeamSelect from "@/components/TeamSelect"
 import { useLogout } from "@/page/SettingPage/hooks/useLogout"
 import { SettingContextType } from "@/page/SettingPage/team/interface"
 import { track } from "@/utils/mixpanelHelper"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import SettingMenu from "../Menu"
 import {
   landingMenuItemsStyle,
@@ -31,8 +27,8 @@ import {
 
 const Entrance: FC = () => {
   const { t } = useTranslation()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
-  const teams = useSelector(getTeamItems)
+  const { data: teams } = useGetTeamsInfoQuery(null)
+  const currentTeamInfo = useGetCurrentTeamInfo()
   const logout = useLogout()
 
   const isOwner = currentTeamInfo?.myRole === USER_ROLE.OWNER
