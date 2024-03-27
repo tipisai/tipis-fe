@@ -69,11 +69,10 @@ export class UploadFileStore {
     const uploadInfo = this.fileDetailInfos.find(
       (item) => item.queryID === queryID,
     )
-    if (uploadInfo && uploadInfo.uploadParams) {
+    if (uploadInfo && uploadInfo.needUploadFile) {
       uploadFileToDrive(
         queryID,
-        uploadInfo.uploadParams.fileData,
-        uploadInfo.uploadParams,
+        uploadInfo.needUploadFile,
         uploadInfo.abortController?.signal!,
       )
       this.listeners.forEach((listener) => listener())

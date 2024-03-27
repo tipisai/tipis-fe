@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react"
+import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
@@ -20,7 +21,7 @@ const LanguageSetting: FC = () => {
   const language = useSelector(getCurrentTranslateLanguage) || defaultLanguage
   const [currentLanguage, setCurrentLanguage] = useState(language)
   const [languageLoading, setLanguageLoading] = useState(false)
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
 
   const [updateUserLanguage] = useUpdateUserLanguageMutation()
 
@@ -45,31 +46,36 @@ const LanguageSetting: FC = () => {
     }
   }
   return (
-    <MixpanelTrackProvider
-      basicTrack={track}
-      pageName={ILLA_MIXPANEL_CLOUD_PAGE_NAME.LANGUAGE_SETTING}
-    >
-      <LayoutAutoChange
-        desktopPage={
-          <PCLanguageSetting
-            loading={languageLoading}
-            language={language}
-            currentLanguage={currentLanguage}
-            onChangeLanguage={setCurrentLanguage}
-            onSubmit={onSaveLanguageChange}
-          />
-        }
-        mobilePage={
-          <MobileLanguageSetting
-            loading={languageLoading}
-            language={language}
-            currentLanguage={currentLanguage}
-            onChangeLanguage={setCurrentLanguage}
-            onSubmit={onSaveLanguageChange}
-          />
-        }
-      />
-    </MixpanelTrackProvider>
+    <>
+      <Helmet>
+        <title>{t("profile.setting.language")}</title>
+      </Helmet>
+      <MixpanelTrackProvider
+        basicTrack={track}
+        pageName={ILLA_MIXPANEL_CLOUD_PAGE_NAME.LANGUAGE_SETTING}
+      >
+        <LayoutAutoChange
+          desktopPage={
+            <PCLanguageSetting
+              loading={languageLoading}
+              language={language}
+              currentLanguage={currentLanguage}
+              onChangeLanguage={setCurrentLanguage}
+              onSubmit={onSaveLanguageChange}
+            />
+          }
+          mobilePage={
+            <MobileLanguageSetting
+              loading={languageLoading}
+              language={language}
+              currentLanguage={currentLanguage}
+              onChangeLanguage={setCurrentLanguage}
+              onSubmit={onSaveLanguageChange}
+            />
+          }
+        />
+      </MixpanelTrackProvider>
+    </>
   )
 }
 export default LanguageSetting

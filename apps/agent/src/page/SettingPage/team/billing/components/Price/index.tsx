@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { BillingContext } from "../../context"
-import CreditCard from "./components/WooCard"
+import PriceCard from "./components/PriceCard"
 import { infoTitleStyle, priceCardContainerStyle, priceStyle } from "./style"
 
 export const Price = () => {
@@ -15,7 +15,7 @@ export const Price = () => {
     <section css={priceStyle} id="pricing">
       <span css={infoTitleStyle}>{t("billing.title.pricing")}</span>
       <div css={priceCardContainerStyle}>
-        {(isUnSubscribeCredit || isExpiredCredit) && <CreditCard />}
+        {(isUnSubscribeCredit || isExpiredCredit) && <PriceCard />}
       </div>
     </section>
   )

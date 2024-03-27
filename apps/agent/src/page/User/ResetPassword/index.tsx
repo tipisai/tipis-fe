@@ -1,5 +1,6 @@
 import { App } from "antd"
 import { FC, useState } from "react"
+import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
@@ -125,37 +126,42 @@ export const ResetPasswordPage: FC = () => {
     } catch (e) {}
   }
   return (
-    <FormProvider {...formProps}>
-      <MixpanelTrackProvider
-        basicTrack={track}
-        pageName={ILLA_MIXPANEL_PUBLIC_PAGE_NAME.FORGET_PASSWORD}
-      >
-        <LayoutAutoChange
-          desktopPage={
-            <PCReset
-              loading={loading}
-              errorMsg={errorMsg}
-              onSubmit={onSubmit}
-              sendEmail={handleSendEmail}
-              lockedEmail={email ?? searchParams.get("email") ?? ""}
-              showCountDown={showCountDown}
-              onCountDownChange={setShowCountDown}
-            />
-          }
-          mobilePage={
-            <MobileReset
-              loading={loading}
-              errorMsg={errorMsg}
-              onSubmit={onSubmit}
-              sendEmail={handleSendEmail}
-              lockedEmail={email ?? searchParams.get("email") ?? ""}
-              showCountDown={showCountDown}
-              onCountDownChange={setShowCountDown}
-            />
-          }
-        />
-      </MixpanelTrackProvider>
-    </FormProvider>
+    <>
+      <Helmet>
+        <title>{t("page.user.forgot_password.title")}</title>
+      </Helmet>
+      <FormProvider {...formProps}>
+        <MixpanelTrackProvider
+          basicTrack={track}
+          pageName={ILLA_MIXPANEL_PUBLIC_PAGE_NAME.FORGET_PASSWORD}
+        >
+          <LayoutAutoChange
+            desktopPage={
+              <PCReset
+                loading={loading}
+                errorMsg={errorMsg}
+                onSubmit={onSubmit}
+                sendEmail={handleSendEmail}
+                lockedEmail={email ?? searchParams.get("email") ?? ""}
+                showCountDown={showCountDown}
+                onCountDownChange={setShowCountDown}
+              />
+            }
+            mobilePage={
+              <MobileReset
+                loading={loading}
+                errorMsg={errorMsg}
+                onSubmit={onSubmit}
+                sendEmail={handleSendEmail}
+                lockedEmail={email ?? searchParams.get("email") ?? ""}
+                showCountDown={showCountDown}
+                onCountDownChange={setShowCountDown}
+              />
+            }
+          />
+        </MixpanelTrackProvider>
+      </FormProvider>
+    </>
   )
 }
 

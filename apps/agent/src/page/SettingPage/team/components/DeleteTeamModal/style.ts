@@ -9,7 +9,6 @@ export const modalTitleStyle = css`
   font-weight: 600;
   font-size: 16px;
   justify-content: center;
-  border-bottom: 1px solid ${getColor("grayBlue", "08")};
   ${applyMobileStyle(css`
     padding: 24px 24px 16px 24px;
     font-weight: 500;
@@ -40,7 +39,6 @@ export const footerStyle = css`
   width: 100%;
   box-sizing: border-box;
   padding: 24px 24px;
-  border-top: 1px solid ${getColor("grayBlue", "08")};
   ${applyMobileStyle(css`
     border-top: none;
   `)}
