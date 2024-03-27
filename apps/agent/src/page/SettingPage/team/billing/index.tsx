@@ -22,16 +22,15 @@ const Billing: FC = () => {
     teamInfo.id,
   )
 
-  const creditInfo = data?.credit?.current
-
   const [triggerGetTeamsInfo] = useLazyGetTeamsInfoQuery()
+  const creditInfo = data?.credit?.current
 
   const fetchSubscriptionInfo = useCallback(async () => {
     if (!teamInfo?.id) return
     setLoading(true)
     try {
       refetch()
-      await triggerGetTeamsInfo({}).unwrap()
+      triggerGetTeamsInfo(null)
     } catch (error) {
     } finally {
       setLoading(false)
