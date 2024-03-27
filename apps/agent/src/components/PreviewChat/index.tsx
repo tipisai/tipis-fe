@@ -12,22 +12,19 @@ import {
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { v4 } from "uuid"
-import { isPremiumModel } from "@illa-public/market-agent"
 import { IKnowledgeFile } from "@illa-public/public-types"
-import { getCurrentId, getCurrentUser } from "@illa-public/user-data"
+import { getCurrentUser } from "@illa-public/user-data"
 import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { TextSignal } from "@/api/ws/textSignal"
 import AgentBlockInput from "@/assets/agent/agent-block-input.svg?react"
 import StopIcon from "@/assets/agent/stop.svg?react"
 import {
-  CHAT_UPLOAD_PATH,
   MAX_FILE_SIZE,
   MAX_MESSAGE_FILES_LENGTH,
 } from "@/config/constants/knowledge"
 import AIAgentMessage from "@/page/WorkSpace/AI/components/AIAgentMessage"
 import GroupAgentMessage from "@/page/WorkSpace/AI/components/GroupAgentMessage"
 import UserMessage from "@/page/WorkSpace/AI/components/UserMessage"
-import { useDeleteFileMutation } from "@/redux/services/driveAPI"
 import { isGroupMessage } from "@/utils/agent/typeHelper"
 import { UploadFileStore, useUploadFileToDrive } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
@@ -61,14 +58,8 @@ import {
 const chatUploadStore = new UploadFileStore()
 
 export const PreviewChat: FC<PreviewChatProps> = (props) => {
-  const {
-    isMobile,
-    blockInput,
-    editState,
-    model,
-    onSendMessage,
-    wsContextValue,
-  } = props
+  const { isMobile, blockInput, editState, onSendMessage, wsContextValue } =
+    props
 
   const {
     wsStatus,
@@ -90,7 +81,6 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   }, [sendMessage, setIsReceiving])
 
   const currentUserInfo = useSelector(getCurrentUser)
-  const teamID = useSelector(getCurrentId)!
   const { message: messageAPI } = App.useApp()
 
   const chatRef = useRef<HTMLDivElement>(null)
@@ -100,12 +90,10 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const [uploadKnowledgeLoading, setUploadKnowledgeLoading] = useState(false)
 
   const inputRef = useRef<HTMLInputElement>(null)
-  const canShowKnowledgeFiles = isPremiumModel(model) || true // TODO: WTF need update after billing
 
   const disableSend = isReceiving || blockInput || uploadKnowledgeLoading
 
-  const { uploadFileToDrive } = useUploadFileToDrive()
-  const [deleteFile] = useDeleteFileMutation()
+  const { uploadChatFile } = useUploadFileToDrive()
 
   const { t } = useTranslation()
 
@@ -146,23 +134,10 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     })
   }, [chatMessages, currentUserInfo.userID, isMobile, isReceiving])
 
-  const handleDeleteFile = (
-    fileName: string,
-    needDelFromDrive: boolean,
-    queryID?: string,
-  ) => {
+  const handleDeleteFile = (fileName: string, queryID?: string) => {
     const files = knowledgeFiles.filter((file) => file.fileName !== fileName)
     setKnowledgeFiles(files)
-    if (queryID) {
-      chatUploadStore.deleteFileDetailInfo(queryID)
-      try {
-        needDelFromDrive &&
-          deleteFile({
-            fileID: queryID,
-            teamID,
-          })
-      } catch (e) {}
-    }
+    queryID && chatUploadStore.deleteFileDetailInfo(queryID)
   }
 
   const handleClickUploadFile = () => {
@@ -187,15 +162,10 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     }
     setUploadKnowledgeLoading(true)
     const currentFiles = [...knowledgeFiles]
-    const uploadParams = {
-      folder: CHAT_UPLOAD_PATH,
-      allowAnonymous: false,
-      replace: false,
-    }
+
     const formatFiles = multipleFileHandler(
       inputFiles,
       currentFiles,
-      uploadParams,
       chatUploadStore,
     )
     currentFiles.push(
@@ -220,19 +190,18 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
           )
           return
         }
-        let uploadRes = await uploadFileToDrive(
+        const fileID = await uploadChatFile(
           item.queryID,
           file,
-          uploadParams,
           abortController.signal,
           chatUploadStore,
         )
 
-        if (!!uploadRes) {
+        if (!!fileID) {
           const res = {
             fileName: fileName,
             contentType: file.type,
-            value: uploadRes.id,
+            value: fileID,
           }
           setKnowledgeFiles((prev) => {
             const currentItems = [...prev]
@@ -373,24 +342,20 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
                   setTextAreaVal(v.target.value)
                 }}
               />
-              {canShowKnowledgeFiles && (
-                <UploadButton
-                  handleClick={handleClickUploadFile}
-                  handleFileChange={handleFileChange}
-                  ref={inputRef}
-                />
-              )}
+              <UploadButton
+                handleClick={handleClickUploadFile}
+                handleFileChange={handleFileChange}
+                ref={inputRef}
+              />
               <Button disabled={disableSend} onClick={sendAndClearMessage}>
                 {t("editor.ai-agent.button.send")}
               </Button>
             </div>
-            {canShowKnowledgeFiles && (
-              <UploadKnowledgeFiles
-                knowledgeFiles={knowledgeFiles}
-                handleDeleteFile={handleDeleteFile}
-                chatUploadStore={chatUploadStore}
-              />
-            )}
+            <UploadKnowledgeFiles
+              knowledgeFiles={knowledgeFiles}
+              handleDeleteFile={handleDeleteFile}
+              chatUploadStore={chatUploadStore}
+            />
           </div>
         ) : (
           <>
@@ -411,22 +376,18 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
                 setTextAreaVal(event.target.value)
               }}
             />
-            <div css={operationStyle(canShowKnowledgeFiles)}>
-              {canShowKnowledgeFiles && (
-                <UploadKnowledgeFiles
-                  knowledgeFiles={knowledgeFiles}
-                  handleDeleteFile={handleDeleteFile}
-                  chatUploadStore={chatUploadStore}
-                />
-              )}
+            <div css={operationStyle}>
+              <UploadKnowledgeFiles
+                knowledgeFiles={knowledgeFiles}
+                handleDeleteFile={handleDeleteFile}
+                chatUploadStore={chatUploadStore}
+              />
               <div css={sendButtonStyle}>
-                {canShowKnowledgeFiles && (
-                  <UploadButton
-                    handleClick={handleClickUploadFile}
-                    handleFileChange={handleFileChange}
-                    ref={inputRef}
-                  />
-                )}
+                <UploadButton
+                  handleClick={handleClickUploadFile}
+                  handleFileChange={handleFileChange}
+                  ref={inputRef}
+                />
                 <Button disabled={disableSend} onClick={sendAndClearMessage}>
                   {t("editor.ai-agent.button.send")}
                 </Button>

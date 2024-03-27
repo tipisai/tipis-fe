@@ -167,9 +167,9 @@ export const mobileInputStyle = css`
   align-items: center;
 `
 
-export const operationStyle = (showKnowledge: boolean) => css`
+export const operationStyle = css`
   display: flex;
-  justify-content: ${showKnowledge ? "space-between" : "flex-end"};
+  justify-content: space-between;
   align-items: flex-end;
   align-self: stretch;
 `
