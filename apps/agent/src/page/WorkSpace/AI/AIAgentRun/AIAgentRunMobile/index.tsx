@@ -1,10 +1,9 @@
 import { FC, useCallback, useContext, useEffect, useMemo } from "react"
-import { useFormContext, useFormState, useWatch } from "react-hook-form"
+import { useFormContext, useWatch } from "react-hook-form"
 import {
   ILLA_MIXPANEL_BUILDER_PAGE_NAME,
   ILLA_MIXPANEL_EVENT_TYPE,
 } from "@illa-public/mixpanel-utils"
-import { Agent } from "@illa-public/public-types"
 import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { TextSignal } from "@/api/ws/textSignal"
 import { PreviewChat } from "@/components/PreviewChat"
@@ -13,16 +12,13 @@ import {
   ChatSendRequestPayload,
 } from "@/components/PreviewChat/interface"
 import { track } from "@/utils/mixpanelHelper"
+import { IAgentForm } from "../../AIAgent/interface"
 import { ChatContext } from "../../components/ChatContext"
 import { AgentWSContext } from "../../context/AgentWSContext"
 import { previewChatContainer } from "./style"
 
 export const AIAgentRunMobile: FC = () => {
-  const { control, getValues } = useFormContext<Agent>()
-
-  const { isDirty } = useFormState({
-    control,
-  })
+  const { control, getValues, getFieldState } = useFormContext<IAgentForm>()
 
   const [agentType, aiAgentID] = useWatch({
     control,
@@ -62,6 +58,16 @@ export const AIAgentRunMobile: FC = () => {
       wsStatus,
     ],
   )
+
+  const isVariablesDirty = getFieldState("variables")?.isDirty
+
+  const blockInputDirty = useMemo(() => {
+    if (lastRunAgent === undefined) {
+      return true
+    }
+
+    return isVariablesDirty
+  }, [lastRunAgent, isVariablesDirty])
 
   const onSendMessage = useCallback(
     (message: ChatMessage) => {
@@ -105,7 +111,7 @@ export const AIAgentRunMobile: FC = () => {
           <PreviewChat
             editState="RUN"
             isMobile
-            blockInput={!isRunning || isDirty}
+            blockInput={!isRunning || blockInputDirty}
             onSendMessage={onSendMessage}
             wsContextValue={wsContext}
           />

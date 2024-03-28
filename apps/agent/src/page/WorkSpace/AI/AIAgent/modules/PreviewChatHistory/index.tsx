@@ -1,12 +1,10 @@
-import { isEqual } from "lodash-es"
 import { FC, memo, useCallback, useContext, useMemo } from "react"
-import { useFormContext, useWatch } from "react-hook-form"
+import { useFormContext } from "react-hook-form"
 import {
   ILLA_MIXPANEL_BUILDER_PAGE_NAME,
   ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackProvider,
 } from "@illa-public/mixpanel-utils"
-import { Agent } from "@illa-public/public-types"
 import { TextSignal } from "@/api/ws/textSignal"
 import { PreviewChat } from "@/components/PreviewChat"
 import {
@@ -15,12 +13,13 @@ import {
 } from "@/components/PreviewChat/interface"
 import { track } from "@/utils/mixpanelHelper"
 import { AgentWSContext } from "../../../context/AgentWSContext"
+import { IAgentForm } from "../../interface"
 import { IPreviewChatHistoryProps } from "./interface"
 import { rightPanelContainerStyle } from "./style"
 
 const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
   (props: IPreviewChatHistoryProps) => {
-    const { getValues, control } = useFormContext<Agent>()
+    const { getValues, getFieldState } = useFormContext<IAgentForm>()
     const {
       wsStatus,
       isRunning,
@@ -31,25 +30,25 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
       lastRunAgent,
     } = useContext(AgentWSContext)
 
-    const fieldArray = useWatch({
-      control: control,
-      name: ["variables", "model", "prompt", "agentType"],
-    })
+    const isPromptDirty = getFieldState("prompt").isDirty
+    const isVariablesDirty = getFieldState("variables").isDirty
+    const isKnowledgeDirty = getFieldState("knowledge").isDirty
 
-    const blockInputDirty = useMemo(() => {
-      if (lastRunAgent === undefined) {
+    const getIsBlockInputDirty = useCallback(() => {
+      if (!isRunning) {
         return true
       }
-      return (
-        !isEqual(
-          lastRunAgent.variables.filter((v) => v.key !== "" && v.value !== ""),
-          fieldArray[0].filter((v) => v.key !== "" && v.value !== ""),
-        ) ||
-        !isEqual(lastRunAgent.model, fieldArray[1]) ||
-        !isEqual(lastRunAgent.prompt, fieldArray[2]) ||
-        !isEqual(lastRunAgent.agentType, fieldArray[3])
-      )
-    }, [lastRunAgent, fieldArray])
+      if (lastRunAgent.current === undefined) {
+        return true
+      }
+      return isPromptDirty || isVariablesDirty || isKnowledgeDirty
+    }, [
+      isKnowledgeDirty,
+      isPromptDirty,
+      isRunning,
+      isVariablesDirty,
+      lastRunAgent,
+    ])
 
     const wsContext = useMemo(
       () => ({
@@ -110,7 +109,7 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
           <PreviewChat
             isMobile={!!props.isMobile}
             editState="EDIT"
-            blockInput={!isRunning || blockInputDirty}
+            blockInput={getIsBlockInputDirty()}
             onSendMessage={onSendMessage}
             wsContextValue={wsContext}
           />

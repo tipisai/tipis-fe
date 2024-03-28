@@ -15,6 +15,7 @@ import store from "./redux/store.ts"
 Bugsnag.start({
   apiKey: "a59ca89c3b66725e12abb0be6a68fbd3",
   plugins: [new BugsnagPluginReact()],
+  autoDetectErrors: import.meta.env.ILLA_APP_ENV === "production",
 })
 
 // eslint-disable-next-line react-refresh/only-export-components

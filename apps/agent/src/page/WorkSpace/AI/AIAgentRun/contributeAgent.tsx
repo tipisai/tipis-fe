@@ -2,7 +2,6 @@ import { FC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { Navigate } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
-import { Agent } from "@illa-public/public-types"
 import MobileCustomTitle from "@/Layout/Workspace/mobile/components/CustomTitle"
 import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayout"
 import PCCustomTitle from "@/Layout/Workspace/pc/components/CustomTitle"
@@ -10,11 +9,13 @@ import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
 import { useGetTipiContributedDetail } from "@/utils/tipis/hook"
+import { AgentInitial, IAgentForm } from "../AIAgent/interface"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import AIAgentRunMobile from "./AIAgentRunMobile"
 import AIAgentRunPC from "./AIAgentRunPC"
 import HeaderTools from "./AIAgentRunPC/components/HeaderTools"
 import FormContext from "./AIAgentRunPC/context/FormContext"
+import { InputVariablesModalProvider } from "./AIAgentRunPC/context/InputVariablesModalContext"
 import MoreActionButton from "./components/MoreActionButton"
 import { MarketplaceInfoProvider } from "./contexts/MarketplaceInfoContext"
 
@@ -22,7 +23,7 @@ export const ContributedAgent: FC = () => {
   const { contributeAgentDetail, isError, isLoading, aiAgentMarketPlaceInfo } =
     useGetTipiContributedDetail()
 
-  const methods = useForm<Agent>({
+  const methods = useForm<IAgentForm>({
     values: contributeAgentDetail
       ? {
           ...contributeAgentDetail,
@@ -30,8 +31,9 @@ export const ContributedAgent: FC = () => {
             contributeAgentDetail.variables.length === 0
               ? [{ key: "", value: "" }]
               : contributeAgentDetail.variables,
+          cacheID: contributeAgentDetail.aiAgentID,
         }
-      : undefined,
+      : AgentInitial,
   })
 
   if (isLoading) {
@@ -50,7 +52,7 @@ export const ContributedAgent: FC = () => {
             <FormContext>
               <LayoutAutoChange
                 desktopPage={
-                  <>
+                  <InputVariablesModalProvider>
                     <WorkspacePCHeaderLayout
                       title={contributeAgentDetail.name}
                       extra={<HeaderTools />}
@@ -62,7 +64,7 @@ export const ContributedAgent: FC = () => {
                       )}
                     />
                     <AIAgentRunPC />
-                  </>
+                  </InputVariablesModalProvider>
                 }
                 mobilePage={
                   <>
