@@ -3,12 +3,19 @@ import { SEND_MESSAGE_WS_TYPE } from "@/components/PreviewChat/TipisWebscoketCon
 import {
   ChatMessage,
   ChatSendRequestPayload,
+  ChatWsAppendResponse,
   IGroupMessage,
   MESSAGE_STATUS,
   MESSAGE_SYNC_TYPE,
 } from "@/components/PreviewChat/interface"
 import { AgentInitial } from "@/page/WorkSpace/AI/AIAgent/interface"
-import { isGroupMessage } from "./typeHelper"
+import {
+  getEditCacheChatMessage,
+  getRunCacheChatMessage,
+  setEditCacheChatMessage,
+  setRunCacheChatMessage,
+} from "../localForage/teamData"
+import { isGroupMessage, isNormalMessage } from "./typeHelper"
 
 export const formatSendMessagePayload = (payload: ChatSendRequestPayload) => {
   const encodePayload: ChatSendRequestPayload = payload
@@ -135,4 +142,97 @@ export const getSendMessageBody = (message: ChatMessage, aiAgentID: string) => {
     updateMessage: true,
     messageContent: message,
   }
+}
+
+export const groupReceivedMessagesForUI = (
+  oldMessage: (IGroupMessage | ChatMessage)[],
+  message: ChatMessage,
+) => {
+  const newMessageList = [...oldMessage]
+  const index = newMessageList.findIndex((m) => {
+    return m.threadID === message.threadID
+  })
+  if (index === -1) {
+    if (isRequestMessage(message)) {
+      newMessageList.push({
+        threadID: message.threadID,
+        items: [
+          {
+            sender: message.sender,
+            message: message.message,
+            threadID: message.threadID,
+            messageType: message.messageType,
+            status: MESSAGE_STATUS.ANALYZE_PENDING,
+          },
+        ],
+      })
+    } else {
+      newMessageList.push({
+        sender: message.sender,
+        message: message.message,
+        threadID: message.threadID,
+        messageType: message.messageType,
+      })
+    }
+  } else {
+    const curMessage = newMessageList[index]
+    if (isNormalMessage(curMessage)) {
+      curMessage.message = curMessage.message + message.message
+    } else {
+      handleUpdateMessageList(curMessage, message)
+    }
+  }
+  return newMessageList
+}
+
+export const groupReceivedMessagesForCache = async (
+  mode: "edit" | "run",
+  cacheInfo: {
+    teamID: string
+    cacheID: string
+  },
+  message: ChatWsAppendResponse,
+) => {
+  const setChatMessageCache =
+    mode === "run" ? setRunCacheChatMessage : setEditCacheChatMessage
+  const getChatMessageCache =
+    mode === "run" ? getRunCacheChatMessage : getEditCacheChatMessage
+  const oldMessage = await getChatMessageCache(
+    cacheInfo.teamID,
+    cacheInfo.cacheID,
+  )
+
+  const newMessageList = [...oldMessage] as ChatWsAppendResponse[]
+  switch (message.messageType) {
+    case MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_CHAT: {
+      const prevChatMessage = newMessageList.find(
+        (m) =>
+          m.threadID === message.threadID &&
+          m.messageType === message.messageType,
+      )
+      if (prevChatMessage) {
+        prevChatMessage.message = prevChatMessage.message + message.message
+      } else {
+        newMessageList.push(message)
+      }
+      break
+    }
+    case MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST: {
+      const prevChatMessage = newMessageList.find(
+        (m) =>
+          m.threadID === message.threadID &&
+          m.messageType === message.messageType,
+      )
+      if (prevChatMessage) {
+        prevChatMessage.message = prevChatMessage.message + message.message
+      } else {
+        newMessageList.push(message)
+      }
+      break
+    }
+    case MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_OK:
+    case MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_ERROR:
+  }
+  setChatMessageCache(cacheInfo.teamID, cacheInfo.cacheID, newMessageList)
+  return newMessageList
 }

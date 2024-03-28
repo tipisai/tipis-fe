@@ -1,5 +1,5 @@
 import { memo, useState } from "react"
-import { useFormContext, useFormState } from "react-hook-form"
+import { useFormContext, useFormState, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import BlackButton from "@/components/BlackButton"
 import { editPanelUpdateFileDetailStore } from "@/utils/drive"
@@ -10,7 +10,11 @@ import { saveButtonContainerStyle } from "./style"
 
 const SaveButton = memo(() => {
   const { control, trigger } = useFormContext<IAgentForm>()
-  const { isSubmitting, errors } = useFormState({ control })
+  const { isSubmitting, errors, isDirty } = useFormState({ control })
+  const [aiAgentID] = useWatch({
+    control,
+    name: ["aiAgentID"],
+  })
   const { t } = useTranslation()
   const [modalOpen, setModalOpen] = useState(false)
 
@@ -43,6 +47,7 @@ const SaveButton = memo(() => {
         loading={isSubmitting}
         block
         type="primary"
+        disabled={!!aiAgentID && !isDirty}
       >
         {t("editor.ai-agent.save")}
       </BlackButton>

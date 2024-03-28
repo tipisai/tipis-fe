@@ -10,6 +10,7 @@ import {
 } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { useParams } from "react-router-dom"
 import { v4 } from "uuid"
 import { Agent } from "@illa-public/public-types"
 import {
@@ -37,20 +38,20 @@ import {
   ChatWsAppendResponse,
   CollaboratorsInfo,
   IGroupMessage,
-  MESSAGE_STATUS,
 } from "@/components/PreviewChat/interface"
 import {
   useLazyGetAIAgentAnonymousAddressQuery,
   useLazyGetAIAgentWsAddressQuery,
 } from "@/redux/services/agentAPI"
 import store from "@/redux/store"
-import { isNormalMessage } from "@/utils/agent/typeHelper"
 import {
   cancelPendingMessage,
   formatSendMessagePayload,
-  handleUpdateMessageList,
-  isRequestMessage,
+  groupReceivedMessagesForCache,
+  groupReceivedMessagesForUI,
 } from "@/utils/agent/wsUtils"
+import { addRunCacheChatMessage } from "@/utils/localForage/teamData"
+import { IAgentForm } from "../../AIAgent/interface"
 import { IAgentWSInject, IAgentWSProviderProps } from "./interface"
 
 export const AgentWSContext = createContext({} as IAgentWSInject)
@@ -61,8 +62,9 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
   const { message: messageAPI } = App.useApp()
 
   const { t } = useTranslation()
+  const { tabID } = useParams()
 
-  const { getValues } = useFormContext<Agent>()
+  const { getValues } = useFormContext<IAgentForm>()
   const creditModal = useCreditModal()
 
   const [triggerGetAIAgentAnonymousAddressQuery] =
@@ -136,40 +138,10 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
   )
 
   const onUpdateChatMessage = useCallback((message: ChatMessage) => {
-    const newMessageList = [...chatMessagesRef.current]
-    const index = newMessageList.findIndex((m) => {
-      return m.threadID === message.threadID
-    })
-    if (index === -1) {
-      if (isRequestMessage(message)) {
-        newMessageList.push({
-          threadID: message.threadID,
-          items: [
-            {
-              sender: message.sender,
-              message: message.message,
-              threadID: message.threadID,
-              messageType: message.messageType,
-              status: MESSAGE_STATUS.ANALYZE_PENDING,
-            },
-          ],
-        })
-      } else {
-        newMessageList.push({
-          sender: message.sender,
-          message: message.message,
-          threadID: message.threadID,
-          messageType: message.messageType,
-        })
-      }
-    } else {
-      const curMessage = newMessageList[index]
-      if (isNormalMessage(curMessage)) {
-        curMessage.message = curMessage.message + message.message
-      } else {
-        handleUpdateMessageList(curMessage, message)
-      }
-    }
+    const newMessageList = groupReceivedMessagesForUI(
+      chatMessagesRef.current,
+      message,
+    )
     chatMessagesRef.current = newMessageList
     setChatMessages(newMessageList)
   }, [])
@@ -244,9 +216,15 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
         "",
         [encodePayload],
       )
+
       sendMessage(textMessage)
 
       if (options?.updateMessage && options?.messageContent) {
+        addRunCacheChatMessage(
+          getCurrentId(store.getState())!,
+          tabID!,
+          encodePayload,
+        )
         chatMessagesRef.current = [
           ...chatMessagesRef.current,
           options?.messageContent,
@@ -254,7 +232,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
         setChatMessages([...chatMessages, options?.messageContent])
       }
     },
-    [chatMessages, sendMessage],
+    [chatMessages, sendMessage, tabID],
   )
 
   const onMessageSuccessCallback = useCallback(
@@ -274,6 +252,14 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
           break
         case "chat/remote":
           let chatCallback = callback.broadcast.payload as ChatWsAppendResponse
+          groupReceivedMessagesForCache(
+            "run",
+            {
+              cacheID: tabID!,
+              teamID: getCurrentId(store.getState())!,
+            },
+            chatCallback,
+          )
           onUpdateChatMessage(chatCallback)
           break
         case "stop_all/remote":
@@ -309,6 +295,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       startSendMessage,
       onUpdateChatMessage,
       onUpdateRoomUser,
+      tabID,
     ],
   )
 

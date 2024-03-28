@@ -3,8 +3,8 @@ import { FC, UIEvent, useContext } from "react"
 import { MarketAgentListData } from "@illa-public/market-agent"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { useGetMarketListQuery } from "@/redux/services/marketAPI"
-import { MarketListContext } from "../../context/marketListContext"
-import { MARKET_ACTION_TYPE } from "../../context/reducer"
+import { DASH_BOARD_UI_STATE_ACTION_TYPE } from "../../context/interface"
+import { DashBoardUIStateContext } from "../../context/marketListContext"
 import { useGetShowData } from "./hook"
 import { IMarketCardListProps } from "./interface"
 import { contentStyle, listContainerStyle, moreLoadingStyle } from "./style"
@@ -12,7 +12,9 @@ import { TEMP_DATA } from "./temp"
 
 const MarketCardList: FC<IMarketCardListProps> = (props) => {
   const { RenderEmpty, RenderItem, RenderSortBy } = props
-  const { marketState, dispatch } = useContext(MarketListContext)
+  const { dashboardUIState: marketState, dispatch } = useContext(
+    DashBoardUIStateContext,
+  )
 
   const { data: _data, isLoading } = useGetMarketListQuery({
     params: {
@@ -34,7 +36,7 @@ const MarketCardList: FC<IMarketCardListProps> = (props) => {
     const target = event.target as HTMLDivElement
     if (target.scrollHeight - target.scrollTop - target.clientHeight <= 800) {
       dispatch({
-        type: MARKET_ACTION_TYPE.SET_PAGE,
+        type: DASH_BOARD_UI_STATE_ACTION_TYPE.SET_PAGE,
         payload: marketState.page + 1,
       })
     }

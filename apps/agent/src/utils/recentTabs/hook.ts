@@ -161,6 +161,45 @@ export const useEditTipis = () => {
   return editTipis
 }
 
+export const useCreateTipiToEditTipi = () => {
+  const navigate = useNavigate()
+  const addRecentTab = useAddRecentTabReducer()
+  const updateRecentTab = useUpdateRecentTabReducer()
+
+  const changeCreateTipiToEditTipi = useCallback(
+    (cacheID: string, tipisID: string) => {
+      const historyTabs = getRecentTabInfos(store.getState())
+      const currentTeamInfo = getCurrentTeamInfo(store.getState())!
+
+      let currentTab = historyTabs.find(
+        (tab) =>
+          tab.cacheID === cacheID && tab.tabType === TAB_TYPE.CREATE_TIPIS,
+      )
+      if (!currentTab) {
+        currentTab = {
+          tabName: "",
+          tabIcon: "",
+          tabType: TAB_TYPE.EDIT_TIPIS,
+          tabID: v4(),
+          cacheID: tipisID,
+        }
+        addRecentTab(currentTab)
+      } else {
+        updateRecentTab(cacheID, {
+          ...currentTab,
+          tabType: TAB_TYPE.EDIT_TIPIS,
+          cacheID: tipisID,
+        })
+      }
+
+      navigate(getEditTipiPath(currentTeamInfo.identifier, tipisID))
+    },
+    [addRecentTab, navigate, updateRecentTab],
+  )
+
+  return changeCreateTipiToEditTipi
+}
+
 export const useRunTipis = () => {
   const navigate = useNavigate()
   const addRecentTab = useAddRecentTabReducer()

@@ -4,8 +4,8 @@ import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { EmptyIcon } from "@illa-public/icon"
 import { IMarketCardEmptyListProps } from "../../../components/MarketCardList/interface"
-import { MarketListContext } from "../../../context/marketListContext"
-import { MARKET_ACTION_TYPE } from "../../../context/reducer"
+import { DASH_BOARD_UI_STATE_ACTION_TYPE } from "../../../context/interface"
+import { DashBoardUIStateContext } from "../../../context/marketListContext"
 import TagList from "../TagList"
 import {
   emptyColorStyle,
@@ -18,12 +18,12 @@ const EmptyMarketList: FC<IMarketCardEmptyListProps> = ({
   tagList,
 }) => {
   const { t } = useTranslation()
-  const { dispatch } = useContext(MarketListContext)
+  const { dispatch } = useContext(DashBoardUIStateContext)
 
   const handleClick = (name?: string) => {
     if (!name) return
     dispatch({
-      type: MARKET_ACTION_TYPE.SET_RECOMMEND_TAG,
+      type: DASH_BOARD_UI_STATE_ACTION_TYPE.SET_RECOMMEND_TAG,
       payload: name,
     })
   }

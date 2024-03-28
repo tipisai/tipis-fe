@@ -2,7 +2,7 @@ import { Tabs } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayout"
-import { MarketListProvider } from "../context/marketListContext"
+import { DashboardUIStateProvider } from "../context/marketListContext"
 import HeaderTools from "./components/HeaderTools"
 import DashboardContent from "./modules/DashboardContent"
 import MarketContent from "./modules/MarketContent"
@@ -11,7 +11,7 @@ import { tabsContainerStyle, tipisMobileDashboardContainerStyle } from "./style"
 const TipisMobileDashboard: FC = () => {
   const { t } = useTranslation()
   return (
-    <MarketListProvider>
+    <DashboardUIStateProvider>
       <div css={tipisMobileDashboardContainerStyle}>
         <MobileFirstPageLayout
           title={t("homepage.tipi_dashboard.title.tipi_dashboard")}
@@ -36,7 +36,7 @@ const TipisMobileDashboard: FC = () => {
           </div>
         </MobileFirstPageLayout>
       </div>
-    </MarketListProvider>
+    </DashboardUIStateProvider>
   )
 }
 

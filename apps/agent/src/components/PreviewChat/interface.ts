@@ -45,10 +45,6 @@ export interface ChatWsAppendResponse {
   messageType: MESSAGE_SYNC_TYPE
 }
 
-export interface ChatWsEndResponse {
-  actionID: string
-}
-
 export interface ChatSender {
   senderID: string
   senderType: SenderType

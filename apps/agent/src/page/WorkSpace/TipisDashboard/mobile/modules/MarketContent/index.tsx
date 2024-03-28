@@ -4,8 +4,8 @@ import { debounce } from "lodash-es"
 import { ChangeEvent, FC, useCallback, useContext, useMemo } from "react"
 import { SearchIcon } from "@illa-public/icon"
 import MarketCardList from "../../../components/MarketCardList"
-import { MarketListContext } from "../../../context/marketListContext"
-import { MARKET_ACTION_TYPE } from "../../../context/reducer"
+import { DASH_BOARD_UI_STATE_ACTION_TYPE } from "../../../context/interface"
+import { DashBoardUIStateContext } from "../../../context/marketListContext"
 import EmptyMarketList from "../../components/EmptyMarketList"
 import MarketCard from "../../components/MarketCard"
 import SortComponentMobile from "../../components/SortComponent"
@@ -16,13 +16,13 @@ import {
 } from "./style"
 
 const MarketContent: FC = () => {
-  const { dispatch } = useContext(MarketListContext)
+  const { dispatch } = useContext(DashBoardUIStateContext)
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const v = e.target.value
       dispatch({
-        type: MARKET_ACTION_TYPE.SET_SEARCH,
+        type: DASH_BOARD_UI_STATE_ACTION_TYPE.SET_SEARCH,
         payload: v,
       })
     },

@@ -5,20 +5,14 @@ import {
   HTTP_REQUEST_PUBLIC_BASE_URL,
 } from "@illa-public/illa-net"
 import { Agent, AgentRaw } from "@illa-public/public-types"
-import { getAuthToken } from "@illa-public/utils"
+import { prepareHeaders } from "@illa-public/user-data"
 import { getFileExtensionFromBase64 } from "@/utils/file"
 
 export const agentAuthAPI = createApi({
   reducerPath: "agentAuthAPI",
   baseQuery: fetchBaseQuery({
     baseUrl: `${HTTP_REQUEST_PUBLIC_BASE_URL}${AGENT_REQUEST_PREFIX}`,
-    prepareHeaders: (headers) => {
-      const token = getAuthToken()
-      if (token) {
-        headers.set("Authorization", token)
-      }
-      return headers
-    },
+    prepareHeaders: prepareHeaders,
   }),
   tagTypes: ["Agents"],
   endpoints: (builder) => ({
@@ -147,6 +141,29 @@ export const agentAuthAPI = createApi({
           method: "POST",
           body: agentRaw,
         }
+      },
+      onQueryStarted: async ({ teamID }, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(
+            agentAuthAPI.util.updateQueryData(
+              "getAIAgentListByPage",
+              {
+                teamID,
+              },
+              (draft) => {
+                draft.aiAgentList?.push(data)
+              },
+            ),
+          )
+          dispatch(
+            agentAuthAPI.util.upsertQueryData(
+              "getAgentDetail",
+              { teamID, aiAgentID: data.aiAgentID },
+              data,
+            ),
+          )
+        } catch {}
       },
     }),
     generatePromptDescription: builder.mutation<

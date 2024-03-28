@@ -87,6 +87,15 @@ importers:
       '@ant-design/icons':
         specifier: ^5.3.1
         version: 5.3.1(react-dom@18.2.0)(react@18.2.0)
+      '@bugsnag/browser-performance':
+        specifier: ^2.4.0
+        version: 2.4.0
+      '@bugsnag/js':
+        specifier: ^7.22.4
+        version: 7.22.4
+      '@bugsnag/plugin-react':
+        specifier: ^7.19.0
+        version: 7.19.0
       '@codemirror/autocomplete':
         specifier: ^6.4.0
         version: 6.13.0(@codemirror/language@6.10.1)(@codemirror/state@6.4.1)(@codemirror/view@6.25.0)(@lezer/common@1.2.1)
@@ -222,6 +231,9 @@ importers:
       framer-motion:
         specifier: ^11.0.8
         version: 11.0.8(react-dom@18.2.0)(react@18.2.0)
+      fuse.js:
+        specifier: ^7.0.0
+        version: 7.0.0
       i18next:
         specifier: ^23.10.0
         version: 23.10.0
@@ -249,6 +261,9 @@ importers:
       pdfjs-dist:
         specifier: 2.16.105
         version: 2.16.105
+      posthog-js:
+        specifier: ^1.116.6
+        version: 1.116.6
       qs:
         specifier: ^6.12.0
         version: 6.12.0
@@ -1585,6 +1600,82 @@ packages:
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
     dev: true
+
+  /@bugsnag/browser-performance@2.4.0:
+    resolution: {integrity: sha512-7pPL9j/cVogEOp9EC+I9GB3w22JNlSFcEOY/pWA/zNpS4l9OLzP+MCXsRvyVcM76ZGlNq86YC2VAQMBtsxbY4g==}
+    dependencies:
+      '@bugsnag/core-performance': 2.4.0
+      '@bugsnag/cuid': 3.0.2
+      '@bugsnag/delivery-fetch-performance': 2.4.0
+      '@bugsnag/request-tracker-performance': 2.4.0
+    dev: false
+
+  /@bugsnag/browser@7.22.4:
+    resolution: {integrity: sha512-h2o9RZhAEIgJAUsECd7a00IkLnvQvLT7dUyUYx/s8VLvcq89gKa8E59rlM7f15wtkJ5MPfozhErXDpsdOvF4Rg==}
+    dependencies:
+      '@bugsnag/core': 7.19.0
+    dev: false
+
+  /@bugsnag/core-performance@2.4.0:
+    resolution: {integrity: sha512-Dt+DFE6b9pVnACH/PyIZkmL5HCfYktemcljDpr3pFup8aOcST6a7pFpiIRyAYl1t8l4hsmHIMNCrkHqNBchEaQ==}
+    dev: false
+
+  /@bugsnag/core@7.19.0:
+    resolution: {integrity: sha512-2KGwdaLD9PhR7Wk7xPi3jGuGsKTatc/28U4TOZIDU3CgC2QhGjubwiXSECel5gwxhZ3jACKcMKSV2ovHhv1NrA==}
+    dependencies:
+      '@bugsnag/cuid': 3.0.2
+      '@bugsnag/safe-json-stringify': 6.0.0
+      error-stack-parser: 2.1.4
+      iserror: 0.0.2
+      stack-generator: 2.0.10
+    dev: false
+
+  /@bugsnag/cuid@3.0.2:
+    resolution: {integrity: sha512-cIwzC93r3PQ/INeuwtZwkZIG2K8WWN0rRLZQhu+mr48Ay+i6sEki4GYfTsflse7hZ1BeDWrNb/Q9vgY3B31xHQ==}
+    dev: false
+
+  /@bugsnag/delivery-fetch-performance@2.4.0:
+    resolution: {integrity: sha512-kPX8Pr5pWG9o8tE3Pb0TJlCZZeqIRS0bRpsdmRhOfAkZZPl+Q7XX0wNfABcKehBCFQMUIHvIJotqi31T9xqEGg==}
+    dependencies:
+      '@bugsnag/core-performance': 2.4.0
+    dev: false
+
+  /@bugsnag/js@7.22.4:
+    resolution: {integrity: sha512-GjU3YmCNxVl1QZ64e8D4hKSfhHiymHu4hyYlyKxIdqmnhpHvoFnADcdAHEnWPG82O9j9w+JoDXvL460aiOEgHg==}
+    dependencies:
+      '@bugsnag/browser': 7.22.4
+      '@bugsnag/node': 7.22.3
+    dev: false
+
+  /@bugsnag/node@7.22.3:
+    resolution: {integrity: sha512-vDXu0mrduonyCjUkTp+zKSh1WHAtA2VjB49xK5s1f/HnTASiJvzUOQBRXrkqaj37sndYHUSMxUCPvLawyc75nA==}
+    dependencies:
+      '@bugsnag/core': 7.19.0
+      byline: 5.0.0
+      error-stack-parser: 2.1.4
+      iserror: 0.0.2
+      pump: 3.0.0
+      stack-generator: 2.0.10
+    dev: false
+
+  /@bugsnag/plugin-react@7.19.0:
+    resolution: {integrity: sha512-owC4QXYJWGllMoOPcH5P7sbDIDuFLMCbjGAU6FwH5mBMObSQo+1ViSKImlTJQUFXATM8ySISTBVt7w3C6FFHng==}
+    peerDependencies:
+      '@bugsnag/core': ^7.0.0
+    peerDependenciesMeta:
+      '@bugsnag/core':
+        optional: true
+    dev: false
+
+  /@bugsnag/request-tracker-performance@2.4.0:
+    resolution: {integrity: sha512-hHRwgqjnkwN9d2q4xUzZCCSxgarf1O2eEIPTJLU/do4PO0qK0q+WkblLsiGrTQaxEEISKhkTu38+ikS7Ocqm0g==}
+    dependencies:
+      '@bugsnag/core-performance': 2.4.0
+    dev: false
+
+  /@bugsnag/safe-json-stringify@6.0.0:
+    resolution: {integrity: sha512-htzFO1Zc57S8kgdRK9mLcPVTW1BY2ijfH7Dk2CeZmspTWKdKqSo1iwmqrq2WtRjFlo8aRZYgLX0wFrDXF/9DLA==}
+    dev: false
 
   /@codemirror/autocomplete@6.13.0(@codemirror/language@6.10.1)(@codemirror/state@6.4.1)(@codemirror/view@6.25.0)(@lezer/common@1.2.1):
     resolution: {integrity: sha512-SuDrho1klTINfbcMPnyro1ZxU9xJtwDMtb62R8TjL/tOl71IoOsvBo1a9x+hDvHhIzkTcJHy2VC+rmpGgYkRSw==}
@@ -4407,6 +4498,11 @@ packages:
     engines: {node: '>=0.2.0'}
     dev: false
 
+  /byline@5.0.0:
+    resolution: {integrity: sha512-s6webAy+R4SR8XVuJWt2V2rGvhnrhxN+9S15GNuTK3wKPOXFF6RNc+8ug2XhH+2s4f+uudG4kUVYmYOQWL2g0Q==}
+    engines: {node: '>=0.10.0'}
+    dev: false
+
   /call-bind@1.0.5:
     resolution: {integrity: sha512-C3nQxfFZxFRVoJoGKKI8y3MOEo129NQ+FgQ08iye+Mk4zNZZGdjfs06bVTr+DBSlA66Q2VEcMki/cUCP4SercQ==}
     dependencies:
@@ -5704,6 +5800,10 @@ packages:
       format: 0.2.2
     dev: false
 
+  /fflate@0.4.8:
+    resolution: {integrity: sha512-FJqqoDBR00Mdj9ppamLa/Y7vxm+PRmNWA67N846RvsoYVMKB4q3y/de5PA7gUmRMYK/8CMz2GDZQmCRN1wBcWA==}
+    dev: false
+
   /file-entry-cache@6.0.1:
     resolution: {integrity: sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -5892,6 +5992,11 @@ packages:
 
   /functions-have-names@1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
+    dev: false
+
+  /fuse.js@7.0.0:
+    resolution: {integrity: sha512-14F4hBIxqKvD4Zz/XjDc3y94mNZN6pRv3U13Udo0lNLCWRBUsrMv2xwcF/y/Z5sV6+FQW+/ow68cHpm4sunt8Q==}
+    engines: {node: '>=10'}
     dev: false
 
   /gensync@1.0.0-beta.2:
@@ -6573,6 +6678,10 @@ packages:
 
   /isarray@2.0.5:
     resolution: {integrity: sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==}
+    dev: false
+
+  /iserror@0.0.2:
+    resolution: {integrity: sha512-oKGGrFVaWwETimP3SiWwjDeY27ovZoyZPHtxblC4hCq9fXxed/jasx+ATWFFjCVSRZng8VTMsN1nDnGo6zMBSw==}
     dev: false
 
   /isexe@2.0.0:
@@ -7827,6 +7936,17 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
+  /posthog-js@1.116.6:
+    resolution: {integrity: sha512-rvt8HxzJD4c2B/xsUa4jle8ApdqljeBI2Qqjp4XJMohQf18DXRyM6b96H5/UMs8jxYuZG14Er0h/kEIWeU6Fmw==}
+    dependencies:
+      fflate: 0.4.8
+      preact: 10.20.1
+    dev: false
+
+  /preact@10.20.1:
+    resolution: {integrity: sha512-JIFjgFg9B2qnOoGiYMVBtrcFxHqn+dNXbq76bVmcaHYJFYR4lW67AOcXgAYQQTDYXDOg/kTZrKPNCdRgJ2UJmw==}
+    dev: false
+
   /prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -7878,6 +7998,13 @@ packages:
 
   /prr@1.0.1:
     resolution: {integrity: sha512-yPw4Sng1gWghHQWj0B3ZggWUm4qVbPwPFcRG8KyxiU7J2OHFSoEHKS+EZ3fv5l1t9CyCiop6l/ZYeWbrgoQejw==}
+    dev: false
+
+  /pump@3.0.0:
+    resolution: {integrity: sha512-LwZy+p3SFs1Pytd/jYct4wpv49HiYCqd9Rlc5ZVdk0V+8Yzv6jR5Blk3TRmPL1ft69TxP0IMZGJ+WPFU2BFhww==}
+    dependencies:
+      end-of-stream: 1.4.4
+      once: 1.4.0
     dev: false
 
   /punycode@2.3.0:
