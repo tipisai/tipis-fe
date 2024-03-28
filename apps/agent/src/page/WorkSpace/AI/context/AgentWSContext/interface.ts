@@ -4,12 +4,15 @@ import {
   AI_AGENT_TYPE,
   Params,
 } from "@illa-public/public-types"
+import { TextSignal } from "@/api/ws/textSignal"
 import {
   IChatSendMessage,
+  SEND_MESSAGE_WS_TYPE,
   TipisWebSocketContextType,
 } from "@/components/PreviewChat/TipisWebscoketContext/interface"
 import {
   ChatMessage,
+  ChatSendRequestPayload,
   CollaboratorsInfo,
   IGroupMessage,
 } from "@/components/PreviewChat/interface"
@@ -35,6 +38,11 @@ export interface IAgentWSInject
   sendMessage: IChatSendMessage
 }
 
+export interface ICachePayloadQueue {
+  payload: ChatSendRequestPayload
+  signal: TextSignal
+  type: SEND_MESSAGE_WS_TYPE
+}
 export interface IRunAgentConfig {
   variables: Params[]
   model: AI_AGENT_MODEL

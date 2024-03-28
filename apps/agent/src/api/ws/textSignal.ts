@@ -20,6 +20,7 @@ export enum TextSignal {
   STOP_ALL = 18,
   CLEAN = 19,
   SIGNAL_ADD_CHAT_FILE = 20,
+  ERROR_CHAT_FILE_PROCESS_END = 21,
 }
 
 export enum TextTarget {

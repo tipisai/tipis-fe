@@ -1,11 +1,14 @@
 import { ReactNode } from "react"
 import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
+import { TextSignal } from "@/api/ws/textSignal"
 import {
   IChatSendMessage,
+  SEND_MESSAGE_WS_TYPE,
   TipisWebSocketContextType,
 } from "@/components/PreviewChat/TipisWebscoketContext/interface"
 import {
   ChatMessage,
+  ChatSendRequestPayload,
   CollaboratorsInfo,
   IGroupMessage,
 } from "@/components/PreviewChat/interface"
@@ -41,4 +44,10 @@ export interface IChatUnStableWSInject {
   inRoomUsers: CollaboratorsInfo[]
   chatMessages: (IGroupMessage | ChatMessage)[]
   wsStatus: ILLA_WEBSOCKET_STATUS
+}
+
+export interface ICachePayloadQueue {
+  payload: ChatSendRequestPayload
+  signal: TextSignal
+  type: SEND_MESSAGE_WS_TYPE
 }

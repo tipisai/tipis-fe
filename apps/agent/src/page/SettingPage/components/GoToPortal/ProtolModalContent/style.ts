@@ -1,6 +1,11 @@
 import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
 
+export const contentContainerStyle = css`
+  padding: 64px 20px 40px 20px;
+  width: 100%;
+`
+
 export const modalCloseIconStyle = css`
   position: absolute;
   width: 24px;

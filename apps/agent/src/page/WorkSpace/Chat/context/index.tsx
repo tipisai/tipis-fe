@@ -44,6 +44,7 @@ import {
   groupReceivedMessagesForUI,
 } from "@/utils/agent/wsUtils"
 import {
+  ICachePayloadQueue,
   IChatStableWSInject,
   IChatUnStableWSInject,
   IChatWSProviderProps,
@@ -69,6 +70,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     (IGroupMessage | ChatMessage)[]
   >([])
   const chatMessagesRef = useRef<(IGroupMessage | ChatMessage)[]>([])
+  const cacheMessageQueue = useRef<ICachePayloadQueue[]>([])
 
   const [triggerGetAIAgentAnonymousAddressQuery] =
     useLazyGetAIAgentAnonymousAddressQuery()
@@ -121,20 +123,26 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       if (options?.fileIDs && options.fileIDs.length > 0) {
         const withFileTextMessage = getWithFileMessagePayload(options.fileIDs)
         sendMessage(withFileTextMessage)
+        cacheMessageQueue.current.push({
+          payload,
+          signal,
+          type,
+        })
+      } else {
+        const textMessage = getTextMessagePayload(
+          signal,
+          TextTarget.ACTION,
+          true,
+          {
+            type: type,
+            payload: {},
+          },
+          "",
+          "",
+          [encodePayload],
+        )
+        sendMessage(textMessage)
       }
-      const textMessage = getTextMessagePayload(
-        signal,
-        TextTarget.ACTION,
-        true,
-        {
-          type: type,
-          payload: {},
-        },
-        "",
-        "",
-        [encodePayload],
-      )
-      sendMessage(textMessage)
     },
     [sendMessage],
   )
@@ -154,20 +162,26 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       if (options?.fileIDs && options.fileIDs.length > 0) {
         const withFileTextMessage = getWithFileMessagePayload(options.fileIDs)
         sendMessage(withFileTextMessage)
+        cacheMessageQueue.current.push({
+          payload,
+          signal,
+          type,
+        })
+      } else {
+        const textMessage = getTextMessagePayload(
+          signal,
+          TextTarget.ACTION,
+          true,
+          {
+            type: type,
+            payload: {},
+          },
+          "",
+          "",
+          [encodePayload],
+        )
+        sendMessage(textMessage)
       }
-      const textMessage = getTextMessagePayload(
-        signal,
-        TextTarget.ACTION,
-        true,
-        {
-          type: type,
-          payload: {},
-        },
-        "",
-        "",
-        [encodePayload],
-      )
-      sendMessage(textMessage)
 
       if (options?.updateMessage && options?.messageContent) {
         chatMessagesRef.current = [
@@ -179,6 +193,19 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     },
     [chatMessages, sendMessage],
   )
+
+  const clearCacheQueue = useCallback(() => {
+    while (cacheMessageQueue.current.length > 0) {
+      const cachePayload = cacheMessageQueue.current.pop()
+      if (cachePayload) {
+        startSendMessage(
+          cachePayload.payload,
+          cachePayload.signal,
+          cachePayload.type,
+        )
+      }
+    }
+  }, [startSendMessage])
 
   const onMessageSuccessCallback = useCallback(
     (callback: Callback<unknown>) => {
@@ -244,9 +271,12 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           break
         case 3:
           break
+        case 21:
+          clearCacheQueue()
+          break
       }
     },
-    [creditModal, messageAPI, t],
+    [clearCacheQueue, creditModal, messageAPI, t],
   )
 
   const getConnectParams = useCallback(async () => {
