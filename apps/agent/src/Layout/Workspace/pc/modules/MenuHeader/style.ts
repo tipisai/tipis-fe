@@ -2,7 +2,7 @@ import { css } from "@emotion/react"
 
 export const menuHeaderStyle = css`
   display: flex;
-  padding: 24px 24px 16px 24px;
+  padding: 24px 16px 16px 24px;
   justify-content: space-between;
   align-items: center;
   width: 100%;
@@ -11,7 +11,13 @@ export const menuHeaderStyle = css`
 export const logoAndProjectNameContainerStyle = css`
   display: flex;
   align-items: center;
-  font-size: 24px;
+  width: 76px;
+  height: 24px;
+`
+
+export const logoStyle = css`
+  width: 76px;
+  height: 24px;
 `
 
 export const projectNameStyle = css`

@@ -15,7 +15,7 @@ export const menuInnerContainerStyle = css`
   justify-content: space-between;
   align-items: center;
   border-radius: 24px;
-  background: linear-gradient(180deg, #f5f3f7 0%, #f8f4fb 100%);
+  background: linear-gradient(180deg, #f6effb 0%, #f1ebf8 49.5%, #efe9f5 100%);
 `
 
 export const menuContentStyle = css`
