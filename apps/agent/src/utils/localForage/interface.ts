@@ -1,9 +1,15 @@
-import { ChatMessage } from "@/components/PreviewChat/interface"
+import {
+  ChatSendRequestPayload,
+  ChatWsAppendResponse,
+} from "@/components/PreviewChat/interface"
 import { ITabInfo } from "@/redux/ui/recentTab/interface"
 
 export interface IUiHistoryData {
   formData?: unknown
-  chatMessage?: ChatMessage[]
+  chatMessage?: {
+    edit: (ChatWsAppendResponse | ChatSendRequestPayload)[]
+    run: (ChatWsAppendResponse | ChatSendRequestPayload)[]
+  }
   uiState?: unknown
 }
 

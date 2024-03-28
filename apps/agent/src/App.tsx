@@ -5,11 +5,13 @@ import tipisThemConfig from "@/config/them/theme-tipis.json"
 import { illaCodeMirrorTooltipStyle } from "./components/CodeEditor/CodeMirror/theme"
 import { ILLARouterProvider } from "./router/config"
 import { globalStyle } from "./style"
+import AntdStore from "./utils/antdStore"
 
 function App() {
   return (
     <ConfigProvider theme={tipisThemConfig as ThemeConfig}>
       <AntdContextProvider component={false}>
+        <AntdStore />
         <HelmetProvider>
           <Global styles={globalStyle} />
           <ILLARouterProvider />

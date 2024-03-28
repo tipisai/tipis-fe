@@ -34,16 +34,13 @@ import {
   ChatWsAppendResponse,
   CollaboratorsInfo,
   IGroupMessage,
-  MESSAGE_STATUS,
 } from "@/components/PreviewChat/interface"
 import { useLazyGetAIAgentAnonymousAddressQuery } from "@/redux/services/agentAPI"
 import store from "@/redux/store"
-import { isNormalMessage } from "@/utils/agent/typeHelper"
 import {
   cancelPendingMessage,
   formatSendMessagePayload,
-  handleUpdateMessageList,
-  isRequestMessage,
+  groupReceivedMessagesForUI,
 } from "@/utils/agent/wsUtils"
 import {
   IChatStableWSInject,
@@ -91,40 +88,10 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
   )
 
   const onUpdateChatMessage = useCallback((message: ChatMessage) => {
-    const newMessageList = [...chatMessagesRef.current]
-    const index = newMessageList.findIndex((m) => {
-      return m.threadID === message.threadID
-    })
-    if (index === -1) {
-      if (isRequestMessage(message)) {
-        newMessageList.push({
-          threadID: message.threadID,
-          items: [
-            {
-              sender: message.sender,
-              message: message.message,
-              threadID: message.threadID,
-              messageType: message.messageType,
-              status: MESSAGE_STATUS.ANALYZE_PENDING,
-            },
-          ],
-        })
-      } else {
-        newMessageList.push({
-          sender: message.sender,
-          message: message.message,
-          threadID: message.threadID,
-          messageType: message.messageType,
-        })
-      }
-    } else {
-      const curMessage = newMessageList[index]
-      if (isNormalMessage(curMessage)) {
-        curMessage.message = curMessage.message + message.message
-      } else {
-        handleUpdateMessageList(curMessage, message)
-      }
-    }
+    const newMessageList = groupReceivedMessagesForUI(
+      chatMessagesRef.current,
+      message,
+    )
     chatMessagesRef.current = newMessageList
     setChatMessages(newMessageList)
   }, [])
@@ -189,6 +156,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           break
         case "chat/remote":
           let chatCallback = callback.broadcast.payload as ChatWsAppendResponse
+
           onUpdateChatMessage(chatCallback)
           break
         case "stop_all/remote":
