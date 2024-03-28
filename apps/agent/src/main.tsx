@@ -1,6 +1,7 @@
 import Bugsnag from "@bugsnag/js"
 import BugsnagPluginReact, { BugsnagErrorBoundary } from "@bugsnag/plugin-react"
 import { LicenseInfo } from "@mui/x-data-grid-premium"
+import { PostHogProvider } from "posthog-js/react"
 import { StrictMode } from "react"
 import React from "react"
 import { createRoot } from "react-dom/client"
@@ -28,11 +29,13 @@ if (import.meta.env.ILLA_MUI_LICENSE) {
 ILLAMixpanel.setDeviceID()
 
 createRoot(document.getElementById("root")!).render(
-  <ErrorBoundary>
-    <StrictMode>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </StrictMode>
-  </ErrorBoundary>,
+  <StrictMode>
+    <PostHogProvider apiKey={import.meta.env.ILLA_POSTHOG_KEY}>
+      <ErrorBoundary>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </ErrorBoundary>
+    </PostHogProvider>
+  </StrictMode>,
 )
