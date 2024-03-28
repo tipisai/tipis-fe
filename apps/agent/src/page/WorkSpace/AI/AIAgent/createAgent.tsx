@@ -3,15 +3,14 @@ import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useBeforeUnload, useParams } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
-import { Agent } from "@illa-public/public-types"
 import { getCurrentId } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
+import store from "@/redux/store"
 import {
   getUiHistoryDataByCacheID,
   setUiHistoryData,
 } from "@/utils/localForage/teamData"
-import store from "../../../../redux/store"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import { AIAgent } from "./aiagent"
 import FormContext from "./components/FormContext"
@@ -68,13 +67,13 @@ export const CreateAIAgentPage: FC = () => {
       setUiHistoryData(teamID, cacheID!, {
         ...uiHistoryData,
         formData: {
-          ...(formData as Agent),
-          ...values,
+          ...(formData as IAgentForm),
+          ...(values as IAgentForm),
         },
       })
     } else {
       setUiHistoryData(teamID, cacheID!, {
-        formData: values,
+        formData: values as IAgentForm,
       })
     }
   }, [initAgent.cacheID, values])
@@ -87,7 +86,7 @@ export const CreateAIAgentPage: FC = () => {
       if (uiHistoryData) {
         const { formData } = uiHistoryData
         if (formData) {
-          methods.reset(formData as Agent)
+          methods.reset(formData as IAgentForm)
         }
       }
     }

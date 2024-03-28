@@ -15,6 +15,7 @@ export interface IAgentForm
     | "editedBy"
   > {
   cacheID: string
+  formIsDirty?: boolean
 }
 
 export const AgentInitial: IAgentForm = {

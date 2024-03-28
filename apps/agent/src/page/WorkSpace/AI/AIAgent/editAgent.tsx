@@ -56,6 +56,8 @@ export const EditAIAgentPage: FC = () => {
       : initAgent,
   })
 
+  const isDirty = methods.formState.isDirty
+
   const values = useWatch({
     control: methods.control,
   })
@@ -71,18 +73,22 @@ export const EditAIAgentPage: FC = () => {
           ...uiHistoryData,
           formData: {
             ...(formData as IAgentForm),
-            ...values,
+            ...(values as IAgentForm),
+            formIsDirty: isDirty,
           },
         })
       }
     } else {
       if (values.aiAgentID) {
         setUiHistoryData(teamID!, cacheID!, {
-          formData: values,
+          formData: {
+            ...(values as IAgentForm),
+            formIsDirty: isDirty,
+          },
         })
       }
     }
-  }, [teamID, values])
+  }, [isDirty, teamID, values])
 
   useEffect(() => {
     const getHistoryDataAndSetFormData = async () => {
@@ -92,15 +98,20 @@ export const EditAIAgentPage: FC = () => {
       if (uiHistoryData) {
         const { formData } = uiHistoryData
         if (formData) {
-          methods.reset({
-            ...formData,
-            cacheID: (formData as IAgentForm).aiAgentID,
-          })
+          methods.reset(
+            {
+              ...formData,
+              cacheID: (formData as IAgentForm).aiAgentID,
+            },
+            {
+              keepDirty: true,
+            },
+          )
         }
       }
     }
     getHistoryDataAndSetFormData()
-  }, [methods, values.aiAgentID])
+  }, [isDirty, methods, values.aiAgentID])
 
   useBeforeUnload(setUiHistoryFormData)
 
