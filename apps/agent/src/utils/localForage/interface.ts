@@ -2,10 +2,11 @@ import {
   ChatSendRequestPayload,
   ChatWsAppendResponse,
 } from "@/components/PreviewChat/interface"
+import { IAgentForm } from "@/page/WorkSpace/AI/AIAgent/interface"
 import { ITabInfo } from "@/redux/ui/recentTab/interface"
 
 export interface IUiHistoryData {
-  formData?: unknown
+  formData?: IAgentForm
   chatMessage?: {
     edit: (ChatWsAppendResponse | ChatSendRequestPayload)[]
     run: (ChatWsAppendResponse | ChatSendRequestPayload)[]

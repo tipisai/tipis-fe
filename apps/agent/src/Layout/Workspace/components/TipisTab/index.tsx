@@ -9,6 +9,7 @@ import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
+import { getUiHistoryDataByCacheID } from "@/utils/localForage/teamData"
 import { useRemoveRecentTabReducer } from "@/utils/recentTabs/hook"
 import { getChatPath } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
@@ -41,7 +42,7 @@ const TipisTab: FC<ITipsTab> = (props) => {
 
   const getTabName = useGetTabName()
 
-  const onClickRemoveTab: MouseEventHandler<HTMLElement> = (e) => {
+  const onClickRemoveTab: MouseEventHandler<HTMLElement> = async (e) => {
     e.stopPropagation()
     e.preventDefault()
     const newTabs = allRecentTabs.filter((tab) => tab.tabID !== tabID)
@@ -62,12 +63,22 @@ const TipisTab: FC<ITipsTab> = (props) => {
       navigate(newPath)
     }
     if (shouldModelTipTabTypes.includes(tabType)) {
-      modal.confirm({
-        content: t("homepage.edit_tipi.modal.not_save_desc"),
-        okText: t("homepage.edit_tipi.modal.not_save_ok"),
-        cancelText: t("homepage.edit_tipi.modal.not_save_cancel"),
-        onOk: removeTab,
-      })
+      const uiHistoryData = await getUiHistoryDataByCacheID(
+        currentTeamInfo?.id ?? "",
+        cacheID,
+      )
+      const isDirty = uiHistoryData?.formData?.formIsDirty
+      if (isDirty || tabType === TAB_TYPE.CREATE_TIPIS) {
+        modal.confirm({
+          content: t("homepage.edit_tipi.modal.not_save_desc"),
+          okText: t("homepage.edit_tipi.modal.not_save_ok"),
+          cancelText: t("homepage.edit_tipi.modal.not_save_cancel"),
+          onOk: removeTab,
+        })
+      } else {
+        removeTab()
+      }
+
       return
     }
     removeTab()

@@ -205,7 +205,6 @@ export const groupReceivedMessagesForCache = async (
   },
   message: ChatWsAppendResponse,
 ) => {
-  console.log("message", message)
   const setChatMessageCache =
     mode === "run" ? setRunCacheChatMessage : setEditCacheChatMessage
   const getChatMessageCache =

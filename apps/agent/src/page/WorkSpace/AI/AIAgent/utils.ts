@@ -141,7 +141,11 @@ export const useSubmitSaveAgent = () => {
             ? agentInfo.knowledge
             : [],
         }
-        reset(newFormData)
+        reset({
+          ...newFormData,
+          cacheID: newFormData.aiAgentID,
+          formIsDirty: false,
+        })
         updateTabInfo(data.cacheID, {
           tabName: newFormData.name,
           tabIcon: newFormData.icon,
@@ -154,7 +158,11 @@ export const useSubmitSaveAgent = () => {
           data.cacheID,
           newFormData.aiAgentID,
           {
-            formData: newFormData,
+            formData: {
+              ...newFormData,
+              cacheID: newFormData.aiAgentID,
+              formIsDirty: false,
+            },
           },
         )
         message.success({
