@@ -52,7 +52,11 @@ import {
 } from "@/utils/agent/wsUtils"
 import { addRunCacheChatMessage } from "@/utils/localForage/teamData"
 import { IAgentForm } from "../../AIAgent/interface"
-import { IAgentWSInject, IAgentWSProviderProps } from "./interface"
+import {
+  IAgentWSInject,
+  IAgentWSProviderProps,
+  ICachePayloadQueue,
+} from "./interface"
 
 export const AgentWSContext = createContext({} as IAgentWSInject)
 
@@ -63,6 +67,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
 
   const { t } = useTranslation()
   const { tabID } = useParams()
+  const cacheMessageQueue = useRef<ICachePayloadQueue[]>([])
 
   const { getValues } = useFormContext<IAgentForm>()
   const creditModal = useCreditModal()
@@ -79,7 +84,6 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       model: getValues("model"),
       prompt: getValues("prompt"),
       agentType: getValues("agentType"),
-      // TODO: add knowledge
     } as Agent
   }, [getValues])
 
@@ -170,20 +174,26 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       if (options?.fileIDs && options.fileIDs.length > 0) {
         const withFileTextMessage = getWithFileMessagePayload(options.fileIDs)
         sendMessage(withFileTextMessage)
+        cacheMessageQueue.current.push({
+          payload,
+          signal,
+          type,
+        })
+      } else {
+        const textMessage = getTextMessagePayload(
+          signal,
+          TextTarget.ACTION,
+          true,
+          {
+            type: type,
+            payload: {},
+          },
+          "",
+          "",
+          [encodePayload],
+        )
+        sendMessage(textMessage)
       }
-      const textMessage = getTextMessagePayload(
-        signal,
-        TextTarget.ACTION,
-        true,
-        {
-          type: type,
-          payload: {},
-        },
-        "",
-        "",
-        [encodePayload],
-      )
-      sendMessage(textMessage)
     },
     [sendMessage],
   )
@@ -199,25 +209,29 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
 
       const encodePayload: ChatSendRequestPayload =
         formatSendMessagePayload(payload)
-
       if (options?.fileIDs && options.fileIDs.length > 0) {
         const withFileTextMessage = getWithFileMessagePayload(options.fileIDs)
         sendMessage(withFileTextMessage)
+        cacheMessageQueue.current.push({
+          payload,
+          signal,
+          type,
+        })
+      } else {
+        const textMessage = getTextMessagePayload(
+          signal,
+          TextTarget.ACTION,
+          true,
+          {
+            type: type,
+            payload: {},
+          },
+          "",
+          "",
+          [encodePayload],
+        )
+        sendMessage(textMessage)
       }
-      const textMessage = getTextMessagePayload(
-        signal,
-        TextTarget.ACTION,
-        true,
-        {
-          type: type,
-          payload: {},
-        },
-        "",
-        "",
-        [encodePayload],
-      )
-
-      sendMessage(textMessage)
 
       if (options?.updateMessage && options?.messageContent) {
         addRunCacheChatMessage(
@@ -229,11 +243,24 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
           ...chatMessagesRef.current,
           options?.messageContent,
         ]
-        setChatMessages([...chatMessages, options?.messageContent])
+        setChatMessages(chatMessagesRef.current)
       }
     },
-    [chatMessages, sendMessage, tabID],
+    [sendMessage, tabID],
   )
+
+  const clearCacheQueue = useCallback(() => {
+    while (cacheMessageQueue.current.length > 0) {
+      const cachePayload = cacheMessageQueue.current.pop()
+      if (cachePayload) {
+        startSendMessage(
+          cachePayload.payload,
+          cachePayload.signal,
+          cachePayload.type,
+        )
+      }
+    }
+  }, [startSendMessage])
 
   const onMessageSuccessCallback = useCallback(
     (callback: Callback<unknown>) => {
@@ -333,9 +360,12 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
           break
         case 3:
           break
+        case 21:
+          clearCacheQueue()
+          break
       }
     },
-    [creditModal, messageAPI, t],
+    [clearCacheQueue, creditModal, messageAPI, t],
   )
 
   const getConnectParams = useCallback(async () => {
