@@ -3,13 +3,7 @@ import { Button, Dropdown, MenuProps } from "antd"
 import { FC, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
-import {
-  InfoIcon,
-  MoreIcon,
-  PenIcon,
-  PinIcon,
-  ShareIcon,
-} from "@illa-public/icon"
+import { InfoIcon, MoreIcon, PenIcon, ShareIcon } from "@illa-public/icon"
 import { ShareAgentMobile, ShareAgentPC } from "@illa-public/invite-modal"
 import {
   ILLA_MIXPANEL_CLOUD_PAGE_NAME,
@@ -54,11 +48,6 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
   )
 
   const items: MenuProps["items"] = [
-    {
-      key: "pin",
-      label: t("homepage.run_tipi.more.pin"),
-      icon: <Icon component={PinIcon} />,
-    },
     {
       key: "edit",
       label: t("dashboard.common.edit"),
