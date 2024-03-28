@@ -1,13 +1,10 @@
 import Icon from "@ant-design/icons"
-import { App, Button, Progress } from "antd"
+import { App, Button } from "antd"
 import { ChangeEvent, FC, useMemo, useRef, useSyncExternalStore } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
-import { useRaf } from "react-use"
-import { getColor } from "@illa-public/color-scheme"
 import { getFileIconByContentType } from "@illa-public/icon"
-import { DeleteIcon, SuccessIcon, UploadIcon } from "@illa-public/icon"
-import { ErrorIcon } from "@illa-public/icon"
+import { DeleteIcon, UploadIcon } from "@illa-public/icon"
 import { GCS_OBJECT_TYPE, IKnowledgeFile } from "@illa-public/public-types"
 import { getCurrentId } from "@illa-public/user-data"
 import {
@@ -19,11 +16,12 @@ import { useDeleteKnowledgeFileMutation } from "@/redux/services/driveAPI"
 import {
   FILE_ITEM_DETAIL_STATUS_IN_UI,
   IFileDetailInfo,
-  UploadFileStore,
+  editPanelUpdateFileDetailStore,
   useUploadFileToDrive,
 } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
-import { IKnowledgeUploadProps, IStatusIconProps } from "./interface"
+import StatusIcon from "./StatusIcon"
+import { IKnowledgeUploadProps } from "./interface"
 import {
   containerStyle,
   fileItemStyle,
@@ -35,46 +33,6 @@ import {
   opeationStyle,
 } from "./style"
 
-const editPanelUpdateFileDetailStore = new UploadFileStore()
-
-const StatusIcon: FC<IStatusIconProps> = ({ status, onClickRetry }) => {
-  const loadedNum = useRaf(3000, 0)
-  switch (status) {
-    case FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING:
-      return <Progress type="circle" size={16} percent={0} />
-    case FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING:
-      return (
-        <Progress
-          type="circle"
-          size={16}
-          strokeLinecap="square"
-          percent={parseFloat((loadedNum * 85).toFixed(2))}
-        />
-      )
-
-    case FILE_ITEM_DETAIL_STATUS_IN_UI.SUCCESS:
-      return (
-        <SuccessIcon
-          style={{
-            color: getColor("green", "03"),
-          }}
-        />
-      )
-    case FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR:
-      return (
-        <Icon
-          component={ErrorIcon}
-          onClick={onClickRetry}
-          style={{
-            color: getColor("red", "03"),
-          }}
-        />
-      )
-    default:
-      return null
-  }
-}
-
 const mergeUploadValues = (
   values: IKnowledgeFile[],
   uploadFiles: IFileDetailInfo[],
@@ -83,7 +41,7 @@ const mergeUploadValues = (
     return {
       ...item,
       status: FILE_ITEM_DETAIL_STATUS_IN_UI.SUCCESS,
-      queryID: item.value,
+      queryID: item.fileID,
     }
   })
   return [...mergeValues, ...uploadFiles]
@@ -147,7 +105,7 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
           const res = {
             fileName: fileName,
             contentType: file.type,
-            value: fileID,
+            fileID,
           }
           editPanelUpdateFileDetailStore.deleteFileDetailInfo(queryID)
           addFile(res)
@@ -169,6 +127,10 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
       title: t("drive.modal.delete_going_on_task.title"),
       content: t("drive.modal.delete_going_on_task.description"),
       okText: t("drive.modal.delete_going_on_task.delete"),
+      okButtonProps: {
+        danger: true,
+      },
+      centered: true,
       cancelText: t("drive.modal.delete_going_on_task.cancel"),
       onOk: () => {
         try {
@@ -179,6 +141,7 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
               fileID: queryID,
               teamID,
             })
+          messageAPI.success(t("删除成功"))
         } catch (e) {}
       },
     })
@@ -186,9 +149,7 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
 
   const handleClickUpload = () => {
     if (Array.isArray(values) && values.length >= MAX_MESSAGE_FILES_LENGTH) {
-      messageAPI.warning({
-        content: t("dashboard.message.support_for_up_to_10"),
-      })
+      messageAPI.warning(t("dashboard.message.support_for_up_to_10"))
       return
     }
     inputRef.current?.click()

@@ -13,8 +13,8 @@ export const collarUsageContainerStyle = css`
 export const collarUsageHeaderStyle = css`
   width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  justify-content: space-between;
+  align-items: center;
   gap: 12px;
 `
 
@@ -39,4 +39,9 @@ export const detailStyle = css`
   flex-direction: column;
   align-items: center;
   gap: 24px;
+`
+
+export const loadingContainerStyle = css`
+  width: 100%;
+  height: 286px;
 `

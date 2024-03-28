@@ -1,5 +1,5 @@
-import { isPremiumModel } from "@illa-public/market-agent"
-import { IKnowledgeFile } from "@illa-public/public-types"
+import { TextSignal } from "@/api/ws/textSignal"
+import { SEND_MESSAGE_WS_TYPE } from "@/components/PreviewChat/TipisWebscoketContext/interface"
 import {
   ChatMessage,
   ChatSendRequestPayload,
@@ -7,40 +7,15 @@ import {
   MESSAGE_STATUS,
   MESSAGE_SYNC_TYPE,
 } from "@/components/PreviewChat/interface"
+import { AgentInitial } from "@/page/WorkSpace/AI/AIAgent/interface"
 import { isGroupMessage } from "./typeHelper"
 
-export const formatMessageString = (
-  text: string,
-  knowledgeFiles?: IKnowledgeFile[],
-) => {
-  let res = text
-  if (!knowledgeFiles || knowledgeFiles.length === 0) return res
-  const fileString = knowledgeFiles
-    .map((file) => {
-      return `File name: [${file.fileName}]\nFile content: [\n${file.value}\n]
-    `
-    })
-    .join("\n\n")
-
-  return `${res}\n${fileString}`
-}
-
-export const formatSendMessagePayload = (
-  payload: ChatSendRequestPayload,
-  messageContent?: ChatMessage,
-) => {
+export const formatSendMessagePayload = (payload: ChatSendRequestPayload) => {
   const encodePayload: ChatSendRequestPayload = payload
 
   Object.keys(encodePayload).forEach((key) => {
     if (key === "prompt") {
-      const text = encodePayload[key]
-      if (isPremiumModel(payload.model)) {
-        encodePayload[key] = encodeURIComponent(
-          formatMessageString(text, messageContent?.knowledgeFiles),
-        )
-      } else {
-        encodePayload[key] = encodeURIComponent(encodePayload[key])
-      }
+      encodePayload[key] = encodeURIComponent(encodePayload[key])
     }
     if (key === "variables") {
       encodePayload[key] = encodePayload[key].map((v) => {
@@ -111,14 +86,6 @@ export const handleUpdateMessageList = (
   }
 }
 
-export const markAnalyzeMessageEnd = (messageList: ChatMessage[]) => {
-  messageList.forEach((message) => {
-    if (isPendingRequestMessage(message)) {
-      message.status = MESSAGE_STATUS.ANALYZE_END
-    }
-  })
-}
-
 export const cancelPendingMessage = (
   messageList: (IGroupMessage | ChatMessage)[],
 ) => {
@@ -147,4 +114,25 @@ export const cancelPendingMessage = (
   })
 
   return needUpdateMessageList ? cancelUpdateList : undefined
+}
+
+export const getSendMessageBody = (message: ChatMessage, aiAgentID: string) => {
+  const { agentType, model, modelConfig, variables } = AgentInitial
+
+  return {
+    payload: {
+      threadID: message.threadID,
+      prompt: message.message,
+      variables,
+      actionID: aiAgentID,
+      modelConfig,
+      model,
+      agentType,
+    },
+    signal: TextSignal.RUN,
+    type: SEND_MESSAGE_WS_TYPE.CHAT,
+    fileIDs: message?.knowledgeFiles?.map((item) => item.fileID) || [],
+    updateMessage: true,
+    messageContent: message,
+  }
 }

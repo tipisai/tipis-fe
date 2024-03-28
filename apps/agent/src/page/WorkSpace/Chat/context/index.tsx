@@ -15,14 +15,15 @@ import {
   useCreditModal,
 } from "@illa-public/upgrade-modal"
 import { getCurrentId } from "@illa-public/user-data"
-import { getTextMessagePayload } from "@/api/ws"
+import { getTextMessagePayload, getWithFileMessagePayload } from "@/api/ws"
 import { Callback } from "@/api/ws/interface"
 import { TextSignal, TextTarget } from "@/api/ws/textSignal"
 import defaultChatIconURL from "@/assets/public/logo.svg"
 import { TipisWebSocketContext } from "@/components/PreviewChat/TipisWebscoketContext"
 import {
-  AgentMessageType,
   IInitWSCallback,
+  ISendMessageOptions,
+  SEND_MESSAGE_WS_TYPE,
 } from "@/components/PreviewChat/TipisWebscoketContext/interface"
 import {
   useUpdateAnonymousAvatar,
@@ -61,7 +62,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
 
   const { t } = useTranslation()
 
-  const collaModal = useCreditModal()
+  const creditModal = useCreditModal()
 
   const [isConnecting, setIsConnecting] = useState(false)
   const [isReceiving, setIsReceiving] = useState(false)
@@ -138,18 +139,55 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     TipisWebSocketContext,
   )
 
-  const innerSendMessage = useCallback(
+  const startSendMessage = useCallback(
     (
       payload: ChatSendRequestPayload,
       signal: TextSignal,
-      type: AgentMessageType,
-      updateMessage?: boolean,
-      messageContent?: ChatMessage,
+      type: SEND_MESSAGE_WS_TYPE,
+      options?: ISendMessageOptions,
     ) => {
       setIsReceiving(true)
 
       const encodePayload: ChatSendRequestPayload =
         formatSendMessagePayload(payload)
+
+      if (options?.fileIDs && options.fileIDs.length > 0) {
+        const withFileTextMessage = getWithFileMessagePayload(options.fileIDs)
+        sendMessage(withFileTextMessage)
+      }
+      const textMessage = getTextMessagePayload(
+        signal,
+        TextTarget.ACTION,
+        true,
+        {
+          type: type,
+          payload: {},
+        },
+        "",
+        "",
+        [encodePayload],
+      )
+      sendMessage(textMessage)
+    },
+    [sendMessage],
+  )
+
+  const chatSendMessage = useCallback(
+    (
+      payload: ChatSendRequestPayload,
+      signal: TextSignal,
+      type: SEND_MESSAGE_WS_TYPE,
+      options?: ISendMessageOptions,
+    ) => {
+      setIsReceiving(true)
+
+      const encodePayload: ChatSendRequestPayload =
+        formatSendMessagePayload(payload)
+
+      if (options?.fileIDs && options.fileIDs.length > 0) {
+        const withFileTextMessage = getWithFileMessagePayload(options.fileIDs)
+        sendMessage(withFileTextMessage)
+      }
       const textMessage = getTextMessagePayload(
         signal,
         TextTarget.ACTION,
@@ -164,12 +202,15 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       )
       sendMessage(textMessage)
 
-      if (updateMessage && messageContent) {
-        chatMessagesRef.current = [...chatMessagesRef.current, messageContent]
-        setChatMessages((prevMessage) => [...prevMessage, messageContent])
+      if (options?.updateMessage && options?.messageContent) {
+        chatMessagesRef.current = [
+          ...chatMessagesRef.current,
+          options?.messageContent,
+        ]
+        setChatMessages([...chatMessages, options?.messageContent])
       }
     },
-    [sendMessage],
+    [chatMessages, sendMessage],
   )
 
   const onMessageSuccessCallback = useCallback(
@@ -181,10 +222,10 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           }
           onUpdateRoomUser(inRoomUsers)
           cleanMessage()
-          innerSendMessage(
+          startSendMessage(
             {} as ChatSendRequestPayload,
             TextSignal.CLEAN,
-            "clean",
+            SEND_MESSAGE_WS_TYPE.CLEAN,
           )
           break
         case "chat/remote":
@@ -198,7 +239,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           break
       }
     },
-    [cleanMessage, innerSendMessage, onUpdateChatMessage, onUpdateRoomUser],
+    [cleanMessage, startSendMessage, onUpdateChatMessage, onUpdateRoomUser],
   )
 
   const onMessageFailedCallback = useCallback(
@@ -228,7 +269,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           break
         case 17:
         case 18:
-          collaModal({
+          creditModal({
             modalType: CreditModalType.TOKEN,
             from: "agent_run",
           })
@@ -237,7 +278,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           break
       }
     },
-    [collaModal, messageAPI, t],
+    [creditModal, messageAPI, t],
   )
 
   const getConnectParams = useCallback(async () => {
@@ -299,13 +340,13 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
 
   const stableValue = useMemo(() => {
     return {
-      sendMessage: innerSendMessage,
+      sendMessage: chatSendMessage,
       reconnect: innerReconnect,
       connect: innerConnect,
       setIsReceiving,
       leaveRoom: innerLeaveRoom,
     }
-  }, [innerConnect, innerLeaveRoom, innerReconnect, innerSendMessage])
+  }, [innerConnect, innerLeaveRoom, innerReconnect, chatSendMessage])
 
   const unStableValue = useMemo(
     () => ({

@@ -4,7 +4,7 @@ import { FILE_ITEM_DETAIL_STATUS_IN_UI, UploadFileStore } from "."
 
 export const multipleFileHandler = (
   files: File[],
-  currentFiles: Omit<IKnowledgeFile, "value">[],
+  currentFiles: Omit<IKnowledgeFile, "fileID">[],
   fileStore: UploadFileStore,
 ) => {
   const res = files.map((file) => {
@@ -14,9 +14,10 @@ export const multipleFileHandler = (
     )
 
     const queryID = `${file.name}_${new Date().getTime()}`
+    const fileNameArr = file.name.split(".")
     const fileName =
       index !== -1
-        ? `${file.name.split(".")[0]}(${v4().slice(0, 3)})`
+        ? `${fileNameArr[0]}(${v4().slice(0, 3)}).${fileNameArr[1]}`
         : file.name
 
     fileStore.addFileDetailInfo({

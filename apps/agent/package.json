@@ -72,6 +72,7 @@
     "klona": "^2.0.6",
     "localforage": "^1.10.0",
     "lodash-es": "^4.17.21",
+    "lottie-web": "^5.12.2",
     "mammoth": "^1.7.0",
     "pdfjs-dist": "2.16.105",
     "qs": "^6.12.0",

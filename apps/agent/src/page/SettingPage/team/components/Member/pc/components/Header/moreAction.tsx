@@ -1,6 +1,6 @@
 import Icon from "@ant-design/icons"
 import { App, Button, Dropdown, MenuProps, Switch } from "antd"
-import { FC, MouseEvent, useCallback, useContext, useState } from "react"
+import { FC, useCallback, useContext, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -23,9 +23,6 @@ import {
   moreActionTextStyle,
 } from "./style"
 
-const stopPropagation = (e: MouseEvent) => {
-  e.stopPropagation()
-}
 export const MoreAction: FC = () => {
   const { message, modal } = App.useApp()
   const { t } = useTranslation()
@@ -82,12 +79,6 @@ export const MoreAction: FC = () => {
   ])
 
   const handleClickDeleteOrLeaveTeam = useCallback(() => {
-    track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      element: "leave",
-    })
-    track?.(ILLA_MIXPANEL_EVENT_TYPE.SHOW, {
-      element: "leave_modal",
-    })
     modal.confirm({
       title: t("team_setting.leave_modal.title"),
       content: t("team_setting.leave_modal.description"),
@@ -106,10 +97,6 @@ export const MoreAction: FC = () => {
   }, [handleLeaveTeam, modal, t, track])
 
   const handleChangeInviteByEditor = async (value: boolean) => {
-    track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      element: "allow_manage",
-      parameter2: value ? "on" : "off",
-    })
     try {
       setAllowInviteLoading(true)
       await updateTeamPermissionConfig({
@@ -125,6 +112,19 @@ export const MoreAction: FC = () => {
     }
   }
 
+  const handleMenuClick: MenuProps["onClick"] = ({ key }) => {
+    switch (key) {
+      case "allow_invite":
+        handleChangeInviteByEditor(
+          !(allowEditorManageTeamMember && allowViewerManageTeamMember),
+        )
+        break
+      case "leave_team":
+        handleClickDeleteOrLeaveTeam()
+        break
+    }
+  }
+
   const dropItems = [
     {
       key: "allow_invite",
@@ -134,15 +134,11 @@ export const MoreAction: FC = () => {
           allowRoles={[USER_ROLE.OWNER, USER_ROLE.ADMIN]}
           rules={SHOW_RULES.EQUAL}
         >
-          <div
-            css={allowEditorOrViewerInviteWrapperStyle}
-            onClick={stopPropagation}
-          >
+          <div css={allowEditorOrViewerInviteWrapperStyle}>
             <span css={moreActionTextStyle}>
               {t("user_management.settings.allow_editors_invite")}
             </span>
             <Switch
-              onChange={handleChangeInviteByEditor}
               disabled={allowInviteLoading}
               checked={
                 allowEditorManageTeamMember && allowViewerManageTeamMember
@@ -154,11 +150,7 @@ export const MoreAction: FC = () => {
     },
     {
       key: "leave_team",
-      label: (
-        <span onClick={handleClickDeleteOrLeaveTeam}>
-          {t("team_setting.left_panel.leave")}
-        </span>
-      ),
+      label: t("team_setting.left_panel.leave"),
       disabled: currentUserRole === USER_ROLE.OWNER,
     },
   ]
@@ -187,7 +179,7 @@ export const MoreAction: FC = () => {
       }}
       menu={{
         items: menuItems,
-        onClick: handleClickDeleteOrLeaveTeam,
+        onClick: handleMenuClick,
       }}
     >
       <Button icon={<Icon component={MoreIcon} />} />

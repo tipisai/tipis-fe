@@ -6,8 +6,7 @@ import {
 } from "@illa-public/public-types"
 import { Params } from "@illa-public/record-editor"
 import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
-import { TextSignal } from "@/api/ws/textSignal"
-import { AgentMessageType } from "./TipisWebscoketContext/interface"
+import { IChatSendMessage } from "./TipisWebscoketContext/interface"
 
 export type EDIT_STATE = "EDIT" | "RUN"
 
@@ -16,7 +15,6 @@ export enum MESSAGE_STATUS {
   ANALYZE_FAILED = "analyze_failed",
   ANALYZE_PENDING = "analyze_pending",
   ANALYZE_STOP = "analyze_stop",
-  ANALYZE_END = "analyze_end",
 }
 
 export enum SenderType {
@@ -90,13 +88,7 @@ export interface PreviewChatProps {
     isRunning: boolean
     chatMessages: (IGroupMessage | ChatMessage)[]
     isReceiving: boolean
-    sendMessage: (
-      payload: ChatSendRequestPayload,
-      signal: TextSignal,
-      type: AgentMessageType,
-      updateMessage?: boolean,
-      messageContent?: ChatMessage,
-    ) => void
+    sendMessage: IChatSendMessage
     setIsReceiving: (isReceiving: boolean) => void
   }
 }

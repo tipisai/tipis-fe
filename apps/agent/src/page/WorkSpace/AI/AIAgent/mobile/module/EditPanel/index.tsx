@@ -8,6 +8,7 @@ import {
 import EditPanelLayout from "@/Layout/EditPanelLayout"
 import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayout"
 import MobileSecondPageLayout from "@/Layout/Workspace/mobile/module/SecondPageLayout"
+import { editPanelUpdateFileDetailStore } from "@/utils/drive"
 import BlackButton from "../../../../../../../components/BlackButton"
 import { track } from "../../../../../../../utils/mixpanelHelper"
 import { AgentWSContext } from "../../../../context/AgentWSContext"
@@ -75,12 +76,8 @@ const MobileEditPanel: FC = () => {
       })
       handleScrollToElement(SCROLL_ID.VARIABLES)
       return false
-    } else if (
-      Array.isArray(getValues("knowledge")) &&
-      getValues("knowledge").length > 0 &&
-      getValues("knowledge").some((param) => param.value === "")
-    ) {
-      setError("variables", {
+    } else if (editPanelUpdateFileDetailStore.hasPendingFile()) {
+      setError("knowledge", {
         type: "knowledge",
         message: t("dashboard.message.parsing_file_in_prog"),
       })

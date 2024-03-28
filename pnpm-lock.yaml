@@ -240,6 +240,9 @@ importers:
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
+      lottie-web:
+        specifier: ^5.12.2
+        version: 5.12.2
       mammoth:
         specifier: ^1.7.0
         version: 1.7.0
@@ -6933,6 +6936,10 @@ packages:
       duck: 0.1.12
       option: 0.2.4
       underscore: 1.13.6
+    dev: false
+
+  /lottie-web@5.12.2:
+    resolution: {integrity: sha512-uvhvYPC8kGPjXT3MyKMrL3JitEAmDMp30lVkuq/590Mw9ok6pWcFCwXJveo0t5uqYw1UREQHofD+jVpdjBv8wg==}
     dev: false
 
   /lower-case@2.0.2:
