@@ -77,7 +77,7 @@ export const useGetNotContributeTipDetail = () => {
   const currentTeamID = useSelector(getCurrentId)
   const { agentID } = useParams()
 
-  const { data, isLoading, isError } = useGetAgentDetailQuery({
+  const { data, isLoading, isError, isSuccess } = useGetAgentDetailQuery({
     aiAgentID: agentID!,
     teamID: currentTeamID!,
   })
@@ -87,8 +87,9 @@ export const useGetNotContributeTipDetail = () => {
       data,
       isLoading,
       isError,
+      isSuccess,
     }),
-    [data, isError, isLoading],
+    [data, isError, isLoading, isSuccess],
   )
 
   return returnValue

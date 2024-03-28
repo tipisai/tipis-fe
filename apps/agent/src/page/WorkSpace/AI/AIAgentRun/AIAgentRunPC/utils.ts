@@ -6,15 +6,15 @@ import {
   ILLA_MIXPANEL_BUILDER_PAGE_NAME,
   ILLA_MIXPANEL_EVENT_TYPE,
 } from "@illa-public/mixpanel-utils"
-import { Agent } from "@illa-public/public-types"
 import { getCurrentTeamInfo, getPlanUtils } from "@illa-public/user-data"
 import { canUseUpgradeFeature } from "@illa-public/user-role-utils"
 import { track } from "@/utils/mixpanelHelper"
+import { IAgentForm } from "../../AIAgent/interface"
 import { AgentWSContext } from "../../context/AgentWSContext"
 
 export const useReRerunAgent = () => {
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!!
-  const { reset, control } = useFormContext<Agent>()
+  const { reset, control } = useFormContext<IAgentForm>()
   const [aiAgentID] = useWatch({
     control,
     name: ["aiAgentID"],
@@ -30,7 +30,7 @@ export const useReRerunAgent = () => {
   )
 
   const rerunAgent = useCallback(
-    async (data: Agent) => {
+    async (data: IAgentForm) => {
       if (isPremiumModel(data.model) && !canUseBillingFeature) {
         // TODO: billing
         // upgradeModal({
