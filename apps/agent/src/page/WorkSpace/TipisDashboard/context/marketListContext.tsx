@@ -1,29 +1,57 @@
-import { Dispatch, FC, ReactNode, createContext, useReducer } from "react"
 import {
-  IMarketAction,
-  IMarketState,
-  INIT_MARKET_STATE,
-  reducer,
-} from "./reducer"
+  Dispatch,
+  FC,
+  ReactNode,
+  createContext,
+  useEffect,
+  useReducer,
+} from "react"
+import { useSelector } from "react-redux"
+import { getCurrentId } from "@illa-public/user-data"
+import { getCacheUIState } from "../../../../utils/localForage/teamData"
+import { EXPLORE_TIPIS_ID } from "../../../../utils/recentTabs/constants"
+import {
+  DASH_BOARD_UI_STATE_ACTION_TYPE,
+  IDashBoardUIState,
+  TDashboardUIStateAction,
+} from "./interface"
+import { INIT_DASH_BOARD_UI_STATE, reducer } from "./reducer"
 
-interface IMarketListInject {
-  marketState: IMarketState
-  dispatch: Dispatch<IMarketAction>
+interface IDashboardUIInject {
+  dashboardUIState: IDashBoardUIState
+  dispatch: Dispatch<TDashboardUIStateAction>
 }
 
-interface IMarketListProviderProps {
+interface IDashBoardUIStateProviderProps {
   children: ReactNode
 }
 
-export const MarketListContext = createContext({} as IMarketListInject)
+export const DashBoardUIStateContext = createContext({} as IDashboardUIInject)
 
-export const MarketListProvider: FC<IMarketListProviderProps> = ({
+export const DashboardUIStateProvider: FC<IDashBoardUIStateProviderProps> = ({
   children,
 }) => {
-  const [marketState, dispatch] = useReducer(reducer, INIT_MARKET_STATE)
+  const currentTeamID = useSelector(getCurrentId)
+  const [dashboardUIState, dispatch] = useReducer(
+    reducer,
+    INIT_DASH_BOARD_UI_STATE,
+  )
+
+  useEffect(() => {
+    const setDefaultUIState = async () => {
+      const uiState = await getCacheUIState(currentTeamID!, EXPLORE_TIPIS_ID)
+      dispatch({
+        type: DASH_BOARD_UI_STATE_ACTION_TYPE.SET_UI_STATE,
+        payload: (uiState as IDashBoardUIState) ?? INIT_DASH_BOARD_UI_STATE,
+      })
+    }
+
+    setDefaultUIState()
+  }, [currentTeamID])
+
   return (
-    <MarketListContext.Provider value={{ marketState, dispatch }}>
+    <DashBoardUIStateContext.Provider value={{ dashboardUIState, dispatch }}>
       {children}
-    </MarketListContext.Provider>
+    </DashBoardUIStateContext.Provider>
   )
 }

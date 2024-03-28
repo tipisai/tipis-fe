@@ -227,3 +227,26 @@ export const deleteRunCacheChatMessage = async (
   newUIHistoryCacheData.chatMessage.run = []
   await setUiHistoryData(teamID, tabID, newUIHistoryCacheData)
 }
+
+export const getCacheUIState = async (teamID: string, cacheID: string) => {
+  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
+  return uiHistoryCacheData.uiState
+}
+
+export const setCacheUIState = async (
+  teamID: string,
+  cacheID: string,
+  uiState: unknown,
+) => {
+  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
+  const newUIHistoryCacheData = klona(uiHistoryCacheData ?? {})
+  newUIHistoryCacheData.uiState = uiState
+  await setUiHistoryData(teamID, cacheID, newUIHistoryCacheData)
+}
+
+export const deleteCacheUIState = async (teamID: string, cacheID: string) => {
+  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
+  const newUIHistoryCacheData = klona(uiHistoryCacheData ?? {})
+  newUIHistoryCacheData.uiState = undefined
+  await setUiHistoryData(teamID, cacheID, newUIHistoryCacheData)
+}
