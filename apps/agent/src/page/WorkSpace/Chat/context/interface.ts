@@ -1,13 +1,11 @@
 import { ReactNode } from "react"
 import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
-import { TextSignal } from "@/api/ws/textSignal"
 import {
-  AgentMessageType,
+  IChatSendMessage,
   TipisWebSocketContextType,
 } from "@/components/PreviewChat/TipisWebscoketContext/interface"
 import {
   ChatMessage,
-  ChatSendRequestPayload,
   CollaboratorsInfo,
   IGroupMessage,
 } from "@/components/PreviewChat/interface"
@@ -32,13 +30,7 @@ export interface IChatStableWSInject {
   setIsReceiving: (isReceiving: boolean) => void
   connect: () => Promise<void>
   reconnect: () => Promise<void>
-  sendMessage: (
-    payload: ChatSendRequestPayload,
-    signal: TextSignal,
-    type: AgentMessageType,
-    updateMessage?: boolean,
-    messageContent?: ChatMessage,
-  ) => void
+  sendMessage: IChatSendMessage
   leaveRoom: () => void
 }
 

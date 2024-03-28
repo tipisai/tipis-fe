@@ -24,6 +24,7 @@ import {
   collarUsageHeaderStyle,
   detailStyle,
   doughnutContainerStyle,
+  loadingContainerStyle,
 } from "./style"
 
 const { MonthPicker } = DatePicker
@@ -63,7 +64,9 @@ export const CreditUsageMobile: FC = () => {
       </div>
       <div css={cardContainerStyle}>
         {loading ? (
-          <FullSectionLoading />
+          <div css={loadingContainerStyle}>
+            <FullSectionLoading />
+          </div>
         ) : (
           <div css={detailStyle}>
             {allNum !== 0 ? (

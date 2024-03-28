@@ -9,6 +9,7 @@ import {
   ILLA_MIXPANEL_EVENT_TYPE,
 } from "@illa-public/mixpanel-utils"
 import EditPanelLayout from "@/Layout/EditPanelLayout"
+import { editPanelUpdateFileDetailStore } from "@/utils/drive"
 import { track } from "@/utils/mixpanelHelper"
 import { AgentWSContext } from "../../../../context/AgentWSContext"
 import KnowledgeEditor from "../../../components/KnowledgeEditor"
@@ -48,12 +49,8 @@ const PCEditPanel: FC = () => {
       })
       handleScrollToElement(SCROLL_ID.VARIABLES)
       return false
-    } else if (
-      Array.isArray(getValues("knowledge")) &&
-      getValues("knowledge").length > 0 &&
-      getValues("knowledge").some((param) => param.value === "")
-    ) {
-      setError("variables", {
+    } else if (editPanelUpdateFileDetailStore.hasPendingFile()) {
+      setError("knowledge", {
         type: "knowledge",
         message: t("dashboard.message.parsing_file_in_prog"),
       })

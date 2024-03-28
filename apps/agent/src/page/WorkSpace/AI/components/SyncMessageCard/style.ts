@@ -59,6 +59,12 @@ export const messageContainerStyle = css`
 export const infoIconStyle = css`
   font-size: 24px;
 `
+export const codeRunningStyle = css`
+  height: 24px;
+  width: 24px;
+  background-color: ${getColor("techPurple", "08")};
+  border-radius: 50%;
+`
 
 export const hoverCopyStyle = css`
   display: inline-flex;

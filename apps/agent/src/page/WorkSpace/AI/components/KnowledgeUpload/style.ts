@@ -27,12 +27,15 @@ export const fileItemStyle = css`
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
+  width: 100%;
 `
 
 export const nameContainerStyle = css`
   display: flex;
   align-items: center;
   gap: 12px;
+  overflow: hidden;
+  width: 100%;
 `
 
 export const fileTypeIconStyle = css`
@@ -43,7 +46,7 @@ export const fileTypeIconStyle = css`
 export const fileNameStyle = css`
   color: ${getColor("grayBlue", "02")};
   display: inline-block;
-  max-width: 364px;
+  width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

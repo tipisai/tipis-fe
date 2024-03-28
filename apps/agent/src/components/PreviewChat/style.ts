@@ -3,7 +3,7 @@ import { getColor } from "@illa-public/color-scheme"
 import { applyMobileStyle } from "@illa-public/utils"
 
 export const blockInputContainerStyle = css`
-  height: 104px;
+  height: 150px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -12,6 +12,17 @@ export const blockInputContainerStyle = css`
   overflow: hidden;
   background-color: ${getColor("white", "05")};
   backdrop-filter: blur(5px);
+  padding: 16px 24px 24px 24px;
+  border-radius: 24px;
+  border: 1px solid ${getColor("grayBlue", "09")};
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.06);
+  ${applyMobileStyle(css`
+    height: 100%;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    border-radius: unset;
+  `)}
 `
 
 export const blockInputTextStyle = css`
@@ -34,14 +45,14 @@ export const previewChatContainerStyle = css`
 `
 
 export const inputTextContainerStyle = css`
-  padding: 24px;
+  padding: 16px;
   position: relative;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  border-top: 1px solid ${getColor("grayBlue", "08")};
   flex: none;
   ${applyMobileStyle(css`
+    border-top: 1px solid ${getColor("grayBlue", "09")};
     padding: 12px 20px;
   `)}
 `
@@ -58,11 +69,11 @@ export const chatContainerStyle = css`
 export const mobileInputElementStyle = css`
   color: ${getColor("grayBlue", "02")};
   font-size: 14px;
-  flex-grow: 1;
+  width: 100%;
   font-style: normal;
   border: none;
   font-weight: 400;
-  line-height: 22px; /* 157.143% */
+  line-height: 22px;
   padding: 8px 8px 8px 0;
 
   ::placeholder {
@@ -70,8 +81,21 @@ export const mobileInputElementStyle = css`
   }
 `
 
+export const inputContainerStyle = css`
+  width: 100%;
+  padding: 16px 24px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 24px;
+  border: 1px solid ${getColor("grayBlue", "09")};
+  background: ${getColor("white", "01")};
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.06);
+`
+
 export const inputStyle = css`
-  padding: 6px 16px;
   font-size: 14px;
   color: ${getColor("grayBlue", "02")};
   outline: none;
@@ -79,7 +103,6 @@ export const inputStyle = css`
   border: none;
   flex-shrink: 1;
   width: 100%;
-  flex-grow: 1;
   font-family: unset;
   background: none;
   resize: none;
@@ -165,6 +188,7 @@ export const mobileInputStyle = css`
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: 4px;
 `
 
 export const operationStyle = css`

@@ -44,8 +44,6 @@ export const messageContainerStyle = css`
   border-radius: 8px;
   background: ${getColor("techPurple", "08")};
   padding: 12px;
-  width: 100%;
-  overflow: hidden;
   ${applyMobileStyle(css`
     margin-left: 0;
   `)}

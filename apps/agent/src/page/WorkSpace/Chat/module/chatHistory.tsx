@@ -1,6 +1,7 @@
 import { FC, useCallback, useContext, useEffect, useMemo } from "react"
 import { TextSignal } from "@/api/ws/textSignal"
 import { PreviewChat } from "@/components/PreviewChat"
+import { SEND_MESSAGE_WS_TYPE } from "@/components/PreviewChat/TipisWebscoketContext/interface"
 import {
   ChatMessage,
   ChatSendRequestPayload,
@@ -55,9 +56,11 @@ export const DefaultChat: FC<{ isMobile: boolean }> = ({
           ...INIT_CHAT_CONFIG,
         } as ChatSendRequestPayload,
         TextSignal.RUN,
-        "chat",
-        true,
-        message,
+        SEND_MESSAGE_WS_TYPE.CHAT,
+        {
+          updateMessage: true,
+          messageContent: message,
+        },
       )
     },
     [sendMessage],

@@ -88,4 +88,22 @@ export class UploadFileStore {
       (item) => item.fileName === nameOrId || item.queryID === nameOrId,
     )
   }
+
+  clearStore() {
+    this.fileDetailInfos = []
+    this.listeners.forEach((listener) => listener())
+  }
+
+  hasPendingFile() {
+    return this.fileDetailInfos.some(
+      (item) =>
+        item.status === FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING ||
+        item.status === FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING ||
+        item.status === FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
+    )
+  }
 }
+
+export const editPanelUpdateFileDetailStore = new UploadFileStore()
+
+export const chatUploadStore = new UploadFileStore()

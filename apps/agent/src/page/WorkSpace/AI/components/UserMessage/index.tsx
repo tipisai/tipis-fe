@@ -11,7 +11,7 @@ import {
   senderContainerStyle,
   senderNicknameStyle,
 } from "@/page/WorkSpace/AI/components/UserMessage/style"
-import ShowFilesMobile from "./ShowFiles"
+import ShowFiles from "./ShowFiles"
 
 export const UserMessage: FC<UserMessageProps> = (props) => {
   const { message, isMobile } = props
@@ -23,7 +23,7 @@ export const UserMessage: FC<UserMessageProps> = (props) => {
         <span css={senderNicknameStyle}>{currentUserInfo.nickname}</span>
         {Array.isArray(message.knowledgeFiles) &&
           message.knowledgeFiles.length > 0 && (
-            <ShowFilesMobile knowledgeFiles={message.knowledgeFiles} />
+            <ShowFiles knowledgeFiles={message.knowledgeFiles} />
           )}
         {message.message && (
           <div css={messageContainerStyle}>

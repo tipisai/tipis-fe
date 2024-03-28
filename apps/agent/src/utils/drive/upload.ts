@@ -10,6 +10,7 @@ import {
   usePutKnowledgeFileUploadStatusMutation,
 } from "@/redux/services/driveAPI"
 import { uploadFileToObjectStorage } from "@/services/drive"
+import { DEFAULT_CONTENT_TYPE } from "./constant"
 import { FILE_ITEM_DETAIL_STATUS_IN_UI } from "./interface"
 import { UploadFileStore } from "./store"
 
@@ -38,7 +39,7 @@ export const useUploadFileToDrive = () => {
       })
       const { uploadAddress, fileID } = await triggerGetChatUploadAddress({
         name: needUploadFile.name,
-        contentType: needUploadFile.type,
+        contentType: needUploadFile.type || DEFAULT_CONTENT_TYPE,
         size: needUploadFile.size,
         teamID,
       }).unwrap()
@@ -62,6 +63,10 @@ export const useUploadFileToDrive = () => {
         })
         message.success(t("editor.inspect.setter_message.uploadsuc"))
         return fileID
+      } else if (status === UPLOAD_FILE_STATUS.CANCELED) {
+        store.updateFileDetailInfo(queryID, {
+          status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
+        })
       } else {
         store.updateFileDetailInfo(queryID, {
           status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
@@ -112,6 +117,10 @@ export const useUploadFileToDrive = () => {
         })
         message.success(t("editor.inspect.setter_message.uploadsuc"))
         return fileID
+      } else if (status === UPLOAD_FILE_STATUS.CANCELED) {
+        store.updateFileDetailInfo(queryID, {
+          status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
+        })
       } else {
         store.updateFileDetailInfo(queryID, {
           status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,

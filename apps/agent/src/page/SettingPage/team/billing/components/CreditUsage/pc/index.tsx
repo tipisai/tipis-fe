@@ -23,6 +23,7 @@ import {
   collarUsageHeaderStyle,
   detailStyle,
   doughnutContainerStyle,
+  loadingContainerStyle,
 } from "./style"
 
 ChartJS.register(DoughnutController, DoughnutPlugin, Title, Tooltip)
@@ -65,7 +66,9 @@ export const CreditUsagePC: FC = () => {
       </div>
       <div css={cardContainerStyle}>
         {loading ? (
-          <FullSectionLoading />
+          <div css={loadingContainerStyle}>
+            <FullSectionLoading />
+          </div>
         ) : (
           <div css={detailStyle}>
             {allNum !== 0 ? (

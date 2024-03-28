@@ -4,8 +4,10 @@ import { useTranslation } from "react-i18next"
 import AnalyzeIcon from "@/assets/agent/message-analyze.svg?react"
 import AnalyzeErrorIcon from "@/assets/agent/message-error.svg?react"
 import AnalyzeStopIcon from "@/assets/agent/message-stop.svg?react"
+import LottieItem from "@/components/LottieItem"
 import { MESSAGE_STATUS } from "@/components/PreviewChat/interface"
-import { infoIconStyle } from "./style"
+import runningCodeConfig from "@/config/lottieConfig/runningCode.json"
+import { codeRunningStyle, infoIconStyle } from "./style"
 
 export const useGetInfoByStatus = () => {
   const { t } = useTranslation()
@@ -31,7 +33,11 @@ export const useGetInfoByStatus = () => {
         }
         default:
         case MESSAGE_STATUS.ANALYZE_PENDING: {
-          InfoIcon = <Icon component={AnalyzeIcon} css={infoIconStyle} />
+          InfoIcon = (
+            <div css={codeRunningStyle}>
+              <LottieItem configJson={runningCodeConfig} autoplay loop />
+            </div>
+          )
           InfoTitle = t("homepage.tipi_chat.processing_status.processing")
           break
         }

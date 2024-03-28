@@ -39,3 +39,8 @@ export const detailStyle = css`
   align-items: center;
   gap: 24px;
 `
+
+export const loadingContainerStyle = css`
+  width: 100%;
+  height: 270px;
+`
