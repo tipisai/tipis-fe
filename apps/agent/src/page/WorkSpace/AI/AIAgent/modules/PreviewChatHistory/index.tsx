@@ -3,16 +3,12 @@ import { FC, memo, useCallback, useContext, useMemo } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import {
   ILLA_MIXPANEL_BUILDER_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackProvider,
 } from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
-import { TextSignal } from "@/api/ws/textSignal"
 import { PreviewChat } from "@/components/PreviewChat"
-import {
-  ChatMessage,
-  ChatSendRequestPayload,
-} from "@/components/PreviewChat/interface"
+import { ChatMessage } from "@/components/PreviewChat/interface"
+import { getSendMessageBody } from "@/utils/agent/wsUtils"
 import { track } from "@/utils/mixpanelHelper"
 import { AgentWSContext } from "../../../context/AgentWSContext"
 import { IPreviewChatHistoryProps } from "./interface"
@@ -74,29 +70,28 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
 
     const onSendMessage = useCallback(
       (message: ChatMessage) => {
-        track(
-          ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-          ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_RUN,
-          {
-            element: "send",
-            parameter5: getValues("aiAgentID"),
-          },
-        )
-        sendMessage(
-          {
-            threadID: message.threadID,
-            prompt: message.message,
-            variables: [],
-            actionID: getValues("aiAgentID"),
-            modelConfig: getValues("modelConfig"),
-            model: getValues("model"),
-            agentType: getValues("agentType"),
-          } as ChatSendRequestPayload,
-          TextSignal.RUN,
-          "chat",
-          true,
-          message,
-        )
+        // track(
+        //   ILLA_MIXPANEL_EVENT_TYPE.CLICK,
+        //   ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_RUN,
+        //   {
+        //     element: "send",
+        //     parameter5: getValues("aiAgentID"),
+        //   },
+        // )
+        const {
+          payload,
+          signal,
+          type,
+          fileIDs,
+          updateMessage,
+          messageContent,
+        } = getSendMessageBody(message, getValues("aiAgentID"))
+
+        sendMessage(payload, signal, type, {
+          fileIDs,
+          updateMessage,
+          messageContent,
+        })
       },
       [getValues, sendMessage],
     )

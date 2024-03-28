@@ -1,3 +1,4 @@
+import Icon from "@ant-design/icons"
 import { App, Button } from "antd"
 import { AnimatePresence, motion } from "framer-motion"
 import {
@@ -12,6 +13,7 @@ import {
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { v4 } from "uuid"
+import { SendIcon } from "@illa-public/icon"
 import { IKnowledgeFile } from "@illa-public/public-types"
 import { getCurrentUser } from "@illa-public/user-data"
 import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
@@ -26,8 +28,9 @@ import AIAgentMessage from "@/page/WorkSpace/AI/components/AIAgentMessage"
 import GroupAgentMessage from "@/page/WorkSpace/AI/components/GroupAgentMessage"
 import UserMessage from "@/page/WorkSpace/AI/components/UserMessage"
 import { isGroupMessage } from "@/utils/agent/typeHelper"
-import { UploadFileStore, useUploadFileToDrive } from "@/utils/drive"
+import { chatUploadStore, useUploadFileToDrive } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
+import { SEND_MESSAGE_WS_TYPE } from "./TipisWebscoketContext/interface"
 import UploadButton from "./UploadButton"
 import UploadKnowledgeFiles from "./UploadKnowledgeFiles"
 import {
@@ -44,6 +47,7 @@ import {
   generatingContentContainerStyle,
   generatingDividerStyle,
   generatingTextStyle,
+  inputContainerStyle,
   inputStyle,
   inputTextContainerStyle,
   mobileInputContainerStyle,
@@ -54,8 +58,6 @@ import {
   sendButtonStyle,
   stopIconStyle,
 } from "./style"
-
-const chatUploadStore = new UploadFileStore()
 
 export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const { isMobile, blockInput, editState, onSendMessage, wsContextValue } =
@@ -74,8 +76,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     sendMessage(
       {} as ChatSendRequestPayload,
       TextSignal.STOP_ALL,
-      "stop_all",
-      false,
+      SEND_MESSAGE_WS_TYPE.STOP_ALL,
     )
     setIsReceiving(false)
   }, [sendMessage, setIsReceiving])
@@ -172,7 +173,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       ...formatFiles.map((item) => ({
         fileName: item.fileName,
         contentType: item.file.type,
-        value: "",
+        fileID: "",
       })),
     )
     setKnowledgeFiles(currentFiles)
@@ -201,7 +202,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
           const res = {
             fileName: fileName,
             contentType: file.type,
-            value: fileID,
+            fileID,
           }
           setKnowledgeFiles((prev) => {
             const currentItems = [...prev]
@@ -229,12 +230,16 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   }, [chatMessages])
 
   const sendAndClearMessage = useCallback(() => {
-    const realSendKnowledgeFiles = knowledgeFiles.filter((item) => !!item.value)
-    if (textAreaVal !== "" || realSendKnowledgeFiles.length > 0) {
-      realSendKnowledgeFiles //
+    const realSendKnowledgeFiles = knowledgeFiles.filter(
+      (item) => !!item.fileID,
+    )
+    if (
+      (textAreaVal !== "" && realSendKnowledgeFiles.length > 0) ||
+      (textAreaVal !== "" && realSendKnowledgeFiles.length === 0)
+    ) {
       onSendMessage({
         threadID: v4(),
-        message: textAreaVal, // TODO: WTF add format knowledge filter value
+        message: textAreaVal,
         sender: {
           senderID: currentUserInfo.userID,
           senderType: SenderType.USER,
@@ -243,6 +248,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       } as ChatMessage)
       setTextAreaVal("")
       setKnowledgeFiles([])
+      chatUploadStore.clearStore()
     }
   }, [currentUserInfo.userID, knowledgeFiles, onSendMessage, textAreaVal])
 
@@ -347,7 +353,13 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
                 handleFileChange={handleFileChange}
                 ref={inputRef}
               />
-              <Button disabled={disableSend} onClick={sendAndClearMessage}>
+              <Button
+                type="primary"
+                size="large"
+                icon={<Icon component={SendIcon} />}
+                disabled={disableSend}
+                onClick={sendAndClearMessage}
+              >
                 {t("editor.ai-agent.button.send")}
               </Button>
             </div>
@@ -358,7 +370,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
             />
           </div>
         ) : (
-          <>
+          <div css={inputContainerStyle}>
             <textarea
               value={textAreaVal}
               css={inputStyle}
@@ -388,12 +400,18 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
                   handleFileChange={handleFileChange}
                   ref={inputRef}
                 />
-                <Button disabled={disableSend} onClick={sendAndClearMessage}>
+                <Button
+                  type="primary"
+                  size="large"
+                  icon={<Icon component={SendIcon} />}
+                  disabled={disableSend}
+                  onClick={sendAndClearMessage}
+                >
                   {t("editor.ai-agent.button.send")}
                 </Button>
               </div>
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>

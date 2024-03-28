@@ -3,7 +3,7 @@ import {
   HTTP_REQUEST_PUBLIC_BASE_URL,
   OBJECT_STORAGE_REQUEST_PREFIX,
 } from "@illa-public/illa-net"
-import { UPLOAD_FILE_STATUS } from "@illa-public/public-types"
+import { GCS_OBJECT_TYPE, UPLOAD_FILE_STATUS } from "@illa-public/public-types"
 import { prepareHeaders } from "@illa-public/user-data"
 
 const FOLDER_ID = "ILAfx4p1C7dZ"
@@ -34,7 +34,7 @@ export const driveAPI = createApi({
           body: {
             name,
             folderID: FOLDER_ID,
-            type: "file",
+            type: GCS_OBJECT_TYPE.FILE,
             contentType,
             size,
           },
@@ -61,7 +61,7 @@ export const driveAPI = createApi({
           body: {
             name,
             folderID: FOLDER_ID,
-            type: "file",
+            type: GCS_OBJECT_TYPE.FILE,
             contentType,
             size,
           },

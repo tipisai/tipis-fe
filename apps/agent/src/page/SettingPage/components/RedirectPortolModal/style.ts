@@ -1,11 +1,6 @@
 import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
 
-export const modalMaskStyle = css`
-  background-color: ${getColor("white", "05")};
-  backdrop-filter: blur(5px);
-`
-
 export const modalCloseIconStyle = css`
   position: absolute;
   width: 24px;

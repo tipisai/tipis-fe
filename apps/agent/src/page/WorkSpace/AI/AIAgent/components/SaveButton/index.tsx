@@ -2,6 +2,7 @@ import { memo, useState } from "react"
 import { useFormContext, useFormState, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import BlackButton from "@/components/BlackButton"
+import { editPanelUpdateFileDetailStore } from "@/utils/drive"
 import { IAgentForm, SCROLL_ID } from "../../interface"
 import PublishModal from "../../pc/modules/PublishModal"
 import { handleScrollToElement } from "../../utils"
@@ -32,6 +33,7 @@ const SaveButton = memo(() => {
     }
     if (validate) {
       setModalOpen(true)
+      editPanelUpdateFileDetailStore.clearStore()
     }
     return validate
   }

@@ -1,6 +1,6 @@
 import Icon from "@ant-design/icons"
 import { App, Modal } from "antd"
-import { FC, useCallback, useEffect } from "react"
+import { FC, useCallback } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { getColor } from "@illa-public/color-scheme"
@@ -14,8 +14,7 @@ import {
   contentStyle,
   imgStyle,
   labelStyle,
-  modalCloseIconStyle, // modalMaskStyle,
-  // modalStyle,
+  modalCloseIconStyle,
 } from "./style"
 
 interface RedirectPortalModalProps {
@@ -45,17 +44,14 @@ export const RedirectPortalModal: FC<RedirectPortalModalProps> = (props) => {
       })
   }, [message, t, teamInfo.id, triggetGetPortalURL])
 
-  useEffect(() => {
-    if (visible) {
-      // openPortalPage()
-    }
-  }, [visible, openPortalPage])
-
   return (
     <Modal
       maskClosable={false}
       footer={false}
       open={visible}
+      afterOpenChange={(visible) => {
+        visible && openPortalPage()
+      }}
       onCancel={onCancel}
       closeIcon={false}
       width="400px"

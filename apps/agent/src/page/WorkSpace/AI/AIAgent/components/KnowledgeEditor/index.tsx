@@ -1,27 +1,31 @@
 import { FC, memo } from "react"
-import { Controller, useFormContext } from "react-hook-form"
+import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { Agent, IKnowledgeFile } from "@illa-public/public-types"
+import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { SCROLL_ID } from "@/page/WorkSpace/AI/AIAgent/interface"
 import KnowledgeUpload from "@/page/WorkSpace/AI/components/KnowledgeUpload"
+import { editPanelUpdateFileDetailStore } from "@/utils/drive"
 
 const KnowledgeEditor: FC = memo(() => {
   const { t } = useTranslation()
 
   const methods = useFormContext<Agent>()
+  const { errors } = useFormState({
+    control: methods.control,
+  })
 
   return (
     <Controller
       name="knowledge"
       control={methods.control}
       rules={{
-        validate: (value) => {
-          const isValidate =
-            !value ||
-            value.length === 0 ||
-            value.every((param) => param.value !== "")
-          return isValidate ? isValidate : t("")
+        validate: () => {
+          const isValidate = !editPanelUpdateFileDetailStore.hasPendingFile()
+          return isValidate
+            ? isValidate
+            : t("dashboard.message.parsing_file_in_prog")
         },
       }}
       shouldUnregister={false}
@@ -45,6 +49,9 @@ const KnowledgeEditor: FC = memo(() => {
             }}
             values={field.value}
           />
+          {errors.knowledge?.message && (
+            <ErrorText errorMessage={errors.knowledge?.message} />
+          )}
         </LayoutBlock>
       )}
     />

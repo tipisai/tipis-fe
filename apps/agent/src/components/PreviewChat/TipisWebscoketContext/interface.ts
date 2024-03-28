@@ -1,7 +1,27 @@
 import { ReactNode } from "react"
 import { Callback, ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
+import { TextSignal } from "@/api/ws/textSignal"
+import { ChatMessage, ChatSendRequestPayload } from "../interface"
 
-export type AgentMessageType = "chat" | "stop_all" | "clean"
+export enum SEND_MESSAGE_WS_TYPE {
+  CHAT = "chat",
+  STOP_ALL = "stop_all",
+  CLEAN = "clean",
+  ADD_FILE = "add_file",
+}
+
+export interface ISendMessageOptions {
+  fileIDs?: string[]
+  updateMessage?: boolean
+  messageContent?: ChatMessage
+}
+
+export type IChatSendMessage = (
+  payload: ChatSendRequestPayload,
+  signal: TextSignal,
+  type: SEND_MESSAGE_WS_TYPE,
+  options?: ISendMessageOptions,
+) => void
 
 export type TipisWebSocketContextType = {
   connect: (initWSCallback: IInitWSCallback) => Promise<void>
