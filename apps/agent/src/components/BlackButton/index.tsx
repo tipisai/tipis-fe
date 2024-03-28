@@ -6,7 +6,9 @@ const BlackButton: FC<ButtonProps> = (props) => {
   const { children, ...antdButtonProps } = props
   return (
     <ConfigProvider theme={BlackButtonTheme as ThemeConfig}>
-      <Button {...antdButtonProps}>{children}</Button>
+      <Button {...antdButtonProps} type="primary">
+        {children}
+      </Button>
     </ConfigProvider>
   )
 }

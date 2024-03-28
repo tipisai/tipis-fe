@@ -21,10 +21,11 @@ import { agentData2JSONReport, handleScrollToElement } from "../../../utils"
 const PCEditPanel: FC = () => {
   const { t } = useTranslation()
 
-  const { isConnecting, isRunning, reconnect, connect } =
+  const { isConnecting, isRunning, reconnect, connect, lastRunAgent } =
     useContext(AgentWSContext)
 
-  const { clearErrors, getValues, setError } = useFormContext<IAgentForm>()
+  const { clearErrors, getValues, setError, reset } =
+    useFormContext<IAgentForm>()
 
   const handleVerifyOnStart = () => {
     clearErrors()
@@ -81,6 +82,8 @@ const PCEditPanel: FC = () => {
       },
     )
     isRunning ? await reconnect() : await connect()
+    console.log("lastRunAgent.current", lastRunAgent.current)
+    reset(lastRunAgent.current)
   }
 
   return (

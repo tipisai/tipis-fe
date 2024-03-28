@@ -65,10 +65,10 @@ export const menuItemButtonContentContainerStyle = (isMiniSize: boolean) => {
   return isMiniSize ? miniStyle : manualStyle
 }
 
-export const menuItemButtonContentStyle = css`
+export const menuItemButtonContentStyle = (isActive: boolean) => css`
   color: ${getColor("grayBlue", "02")};
   font-size: 14px;
-  font-weight: 500;
+  font-weight: ${isActive ? "600" : "500"};
   line-height: 22px;
   width: 100%;
   text-align: left;

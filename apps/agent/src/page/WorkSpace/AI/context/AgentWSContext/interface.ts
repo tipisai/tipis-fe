@@ -1,5 +1,9 @@
-import { ReactNode } from "react"
-import { Agent } from "@illa-public/public-types"
+import { MutableRefObject, ReactNode } from "react"
+import {
+  AI_AGENT_MODEL,
+  AI_AGENT_TYPE,
+  Params,
+} from "@illa-public/public-types"
 import { TextSignal } from "@/api/ws/textSignal"
 import {
   IChatSendMessage,
@@ -22,7 +26,7 @@ export interface IAgentWSInject
     TipisWebSocketContextType,
     "connect" | "reconnect" | "sendMessage"
   > {
-  lastRunAgent: Agent | undefined
+  lastRunAgent: MutableRefObject<IRunAgentConfig | undefined>
   isConnecting: boolean
   isReceiving: boolean
   isRunning: boolean
@@ -38,4 +42,10 @@ export interface ICachePayloadQueue {
   payload: ChatSendRequestPayload
   signal: TextSignal
   type: SEND_MESSAGE_WS_TYPE
+}
+export interface IRunAgentConfig {
+  variables: Params[]
+  model: AI_AGENT_MODEL
+  prompt: string
+  agentType: AI_AGENT_TYPE
 }

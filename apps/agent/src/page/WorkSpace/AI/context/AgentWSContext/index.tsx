@@ -12,7 +12,6 @@ import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useParams } from "react-router-dom"
 import { v4 } from "uuid"
-import { Agent } from "@illa-public/public-types"
 import {
   CreditModalType,
   handleCreditPurchaseError,
@@ -77,14 +76,16 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
   const [triggerGetAIAgentWsAddressQuery] = useLazyGetAIAgentWsAddressQuery()
   const updateAnonymousLocalIcon = useUpdateAnonymousAvatar()
   const updateAnonymousLocalName = useUpdateAnonymousName()
+  const lastRunAgent = useRef<IAgentForm | undefined>()
 
-  const getRunAgent = useCallback(() => {
+  const setAndGetRunAgentConfig = useCallback(() => {
+    lastRunAgent.current = getValues()
     return {
-      variables: getValues("variables"),
-      model: getValues("model"),
-      prompt: getValues("prompt"),
-      agentType: getValues("agentType"),
-    } as Agent
+      variables: lastRunAgent.current.variables,
+      model: lastRunAgent.current.model,
+      prompt: lastRunAgent.current.prompt,
+      agentType: lastRunAgent.current.agentType,
+    }
   }, [getValues])
 
   const updateLocalIcon = useCallback(
@@ -122,7 +123,6 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
     [getValues, updateAnonymousLocalName],
   )
 
-  const [lastRunAgent, setLastRunAgent] = useState<Agent | undefined>()
   const [isConnecting, setIsConnecting] = useState(false)
   const [isReceiving, setIsReceiving] = useState(false)
   const [isRunning, setIsRunning] = useState(false)
@@ -428,8 +428,8 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
     setIsConnecting(false)
     setIsRunning(true)
     setIsReceiving(true)
-    setLastRunAgent(getRunAgent())
-  }, [connect, getConnectParams, getRunAgent])
+    setAndGetRunAgentConfig()
+  }, [connect, getConnectParams, setAndGetRunAgentConfig])
   const innerLeaveRoom = useCallback(() => {
     cleanMessage()
     leaveRoom()
@@ -448,7 +448,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       reconnect: innerReconnect,
       connect: innerConnect,
       wsStatus,
-      lastRunAgent,
+      lastRunAgent: lastRunAgent,
       isConnecting,
       isReceiving,
       isRunning,
@@ -466,7 +466,6 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
     isConnecting,
     isReceiving,
     isRunning,
-    lastRunAgent,
     wsStatus,
   ])
 

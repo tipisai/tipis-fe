@@ -14,7 +14,7 @@ export const miniMenuInnerContainerStyle = css`
   align-items: center;
   justify-content: space-between;
   border-radius: 24px;
-  background: linear-gradient(180deg, #f5f3f7 0%, #f8f4fb 100%);
+  background: linear-gradient(180deg, #f6effb 0%, #f1ebf8 49.5%, #efe9f5 100%);
 `
 
 export const miniMenuFooterContainerStyle = css`
