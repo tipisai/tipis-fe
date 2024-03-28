@@ -3,8 +3,8 @@ import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { PRODUCT_SORT_BY } from "@/redux/services/marketAPI/constants"
 import { IMarketSortComponentProps } from "../../../components/MarketCardList/interface"
-import { MarketListContext } from "../../../context/marketListContext"
-import { MARKET_ACTION_TYPE } from "../../../context/reducer"
+import { DASH_BOARD_UI_STATE_ACTION_TYPE } from "../../../context/interface"
+import { DashBoardUIStateContext } from "../../../context/marketListContext"
 import TagList from "../TagList"
 import { sortWrapperStyle } from "./style"
 
@@ -27,19 +27,21 @@ const SortComponentPC: FC<IMarketSortComponentProps> = ({ tagList }) => {
       key: PRODUCT_SORT_BY.STARRED,
     },
   ]
-  const { dispatch, marketState } = useContext(MarketListContext)
+  const { dispatch, dashboardUIState: marketState } = useContext(
+    DashBoardUIStateContext,
+  )
 
   const onSortChange = (v: string) => {
     if (v === marketState.sortedBy) return
     dispatch({
-      type: MARKET_ACTION_TYPE.SET_SORTED_BY,
+      type: DASH_BOARD_UI_STATE_ACTION_TYPE.SET_SORTED_BY,
       payload: v as PRODUCT_SORT_BY,
     })
   }
 
   const onTagChange = (v?: string) => {
     dispatch({
-      type: MARKET_ACTION_TYPE.SET_HASH_TAG,
+      type: DASH_BOARD_UI_STATE_ACTION_TYPE.SET_HASH_TAG,
       payload: v,
     })
   }
@@ -50,7 +52,7 @@ const SortComponentPC: FC<IMarketSortComponentProps> = ({ tagList }) => {
         tabBarStyle={{
           marginBottom: 0,
         }}
-        defaultValue={marketState.sortedBy}
+        activeKey={marketState.sortedBy}
         onChange={onSortChange}
         items={options}
       />

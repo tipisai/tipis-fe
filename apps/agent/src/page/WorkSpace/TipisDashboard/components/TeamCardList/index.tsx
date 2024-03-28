@@ -1,18 +1,21 @@
 import { List } from "antd"
-import { FC, useMemo } from "react"
+import Fuse from "fuse.js"
+import { FC, useContext, useMemo } from "react"
 import { useSelector } from "react-redux"
 import { getCurrentId } from "@illa-public/user-data"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import TeamNoData from "@/components/TeamNoData"
 import { useGetAIAgentListByPageQuery } from "@/redux/services/agentAPI"
 import { useCreateTipis } from "@/utils/recentTabs/hook"
+import { DashBoardUIStateContext } from "../../context/marketListContext"
 import { ITeamCardListProps } from "./interface"
 
 const TeamCardList: FC<ITeamCardListProps> = (props) => {
   const { RenderItem } = props
   const currentTeamID = useSelector(getCurrentId)!
   const createTipi = useCreateTipis()
-
+  const { dashboardUIState } = useContext(DashBoardUIStateContext)
+  const { search } = dashboardUIState
   const agentQuery = useMemo(
     () => ({
       teamID: currentTeamID,
@@ -30,6 +33,13 @@ const TeamCardList: FC<ITeamCardListProps> = (props) => {
     return <TeamNoData showCreate onClickButton={createTipi} />
   }
 
+  const fuseSearch = new Fuse(data.aiAgentList, {
+    keys: ["name", "description"],
+  }).search(search ?? "")
+
+  const searchResult =
+    fuseSearch.length > 0 ? fuseSearch.map((s) => s.item) : data.aiAgentList
+
   return (
     <List
       grid={{
@@ -41,7 +51,7 @@ const TeamCardList: FC<ITeamCardListProps> = (props) => {
         xl: 3,
         xxl: 4,
       }}
-      dataSource={data.aiAgentList}
+      dataSource={searchResult}
       renderItem={(item) => (
         <RenderItem
           icon={item.icon}

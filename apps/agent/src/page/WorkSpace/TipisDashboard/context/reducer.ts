@@ -1,74 +1,93 @@
+import { getCurrentId } from "@illa-public/user-data"
 import {
   INITIAL_PAGE,
   PRODUCT_SORT_BY,
 } from "@/redux/services/marketAPI/constants"
+import store from "@/redux/store"
+import { setCacheUIState } from "@/utils/localForage/teamData"
+import { EXPLORE_TIPIS_ID } from "@/utils/recentTabs/constants"
+import {
+  DASH_BOARD_UI_STATE_ACTION_TYPE,
+  IDashBoardUIState,
+  TABS_KEY,
+  TDashboardUIStateAction,
+} from "./interface"
 
-export interface IMarketState {
-  page: number
-  sortedBy: PRODUCT_SORT_BY
-  search: string | undefined
-  hashTag: string | undefined
-}
-
-export enum MARKET_ACTION_TYPE {
-  SET_PAGE = "SET_PAGE",
-  SET_SORTED_BY = "SET_SORTED_BY",
-  SET_SEARCH = "SET_SEARCH",
-  SET_HASH_TAG = "SET_HASH_TAG",
-  SET_RECOMMEND_TAG = "SET_RECOMMEND_TAG",
-  RESET_PARAMS = "RESET_PARAMS",
-}
-
-export interface IMarketAction {
-  type: MARKET_ACTION_TYPE
-  payload?: any
-}
-
-export const INIT_MARKET_STATE = {
+export const INIT_DASH_BOARD_UI_STATE: IDashBoardUIState = {
   page: INITIAL_PAGE,
   sortedBy: PRODUCT_SORT_BY.POPULAR,
   search: undefined,
   hashTag: undefined,
+  activeTab: TABS_KEY.TEAM,
 }
 
-export const reducer = (state: IMarketState, action: IMarketAction) => {
+export const reducer = (
+  state: IDashBoardUIState,
+  action: TDashboardUIStateAction,
+): IDashBoardUIState => {
+  const currentTeamID = getCurrentId(store.getState())
+  let newState = { ...state }
   switch (action.type) {
-    case MARKET_ACTION_TYPE.SET_PAGE:
-      return {
+    case DASH_BOARD_UI_STATE_ACTION_TYPE.SET_PAGE: {
+      newState = {
         ...state,
         page: action.payload,
       }
-    case MARKET_ACTION_TYPE.SET_SORTED_BY:
-      return {
+      break
+    }
+    case DASH_BOARD_UI_STATE_ACTION_TYPE.SET_SORTED_BY: {
+      newState = {
         ...state,
         page: INITIAL_PAGE,
         sortedBy: action.payload,
       }
-    case MARKET_ACTION_TYPE.SET_SEARCH:
-      return {
+      break
+    }
+    case DASH_BOARD_UI_STATE_ACTION_TYPE.SET_SEARCH: {
+      newState = {
         ...state,
         page: INITIAL_PAGE,
         search: action.payload,
       }
+      break
+    }
 
-    case MARKET_ACTION_TYPE.SET_HASH_TAG:
-      return {
+    case DASH_BOARD_UI_STATE_ACTION_TYPE.SET_HASH_TAG: {
+      newState = {
         ...state,
         page: INITIAL_PAGE,
         hashTag: action.payload,
       }
+      break
+    }
 
-    case MARKET_ACTION_TYPE.SET_RECOMMEND_TAG:
-      return {
+    case DASH_BOARD_UI_STATE_ACTION_TYPE.SET_RECOMMEND_TAG: {
+      newState = {
+        ...state,
         page: INITIAL_PAGE,
         sortedBy: PRODUCT_SORT_BY.POPULAR,
         search: undefined,
         hashTag: action.payload,
       }
+      break
+    }
+    case DASH_BOARD_UI_STATE_ACTION_TYPE.RESET_PARAMS: {
+      newState = INIT_DASH_BOARD_UI_STATE
+      break
+    }
 
-    case MARKET_ACTION_TYPE.RESET_PARAMS:
-      return INIT_MARKET_STATE
-    default:
-      return state
+    case DASH_BOARD_UI_STATE_ACTION_TYPE.SET_ACTIVE_TAB: {
+      newState = {
+        ...state,
+        activeTab: action.payload,
+      }
+      break
+    }
+    case DASH_BOARD_UI_STATE_ACTION_TYPE.SET_UI_STATE: {
+      newState = action.payload
+      break
+    }
   }
+  setCacheUIState(currentTeamID!, EXPLORE_TIPIS_ID, newState)
+  return newState
 }

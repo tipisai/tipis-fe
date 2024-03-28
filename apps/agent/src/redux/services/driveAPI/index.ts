@@ -4,7 +4,7 @@ import {
   OBJECT_STORAGE_REQUEST_PREFIX,
 } from "@illa-public/illa-net"
 import { UPLOAD_FILE_STATUS } from "@illa-public/public-types"
-import { getAuthToken } from "@illa-public/utils"
+import { prepareHeaders } from "@illa-public/user-data"
 
 const FOLDER_ID = "ILAfx4p1C7dZ"
 
@@ -12,13 +12,7 @@ export const driveAPI = createApi({
   reducerPath: "driveAPI",
   baseQuery: fetchBaseQuery({
     baseUrl: `${HTTP_REQUEST_PUBLIC_BASE_URL}${OBJECT_STORAGE_REQUEST_PREFIX}`,
-    prepareHeaders: (headers) => {
-      const token = getAuthToken()
-      if (token) {
-        headers.set("Authorization", token)
-      }
-      return headers
-    },
+    prepareHeaders: prepareHeaders,
   }),
   endpoints: (builder) => ({
     getChatUploadAddress: builder.query<
