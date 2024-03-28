@@ -10,15 +10,20 @@ export const fileItemContainerStyle = css`
   overflow-y: auto;
 `
 
-export const fileTypeIconStyle = css`
-  height: 16px;
-  margin-right: 4px;
+export const fileNameStyle = css`
+  font-size: 12px;
+  display: block;
+  max-width: 150px;
+  color: ${getColor("grayBlue", "02")};
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: none;
 `
-
-export const fileNameStyle = css``
-
 export const closeIconStyle = (isError: boolean) => css`
   display: flex;
+  flex: none;
   width: 8px;
   height: 8px;
   font-size: 8px;

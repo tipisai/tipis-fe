@@ -6,12 +6,9 @@ import {
 } from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
 import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
-import { TextSignal } from "@/api/ws/textSignal"
 import { PreviewChat } from "@/components/PreviewChat"
-import {
-  ChatMessage,
-  ChatSendRequestPayload,
-} from "@/components/PreviewChat/interface"
+import { ChatMessage } from "@/components/PreviewChat/interface"
+import { getSendMessageBody } from "@/utils/agent/wsUtils"
 import { track } from "@/utils/mixpanelHelper"
 import { ChatContext } from "../../components/ChatContext"
 import { AgentWSContext } from "../../context/AgentWSContext"
@@ -73,21 +70,14 @@ export const AIAgentRunMobile: FC = () => {
           parameter5: getValues("aiAgentID"),
         },
       )
-      sendMessage(
-        {
-          threadID: message.threadID,
-          prompt: message.message,
-          variables: [],
-          actionID: getValues("aiAgentID"),
-          modelConfig: getValues("modelConfig"),
-          model: getValues("model"),
-          agentType: getValues("agentType"),
-        } as ChatSendRequestPayload,
-        TextSignal.RUN,
-        "chat",
-        true,
-        message,
-      )
+      const { payload, signal, type, fileIDs, updateMessage, messageContent } =
+        getSendMessageBody(message, getValues("aiAgentID"))
+
+      sendMessage(payload, signal, type, {
+        fileIDs,
+        updateMessage,
+        messageContent,
+      })
     },
     [getValues, sendMessage],
   )

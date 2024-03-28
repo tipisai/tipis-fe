@@ -7,26 +7,23 @@ export const uploadFileToObjectStorage = async (
   abortSignal?: AbortSignal,
 ) => {
   try {
-    const openUploadLink = await axios.post(url, null, {
+    await axios.put(url, uploadFile, {
       headers: {
-        "x-goog-resumable": "start",
-        "Content-Type": uploadFile.type,
+        "Content-Type": "multipart/form-data",
+        "x-amz-acl": "public-read",
       },
-      withCredentials: false,
       signal: abortSignal,
     })
-    if (openUploadLink.headers.location) {
-      await axios.put(openUploadLink.headers.location, uploadFile, {
-        headers: {
-          "Content-Type": uploadFile.type,
-        },
-        withCredentials: false,
-        signal: abortSignal,
-      })
-      return Promise.resolve(UPLOAD_FILE_STATUS.COMPLETE)
+    return Promise.resolve(UPLOAD_FILE_STATUS.COMPLETE)
+  } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      error.code === "ERR_CANCELED"
+    ) {
+      return Promise.resolve(UPLOAD_FILE_STATUS.CANCELED)
     }
-    return Promise.resolve(UPLOAD_FILE_STATUS.FAILED)
-  } catch (e) {
     return Promise.resolve(UPLOAD_FILE_STATUS.FAILED)
   }
 }

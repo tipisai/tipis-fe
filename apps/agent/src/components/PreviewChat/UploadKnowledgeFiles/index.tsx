@@ -1,64 +1,17 @@
 import Icon from "@ant-design/icons"
-import { Progress, Tag } from "antd"
+import { Tag } from "antd"
 import { FC } from "react"
-import { useRaf } from "react-use"
 import { getColor } from "@illa-public/color-scheme"
-import { CloseIcon, getFileIconByContentType } from "@illa-public/icon"
-import { GCS_OBJECT_TYPE, IKnowledgeFile } from "@illa-public/public-types"
-import {
-  FILE_ITEM_DETAIL_STATUS_IN_UI,
-  IFileDetailInfo,
-  UploadFileStore,
-} from "@/utils/drive"
-import {
-  closeIconStyle,
-  fileItemContainerStyle,
-  fileTypeIconStyle,
-} from "./style"
+import { CloseIcon } from "@illa-public/icon"
+import { IKnowledgeFile } from "@illa-public/public-types"
+import { FILE_ITEM_DETAIL_STATUS_IN_UI, UploadFileStore } from "@/utils/drive"
+import StatusIcon from "./StatusIcon"
+import { closeIconStyle, fileItemContainerStyle, fileNameStyle } from "./style"
 
 interface UploadKnowledgeFilesPops {
   knowledgeFiles: IKnowledgeFile[]
   handleDeleteFile: (name: string, queryID?: string) => void
   chatUploadStore: UploadFileStore
-}
-
-const StatusIcon: FC<
-  Partial<Pick<IFileDetailInfo, "status" | "contentType">>
-> = ({ status, contentType }) => {
-  const loadedNum = useRaf(3000, 0)
-  switch (status) {
-    case FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING:
-      return (
-        <Progress
-          type="circle"
-          size={16}
-          percent={0}
-          style={{
-            marginRight: "4px",
-          }}
-        />
-      )
-    case FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING:
-      return (
-        <Progress
-          type="circle"
-          size={16}
-          percent={parseFloat((loadedNum * 85).toFixed(2))}
-          style={{
-            marginRight: "4px",
-          }}
-        />
-      )
-
-    default:
-    case FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR:
-    case FILE_ITEM_DETAIL_STATUS_IN_UI.SUCCESS:
-      return getFileIconByContentType(
-        GCS_OBJECT_TYPE.FILE,
-        contentType,
-        fileTypeIconStyle,
-      )
-  }
 }
 
 const UploadKnowledgeFiles: FC<UploadKnowledgeFilesPops> = ({
@@ -94,11 +47,11 @@ const UploadKnowledgeFiles: FC<UploadKnowledgeFilesPops> = ({
             icon={
               <StatusIcon
                 status={fileInfo?.status}
-                contentType={fileInfo?.contentType}
+                contentType={item?.contentType}
               />
             }
           >
-            {item.fileName}
+            <span css={fileNameStyle}>{item.fileName}</span>
           </Tag>
         )
       })}
