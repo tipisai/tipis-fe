@@ -1,6 +1,6 @@
 import { FC, useState } from "react"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
-import CreateTeamModal from "@/Layout/Workspace/pc/components/CreateTeamModal"
+import CreateTeamModal from "@/Layout/Workspace/components/CreateTeamModal"
 import EmptyTeamMobile from "./mobile"
 import EmptyTeamPC from "./pc"
 

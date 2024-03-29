@@ -2,19 +2,16 @@ import Icon from "@ant-design/icons"
 import { Avatar, Divider, Tag } from "antd"
 import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { SuccessIcon } from "@illa-public/icon"
 import {
   ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackContext,
 } from "@illa-public/mixpanel-utils"
-import {
-  getCurrentTeamInfo,
-  teamActions,
-  useGetTeamsInfoQuery,
-} from "@illa-public/user-data"
+import { teamActions, useGetTeamsInfoQuery } from "@illa-public/user-data"
 import { setLocalTeamIdentifier } from "@/utils/auth"
 import { isSubscribeForBilling } from "@/utils/billing/isSubscribe"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { TeamSelectProps } from "../interface"
 import { containerStyle, switchItemStyle, teamInfoStyle } from "./style"
 
@@ -26,7 +23,7 @@ const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
   const { closePopover, openCreateModal, showCreateTeamButton, onChangeTeam } =
     props
   const { t } = useTranslation()
-  const teamInfo = useSelector(getCurrentTeamInfo)!
+  const teamInfo = useGetCurrentTeamInfo()!
   const { track } = useContext(MixpanelTrackContext)
 
   const currentTeamId = teamInfo?.id

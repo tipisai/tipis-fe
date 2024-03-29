@@ -52,6 +52,7 @@ export const isPendingRequestMessage = (message: ChatMessage) => {
     message.status == MESSAGE_STATUS.ANALYZE_PENDING
   )
 }
+
 export const isErrorMessageRes = (message: ChatMessage) => {
   return (
     message.messageType ===

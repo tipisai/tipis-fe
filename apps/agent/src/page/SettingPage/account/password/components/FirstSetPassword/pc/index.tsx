@@ -18,14 +18,8 @@ const { Password } = Input
 
 const SetPasswordPC: FC<FirstSetPasswordProps> = (props) => {
   const { t } = useTranslation()
-  const {
-    onSubmit,
-    errorMsg,
-    loading,
-    showCountDown,
-    onCountDownChange,
-    sendEmail,
-  } = props
+  const { onSubmit, errorMsg, showCountDown, onCountDownChange, sendEmail } =
+    props
   const { handleSubmit, control, formState, watch } =
     useFormContext<IFirstSetPasswordFields>()
   const { newPassword, verificationCode } = watch()
@@ -136,12 +130,7 @@ const SetPasswordPC: FC<FirstSetPasswordProps> = (props) => {
             </section>
           </section>
           <span>
-            <Button
-              type="primary"
-              size="large"
-              loading={loading}
-              disabled={disabled}
-            >
+            <Button type="primary" size="large" disabled={disabled}>
               {t("profile.setting.save")}
             </Button>
           </span>

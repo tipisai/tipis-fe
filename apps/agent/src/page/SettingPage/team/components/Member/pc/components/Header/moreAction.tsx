@@ -1,8 +1,8 @@
 import Icon from "@ant-design/icons"
 import { App, Button, Dropdown, MenuProps, Switch } from "antd"
-import { FC, useCallback, useContext, useState } from "react"
+import { FC, useCallback, useContext } from "react"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { AuthShown, SHOW_RULES } from "@illa-public/auth-shown"
 import { MoreIcon } from "@illa-public/icon"
@@ -12,12 +12,15 @@ import {
 } from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
 import {
-  getCurrentTeamIdentifier,
-  getCurrentTeamInfo,
+  getTeamItems,
+  teamActions,
   useRemoveTeamMemberByIDMutation,
   useUpdateTeamPermissionConfigMutation,
 } from "@illa-public/user-data"
 import store from "@/redux/store"
+import { removeLocalTeamIdentifier, setLocalTeamIdentifier } from "@/utils/auth"
+import { EMPTY_TEAM_PATH, getChatPath } from "@/utils/routeHelper"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import {
   allowEditorOrViewerInviteWrapperStyle,
   moreActionTextStyle,
@@ -28,15 +31,11 @@ export const MoreAction: FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { track } = useContext(MixpanelTrackContext)
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
-  const {
-    myRole: currentUserRole,
-    teamMemberID: currentTeamMemberID,
-    id: currentTeamID,
-  } = currentTeamInfo
+  const dispatch = useDispatch()
+  const teamInfo = useGetCurrentTeamInfo()!
+  const { myRole: currentUserRole, id: currentTeamID } = teamInfo
   const { allowEditorManageTeamMember, allowViewerManageTeamMember } =
-    currentTeamInfo.permission
-  const [allowInviteLoading, setAllowInviteLoading] = useState(false)
+    teamInfo.permission
 
   const [removeTeamMemberByID] = useRemoveTeamMemberByIDMutation()
   const [updateTeamPermissionConfig] = useUpdateTeamPermissionConfigMutation()
@@ -46,10 +45,10 @@ export const MoreAction: FC = () => {
       element: "leave_modal_leave",
     })
     try {
-      await removeTeamMemberByID({
-        teamID: currentTeamID,
-        teamMemberID: currentTeamMemberID,
-      })
+      removeTeamMemberByID({
+        teamID: teamInfo.id,
+        teamMemberID: teamInfo?.teamMemberID,
+      }).unwrap()
       message.success({
         content: t("team_setting.mes.leave_suc"),
       })
@@ -57,9 +56,17 @@ export const MoreAction: FC = () => {
         element: "delete",
         parameter1: "delete_select",
       })
-      const currentIdentifier = getCurrentTeamIdentifier(store.getState())
-      if (currentIdentifier) {
-        navigate("workspace", {
+      const teamItems = getTeamItems(store.getState()) ?? []
+      const newTeamItems = teamItems.filter((team) => team.id !== teamInfo.id)
+      if (Array.isArray(newTeamItems) && newTeamItems.length > 0) {
+        setLocalTeamIdentifier(newTeamItems[0].identifier)
+        dispatch(teamActions.updateCurrentIdReducer(newTeamItems[0].id))
+        navigate(getChatPath(newTeamItems[0].identifier), {
+          replace: true,
+        })
+      } else {
+        removeLocalTeamIdentifier()
+        navigate(EMPTY_TEAM_PATH, {
           replace: true,
         })
       }
@@ -69,12 +76,13 @@ export const MoreAction: FC = () => {
       })
     }
   }, [
-    currentTeamID,
-    currentTeamMemberID,
+    dispatch,
     message,
     navigate,
     removeTeamMemberByID,
     t,
+    teamInfo.id,
+    teamInfo?.teamMemberID,
     track,
   ])
 
@@ -98,18 +106,14 @@ export const MoreAction: FC = () => {
 
   const handleChangeInviteByEditor = async (value: boolean) => {
     try {
-      setAllowInviteLoading(true)
-      await updateTeamPermissionConfig({
+      updateTeamPermissionConfig({
         teamID: currentTeamID,
         data: {
           allowEditorManageTeamMember: value,
           allowViewerManageTeamMember: value,
         },
       })
-    } catch (e) {
-    } finally {
-      setAllowInviteLoading(false)
-    }
+    } catch (e) {}
   }
 
   const handleMenuClick: MenuProps["onClick"] = ({ key }) => {
@@ -139,7 +143,6 @@ export const MoreAction: FC = () => {
               {t("user_management.settings.allow_editors_invite")}
             </span>
             <Switch
-              disabled={allowInviteLoading}
               checked={
                 allowEditorManageTeamMember && allowViewerManageTeamMember
               }

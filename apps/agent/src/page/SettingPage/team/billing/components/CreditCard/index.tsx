@@ -3,12 +3,11 @@ import { Button, Tooltip } from "antd"
 import dayjs from "dayjs"
 import { FC, useContext, useRef } from "react"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { DoubtIcon } from "@illa-public/icon"
 import { CREDIT_UNIT_BY_CYCLE } from "@illa-public/upgrade-modal"
-import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { infoTitleStyle } from "@/page/SettingPage/team/billing/style"
 import { toThousands } from "@/utils/billing/toThousands"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { BillingContext } from "../../context"
 import {
   cardDetailContainerStyle,
@@ -28,7 +27,7 @@ import {
 
 const CreditCard: FC = () => {
   const { t } = useTranslation()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)
+  const teamInfo = useGetCurrentTeamInfo()!
   const titleRef = useRef<HTMLSpanElement>(null)
   const {
     creditInfo,
@@ -45,8 +44,8 @@ const CreditCard: FC = () => {
     <section css={licenseCardContainerStyle} id="license">
       <span css={infoTitleStyle}>{t("billing.menu.overview")}</span>
       <div css={teamInfoStyle}>
-        <img src={currentTeamInfo?.icon} />
-        <span>{currentTeamInfo?.name}</span>
+        <img src={teamInfo?.icon} />
+        <span>{teamInfo?.name}</span>
       </div>
       <div css={cardDetailContainerStyle}>
         <div css={cardStyle}>

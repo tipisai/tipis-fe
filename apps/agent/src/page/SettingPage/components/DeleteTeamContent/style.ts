@@ -23,13 +23,9 @@ export const modalContentStyle = css`
   color: ${getColor("grayBlue", "02")};
   font-weight: 400;
   line-height: 22px;
-  padding: 16px 24px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  ${applyMobileStyle(css`
-    padding: 0 24px;
-  `)}
 `
 
 export const footerStyle = css`
@@ -38,7 +34,6 @@ export const footerStyle = css`
   flex-direction: row;
   width: 100%;
   box-sizing: border-box;
-  padding: 24px 24px;
   ${applyMobileStyle(css`
     border-top: none;
   `)}

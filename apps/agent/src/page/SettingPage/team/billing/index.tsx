@@ -1,17 +1,16 @@
 import { FC, useCallback, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { Navigate } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { SUBSCRIBE_PLAN } from "@illa-public/public-types"
 import { useCreditDrawer } from "@illa-public/upgrade-modal"
 import {
-  getCurrentTeamInfo,
   useGetTeamSubscriptionQuery,
   useLazyGetTeamsInfoQuery,
 } from "@illa-public/user-data"
 import FullSectionLoading from "@/components/FullSectionLoading"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { BillingContext } from "./context"
 import { BillingMobilePage } from "./mobile"
 import { BillingPCPage } from "./pc"
@@ -19,7 +18,7 @@ import { BillingPCPage } from "./pc"
 const Billing: FC = () => {
   const creditDrawer = useCreditDrawer()
   const [loading, setLoading] = useState(false)
-  const teamInfo = useSelector(getCurrentTeamInfo)!
+  const teamInfo = useGetCurrentTeamInfo()!
   const { data, isError, isLoading, refetch } = useGetTeamSubscriptionQuery(
     teamInfo.id,
   )
