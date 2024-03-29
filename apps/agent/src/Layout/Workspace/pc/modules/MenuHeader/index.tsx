@@ -1,7 +1,7 @@
 import Icon from "@ant-design/icons"
-import { Button, Image } from "antd"
+import { Button } from "antd"
 import { FC, useContext } from "react"
-import TextAndLogoSrc from "@/assets/public/textLogo.png"
+import TextAndLogo from "@/assets/public/textLogo.svg?react"
 import MenuFoldIcon from "@/assets/workspace/menuFold.svg?react"
 import { MenuStatusUIContext } from "../Menu/context"
 import { logoAndProjectNameContainerStyle, menuHeaderStyle } from "./style"
@@ -11,7 +11,7 @@ const MenuHeader: FC = () => {
   return (
     <div css={menuHeaderStyle}>
       <div css={logoAndProjectNameContainerStyle}>
-        <Image src={TextAndLogoSrc} preview={false} />
+        <TextAndLogo />
       </div>
       <div>
         <Button
