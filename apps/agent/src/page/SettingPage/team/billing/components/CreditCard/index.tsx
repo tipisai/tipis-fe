@@ -52,10 +52,7 @@ const CreditCard: FC = () => {
           <div css={cardTitleStyle}>
             <div css={collarCardNameStyle}>
               <span>Credit</span>
-              <Tooltip
-                trigger="hover"
-                title={t("billing.subscription_general.colla.desc")}
-              >
+              <Tooltip trigger="hover" title={t("tipi_billing.credits_desc")}>
                 <span css={doubtColorStyle} ref={titleRef}>
                   <Icon component={DoubtIcon} />
                 </span>
@@ -65,7 +62,7 @@ const CreditCard: FC = () => {
               !isUnSubscribeCredit &&
               !isCancelSubscribedCredit && (
                 <Button onClick={openCreditDrawer}>
-                  {t("billing.subscription_general.table_button.colla")}
+                  {t("tipi_billing.manage_credits")}
                 </Button>
               )}
 
