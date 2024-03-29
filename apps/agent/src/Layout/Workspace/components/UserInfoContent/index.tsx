@@ -26,6 +26,9 @@ const UserInfoContent: FC<IUserInfoContentProps> = (props) => {
         offset: isMiniSize ? [16, -32] : [0, -8],
       }}
       content={<UserInfoPopoverContent />}
+      overlayInnerStyle={{
+        padding: "8px",
+      }}
     >
       <div css={userInfoContentContainerStyle(isMiniSize)}>
         <div css={avatarContainerStyle}>

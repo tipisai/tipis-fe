@@ -8,5 +8,6 @@ export interface ILayoutBlock {
   subtitleTips?: string
   required?: boolean
   scrollId?: string
-  mode?: "panel" | "modal"
+  isMobile?: boolean
+  errorMessage?: string
 }

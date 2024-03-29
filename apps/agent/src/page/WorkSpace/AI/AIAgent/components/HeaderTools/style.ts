@@ -5,3 +5,7 @@ export const headerToolsContainerStyle = css`
   align-items: center;
   gap: 8px;
 `
+
+export const saveButtonContainerStyle = css`
+  width: 200px;
+`

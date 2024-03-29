@@ -4,7 +4,7 @@ export const DEFAULT_CHAT_ID = "DEFAULT_CHAT"
 
 export const INIT_TABS: ITabInfo[] = [
   {
-    tabName: "Default Chat",
+    tabName: "",
     tabIcon: "",
     tabType: TAB_TYPE.CHAT,
     tabID: DEFAULT_CHAT_ID,

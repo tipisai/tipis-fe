@@ -216,6 +216,9 @@ importers:
       antd:
         specifier: ^5.15.2
         version: 5.15.2(react-dom@18.2.0)(react@18.2.0)
+      antd-img-crop:
+        specifier: ^4.21.0
+        version: 4.21.0(antd@5.15.2)(react-dom@18.2.0)(react@18.2.0)
       axios:
         specifier: ^1.6.2
         version: 1.6.7
@@ -3956,6 +3959,21 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
+  /antd-img-crop@4.21.0(antd@5.15.2)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-YA5GUMfwoDoSJNWinGOmtYFDFLf+t7Rhfg7ZusbHgFpKCq8n9W0005LeCWgSP4C0iK3vxNHAT3DaRa3rTgKFlQ==}
+    peerDependencies:
+      antd: '>=4.0.0'
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    dependencies:
+      antd: 5.15.2(react-dom@18.2.0)(react@18.2.0)
+      compare-versions: 6.1.0
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-easy-crop: 5.0.5(react-dom@18.2.0)(react@18.2.0)
+      tslib: 2.6.2
+    dev: false
+
   /antd@5.15.0(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-6AsP4KjYxwMMv3ipSGNB6n5kwW/X3da5MgjaEIL1GFOYZZvdKSrKx9eijC4T5pUXB5hTCwYPfk9qtb1lZIPm8w==}
     peerDependencies:
@@ -4758,6 +4776,10 @@ packages:
       array-ify: 1.0.0
       dot-prop: 5.3.0
     dev: true
+
+  /compare-versions@6.1.0:
+    resolution: {integrity: sha512-LNZQXhqUvqUTotpZ00qLSaify3b4VFD588aRr8MKFw4CMUr98ytzCW5wDH5qx/DEY5kCDXcbcRuCqL0szEf2tg==}
+    dev: false
 
   /compress-commons@4.1.2:
     resolution: {integrity: sha512-D3uMHtGc/fcO1Gt1/L7i1e33VOvD4A9hfQLP+6ewd+BvG/gQ84Yh4oftEhAdjSMgBgwGL+jsppT7JYNpo6MHHg==}

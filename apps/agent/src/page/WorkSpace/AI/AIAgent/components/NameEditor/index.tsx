@@ -3,8 +3,8 @@ import { FC, memo } from "react"
 import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { Agent } from "@illa-public/public-types"
-import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
+import { SCROLL_ID } from "../../interface"
 
 const NameEditor: FC = memo(() => {
   const { t } = useTranslation()
@@ -25,9 +25,10 @@ const NameEditor: FC = memo(() => {
       shouldUnregister={false}
       render={({ field }) => (
         <LayoutBlock
-          mode="modal"
           title={t("editor.ai-agent.label.name")}
           required
+          scrollId={SCROLL_ID.NAME}
+          errorMessage={errors.name?.message}
         >
           <Input
             {...field}
@@ -40,9 +41,6 @@ const NameEditor: FC = memo(() => {
               // setInRoomUsers(updateLocalName(value, inRoomUsers))
             }}
           />
-          {errors.name?.message && (
-            <ErrorText errorMessage={errors.name?.message} />
-          )}
         </LayoutBlock>
       )}
     />

@@ -8,5 +8,4 @@ export const errorMsgStyle = css`
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 8px;
 `

@@ -14,7 +14,15 @@ import {
 const UserInfoPopoverContent: FC = () => {
   const { t } = useTranslation()
   return (
-    <ConfigProvider>
+    <ConfigProvider
+      theme={{
+        components: {
+          Button: {
+            paddingInlineLG: "8px",
+          },
+        },
+      }}
+    >
       <div css={popoverContentContainerStyle}>
         <Button type="text" block size="large">
           <a target="_blank" href="https://www.illa.ai" rel="noreferrer">

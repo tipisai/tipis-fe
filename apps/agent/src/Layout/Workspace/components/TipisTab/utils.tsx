@@ -19,6 +19,7 @@ import {
   getRunTipiPath,
   getTipiDetailPath,
 } from "@/utils/routeHelper"
+import { DEFAULT_CHAT_ID } from "../../../../redux/ui/recentTab/state"
 import {
   menuItemButtonCustomIconContainerStyle,
   menuItemButtonIconContainerStyle,
@@ -78,7 +79,7 @@ export const useGetTabName = () => {
   const { t } = useTranslation()
 
   const getTabName = useCallback(
-    (tabName: string, tabType: TAB_TYPE) => {
+    (tabName: string, tabType: TAB_TYPE, tabID: string) => {
       if (tabName) return tabName
       switch (tabType) {
         case TAB_TYPE.CREATE_TIPIS:
@@ -88,7 +89,9 @@ export const useGetTabName = () => {
         case TAB_TYPE.RUN_TIPIS:
           return "Run tipi"
         case TAB_TYPE.CHAT:
-          return t("homepage.left_panel.tab.tipi_chat")
+          return tabID === DEFAULT_CHAT_ID
+            ? t("homepage.left_panel.tab.default_tipi_chat")
+            : t("homepage.left_panel.tab.tipi_chat")
         case TAB_TYPE.CREATE_FUNCTION:
           return "Create Function"
         case TAB_TYPE.EDIT_FUNCTION:
