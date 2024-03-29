@@ -1,4 +1,5 @@
 import { css } from "@emotion/react"
+import { Variants } from "framer-motion"
 import { getColor } from "@illa-public/color-scheme"
 import { applyMobileStyle } from "@illa-public/utils"
 import { MESSAGE_STATUS } from "@/components/PreviewChat/interface"
@@ -87,11 +88,38 @@ export const infoDescStyle = (status: MESSAGE_STATUS) => {
   `
 }
 
+export const pureMessageContainerStyle = css`
+  border-radius: 8px;
+  background: ${getColor("grayBlue", "09")};
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 100%;
+  ${applyMobileStyle(css`
+    margin-right: 0;
+  `)}
+`
+
+export const messageCardAnimation: Variants = {
+  enter: {
+    height: "auto",
+    padding: 12,
+    transitionEnd: { display: "flex" },
+  },
+  exit: {
+    height: 0,
+    padding: 0,
+    transitionEnd: { display: "none" },
+  },
+}
+
 export const messageContainerStyle = css`
   border-radius: 8px;
   background: ${getColor("grayBlue", "09")};
   padding: 12px;
   display: flex;
+  height: auto;
   flex-direction: column;
   gap: 8px;
   max-width: 100%;
