@@ -59,7 +59,7 @@ const MobileEditPanel: FC = () => {
       )}
       {currentStep === MOBILE_EDIT_PAGE_STEP.PREVIEW && (
         <MobileSecondPageLayout
-          title="Preview"
+          title={t("homepage.edit_tipi.mobile_preview.preview")}
           onClickClose={onClickClosePreviewPage}
           headerExtra={<div css={placeholderDivStyle} />}
         >
