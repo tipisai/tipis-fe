@@ -128,7 +128,7 @@ export const ResetPasswordPage: FC = () => {
   return (
     <>
       <Helmet>
-        <title>{t("page.user.forgot_password.title")}</title>
+        <title>{t("meta.forget_password_meta_title")}</title>
       </Helmet>
       <FormProvider {...formProps}>
         <MixpanelTrackProvider

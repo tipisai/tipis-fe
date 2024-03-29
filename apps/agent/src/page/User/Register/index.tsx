@@ -163,7 +163,7 @@ const RegisterPage: FC = () => {
   return (
     <>
       <Helmet>
-        <title>{t("page.user.sign_up.title")}</title>
+        <title>{t("meta.register_meta_title")}</title>
       </Helmet>
       <FormProvider {...formProps}>
         <MixpanelTrackProvider

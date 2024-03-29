@@ -25,13 +25,13 @@ const CreditCardMobile: FC<CreditCardProps> = ({ openCreditDrawer }) => {
   const price = CREDIT_UNIT_PRICE[SUBSCRIPTION_CYCLE.MONTHLY]
   return (
     <div css={containerStyle}>
-      <span css={titleStyle}>{t("billing.new_pricing.colla")}</span>
+      <span css={titleStyle}>{t("tipi_billing.credit")}</span>
       <div css={cardContainerStyle}>
         <img src={CollaCardMobileBg} css={bgStyle} />
         <div css={priceStyle}>
           <span css={priceNumStyle}>${price}</span>
           <span css={priceUnitStyle}>
-            {t("billing.new_pricing.colla_month")}
+            {t("tipi_billing.monthly_price_unit")}
           </span>
         </div>
         <div css={cardContentStyle}>
@@ -48,7 +48,7 @@ const CreditCardMobile: FC<CreditCardProps> = ({ openCreditDrawer }) => {
           size="large"
           onClick={() => openCreditDrawer()}
         >
-          {t("billing.new_pricing.upgrade")}
+          {t("tipi_billing.upgrade")}
         </Button>
       </div>
     </div>

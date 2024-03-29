@@ -32,6 +32,7 @@ const KnowledgeEditor: FC = memo(() => {
       render={({ field }) => (
         <LayoutBlock
           title={t("homepage.edit_tipi.modal.knowledge")}
+          subtitle={t("homepage.edit_tipi.caption.knowledge")}
           scrollId={SCROLL_ID.KNOWLEDGE}
         >
           <KnowledgeUpload

@@ -54,7 +54,7 @@ export const CreditUsageMobile: FC = () => {
   return (
     <section css={collarUsageContainerStyle} id="colla-usage">
       <div css={collarUsageHeaderStyle}>
-        <span css={infoTitleStyle}>{t("billing.title.colla_usage")}</span>
+        <span css={infoTitleStyle}>{t("tipi_billing.credit_usage")}</span>
         <MonthPicker
           allowClear={false}
           defaultValue={dayjs(date.current) as unknown as string}

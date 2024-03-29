@@ -1,13 +1,5 @@
 import dayjs from "dayjs"
-import {
-  FC,
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react"
-import { useTranslation } from "react-i18next"
+import { FC, createContext, useCallback, useEffect, useState } from "react"
 import { useLazyGetCreditUsageInfoQuery } from "@illa-public/user-data"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import { DATE_FORMAT, LABEL_CONFIG } from "../constants"
@@ -18,7 +10,6 @@ export const UsageContext = createContext<UsageContextProps>(
 )
 
 export const UsageProvider: FC<UsageContextProviderProps> = (props) => {
-  const { t } = useTranslation()
   const teamInfo = useGetCurrentTeamInfo()!
   // const [dataNums, setsDataNums] = useState<number[]>([0, 0, 0])
   const [dataNums, setsDataNums] = useState<number[]>([0])
@@ -29,12 +20,8 @@ export const UsageProvider: FC<UsageContextProviderProps> = (props) => {
 
   const [triggerGetCreditUsageInfo] = useLazyGetCreditUsageInfoQuery()
 
-  const translationLabelName = useMemo(() => {
-    return LABEL_CONFIG.NAME.map((item) => t(item))
-  }, [t])
-
   const usageData = {
-    labels: translationLabelName,
+    labels: LABEL_CONFIG.NAME.map((item) => item),
     datasets: [
       {
         data: dataNums,
