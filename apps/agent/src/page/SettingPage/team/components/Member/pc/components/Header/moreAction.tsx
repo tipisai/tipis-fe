@@ -1,6 +1,6 @@
 import Icon from "@ant-design/icons"
 import { App, Button, Dropdown, MenuProps, Switch } from "antd"
-import { FC, useCallback, useContext } from "react"
+import { FC, useCallback, useContext, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -36,6 +36,9 @@ export const MoreAction: FC = () => {
   const { myRole: currentUserRole, id: currentTeamID } = teamInfo
   const { allowEditorManageTeamMember, allowViewerManageTeamMember } =
     teamInfo.permission
+
+  const [dropDownShow, setDropDownShow] = useState(false)
+  const [disableSwitch, setDisableSwitch] = useState(false)
 
   const [removeTeamMemberByID] = useRemoveTeamMemberByIDMutation()
   const [updateTeamPermissionConfig] = useUpdateTeamPermissionConfigMutation()
@@ -106,14 +109,18 @@ export const MoreAction: FC = () => {
 
   const handleChangeInviteByEditor = async (value: boolean) => {
     try {
-      updateTeamPermissionConfig({
+      setDisableSwitch(true)
+      await updateTeamPermissionConfig({
         teamID: currentTeamID,
         data: {
           allowEditorManageTeamMember: value,
           allowViewerManageTeamMember: value,
         },
       })
-    } catch (e) {}
+    } catch (e) {
+    } finally {
+      setDisableSwitch(false)
+    }
   }
 
   const handleMenuClick: MenuProps["onClick"] = ({ key }) => {
@@ -125,6 +132,7 @@ export const MoreAction: FC = () => {
         break
       case "leave_team":
         handleClickDeleteOrLeaveTeam()
+        setDropDownShow(false)
         break
     }
   }
@@ -143,6 +151,7 @@ export const MoreAction: FC = () => {
               {t("user_management.settings.allow_editors_invite")}
             </span>
             <Switch
+              disabled={disableSwitch}
               checked={
                 allowEditorManageTeamMember && allowViewerManageTeamMember
               }
@@ -165,8 +174,10 @@ export const MoreAction: FC = () => {
   return (
     <Dropdown
       trigger={["click"]}
+      open={dropDownShow}
       placement="bottomRight"
-      onOpenChange={(show: boolean) => {
+      onOpenChange={(show: boolean, { source }) => {
+        source !== "menu" && setDropDownShow(show)
         if (show) {
           track?.(ILLA_MIXPANEL_EVENT_TYPE.SHOW, {
             element: "more",
@@ -185,7 +196,11 @@ export const MoreAction: FC = () => {
         onClick: handleMenuClick,
       }}
     >
-      <Button icon={<Icon component={MoreIcon} />} />
+      <Button
+        size="large"
+        icon={<Icon component={MoreIcon} />}
+        onClick={() => setDropDownShow(!dropDownShow)}
+      />
     </Dropdown>
   )
 }

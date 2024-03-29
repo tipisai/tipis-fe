@@ -9,9 +9,17 @@ import {
   SyncMessageResultProps,
 } from "./interface"
 import {
+  actionIconStyle,
   containerStyle,
   headerContainerStyle,
+  infoContainerStyle,
+  infoDescStyle,
+  infoTextContainerStyle,
+  infoTitleStyle,
+  lineContainerStyle,
+  lineStyle,
   messageContainerStyle,
+  textAndIconContainerStyle,
 } from "./style"
 import { useGetInfoByStatus } from "./utils"
 
@@ -54,17 +62,29 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
 
   const getInfoByStatus = useGetInfoByStatus()
 
-  const { InfoIcon, InfoTitle } = getInfoByStatus(messageStatus)
+  const { InfoIcon, InfoTitle, infoDesc } = getInfoByStatus(messageStatus)
 
   return (
     <div css={containerStyle}>
       <div
-        css={headerContainerStyle(messageStatus)}
+        css={headerContainerStyle}
         onClick={() => setShowMessage(!showMessage)}
       >
-        {InfoIcon}
-        {InfoTitle}
-        {formatMessage && <Icon component={showMessage ? UpIcon : DownIcon} />}
+        <div css={infoContainerStyle}>
+          <div css={textAndIconContainerStyle}>
+            {InfoIcon}
+            <div css={infoTextContainerStyle}>
+              <span css={infoTitleStyle}>{InfoTitle}</span>
+              <span css={infoDescStyle(messageStatus)}>{infoDesc}</span>
+            </div>
+          </div>
+          {formatMessage && (
+            <Icon
+              component={showMessage ? UpIcon : DownIcon}
+              css={actionIconStyle}
+            />
+          )}
+        </div>
       </div>
       <AnimatePresence>
         {formatMessage && showMessage && (
@@ -73,6 +93,14 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
           </div>
         )}
       </AnimatePresence>
+    </div>
+  )
+}
+
+export const SyncMessageLine = () => {
+  return (
+    <div css={lineContainerStyle}>
+      <div css={lineStyle} />
     </div>
   )
 }

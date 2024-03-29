@@ -249,6 +249,7 @@ const ChangePasswordPC: FC<ChangePasswordProps> = (props) => {
                 loading={loading}
                 disabled={disabled}
                 onClick={validReport}
+                htmlType="submit"
               >
                 {t("profile.setting.save")}
               </Button>

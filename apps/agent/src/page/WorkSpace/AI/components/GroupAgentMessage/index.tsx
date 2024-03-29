@@ -1,4 +1,4 @@
-import { FC, useContext } from "react"
+import { FC, Fragment, ReactNode, useContext } from "react"
 import { Avatar } from "@illa-public/avatar"
 import {
   IGroupMessage,
@@ -6,11 +6,11 @@ import {
   SenderType,
 } from "@/components/PreviewChat/interface"
 import { ChatContext } from "@/page/WorkSpace/AI/components/ChatContext"
-import { isChatMessage, isRequestMessage } from "@/utils/agent/wsUtils"
+import { isRequestMessage } from "@/utils/agent/wsUtils"
 import {
   PureMessage,
   SyncMessageCard,
-  SyncMessageResult,
+  SyncMessageLine,
 } from "../SyncMessageCard"
 import {
   agentMessageContainer,
@@ -62,18 +62,10 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
       <div css={senderContainerStyle}>
         <div css={senderNicknameStyle}>{senderNickname}</div>
         {message.items.map((messageItem, i) => {
-          if (isChatMessage(messageItem)) {
-            return (
-              <PureMessage
-                key={`${messageItem.messageType}${i}`}
-                message={messageItem.message}
-                disableTrigger={isLastMessage && !isReceiving}
-              />
-            )
-          } else if (isRequestMessage(messageItem)) {
-            return (
+          let element: ReactNode
+          if (isRequestMessage(messageItem)) {
+            element = (
               <SyncMessageCard
-                key={`${messageItem.messageType}${i}`}
                 message={messageItem.message}
                 messageStatus={
                   messageItem.status ?? MESSAGE_STATUS.ANALYZE_PENDING
@@ -81,13 +73,18 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
               />
             )
           } else {
-            return (
-              <SyncMessageResult
-                key={`${messageItem.messageType}${i}`}
+            element = (
+              <PureMessage
                 message={messageItem.message}
+                disableTrigger={isLastMessage && !isReceiving}
               />
             )
           }
+          return (
+            <Fragment key={`${messageItem.messageType}${i}`}>
+              {element} {i !== message.items.length - 1 && <SyncMessageLine />}
+            </Fragment>
+          )
         })}
       </div>
     </div>

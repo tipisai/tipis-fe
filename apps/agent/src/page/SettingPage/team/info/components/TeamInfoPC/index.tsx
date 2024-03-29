@@ -115,7 +115,11 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
                 })
               }}
             />
-            {canEditorTeamMobile && <span css={editLabelStyle}>Edit</span>}
+            {canEditorTeamMobile && (
+              <span css={editLabelStyle}>
+                {t("homepage.edit_tipi.modal.edit")}
+              </span>
+            )}
           </AvatarUpload>
         </div>
         <form css={formStyle} onSubmit={handleSubmit?.(onSubmit)}>

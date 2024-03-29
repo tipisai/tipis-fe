@@ -49,6 +49,7 @@ export const Header: FC = () => {
           )}
           {showInviteButton && (
             <Button
+              size="large"
               type="primary"
               style={{
                 width: 200,

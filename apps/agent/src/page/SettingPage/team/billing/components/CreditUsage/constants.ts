@@ -1,8 +1,8 @@
 export const LABEL_CONFIG = {
   NAME: [
     "billing.colla_usage.token",
-    "billing.colla_usage.storage",
-    "billing.colla_usage.traffic",
+    // "billing.colla_usage.storage",
+    // "billing.colla_usage.traffic",
   ],
   COLOR: ["#165DFF", "#0EDAD5", "#CCED00"],
 }
