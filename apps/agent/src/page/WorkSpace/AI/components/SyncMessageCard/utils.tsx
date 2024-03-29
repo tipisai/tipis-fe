@@ -18,20 +18,20 @@ export const useGetInfoByStatus = () => {
       switch (status) {
         case MESSAGE_STATUS.ANALYZE_SUCCESS: {
           InfoIcon = <Icon component={AnalyzeSuccess} css={infoIconStyle} />
-          InfoTitle = t("homepage.tipi_chat.processing_status.suc")
-          infoDesc = t("homepage.tipi_chat.processing_status.suc")
+          InfoTitle = t("tipi_billing.python_runtime")
+          infoDesc = t("tipi_billing.successfully_executed")
           break
         }
         case MESSAGE_STATUS.ANALYZE_FAILED: {
           InfoIcon = <Icon component={AnalyzeErrorIcon} css={infoIconStyle} />
-          InfoTitle = t("homepage.tipi_chat.processing_status.failed")
-          infoDesc = t("homepage.tipi_chat.processing_status.failed")
+          InfoTitle = t("tipi_billing.python_runtime")
+          infoDesc = t("tipi_billing.failed_to_execute")
           break
         }
         case MESSAGE_STATUS.ANALYZE_STOP: {
           InfoIcon = <Icon component={AnalyzeStopIcon} css={infoIconStyle} />
-          InfoTitle = t("homepage.tipi_chat.processing_status.stopped")
-          infoDesc = t("homepage.tipi_chat.processing_status.stopped")
+          InfoTitle = t("tipi_billing.python_runtime")
+          infoDesc = t("tipi_billing.stopped_executing")
           break
         }
         default:
@@ -41,8 +41,8 @@ export const useGetInfoByStatus = () => {
               <LottieItem configJson={runningCodeConfig} autoplay loop />
             </div>
           )
-          InfoTitle = t("homepage.tipi_chat.processing_status.processing")
-          infoDesc = t("homepage.tipi_chat.processing_status.processing")
+          InfoTitle = t("tipi_billing.python_runtime")
+          infoDesc = t("tipi_billing.executing")
           break
         }
       }

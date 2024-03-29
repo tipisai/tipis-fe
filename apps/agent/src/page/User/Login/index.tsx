@@ -94,7 +94,7 @@ const LoginPage: FC = () => {
   return (
     <>
       <Helmet>
-        <title>{t("page.user.sign_in.title")}</title>
+        <title>{t("meta.login_meta_title")}</title>
       </Helmet>
       <FormProvider {...formProps}>
         <MixpanelTrackProvider

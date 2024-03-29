@@ -49,14 +49,14 @@ export const CreditUsagePC: FC = () => {
     plugins: {
       doughnutPlugin: {
         total: toThousands(allNum),
-        title: t("billing.colla_usage.used"),
+        title: t("tipi_billing.used"),
       },
     },
   }
   return (
     <section css={collarUsageContainerStyle} id="colla-usage">
       <div css={collarUsageHeaderStyle}>
-        <span css={infoTitleStyle}>{t("billing.title.colla_usage")}</span>
+        <span css={infoTitleStyle}>{t("tipi_billing.credit_usage")}</span>
         <MonthPicker
           allowClear={false}
           defaultValue={dayjs(date.current) as unknown as string}

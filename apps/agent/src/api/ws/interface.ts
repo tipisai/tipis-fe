@@ -25,3 +25,8 @@ export interface Callback<T> {
   target: TextTarget
   signal: TextSignal
 }
+
+export enum FILE_SOURCE {
+  FILES = "files",
+  TEMPORARY_FILES = "temporaryFiles",
+}
