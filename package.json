@@ -35,7 +35,25 @@
     "@emotion/styled": "^11.11.0",
     "@illa-public/utils": "workspace:^",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-i18next": "^14.0.5",
+    "i18next": "^23.10.0",
+    "antd": "^5.15.2",
+    "dayjs": "^1.11.10"
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "$react",
+      "react-dom": "$react-dom",
+      "@types/react": "$@types/react",
+      "@types/react-dom": "$@types/react-dom",
+      "react-i18next": "$react-i18next",
+      "i18next": "$i18next",
+      "antd": "$antd",
+      "dayjs": "$dayjs",
+      "@emotion/react": "$@emotion/react",
+      "@emotion/styled": "$@emotion/styled"
+    }
   },
   "packageManager": "pnpm@8.9.0",
   "engines": {
