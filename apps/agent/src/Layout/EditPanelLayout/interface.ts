@@ -5,4 +5,5 @@ export interface IEditPanelLayoutProps {
   footerChildren?: ReactNode
   customWidth?: string
   canResize?: boolean
+  isMobile?: boolean
 }

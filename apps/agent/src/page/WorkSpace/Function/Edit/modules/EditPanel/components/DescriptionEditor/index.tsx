@@ -29,7 +29,6 @@ const DescriptionEditor: FC = memo(() => {
       render={({ field }) => (
         <LayoutBlock
           required
-          mode="panel"
           title={t("editor.ai-agent.label.desc")}
           subtitleTips={t("editor.ai-agent.generate-desc.tooltips")}
         >

@@ -1,33 +1,24 @@
-import Icon from "@ant-design/icons"
 import { Image } from "antd"
 import { FC, memo } from "react"
-import { Controller, useFormContext, useFormState } from "react-hook-form"
+import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { getColor } from "@illa-public/color-scheme"
 import { AvatarUpload } from "@illa-public/cropper"
-import { PlusIcon } from "@illa-public/icon"
 import {
   ILLA_MIXPANEL_BUILDER_PAGE_NAME,
   ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackProvider,
 } from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
-import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { track } from "@/utils/mixpanelHelper"
 import {
-  uploadContainerStyle,
   uploadContentContainerStyle,
-  uploadTextStyle,
+  uploadPreviewContainerStyle,
 } from "./style"
 
 const AvatarUploader: FC = memo(() => {
   const { t } = useTranslation()
   const { control } = useFormContext<Agent>()
-
-  const { errors } = useFormState({
-    control: control,
-  })
 
   return (
     <Controller
@@ -36,7 +27,6 @@ const AvatarUploader: FC = memo(() => {
       shouldUnregister={false}
       render={({ field }) => (
         <LayoutBlock
-          mode="modal"
           title={t("editor.ai-agent.label.icon")}
           subtitleTips={t("editor.ai-agent.generate-icon.tooltips")}
         >
@@ -58,6 +48,7 @@ const AvatarUploader: FC = memo(() => {
               }}
             >
               <div
+                css={uploadPreviewContainerStyle}
                 onClick={() => {
                   track(
                     ILLA_MIXPANEL_EVENT_TYPE.CLICK,
@@ -68,35 +59,16 @@ const AvatarUploader: FC = memo(() => {
                   )
                 }}
               >
-                {!field.value ? (
-                  <div>
-                    <div css={uploadContainerStyle}>
-                      <div css={uploadContentContainerStyle}>
-                        <Icon
-                          component={PlusIcon}
-                          color={getColor("grayBlue", "03")}
-                        />
-
-                        <div css={uploadTextStyle}>
-                          {t("editor.ai-agent.placeholder.icon")}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <Image
-                    src={field.value}
-                    css={uploadContentContainerStyle}
-                    width="100px"
-                    height="100px"
-                  />
-                )}
+                <Image
+                  src={field.value}
+                  css={uploadContentContainerStyle}
+                  width="100px"
+                  height="100px"
+                  preview={false}
+                />
               </div>
             </AvatarUpload>
           </MixpanelTrackProvider>
-          {errors.icon?.message && (
-            <ErrorText errorMessage={errors.icon?.message} />
-          )}
         </LayoutBlock>
       )}
     />

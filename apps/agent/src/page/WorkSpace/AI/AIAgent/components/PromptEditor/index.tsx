@@ -3,7 +3,6 @@ import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { CodeEditor } from "@illa-public/code-editor"
 import { Agent } from "@illa-public/public-types"
-import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { SCROLL_ID } from "../../interface"
 import { codeEditorErrorStyle } from "./style"
@@ -28,7 +27,12 @@ const PromptEditor: FC = memo(() => {
       }}
       shouldUnregister={false}
       render={({ field: promptField }) => (
-        <LayoutBlock title={"Prompt"} required scrollId={SCROLL_ID.PROMPT}>
+        <LayoutBlock
+          title={"Prompt"}
+          required
+          scrollId={SCROLL_ID.PROMPT}
+          errorMessage={errors.prompt?.message}
+        >
           <div>
             <CodeEditor
               {...promptField}
@@ -37,9 +41,6 @@ const PromptEditor: FC = memo(() => {
               height="600px"
               completionOptions={variables}
             />
-            {errors.prompt?.message && (
-              <ErrorText errorMessage={errors.prompt?.message} />
-            )}
           </div>
         </LayoutBlock>
       )}

@@ -4,24 +4,30 @@ import { useTranslation } from "react-i18next"
 import BlackButton from "@/components/BlackButton"
 import { editPanelUpdateFileDetailStore } from "@/utils/drive"
 import { IAgentForm, SCROLL_ID } from "../../interface"
-import PublishModal from "../../pc/modules/PublishModal"
-import { handleScrollToElement } from "../../utils"
-import { saveButtonContainerStyle } from "./style"
+import { handleScrollToElement, useSubmitSaveAgent } from "../../utils"
 
 const SaveButton = memo(() => {
-  const { control, trigger } = useFormContext<IAgentForm>()
-  const { isSubmitting, errors, isDirty } = useFormState({ control })
+  const { control, trigger, getValues } = useFormContext<IAgentForm>()
+  const { errors, isDirty } = useFormState({ control })
   const [aiAgentID] = useWatch({
     control,
     name: ["aiAgentID"],
   })
   const { t } = useTranslation()
-  const [modalOpen, setModalOpen] = useState(false)
+  const handleSubmitSave = useSubmitSaveAgent()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleVerifyOnSave = async () => {
+    setIsLoading(true)
     await trigger()
     let validate = true
-    if (!!errors.prompt) {
+    if (!!errors.name) {
+      handleScrollToElement(SCROLL_ID.NAME)
+      validate = false
+    } else if (!!errors.description) {
+      handleScrollToElement(SCROLL_ID.DESCRIPTION)
+      validate = false
+    } else if (!!errors.prompt) {
       handleScrollToElement(SCROLL_ID.PROMPT)
       validate = false
     } else if (!!errors.knowledge) {
@@ -32,27 +38,27 @@ const SaveButton = memo(() => {
       validate = false
     }
     if (validate) {
-      setModalOpen(true)
+      const agentInfo = getValues()
+      await handleSubmitSave(agentInfo)
       editPanelUpdateFileDetailStore.clearStore()
     }
+    setIsLoading(false)
+
     return validate
   }
 
   return (
-    <div css={saveButtonContainerStyle}>
-      <BlackButton
-        id="save-button"
-        onClick={handleVerifyOnSave}
-        size="large"
-        loading={isSubmitting}
-        block
-        type="primary"
-        disabled={!!aiAgentID && !isDirty}
-      >
-        {t("editor.ai-agent.save")}
-      </BlackButton>
-      <PublishModal open={modalOpen} changeOpen={setModalOpen} />
-    </div>
+    <BlackButton
+      id="save-button"
+      onClick={handleVerifyOnSave}
+      size="large"
+      loading={isLoading}
+      block
+      type="primary"
+      disabled={!!aiAgentID && !isDirty}
+    >
+      {t("editor.ai-agent.save")}
+    </BlackButton>
   )
 })
 

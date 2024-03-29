@@ -12,12 +12,15 @@ const EditPanelLayout: FC<IEditPanelLayoutProps> = (props) => {
     footerChildren,
     customWidth = "528px",
     canResize = false,
+    isMobile = false,
   } = props
   return (
     <div css={editPanelContainerStyle(customWidth, canResize)}>
       <div css={editContentStyle(customWidth)}>{children}</div>
       {footerChildren && (
-        <div css={footerContainerStyle(customWidth)}>{footerChildren}</div>
+        <div css={footerContainerStyle(customWidth, isMobile)}>
+          {footerChildren}
+        </div>
       )}
     </div>
   )
