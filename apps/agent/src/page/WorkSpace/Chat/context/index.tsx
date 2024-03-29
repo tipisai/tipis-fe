@@ -116,10 +116,9 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       options?: ISendMessageOptions,
     ) => {
       setIsReceiving(true)
-
-      const encodePayload: ChatSendRequestPayload =
-        formatSendMessagePayload(payload)
-
+      const encodePayload: ChatSendRequestPayload = formatSendMessagePayload(
+        JSON.parse(JSON.stringify(payload)),
+      )
       if (options?.fileIDs && options.fileIDs.length > 0) {
         const withFileTextMessage = getWithFileMessagePayload(
           options.fileIDs,
@@ -158,9 +157,9 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       options?: ISendMessageOptions,
     ) => {
       setIsReceiving(true)
-
-      const encodePayload: ChatSendRequestPayload =
-        formatSendMessagePayload(payload)
+      const encodePayload: ChatSendRequestPayload = formatSendMessagePayload(
+        JSON.parse(JSON.stringify(payload)),
+      )
 
       if (options?.fileIDs && options.fileIDs.length > 0) {
         const withFileTextMessage = getWithFileMessagePayload(

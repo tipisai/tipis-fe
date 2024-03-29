@@ -168,8 +168,9 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
     ) => {
       setIsReceiving(true)
 
-      const encodePayload: ChatSendRequestPayload =
-        formatSendMessagePayload(payload)
+      const encodePayload: ChatSendRequestPayload = formatSendMessagePayload(
+        JSON.parse(JSON.stringify(payload)),
+      )
 
       if (options?.fileIDs && options.fileIDs.length > 0) {
         const withFileTextMessage = getWithFileMessagePayload(
@@ -209,9 +210,9 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       options?: ISendMessageOptions,
     ) => {
       setIsReceiving(true)
-
-      const encodePayload: ChatSendRequestPayload =
-        formatSendMessagePayload(payload)
+      const encodePayload: ChatSendRequestPayload = formatSendMessagePayload(
+        JSON.parse(JSON.stringify(payload)),
+      )
       if (options?.fileIDs && options.fileIDs.length > 0) {
         const withFileTextMessage = getWithFileMessagePayload(
           options.fileIDs,
