@@ -62,6 +62,9 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
       <div css={senderContainerStyle}>
         <div css={senderNicknameStyle}>{senderNickname}</div>
         {message.items.map((messageItem, i) => {
+          if (!messageItem.message) {
+            return null
+          }
           let element: ReactNode
           if (isRequestMessage(messageItem)) {
             element = (

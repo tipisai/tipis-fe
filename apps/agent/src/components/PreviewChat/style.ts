@@ -3,7 +3,7 @@ import { getColor } from "@illa-public/color-scheme"
 import { applyMobileStyle } from "@illa-public/utils"
 
 export const blockInputContainerStyle = css`
-  height: 150px;
+  height: 134px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -101,7 +101,6 @@ export const inputStyle = css`
   outline: none;
   line-height: 22px;
   border: none;
-  flex-shrink: 1;
   width: 100%;
   font-family: unset;
   background: none;
@@ -202,5 +201,4 @@ export const sendButtonStyle = css`
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 16px;
 `

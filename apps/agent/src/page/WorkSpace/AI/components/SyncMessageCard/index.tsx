@@ -1,5 +1,5 @@
 import Icon from "@ant-design/icons"
-import { AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { FC, useState } from "react"
 import { DownIcon, UpIcon } from "@illa-public/icon"
 import MarkdownMessage from "../MarkdownMessage"
@@ -18,7 +18,9 @@ import {
   infoTitleStyle,
   lineContainerStyle,
   lineStyle,
+  messageCardAnimation,
   messageContainerStyle,
+  pureMessageContainerStyle,
   textAndIconContainerStyle,
 } from "./style"
 import { useGetInfoByStatus } from "./utils"
@@ -26,7 +28,7 @@ import { useGetInfoByStatus } from "./utils"
 export const PureMessage: FC<PureMessageProps> = ({ message }) => {
   if (!message) return null
   return (
-    <div css={messageContainerStyle}>
+    <div css={pureMessageContainerStyle}>
       <MarkdownMessage>{message}</MarkdownMessage>
     </div>
   )
@@ -40,7 +42,7 @@ export const SyncMessageResult: FC<SyncMessageResultProps> = ({ message }) => {
     formatMessage = `\`\`\`json\n${message}\n\`\`\``
   }
   return (
-    <div css={messageContainerStyle}>
+    <div css={pureMessageContainerStyle}>
       <MarkdownMessage>{formatMessage}</MarkdownMessage>
     </div>
   )
@@ -86,13 +88,16 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
           )}
         </div>
       </div>
-      <AnimatePresence>
-        {formatMessage && showMessage && (
-          <div css={messageContainerStyle}>
-            <MarkdownMessage>{formatMessage}</MarkdownMessage>
-          </div>
-        )}
-      </AnimatePresence>
+      <motion.div
+        variants={messageCardAnimation}
+        animate={!!(formatMessage && showMessage) ? "enter" : "exit"}
+        css={messageContainerStyle}
+        transition={{ duration: 0.2 }}
+        initial="exit"
+        exit="exit"
+      >
+        <MarkdownMessage>{formatMessage}</MarkdownMessage>
+      </motion.div>
     </div>
   )
 }

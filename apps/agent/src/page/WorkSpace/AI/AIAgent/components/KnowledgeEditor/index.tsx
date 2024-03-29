@@ -7,6 +7,7 @@ import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { SCROLL_ID } from "@/page/WorkSpace/AI/AIAgent/interface"
 import KnowledgeUpload from "@/page/WorkSpace/AI/components/KnowledgeUpload"
 import { editPanelUpdateFileDetailStore } from "@/utils/drive"
+import { descStyle } from "./style"
 
 const KnowledgeEditor: FC = memo(() => {
   const { t } = useTranslation()
@@ -32,9 +33,11 @@ const KnowledgeEditor: FC = memo(() => {
       render={({ field }) => (
         <LayoutBlock
           title={t("homepage.edit_tipi.modal.knowledge")}
-          subtitle={t("homepage.edit_tipi.caption.knowledge")}
           scrollId={SCROLL_ID.KNOWLEDGE}
         >
+          <span css={descStyle}>
+            {t("homepage.edit_tipi.caption.knowledge")}
+          </span>
           <KnowledgeUpload
             addFile={(file: IKnowledgeFile) => {
               const files = field.value || []
