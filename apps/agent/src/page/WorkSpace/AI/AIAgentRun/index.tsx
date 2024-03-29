@@ -1,6 +1,7 @@
-import { FC } from "react"
+import { FC, useEffect } from "react"
 import { Navigate, useParams } from "react-router-dom"
 import FullSectionLoading from "@/components/FullSectionLoading"
+import { useRunTipis } from "@/utils/recentTabs/hook"
 import { useGetTipiContributed } from "@/utils/tipis/hook"
 import { ContributedAgent } from "./contributeAgent"
 import { NotContributedAgent } from "./notContributeAgent"
@@ -8,6 +9,13 @@ import { NotContributedAgent } from "./notContributeAgent"
 export const AIAgentRun: FC = () => {
   const { tabID } = useParams()
   const { data, isLoading, isError, agentID } = useGetTipiContributed()
+  const addAgentRunTab = useRunTipis()
+
+  useEffect(() => {
+    if (agentID) {
+      addAgentRunTab(agentID)
+    }
+  }, [addAgentRunTab, agentID])
 
   // useEffect(() => {
   //   track(

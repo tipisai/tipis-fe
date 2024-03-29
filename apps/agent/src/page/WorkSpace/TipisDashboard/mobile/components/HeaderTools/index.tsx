@@ -3,11 +3,11 @@ import { Button } from "antd"
 import { t } from "i18next"
 import { FC } from "react"
 import { PlusIcon } from "@illa-public/icon"
-import { useCreateTipis } from "@/utils/recentTabs/hook"
+import { useAddCreateTipisTab } from "@/utils/recentTabs/hook"
 import { headerToolsContainerStyle } from "./style"
 
 const HeaderTools: FC = () => {
-  const createTipi = useCreateTipis()
+  const createTipi = useAddCreateTipisTab()
 
   return (
     <div css={headerToolsContainerStyle}>

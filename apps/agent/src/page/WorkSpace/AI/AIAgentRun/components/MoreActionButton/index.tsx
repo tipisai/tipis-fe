@@ -3,6 +3,7 @@ import { Button, Dropdown, MenuProps } from "antd"
 import { FC, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import { InfoIcon, MoreIcon, PenIcon, ShareIcon } from "@illa-public/icon"
 import { ShareAgentMobile, ShareAgentPC } from "@illa-public/invite-modal"
 import {
@@ -27,7 +28,8 @@ import {
 } from "@illa-public/utils"
 import { copyToClipboard } from "@/utils/copyToClipboard"
 import { track } from "@/utils/mixpanelHelper"
-import { useDetailTipis, useEditTipis } from "@/utils/recentTabs/hook"
+import { useAddEditTipisTab, useDetailTipis } from "@/utils/recentTabs/hook"
+import { getEditTipiPath, getRunTipiPath } from "@/utils/routeHelper"
 import { IMoreActionButtonProps } from "./interface"
 
 const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
@@ -36,15 +38,16 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
   const { t } = useTranslation()
   const [shareVisible, setShareVisible] = useState(false)
   const dispatch = useDispatch()
-  const teamInfo = useSelector(getCurrentTeamInfo)!
+  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const currentUser = useSelector(getCurrentUser)
-  const editTipis = useEditTipis()
+  const addEditTipis = useAddEditTipisTab()
   const detailTipis = useDetailTipis()
+  const navigate = useNavigate()
 
   const canInvite = canManageInvite(
-    teamInfo.myRole,
-    teamInfo.permission.allowEditorManageTeamMember,
-    teamInfo.permission.allowViewerManageTeamMember,
+    currentTeamInfo.myRole,
+    currentTeamInfo.permission.allowEditorManageTeamMember,
+    currentTeamInfo.permission.allowViewerManageTeamMember,
   )
 
   const items: MenuProps["items"] = [
@@ -74,7 +77,8 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
         }
         break
       case "edit": {
-        editTipis(agentID)
+        addEditTipis(agentID)
+        navigate(getEditTipiPath(currentTeamInfo.identifier, agentID))
         break
       }
       case "detail": {
@@ -122,32 +126,34 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
               dispatch(teamActions.updateInvitedUserReducer(memberListInfo))
             }}
             canUseBillingFeature={canUseUpgradeFeature(
-              teamInfo.myRole,
-              getPlanUtils(teamInfo),
-              teamInfo.totalTeamLicense?.teamLicensePurchased,
-              teamInfo.totalTeamLicense?.teamLicenseAllPaid,
+              currentTeamInfo.myRole,
+              getPlanUtils(currentTeamInfo),
+              currentTeamInfo.totalTeamLicense?.teamLicensePurchased,
+              currentTeamInfo.totalTeamLicense?.teamLicenseAllPaid,
             )}
             title={t("user_management.modal.social_media.default_text.agent", {
               agentName: agentName,
             })}
             redirectURL={`${getILLACloudURL(window.customDomain)}/${
-              teamInfo.identifier
-            }/ai-agent/${agentID}/run?myTeamIdentifier=${teamInfo.identifier}`}
+              currentTeamInfo.identifier
+            }/ai-agent/${agentID}/run?myTeamIdentifier=${currentTeamInfo.identifier}`}
             onClose={() => {
               setShareVisible(false)
             }}
             canInvite={canInvite}
             defaultInviteUserRole={USER_ROLE.VIEWER}
-            teamID={teamInfo.id}
-            currentUserRole={teamInfo.myRole}
-            defaultBalance={teamInfo.currentTeamLicense.balance}
-            defaultAllowInviteLink={teamInfo.permission.inviteLinkEnabled}
+            teamID={currentTeamInfo.id}
+            currentUserRole={currentTeamInfo.myRole}
+            defaultBalance={currentTeamInfo.currentTeamLicense.balance}
+            defaultAllowInviteLink={
+              currentTeamInfo.permission.inviteLinkEnabled
+            }
             onInviteLinkStateChange={(enableInviteLink) => {
               dispatch(
                 teamActions.updateTeamMemberPermissionReducer({
-                  teamID: teamInfo.id,
+                  teamID: currentTeamInfo.id,
                   newPermission: {
-                    ...teamInfo.permission,
+                    ...currentTeamInfo.permission,
                     inviteLinkEnabled: enableInviteLink,
                   },
                 }),
@@ -174,7 +180,7 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
               copyToClipboard(
                 t("user_management.modal.custom_copy_text_agent_invite", {
                   userName: currentUser.nickname,
-                  teamName: teamInfo.name,
+                  teamName: currentTeamInfo.name,
                   inviteLink: link,
                 }),
               )
@@ -195,14 +201,14 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
                 }),
               )
             }}
-            userRoleForThisAgent={teamInfo.myRole}
-            ownerTeamID={teamInfo.id}
+            userRoleForThisAgent={currentTeamInfo.myRole}
+            ownerTeamID={currentTeamInfo.id}
             onBalanceChange={(balance) => {
               dispatch(
                 teamActions.updateTeamMemberSubscribeReducer({
-                  teamID: teamInfo.id,
+                  teamID: currentTeamInfo.id,
                   subscribeInfo: {
-                    ...teamInfo.currentTeamLicense,
+                    ...currentTeamInfo.currentTeamLicense,
                     balance: balance,
                   },
                 }),
@@ -219,7 +225,7 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
                 },
               )
             }}
-            teamPlan={getPlanUtils(teamInfo)}
+            teamPlan={getPlanUtils(currentTeamInfo)}
           />
         ) : (
           <ShareAgentPC
@@ -240,32 +246,32 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
               dispatch(teamActions.updateInvitedUserReducer(memberListInfo))
             }}
             canUseBillingFeature={canUseUpgradeFeature(
-              teamInfo.myRole,
-              getPlanUtils(teamInfo),
-              teamInfo.totalTeamLicense?.teamLicensePurchased,
-              teamInfo.totalTeamLicense?.teamLicenseAllPaid,
+              currentTeamInfo.myRole,
+              getPlanUtils(currentTeamInfo),
+              currentTeamInfo.totalTeamLicense?.teamLicensePurchased,
+              currentTeamInfo.totalTeamLicense?.teamLicenseAllPaid,
             )}
             title={t("user_management.modal.social_media.default_text.agent", {
               agentName: agentName,
             })}
-            redirectURL={`${getILLACloudURL(window.customDomain)}/${
-              teamInfo.identifier
-            }/ai-agent/${agentID}/run?myTeamIdentifier=${teamInfo.identifier}`}
+            redirectURL={`${getILLACloudURL()}${getRunTipiPath(currentTeamInfo.identifier, agentID)}`}
             onClose={() => {
               setShareVisible(false)
             }}
             canInvite={canInvite}
             defaultInviteUserRole={USER_ROLE.VIEWER}
-            teamID={teamInfo.id}
-            currentUserRole={teamInfo.myRole}
-            defaultBalance={teamInfo.currentTeamLicense.balance}
-            defaultAllowInviteLink={teamInfo.permission.inviteLinkEnabled}
+            teamID={currentTeamInfo.id}
+            currentUserRole={currentTeamInfo.myRole}
+            defaultBalance={currentTeamInfo.currentTeamLicense.balance}
+            defaultAllowInviteLink={
+              currentTeamInfo.permission.inviteLinkEnabled
+            }
             onInviteLinkStateChange={(enableInviteLink) => {
               dispatch(
                 teamActions.updateTeamMemberPermissionReducer({
-                  teamID: teamInfo.id,
+                  teamID: currentTeamInfo.id,
                   newPermission: {
-                    ...teamInfo.permission,
+                    ...currentTeamInfo.permission,
                     inviteLinkEnabled: enableInviteLink,
                   },
                 }),
@@ -292,7 +298,7 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
               copyToClipboard(
                 t("user_management.modal.custom_copy_text_agent_invite", {
                   userName: currentUser.nickname,
-                  teamName: teamInfo.name,
+                  teamName: currentTeamInfo.name,
                   inviteLink: link,
                 }),
               )
@@ -313,14 +319,14 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
                 }),
               )
             }}
-            userRoleForThisAgent={teamInfo.myRole}
-            ownerTeamID={teamInfo.id}
+            userRoleForThisAgent={currentTeamInfo.myRole}
+            ownerTeamID={currentTeamInfo.id}
             onBalanceChange={(balance) => {
               dispatch(
                 teamActions.updateTeamMemberSubscribeReducer({
-                  teamID: teamInfo.id,
+                  teamID: currentTeamInfo.id,
                   subscribeInfo: {
-                    ...teamInfo.currentTeamLicense,
+                    ...currentTeamInfo.currentTeamLicense,
                     balance: balance,
                   },
                 }),
@@ -337,7 +343,7 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
                 },
               )
             }}
-            teamPlan={getPlanUtils(teamInfo)}
+            teamPlan={getPlanUtils(currentTeamInfo)}
           />
         ))}
     </>

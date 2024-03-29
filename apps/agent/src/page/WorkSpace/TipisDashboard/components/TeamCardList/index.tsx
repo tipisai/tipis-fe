@@ -6,14 +6,14 @@ import { getCurrentId } from "@illa-public/user-data"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import TeamNoData from "@/components/TeamNoData"
 import { useGetAIAgentListByPageQuery } from "@/redux/services/agentAPI"
-import { useCreateTipis } from "@/utils/recentTabs/hook"
+import { useAddCreateTipisTab } from "@/utils/recentTabs/hook"
 import { DashBoardUIStateContext } from "../../context/marketListContext"
 import { ITeamCardListProps } from "./interface"
 
 const TeamCardList: FC<ITeamCardListProps> = (props) => {
   const { RenderItem } = props
   const currentTeamID = useSelector(getCurrentId)!
-  const createTipi = useCreateTipis()
+  const createTipi = useAddCreateTipisTab()
   const { dashboardUIState } = useContext(DashBoardUIStateContext)
   const { search } = dashboardUIState
   const agentQuery = useMemo(

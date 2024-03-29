@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { v4 } from "uuid"
 import { getCurrentId, getCurrentTeamInfo } from "@illa-public/user-data"
 import store from "@/redux/store"
@@ -28,7 +28,7 @@ import {
   getRunTipiPath,
   getTipiDetailPath,
 } from "../routeHelper"
-import { EXPLORE_TIPIS_ID } from "./constants"
+import { CREATE_TIPIS_ID, EXPLORE_TIPIS_ID } from "./constants"
 
 export const useAddRecentTabReducer = () => {
   const dispatch = useDispatch()
@@ -95,49 +95,43 @@ export const useInitRecentTab = () => {
   }, [initRecentTab])
 }
 
-export const useCreateTipis = () => {
+export const useAddCreateTipisTab = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const addRecentTab = useAddRecentTabReducer()
 
-  const createTip = useCallback(() => {
+  const addCreateTipTab = useCallback(() => {
     const historyTabs = getRecentTabInfos(store.getState())
     const createTipisTab = historyTabs.find(
       (tab) => tab.tabType === TAB_TYPE.CREATE_TIPIS,
     )
     const currentTeamInfo = getCurrentTeamInfo(store.getState())!
     if (!createTipisTab) {
-      const tempID = v4()
       const tabsInfo: ITabInfo = {
         tabName: "",
         tabIcon: "",
         tabType: TAB_TYPE.CREATE_TIPIS,
-        tabID: tempID,
-        cacheID: tempID,
+        tabID: CREATE_TIPIS_ID,
+        cacheID: CREATE_TIPIS_ID,
       }
       addRecentTab(tabsInfo)
-      navigate(getCreateTipiPath(currentTeamInfo?.identifier, tempID))
     } else {
       dispatch(
         recentTabActions.updateCurrentRecentTabIDReducer(createTipisTab.tabID),
       )
-      navigate(
-        getCreateTipiPath(currentTeamInfo?.identifier, createTipisTab.cacheID),
-      )
     }
+    navigate(getCreateTipiPath(currentTeamInfo?.identifier))
   }, [addRecentTab, dispatch, navigate])
 
-  return createTip
+  return addCreateTipTab
 }
 
-export const useEditTipis = () => {
-  const navigate = useNavigate()
+export const useAddEditTipisTab = () => {
   const addRecentTab = useAddRecentTabReducer()
 
-  const editTipis = useCallback(
+  const addEditTipisTab = useCallback(
     (tipisID: string) => {
       const historyTabs = getRecentTabInfos(store.getState())
-      const currentTeamInfo = getCurrentTeamInfo(store.getState())!
 
       let currentTab = historyTabs.find(
         (tab) => tab.cacheID === tipisID && tab.tabType === TAB_TYPE.EDIT_TIPIS,
@@ -152,13 +146,11 @@ export const useEditTipis = () => {
         }
         addRecentTab(currentTab)
       }
-
-      navigate(getEditTipiPath(currentTeamInfo.identifier, tipisID))
     },
-    [addRecentTab, navigate],
+    [addRecentTab],
   )
 
-  return editTipis
+  return addEditTipisTab
 }
 
 export const useCreateTipiToEditTipi = () => {
@@ -203,26 +195,41 @@ export const useCreateTipiToEditTipi = () => {
 export const useRunTipis = () => {
   const navigate = useNavigate()
   const addRecentTab = useAddRecentTabReducer()
+  const dispatch = useDispatch()
 
   const runTipis = useCallback(
-    (tipisID: string) => {
+    async (tipisID: string) => {
       const currentTeamInfo = getCurrentTeamInfo(store.getState())!
+      const historyTabs = getRecentTabInfos(store.getState())
+      const createTipisTab = historyTabs.find(
+        (tab) => tab.tabType === TAB_TYPE.RUN_TIPIS && tab.cacheID === tipisID,
+      )
+      let tabID: string
+      if (createTipisTab) {
+        dispatch(
+          recentTabActions.updateCurrentRecentTabIDReducer(
+            createTipisTab.tabID,
+          ),
+        )
+        tabID = createTipisTab.tabID
+      } else {
+        const newTabID = v4()
 
-      const tabID = v4()
-
-      const tabsInfo: ITabInfo = {
-        tabName: "",
-        tabIcon: "",
-        tabType: TAB_TYPE.RUN_TIPIS,
-        tabID: tabID,
-        cacheID: tipisID,
+        const tabsInfo: ITabInfo = {
+          tabName: "",
+          tabIcon: "",
+          tabType: TAB_TYPE.RUN_TIPIS,
+          tabID: newTabID,
+          cacheID: tipisID,
+        }
+        addRecentTab(tabsInfo)
+        tabID = newTabID
       }
-      addRecentTab(tabsInfo)
       navigate(
         `${getRunTipiPath(currentTeamInfo.identifier, tipisID)}/${tabID}`,
       )
     },
-    [addRecentTab, navigate],
+    [addRecentTab, dispatch, navigate],
   )
 
   return runTipis
@@ -342,24 +349,37 @@ export const useRunMarketTipis = () => {
   return runTipis
 }
 
-export const useCreateChat = () => {
+export const useAddCreateChatTab = () => {
   const addRecentTab = useAddRecentTabReducer()
   const navigate = useNavigate()
+  const { chatID } = useParams()
+  const dispatch = useDispatch()
 
   const createChat = useCallback(() => {
     const currentTeamInfo = getCurrentTeamInfo(store.getState())!
-    const tempID = v4()
-    const tabsInfo: ITabInfo = {
-      tabName: "",
-      tabIcon: "",
-      tabType: TAB_TYPE.CHAT,
-      tabID: tempID,
-      cacheID: tempID,
-    }
-    addRecentTab(tabsInfo)
+    const historyTabs = getRecentTabInfos(store.getState())
+    const createTipisTab = historyTabs.find(
+      (tab) => tab.tabType === TAB_TYPE.CHAT && tab.cacheID === chatID,
+    )
 
-    navigate(getChatPath(currentTeamInfo?.identifier, tempID))
-  }, [addRecentTab, navigate])
+    if (createTipisTab) {
+      dispatch(
+        recentTabActions.updateCurrentRecentTabIDReducer(createTipisTab.tabID),
+      )
+    } else {
+      const tempID = v4()
+      const tabsInfo: ITabInfo = {
+        tabName: "",
+        tabIcon: "",
+        tabType: TAB_TYPE.CHAT,
+        tabID: tempID,
+        cacheID: tempID,
+      }
+      addRecentTab(tabsInfo)
+    }
+
+    navigate(getChatPath(currentTeamInfo?.identifier, chatID))
+  }, [addRecentTab, chatID, dispatch, navigate])
 
   return createChat
 }

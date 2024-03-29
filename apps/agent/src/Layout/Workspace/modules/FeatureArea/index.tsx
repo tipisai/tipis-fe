@@ -7,8 +7,8 @@ import FunctionIcon from "@/assets/workspace/function.svg?react"
 import MarketplaceIcon from "@/assets/workspace/marketplace.svg?react"
 import store from "@/redux/store"
 import {
-  useCreateChat,
-  useCreateTipis,
+  useAddCreateChatTab,
+  useAddCreateTipisTab,
   useGoToExploreFunctions,
   useGoToExploreTipis,
 } from "@/utils/recentTabs/hook"
@@ -21,8 +21,8 @@ interface FeatureAreaProps {
 }
 const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
   const { t } = useTranslation()
-  const createTipi = useCreateTipis()
-  const createChat = useCreateChat()
+  const addCreateTipisTab = useAddCreateTipisTab()
+  const createChat = useAddCreateChatTab()
   const gotoExploreTipi = useGoToExploreTipis()
   const gotoExploreFunction = useGoToExploreFunctions()
 
@@ -32,7 +32,7 @@ const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
       openCreateModal?.()
       return
     }
-    createTipi()
+    addCreateTipisTab()
   }
 
   const handleClickCreateChat = () => {

@@ -1,7 +1,7 @@
-import { FC, useCallback, useEffect, useMemo } from "react"
+import { FC, useCallback, useEffect } from "react"
 import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useBeforeUnload, useParams } from "react-router-dom"
+import { useBeforeUnload } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { getCurrentId } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
@@ -11,6 +11,8 @@ import {
   getUiHistoryDataByCacheID,
   setUiHistoryData,
 } from "@/utils/localForage/teamData"
+import { CREATE_TIPIS_ID } from "@/utils/recentTabs/constants"
+import { useAddCreateTipisTab } from "@/utils/recentTabs/hook"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import { AIAgent } from "./aiagent"
 import FormContext from "./components/FormContext"
@@ -24,18 +26,17 @@ import { AgentInitial, IAgentForm } from "./interface"
 // } from "@/utils/mixpanelHelper"
 
 export const CreateAIAgentPage: FC = () => {
-  const { agentID } = useParams()
+  const createTipiTab = useAddCreateTipisTab()
 
-  const initAgent: IAgentForm = useMemo(
-    () => ({
-      ...AgentInitial,
-      cacheID: agentID!,
-    }),
-    [agentID],
-  )
+  useEffect(() => {
+    createTipiTab()
+  }, [createTipiTab])
 
   const methods = useForm<IAgentForm>({
-    values: initAgent,
+    values: {
+      ...AgentInitial,
+      cacheID: CREATE_TIPIS_ID!,
+    },
   })
 
   const values = useWatch({
@@ -59,7 +60,7 @@ export const CreateAIAgentPage: FC = () => {
   // })
 
   const setUiHistoryFormData = useCallback(async () => {
-    const cacheID = initAgent.cacheID
+    const cacheID = CREATE_TIPIS_ID
     const teamID = getCurrentId(store.getState())!
     const uiHistoryData = await getUiHistoryDataByCacheID(teamID, cacheID)
     if (uiHistoryData) {
@@ -76,11 +77,11 @@ export const CreateAIAgentPage: FC = () => {
         formData: values as IAgentForm,
       })
     }
-  }, [initAgent.cacheID, values])
+  }, [values])
 
   useEffect(() => {
     const getHistoryDataAndSetFormData = async () => {
-      const cacheID = initAgent.cacheID
+      const cacheID = CREATE_TIPIS_ID
       const teamID = getCurrentId(store.getState())!
       const uiHistoryData = await getUiHistoryDataByCacheID(teamID, cacheID)
       if (uiHistoryData) {
@@ -91,7 +92,7 @@ export const CreateAIAgentPage: FC = () => {
       }
     }
     getHistoryDataAndSetFormData()
-  }, [initAgent.cacheID, methods])
+  }, [methods])
 
   useBeforeUnload(setUiHistoryFormData)
 
@@ -103,7 +104,7 @@ export const CreateAIAgentPage: FC = () => {
 
   return (
     <FormProvider {...methods}>
-      <TipisWebSocketProvider key={agentID}>
+      <TipisWebSocketProvider key={CREATE_TIPIS_ID}>
         <AgentWSProvider>
           <FormContext>
             <LayoutAutoChange
