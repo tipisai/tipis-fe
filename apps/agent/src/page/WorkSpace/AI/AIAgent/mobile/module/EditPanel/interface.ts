@@ -1,5 +1,4 @@
 export enum MOBILE_EDIT_PAGE_STEP {
   BASIC,
   PREVIEW,
-  INFO,
 }

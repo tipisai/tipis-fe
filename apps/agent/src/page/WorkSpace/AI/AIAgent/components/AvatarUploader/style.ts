@@ -19,16 +19,13 @@ export const descTextStyle = css`
   -webkit-text-fill-color: transparent;
 `
 
-export const uploadContainerStyle = css`
-  cursor: pointer;
-  background: ${getColor("grayBlue", "09")};
-  width: 100px;
-  height: 100px;
-  border-radius: 4px;
+export const avatarMaskContainerStyle = css`
   display: flex;
-  padding: 32px 28px 22px 29px;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
 `
 
 export const uploadContentContainerStyle = css`
@@ -36,13 +33,10 @@ export const uploadContentContainerStyle = css`
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-`
-
-export const uploadTextStyle = css`
-  text-align: center;
-  margin-top: 8px;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 22px;
+  border-radius: 12px;
+  padding: 1px;
+  + .ant-image-mask {
+    border-radius: 12px;
+    inset: 1px;
+  }
 `

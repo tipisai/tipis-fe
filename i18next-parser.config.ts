@@ -1,5 +1,3 @@
-import { languageKeys } from "@illa-public/utils"
-
 export default {
   contextSeparator: "_",
   // Key separator used in your translation keys
@@ -47,7 +45,7 @@ export default {
   lineEnding: "auto",
   // Control the line ending. See options at https://github.com/ryanve/eol
 
-  locales: languageKeys,
+  locales: ["en-US"],
   // An array of the locales in your applications
 
   namespaceSeparator: false,

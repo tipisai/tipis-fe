@@ -10,7 +10,7 @@ import {
 import ContributeButton from "../ContributeButton"
 import SaveButton from "../SaveButton"
 import ShareButton from "../ShareButton"
-import { headerToolsContainerStyle } from "./style"
+import { headerToolsContainerStyle, saveButtonContainerStyle } from "./style"
 
 const HeaderTools: FC = () => {
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
@@ -32,7 +32,9 @@ const HeaderTools: FC = () => {
     <div css={headerToolsContainerStyle}>
       {!!aiAgentID && showShareDialog && <ShareButton />}
       {!!aiAgentID && showContributeDialog && <ContributeButton />}
-      <SaveButton />
+      <div css={saveButtonContainerStyle}>
+        <SaveButton />
+      </div>
     </div>
   )
 }

@@ -24,7 +24,7 @@ import {
   useCreateTipiToEditTipi,
   useUpdateRecentTabReducer,
 } from "@/utils/recentTabs/hook"
-import { IAgentForm } from "./interface"
+import { AgentInitial, IAgentForm } from "./interface"
 
 export const agentData2JSONReport = (agent: IAgentForm) => {
   try {
@@ -87,9 +87,11 @@ export const useSubmitSaveAgent = () => {
       let agentInfo: Agent
       try {
         let updateIconURL = currentData.icon
-        if (currentData.icon !== undefined && currentData.icon !== "") {
+        if (!updateIconURL) {
+          updateIconURL = AgentInitial.icon
+        } else {
           const iconURL = new URL(currentData.icon)
-          if (iconURL.protocol !== "http:" && iconURL.protocol !== "https:") {
+          if (iconURL.protocol === "data:") {
             const responseData = await getAgentIconUploadAddress({
               teamID: currentTeamInfo.id,
               base64: currentData.icon,
@@ -100,6 +102,7 @@ export const useSubmitSaveAgent = () => {
             )
           }
         }
+
         if (
           currentData.aiAgentID === undefined ||
           currentData.aiAgentID === ""

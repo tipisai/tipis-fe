@@ -5,7 +5,6 @@ export const editPanelContainerStyle = (
   width: string,
   canResize: boolean,
 ) => css`
-  padding: 16px 0;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -28,9 +27,9 @@ export const editContentStyle = (width: string) => css`
   overflow-y: auto;
 `
 
-export const footerContainerStyle = (width: string) => css`
+export const footerContainerStyle = (width: string, isMobile: boolean) => css`
   width: ${width};
-  padding: 24px 24px 8px 24px;
+  padding: ${isMobile ? "20px" : "24px"};
   border-top: 1px solid ${getColor("grayBlue", "08")};
   background-color: ${getColor("white", "01")};
 `

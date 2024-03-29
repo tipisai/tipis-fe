@@ -1,17 +1,13 @@
 import { SerializedStyles, css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
 
-export const agentBlockStyle = (mode: "panel" | "modal") => {
-  return mode === "panel"
-    ? css`
-        margin-top: 8px;
-        padding: 8px 24px;
-        width: 100%;
-      `
-    : css`
-        width: 100%;
-      `
-}
+export const agentBlockStyle = (isMobile: boolean) => css`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: ${isMobile ? "0px" : "8px 0px"};
+`
 
 export function applyBlockTextStyle(
   renderBottomLine?: boolean,
@@ -27,15 +23,17 @@ export function applyBlockTextStyle(
   `
 }
 
-export const blockRequireStyle = css`
-  margin-left: 4px;
-`
-
 export const blockTitleContainer = css`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 8px;
+  justify-content: space-between;
+`
+
+export const blockTItleAndRequireContainerStyle = css`
+  display: flex;
+  align-items: center;
+  gap: 4px;
 `
 
 export function applyBlockSubtitleStyle(
@@ -49,3 +47,10 @@ export function applyBlockSubtitleStyle(
       : "none"};
   `
 }
+
+export const childrenAndErrorMessageContainerStyle = css`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`

@@ -1,13 +1,15 @@
 import { Tooltip } from "antd"
 import { FC } from "react"
 import RequireIcon from "@/assets/agent/require.svg?react"
+import { ErrorText } from "../ErrorText"
 import { ILayoutBlock } from "./interface"
 import {
   agentBlockStyle,
   applyBlockSubtitleStyle,
   applyBlockTextStyle,
-  blockRequireStyle,
+  blockTItleAndRequireContainerStyle,
   blockTitleContainer,
+  childrenAndErrorMessageContainerStyle,
 } from "./style"
 
 export const LayoutBlock: FC<ILayoutBlock> = (props) => {
@@ -19,19 +21,21 @@ export const LayoutBlock: FC<ILayoutBlock> = (props) => {
     subtitleTips,
     required,
     scrollId,
-    mode = "panel",
+    isMobile = false,
+    errorMessage,
   } = props
 
   return (
-    <div css={agentBlockStyle(mode)} data-scroll-id={scrollId}>
+    <div css={agentBlockStyle(isMobile)} data-scroll-id={scrollId}>
       <div css={blockTitleContainer}>
-        {title && (
-          <Tooltip title={tips} trigger="hover" placement="top">
-            <div css={applyBlockTextStyle(tips !== undefined)}>{title}</div>
-          </Tooltip>
-        )}
-        {required && <RequireIcon css={blockRequireStyle} />}
-        <div style={{ flex: 1 }} />
+        <div css={blockTItleAndRequireContainerStyle}>
+          {title && (
+            <Tooltip title={tips} trigger="hover" placement="top">
+              <div css={applyBlockTextStyle(tips !== undefined)}>{title}</div>
+            </Tooltip>
+          )}
+          {required && <RequireIcon />}
+        </div>
         {subtitle && (
           <Tooltip title={subtitleTips} trigger="hover">
             <div css={applyBlockSubtitleStyle(subtitleTips !== undefined)}>
@@ -40,7 +44,10 @@ export const LayoutBlock: FC<ILayoutBlock> = (props) => {
           </Tooltip>
         )}
       </div>
-      {children}
+      <div css={childrenAndErrorMessageContainerStyle}>
+        {children}
+        {errorMessage && <ErrorText errorMessage={errorMessage} />}
+      </div>
     </div>
   )
 }
