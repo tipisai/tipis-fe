@@ -116,9 +116,7 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
               }}
             />
             {canEditorTeamMobile && (
-              <span css={editLabelStyle}>
-                {t("homepage.edit_tipi.modal.edit")}
-              </span>
+              <span css={editLabelStyle}>{t("editor.ai-agent.save")}</span>
             )}
           </AvatarUpload>
         </div>

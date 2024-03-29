@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { FC, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 import { v4 } from "uuid"
@@ -6,6 +6,7 @@ import { getCurrentTeamInfo } from "@illa-public/user-data"
 import DetailLayout from "@/Layout/DetailLayout"
 import ContributeInfo from "@/Layout/DetailLayout/components/ContributeInfo"
 import DetailHeader from "@/Layout/DetailLayout/components/DetailHeader"
+import FullSectionLoading from "@/components/FullSectionLoading"
 import { useGetAIAgentMarketplaceInfoQuery } from "@/redux/services/marketAPI"
 import store from "@/redux/store"
 import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
@@ -14,8 +15,8 @@ import {
   getRecentTabInfos,
 } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
+import { useAddMarketTipiDetailTab } from "@/utils/recentTabs/hook"
 import { getExploreTipisPath } from "@/utils/routeHelper"
-import FullSectionLoading from "../../../../components/FullSectionLoading"
 import ActionGroup from "../components/ActionGroup"
 import Parameters from "../components/Parameters"
 import Prompt from "../components/Prompt"
@@ -32,6 +33,17 @@ const MarketTipiDetailPage: FC = () => {
   const navigate = useNavigate()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const dispatch = useDispatch()
+  const addMarketTipiDetailTab = useAddMarketTipiDetailTab()
+
+  useEffect(() => {
+    if (aiAgentMarketPlaceInfo) {
+      addMarketTipiDetailTab({
+        tipisID: aiAgentMarketPlaceInfo.aiAgent.aiAgentID,
+        title: aiAgentMarketPlaceInfo.aiAgent.name,
+        tabIcon: aiAgentMarketPlaceInfo.aiAgent.icon,
+      })
+    }
+  }, [addMarketTipiDetailTab, aiAgentMarketPlaceInfo])
 
   const onClickBack = () => {
     const currentTabID = getCurrentTabID(store.getState())

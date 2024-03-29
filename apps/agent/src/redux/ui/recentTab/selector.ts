@@ -31,6 +31,23 @@ export const getCreateTipsTab = createSelector(
 export const getExploreTipisTab = createSelector(
   [getRecentTabInfos],
   (recentTabs) => {
-    return recentTabs.find((tab) => tab.tabType === TAB_TYPE.EXPLORE_TIPIS)
+    return recentTabs.find(
+      (tab) =>
+        tab.tabType === TAB_TYPE.EXPLORE_TIPIS ||
+        tab.tabType === TAB_TYPE.EXPLORE_TIPIS_DETAIL ||
+        tab.tabType === TAB_TYPE.EXPLORE_MARKET_TIPIS_DETAIL,
+    )
+  },
+)
+
+export const getExploreFunctionTab = createSelector(
+  [getRecentTabInfos],
+  (recentTabs) => {
+    return recentTabs.find(
+      (tab) =>
+        tab.tabType === TAB_TYPE.EXPLORE_FUNCTION ||
+        tab.tabType === TAB_TYPE.EXPLORE_FUNCTION_DETAIL ||
+        tab.tabType === TAB_TYPE.EXPLORE_MARKET_FUNCTION_DETAIL,
+    )
   },
 )

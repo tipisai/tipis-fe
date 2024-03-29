@@ -3,10 +3,11 @@ import { Avatar } from "antd"
 import { useCallback } from "react"
 import { useTranslation } from "react-i18next"
 import { PenIcon } from "@illa-public/icon"
-import ChatIcon from "@/assets/workspace/chat.svg?react"
+import ChatIcon from "@/assets/public/tipiChatAvatar.svg?react"
 import FunctionIcon from "@/assets/workspace/function.svg?react"
 import MarketplaceIcon from "@/assets/workspace/marketplace.svg?react"
 import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
+import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 import {
   getChatPath,
   getCreateFunctionPath,
@@ -19,7 +20,6 @@ import {
   getRunTipiPath,
   getTipiDetailPath,
 } from "@/utils/routeHelper"
-import { DEFAULT_CHAT_ID } from "../../../../redux/ui/recentTab/state"
 import {
   menuItemButtonCustomIconContainerStyle,
   menuItemButtonIconContainerStyle,
@@ -119,7 +119,7 @@ export const genTabNavigateLink = (
 ) => {
   switch (tabType) {
     case TAB_TYPE.CREATE_TIPIS:
-      return getCreateTipiPath(teamIdentifier, cacheID)
+      return getCreateTipiPath(teamIdentifier)
     case TAB_TYPE.EDIT_TIPIS:
       return getEditTipiPath(teamIdentifier, cacheID)
     case TAB_TYPE.RUN_TIPIS:
@@ -138,6 +138,7 @@ export const genTabNavigateLink = (
       return getTipiDetailPath(teamIdentifier, cacheID)
     case TAB_TYPE.EXPLORE_MARKET_TIPIS_DETAIL:
       return getMarketTipiDetailPath(teamIdentifier, cacheID)
+    case TAB_TYPE.EXPLORE_MARKET_FUNCTION_DETAIL:
     case TAB_TYPE.EXPLORE_FUNCTION_DETAIL:
       return ""
   }

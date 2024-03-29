@@ -1,6 +1,6 @@
-import { FC } from "react"
+import { FC, useEffect } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { Navigate } from "react-router-dom"
+import { Navigate, useParams } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import MobileCustomTitle from "@/Layout/Workspace/mobile/components/CustomTitle"
 import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayout"
@@ -8,6 +8,7 @@ import PCCustomTitle from "@/Layout/Workspace/pc/components/CustomTitle"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
+import { useAddRunTipisTab } from "@/utils/recentTabs/hook"
 import { useGetNotContributeTipDetail } from "@/utils/tipis/hook"
 import { AgentInitial, IAgentForm } from "../AIAgent/interface"
 import { AgentWSProvider } from "../context/AgentWSContext"
@@ -29,6 +30,23 @@ export const NotContributedAgent: FC = () => {
         }
       : AgentInitial,
   })
+
+  const { tabID } = useParams()
+
+  const addAgentRunTab = useAddRunTipisTab()
+
+  useEffect(() => {
+    if (data && tabID) {
+      addAgentRunTab(
+        {
+          tipisID: data.aiAgentID,
+          tipisIcon: data.icon,
+          tipisName: data.name,
+        },
+        tabID,
+      )
+    }
+  }, [addAgentRunTab, data, tabID])
 
   if (isLoading) {
     return <FullSectionLoading />

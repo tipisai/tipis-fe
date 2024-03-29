@@ -1,6 +1,6 @@
-import { FC } from "react"
+import { FC, useEffect } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { Navigate } from "react-router-dom"
+import { Navigate, useParams } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import MobileCustomTitle from "@/Layout/Workspace/mobile/components/CustomTitle"
 import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayout"
@@ -9,6 +9,7 @@ import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
 import { useGetTipiContributedDetail } from "@/utils/tipis/hook"
+import { useAddRunTipisTab } from "../../../../utils/recentTabs/hook"
 import { AgentInitial, IAgentForm } from "../AIAgent/interface"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import AIAgentRunMobile from "./AIAgentRunMobile"
@@ -22,6 +23,22 @@ import { MarketplaceInfoProvider } from "./contexts/MarketplaceInfoContext"
 export const ContributedAgent: FC = () => {
   const { contributeAgentDetail, isError, isLoading, aiAgentMarketPlaceInfo } =
     useGetTipiContributedDetail()
+  const { tabID } = useParams()
+
+  const addAgentRunTab = useAddRunTipisTab()
+
+  useEffect(() => {
+    if (contributeAgentDetail && tabID) {
+      addAgentRunTab(
+        {
+          tipisID: contributeAgentDetail.aiAgentID,
+          tipisIcon: contributeAgentDetail.icon,
+          tipisName: contributeAgentDetail.name,
+        },
+        tabID,
+      )
+    }
+  }, [addAgentRunTab, contributeAgentDetail, tabID])
 
   const methods = useForm<IAgentForm>({
     values: contributeAgentDetail

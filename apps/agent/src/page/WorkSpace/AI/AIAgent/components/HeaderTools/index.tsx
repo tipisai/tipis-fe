@@ -7,7 +7,7 @@ import {
   showShareAgentModal,
   showShareAgentModalOnlyForShare,
 } from "@illa-public/user-role-utils"
-import ContributeButton from "../ContributeButton"
+// import ContributeButton from "../ContributeButton"
 import SaveButton from "../SaveButton"
 import ShareButton from "../ShareButton"
 import { headerToolsContainerStyle, saveButtonContainerStyle } from "./style"
@@ -31,7 +31,7 @@ const HeaderTools: FC = () => {
   return (
     <div css={headerToolsContainerStyle}>
       {!!aiAgentID && showShareDialog && <ShareButton />}
-      {!!aiAgentID && showContributeDialog && <ContributeButton />}
+      {/* {!!aiAgentID && showContributeDialog && <ContributeButton />} */}
       <div css={saveButtonContainerStyle}>
         <SaveButton />
       </div>

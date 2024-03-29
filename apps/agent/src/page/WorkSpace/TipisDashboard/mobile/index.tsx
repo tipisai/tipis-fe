@@ -5,7 +5,7 @@ import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayo
 import { DashboardUIStateProvider } from "../context/marketListContext"
 import HeaderTools from "./components/HeaderTools"
 import DashboardContent from "./modules/DashboardContent"
-import MarketContent from "./modules/MarketContent"
+// import MarketContent from "./modules/MarketContent"
 import { tabsContainerStyle, tipisMobileDashboardContainerStyle } from "./style"
 
 const TipisMobileDashboard: FC = () => {
@@ -25,11 +25,11 @@ const TipisMobileDashboard: FC = () => {
                   key: "team",
                   children: <DashboardContent />,
                 },
-                {
-                  label: t("homepage.tipi_dashboard.tab.marketplace"),
-                  key: "marketplace",
-                  children: <MarketContent />,
-                },
+                // {
+                //   label: t("homepage.tipi_dashboard.tab.marketplace"),
+                //   key: "marketplace",
+                //   children: <MarketContent />,
+                // },
               ]}
               style={{ height: "100%" }}
             />

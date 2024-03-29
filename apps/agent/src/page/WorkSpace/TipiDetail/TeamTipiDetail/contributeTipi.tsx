@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { FC, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Navigate, useNavigate } from "react-router-dom"
 import { v4 } from "uuid"
@@ -17,7 +17,8 @@ import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import {
   useAddRecentTabReducer,
   useUpdateRecentTabReducer,
-} from "@/utils/recentTabs/hook"
+} from "@/utils/recentTabs/baseHook"
+import { useAddTipisDetailTab } from "@/utils/recentTabs/hook"
 import { getExploreTipisPath } from "@/utils/routeHelper"
 import { useGetTipiContributedDetail } from "@/utils/tipis/hook"
 import ActionGroup from "../components/ActionGroup"
@@ -32,6 +33,18 @@ const ContributeTipiDetail: FC = () => {
   const dispatch = useDispatch()
   const updateRecentTab = useUpdateRecentTabReducer()
   const addRecentTab = useAddRecentTabReducer()
+
+  const addTipiDetailTab = useAddTipisDetailTab()
+
+  useEffect(() => {
+    if (contributeAgentDetail) {
+      addTipiDetailTab({
+        tipisID: contributeAgentDetail.aiAgentID,
+        title: contributeAgentDetail.name,
+        tabIcon: contributeAgentDetail.icon,
+      })
+    }
+  }, [addTipiDetailTab, contributeAgentDetail])
 
   const onClickBack = () => {
     const currentTabID = getCurrentTabID(store.getState())

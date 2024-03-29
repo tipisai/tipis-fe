@@ -35,6 +35,7 @@ import {
 } from "@illa-public/utils"
 import { copyToClipboard } from "@/utils/copyToClipboard"
 import { track } from "@/utils/mixpanelHelper"
+import { getEditTipiPath } from "@/utils/routeHelper"
 import { IShareAndContributeModalProps } from "./interface"
 
 const ShareAndContributeModal: FC<IShareAndContributeModalProps> = (props) => {
@@ -90,9 +91,7 @@ const ShareAndContributeModal: FC<IShareAndContributeModalProps> = (props) => {
             title={t("user_management.modal.social_media.default_text.agent", {
               agentName: agentName,
             })}
-            redirectURL={`${getILLACloudURL(
-              window.customDomain,
-            )}/${currentTeamInfo.identifier}/ai-agent/${aiAgentID}`}
+            redirectURL={`${getILLACloudURL()}${getEditTipiPath(currentTeamInfo.identifier, aiAgentID)}`}
             onClose={() => {
               setShareDialogVisible(false)
             }}
@@ -102,7 +101,7 @@ const ShareAndContributeModal: FC<IShareAndContributeModalProps> = (props) => {
               currentTeamInfo.permission.allowViewerManageTeamMember,
             )}
             defaultTab={defaultShareTag}
-            defaultInviteUserRole={USER_ROLE.VIEWER}
+            defaultInviteUserRole={USER_ROLE.EDITOR}
             teamID={currentTeamInfo.id}
             currentUserRole={currentTeamInfo.myRole}
             defaultBalance={currentTeamInfo.currentTeamLicense.balance}

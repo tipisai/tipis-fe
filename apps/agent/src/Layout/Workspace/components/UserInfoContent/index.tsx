@@ -2,6 +2,7 @@ import { Avatar, Popover } from "antd"
 import { FC } from "react"
 import { useSelector } from "react-redux"
 import { getCurrentUser } from "@illa-public/user-data"
+import { getColorByString } from "@illa-public/utils"
 import UserInfoPopoverContent from "../UserInfoPopoverContent"
 import { IUserInfoContentProps } from "./interface"
 import {
@@ -36,7 +37,17 @@ const UserInfoContent: FC<IUserInfoContentProps> = (props) => {
             src={userInfo.avatar}
             shape="circle"
             size={isMiniSize ? 24 : 32}
-          />
+            style={{
+              fontSize: isMiniSize ? 12 : 16,
+              background: userInfo?.avatar
+                ? "#ffffff"
+                : getColorByString(userInfo?.userID || ""),
+            }}
+          >
+            {userInfo.nickname[0]
+              ? userInfo.nickname[0].toLocaleUpperCase()
+              : "U"}
+          </Avatar>
         </div>
         {!isMiniSize && (
           <div css={nickNameAndEmailContainerStyle}>

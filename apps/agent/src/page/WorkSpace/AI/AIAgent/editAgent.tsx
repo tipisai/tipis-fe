@@ -8,11 +8,12 @@ import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
 import { useGetAgentDetailQuery } from "@/redux/services/agentAPI"
+import store from "@/redux/store"
 import {
   getUiHistoryDataByCacheID,
   setUiHistoryData,
 } from "@/utils/localForage/teamData"
-import store from "../../../../redux/store"
+import { useAddEditTipisTab } from "@/utils/recentTabs/hook"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import { AIAgent } from "./aiagent"
 import FormContext from "./components/FormContext"
@@ -33,6 +34,8 @@ export const EditAIAgentPage: FC = () => {
     aiAgentID: agentID!,
     teamID: teamID!,
   })
+
+  const addEditTipiTab = useAddEditTipisTab()
 
   const initAgent = useMemo(
     () => ({
@@ -120,6 +123,12 @@ export const EditAIAgentPage: FC = () => {
       setUiHistoryFormData()
     }
   }, [setUiHistoryFormData])
+
+  useEffect(() => {
+    if (agentID) {
+      addEditTipiTab(agentID)
+    }
+  }, [agentID, addEditTipiTab])
 
   // useEffect(() => {
   //   track(

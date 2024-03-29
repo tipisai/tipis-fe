@@ -13,13 +13,13 @@ import {
   useState,
 } from "react"
 import { PlusIcon, SearchIcon } from "@illa-public/icon"
-import { useCreateTipis } from "@/utils/recentTabs/hook"
+import { useNavigateToCreateTipis } from "@/utils/routeHelper/hook"
 import { DASH_BOARD_UI_STATE_ACTION_TYPE } from "../../../context/interface"
 import { DashBoardUIStateContext } from "../../../context/marketListContext"
 import { headerToolsContainerStyle } from "./style"
 
 const HeaderTools: FC = () => {
-  const createTipi = useCreateTipis()
+  const navigateToCreateTipis = useNavigateToCreateTipis()
 
   const { dispatch, dashboardUIState } = useContext(DashBoardUIStateContext)
   const { search } = dashboardUIState
@@ -70,7 +70,7 @@ const HeaderTools: FC = () => {
         type="primary"
         icon={<Icon component={PlusIcon} />}
         size="large"
-        onClick={createTipi}
+        onClick={navigateToCreateTipis}
       >
         {t("dashboard.create")}
       </Button>

@@ -4,8 +4,8 @@ export const getExploreTipisPath = (teamIdentifier: string) => {
   return `/workspace/${teamIdentifier}/tipis`
 }
 
-export const getCreateTipiPath = (teamIdentifier: string, tipiID: string) => {
-  return `/workspace/${teamIdentifier}/tipi/${tipiID}/create`
+export const getCreateTipiPath = (teamIdentifier: string) => {
+  return `/workspace/${teamIdentifier}/tipi/create`
 }
 
 export const getEditTipiPath = (teamIdentifier: string, tipiID: string) => {

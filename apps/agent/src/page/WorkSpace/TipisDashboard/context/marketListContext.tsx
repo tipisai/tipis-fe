@@ -8,8 +8,8 @@ import {
 } from "react"
 import { useSelector } from "react-redux"
 import { getCurrentId } from "@illa-public/user-data"
-import { getCacheUIState } from "../../../../utils/localForage/teamData"
-import { EXPLORE_TIPIS_ID } from "../../../../utils/recentTabs/constants"
+import { getCacheUIState } from "@/utils/localForage/teamData"
+import { EXPLORE_TIPIS_ID } from "@/utils/recentTabs/constants"
 import {
   DASH_BOARD_UI_STATE_ACTION_TYPE,
   IDashBoardUIState,

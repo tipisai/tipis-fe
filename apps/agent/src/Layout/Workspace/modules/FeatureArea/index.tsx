@@ -1,30 +1,30 @@
 import Icon from "@ant-design/icons"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
+import { v4 } from "uuid"
 import { PenIcon, PlusIcon } from "@illa-public/icon"
 import { getIsEmptyTeam } from "@illa-public/user-data"
-import FunctionIcon from "@/assets/workspace/function.svg?react"
+// import FunctionIcon from "@/assets/workspace/function.svg?react"
 import MarketplaceIcon from "@/assets/workspace/marketplace.svg?react"
 import store from "@/redux/store"
 import {
-  useCreateChat,
-  useCreateTipis,
-  useGoToExploreFunctions,
-  useGoToExploreTipis,
-} from "@/utils/recentTabs/hook"
-import FeatureCard from "../../components/FeatureCard"
+  useNavigateToCreateTipis,
+  useNavigateToExploreTipis,
+  useNavigateToNewChat,
+} from "@/utils/routeHelper/hook"
+// import FeatureCard from "../../components/FeatureCard"
 import MenuItemButton from "../../components/MenuItemButton"
-import { featureAreaContainerStyle, featureCardsContainerStyle } from "./style"
+import { featureAreaContainerStyle } from "./style"
 
 interface FeatureAreaProps {
   openCreateModal?: () => void
 }
 const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
   const { t } = useTranslation()
-  const createTipi = useCreateTipis()
-  const createChat = useCreateChat()
-  const gotoExploreTipi = useGoToExploreTipis()
-  const gotoExploreFunction = useGoToExploreFunctions()
+  const navigateToCreateTIpis = useNavigateToCreateTipis()
+  const navigateToChat = useNavigateToNewChat()
+  const navigateToExploreTipis = useNavigateToExploreTipis()
+  // const navigateToExploreFunction = useNavigateToExploreFunction()
 
   const handleClickCreateTipis = () => {
     const isEmptyTeam = getIsEmptyTeam(store.getState())
@@ -32,7 +32,7 @@ const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
       openCreateModal?.()
       return
     }
-    createTipi()
+    navigateToCreateTIpis()
   }
 
   const handleClickCreateChat = () => {
@@ -41,7 +41,7 @@ const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
       openCreateModal?.()
       return
     }
-    createChat()
+    navigateToChat(v4())
   }
 
   const handleClickExploreTipis = () => {
@@ -50,25 +50,25 @@ const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
       openCreateModal?.()
       return
     }
-    gotoExploreTipi()
+    navigateToExploreTipis()
   }
 
-  const handleClickFunction = () => {
-    const isEmptyTeam = getIsEmptyTeam(store.getState())
-    if (isEmptyTeam) {
-      openCreateModal?.()
-      return
-    }
-    gotoExploreFunction()
-  }
+  // const handleClickFunction = () => {
+  //   const isEmptyTeam = getIsEmptyTeam(store.getState())
+  //   if (isEmptyTeam) {
+  //     openCreateModal?.()
+  //     return
+  //   }
+  //   navigateToExploreFunction()
+  // }
 
   return (
     <div css={featureAreaContainerStyle}>
-      <div css={featureCardsContainerStyle}>
+      {/* <div css={featureCardsContainerStyle}>
         <FeatureCard
           icon={<Icon component={MarketplaceIcon} />}
           title={t("homepage.left_panel.feature.explore_tipi")}
-          position="left"
+          position="full"
           onClick={handleClickExploreTipis}
         />
         <FeatureCard
@@ -77,7 +77,12 @@ const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
           position="right"
           onClick={handleClickFunction}
         />
-      </div>
+      </div> */}
+      <MenuItemButton
+        text={t("homepage.left_panel.feature.explore_tipi")}
+        icon={<Icon component={MarketplaceIcon} />}
+        onClick={handleClickExploreTipis}
+      />
       <MenuItemButton
         text={t("homepage.left_panel.feature.new_chat")}
         icon={<Icon component={PlusIcon} />}
