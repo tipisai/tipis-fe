@@ -89,9 +89,7 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
               {userInfo?.nickname ? userInfo.nickname[0].toUpperCase() : "U"}
             </Avatar>
 
-            <span css={editLabelStyle}>
-              {t("homepage.edit_tipi.modal.edit")}
-            </span>
+            <span css={editLabelStyle}>{t("editor.ai-agent.save")}</span>
           </AvatarUpload>
         </div>
         <form onSubmit={handleSubmit?.(onSubmit)} css={formContainerStyle}>
