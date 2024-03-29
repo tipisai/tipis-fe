@@ -87,7 +87,9 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
                 })
               }
             />
-            <span css={editLabelStyle}>Edit</span>
+            <span css={editLabelStyle}>
+              {t("homepage.edit_tipi.modal.edit")}
+            </span>
           </AvatarUpload>
         </div>
         <form onSubmit={handleSubmit?.(onSubmit)} css={formContainerStyle}>
