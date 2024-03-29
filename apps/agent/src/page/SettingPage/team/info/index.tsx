@@ -3,8 +3,7 @@ import { FC, useEffect, useMemo, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
-import { useNavigate, useOutletContext, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
@@ -13,26 +12,21 @@ import {
   MixpanelTrackProvider,
 } from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
-import {
-  getCurrentTeamInfo,
-  useChangeTeamConfigMutation,
-} from "@illa-public/user-data"
+import { useChangeTeamConfigMutation } from "@illa-public/user-data"
 import { isSmallThanTargetRole } from "@illa-public/user-role-utils"
 import TeamInfoMobile from "@/page/SettingPage/team/info/components/TeamInfoMobile"
 import TeamInfoPC from "@/page/SettingPage/team/info/components/TeamInfoPC"
-import {
-  SettingContextType,
-  TeamInfoFields,
-} from "@/page/SettingPage/team/interface"
+import { TeamInfoFields } from "@/page/SettingPage/team/interface"
+import { setLocalTeamIdentifier } from "@/utils/auth"
 import { track } from "@/utils/mixpanelHelper"
 import { getTeamInfoSetting } from "@/utils/routeHelper"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 
 const TeamInfo: FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { teamIdentifier } = useParams()
-  const { onClickLeaveTeam } = useOutletContext<SettingContextType>()
-  const teamInfo = useSelector(getCurrentTeamInfo)
+  const teamInfo = useGetCurrentTeamInfo()!
   const [loading, setLoading] = useState(false)
   const { message } = App.useApp()
 
@@ -64,6 +58,7 @@ const TeamInfo: FC = () => {
         identifier: data.identifier,
       })
       if (data.identifier && data.identifier !== teamIdentifier) {
+        setLocalTeamIdentifier(data.identifier)
         navigate(getTeamInfoSetting(data.identifier))
       }
       return true
@@ -118,7 +113,6 @@ const TeamInfo: FC = () => {
                 loading={loading}
                 onSubmit={onSubmit}
                 teamInfo={teamInfo}
-                onClickLeaveTeam={onClickLeaveTeam}
               />
             }
             mobilePage={

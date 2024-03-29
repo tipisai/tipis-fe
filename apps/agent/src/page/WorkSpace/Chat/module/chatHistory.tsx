@@ -58,6 +58,7 @@ export const DefaultChat: FC<{ isMobile: boolean }> = ({
         TextSignal.RUN,
         SEND_MESSAGE_WS_TYPE.CHAT,
         {
+          fileIDs: message?.knowledgeFiles?.map((item) => item.fileID) || [],
           updateMessage: true,
           messageContent: message,
         },

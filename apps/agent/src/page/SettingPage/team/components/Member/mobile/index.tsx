@@ -1,24 +1,24 @@
 import { Button } from "antd"
 import { FC, useContext, useEffect } from "react"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { InviteMemberMobile } from "@illa-public/invite-modal"
 import {
   ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackContext,
 } from "@illa-public/mixpanel-utils"
 import { MemberInfo, USER_ROLE, USER_STATUS } from "@illa-public/public-types"
-import { getCurrentTeamInfo, teamActions } from "@illa-public/user-data"
+import { teamActions } from "@illa-public/user-data"
 import { canManageInvite, showInviteModal } from "@illa-public/user-role-utils"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { MemberContext } from "../context"
 import { MobileMemberList } from "./List"
 import { mobileMemberContainerStyle, mobileTitleStyle } from "./style"
 
 export const MobileMemberPage: FC = () => {
   const { t } = useTranslation()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+  const teamInfo = useGetCurrentTeamInfo()!
   const dispatch = useDispatch()
-  const teamInfo = useSelector(getCurrentTeamInfo)!
   const currentUserRole = teamInfo?.myRole ?? USER_ROLE.VIEWER
   const { track } = useContext(MixpanelTrackContext)
   const {
@@ -58,9 +58,9 @@ export const MobileMemberPage: FC = () => {
           redirectURL=""
           onClose={closeInviteModal}
           canInvite={canManageInvite(
-            currentTeamInfo.myRole,
-            currentTeamInfo.permission.allowEditorManageTeamMember,
-            currentTeamInfo.permission.allowViewerManageTeamMember,
+            teamInfo.myRole,
+            teamInfo.permission.allowEditorManageTeamMember,
+            teamInfo.permission.allowViewerManageTeamMember,
           )}
           currentUserRole={currentUserRole}
           defaultAllowInviteLink={teamInfo.permission.inviteLinkEnabled}

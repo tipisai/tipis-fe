@@ -3,7 +3,6 @@ import { Button, Input } from "antd"
 import { FC, useContext, useEffect } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { Avatar } from "@illa-public/avatar"
 import { AvatarUpload } from "@illa-public/cropper"
 import { CameraIcon } from "@illa-public/icon"
@@ -11,7 +10,7 @@ import {
   ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackContext,
 } from "@illa-public/mixpanel-utils"
-import { getCurrentUser } from "@illa-public/user-data"
+import { useGetUserInfoQuery } from "@illa-public/user-data"
 import ErrorMessage from "@/components/InputErrorMessage"
 import { getValidUserNameError } from "@/page/SettingPage/utils"
 import { AccountSettingFields, AccountSettingProps } from "../interface"
@@ -28,7 +27,7 @@ import {
 const MobileAccountSetting: FC<AccountSettingProps> = (props) => {
   const { t } = useTranslation()
   const { track } = useContext(MixpanelTrackContext)
-  const { onSubmit, loading, handleUpdateAvatar } = props
+  const { onSubmit, handleUpdateAvatar } = props
   const {
     handleSubmit,
     control,
@@ -37,7 +36,7 @@ const MobileAccountSetting: FC<AccountSettingProps> = (props) => {
     getValues,
     trigger,
   } = useFormContext<AccountSettingFields>()
-  const userInfo = useSelector(getCurrentUser)
+  const { data: userInfo } = useGetUserInfoQuery(null)
 
   const validReport = async () => {
     track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
@@ -143,7 +142,7 @@ const MobileAccountSetting: FC<AccountSettingProps> = (props) => {
               disabled
               size="large"
               variant="filled"
-              value={userInfo.email}
+              value={userInfo?.email}
               placeholder={t("profile.setting.new_password_placeholder")}
             />
           </div>
@@ -151,7 +150,6 @@ const MobileAccountSetting: FC<AccountSettingProps> = (props) => {
         <Button
           type="primary"
           size="large"
-          loading={loading}
           disabled={!isDirty}
           block
           onClick={validReport}

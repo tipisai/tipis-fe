@@ -11,7 +11,6 @@ import {
 } from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
 import {
-  getCurrentTeamInfo,
   getCurrentUser,
   useChangeTeamMemberRoleMutation,
   useGetMemberListQuery,
@@ -19,15 +18,15 @@ import {
 import { showInviteModal } from "@illa-public/user-role-utils"
 import { COPY_STATUS, copyToClipboard } from "@illa-public/utils"
 import FullSectionLoading from "@/components/FullSectionLoading"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { MemberContext } from "./context"
 import MobileMemberPage from "./mobile"
 import PCMemberPage from "./pc"
 
 export const MemberListPage: FC = () => {
   const { t } = useTranslation()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const [inviteModalVisible, setInviteModalVisible] = useState(false)
-  const teamInfo = useSelector(getCurrentTeamInfo)!
+  const teamInfo = useGetCurrentTeamInfo()!
   const currentUserInfo = useSelector(getCurrentUser)!
   const { message } = App.useApp()
   const { track } = useContext(MixpanelTrackContext)
@@ -49,7 +48,7 @@ export const MemberListPage: FC = () => {
     async (teamMemberID: string, userRole: USER_ROLE) => {
       try {
         await changeTeamMembersRole({
-          teamID: currentTeamInfo.id,
+          teamID: teamInfo.id,
           teamMemberID,
           userRole,
         })
@@ -80,7 +79,7 @@ export const MemberListPage: FC = () => {
         }
       }
     },
-    [changeTeamMembersRole, currentTeamInfo.id, message, t],
+    [changeTeamMembersRole, teamInfo.id, message, t],
   )
 
   const handleClickInviteButton = useCallback(() => {

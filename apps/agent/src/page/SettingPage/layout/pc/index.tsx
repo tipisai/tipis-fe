@@ -94,7 +94,7 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
       ]
     : []
 
-  const handleSwitchTeam = (teamID: string, teamIdentifier: string) => {
+  const handleSwitchTeam = (_: string, teamIdentifier: string) => {
     navigate(getTeamInfoSetting(teamIdentifier))
   }
 

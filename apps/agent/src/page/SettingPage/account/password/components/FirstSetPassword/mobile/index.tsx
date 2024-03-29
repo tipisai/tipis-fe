@@ -10,14 +10,8 @@ import { controllerContainerStyle, formContainerStyle } from "./style"
 const { Password } = Input
 
 const SetPasswordMobile: FC<FirstSetPasswordProps> = (props) => {
-  const {
-    onSubmit,
-    errorMsg,
-    loading,
-    showCountDown,
-    onCountDownChange,
-    sendEmail,
-  } = props
+  const { onSubmit, errorMsg, showCountDown, onCountDownChange, sendEmail } =
+    props
   const { t } = useTranslation()
   const { handleSubmit, control, formState } =
     useFormContext<IFirstSetPasswordFields>()
@@ -100,13 +94,7 @@ const SetPasswordMobile: FC<FirstSetPasswordProps> = (props) => {
           )}
         </div>
       </section>
-      <Button
-        size="large"
-        type="primary"
-        loading={loading}
-        disabled={false}
-        block
-      >
+      <Button size="large" type="primary" disabled={false} block>
         {t("profile.setting.save")}
       </Button>
     </form>

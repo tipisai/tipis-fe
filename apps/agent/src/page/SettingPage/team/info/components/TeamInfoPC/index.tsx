@@ -2,7 +2,6 @@ import { App, Button, Input } from "antd"
 import { FC, useContext } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { Avatar } from "@illa-public/avatar"
 import { AvatarUpload } from "@illa-public/cropper"
 import {
@@ -10,14 +9,15 @@ import {
   MixpanelTrackContext,
 } from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
-import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { isBiggerThanTargetRole } from "@illa-public/user-role-utils"
 import ErrorMessage from "@/components/InputErrorMessage"
 import { Header } from "@/page/SettingPage/components/Header"
 import { useUploadAvatar } from "@/page/SettingPage/hooks/uploadAvatar"
+import { useLeaveTeamModal } from "@/page/SettingPage/hooks/useLeaveTeamModal"
 import { TEAM_IDENTIFY_FORMAT } from "@/page/SettingPage/team/info/constants"
 import { TeamInfoFields } from "@/page/SettingPage/team/interface"
 import { getValidTeamSettingError } from "@/page/SettingPage/utils"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { TeamInfoPCProps } from "./interface"
 import {
   avatarStyle,
@@ -35,10 +35,11 @@ import {
 const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
   const { t } = useTranslation()
   const { message } = App.useApp()
-  const { onSubmit, loading, disabled, teamInfo, onClickLeaveTeam } = props
+  const { onSubmit, loading, disabled } = props
   const { handleSubmit, control, formState, getValues, trigger } =
     useFormContext<TeamInfoFields>()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+  const teamInfo = useGetCurrentTeamInfo()!
+  const handleLeaveOrDeleteTeamModal = useLeaveTeamModal()
 
   const { uploadTeamIcon } = useUploadAvatar()
   const { track } = useContext(MixpanelTrackContext)
@@ -80,8 +81,18 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
 
   const canEditorTeamMobile = isBiggerThanTargetRole(
     USER_ROLE.OWNER,
-    currentTeamInfo?.myRole,
+    teamInfo?.myRole,
   )
+
+  const handleClickLeave = () => {
+    track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
+      element: "delete_button",
+      parameter1: isOwner ? "delete_button" : undefined,
+      parameter11: teamInfo?.myRole,
+      team_id: teamInfo?.identifier || "-1",
+    })
+    handleLeaveOrDeleteTeamModal()
+  }
 
   return (
     <>
@@ -226,15 +237,7 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
               danger
               type="primary"
               size="large"
-              onClick={() => {
-                track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-                  element: "delete_button",
-                  parameter1: isOwner ? "delete_button" : undefined,
-                  parameter11: teamInfo?.myRole,
-                  team_id: teamInfo?.identifier || "-1",
-                })
-                onClickLeaveTeam && onClickLeaveTeam()
-              }}
+              onClick={handleClickLeave}
             >
               {isOwner
                 ? t("team_setting.left_panel.delete")

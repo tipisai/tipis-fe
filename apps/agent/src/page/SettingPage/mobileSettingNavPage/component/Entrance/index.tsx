@@ -2,7 +2,6 @@ import Icon from "@ant-design/icons"
 import { FC, useEffect, useMemo } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
-import { useOutletContext } from "react-router-dom"
 import {
   ILLA_MIXPANEL_CLOUD_PAGE_NAME,
   ILLA_MIXPANEL_EVENT_TYPE,
@@ -13,8 +12,8 @@ import { canAccessMember, canManagePayment } from "@illa-public/user-role-utils"
 import ProfileIcon from "@/assets/setting/profile.svg?react"
 import TeamIcon from "@/assets/setting/team.svg?react"
 import TeamSelect from "@/components/TeamSelect"
+import { useLeaveTeamModal } from "@/page/SettingPage/hooks/useLeaveTeamModal"
 import { useLogout } from "@/page/SettingPage/hooks/useLogout"
-import { SettingContextType } from "@/page/SettingPage/team/interface"
 import { track } from "@/utils/mixpanelHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import SettingMenu from "../Menu"
@@ -33,7 +32,7 @@ const Entrance: FC = () => {
 
   const isOwner = currentTeamInfo?.myRole === USER_ROLE.OWNER
 
-  const { onClickLeaveTeam } = useOutletContext<SettingContextType>()
+  const handleLeaveOrDeleteTeamModal = useLeaveTeamModal()
   const { hiddenMember, leaveLabel } = useMemo(() => {
     return {
       hiddenMember: !canAccessMember(currentTeamInfo),
@@ -110,7 +109,7 @@ const Entrance: FC = () => {
                 parameter11: currentTeamInfo?.myRole,
               },
             )
-            onClickLeaveTeam && onClickLeaveTeam()
+            handleLeaveOrDeleteTeamModal()
           },
         },
       ]

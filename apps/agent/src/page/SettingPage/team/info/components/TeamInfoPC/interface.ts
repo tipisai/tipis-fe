@@ -7,5 +7,4 @@ export interface TeamInfoPCProps {
   disabled?: boolean
   onSubmit: SubmitHandler<TeamInfoFields>
   teamInfo?: TeamInfo
-  onClickLeaveTeam?: () => void
 }
