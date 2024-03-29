@@ -19,7 +19,7 @@ import {
 } from "@illa-public/upgrade-modal"
 import { getCurrentId } from "@illa-public/user-data"
 import { getTextMessagePayload, getWithFileMessagePayload } from "@/api/ws"
-import { Callback } from "@/api/ws/interface"
+import { Callback, FILE_SOURCE } from "@/api/ws/interface"
 import { TextSignal, TextTarget } from "@/api/ws/textSignal"
 import { TipisWebSocketContext } from "@/components/PreviewChat/TipisWebscoketContext"
 import {
@@ -172,7 +172,10 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
         formatSendMessagePayload(payload)
 
       if (options?.fileIDs && options.fileIDs.length > 0) {
-        const withFileTextMessage = getWithFileMessagePayload(options.fileIDs)
+        const withFileTextMessage = getWithFileMessagePayload(
+          options.fileIDs,
+          FILE_SOURCE.FILES,
+        )
         sendMessage(withFileTextMessage)
         cacheMessageQueue.current.push({
           payload,
@@ -210,7 +213,10 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       const encodePayload: ChatSendRequestPayload =
         formatSendMessagePayload(payload)
       if (options?.fileIDs && options.fileIDs.length > 0) {
-        const withFileTextMessage = getWithFileMessagePayload(options.fileIDs)
+        const withFileTextMessage = getWithFileMessagePayload(
+          options.fileIDs,
+          FILE_SOURCE.TEMPORARY_FILES,
+        )
         sendMessage(withFileTextMessage)
         cacheMessageQueue.current.push({
           payload,

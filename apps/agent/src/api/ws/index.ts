@@ -1,5 +1,5 @@
 import { SEND_MESSAGE_WS_TYPE } from "@/components/PreviewChat/TipisWebscoketContext/interface"
-import { Broadcast } from "./interface"
+import { Broadcast, FILE_SOURCE } from "./interface"
 import { TextSignal, TextTarget } from "./textSignal"
 
 export function getTextMessagePayload<T>(
@@ -22,7 +22,10 @@ export function getTextMessagePayload<T>(
   })
 }
 
-export function getWithFileMessagePayload(fileIDs: string[]): string {
+export function getWithFileMessagePayload(
+  fileIDs: string[],
+  fileSource: FILE_SOURCE,
+): string {
   return JSON.stringify({
     signal: TextSignal.SIGNAL_ADD_CHAT_FILE,
     target: TextTarget.ACTION,
@@ -34,6 +37,7 @@ export function getWithFileMessagePayload(fileIDs: string[]): string {
     payload: [
       {
         fileIDs,
+        fileSource,
       },
     ],
     teamID: "",

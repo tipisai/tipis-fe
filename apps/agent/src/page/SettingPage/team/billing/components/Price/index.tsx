@@ -13,7 +13,7 @@ export const Price = () => {
   }
   return (
     <section css={priceStyle} id="pricing">
-      <span css={infoTitleStyle}>{t("billing.title.pricing")}</span>
+      <span css={infoTitleStyle}>{t("tipi_billing.pricing")}</span>
       <div css={priceCardContainerStyle}>
         {(isUnSubscribeCredit || isExpiredCredit) && <PriceCard />}
       </div>

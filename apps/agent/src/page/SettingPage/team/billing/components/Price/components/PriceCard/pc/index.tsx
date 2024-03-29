@@ -36,7 +36,7 @@ const CreditCardPC: FC<CreditCardProps> = ({ openCreditDrawer }) => {
   return (
     <div css={containerStyle}>
       <div css={headerStyle}>
-        <span css={titleStyle}>{t("billing.new_pricing.colla")}</span>
+        <span css={titleStyle}>{t("tipi_billing.credit")}</span>
         <div css={radioContainerStyle}>
           <ConfigProvider
             theme={{
@@ -51,13 +51,13 @@ const CreditCardPC: FC<CreditCardProps> = ({ openCreditDrawer }) => {
               checked={cycle === SUBSCRIPTION_CYCLE.MONTHLY}
               onChange={() => setCycle(SUBSCRIPTION_CYCLE.MONTHLY)}
             >
-              <span css={labelStyle}>{t("billing.new_pricing.monthly")}</span>
+              <span css={labelStyle}>{t("tipi_billing.monthly")}</span>
             </Radio>
             <Radio
               checked={cycle === SUBSCRIPTION_CYCLE.YEARLY}
               onChange={() => setCycle(SUBSCRIPTION_CYCLE.YEARLY)}
             >
-              <span css={labelStyle}>{t("billing.new_pricing.annually")}</span>
+              <span css={labelStyle}>{t("tipi_billing.annual")}</span>
             </Radio>
           </ConfigProvider>
         </div>
@@ -68,7 +68,9 @@ const CreditCardPC: FC<CreditCardProps> = ({ openCreditDrawer }) => {
           <div css={priceStyle}>
             <span css={priceNumStyle}>${price}</span>
             <span css={priceUnitStyle}>
-              {t("billing.new_pricing.colla_month")}
+              {cycle === SUBSCRIPTION_CYCLE.MONTHLY
+                ? t("tipi_billing.monthly_price_unit")
+                : t("tipi_billing.annual_price_unit")}
             </span>
           </div>
           <Button
@@ -76,7 +78,7 @@ const CreditCardPC: FC<CreditCardProps> = ({ openCreditDrawer }) => {
             size="large"
             onClick={() => openCreditDrawer(cycle)}
           >
-            {t("billing.new_pricing.upgrade")}
+            {t("tipi_billing.upgrade")}
           </Button>
         </div>
         <div css={cardContentStyle}>

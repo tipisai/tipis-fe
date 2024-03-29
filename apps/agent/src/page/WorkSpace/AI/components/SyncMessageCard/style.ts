@@ -108,10 +108,13 @@ export const codeRunningStyle = css`
   width: 32px;
   background-color: ${getColor("techPurple", "08")};
   border-radius: 50%;
+  flex: none;
 `
 
 export const actionIconStyle = css`
   font-size: 16px;
+  width: 16px;
+  flex: none;
 `
 export const hoverCopyStyle = css`
   display: inline-flex;
