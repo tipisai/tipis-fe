@@ -20,10 +20,8 @@ import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { fetchUploadBase64 } from "@/utils/file"
 import { updateUiHistoryData } from "@/utils/localForage/teamData"
 import { track } from "@/utils/mixpanelHelper"
-import {
-  useCreateTipiToEditTipi,
-  useUpdateRecentTabReducer,
-} from "@/utils/recentTabs/hook"
+import { useUpdateRecentTabReducer } from "@/utils/recentTabs/baseHook"
+import { useCreateTipiToEditTipi } from "@/utils/recentTabs/hook"
 import { AgentInitial, IAgentForm } from "./interface"
 
 export const agentData2JSONReport = (agent: IAgentForm) => {

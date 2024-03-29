@@ -3,11 +3,11 @@ import { Button } from "antd"
 import { t } from "i18next"
 import { FC } from "react"
 import { PlusIcon } from "@illa-public/icon"
-import { useAddCreateTipisTab } from "@/utils/recentTabs/hook"
+import { useNavigateToCreateTipis } from "@/utils/routeHelper/hook"
 import { headerToolsContainerStyle } from "./style"
 
 const HeaderTools: FC = () => {
-  const createTipi = useAddCreateTipisTab()
+  const navigateToCreateTipis = useNavigateToCreateTipis()
 
   return (
     <div css={headerToolsContainerStyle}>
@@ -15,7 +15,7 @@ const HeaderTools: FC = () => {
         type="primary"
         icon={<Icon component={PlusIcon} />}
         size="large"
-        onClick={createTipi}
+        onClick={navigateToCreateTipis}
       >
         {t("dashboard.create")}
       </Button>

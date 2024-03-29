@@ -138,6 +138,7 @@ export const genTabNavigateLink = (
       return getTipiDetailPath(teamIdentifier, cacheID)
     case TAB_TYPE.EXPLORE_MARKET_TIPIS_DETAIL:
       return getMarketTipiDetailPath(teamIdentifier, cacheID)
+    case TAB_TYPE.EXPLORE_MARKET_FUNCTION_DETAIL:
     case TAB_TYPE.EXPLORE_FUNCTION_DETAIL:
       return ""
   }

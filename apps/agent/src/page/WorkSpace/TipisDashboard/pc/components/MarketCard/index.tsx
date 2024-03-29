@@ -4,7 +4,7 @@ import { FC } from "react"
 import { ForkIcon, PlayOutlineIcon, StarOutlineIcon } from "@illa-public/icon"
 import { getLLM } from "@illa-public/market-agent"
 import { formatNumForAgent } from "@illa-public/utils"
-import { useMarketDetailTipis } from "@/utils/recentTabs/hook"
+import { useNavigateToMarketTipiDetail } from "@/utils/routeHelper/hook"
 import TagList from "../TagList"
 import { MarketAgentCardProps } from "./interface"
 import {
@@ -26,10 +26,10 @@ import {
 const MarketCard: FC<MarketAgentCardProps> = (props) => {
   const { marketAIAgent } = props
   const { aiAgent, marketplace } = marketAIAgent ?? {}
-  const detailTipis = useMarketDetailTipis()
+  const navigateToMarketTipiDetail = useNavigateToMarketTipiDetail()
 
   const onClickCard = () => {
-    detailTipis({
+    navigateToMarketTipiDetail({
       tipisID: aiAgent?.aiAgentID,
       title: aiAgent?.name,
       tabIcon: aiAgent?.icon,

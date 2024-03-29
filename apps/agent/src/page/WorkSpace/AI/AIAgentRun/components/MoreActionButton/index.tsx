@@ -3,7 +3,6 @@ import { Button, Dropdown, MenuProps } from "antd"
 import { FC, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
 import { InfoIcon, MoreIcon, PenIcon, ShareIcon } from "@illa-public/icon"
 import { ShareAgentMobile, ShareAgentPC } from "@illa-public/invite-modal"
 import {
@@ -28,8 +27,11 @@ import {
 } from "@illa-public/utils"
 import { copyToClipboard } from "@/utils/copyToClipboard"
 import { track } from "@/utils/mixpanelHelper"
-import { useAddEditTipisTab, useDetailTipis } from "@/utils/recentTabs/hook"
-import { getEditTipiPath, getRunTipiPath } from "@/utils/routeHelper"
+import { getRunTipiPath } from "@/utils/routeHelper"
+import {
+  useNavigateToEditTipis,
+  useNavigateToTipiDetail,
+} from "@/utils/routeHelper/hook"
 import { IMoreActionButtonProps } from "./interface"
 
 const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
@@ -40,9 +42,8 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
   const dispatch = useDispatch()
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const currentUser = useSelector(getCurrentUser)
-  const addEditTipis = useAddEditTipisTab()
-  const detailTipis = useDetailTipis()
-  const navigate = useNavigate()
+  const navigateToEditTipis = useNavigateToEditTipis()
+  const navigateToTipiDetails = useNavigateToTipiDetail()
 
   const canInvite = canManageInvite(
     currentTeamInfo.myRole,
@@ -77,12 +78,11 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
         }
         break
       case "edit": {
-        addEditTipis(agentID)
-        navigate(getEditTipiPath(currentTeamInfo.identifier, agentID))
+        navigateToEditTipis(agentID)
         break
       }
       case "detail": {
-        detailTipis({
+        navigateToTipiDetails({
           tipisID: agentID,
           title: agentName,
           tabIcon: agentIcon,

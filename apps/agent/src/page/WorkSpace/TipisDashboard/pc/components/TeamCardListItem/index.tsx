@@ -4,6 +4,7 @@ import { FC, MouseEventHandler, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
+import { v4 } from "uuid"
 import {
   CopyIcon,
   DeleteIcon,
@@ -42,12 +43,12 @@ import {
 } from "@/redux/services/agentAPI"
 import { copyToClipboard } from "@/utils/copyToClipboard"
 import { track } from "@/utils/mixpanelHelper"
-import {
-  useAddEditTipisTab,
-  useDetailTipis,
-  useRunTipis,
-} from "@/utils/recentTabs/hook"
 import { getEditTipiPath, getRunTipiPath } from "@/utils/routeHelper"
+import {
+  useNavigateToEditTipis,
+  useNavigateToRunTipis,
+  useNavigateToTipiDetail,
+} from "@/utils/routeHelper/hook"
 import { ITeamCardListItemProps } from "../../../components/TeamCardList/interface"
 
 const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
@@ -67,13 +68,13 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const addEditTipisTab = useAddEditTipisTab()
-  const runTipis = useRunTipis()
-  const detailTipis = useDetailTipis()
+  const navigateToEditTIpis = useNavigateToEditTipis()
+  const navigateRunTipis = useNavigateToRunTipis()
+  const navigateToTipiDetails = useNavigateToTipiDetail()
   const [shareVisible, setShareVisible] = useState(false)
 
   const onClickCard = () => {
-    detailTipis({
+    navigateToTipiDetails({
       tipisID: id,
       title: title,
       tabIcon: icon,
@@ -94,13 +95,19 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
 
   const onClickEditButton: MouseEventHandler<HTMLElement> = (e) => {
     e.stopPropagation()
-    addEditTipisTab(id)
-    navigate(getEditTipiPath(currentTeamInfo.identifier, id))
+    navigateToEditTIpis(id)
   }
 
   const onClickRunButton: MouseEventHandler<HTMLElement> = (e) => {
     e.stopPropagation()
-    runTipis(id)
+    navigateRunTipis(
+      {
+        tipisID: id,
+        tipisName: title,
+        tipisIcon: icon,
+      },
+      v4(),
+    )
   }
 
   const onClickMoreAction: MouseEventHandler<HTMLElement> = (e) => {
