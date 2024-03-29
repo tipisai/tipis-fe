@@ -159,7 +159,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         accessByMobile: true,
       },
       {
-        path: ":teamIdentifier/tipi/:agentID/create",
+        path: ":teamIdentifier/tipi/create",
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <CreateAgentPage />

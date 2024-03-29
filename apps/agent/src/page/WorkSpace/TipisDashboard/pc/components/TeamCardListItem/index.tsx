@@ -4,6 +4,7 @@ import { FC, MouseEventHandler, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
+import { v4 } from "uuid"
 import {
   CopyIcon,
   DeleteIcon,
@@ -42,12 +43,12 @@ import {
 } from "@/redux/services/agentAPI"
 import { copyToClipboard } from "@/utils/copyToClipboard"
 import { track } from "@/utils/mixpanelHelper"
+import { getEditTipiPath, getRunTipiPath } from "@/utils/routeHelper"
 import {
-  useDetailTipis,
-  useEditTipis,
-  useRunTipis,
-} from "@/utils/recentTabs/hook"
-import { getEditTipiPath } from "@/utils/routeHelper"
+  useNavigateToEditTipis,
+  useNavigateToRunTipis,
+  useNavigateToTipiDetail,
+} from "@/utils/routeHelper/hook"
 import { ITeamCardListItemProps } from "../../../components/TeamCardList/interface"
 
 const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
@@ -58,7 +59,7 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
   const { teamIdentifier } = useParams()
 
   const currentTeamID = useSelector(getCurrentId)!
-  const teamInfo = useSelector(getCurrentTeamInfo)!
+  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const currentUser = useSelector(getCurrentUser)
 
   const tags = publishToMarketplace ? (
@@ -67,13 +68,13 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const editTipis = useEditTipis()
-  const runTipis = useRunTipis()
-  const detailTipis = useDetailTipis()
+  const navigateToEditTIpis = useNavigateToEditTipis()
+  const navigateRunTipis = useNavigateToRunTipis()
+  const navigateToTipiDetails = useNavigateToTipiDetail()
   const [shareVisible, setShareVisible] = useState(false)
 
   const onClickCard = () => {
-    detailTipis({
+    navigateToTipiDetails({
       tipisID: id,
       title: title,
       tabIcon: icon,
@@ -87,19 +88,26 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
     useState(false)
 
   const canInvite = canManageInvite(
-    teamInfo.myRole,
-    teamInfo.permission.allowEditorManageTeamMember,
-    teamInfo.permission.allowViewerManageTeamMember,
+    currentTeamInfo.myRole,
+    currentTeamInfo.permission.allowEditorManageTeamMember,
+    currentTeamInfo.permission.allowViewerManageTeamMember,
   )
 
   const onClickEditButton: MouseEventHandler<HTMLElement> = (e) => {
     e.stopPropagation()
-    editTipis(id)
+    navigateToEditTIpis(id)
   }
 
   const onClickRunButton: MouseEventHandler<HTMLElement> = (e) => {
     e.stopPropagation()
-    runTipis(id)
+    navigateRunTipis(
+      {
+        tipisID: id,
+        tipisName: title,
+        tipisIcon: icon,
+      },
+      v4(),
+    )
   }
 
   const onClickMoreAction: MouseEventHandler<HTMLElement> = (e) => {
@@ -246,32 +254,32 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
               dispatch(teamActions.updateInvitedUserReducer(memberListInfo))
             }}
             canUseBillingFeature={canUseUpgradeFeature(
-              teamInfo.myRole,
-              getPlanUtils(teamInfo),
-              teamInfo.totalTeamLicense?.teamLicensePurchased,
-              teamInfo.totalTeamLicense?.teamLicenseAllPaid,
+              currentTeamInfo.myRole,
+              getPlanUtils(currentTeamInfo),
+              currentTeamInfo.totalTeamLicense?.teamLicensePurchased,
+              currentTeamInfo.totalTeamLicense?.teamLicenseAllPaid,
             )}
             title={t("user_management.modal.social_media.default_text.agent", {
               agentName: title,
             })}
-            redirectURL={`${getILLACloudURL(window.customDomain)}/${
-              teamInfo.identifier
-            }/ai-agent/${id}/run?myTeamIdentifier=${teamInfo.identifier}`}
+            redirectURL={`${getILLACloudURL()}${getRunTipiPath(currentTeamInfo.identifier, id)}`}
             onClose={() => {
               setShareVisible(false)
             }}
             canInvite={canInvite}
             defaultInviteUserRole={USER_ROLE.VIEWER}
-            teamID={teamInfo.id}
-            currentUserRole={teamInfo.myRole}
-            defaultBalance={teamInfo.currentTeamLicense.balance}
-            defaultAllowInviteLink={teamInfo.permission.inviteLinkEnabled}
+            teamID={currentTeamInfo.id}
+            currentUserRole={currentTeamInfo.myRole}
+            defaultBalance={currentTeamInfo.currentTeamLicense.balance}
+            defaultAllowInviteLink={
+              currentTeamInfo.permission.inviteLinkEnabled
+            }
             onInviteLinkStateChange={(enableInviteLink) => {
               dispatch(
                 teamActions.updateTeamMemberPermissionReducer({
-                  teamID: teamInfo.id,
+                  teamID: currentTeamInfo.id,
                   newPermission: {
-                    ...teamInfo.permission,
+                    ...currentTeamInfo.permission,
                     inviteLinkEnabled: enableInviteLink,
                   },
                 }),
@@ -298,7 +306,7 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
               copyToClipboard(
                 t("user_management.modal.custom_copy_text_agent_invite", {
                   userName: currentUser.nickname,
-                  teamName: teamInfo.name,
+                  teamName: currentTeamInfo.name,
                   inviteLink: link,
                 }),
               )
@@ -319,14 +327,14 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
                 }),
               )
             }}
-            userRoleForThisAgent={teamInfo.myRole}
-            ownerTeamID={teamInfo.id}
+            userRoleForThisAgent={currentTeamInfo.myRole}
+            ownerTeamID={currentTeamInfo.id}
             onBalanceChange={(balance) => {
               dispatch(
                 teamActions.updateTeamMemberSubscribeReducer({
-                  teamID: teamInfo.id,
+                  teamID: currentTeamInfo.id,
                   subscribeInfo: {
-                    ...teamInfo.currentTeamLicense,
+                    ...currentTeamInfo.currentTeamLicense,
                     balance: balance,
                   },
                 }),
@@ -343,7 +351,7 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
                 },
               )
             }}
-            teamPlan={getPlanUtils(teamInfo)}
+            teamPlan={getPlanUtils(currentTeamInfo)}
           />
         )}
       </MixpanelTrackProvider>

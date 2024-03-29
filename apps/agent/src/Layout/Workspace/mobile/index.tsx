@@ -1,6 +1,6 @@
 import { FC } from "react"
 import { Outlet } from "react-router-dom"
-import { useInitRecentTab } from "@/utils/recentTabs/hook"
+import { useInitRecentTab } from "@/utils/recentTabs/baseHook"
 import { workspaceLayoutContainerStyle } from "./style"
 
 export const MobileWorkspaceLayout: FC = () => {

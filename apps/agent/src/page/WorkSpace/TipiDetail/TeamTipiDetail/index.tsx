@@ -1,7 +1,7 @@
 import { FC } from "react"
 import { Navigate } from "react-router-dom"
-import FullSectionLoading from "../../../../components/FullSectionLoading"
-import { useGetTipiContributed } from "../../../../utils/tipis/hook"
+import FullSectionLoading from "@/components/FullSectionLoading"
+import { useGetTipiContributed } from "@/utils/tipis/hook"
 import ContributeTipiDetail from "./contributeTipi"
 import NotContributeTipiDetail from "./notContributeTipi"
 

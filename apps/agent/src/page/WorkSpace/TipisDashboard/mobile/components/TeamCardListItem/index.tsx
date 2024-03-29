@@ -1,7 +1,8 @@
 import { ConfigProvider, List, Tag } from "antd"
 import { FC } from "react"
+import { v4 } from "uuid"
 import TeamCard from "@/components/TeamCard"
-import { useRunTipis } from "@/utils/recentTabs/hook"
+import { useNavigateToRunTipis } from "@/utils/routeHelper/hook"
 import { ITeamCardListItemProps } from "../../../components/TeamCardList/interface"
 
 const MobileTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
@@ -11,10 +12,17 @@ const MobileTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
     <Tag color="purple">Marketplace</Tag>
   ) : undefined
 
-  const runTipis = useRunTipis()
+  const navigateRunTipis = useNavigateToRunTipis()
 
   const onClickCard = () => {
-    runTipis(id)
+    navigateRunTipis(
+      {
+        tipisID: id,
+        tipisIcon: icon,
+        tipisName: title,
+      },
+      v4(),
+    )
   }
 
   return (

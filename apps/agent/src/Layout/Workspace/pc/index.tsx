@@ -1,6 +1,6 @@
 import { FC, useContext } from "react"
 import { Outlet } from "react-router-dom"
-import { useInitRecentTab } from "@/utils/recentTabs/hook"
+import { useInitRecentTab } from "@/utils/recentTabs/baseHook"
 import PCWorkspaceMenu from "./modules/Menu"
 import MiniMenu from "./modules/Menu/MiniMenu"
 import {

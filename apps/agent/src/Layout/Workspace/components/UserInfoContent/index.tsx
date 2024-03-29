@@ -36,7 +36,9 @@ const UserInfoContent: FC<IUserInfoContentProps> = (props) => {
             src={userInfo.avatar}
             shape="circle"
             size={isMiniSize ? 24 : 32}
-          />
+          >
+            {userInfo.nickname[0]}
+          </Avatar>
         </div>
         {!isMiniSize && (
           <div css={nickNameAndEmailContainerStyle}>
