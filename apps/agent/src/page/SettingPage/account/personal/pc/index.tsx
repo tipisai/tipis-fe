@@ -1,21 +1,20 @@
-import { Button, Input } from "antd"
+import { Avatar, Button, Input } from "antd"
 import { FC, useContext, useEffect } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { Avatar } from "@illa-public/avatar"
 import { AvatarUpload } from "@illa-public/cropper"
 import {
   ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackContext,
 } from "@illa-public/mixpanel-utils"
 import { useGetUserInfoQuery } from "@illa-public/user-data"
+import { getColorByString } from "@illa-public/utils"
 import ErrorMessage from "@/components/InputErrorMessage"
 import { Header } from "@/page/SettingPage/components/Header"
 import { getValidUserNameError } from "@/page/SettingPage/utils"
 import { AccountSettingFields, AccountSettingProps } from "../interface"
 import Logout from "./logout"
 import {
-  avatarStyle,
   contentContainerStyle,
   editLabelStyle,
   formContainerStyle,
@@ -77,16 +76,19 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
         <div>
           <AvatarUpload onOk={handleUpdateAvatar}>
             <Avatar
-              css={avatarStyle}
-              id={userInfo?.userID}
-              name={userInfo?.nickname}
-              avatarUrl={userInfo?.avatar}
-              onClick={() =>
-                track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-                  element: "avatar",
-                })
-              }
-            />
+              shape="circle"
+              size={120}
+              src={userInfo?.avatar}
+              style={{
+                fontSize: "60px",
+                background: userInfo?.avatar
+                  ? "#ffffff"
+                  : getColorByString(userInfo?.userID || ""),
+              }}
+            >
+              {userInfo?.nickname ? userInfo.nickname[0].toUpperCase() : "U"}
+            </Avatar>
+
             <span css={editLabelStyle}>
               {t("homepage.edit_tipi.modal.edit")}
             </span>
