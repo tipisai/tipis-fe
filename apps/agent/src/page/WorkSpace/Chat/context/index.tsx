@@ -18,7 +18,7 @@ import { getCurrentId } from "@illa-public/user-data"
 import { getTextMessagePayload, getWithFileMessagePayload } from "@/api/ws"
 import { Callback, FILE_SOURCE } from "@/api/ws/interface"
 import { TextSignal, TextTarget } from "@/api/ws/textSignal"
-import defaultChatIconURL from "@/assets/public/logo.svg"
+import defaultChatIconURL from "@/assets/public/tipiChatAvatar.png"
 import { TipisWebSocketContext } from "@/components/PreviewChat/TipisWebscoketContext"
 import {
   IInitWSCallback,
