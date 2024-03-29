@@ -124,14 +124,14 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
     needDelFromDrive: boolean,
   ) => {
     modal.confirm({
-      title: t("drive.modal.delete_going_on_task.title"),
-      content: t("drive.modal.delete_going_on_task.description"),
-      okText: t("drive.modal.delete_going_on_task.delete"),
+      title: t("homepage.edit_tipi.modal.remove_file_title"),
+      content: t("homepage.edit_tipi.modal.remove_file_desc"),
+      okText: t("homepage.edit_tipi.modal.remove_file_ok"),
       okButtonProps: {
         danger: true,
       },
       centered: true,
-      cancelText: t("drive.modal.delete_going_on_task.cancel"),
+      cancelText: t("homepage.edit_tipi.modal.remove_file_cancel"),
       onOk: () => {
         try {
           removeFile(name)
@@ -141,7 +141,6 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
               fileID: queryID,
               teamID,
             })
-          messageAPI.success(t("删除成功"))
         } catch (e) {}
       },
     })
@@ -170,7 +169,7 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
           icon={<Icon component={UploadIcon} />}
           onClick={handleClickUpload}
         >
-          {t("upload")}
+          {t("homepage.edit_tipi.modal.upload")}
         </Button>
         <input
           style={{ display: "none" }}

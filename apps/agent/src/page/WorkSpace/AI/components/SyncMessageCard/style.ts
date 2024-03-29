@@ -11,35 +11,79 @@ export const containerStyle = css`
   position: relative;
 `
 
-export const headerContainerStyle = (status: MESSAGE_STATUS) => {
-  let textColor = getColor("techPurple", "03")
+export const headerContainerStyle = css`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 16px;
+  background: ${getColor("white", "01")};
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  cursor: pointer;
+`
+
+export const infoContainerStyle = css`
+  display: flex;
+  padding: 9px 16px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 264px;
+  overflow: hidden;
+  align-self: stretch;
+  border-radius: 16px;
+  border: 1px solid ${getColor("grayBlue", "08")};
+`
+
+export const textAndIconContainerStyle = css`
+  width: 100%;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+`
+
+export const infoTextContainerStyle = css`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+`
+
+export const infoTitleStyle = css`
+  color: ${getColor("grayBlue", "02")};
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
+export const infoDescStyle = (status: MESSAGE_STATUS) => {
+  let textColor = getColor("grayBlue", "03")
   switch (status) {
     case MESSAGE_STATUS.ANALYZE_FAILED:
       textColor = getColor("red", "03")
       break
-    case MESSAGE_STATUS.ANALYZE_SUCCESS:
-      textColor = getColor("grayBlue", "02")
-      break
     case MESSAGE_STATUS.ANALYZE_STOP:
       textColor = getColor("grayBlue", "04")
       break
-    default:
-    case MESSAGE_STATUS.ANALYZE_PENDING:
-      textColor = getColor("techPurple", "03")
-      break
   }
   return css`
-    display: flex;
-    padding: 8px;
-    align-items: center;
-    gap: 8px;
-    border-radius: 16px;
-    background: ${getColor("white", "01")};
-    color: ${textColor};
-    font-size: 14px;
+    color: ${getColor("grayBlue", "03")};
+    font-size: 12px;
     font-weight: 400;
-    line-height: 22px;
-    cursor: pointer;
+    line-height: 18px;
+    color: ${textColor};
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   `
 }
 
@@ -57,15 +101,18 @@ export const messageContainerStyle = css`
 `
 
 export const infoIconStyle = css`
-  font-size: 24px;
+  font-size: 32px;
 `
 export const codeRunningStyle = css`
-  height: 24px;
-  width: 24px;
+  height: 32px;
+  width: 32px;
   background-color: ${getColor("techPurple", "08")};
   border-radius: 50%;
 `
 
+export const actionIconStyle = css`
+  font-size: 16px;
+`
 export const hoverCopyStyle = css`
   display: inline-flex;
   padding: 4px;
@@ -78,4 +125,17 @@ export const hoverCopyStyle = css`
   position: absolute;
   bottom: 0;
   right: -32px;
+`
+
+export const lineContainerStyle = css`
+  display: flex;
+  padding: 0px 28px;
+  align-items: flex-start;
+  gap: 8px;
+`
+
+export const lineStyle = css`
+  width: 1px;
+  height: 16px;
+  background-color: ${getColor("grayBlue", "08")};
 `

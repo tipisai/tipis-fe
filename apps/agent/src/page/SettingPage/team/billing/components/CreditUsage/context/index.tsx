@@ -20,9 +20,11 @@ export const UsageContext = createContext<UsageContextProps>(
 export const UsageProvider: FC<UsageContextProviderProps> = (props) => {
   const { t } = useTranslation()
   const teamInfo = useGetCurrentTeamInfo()!
-  const [dataNums, setsDataNums] = useState<number[]>([0, 0, 0])
+  // const [dataNums, setsDataNums] = useState<number[]>([0, 0, 0])
+  const [dataNums, setsDataNums] = useState<number[]>([0])
   const [allNum, setAllNum] = useState<number>(0)
-  const [percentNum, setPercentNum] = useState<number[]>([0, 0, 0])
+  // const [percentNum, setPercentNum] = useState<number[]>([0, 0, 0])
+  const [percentNum, setPercentNum] = useState<number[]>([0])
   const [loading, setLoading] = useState(false)
 
   const [triggerGetCreditUsageInfo] = useLazyGetCreditUsageInfoQuery()
@@ -57,23 +59,23 @@ export const UsageProvider: FC<UsageContextProviderProps> = (props) => {
         if (res) {
           const {
             aiTokenGeneralUsage = 0,
-            driveVolumeUsage = 0,
-            driveTrafficUsage = 0,
-            totalCollaUsage = 0,
+            // driveVolumeUsage = 0,
+            // driveTrafficUsage = 0,
+            totalCreditUsage = 0,
             aiTokenGeneralUsagePercent = 0,
-            driveVolumeUsagePercent = 0,
-            driveTrafficUsagePercent = 0,
+            // driveVolumeUsagePercent = 0,
+            // driveTrafficUsagePercent = 0,
           } = res
           setsDataNums([
             aiTokenGeneralUsage,
-            driveVolumeUsage,
-            driveTrafficUsage,
+            // driveVolumeUsage,
+            // driveTrafficUsage,
           ])
-          setAllNum(totalCollaUsage)
+          setAllNum(totalCreditUsage)
           setPercentNum([
             aiTokenGeneralUsagePercent,
-            driveVolumeUsagePercent,
-            driveTrafficUsagePercent,
+            // driveVolumeUsagePercent,
+            // driveTrafficUsagePercent,
           ])
         }
       } catch (e) {
