@@ -1,3 +1,7 @@
+import { TeamInfo } from "@illa-public/public-types"
+
 export interface IDeleteTeamContent {
-  handleOnchange: (v: string) => void
+  onCancel: () => void
+  deleteTeam: () => void
+  teamInfo: TeamInfo
 }

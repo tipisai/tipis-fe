@@ -200,6 +200,7 @@ const ChangePasswordMobile: FC<ChangePasswordProps> = (props) => {
         size="large"
         loading={loading}
         disabled={disabled}
+        htmlType="submit"
         block
         type="primary"
         onClick={validReport}
