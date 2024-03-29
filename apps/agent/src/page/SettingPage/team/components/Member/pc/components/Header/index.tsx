@@ -1,18 +1,19 @@
 import { Button } from "antd"
 import { FC, useContext, useEffect } from "react"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { InviteMemberPC } from "@illa-public/invite-modal"
 import {
   ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackContext,
 } from "@illa-public/mixpanel-utils"
 import { MemberInfo, USER_ROLE, USER_STATUS } from "@illa-public/public-types"
-import { getCurrentTeamInfo, teamActions } from "@illa-public/user-data"
+import { teamActions } from "@illa-public/user-data"
 import {
   canManageInvite,
   isBiggerThanTargetRole,
 } from "@illa-public/user-role-utils"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { MemberContext } from "../../../context"
 import { MoreAction } from "./moreAction"
 import { buttonGroup, headerWrapperStyle, titleStyle } from "./style"
@@ -20,7 +21,7 @@ import { buttonGroup, headerWrapperStyle, titleStyle } from "./style"
 export const Header: FC = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const teamInfo = useSelector(getCurrentTeamInfo)!!
+  const teamInfo = useGetCurrentTeamInfo()!
   const currentUserRole = teamInfo?.myRole ?? USER_ROLE.VIEWER
   const { track } = useContext(MixpanelTrackContext)
   const {

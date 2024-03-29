@@ -2,13 +2,12 @@ import { App } from "antd"
 import { useState } from "react"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
-  getCurrentUser,
-  useForgetPasswordMutation,
+  useGetUserInfoQuery,
   useSendVerificationCodeToEmailMutation,
+  useSetPasswordMutation,
 } from "@illa-public/user-data"
 import { TIPISStorage } from "@/utils/storage"
 import { IFirstSetPasswordFields, IFirstSetPasswordMsg } from "./interface"
@@ -17,11 +16,10 @@ import SetPasswordPC from "./pc"
 
 const FirstSetPassword = () => {
   const { t } = useTranslation()
-  const userInfo = useSelector(getCurrentUser)
+  const { data: userInfo } = useGetUserInfoQuery(null)
   const { message } = App.useApp()
   const [showCountDown, setShowCountDown] = useState(false)
-  const [passwordLoading, setPasswordLoading] = useState(false)
-  const [forgetPassword] = useForgetPasswordMutation()
+  const [setPassword] = useSetPasswordMutation()
   const [sendVerificationCodeToEmail] = useSendVerificationCodeToEmailMutation()
   const firstSetPasswordForm = useForm<IFirstSetPasswordFields>({
     defaultValues: {
@@ -41,8 +39,7 @@ const FirstSetPassword = () => {
       "verificationToken",
     ) as string
     try {
-      setPasswordLoading(true)
-      await forgetPassword({
+      await setPassword({
         verificationToken,
         ...data,
         isFirstSet: true,
@@ -72,8 +69,6 @@ const FirstSetPassword = () => {
           default:
         }
       }
-    } finally {
-      setPasswordLoading(false)
     }
   }
 
@@ -90,7 +85,6 @@ const FirstSetPassword = () => {
       <LayoutAutoChange
         desktopPage={
           <SetPasswordPC
-            loading={passwordLoading}
             showCountDown={showCountDown}
             sendEmail={handleSendEmail}
             onCountDownChange={setShowCountDown}
@@ -100,7 +94,6 @@ const FirstSetPassword = () => {
         }
         mobilePage={
           <SetPasswordMobile
-            loading={passwordLoading}
             showCountDown={showCountDown}
             sendEmail={handleSendEmail}
             onCountDownChange={setShowCountDown}

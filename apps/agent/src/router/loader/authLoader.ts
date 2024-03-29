@@ -11,7 +11,9 @@ export const getUserInfoLoader = async () => {
     return false
   } else {
     try {
-      const promise = store.dispatch(userAPI.endpoints.getUserInfo.initiate())
+      const promise = store.dispatch(
+        userAPI.endpoints.getUserInfo.initiate(null),
+      )
       const currentUserInfo = await promise.unwrap()
       sendConfigEvent(currentUserInfo.userID)
       ILLAMixpanel.setUserID(currentUserInfo.userID)

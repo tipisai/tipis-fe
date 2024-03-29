@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
   ILLA_MIXPANEL_CLOUD_PAGE_NAME,
@@ -9,7 +8,7 @@ import {
   MixpanelTrackProvider,
 } from "@illa-public/mixpanel-utils"
 import {
-  getCurrentTranslateLanguage,
+  useGetUserInfoQuery,
   useUpdateUserLanguageMutation,
 } from "@illa-public/user-data"
 import { defaultLanguage } from "@/i18n"
@@ -18,7 +17,10 @@ import MobileLanguageSetting from "./mobile"
 import PCLanguageSetting from "./pc"
 
 const LanguageSetting: FC = () => {
-  const language = useSelector(getCurrentTranslateLanguage) || defaultLanguage
+  const { data } = useGetUserInfoQuery(null)
+
+  const language = data?.language || defaultLanguage
+
   const [currentLanguage, setCurrentLanguage] = useState(language)
   const [languageLoading, setLanguageLoading] = useState(false)
   const { i18n, t } = useTranslation()

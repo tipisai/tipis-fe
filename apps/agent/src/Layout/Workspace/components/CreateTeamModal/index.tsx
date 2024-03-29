@@ -14,6 +14,7 @@ import {
   handleFreeTeamLimitError,
 } from "@illa-public/upgrade-modal"
 import { useCreateTeamMutation } from "@illa-public/user-data"
+import { setLocalTeamIdentifier } from "@/utils/auth"
 import { CreateTeamFields } from "./interface"
 import CreateTeamMobileModal from "./mobile"
 import CreateTeamPCModal from "./pc"
@@ -52,7 +53,7 @@ const CreateTeamModal: FC<CreateTeamModalProps> = (props) => {
         element: "team_modal_create_button",
         parameter2: "suc",
       })
-
+      setLocalTeamIdentifier(res.identifier)
       navigate(`/workspace/${res.identifier}`, { replace: true })
     } catch (e) {
       if (isILLAAPiError(e)) {

@@ -1,21 +1,18 @@
 import { GetProp, Table, TableProps } from "antd"
 import { FC, useContext, useMemo } from "react"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { MemberInfo, USER_ROLE } from "@illa-public/public-types"
 import { RoleSelector } from "@illa-public/role-selector"
-import {
-  getCurrentTeamInfo,
-  useGetMemberListQuery,
-} from "@illa-public/user-data"
+import { useGetMemberListQuery } from "@illa-public/user-data"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { MemberContext } from "../../../context"
 import { MoreAction } from "../MoreAction"
 import { NameSpace } from "../NameSpace"
 import { tableListContainerStyle } from "./style"
 
 export const PCMemberList: FC = () => {
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
-  const { teamMemberID, myRole, id: currentTeamID } = currentTeamInfo
+  const teamInfo = useGetCurrentTeamInfo()!
+  const { teamMemberID, myRole, id: currentTeamID } = teamInfo
   const { data: memberList } = useGetMemberListQuery(currentTeamID)
   const { t } = useTranslation()
   const { handleChangeTeamMembersRole } = useContext(MemberContext)
