@@ -64,6 +64,7 @@
     "@reduxjs/toolkit": "^2.2.1",
     "@types/tern": "^0.23.9",
     "antd": "^5.15.2",
+    "antd-img-crop": "^4.21.0",
     "axios": "^1.6.2",
     "chart.js": "^4.4.2",
     "copy-to-clipboard": "^3.3.2",

@@ -57,7 +57,9 @@ const SaveButton = memo(() => {
       type="primary"
       disabled={!!aiAgentID && !isDirty}
     >
-      {t("editor.ai-agent.save")}
+      {!!aiAgentID
+        ? t("editor.ai-agent.save")
+        : t("homepage.edit_tipi.modal.create")}
     </BlackButton>
   )
 })

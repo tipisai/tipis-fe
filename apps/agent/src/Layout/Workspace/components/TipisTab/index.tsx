@@ -111,7 +111,7 @@ const TipisTab: FC<ITipsTab> = (props) => {
             {getIconByTabInfo(icon, tabType)}
             {!isMiniSize && (
               <span css={menuItemButtonContentStyle(isActive)}>
-                {getTabName(tabName, tabType)}
+                {getTabName(tabName, tabType, tabID)}
               </span>
             )}
             {!isMiniSize && tabID !== DEFAULT_CHAT_ID && (

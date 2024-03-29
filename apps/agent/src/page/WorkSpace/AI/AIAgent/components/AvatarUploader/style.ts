@@ -19,13 +19,24 @@ export const descTextStyle = css`
   -webkit-text-fill-color: transparent;
 `
 
+export const avatarMaskContainerStyle = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+`
+
 export const uploadContentContainerStyle = css`
   color: ${getColor("grayBlue", "04")};
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-`
-
-export const uploadPreviewContainerStyle = css`
-  width: 100%;
+  border-radius: 12px;
+  padding: 1px;
+  + .ant-image-mask {
+    border-radius: 12px;
+    inset: 1px;
+  }
 `

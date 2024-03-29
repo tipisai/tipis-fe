@@ -1,24 +1,44 @@
-import { Image } from "antd"
+import { GetProp, Image, Upload, UploadProps } from "antd"
+import ImgCrop from "antd-img-crop"
 import { FC, memo } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { AvatarUpload } from "@illa-public/cropper"
 import {
   ILLA_MIXPANEL_BUILDER_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackProvider,
 } from "@illa-public/mixpanel-utils"
-import { Agent } from "@illa-public/public-types"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
+import { message } from "@/utils/antdStore"
 import { track } from "@/utils/mixpanelHelper"
-import {
-  uploadContentContainerStyle,
-  uploadPreviewContainerStyle,
-} from "./style"
+import { IAgentForm } from "../../interface"
+import { uploadContentContainerStyle } from "./style"
+
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0]
+
+const getBase64 = (img: FileType, callback: (url: string) => void) => {
+  const reader = new FileReader()
+  reader.addEventListener("load", () => callback(reader.result as string))
+  reader.readAsDataURL(img)
+}
+
+const beforeUpload = (file: FileType) => {
+  const isJpgOrPng =
+    file.type === "image/jpeg" ||
+    file.type === "image/png" ||
+    file.type === "image/jpg"
+  if (!isJpgOrPng) {
+    message.error("You can only upload JPG/PNG file!")
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2
+  if (!isLt2M) {
+    message.error("Image must smaller than 2MB!")
+  }
+  return isJpgOrPng && isLt2M
+}
 
 const AvatarUploader: FC = memo(() => {
   const { t } = useTranslation()
-  const { control } = useFormContext<Agent>()
+  const { control } = useFormContext<IAgentForm>()
 
   return (
     <Controller
@@ -34,40 +54,39 @@ const AvatarUploader: FC = memo(() => {
             basicTrack={track}
             pageName={ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_EDIT}
           >
-            <AvatarUpload
-              onOk={async (file) => {
-                let reader = new FileReader()
-                reader.onload = () => {
-                  field.onChange(reader.result)
-                  // setInRoomUsers(
-                  //   updateLocalIcon(reader.result as string, inRoomUsers),
-                  // )
-                }
-                reader.readAsDataURL(file)
-                return true
+            <ImgCrop
+              rotationSlider
+              onModalOk={(v) => {
+                getBase64(v as FileType, (url) => {
+                  field.onChange(url)
+                })
               }}
+              beforeCrop={beforeUpload}
+              cropShape="round"
             >
-              <div
-                css={uploadPreviewContainerStyle}
-                onClick={() => {
-                  track(
-                    ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-                    ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_EDIT,
-                    {
-                      element: "avater",
-                    },
-                  )
+              <Upload
+                listType="picture-card"
+                showUploadList={false}
+                onRemove={() => {
+                  field.onChange("")
                 }}
               >
-                <Image
-                  src={field.value}
-                  css={uploadContentContainerStyle}
-                  width="100px"
-                  height="100px"
-                  preview={false}
-                />
-              </div>
-            </AvatarUpload>
+                {field.value ? (
+                  <Image
+                    src={field.value}
+                    css={uploadContentContainerStyle}
+                    width="100px"
+                    height="100px"
+                    preview={{
+                      visible: false,
+                      mask: "+ Upload",
+                    }}
+                  />
+                ) : (
+                  "+ Upload"
+                )}
+              </Upload>
+            </ImgCrop>
           </MixpanelTrackProvider>
         </LayoutBlock>
       )}
