@@ -1,11 +1,10 @@
-import { useSelector } from "react-redux"
 import { v4 } from "uuid"
 import {
-  getCurrentId,
   useLazyGetTeamIconUploadAddressQuery,
   useLazyGetUserAvatarUploadAddressQuery,
 } from "@illa-public/user-data"
 import { uploadAvatar } from "@/services/user"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 
 export const useUploadAvatar = () => {
   const [triggerGetUserAvatarUploadAddress] =
@@ -14,7 +13,7 @@ export const useUploadAvatar = () => {
   const [triggerGetTeamIconUploadAddress] =
     useLazyGetTeamIconUploadAddressQuery()
 
-  const currentTeamID = useSelector(getCurrentId)!
+  const teamInfo = useGetCurrentTeamInfo()!
 
   const uploadUserAvatar = (file: Blob) => {
     const fileName = v4()
@@ -41,7 +40,7 @@ export const useUploadAvatar = () => {
       try {
         const type = file.type.split("/")[1]
         const { data } = await triggerGetTeamIconUploadAddress({
-          teamID: currentTeamID,
+          teamID: teamInfo.id,
           type,
           fileName,
         })

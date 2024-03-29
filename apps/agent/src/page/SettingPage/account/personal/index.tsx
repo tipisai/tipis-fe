@@ -1,9 +1,8 @@
 import { App } from "antd"
-import { FC, useEffect, useState } from "react"
+import { FC, useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
   ILLA_MIXPANEL_CLOUD_PAGE_NAME,
@@ -11,7 +10,7 @@ import {
   MixpanelTrackProvider,
 } from "@illa-public/mixpanel-utils"
 import {
-  getCurrentUser,
+  useGetUserInfoQuery,
   useUpdateNickNameMutation,
   useUpdateUserAvatarMutation,
 } from "@illa-public/user-data"
@@ -23,8 +22,7 @@ import PCAccountSetting from "./pc"
 
 export const PersonalSetting: FC = () => {
   const { t } = useTranslation()
-  const [accountLoading, setAccountLoading] = useState(false)
-  const userInfo = useSelector(getCurrentUser)!
+  const { data } = useGetUserInfoQuery(null)
   const [updateNickName] = useUpdateNickNameMutation()
   const { uploadUserAvatar } = useUploadAvatar()
   const [updateUserAvatar] = useUpdateUserAvatarMutation()
@@ -32,7 +30,7 @@ export const PersonalSetting: FC = () => {
   const { message } = App.useApp()
   const accountFormMethods = useForm<AccountSettingFields>({
     values: {
-      nickname: userInfo.nickname,
+      nickname: data!.nickname,
     },
   })
 
@@ -48,16 +46,12 @@ export const PersonalSetting: FC = () => {
 
   const onAccountSubmit: SubmitHandler<AccountSettingFields> = async (data) => {
     try {
-      setAccountLoading(true)
-      await updateNickName(data.nickname)
+      updateNickName(data.nickname)
       message.success(t("team_setting.message.save_suc"))
       accountFormMethods.reset({
         nickname: data.nickname,
       })
-    } catch (e) {
-    } finally {
-      setAccountLoading(false)
-    }
+    } catch (e) {}
   }
 
   const handleUpdateAvatar = async (file: Blob) => {
@@ -85,14 +79,12 @@ export const PersonalSetting: FC = () => {
           <LayoutAutoChange
             desktopPage={
               <PCAccountSetting
-                loading={accountLoading}
                 onSubmit={onAccountSubmit}
                 handleUpdateAvatar={handleUpdateAvatar}
               />
             }
             mobilePage={
               <MobileAccountSetting
-                loading={accountLoading}
                 onSubmit={onAccountSubmit}
                 handleUpdateAvatar={handleUpdateAvatar}
               />

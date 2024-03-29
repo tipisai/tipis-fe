@@ -3,7 +3,3 @@ export interface TeamInfoFields {
   identifier?: string
   icon?: string
 }
-
-export interface SettingContextType {
-  onClickLeaveTeam?: () => void
-}

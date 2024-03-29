@@ -1,10 +1,10 @@
 import { Divider } from "antd"
 import { FC, useState } from "react"
+import CreateTeamModal from "../../../components/CreateTeamModal"
 import FeatureArea from "../../../modules/FeatureArea"
 import MenuFooter from "../../../modules/MenuFooter"
 import RecentTabs from "../../../modules/RecentTabs"
 import TeamSelectAndInviteButton from "../../../modules/TeamSelectAndInviteButton"
-import CreateTeamModal from "../../components/CreateTeamModal"
 import MenuHeader from "../MenuHeader"
 import {
   dividerContainerStyle,

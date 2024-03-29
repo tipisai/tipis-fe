@@ -8,11 +8,8 @@ import {
   useState,
 } from "react"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
-import {
-  getCurrentTeamInfo,
-  useLazyGetCreditUsageInfoQuery,
-} from "@illa-public/user-data"
+import { useLazyGetCreditUsageInfoQuery } from "@illa-public/user-data"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { DATE_FORMAT, LABEL_CONFIG } from "../constants"
 import { UsageContextProps, UsageContextProviderProps } from "./interface"
 
@@ -22,7 +19,7 @@ export const UsageContext = createContext<UsageContextProps>(
 
 export const UsageProvider: FC<UsageContextProviderProps> = (props) => {
   const { t } = useTranslation()
-  const teamInfo = useSelector(getCurrentTeamInfo)
+  const teamInfo = useGetCurrentTeamInfo()!
   const [dataNums, setsDataNums] = useState<number[]>([0, 0, 0])
   const [allNum, setAllNum] = useState<number>(0)
   const [percentNum, setPercentNum] = useState<number[]>([0, 0, 0])

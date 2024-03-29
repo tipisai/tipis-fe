@@ -11,7 +11,6 @@ export type IFirstSetPasswordMsg = Partial<
 >
 
 export interface FirstSetPasswordProps {
-  loading: boolean
   errorMsg: IFirstSetPasswordMsg
   onSubmit: SubmitHandler<IFirstSetPasswordFields>
   showCountDown: boolean

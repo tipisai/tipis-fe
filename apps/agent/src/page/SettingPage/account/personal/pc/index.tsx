@@ -2,14 +2,13 @@ import { Button, Input } from "antd"
 import { FC, useContext, useEffect } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { Avatar } from "@illa-public/avatar"
 import { AvatarUpload } from "@illa-public/cropper"
 import {
   ILLA_MIXPANEL_EVENT_TYPE,
   MixpanelTrackContext,
 } from "@illa-public/mixpanel-utils"
-import { getCurrentUser } from "@illa-public/user-data"
+import { useGetUserInfoQuery } from "@illa-public/user-data"
 import ErrorMessage from "@/components/InputErrorMessage"
 import { Header } from "@/page/SettingPage/components/Header"
 import { getValidUserNameError } from "@/page/SettingPage/utils"
@@ -28,7 +27,7 @@ import { gridFormFieldStyle } from "./style"
 
 const PCAccountSetting: FC<AccountSettingProps> = (props) => {
   const { t } = useTranslation()
-  const { onSubmit, loading, handleUpdateAvatar } = props
+  const { onSubmit, handleUpdateAvatar } = props
   const {
     handleSubmit,
     control,
@@ -38,7 +37,7 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
     trigger,
   } = useFormContext<AccountSettingFields>()
 
-  const userInfo = useSelector(getCurrentUser)
+  const { data: userInfo } = useGetUserInfoQuery(null)
 
   const { track } = useContext(MixpanelTrackContext)
   const validReport = async () => {
@@ -151,10 +150,10 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
               <div>
                 <Input
                   size="large"
-                  value={userInfo.email}
+                  value={userInfo?.email}
                   disabled
                   variant="filled"
-                  placeholder={userInfo.email}
+                  placeholder={userInfo?.email}
                 />
               </div>
             </section>
@@ -162,7 +161,6 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
               <Button
                 type="primary"
                 size="large"
-                loading={loading}
                 disabled={!isDirty}
                 onClick={validReport}
                 htmlType="submit"

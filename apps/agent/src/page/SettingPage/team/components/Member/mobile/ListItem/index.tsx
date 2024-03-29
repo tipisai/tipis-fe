@@ -1,10 +1,10 @@
 import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { Avatar } from "@illa-public/avatar"
 import { USER_ROLE, USER_STATUS } from "@illa-public/public-types"
 import { RoleSelector } from "@illa-public/role-selector"
-import { getCurrentTeamInfo, getCurrentUserId } from "@illa-public/user-data"
+import { useGetUserInfoQuery } from "@illa-public/user-data"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { MemberContext } from "../../context"
 import { ListItemProps } from "./interface"
 import {
@@ -23,10 +23,11 @@ export const MobileMemberListItem: FC<ListItemProps> = (props) => {
 
   const { t } = useTranslation()
   const { handleChangeTeamMembersRole } = useContext(MemberContext)
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
-  const currentUserID = useSelector(getCurrentUserId)
+  const teamInfo = useGetCurrentTeamInfo()!
+  const { data } = useGetUserInfoQuery(null)
+  const currentUserID = data?.userID
 
-  const currentUserRole = currentTeamInfo.myRole
+  const currentUserRole = teamInfo.myRole
 
   const executedUserRole = userRole !== USER_ROLE.OWNER ? [USER_ROLE.OWNER] : []
 

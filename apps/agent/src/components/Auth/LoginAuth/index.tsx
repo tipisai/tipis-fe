@@ -8,7 +8,7 @@ import i18n from "@/i18n"
 import { BaseProtectComponentProps } from "@/router/interface"
 
 const LoginAuth: FC<BaseProtectComponentProps> = (props) => {
-  const { data, isSuccess, error } = useGetUserInfoQuery(undefined, {
+  const { data, isSuccess, error } = useGetUserInfoQuery(null, {
     refetchOnFocus: true,
     refetchOnReconnect: true,
   })
