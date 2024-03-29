@@ -96,7 +96,7 @@ export const menuItemButtonIconContainerStyle = css`
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background-color: #e5e1ef;
+  background-color: #dad5eb;
   padding: 4px;
 `
 

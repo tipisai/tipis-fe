@@ -8,9 +8,11 @@ export const menuItemButtonStyle = css`
   width: 100%;
   background-color: transparent;
   cursor: pointer;
+  .menu-item-inner-container {
+    border-radius: 16px;
+  }
   :hover {
     .menu-item-inner-container {
-      border-radius: 16px;
       background-color: rgba(16, 9, 116, 0.06);
     }
   }
