@@ -1,14 +1,9 @@
 import { Button, Input } from "antd"
 import { FC, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { TeamInfo } from "@illa-public/public-types"
+import { IDeleteTeamContent } from "./interface"
 import { footerStyle, modalContentStyle } from "./style"
 
-interface IDeleteTeamContent {
-  onCancel: () => void
-  deleteTeam: () => void
-  teamInfo: TeamInfo
-}
 const DeleteTeamContent: FC<IDeleteTeamContent> = ({
   onCancel,
   deleteTeam,
@@ -60,5 +55,3 @@ const DeleteTeamContent: FC<IDeleteTeamContent> = ({
 }
 
 export default DeleteTeamContent
-
-export {}

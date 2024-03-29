@@ -1,7 +1,6 @@
 import { App } from "antd"
 import { FC, useCallback, useContext, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { Navigate } from "react-router-dom"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
@@ -11,9 +10,9 @@ import {
 } from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
 import {
-  getCurrentUser,
   useChangeTeamMemberRoleMutation,
   useGetMemberListQuery,
+  useGetUserInfoQuery,
 } from "@illa-public/user-data"
 import { showInviteModal } from "@illa-public/user-role-utils"
 import { COPY_STATUS, copyToClipboard } from "@illa-public/utils"
@@ -27,7 +26,7 @@ export const MemberListPage: FC = () => {
   const { t } = useTranslation()
   const [inviteModalVisible, setInviteModalVisible] = useState(false)
   const teamInfo = useGetCurrentTeamInfo()!
-  const currentUserInfo = useSelector(getCurrentUser)!
+  const { data: currentUserInfo } = useGetUserInfoQuery(null)
   const { message } = App.useApp()
   const { track } = useContext(MixpanelTrackContext)
   const showInviteButton = showInviteModal(teamInfo)
@@ -95,7 +94,7 @@ export const MemberListPage: FC = () => {
         t("user_management.modal.custom_copy_text", {
           inviteLink: inviteLink,
           teamName: teamInfo.name,
-          userName: currentUserInfo.nickname,
+          userName: currentUserInfo?.nickname,
         }),
       )
       if (flag === COPY_STATUS.EMPTY) {
@@ -108,7 +107,7 @@ export const MemberListPage: FC = () => {
         })
       }
     },
-    [currentUserInfo.nickname, message, t, teamInfo.name],
+    [currentUserInfo?.nickname, message, t, teamInfo.name],
   )
 
   if (isError) return <Navigate to="/500" />

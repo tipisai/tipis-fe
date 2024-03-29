@@ -6,6 +6,6 @@ export const INIT_CHAT_CONFIG = {
   modelConfig: {
     stream: true,
   },
-  model: AI_AGENT_MODEL.GPT_3_5,
+  model: AI_AGENT_MODEL.GPT_4,
   agentType: AI_AGENT_TYPE.CHAT,
 }

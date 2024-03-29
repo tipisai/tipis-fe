@@ -1,6 +1,5 @@
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
-import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
   ILLA_MIXPANEL_CLOUD_PAGE_NAME,
   MixpanelTrackProvider,
@@ -19,10 +18,7 @@ const TeamMembers = () => {
         basicTrack={track}
         pageName={ILLA_MIXPANEL_CLOUD_PAGE_NAME.TEAM_MEMBER}
       >
-        <LayoutAutoChange
-          desktopPage={<MemberListPage />}
-          mobilePage={<MemberListPage />}
-        />
+        <MemberListPage />
       </MixpanelTrackProvider>
     </>
   )

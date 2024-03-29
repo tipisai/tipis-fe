@@ -18,19 +18,19 @@ export const useGetInfoByStatus = () => {
       switch (status) {
         case MESSAGE_STATUS.ANALYZE_SUCCESS: {
           InfoIcon = <Icon component={AnalyzeSuccess} css={infoIconStyle} />
-          InfoTitle = t("分析成功")
+          InfoTitle = t("homepage.tipi_chat.processing_status.suc")
           infoDesc = t("homepage.tipi_chat.processing_status.suc")
           break
         }
         case MESSAGE_STATUS.ANALYZE_FAILED: {
           InfoIcon = <Icon component={AnalyzeErrorIcon} css={infoIconStyle} />
-          InfoTitle = t("运行失败")
+          InfoTitle = t("homepage.tipi_chat.processing_status.failed")
           infoDesc = t("homepage.tipi_chat.processing_status.failed")
           break
         }
         case MESSAGE_STATUS.ANALYZE_STOP: {
           InfoIcon = <Icon component={AnalyzeStopIcon} css={infoIconStyle} />
-          InfoTitle = t("已取消")
+          InfoTitle = t("homepage.tipi_chat.processing_status.stopped")
           infoDesc = t("homepage.tipi_chat.processing_status.stopped")
           break
         }
@@ -41,7 +41,7 @@ export const useGetInfoByStatus = () => {
               <LottieItem configJson={runningCodeConfig} autoplay loop />
             </div>
           )
-          InfoTitle = t("执行代码中")
+          InfoTitle = t("homepage.tipi_chat.processing_status.processing")
           infoDesc = t("homepage.tipi_chat.processing_status.processing")
           break
         }
