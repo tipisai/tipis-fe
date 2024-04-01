@@ -15,6 +15,7 @@ import ErrorMessage from "@/components/InputErrorMessage"
 import LinkButton from "@/components/LinkButton"
 import { FORGOT_PASSWORD_PATH, REGISTER_PATH } from "@/utils/routeHelper"
 import { OAuthButton } from "../../components/OAuthButton"
+import { CAN_SHOW_OAUTH } from "../../constants"
 import { LoginFields } from "../../interface"
 import { getValidReportParams } from "../../utils"
 import { LoginPageProps } from "../interface"
@@ -260,19 +261,21 @@ export const PCLogin: FC<LoginPageProps> = (props) => {
           {t("page.user.sign_in.actions.login")}
         </Button>
       </form>
-      <div css={oauthContainerStyle}>
-        <Divider>{t("page.user.sign_in.option.or")}</Divider>
-        <div css={oAuthButtonGroupStyle}>
-          <OAuthButton
-            icon={<Icon component={GithubIcon} css={oAuthIconStyle} />}
-            type="github"
-            isMobile={false}
-            landing="signin"
-          >
-            {t("page.user.sign_in.option.github")}
-          </OAuthButton>
+      {CAN_SHOW_OAUTH && (
+        <div css={oauthContainerStyle}>
+          <Divider>{t("page.user.sign_in.option.or")}</Divider>
+          <div css={oAuthButtonGroupStyle}>
+            <OAuthButton
+              icon={<Icon component={GithubIcon} css={oAuthIconStyle} />}
+              type="github"
+              isMobile={false}
+              landing="signin"
+            >
+              {t("page.user.sign_in.option.github")}
+            </OAuthButton>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
