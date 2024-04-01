@@ -21,3 +21,21 @@ export const tagContainerStyle = css`
   gap: 8px;
   flex-wrap: wrap;
 `
+
+export const fileNameStyle = css`
+  font-size: 12px;
+  display: block;
+  max-width: 150px;
+  color: ${getColor("grayBlue", "02")};
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: none;
+`
+
+export const fileTypeIconStyle = css`
+  height: 16px;
+  margin-right: 4px;
+  flex: none;
+`

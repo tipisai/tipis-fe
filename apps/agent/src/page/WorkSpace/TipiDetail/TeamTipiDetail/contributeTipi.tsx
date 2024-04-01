@@ -22,6 +22,7 @@ import { useAddTipisDetailTab } from "@/utils/recentTabs/hook"
 import { getExploreTipisPath } from "@/utils/routeHelper"
 import { useGetTipiContributedDetail } from "@/utils/tipis/hook"
 import ActionGroup from "../components/ActionGroup"
+import Knowledge from "../components/Knowledge"
 import Parameters from "../components/Parameters"
 import Prompt from "../components/Prompt"
 
@@ -100,6 +101,7 @@ const ContributeTipiDetail: FC = () => {
         prompt={contributeAgentDetail.prompt}
       />
       <Parameters parameters={contributeAgentDetail.variables ?? []} />
+      <Knowledge knowledge={contributeAgentDetail.knowledge ?? []} />
     </DetailLayout>
   ) : null
 }

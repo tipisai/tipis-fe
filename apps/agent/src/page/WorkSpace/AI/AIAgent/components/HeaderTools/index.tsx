@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 import { Agent } from "@illa-public/public-types"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import {
-  showShareAgentModal,
+  // showShareAgentModal,
   showShareAgentModalOnlyForShare,
 } from "@illa-public/user-role-utils"
 // import ContributeButton from "../ContributeButton"
@@ -16,17 +16,17 @@ const HeaderTools: FC = () => {
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const { control } = useFormContext<Agent>()
 
-  const [publishedToMarketplace, aiAgentID] = useWatch({
+  const [aiAgentID] = useWatch({
     control: control,
-    name: ["publishedToMarketplace", "aiAgentID"],
+    name: ["aiAgentID"],
   })
 
   const showShareDialog = showShareAgentModalOnlyForShare(currentTeamInfo)
-  const showContributeDialog = showShareAgentModal(
-    currentTeamInfo,
-    currentTeamInfo.myRole,
-    publishedToMarketplace,
-  )
+  // const showContributeDialog = showShareAgentModal(
+  //   currentTeamInfo,
+  //   currentTeamInfo.myRole,
+  //   publishedToMarketplace,
+  // )
 
   return (
     <div css={headerToolsContainerStyle}>
