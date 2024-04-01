@@ -100,6 +100,15 @@ export const menuItemButtonIconContainerStyle = css`
   padding: 4px;
 `
 
+export const chatIconStyle = css`
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  flex: none;
+  border-radius: 50%;
+  overflow: hidden;
+`
+
 export const deleteButtonContainerStyle = (canShow: boolean) => css`
   flex: none;
   width: 24px;

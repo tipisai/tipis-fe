@@ -21,6 +21,7 @@ import {
   getTipiDetailPath,
 } from "@/utils/routeHelper"
 import {
+  chatIconStyle,
   menuItemButtonCustomIconContainerStyle,
   menuItemButtonIconContainerStyle,
 } from "./style"
@@ -63,11 +64,7 @@ export const getIconByTabInfo = (icon: string, tabType: TAB_TYPE) => {
         </span>
       )
     case TAB_TYPE.CHAT:
-      return (
-        <span css={menuItemButtonIconContainerStyle}>
-          <Icon component={ChatIcon} />
-        </span>
-      )
+      return <Icon component={ChatIcon} css={chatIconStyle} />
     case TAB_TYPE.EXPLORE_TIPIS_DETAIL:
     case TAB_TYPE.EXPLORE_MARKET_TIPIS_DETAIL:
     case TAB_TYPE.EXPLORE_FUNCTION_DETAIL:
