@@ -1,11 +1,15 @@
 import { App } from "antd"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
+import {
+  TIPIS_TRACK_CLOUD_PAGE_NAME,
+  TipisTrack,
+} from "@illa-public/track-utils"
 import {
   useForgetPasswordMutation,
   useSendVerificationCodeToEmailMutation,
@@ -93,6 +97,14 @@ export const ResetPasswordPage: FC = () => {
       TIPISStorage.setSessionStorage("verificationToken", verificationToken)
     } catch (e) {}
   }
+
+  useEffect(() => {
+    TipisTrack.pageViewTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.FORGET_PASSWORD)
+    return () => {
+      TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.FORGET_PASSWORD)
+    }
+  }, [])
+
   return (
     <>
       <Helmet>

@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
+import { TipisTrack } from "@illa-public/track-utils"
 import SuccessBg from "@/assets/subscribeRedirect/success-bg.svg"
 import BlackButton from "@/components/BlackButton"
 import {
@@ -21,6 +22,7 @@ const SubscribedLanding: FC = () => {
   const [counter, setCounter] = useState(RETURN_COUNTER)
   const [searchParams] = useSearchParams()
   const returnTo = searchParams.get("returnTo")
+  const from = searchParams.get("from")
 
   useEffect(() => {
     if (!returnTo) return
@@ -34,6 +36,14 @@ const SubscribedLanding: FC = () => {
     }, 1000)
     return () => clearTimeout(timer)
   }, [counter, returnTo])
+
+  useEffect(() => {
+    if (from) {
+      TipisTrack.track("payment_suc", {
+        parameter1: from,
+      })
+    }
+  }, [from])
 
   return (
     <>

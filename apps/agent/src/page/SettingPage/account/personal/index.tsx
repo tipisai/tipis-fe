@@ -1,9 +1,13 @@
 import { App } from "antd"
-import { FC } from "react"
+import { FC, useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
+import {
+  TIPIS_TRACK_CLOUD_PAGE_NAME,
+  TipisTrack,
+} from "@illa-public/track-utils"
 import {
   useGetUserInfoQuery,
   useUpdateNickNameMutation,
@@ -49,6 +53,13 @@ export const PersonalSetting: FC = () => {
     }
     return false
   }
+
+  useEffect(() => {
+    TipisTrack.pageViewTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_ACCOUNT)
+    return () => {
+      TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_ACCOUNT)
+    }
+  }, [])
 
   return (
     <>

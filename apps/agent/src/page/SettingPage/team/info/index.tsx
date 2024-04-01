@@ -1,5 +1,5 @@
 import { App } from "antd"
-import { FC, useMemo, useState } from "react"
+import { FC, useEffect, useMemo, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
@@ -7,6 +7,10 @@ import { useNavigate, useParams } from "react-router-dom"
 import { isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { USER_ROLE } from "@illa-public/public-types"
+import {
+  TIPIS_TRACK_CLOUD_PAGE_NAME,
+  TipisTrack,
+} from "@illa-public/track-utils"
 import { useChangeTeamConfigMutation } from "@illa-public/user-data"
 import { isSmallThanTargetRole } from "@illa-public/user-role-utils"
 import TeamInfoMobile from "@/page/SettingPage/team/info/components/TeamInfoMobile"
@@ -73,6 +77,13 @@ const TeamInfo: FC = () => {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    TipisTrack.pageViewTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_INFO)
+    return () => {
+      TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_INFO)
+    }
+  }, [])
 
   return (
     <>

@@ -1,8 +1,12 @@
 import Icon from "@ant-design/icons"
-import { FC, useMemo } from "react"
+import { FC, useEffect, useMemo } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
 import { USER_ROLE } from "@illa-public/public-types"
+import {
+  TIPIS_TRACK_CLOUD_PAGE_NAME,
+  TipisTrack,
+} from "@illa-public/track-utils"
 import { getPlanUtils } from "@illa-public/user-data"
 import { canAccessMember, canManagePayment } from "@illa-public/user-role-utils"
 import ProfileIcon from "@/assets/setting/profile.svg?react"
@@ -93,6 +97,13 @@ const Entrance: FC = () => {
         },
       ]
     : []
+
+  useEffect(() => {
+    TipisTrack.pageViewTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.MOBILE_SETTING_NAV)
+    return () => {
+      TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.MOBILE_SETTING_NAV)
+    }
+  }, [])
 
   return (
     <>

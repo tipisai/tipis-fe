@@ -1,7 +1,11 @@
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
+import {
+  TIPIS_TRACK_CLOUD_PAGE_NAME,
+  TipisTrack,
+} from "@illa-public/track-utils"
 import {
   useGetUserInfoQuery,
   useUpdateUserLanguageMutation,
@@ -31,6 +35,13 @@ const LanguageSetting: FC = () => {
       setLanguageLoading(false)
     }
   }
+
+  useEffect(() => {
+    TipisTrack.pageViewTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_LANGUAGE)
+    return () => {
+      TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_LANGUAGE)
+    }
+  }, [])
   return (
     <>
       <Helmet>

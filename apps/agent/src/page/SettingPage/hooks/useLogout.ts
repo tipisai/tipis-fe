@@ -10,6 +10,7 @@ import { TIPISStorage } from "@/utils/storage"
 export const useLogout = () => {
   const [logoutMutation] = useLogoutMutation()
   const logout = async () => {
+    TipisTrack.track("click_logout", {})
     TipisTrack.reset()
     const ILLAToken = getAuthToken()
     removeAuthToken()

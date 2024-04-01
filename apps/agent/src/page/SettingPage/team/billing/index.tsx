@@ -1,10 +1,15 @@
-import { FC, useCallback, useState } from "react"
+import { FC, useCallback, useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
 import { Navigate } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { SUBSCRIBE_PLAN } from "@illa-public/public-types"
+import {
+  TIPIS_TRACK_CLOUD_PAGE_NAME,
+  TipisTrack,
+} from "@illa-public/track-utils"
 import { useCreditDrawer } from "@illa-public/upgrade-modal"
+import { BILLING_REPORT_FROM } from "@illa-public/upgrade-modal/constants"
 import {
   useGetTeamSubscriptionQuery,
   useLazyGetTeamsInfoQuery,
@@ -40,7 +45,7 @@ const Billing: FC = () => {
   }, [refetch, teamInfo?.id, triggerGetTeamsInfo])
 
   const openCreditDrawer = useCallback(() => {
-    creditDrawer("billing_manage_credit", {
+    creditDrawer(BILLING_REPORT_FROM.SETTING_BILLING, {
       onSuccessCallback: fetchSubscriptionInfo,
     })
   }, [creditDrawer, fetchSubscriptionInfo])
@@ -53,6 +58,14 @@ const Billing: FC = () => {
 
   const isExpiredCredit =
     creditInfo?.plan === SUBSCRIBE_PLAN.CREDIT_SUBSCRIBE_EXPIRED
+
+  useEffect(() => {
+    TipisTrack.pageViewTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_BILLING)
+    return () => {
+      TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_BILLING)
+    }
+  }, [])
+
   if (isError) return <Navigate to="/500" />
   if (isLoading) return <FullSectionLoading />
   return creditInfo ? (

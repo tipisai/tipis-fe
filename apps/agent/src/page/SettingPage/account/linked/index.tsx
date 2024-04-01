@@ -1,12 +1,23 @@
-import { FC } from "react"
+import { FC, useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
+import {
+  TIPIS_TRACK_CLOUD_PAGE_NAME,
+  TipisTrack,
+} from "@illa-public/track-utils"
 import { MobileLinkedSetting } from "./mobile"
 import { PCLinkedSetting } from "./pc"
 
 const LinkedSetting: FC = () => {
   const { t } = useTranslation()
+
+  useEffect(() => {
+    TipisTrack.pageViewTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_LINKED)
+    return () => {
+      TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_LINKED)
+    }
+  }, [])
   return (
     <>
       <Helmet>

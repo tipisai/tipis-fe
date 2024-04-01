@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { USER_ROLE } from "@illa-public/public-types"
+import { TipisTrack } from "@illa-public/track-utils"
 import {
   getTeamItems,
   teamActions,
@@ -63,6 +64,7 @@ export const useLeaveTeamModal = () => {
 
   const deleteTeam = async () => {
     try {
+      TipisTrack.track("click_delete_team", {})
       deleteTeamByID(teamInfo?.id || "")
       message.success({
         content: t("team_setting.mes.delete_suc"),

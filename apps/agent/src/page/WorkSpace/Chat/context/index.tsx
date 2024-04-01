@@ -14,6 +14,7 @@ import {
   handleCreditPurchaseError,
   useCreditModal,
 } from "@illa-public/upgrade-modal"
+import { BILLING_REPORT_FROM } from "@illa-public/upgrade-modal/constants"
 import { getCurrentId } from "@illa-public/user-data"
 import { getTextMessagePayload, getWithFileMessagePayload } from "@/api/ws"
 import { Callback, FILE_SOURCE } from "@/api/ws/interface"
@@ -271,7 +272,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
         case 18:
           creditModal({
             modalType: CreditModalType.TOKEN,
-            from: "agent_run",
+            from: BILLING_REPORT_FROM.RUN,
           })
           break
         case 3:
