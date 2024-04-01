@@ -21,6 +21,7 @@ import { useAddTipisDetailTab } from "@/utils/recentTabs/hook"
 import { getExploreTipisPath } from "@/utils/routeHelper"
 import { useGetNotContributeTipDetail } from "@/utils/tipis/hook"
 import ActionGroup from "../components/ActionGroup"
+import Knowledge from "../components/Knowledge"
 import Parameters from "../components/Parameters"
 import Prompt from "../components/Prompt"
 
@@ -85,6 +86,7 @@ const NotContributeTipiDetail: FC = () => {
       <ActionGroup isContribute={false} />
       <Prompt parameters={data.variables ?? []} prompt={data.prompt} />
       <Parameters parameters={data.variables ?? []} />
+      <Knowledge knowledge={data.knowledge ?? []} />
     </DetailLayout>
   ) : null
 }

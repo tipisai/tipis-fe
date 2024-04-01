@@ -52,26 +52,26 @@ export const useUploadFileToDrive = () => {
         needUploadFile,
         abortSignal,
       )
-      await putChatFileUploadStatus({
+      const updateStatusRes = await putChatFileUploadStatus({
         fileID,
         status,
         teamID,
       })
-      if (status === UPLOAD_FILE_STATUS.COMPLETE) {
+      if (status === UPLOAD_FILE_STATUS.FAILED || "error" in updateStatusRes) {
         store.updateFileDetailInfo(queryID, {
-          status: FILE_ITEM_DETAIL_STATUS_IN_UI.SUCCESS,
+          status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
         })
-        message.success(t("editor.inspect.setter_message.uploadsuc"))
-        return fileID
+        message.error(t("editor.inspect.setter_message.uploadfail"))
       } else if (status === UPLOAD_FILE_STATUS.CANCELED) {
         store.updateFileDetailInfo(queryID, {
           status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
         })
       } else {
         store.updateFileDetailInfo(queryID, {
-          status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
+          status: FILE_ITEM_DETAIL_STATUS_IN_UI.SUCCESS,
         })
-        message.error(t("editor.inspect.setter_message.uploadfail"))
+        message.success(t("editor.inspect.setter_message.uploadsuc"))
+        return fileID
       }
     } catch (e) {
       store.updateFileDetailInfo(queryID, {
@@ -106,26 +106,26 @@ export const useUploadFileToDrive = () => {
         needUploadFile,
         abortSignal,
       )
-      await putKnowledgeFileUploadStatus({
+      const updateStatusRes = await putKnowledgeFileUploadStatus({
         fileID,
         status,
         teamID,
       })
-      if (status === UPLOAD_FILE_STATUS.COMPLETE) {
+      if (status === UPLOAD_FILE_STATUS.FAILED || "error" in updateStatusRes) {
         store.updateFileDetailInfo(queryID, {
-          status: FILE_ITEM_DETAIL_STATUS_IN_UI.SUCCESS,
+          status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
         })
-        message.success(t("editor.inspect.setter_message.uploadsuc"))
-        return fileID
+        message.error(t("editor.inspect.setter_message.uploadfail"))
       } else if (status === UPLOAD_FILE_STATUS.CANCELED) {
         store.updateFileDetailInfo(queryID, {
           status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
         })
       } else {
         store.updateFileDetailInfo(queryID, {
-          status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
+          status: FILE_ITEM_DETAIL_STATUS_IN_UI.SUCCESS,
         })
-        message.error(t("editor.inspect.setter_message.uploadfail"))
+        message.success(t("editor.inspect.setter_message.uploadsuc"))
+        return fileID
       }
     } catch (e) {
       store.updateFileDetailInfo(queryID, {
