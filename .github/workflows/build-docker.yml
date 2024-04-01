@@ -14,7 +14,7 @@ env:
   DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
   DOCKER_PWD: ${{ secrets.DOCKER_PWD }}
   DO_TOKEN: ${{ secrets.DO_TOKEN }}
-
+  ILLA_INTERCOM_APP_ID: ${{ secrets.ILLA_INTERCOM_APP_ID }}
 jobs:
   build:
     name: Build website
