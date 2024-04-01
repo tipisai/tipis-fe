@@ -130,6 +130,21 @@ export const agentAuthAPI = createApi({
         method: "PUT",
         body: agentRaw,
       }),
+      onQueryStarted: async (
+        { teamID, aiAgentID },
+        { dispatch, queryFulfilled },
+      ) => {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(
+            agentAuthAPI.util.upsertQueryData(
+              "getAgentDetail",
+              { teamID, aiAgentID: aiAgentID },
+              data,
+            ),
+          )
+        } catch {}
+      },
     }),
     createAgent: builder.mutation<
       Agent,
@@ -175,20 +190,6 @@ export const agentAuthAPI = createApi({
         method: "POST",
         timeout: 600000,
         body: { prompt: encodeURIComponent(prompt) },
-      }),
-    }),
-    generateIcon: builder.mutation<
-      { payload: string },
-      { teamID: string; name: string; description: string }
-    >({
-      query: ({ teamID, name, description }) => ({
-        url: `/teams/${teamID}/aiAgent/generateAvatar`,
-        method: "POST",
-        body: {
-          name: encodeURIComponent(name),
-          description: encodeURIComponent(description),
-        },
-        timeout: 600000,
       }),
     }),
     getAgentIconUploadAddress: builder.mutation<
@@ -278,7 +279,6 @@ export const {
   usePutAgentDetailMutation,
   useCreateAgentMutation,
   useGeneratePromptDescriptionMutation,
-  useGenerateIconMutation,
   useGetAgentIconUploadAddressMutation,
   useGetAIAgentListByPageQuery,
   useDuplicateAIAgentMutation,
