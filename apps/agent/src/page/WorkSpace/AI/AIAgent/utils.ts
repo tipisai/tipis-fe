@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { isPremiumModel } from "@illa-public/market-agent"
 import { Agent } from "@illa-public/public-types"
-import { TIPIS_TRACK_EVENT_TYPE } from "@illa-public/track-utils"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import {
   useCreateAgentMutation,
@@ -17,7 +16,6 @@ import { fetchUploadBase64 } from "@/utils/file"
 import { updateUiHistoryData } from "@/utils/localForage/teamData"
 import { useUpdateRecentTabReducer } from "@/utils/recentTabs/baseHook"
 import { useCreateTipiToEditTipi } from "@/utils/recentTabs/hook"
-import { track } from "@/utils/trackHelper"
 import { AgentInitial, IAgentForm } from "./interface"
 
 export const agentData2JSONReport = (agent: IAgentForm) => {
@@ -68,11 +66,7 @@ export const useSubmitSaveAgent = () => {
           knowledge: [],
         }
       }
-      track(TIPIS_TRACK_EVENT_TYPE.CLICK, {
-        element: "save",
-        parameter1: agentData2JSONReport(currentData),
-        parameter5: currentData.aiAgentID || "-1",
-      })
+
       let agentInfo: Agent
       try {
         let updateIconURL = currentData.icon

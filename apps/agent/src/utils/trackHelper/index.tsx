@@ -1,11 +1,7 @@
-import {
-  TIPISProperties,
-  TIPIS_TRACK_EVENT_TYPE,
-  TipisTrack,
-} from "@illa-public/track-utils"
+import { TIPISProperties, TipisTrack } from "@illa-public/track-utils"
 
 export const track = (
-  event: TIPIS_TRACK_EVENT_TYPE,
+  event: string,
   properties: Omit<TIPISProperties, "page"> = {},
 ) => {
   TipisTrack.track(event, {
