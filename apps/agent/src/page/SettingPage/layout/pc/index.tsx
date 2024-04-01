@@ -58,11 +58,12 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
       label: t("profile.setting.password.title"),
       icon: <></>,
     },
-    {
-      path: "/setting/linked",
-      label: t("profile.setting.oauth.title.oauth"),
-      icon: <></>,
-    },
+    // TODO: wtf, not support
+    // {
+    //   path: "/setting/linked",
+    //   label: t("profile.setting.oauth.title.oauth"),
+    //   icon: <></>,
+    // },
     {
       path: "/setting/language",
       label: t("profile.setting.language"),

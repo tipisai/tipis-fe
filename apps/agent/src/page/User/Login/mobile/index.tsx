@@ -14,7 +14,7 @@ import ErrorMessage from "@/components/InputErrorMessage"
 import LinkButton from "@/components/LinkButton"
 import { FORGOT_PASSWORD_PATH, REGISTER_PATH } from "@/utils/routeHelper"
 import { OAuthButton } from "../../components/OAuthButton"
-import { EMAIL_FORMAT } from "../../constants"
+import { CAN_SHOW_OAUTH, EMAIL_FORMAT } from "../../constants"
 import { LoginFields } from "../../interface"
 import { getValidReportParams } from "../../utils"
 import { LoginPageProps } from "../interface"
@@ -245,14 +245,16 @@ export const MobileLogin: FC<LoginPageProps> = (props) => {
           {t("page.user.sign_in.actions.login")}
         </Button>
       </form>
-      <div css={oAuthButtonGroupStyle}>
-        <OAuthButton
-          icon={<Icon component={GithubIcon} css={oAuthIconStyle} />}
-          type="github"
-          isMobile
-          landing="signin"
-        />
-      </div>
+      {CAN_SHOW_OAUTH && (
+        <div css={oAuthButtonGroupStyle}>
+          <OAuthButton
+            icon={<Icon component={GithubIcon} css={oAuthIconStyle} />}
+            type="github"
+            isMobile
+            landing="signin"
+          />
+        </div>
+      )}
     </div>
   )
 }

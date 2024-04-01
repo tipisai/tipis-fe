@@ -15,7 +15,7 @@ import ErrorMessage from "@/components/InputErrorMessage"
 import LinkButton from "@/components/LinkButton"
 import { LOGIN_PATH } from "@/utils/routeHelper"
 import { OAuthButton } from "../../components/OAuthButton"
-import { EMAIL_FORMAT } from "../../constants"
+import { CAN_SHOW_OAUTH, EMAIL_FORMAT } from "../../constants"
 import { RegisterFields } from "../../interface"
 import { getValidReportParams } from "../../utils"
 import { RegisterProps } from "../interface"
@@ -349,19 +349,21 @@ export const PCRegister: FC<RegisterProps> = (props) => {
           {t("page.user.sign_up.actions.create")}
         </Button>
       </form>
-      <div css={oauthContainerStyle}>
-        <Divider>{t("page.user.sign_in.option.or")}</Divider>
-        <div css={oAuthButtonGroupStyle}>
-          <OAuthButton
-            icon={<Icon component={GithubIcon} css={oAuthIconStyle} />}
-            type="github"
-            isMobile={false}
-            landing="signup"
-          >
-            {t("page.user.sign_in.option.github")}
-          </OAuthButton>
+      {CAN_SHOW_OAUTH && (
+        <div css={oauthContainerStyle}>
+          <Divider>{t("page.user.sign_in.option.or")}</Divider>
+          <div css={oAuthButtonGroupStyle}>
+            <OAuthButton
+              icon={<Icon component={GithubIcon} css={oAuthIconStyle} />}
+              type="github"
+              isMobile={false}
+              landing="signup"
+            >
+              {t("page.user.sign_in.option.github")}
+            </OAuthButton>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

@@ -58,10 +58,11 @@ const Entrance: FC = () => {
       path: "/setting/password",
       label: t("profile.setting.password.title"),
     },
-    {
-      path: "/setting/linked",
-      label: t("profile.setting.oauth.title.oauth"),
-    },
+    // TODO: wtf not support
+    // {
+    //   path: "/setting/linked",
+    //   label: t("profile.setting.oauth.title.oauth"),
+    // },
     {
       path: "/setting/language",
       label: t("profile.setting.language"),
