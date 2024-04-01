@@ -50,11 +50,6 @@ export const EditAIAgentPage: FC = () => {
       ? {
           ...data,
           cacheID: data.aiAgentID,
-          variables:
-            data.variables.length === 0
-              ? [{ key: "", value: "" }]
-              : data.variables,
-          knowledge: Array.isArray(data.knowledge) ? data.knowledge : [],
         }
       : initAgent,
   })
@@ -92,6 +87,7 @@ export const EditAIAgentPage: FC = () => {
       }
     }
   }, [isDirty, teamID, values])
+  const { reset } = methods
 
   useEffect(() => {
     const getHistoryDataAndSetFormData = async () => {
@@ -101,7 +97,7 @@ export const EditAIAgentPage: FC = () => {
       if (uiHistoryData) {
         const { formData } = uiHistoryData
         if (formData) {
-          methods.reset(
+          reset(
             {
               ...formData,
               cacheID: (formData as IAgentForm).aiAgentID,
@@ -114,7 +110,7 @@ export const EditAIAgentPage: FC = () => {
       }
     }
     getHistoryDataAndSetFormData()
-  }, [isDirty, methods, values.aiAgentID])
+  }, [reset, values.aiAgentID])
 
   useBeforeUnload(setUiHistoryFormData)
 

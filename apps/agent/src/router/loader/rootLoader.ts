@@ -7,7 +7,6 @@ export const rootLoader = async (args: LoaderFunctionArgs) => {
   const url = new URL(request.url)
   const inviteToken = url.searchParams.get("inviteToken")
   const paramsToken = url.searchParams.get("token")
-
   if (paramsToken) {
     setAuthToken(paramsToken)
   }

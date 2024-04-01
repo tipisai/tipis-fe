@@ -37,7 +37,7 @@ const mergeUploadValues = (
   values: IKnowledgeFile[],
   uploadFiles: IFileDetailInfo[],
 ): IFileDetailInfo[] => {
-  const mergeValues = values.map((item) => {
+  const mergeValues = (values ?? []).map((item) => {
     return {
       ...item,
       status: FILE_ITEM_DETAIL_STATUS_IN_UI.SUCCESS,

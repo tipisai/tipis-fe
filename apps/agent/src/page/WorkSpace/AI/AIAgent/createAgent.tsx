@@ -39,6 +39,8 @@ export const CreateAIAgentPage: FC = () => {
     },
   })
 
+  const { reset } = methods
+
   const values = useWatch({
     control: methods.control,
   })
@@ -87,12 +89,12 @@ export const CreateAIAgentPage: FC = () => {
       if (uiHistoryData) {
         const { formData } = uiHistoryData
         if (formData) {
-          methods.reset(formData as IAgentForm)
+          reset(formData as IAgentForm)
         }
       }
     }
     getHistoryDataAndSetFormData()
-  }, [methods])
+  }, [reset])
 
   useBeforeUnload(setUiHistoryFormData)
 
