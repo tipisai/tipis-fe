@@ -2,12 +2,8 @@ import { FC, useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
-import { PURCHASE_TYPE } from "@illa-public/upgrade-modal"
-import { sendTagEvent } from "@illa-public/utils"
 import SuccessBg from "@/assets/subscribeRedirect/success-bg.svg"
 import BlackButton from "@/components/BlackButton"
-import { linkTrk, rdtPurchaseTrk, twqTrk } from "@/utils/gaHelper"
-import { LINKEDIN_CONVERSION_ID, TWITTER_ID } from "@/utils/gaHelper/constent"
 import {
   actionAreaStyle,
   containerStyle,
@@ -38,23 +34,6 @@ const SubscribedLanding: FC = () => {
     }, 1000)
     return () => clearTimeout(timer)
   }, [counter, returnTo])
-
-  useEffect(() => {
-    const userID = searchParams.get("userID")
-    const purchaseStatus = searchParams.get("purchaseStatus")
-    const purchaseType = searchParams.get("purchaseType")
-    const purchaseCount = searchParams.get("purchaseCount") ?? ""
-    const purchaseValue = searchParams.get("purchaseValue") ?? ""
-
-    if (purchaseStatus && purchaseStatus === "success" && userID) {
-      if (purchaseType === PURCHASE_TYPE.CREDIT) {
-        sendTagEvent("purchase_collaboration", userID)
-        linkTrk(LINKEDIN_CONVERSION_ID.PURCHASE_COLLA)
-        twqTrk(TWITTER_ID.PURCHASE_COLLA, userID)
-        rdtPurchaseTrk(purchaseCount, purchaseValue, "colla", userID)
-      }
-    }
-  }, [searchParams])
 
   return (
     <>

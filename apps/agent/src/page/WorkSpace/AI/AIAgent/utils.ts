@@ -9,8 +9,7 @@ import {
   ILLA_MIXPANEL_EVENT_TYPE,
 } from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
-import { getCurrentTeamInfo, getCurrentUser } from "@illa-public/user-data"
-import { sendTagEvent } from "@illa-public/utils"
+import { getCurrentTeamInfo } from "@illa-public/user-data"
 import {
   useCreateAgentMutation,
   useGetAgentIconUploadAddressMutation,
@@ -57,7 +56,6 @@ export const useSubmitSaveAgent = () => {
   const changeCreateToEdit = useCreateTipiToEditTipi()
 
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
-  const currentUserInfo = useSelector(getCurrentUser)
   const { reset } = useFormContext<IAgentForm>()
   const updateTabInfo = useUpdateRecentTabReducer()
 
@@ -116,7 +114,6 @@ export const useSubmitSaveAgent = () => {
             },
           }).unwrap()
           changeCreateToEdit(currentData.cacheID, serverAgent.aiAgentID)
-          sendTagEvent("create_agent", currentUserInfo.userID)
           agentInfo = serverAgent
         } else {
           const serverAgent = await putAgentDetail({
@@ -180,7 +177,6 @@ export const useSubmitSaveAgent = () => {
       changeCreateToEdit,
       createAgent,
       currentTeamInfo.id,
-      currentUserInfo.userID,
       getAgentIconUploadAddress,
       message,
       putAgentDetail,
