@@ -8,6 +8,7 @@ interface ImportMetaEnv {
   readonly ILLA_APP_VERSION: string
   readonly ILLA_APP_ENV: string
   readonly ILLA_CLOUD_URL: string
+  readonly ILLA_INTERCOM_APP_ID: string
 }
 
 interface ImportMeta {
