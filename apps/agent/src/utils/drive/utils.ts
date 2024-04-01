@@ -21,6 +21,8 @@ export const multipleFileHandler = (
         : file.name
 
     fileStore.addFileDetailInfo({
+      loaded: 0,
+      total: file.size,
       status: FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING,
       fileName: fileName,
       contentType: file.type,

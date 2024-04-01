@@ -46,6 +46,8 @@ const UploadKnowledgeFiles: FC<UploadKnowledgeFilesPops> = ({
             }}
             icon={
               <StatusIcon
+                loaded={fileInfo?.loaded}
+                total={fileInfo?.total}
                 status={fileInfo?.status}
                 contentType={item?.contentType}
               />

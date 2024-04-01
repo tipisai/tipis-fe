@@ -20,6 +20,8 @@ export type IUploadToDrive = (
 ) => void
 
 export interface IFileDetailInfo {
+  loaded: number
+  total: number
   status: FILE_ITEM_DETAIL_STATUS_IN_UI
   fileName: string
   contentType: string
@@ -28,4 +30,6 @@ export interface IFileDetailInfo {
   needUploadFile?: File
 }
 
-export type IUpdateFileUploadInfo = Partial<Pick<IFileDetailInfo, "status">>
+export type IUpdateFileUploadInfo = Partial<
+  Pick<IFileDetailInfo, "status" | "loaded">
+>

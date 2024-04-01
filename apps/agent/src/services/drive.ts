@@ -4,6 +4,7 @@ import { UPLOAD_FILE_STATUS } from "@illa-public/public-types"
 export const uploadFileToObjectStorage = async (
   url: string,
   uploadFile: File,
+  processCall?: (loaded: number) => void,
   abortSignal?: AbortSignal,
 ) => {
   try {
@@ -13,6 +14,9 @@ export const uploadFileToObjectStorage = async (
         "x-amz-acl": "public-read",
       },
       signal: abortSignal,
+      onUploadProgress: (progressEvent) => {
+        processCall?.(progressEvent.loaded)
+      },
     })
     return Promise.resolve(UPLOAD_FILE_STATUS.COMPLETE)
   } catch (error) {

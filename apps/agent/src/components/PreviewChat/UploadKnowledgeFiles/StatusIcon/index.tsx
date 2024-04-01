@@ -1,18 +1,20 @@
 import { Progress } from "antd"
 import { FC } from "react"
-import { useRaf } from "react-use"
 import { getFileIconByContentType } from "@illa-public/icon"
 import { GCS_OBJECT_TYPE } from "@illa-public/public-types"
 import { FILE_ITEM_DETAIL_STATUS_IN_UI, IFileDetailInfo } from "@/utils/drive"
 import { fileTypeIconStyle } from "./style"
 
-const AutoplayProgress = () => {
-  const loadedNum = useRaf(3000, 0)
+const AutoplayProgress: FC<Pick<IFileDetailInfo, "loaded" | "total">> = ({
+  loaded,
+  total,
+}) => {
+  const percent = (loaded / total) * 100
   return (
     <Progress
       type="circle"
       size={16}
-      percent={parseFloat((loadedNum * 85).toFixed(2))}
+      percent={percent > 90 ? 90 : parseFloat(percent.toFixed(2))}
       style={{
         marginRight: "4px",
       }}
@@ -21,8 +23,8 @@ const AutoplayProgress = () => {
 }
 
 const StatusIcon: FC<
-  Partial<Pick<IFileDetailInfo, "status" | "contentType">>
-> = ({ status, contentType }) => {
+  Partial<Pick<IFileDetailInfo, "status" | "contentType" | "loaded" | "total">>
+> = ({ status, contentType, loaded = 0, total = 100 }) => {
   switch (status) {
     case FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING:
       return (
@@ -36,7 +38,7 @@ const StatusIcon: FC<
         />
       )
     case FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING:
-      return <AutoplayProgress />
+      return <AutoplayProgress total={total} loaded={loaded} />
 
     default:
     case FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR:
