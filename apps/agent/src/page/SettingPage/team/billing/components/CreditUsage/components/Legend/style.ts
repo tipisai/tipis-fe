@@ -6,11 +6,11 @@ export const legendContainerStyle = css`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 48px;
   ${applyMobileStyle(css`
     width: 100%;
-    justify-content: space-between;
+    justify-content: center;
     gap: 0;
   `)}
 `
