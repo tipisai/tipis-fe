@@ -1,19 +1,13 @@
 import { App } from "antd"
-import { FC, useEffect, useState } from "react"
+import { FC, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useParams, useSearchParams } from "react-router-dom"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  ILLA_MIXPANEL_PUBLIC_PAGE_NAME,
-  MixpanelTrackProvider,
-} from "@illa-public/mixpanel-utils"
 import { useSignInMutation } from "@illa-public/user-data"
 import { setAuthToken } from "@illa-public/utils"
-import { track } from "@/utils/mixpanelHelper"
 import { useNavigateTargetWorkspace } from "@/utils/routeHelper/hook"
 import { LoginFields } from "../interface"
 import { LoginErrorMsg } from "./interface"
@@ -87,39 +81,30 @@ const LoginPage: FC = () => {
     }
   }
 
-  useEffect(() => {
-    track(ILLA_MIXPANEL_EVENT_TYPE.VISIT, ILLA_MIXPANEL_PUBLIC_PAGE_NAME.LOGIN)
-  }, [])
-
   return (
     <>
       <Helmet>
         <title>{t("meta.login_meta_title")}</title>
       </Helmet>
       <FormProvider {...formProps}>
-        <MixpanelTrackProvider
-          basicTrack={track}
-          pageName={ILLA_MIXPANEL_PUBLIC_PAGE_NAME.LOGIN}
-        >
-          <LayoutAutoChange
-            desktopPage={
-              <PCLogin
-                loading={isLoading}
-                errorMsg={errorMsg}
-                onSubmit={onSubmit}
-                lockedEmail={email ?? searchParams.get("email") ?? ""}
-              />
-            }
-            mobilePage={
-              <MobileLogin
-                loading={isLoading}
-                errorMsg={errorMsg}
-                onSubmit={onSubmit}
-                lockedEmail={email ?? searchParams.get("email") ?? ""}
-              />
-            }
-          />
-        </MixpanelTrackProvider>
+        <LayoutAutoChange
+          desktopPage={
+            <PCLogin
+              loading={isLoading}
+              errorMsg={errorMsg}
+              onSubmit={onSubmit}
+              lockedEmail={email ?? searchParams.get("email") ?? ""}
+            />
+          }
+          mobilePage={
+            <MobileLogin
+              loading={isLoading}
+              errorMsg={errorMsg}
+              onSubmit={onSubmit}
+              lockedEmail={email ?? searchParams.get("email") ?? ""}
+            />
+          }
+        />
       </FormProvider>
     </>
   )

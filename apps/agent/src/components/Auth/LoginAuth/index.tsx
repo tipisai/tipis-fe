@@ -1,6 +1,6 @@
 import { FC } from "react"
 import { Navigate } from "react-router-dom"
-import { ILLAMixpanel } from "@illa-public/mixpanel-utils"
+import { TipisTrack } from "@illa-public/track-utils"
 import { UpgradeModalGroup } from "@illa-public/upgrade-modal"
 import { useGetUserInfoQuery } from "@illa-public/user-data"
 import { getILLACloudURL } from "@illa-public/utils"
@@ -15,7 +15,7 @@ const LoginAuth: FC<BaseProtectComponentProps> = (props) => {
 
   if (error && "status" in error) {
     if (error.status === 401) {
-      ILLAMixpanel.reset()
+      TipisTrack.reset()
       window.location.href = `${getILLACloudURL(window.customDomain)}/user/login?redirectURL=${encodeURIComponent(
         window.location.href,
       )}`
@@ -26,12 +26,12 @@ const LoginAuth: FC<BaseProtectComponentProps> = (props) => {
 
   if (data) {
     const currentLng = i18n.language
-    ILLAMixpanel.setUserID(data.userID)
-    const reportedUserInfo: Record<string, any> = {}
-    Object.entries(data).forEach(([key, value]) => {
-      reportedUserInfo[`illa_${key}`] = value
+    TipisTrack.identify(data.userID, {
+      nickname: data.nickname,
+      email: data.email,
+      language: data.language,
     })
-    ILLAMixpanel.setUserProperties(reportedUserInfo)
+
     if (data.language && data.language !== currentLng) {
       i18n.changeLanguage(data.language)
       return null

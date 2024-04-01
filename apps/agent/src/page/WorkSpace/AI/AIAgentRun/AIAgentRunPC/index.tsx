@@ -1,14 +1,9 @@
 import { FC, useCallback, useContext, useEffect, useMemo, useRef } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
-import {
-  ILLA_MIXPANEL_BUILDER_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
-} from "@illa-public/mixpanel-utils"
 import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { PreviewChat } from "@/components/PreviewChat"
 import { ChatMessage } from "@/components/PreviewChat/interface"
 import { getSendMessageBody } from "@/utils/agent/wsUtils"
-import { track } from "@/utils/mixpanelHelper"
 import { IAgentForm } from "../../AIAgent/interface"
 import { ChatContext } from "../../components/ChatContext"
 import { AgentWSContext } from "../../context/AgentWSContext"
@@ -79,14 +74,6 @@ export const AIAgentRunPC: FC = () => {
 
   const onSendMessage = useCallback(
     (message: ChatMessage) => {
-      track(
-        ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-        ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_RUN,
-        {
-          element: "send",
-          parameter5: getValues("aiAgentID"),
-        },
-      )
       const { payload, signal, type, fileIDs, updateMessage, messageContent } =
         getSendMessageBody(message, getValues("aiAgentID"))
 

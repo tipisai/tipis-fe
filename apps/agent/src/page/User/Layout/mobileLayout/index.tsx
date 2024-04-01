@@ -1,10 +1,6 @@
 import Icon from "@ant-design/icons"
-import { FC, useContext } from "react"
+import { FC } from "react"
 import { Trans, useTranslation } from "react-i18next"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  MixpanelTrackContext,
-} from "@illa-public/mixpanel-utils"
 import LogoIcon from "@/assets/public/logo.svg?react"
 import LinkButton from "@/components/LinkButton"
 import { DOC_PREFIX } from "../../constants"
@@ -20,13 +16,6 @@ import {
 
 const MobileUserLayout: FC<LayoutProps> = ({ children }) => {
   const { t } = useTranslation()
-  const { track } = useContext(MixpanelTrackContext)
-
-  const handleLinkClick = (link: string) => {
-    track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      element: /privacy/.test(link) ? "privacy" : "terms",
-    })
-  }
 
   return (
     <div css={layoutStyle}>
@@ -47,9 +36,6 @@ const MobileUserLayout: FC<LayoutProps> = ({ children }) => {
               style={{
                 height: 17,
               }}
-              onClick={() => {
-                handleLinkClick("/privacy-policy")
-              }}
             />,
             <LinkButton
               key="/terms-of-service"
@@ -58,9 +44,6 @@ const MobileUserLayout: FC<LayoutProps> = ({ children }) => {
                 height: 17,
               }}
               target="__blank"
-              onClick={() => {
-                handleLinkClick("/terms-of-service")
-              }}
             />,
           ]}
         />

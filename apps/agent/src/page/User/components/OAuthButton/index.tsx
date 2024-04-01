@@ -2,11 +2,6 @@ import { Button } from "antd"
 import { FC, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import {
-  ILLAMixpanel,
-  ILLA_MIXPANEL_EVENT_TYPE,
-  ILLA_MIXPANEL_PUBLIC_PAGE_NAME,
-} from "@illa-public/mixpanel-utils"
-import {
   OAUTH_REDIRECT_URL,
   openOAuthUrl,
   useLazyGetOAuthURIQuery,
@@ -20,11 +15,6 @@ export const OAuthButton: FC<OAuthButtonProps> = (props) => {
   const [triggerGetOAuthURIQuery] = useLazyGetOAuthURIQuery()
 
   const onClickButton = async () => {
-    ILLAMixpanel.track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      page: ILLA_MIXPANEL_PUBLIC_PAGE_NAME.LOGIN,
-      element: `${props.type}_sign_in`,
-    })
-
     const targetURL = new URL(OAUTH_REDIRECT_URL)
     searchParams.forEach((value, key) => {
       if (utmKeys.includes(key)) {

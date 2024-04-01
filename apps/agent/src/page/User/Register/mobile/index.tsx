@@ -1,15 +1,10 @@
 import Icon from "@ant-design/icons"
 import { Button, Input } from "antd"
-import { FC, useContext, useEffect, useState } from "react"
+import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { GithubIcon } from "@illa-public/icon"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  ILLA_MIXPANEL_PUBLIC_PAGE_NAME,
-  MixpanelTrackContext,
-} from "@illa-public/mixpanel-utils"
 import { EmailCode } from "@/components/EmailCode"
 import ErrorMessage from "@/components/InputErrorMessage"
 import LinkButton from "@/components/LinkButton"
@@ -17,7 +12,6 @@ import { LOGIN_PATH } from "@/utils/routeHelper"
 import { OAuthButton } from "../../components/OAuthButton"
 import { CAN_SHOW_OAUTH, EMAIL_FORMAT } from "../../constants"
 import { RegisterFields } from "../../interface"
-import { getValidReportParams } from "../../utils"
 import { RegisterProps } from "../interface"
 import {
   containerStyle,
@@ -44,55 +38,11 @@ export const MobileRegister: FC<RegisterProps> = (props) => {
   } = props
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { track } = useContext(MixpanelTrackContext)
-  const { handleSubmit, control, formState, getValues, trigger } =
-    useFormContext<RegisterFields>()
-  const { errors } = formState
-  const [asyncValid, setAsyncValid] = useState<
-    { isValid: boolean } | undefined
-  >()
-
-  const validReport = async () => {
-    track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      element: "create_account",
-    })
-    let isValid = await trigger()
-    if (isValid) {
-      const params = getValidReportParams(
-        ILLA_MIXPANEL_PUBLIC_PAGE_NAME.SIGNUP,
-        true,
-        {},
-      )
-      params &&
-        track(ILLA_MIXPANEL_EVENT_TYPE.VALIDATE, {
-          ...params,
-          element: "create_account",
-        })
-    }
-    setAsyncValid({ isValid })
-  }
+  const { handleSubmit, control, formState } = useFormContext<RegisterFields>()
 
   const handleClickToLogin = () => {
-    track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      element: "sign_in",
-    })
     navigate({ pathname: LOGIN_PATH, search: location.search })
   }
-
-  useEffect(() => {
-    if (asyncValid && !asyncValid.isValid) {
-      const params = getValidReportParams(
-        ILLA_MIXPANEL_PUBLIC_PAGE_NAME.SIGNUP,
-        false,
-        errors,
-      )
-      params &&
-        track(ILLA_MIXPANEL_EVENT_TYPE.VALIDATE, {
-          ...params,
-          element: "create_account",
-        })
-    }
-  }, [errors, asyncValid, track])
 
   return (
     <div css={containerStyle}>
@@ -135,18 +85,6 @@ export const MobileRegister: FC<RegisterProps> = (props) => {
                 status={!!formState?.errors.nickname ? "error" : undefined}
                 variant="filled"
                 placeholder={t("page.user.sign_up.fields.username")}
-                onFocus={() => {
-                  track(ILLA_MIXPANEL_EVENT_TYPE.FOCUS, {
-                    element: "username_input",
-                    parameter3: getValues().nickname?.length ?? 0,
-                  })
-                }}
-                onBlur={() => {
-                  track(ILLA_MIXPANEL_EVENT_TYPE.BLUR, {
-                    element: "username_input",
-                    parameter3: getValues().nickname?.length ?? 0,
-                  })
-                }}
               />
             )}
             rules={{
@@ -186,18 +124,6 @@ export const MobileRegister: FC<RegisterProps> = (props) => {
                 variant="filled"
                 placeholder={t("page.user.sign_up.fields.email")}
                 {...(lockedEmail && { value: lockedEmail, disabled: true })}
-                onFocus={() => {
-                  track(ILLA_MIXPANEL_EVENT_TYPE.FOCUS, {
-                    element: "email_input",
-                    parameter3: getValues().email?.length ?? 0,
-                  })
-                }}
-                onBlur={() => {
-                  track(ILLA_MIXPANEL_EVENT_TYPE.BLUR, {
-                    element: "email_input",
-                    parameter3: getValues().email?.length ?? 0,
-                  })
-                }}
               />
             )}
             rules={{
@@ -246,18 +172,6 @@ export const MobileRegister: FC<RegisterProps> = (props) => {
                   />
                 }
                 placeholder={t("page.user.sign_up.fields.verification_code")}
-                onFocus={() => {
-                  track(ILLA_MIXPANEL_EVENT_TYPE.FOCUS, {
-                    element: "verification_code_input",
-                    parameter3: getValues().verificationCode?.length ?? 0,
-                  })
-                }}
-                onBlur={() => {
-                  track(ILLA_MIXPANEL_EVENT_TYPE.BLUR, {
-                    element: "verification_code_input",
-                    parameter3: getValues().verificationCode?.length ?? 0,
-                  })
-                }}
               />
             )}
             rules={{
@@ -291,18 +205,6 @@ export const MobileRegister: FC<RegisterProps> = (props) => {
                 status={!!formState?.errors.password ? "error" : undefined}
                 variant="filled"
                 placeholder={t("page.user.sign_up.fields.password")}
-                onFocus={() => {
-                  track(ILLA_MIXPANEL_EVENT_TYPE.FOCUS, {
-                    element: "password",
-                    parameter3: getValues().password?.length ?? 0,
-                  })
-                }}
-                onBlur={() => {
-                  track(ILLA_MIXPANEL_EVENT_TYPE.BLUR, {
-                    element: "password",
-                    parameter3: getValues().password?.length ?? 0,
-                  })
-                }}
               />
             )}
             rules={{
@@ -330,7 +232,6 @@ export const MobileRegister: FC<RegisterProps> = (props) => {
           loading={loading}
           htmlType="submit"
           block
-          onClick={validReport}
         >
           {t("page.user.sign_up.actions.create")}
         </Button>

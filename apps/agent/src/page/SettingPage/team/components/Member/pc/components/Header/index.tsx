@@ -1,12 +1,8 @@
 import { Button } from "antd"
-import { FC, useContext, useEffect } from "react"
+import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
 import { InviteMemberPC } from "@illa-public/invite-modal"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  MixpanelTrackContext,
-} from "@illa-public/mixpanel-utils"
 import { MemberInfo, USER_ROLE, USER_STATUS } from "@illa-public/public-types"
 import { teamActions } from "@illa-public/user-data"
 import {
@@ -23,7 +19,6 @@ export const Header: FC = () => {
   const dispatch = useDispatch()
   const teamInfo = useGetCurrentTeamInfo()!
   const currentUserRole = teamInfo?.myRole ?? USER_ROLE.VIEWER
-  const { track } = useContext(MixpanelTrackContext)
   const {
     showInviteButton,
     inviteModalVisible,
@@ -31,13 +26,6 @@ export const Header: FC = () => {
     handleCopy,
     closeInviteModal,
   } = useContext(MemberContext)
-
-  useEffect(() => {
-    showInviteButton &&
-      track?.(ILLA_MIXPANEL_EVENT_TYPE.SHOW, {
-        element: "invite_entry",
-      })
-  }, [showInviteButton, track])
 
   return (
     <>

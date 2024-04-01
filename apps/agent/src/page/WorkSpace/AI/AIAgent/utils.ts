@@ -4,11 +4,8 @@ import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { isPremiumModel } from "@illa-public/market-agent"
-import {
-  ILLA_MIXPANEL_BUILDER_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
-} from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
+import { TIPIS_TRACK_EVENT_TYPE } from "@illa-public/track-utils"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import {
   useCreateAgentMutation,
@@ -18,9 +15,9 @@ import {
 import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { fetchUploadBase64 } from "@/utils/file"
 import { updateUiHistoryData } from "@/utils/localForage/teamData"
-import { track } from "@/utils/mixpanelHelper"
 import { useUpdateRecentTabReducer } from "@/utils/recentTabs/baseHook"
 import { useCreateTipiToEditTipi } from "@/utils/recentTabs/hook"
+import { track } from "@/utils/trackHelper"
 import { AgentInitial, IAgentForm } from "./interface"
 
 export const agentData2JSONReport = (agent: IAgentForm) => {
@@ -71,15 +68,11 @@ export const useSubmitSaveAgent = () => {
           knowledge: [],
         }
       }
-      track(
-        ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-        ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_EDIT,
-        {
-          element: "save",
-          parameter1: agentData2JSONReport(currentData),
-          parameter5: currentData.aiAgentID || "-1",
-        },
-      )
+      track(TIPIS_TRACK_EVENT_TYPE.CLICK, {
+        element: "save",
+        parameter1: agentData2JSONReport(currentData),
+        parameter5: currentData.aiAgentID || "-1",
+      })
       let agentInfo: Agent
       try {
         let updateIconURL = currentData.icon

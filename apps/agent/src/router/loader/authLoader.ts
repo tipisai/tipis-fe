@@ -1,4 +1,4 @@
-import { ILLAMixpanel } from "@illa-public/mixpanel-utils"
+import { TipisTrack } from "@illa-public/track-utils"
 import { teamAPI, userAPI } from "@illa-public/user-data"
 import { getAuthToken } from "@illa-public/utils"
 import store from "@/redux/store"
@@ -7,7 +7,7 @@ import { findRecentTeamInfo } from "../../utils/team"
 export const getUserInfoLoader = async () => {
   const token = getAuthToken()
   if (!token) {
-    ILLAMixpanel.reset()
+    TipisTrack.reset()
     return false
   } else {
     try {
@@ -15,16 +15,15 @@ export const getUserInfoLoader = async () => {
         userAPI.endpoints.getUserInfo.initiate(null),
       )
       const currentUserInfo = await promise.unwrap()
-      ILLAMixpanel.setUserID(currentUserInfo.userID)
-      const reportedUserInfo: Record<string, any> = {}
-      Object.entries(currentUserInfo).forEach(([key, value]) => {
-        reportedUserInfo[`illa_${key}`] = value
+      TipisTrack.identify(currentUserInfo.userID, {
+        nickname: currentUserInfo.nickname,
+        email: currentUserInfo.email,
+        language: currentUserInfo.language,
       })
-      ILLAMixpanel.setUserProperties(reportedUserInfo)
 
       return true
     } catch {
-      ILLAMixpanel.reset()
+      TipisTrack.reset()
       return false
     }
   }
@@ -33,7 +32,7 @@ export const getUserInfoLoader = async () => {
 export const getRecentTeamsInfoLoader = async () => {
   const token = getAuthToken()
   if (!token) {
-    ILLAMixpanel.reset()
+    TipisTrack.reset()
     return undefined
   } else {
     try {

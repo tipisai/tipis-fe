@@ -5,10 +5,6 @@ import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { InviteMemberPC } from "@illa-public/invite-modal"
-import {
-  ILLA_MIXPANEL_CLOUD_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
-} from "@illa-public/mixpanel-utils"
 import { MemberInfo, USER_ROLE, USER_STATUS } from "@illa-public/public-types"
 import {
   getCurrentTeamInfo,
@@ -19,7 +15,6 @@ import { canManageInvite } from "@illa-public/user-role-utils"
 import InviteIcon from "@/assets/workspace/invite.svg?react"
 import TeamSelect from "@/components/TeamSelect"
 import { copyToClipboard } from "@/utils/copyToClipboard"
-import { track } from "@/utils/mixpanelHelper"
 import { getChatPath } from "@/utils/routeHelper"
 import {
   inviteButtonContainerStyle,
@@ -42,11 +37,6 @@ const TeamSelectAndInviteButton: FC<TeamSelectAndInviteButton> = ({
   const navigate = useNavigate()
 
   const handleClickInvite = () => {
-    track(
-      ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-      ILLA_MIXPANEL_CLOUD_PAGE_NAME.HOMEPAGE,
-      { element: "invite_entry" },
-    )
     setInviteModalVisible(true)
   }
 

@@ -6,14 +6,9 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { ContributeIcon } from "@illa-public/icon"
 import { ShareAgentTab } from "@illa-public/invite-modal"
-import {
-  ILLA_MIXPANEL_BUILDER_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
-} from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { openShareAgentModal } from "@illa-public/user-role-utils"
-import { track } from "@/utils/mixpanelHelper"
 import ShareAndContributeModal from "../ShareAndContributeModal"
 
 const ContributeButton: FC = () => {
@@ -37,14 +32,6 @@ const ContributeButton: FC = () => {
     if (publishedToMarketplace) {
       setDefaultShareTag(ShareAgentTab.TO_MARKETPLACE)
       setShareDialogVisible(true)
-      track(
-        ILLA_MIXPANEL_EVENT_TYPE.SHOW,
-        ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_EDIT,
-        {
-          element: "share_modal",
-          parameter5: aiAgentID,
-        },
-      )
     } else {
       if (
         !openShareAgentModal(

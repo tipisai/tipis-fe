@@ -4,15 +4,10 @@ import { FC, useContext } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { PlayFillIcon, ResetIcon } from "@illa-public/icon"
-import {
-  ILLA_MIXPANEL_BUILDER_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
-} from "@illa-public/mixpanel-utils"
 import { editPanelUpdateFileDetailStore } from "@/utils/drive"
-import { track } from "@/utils/mixpanelHelper"
 import { AgentWSContext } from "../../../context/AgentWSContext"
 import { IAgentForm, SCROLL_ID } from "../../interface"
-import { agentData2JSONReport, handleScrollToElement } from "../../utils"
+import { handleScrollToElement } from "../../utils"
 import { IStartButtonProps } from "./interface"
 
 const StartButton: FC<IStartButtonProps> = (props) => {
@@ -61,15 +56,7 @@ const StartButton: FC<IStartButtonProps> = (props) => {
     if (!handleVerifyOnStart()) {
       return
     }
-    track(
-      ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-      ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_EDIT,
-      {
-        element: isRunning ? "restart" : "start",
-        parameter1: agentData2JSONReport(getValues()),
-        parameter5: getValues("aiAgentID") || "-1",
-      },
-    )
+
     isRunning ? await reconnect() : await connect()
     reset(lastRunAgent.current)
     props.onClickCallback?.()

@@ -4,14 +4,9 @@ import { useTranslation } from "react-i18next"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  ILLA_MIXPANEL_PUBLIC_PAGE_NAME,
-} from "@illa-public/mixpanel-utils"
 import { Page404 } from "@illa-public/status-page"
 import { useExchangeTokenMutation } from "@illa-public/user-data"
 import { getAuthToken, setAuthToken } from "@illa-public/utils"
-import { track } from "@/utils/mixpanelHelper"
 import { LINKED_PATH, LOGIN_PATH, REGISTER_PATH } from "@/utils/routeHelper"
 import { mobilePageStyle, pageStyle } from "./style"
 
@@ -29,7 +24,6 @@ const OAuth: FC = () => {
   useEffect(() => {
     if (code && state) {
       const landing = JSON.parse(state)?.landing
-      const currentTime = new Date().getTime()
 
       exchangeToken({
         oauthAgency: "github",
@@ -40,23 +34,13 @@ const OAuth: FC = () => {
         .then((res) => {
           const token = res.token
           token && setAuthToken(token)
-          const isNewUser = res?.isNewUser
+          // const isNewUser = res?.isNewUser
           switch (landing) {
             case "connect":
               message.success(t("profile.setting.oauth.message.github"))
               navigate(LINKED_PATH)
               break
             case "signin": {
-              track(
-                ILLA_MIXPANEL_EVENT_TYPE.REQUEST,
-                ILLA_MIXPANEL_PUBLIC_PAGE_NAME.LOGIN,
-                {
-                  element: "github_sign_in",
-                  consume: new Date().getTime() - currentTime,
-                  parameter2: "suc",
-                  parameter3: !!isNewUser,
-                },
-              )
               message.success({
                 content: t("page.user.sign_in.tips.success"),
               })
@@ -72,16 +56,6 @@ const OAuth: FC = () => {
               break
             }
             case "signup": {
-              track(
-                ILLA_MIXPANEL_EVENT_TYPE.REQUEST,
-                ILLA_MIXPANEL_PUBLIC_PAGE_NAME.SIGNUP,
-                {
-                  element: "github_sign_up",
-                  consume: new Date().getTime() - currentTime,
-                  parameter2: "suc",
-                  parameter3: !!isNewUser,
-                },
-              )
               message.success({
                 content: t("page.user.sign_in.tips.success"),
               })
@@ -102,7 +76,7 @@ const OAuth: FC = () => {
         })
         .catch((error: unknown) => {
           if (isILLAAPiError(error)) {
-            const errorFlag = error.data.errorFlag
+            // const errorFlag = error.data.errorFlag
             switch (error.data.errorFlag) {
               case ERROR_FLAG.ERROR_FLAG_OAUTH_FETCH_USER_INFO_FAILED: {
                 message.error({
@@ -127,29 +101,9 @@ const OAuth: FC = () => {
             }
             switch (landing) {
               case "signin":
-                track(
-                  ILLA_MIXPANEL_EVENT_TYPE.REQUEST,
-                  ILLA_MIXPANEL_PUBLIC_PAGE_NAME.LOGIN,
-                  {
-                    element: "github_sign_in",
-                    consume: new Date().getTime() - currentTime,
-                    parameter2: "failed",
-                    parameter3: errorFlag,
-                  },
-                )
                 navigate(LOGIN_PATH)
                 break
               case "signup":
-                track(
-                  ILLA_MIXPANEL_EVENT_TYPE.REQUEST,
-                  ILLA_MIXPANEL_PUBLIC_PAGE_NAME.SIGNUP,
-                  {
-                    element: "github_sign_up",
-                    consume: new Date().getTime() - currentTime,
-                    parameter2: "failed",
-                    parameter3: errorFlag,
-                  },
-                )
                 navigate(REGISTER_PATH)
                 break
               case "connect":

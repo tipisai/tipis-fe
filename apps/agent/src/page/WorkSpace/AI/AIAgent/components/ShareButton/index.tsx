@@ -5,12 +5,7 @@ import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { ShareIcon } from "@illa-public/icon"
 import { ShareAgentTab } from "@illa-public/invite-modal"
-import {
-  ILLA_MIXPANEL_BUILDER_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
-} from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
-import { track } from "@/utils/mixpanelHelper"
 import ShareAndContributeModal from "../ShareAndContributeModal"
 
 const ShareButton: FC = () => {
@@ -27,23 +22,8 @@ const ShareButton: FC = () => {
   const { t } = useTranslation()
 
   const onShowShareDialog = () => {
-    track(
-      ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-      ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_EDIT,
-      {
-        element: "invite_entry",
-      },
-    )
     setDefaultShareTag(ShareAgentTab.SHARE_WITH_TEAM)
     setShareDialogVisible(true)
-    track(
-      ILLA_MIXPANEL_EVENT_TYPE.SHOW,
-      ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_EDIT,
-      {
-        element: "share_modal",
-        parameter5: aiAgentID,
-      },
-    )
   }
 
   return (

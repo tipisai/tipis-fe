@@ -1,4 +1,4 @@
-import { ILLAMixpanel } from "@illa-public/mixpanel-utils"
+import { TipisTrack } from "@illa-public/track-utils"
 import { useLogoutMutation } from "@illa-public/user-data"
 import {
   getAuthToken,
@@ -10,7 +10,7 @@ import { TIPISStorage } from "@/utils/storage"
 export const useLogout = () => {
   const [logoutMutation] = useLogoutMutation()
   const logout = async () => {
-    ILLAMixpanel.reset()
+    TipisTrack.reset()
     const ILLAToken = getAuthToken()
     removeAuthToken()
     TIPISStorage.clearLocalStorage()

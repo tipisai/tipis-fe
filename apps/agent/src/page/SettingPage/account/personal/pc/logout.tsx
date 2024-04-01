@@ -15,11 +15,6 @@ const Logout: FC = () => {
       size="large"
       loading={isLoading}
       onClick={() => {
-        // track(
-        //   ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-        //   ILLA_MIXPANEL_CLOUD_PAGE_NAME.ACCOUNT_SETTING,
-        //   { element: "log_out", parameter3: teams?.length },
-        // )
         setIsLoading(true)
         logout()
       }}

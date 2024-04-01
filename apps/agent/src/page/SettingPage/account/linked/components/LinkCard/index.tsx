@@ -1,11 +1,7 @@
 import { App, Button } from "antd"
-import { FC, useContext, useState } from "react"
+import { FC, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  MixpanelTrackContext,
-} from "@illa-public/mixpanel-utils"
 import { useCancelLinkedMutation } from "@illa-public/user-data"
 import { useLazyGetOAuthURIQuery } from "@illa-public/user-data"
 import { PASSWORD_PATH } from "@/utils/routeHelper"
@@ -26,7 +22,6 @@ export const LinkCard: FC<LinkCardProps> = (props) => {
   const { message, modal } = App.useApp()
   const [connectedLoading, setConnectedLoading] = useState(false)
   const navigate = useNavigate()
-  const { track } = useContext(MixpanelTrackContext)
   const [triggerGetOAuthURI] = useLazyGetOAuthURIQuery()
   const [cancelLinked] = useCancelLinkedMutation()
 
@@ -40,27 +35,18 @@ export const LinkCard: FC<LinkCardProps> = (props) => {
         tipsModal.update({
           open: false,
         })
-        track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-          element: "github_connect_modal_set_password",
-        })
+
         navigate(PASSWORD_PATH)
       },
       onCancel: () => {
         tipsModal.update({
           open: false,
         })
-        track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-          element: "github_connect_modal_cancel",
-        })
       },
     })
   }
 
   const handleDisconnect = async () => {
-    track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      element: `${type}_connect`,
-      parameter1: "not_connected",
-    })
     if (!hasPassword) {
       tipsNotHasPassword()
       return
@@ -81,10 +67,6 @@ export const LinkCard: FC<LinkCardProps> = (props) => {
   }
 
   const handleConnect = async () => {
-    track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      element: `${type}_connect`,
-      parameter1: "connected",
-    })
     try {
       setConnectedLoading(true)
       const OAuthURIResponse = await triggerGetOAuthURI({

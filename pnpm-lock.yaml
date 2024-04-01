@@ -189,9 +189,6 @@ importers:
       '@illa-public/market-agent':
         specifier: workspace:^
         version: link:../../packages/components/MarketAgent
-      '@illa-public/mixpanel-utils':
-        specifier: workspace:^
-        version: link:../../packages/utils/MixpanelUtils
       '@illa-public/public-configs':
         specifier: workspace:^
         version: link:../../packages/others/publicConfig
@@ -207,6 +204,9 @@ importers:
       '@illa-public/status-page':
         specifier: workspace:^
         version: link:../../packages/components/StatusPage
+      '@illa-public/track-utils':
+        specifier: workspace:^
+        version: link:../../packages/utils/trackUtils
       '@illa-public/upgrade-modal':
         specifier: workspace:^
         version: link:../../packages/components/UpgradeModal
@@ -499,9 +499,9 @@ importers:
       '@illa-public/icon':
         specifier: workspace:^
         version: link:../Icon
-      '@illa-public/mixpanel-utils':
+      '@illa-public/track-utils':
         specifier: workspace:*
-        version: link:../../utils/MixpanelUtils
+        version: link:../../utils/trackUtils
       '@illa-public/utils':
         specifier: workspace:*
         version: link:../../utils/public
@@ -613,15 +613,15 @@ importers:
       '@illa-public/layout-auto-change':
         specifier: workspace:*
         version: link:../LayoutAutoChange
-      '@illa-public/mixpanel-utils':
-        specifier: workspace:*
-        version: link:../../utils/MixpanelUtils
       '@illa-public/public-types':
         specifier: workspace:*
         version: link:../../others/publicTypes
       '@illa-public/role-selector':
         specifier: workspace:*
         version: link:../RoleSelector
+      '@illa-public/track-utils':
+        specifier: workspace:*
+        version: link:../../utils/trackUtils
       '@illa-public/upgrade-modal':
         specifier: workspace:*
         version: link:../UpgradeModal
@@ -904,12 +904,12 @@ importers:
       '@illa-public/illa-net':
         specifier: workspace:*
         version: link:../../utils/ILLANet
-      '@illa-public/mixpanel-utils':
-        specifier: workspace:*
-        version: link:../../utils/MixpanelUtils
       '@illa-public/public-types':
         specifier: workspace:*
         version: link:../../others/publicTypes
+      '@illa-public/track-utils':
+        specifier: workspace:*
+        version: link:../../utils/trackUtils
       '@illa-public/user-data':
         specifier: workspace:*
         version: link:../UserData
@@ -968,6 +968,9 @@ importers:
       '@illa-public/public-types':
         specifier: workspace:*
         version: link:../../others/publicTypes
+      '@illa-public/track-utils':
+        specifier: workspace:^
+        version: link:../../utils/trackUtils
       '@illa-public/utils':
         specifier: workspace:*
         version: link:../../utils/public
@@ -1073,43 +1076,6 @@ importers:
   packages/utils/ILLAStorage: {}
 
   packages/utils/ILLAWebSocket: {}
-
-  packages/utils/MixpanelUtils:
-    dependencies:
-      '@amplitude/analytics-browser':
-        specifier: ^2.4.0
-        version: 2.5.2
-      '@fingerprintjs/fingerprintjs':
-        specifier: ^3.4.0
-        version: 3.4.2
-      '@illa-public/illa-storage':
-        specifier: workspace:*
-        version: link:../ILLAStorage
-      '@illa-public/utils':
-        specifier: workspace:*
-        version: link:../public
-      '@types/react':
-        specifier: ^18.2.62
-        version: 18.2.62
-      '@types/react-dom':
-        specifier: ^18.2.19
-        version: 18.2.19
-      mixpanel-browser:
-        specifier: ^2.47.0
-        version: 2.49.0
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-    devDependencies:
-      '@types/mixpanel-browser':
-        specifier: ^2.47.1
-        version: 2.49.0
-      tsconfig:
-        specifier: workspace:*
-        version: link:../../devConfigs/tsconfig
 
   packages/utils/UserRoleUtils:
     dependencies:
@@ -1241,63 +1207,33 @@ importers:
         specifier: workspace:*
         version: link:../../devConfigs/tsconfig
 
+  packages/utils/trackUtils:
+    dependencies:
+      '@types/react':
+        specifier: ^18.2.62
+        version: 18.2.62
+      '@types/react-dom':
+        specifier: ^18.2.19
+        version: 18.2.19
+      posthog-js:
+        specifier: ^1.116.6
+        version: 1.116.6
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+    devDependencies:
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../devConfigs/tsconfig
+
 packages:
 
   /@aashutoshrathi/word-wrap@1.2.6:
     resolution: {integrity: sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==}
     engines: {node: '>=0.10.0'}
-    dev: false
-
-  /@amplitude/analytics-browser@2.5.2:
-    resolution: {integrity: sha512-SjYjOEXO2it0dylVHv3n812ReA62c7GmxoeZCMMg9IFzgM54J4XIUTXYTDhQI/uGawjWZcsiuSqFgS/7LcwuSg==}
-    dependencies:
-      '@amplitude/analytics-client-common': 2.1.0
-      '@amplitude/analytics-core': 2.2.1
-      '@amplitude/analytics-types': 2.5.0
-      '@amplitude/plugin-page-view-tracking-browser': 2.2.2
-      '@amplitude/plugin-web-attribution-browser': 2.1.3
-      tslib: 2.6.2
-    dev: false
-
-  /@amplitude/analytics-client-common@2.1.0:
-    resolution: {integrity: sha512-wgZs7Orb3+ei7tBqxd5Ug3OzX19E0YpMkhHWFYesmpjBOW+Ng50rolyfB10rHjjeoMgiRc8eGDdnMH4+y7OQlA==}
-    dependencies:
-      '@amplitude/analytics-connector': 1.5.0
-      '@amplitude/analytics-core': 2.2.1
-      '@amplitude/analytics-types': 2.5.0
-      tslib: 2.6.2
-    dev: false
-
-  /@amplitude/analytics-connector@1.5.0:
-    resolution: {integrity: sha512-T8mOYzB9RRxckzhL0NTHwdge9xuFxXEOplC8B1Y3UX3NHa3BLh7DlBUZlCOwQgMc2nxDfnSweDL5S3bhC+W90g==}
-    dev: false
-
-  /@amplitude/analytics-core@2.2.1:
-    resolution: {integrity: sha512-F4IrNzealRXnC3cPjkOoOEd68xsxuDsTeEGErAdxqWXNqV1x9oy1WM1lIKw2yGOyf6OZHidP/Vbp/BJK6B0Fmg==}
-    dependencies:
-      '@amplitude/analytics-types': 2.5.0
-      tslib: 2.6.2
-    dev: false
-
-  /@amplitude/analytics-types@2.5.0:
-    resolution: {integrity: sha512-aY69WxUvVlaCU+9geShjTsAYdUTvegEXH9i4WK/97kNbNLl4/7qUuIPe4hNireDeKLuQA9SA3H7TKynuNomDxw==}
-    dev: false
-
-  /@amplitude/plugin-page-view-tracking-browser@2.2.2:
-    resolution: {integrity: sha512-onsguK2fugi58vhW/NvuAqiQ7TG7IGmUKTg9Zfn39Y2IjudgT8N68LXz6esIY0XKQhZFHVsBT3pqYgEVK5I6Tg==}
-    dependencies:
-      '@amplitude/analytics-client-common': 2.1.0
-      '@amplitude/analytics-types': 2.5.0
-      tslib: 2.6.2
-    dev: false
-
-  /@amplitude/plugin-web-attribution-browser@2.1.3:
-    resolution: {integrity: sha512-CLTzgtewfgSLkwACkvPJ679Yr8HRiy1p8u9Nt5rvKlz3UeHXP7PqTQ/PC/nPp4AuaX30HB3xu4Eof8onWNm4nA==}
-    dependencies:
-      '@amplitude/analytics-client-common': 2.1.0
-      '@amplitude/analytics-core': 2.2.1
-      '@amplitude/analytics-types': 2.5.0
-      tslib: 2.6.2
     dev: false
 
   /@ampproject/remapping@2.3.0:
@@ -2570,12 +2506,6 @@ packages:
       lodash.uniq: 4.5.0
     dev: false
 
-  /@fingerprintjs/fingerprintjs@3.4.2:
-    resolution: {integrity: sha512-3Ncze6JsJpB7BpYhqIgvBpfvEX1jsEKrad5hQBpyRQxtoAp6hx3+R46zqfsuQG4D9egQZ+xftQ0u4LPFMB7Wmg==}
-    dependencies:
-      tslib: 2.6.2
-    dev: false
-
   /@floating-ui/core@1.6.0:
     resolution: {integrity: sha512-PcF++MykgmTj3CIyOQbKA/hDzOAiqI3mhuoN44WRCopIs1sgoDoU4oty4Jtqaj/y3oDU6fnVSm4QG0a3t5i0+g==}
     dependencies:
@@ -3582,10 +3512,6 @@ packages:
 
   /@types/minimatch@5.1.2:
     resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
-    dev: true
-
-  /@types/mixpanel-browser@2.49.0:
-    resolution: {integrity: sha512-StmgUnS58d44DmIAEX9Kk8qwisAYCl6E2qulIjYyHXUPuJCPOuyUMTTKBp+aU2F2do+kxAzCxiBtsB4fnBT9Fg==}
     dev: true
 
   /@types/ms@0.7.34:
@@ -7460,10 +7386,6 @@ packages:
 
   /minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
-
-  /mixpanel-browser@2.49.0:
-    resolution: {integrity: sha512-RZJCO7XXuuHBAWG5fd9Mavz994M7v7W3Qiaq8NzmN631pa4BQ0vNZQtRFqKcCCOBn4xqOZbX2GkuC7ZkQoL4cQ==}
-    dev: false
 
   /mkdirp@0.5.6:
     resolution: {integrity: sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==}

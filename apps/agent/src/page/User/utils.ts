@@ -1,12 +1,12 @@
 import { FieldErrors } from "react-hook-form"
 import {
-  ILLA_MIXPANEL_PUBLIC_PAGE_NAME,
-  ILLA_PAGE_NAME,
-} from "@illa-public/mixpanel-utils"
+  TIPIS_PAGE_NAME,
+  TIPIS_TRACK_PUBLIC_PAGE_NAME,
+} from "@illa-public/track-utils"
 import { IAllFormFields } from "./interface"
 
 export const getValidReportParams = (
-  page: ILLA_PAGE_NAME,
+  page: TIPIS_PAGE_NAME,
   isValid: boolean,
   errors: FieldErrors<IAllFormFields>,
 ) => {
@@ -17,7 +17,7 @@ export const getValidReportParams = (
   }
   const { email, password, nickname, verificationCode, newPassword } = errors
   const errorList = []
-  if (page === ILLA_MIXPANEL_PUBLIC_PAGE_NAME.SIGNUP) {
+  if (page === TIPIS_TRACK_PUBLIC_PAGE_NAME.SIGNUP) {
     if (nickname) {
       if (nickname.type === "required") {
         errorList.push("username_blank")
@@ -30,8 +30,8 @@ export const getValidReportParams = (
   }
 
   if (
-    page === ILLA_MIXPANEL_PUBLIC_PAGE_NAME.SIGNUP ||
-    page === ILLA_MIXPANEL_PUBLIC_PAGE_NAME.FORGET_PASSWORD
+    page === TIPIS_TRACK_PUBLIC_PAGE_NAME.SIGNUP ||
+    page === TIPIS_TRACK_PUBLIC_PAGE_NAME.FORGET_PASSWORD
   ) {
     if (verificationCode && verificationCode.type === "required") {
       errorList.push("verification_code_blank")

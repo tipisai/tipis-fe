@@ -7,15 +7,9 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  ILLA_MIXPANEL_PUBLIC_PAGE_NAME,
-  MixpanelTrackProvider,
-} from "@illa-public/mixpanel-utils"
-import {
   useForgetPasswordMutation,
   useSendVerificationCodeToEmailMutation,
 } from "@illa-public/user-data"
-import { track } from "@/utils/mixpanelHelper"
 import { LOGIN_PATH } from "@/utils/routeHelper"
 import { TIPISStorage } from "@/utils/storage"
 import { ResetPwdFields } from "../interface"
@@ -54,16 +48,7 @@ export const ResetPasswordPage: FC = () => {
         verificationToken,
         ...data,
       })
-      track(
-        ILLA_MIXPANEL_EVENT_TYPE.VALIDATE,
-        ILLA_MIXPANEL_PUBLIC_PAGE_NAME.FORGET_PASSWORD,
-        { element: "send_code", parameter2: "suc" },
-      )
-      track(
-        ILLA_MIXPANEL_EVENT_TYPE.REQUEST,
-        ILLA_MIXPANEL_PUBLIC_PAGE_NAME.FORGET_PASSWORD,
-        { element: "reset_password", parameter2: "suc" },
-      )
+
       navigate(LOGIN_PATH)
       message.success({
         content: t("page.user.forgot_password.tips.success"),
@@ -73,15 +58,7 @@ export const ResetPasswordPage: FC = () => {
         message.error({
           content: t("page.user.forgot_password.tips.fail"),
         })
-        track(
-          ILLA_MIXPANEL_EVENT_TYPE.REQUEST,
-          ILLA_MIXPANEL_PUBLIC_PAGE_NAME.FORGET_PASSWORD,
-          {
-            element: "reset_password",
-            parameter2: "failed",
-            parameter3: e.data?.errorMessage,
-          },
-        )
+
         switch (e.data.errorMessage) {
           case "no such user":
             setErrorMsg({
@@ -92,15 +69,6 @@ export const ResetPasswordPage: FC = () => {
             })
             break
           case "invalid verification code":
-            track(
-              ILLA_MIXPANEL_EVENT_TYPE.VALIDATE,
-              ILLA_MIXPANEL_PUBLIC_PAGE_NAME.FORGET_PASSWORD,
-              {
-                element: "send_code",
-                parameter2: "failed",
-                parameter3: "invalid_code",
-              },
-            )
             setErrorMsg({
               ...errorMsg,
               verificationCode: t(
@@ -131,35 +99,30 @@ export const ResetPasswordPage: FC = () => {
         <title>{t("meta.forget_password_meta_title")}</title>
       </Helmet>
       <FormProvider {...formProps}>
-        <MixpanelTrackProvider
-          basicTrack={track}
-          pageName={ILLA_MIXPANEL_PUBLIC_PAGE_NAME.FORGET_PASSWORD}
-        >
-          <LayoutAutoChange
-            desktopPage={
-              <PCReset
-                loading={loading}
-                errorMsg={errorMsg}
-                onSubmit={onSubmit}
-                sendEmail={handleSendEmail}
-                lockedEmail={email ?? searchParams.get("email") ?? ""}
-                showCountDown={showCountDown}
-                onCountDownChange={setShowCountDown}
-              />
-            }
-            mobilePage={
-              <MobileReset
-                loading={loading}
-                errorMsg={errorMsg}
-                onSubmit={onSubmit}
-                sendEmail={handleSendEmail}
-                lockedEmail={email ?? searchParams.get("email") ?? ""}
-                showCountDown={showCountDown}
-                onCountDownChange={setShowCountDown}
-              />
-            }
-          />
-        </MixpanelTrackProvider>
+        <LayoutAutoChange
+          desktopPage={
+            <PCReset
+              loading={loading}
+              errorMsg={errorMsg}
+              onSubmit={onSubmit}
+              sendEmail={handleSendEmail}
+              lockedEmail={email ?? searchParams.get("email") ?? ""}
+              showCountDown={showCountDown}
+              onCountDownChange={setShowCountDown}
+            />
+          }
+          mobilePage={
+            <MobileReset
+              loading={loading}
+              errorMsg={errorMsg}
+              onSubmit={onSubmit}
+              sendEmail={handleSendEmail}
+              lockedEmail={email ?? searchParams.get("email") ?? ""}
+              showCountDown={showCountDown}
+              onCountDownChange={setShowCountDown}
+            />
+          }
+        />
       </FormProvider>
     </>
   )

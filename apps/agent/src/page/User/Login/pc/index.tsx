@@ -1,15 +1,10 @@
 import Icon from "@ant-design/icons"
 import { Button, Divider, Input } from "antd"
-import { FC, useContext, useEffect, useState } from "react"
+import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { GithubIcon } from "@illa-public/icon"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  ILLA_MIXPANEL_PUBLIC_PAGE_NAME,
-  MixpanelTrackContext,
-} from "@illa-public/mixpanel-utils"
 import { EMAIL_FORMAT, isCloudVersion } from "@illa-public/utils"
 import ErrorMessage from "@/components/InputErrorMessage"
 import LinkButton from "@/components/LinkButton"
@@ -17,7 +12,6 @@ import { FORGOT_PASSWORD_PATH, REGISTER_PATH } from "@/utils/routeHelper"
 import { OAuthButton } from "../../components/OAuthButton"
 import { CAN_SHOW_OAUTH } from "../../constants"
 import { LoginFields } from "../../interface"
-import { getValidReportParams } from "../../utils"
 import { LoginPageProps } from "../interface"
 import {
   containerStyle,
@@ -39,40 +33,10 @@ export const PCLogin: FC<LoginPageProps> = (props) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { onSubmit, errorMsg, lockedEmail, loading } = props
-  const { track } = useContext(MixpanelTrackContext)
 
-  const { handleSubmit, control, formState, getValues, trigger } =
-    useFormContext<LoginFields>()
-  const { errors } = formState
-  const [asyncValid, setAsyncValid] = useState<
-    { isValid: boolean } | undefined
-  >()
-
-  const validReport = async () => {
-    track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      element: "sign_in",
-    })
-
-    let isValid = await trigger()
-    if (isValid) {
-      const params = getValidReportParams(
-        ILLA_MIXPANEL_PUBLIC_PAGE_NAME.LOGIN,
-        true,
-        {},
-      )
-      params &&
-        track(ILLA_MIXPANEL_EVENT_TYPE.VALIDATE, {
-          ...params,
-          element: "sign_in",
-        })
-    }
-    setAsyncValid({ isValid })
-  }
+  const { handleSubmit, control, formState } = useFormContext<LoginFields>()
 
   const handleClickRegister = () => {
-    track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      element: "create_account",
-    })
     navigate({
       pathname: REGISTER_PATH,
       search: location.search,
@@ -80,29 +44,11 @@ export const PCLogin: FC<LoginPageProps> = (props) => {
   }
 
   const handleClickForgotPassword = () => {
-    track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      element: "forget_password",
-    })
     navigate({
       pathname: FORGOT_PASSWORD_PATH,
       search: location.search,
     })
   }
-
-  useEffect(() => {
-    if (asyncValid && !asyncValid.isValid) {
-      const params = getValidReportParams(
-        ILLA_MIXPANEL_PUBLIC_PAGE_NAME.LOGIN,
-        true,
-        errors,
-      )
-      params &&
-        track(ILLA_MIXPANEL_EVENT_TYPE.VALIDATE, {
-          ...params,
-          element: "sign_in",
-        })
-    }
-  }, [asyncValid, errors, track])
 
   return (
     <div css={containerStyle}>
@@ -147,18 +93,6 @@ export const PCLogin: FC<LoginPageProps> = (props) => {
                   variant="filled"
                   placeholder={t("page.user.sign_in.placeholder.email")}
                   {...(lockedEmail && { value: lockedEmail, disabled: true })}
-                  onFocus={() => {
-                    track(ILLA_MIXPANEL_EVENT_TYPE.FOCUS, {
-                      element: "email_input",
-                      parameter3: getValues().email?.length ?? 0,
-                    })
-                  }}
-                  onBlur={() => {
-                    track(ILLA_MIXPANEL_EVENT_TYPE.BLUR, {
-                      element: "email_input",
-                      parameter3: getValues().email?.length ?? 0,
-                    })
-                  }}
                 />
               )}
               rules={{
@@ -217,18 +151,6 @@ export const PCLogin: FC<LoginPageProps> = (props) => {
                   }
                   variant="filled"
                   placeholder={t("page.user.password.placeholder")}
-                  onFocus={() => {
-                    track(ILLA_MIXPANEL_EVENT_TYPE.FOCUS, {
-                      element: "password_input",
-                      parameter3: getValues().password?.length ?? 0,
-                    })
-                  }}
-                  onBlur={() => {
-                    track(ILLA_MIXPANEL_EVENT_TYPE.BLUR, {
-                      element: "password_input",
-                      parameter3: getValues().password?.length ?? 0,
-                    })
-                  }}
                 />
               )}
               rules={{
@@ -256,7 +178,6 @@ export const PCLogin: FC<LoginPageProps> = (props) => {
           loading={loading}
           block
           htmlType="submit"
-          onClick={validReport}
         >
           {t("page.user.sign_in.actions.login")}
         </Button>

@@ -47,7 +47,7 @@
     "@illa-public/invite-modal": "workspace:^",
     "@illa-public/layout-auto-change": "workspace:^",
     "@illa-public/market-agent": "workspace:^",
-    "@illa-public/mixpanel-utils": "workspace:^",
+    "@illa-public/track-utils": "workspace:^",
     "@illa-public/public-configs": "workspace:^",
     "@illa-public/public-types": "workspace:^",
     "@illa-public/record-editor": "workspace:^",

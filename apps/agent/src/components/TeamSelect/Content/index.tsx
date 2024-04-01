@@ -1,13 +1,9 @@
 import Icon from "@ant-design/icons"
 import { Avatar, Divider, Tag } from "antd"
-import { FC, useContext } from "react"
+import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
 import { SuccessIcon } from "@illa-public/icon"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  MixpanelTrackContext,
-} from "@illa-public/mixpanel-utils"
 import { teamActions, useGetTeamsInfoQuery } from "@illa-public/user-data"
 import { setLocalTeamIdentifier } from "@/utils/auth"
 import { isSubscribeForBilling } from "@/utils/billing/isSubscribe"
@@ -24,7 +20,6 @@ const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
     props
   const { t } = useTranslation()
   const teamInfo = useGetCurrentTeamInfo()!
-  const { track } = useContext(MixpanelTrackContext)
 
   const currentTeamId = teamInfo?.id
   const { data } = useGetTeamsInfoQuery(null)
@@ -32,11 +27,6 @@ const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
   const dispatch = useDispatch()
 
   const handleClickCreateTeam = () => {
-    track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      element: "create_team",
-      parameter2: "homepage_select",
-      parameter3: teamItems?.length,
-    })
     openCreateModal?.()
     closePopover()
   }
@@ -58,11 +48,6 @@ const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
             css={switchItemStyle}
             key={index}
             onClick={() => {
-              track?.(
-                ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-                { element: "change_team" },
-                "userRole",
-              )
               switchCurrentTeam(item.id, item.identifier)
             }}
           >

@@ -1,15 +1,11 @@
 import Icon from "@ant-design/icons"
 import { App, Button, Dropdown, MenuProps, Switch } from "antd"
-import { FC, useCallback, useContext, useState } from "react"
+import { FC, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { AuthShown, SHOW_RULES } from "@illa-public/auth-shown"
 import { MoreIcon } from "@illa-public/icon"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  MixpanelTrackContext,
-} from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
 import {
   getTeamItems,
@@ -30,7 +26,6 @@ export const MoreAction: FC = () => {
   const { message, modal } = App.useApp()
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { track } = useContext(MixpanelTrackContext)
   const dispatch = useDispatch()
   const teamInfo = useGetCurrentTeamInfo()!
   const { myRole: currentUserRole, id: currentTeamID } = teamInfo
@@ -44,9 +39,6 @@ export const MoreAction: FC = () => {
   const [updateTeamPermissionConfig] = useUpdateTeamPermissionConfigMutation()
 
   const handleLeaveTeam = useCallback(async () => {
-    track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      element: "leave_modal_leave",
-    })
     try {
       removeTeamMemberByID({
         teamID: teamInfo.id,
@@ -55,10 +47,7 @@ export const MoreAction: FC = () => {
       message.success({
         content: t("team_setting.mes.leave_suc"),
       })
-      track?.(ILLA_MIXPANEL_EVENT_TYPE.REQUEST, {
-        element: "delete",
-        parameter1: "delete_select",
-      })
+
       const teamItems = getTeamItems(store.getState()) ?? []
       const newTeamItems = teamItems.filter((team) => team.id !== teamInfo.id)
       if (Array.isArray(newTeamItems) && newTeamItems.length > 0) {
@@ -86,7 +75,6 @@ export const MoreAction: FC = () => {
     t,
     teamInfo.id,
     teamInfo?.teamMemberID,
-    track,
   ])
 
   const handleClickDeleteOrLeaveTeam = useCallback(() => {
@@ -99,13 +87,9 @@ export const MoreAction: FC = () => {
         danger: true,
       },
       onOk: handleLeaveTeam,
-      onCancel: () => {
-        track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-          element: "leave_modal_cancel",
-        })
-      },
+      onCancel: () => {},
     })
-  }, [handleLeaveTeam, modal, t, track])
+  }, [handleLeaveTeam, modal, t])
 
   const handleChangeInviteByEditor = async (value: boolean) => {
     try {
@@ -179,16 +163,6 @@ export const MoreAction: FC = () => {
       onOpenChange={(show: boolean, { source }) => {
         source !== "menu" && setDropDownShow(show)
         if (show) {
-          track?.(ILLA_MIXPANEL_EVENT_TYPE.SHOW, {
-            element: "more",
-          })
-          track?.(ILLA_MIXPANEL_EVENT_TYPE.SHOW, {
-            element: "allow_manage",
-            parameter2:
-              allowEditorManageTeamMember && allowViewerManageTeamMember
-                ? "on"
-                : "off",
-          })
         }
       }}
       menu={{

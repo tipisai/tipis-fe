@@ -19,12 +19,6 @@ import FormContext from "./components/FormContext"
 import HeaderTools from "./components/HeaderTools"
 import { AgentInitial, IAgentForm } from "./interface"
 
-// import {
-//   track,
-//   trackPageDurationEnd,
-//   trackPageDurationStart,
-// } from "@/utils/mixpanelHelper"
-
 export const CreateAIAgentPage: FC = () => {
   const createTipiTab = useAddCreateTipisTab()
 
@@ -46,20 +40,6 @@ export const CreateAIAgentPage: FC = () => {
   })
 
   const { t } = useTranslation()
-  // useEffect(() => {
-  //   track(
-  //     ILLA_MIXPANEL_EVENT_TYPE.VISIT,
-  //     ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_EDIT,
-  //   )
-  //   trackPageDurationStart()
-  //   return () => {
-  //     trackPageDurationEnd(ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_EDIT)
-  //   }
-  // }, [])
-
-  // useBeforeUnload(() => {
-  //   trackPageDurationEnd(ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_EDIT)
-  // })
 
   const setUiHistoryFormData = useCallback(async () => {
     const cacheID = CREATE_TIPIS_ID

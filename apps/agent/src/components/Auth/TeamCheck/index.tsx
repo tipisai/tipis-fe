@@ -1,6 +1,6 @@
 import { FC } from "react"
 import { Navigate, useParams, useSearchParams } from "react-router-dom"
-import { ILLAMixpanel } from "@illa-public/mixpanel-utils"
+import { TipisTrack } from "@illa-public/track-utils"
 import { useGetTeamsInfoAndCurrentIDQuery } from "@illa-public/user-data"
 import { getILLACloudURL } from "@illa-public/utils"
 import { BaseProtectComponentProps } from "@/router/interface"
@@ -22,7 +22,7 @@ const TeamCheck: FC<BaseProtectComponentProps> = (props) => {
 
   if (error && "status" in error) {
     if (error.status === 401) {
-      ILLAMixpanel.reset()
+      TipisTrack.reset()
       window.location.href = `${getILLACloudURL(window.customDomain)}/user/login?redirectURL=${encodeURIComponent(
         window.location.href,
       )}`
@@ -42,7 +42,10 @@ const TeamCheck: FC<BaseProtectComponentProps> = (props) => {
 
     const currentTeam = data.currentTeamInfo!
 
-    ILLAMixpanel.setGroup(currentTeam.identifier)
+    TipisTrack.group(currentTeam.id, {
+      name: currentTeam.name,
+      identifier: currentTeam.identifier,
+    })
     if (
       Array.isArray(props.needRole) &&
       props.needRole.length > 0 &&

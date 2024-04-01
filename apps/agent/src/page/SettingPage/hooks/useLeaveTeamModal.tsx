@@ -30,15 +30,6 @@ export const useLeaveTeamModal = () => {
   const [deleteTeamByID] = useDeleteTeamByIDMutation()
 
   const handleCancelCallback = () => {
-    // track(
-    //   ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-    //   ILLA_MIXPANEL_CLOUD_PAGE_NAME.TEAM_SETTING,
-    //   {
-    //     element: "delete_modal_cancel",
-    //     parameter1: isOwner ? "delete_button" : undefined,
-    //     team_id: teamInfo?.identifier || "-1",
-    //   },
-    // )
     modalInstance.current?.destroy()
   }
 
@@ -141,31 +132,10 @@ export const useLeaveTeamModal = () => {
         />
       ),
       footer: false,
-      // onOk: deleteTeam,
-      // onCancel: handleCancelCallback,
-      // okText: t("team_setting.delete_modal.delete"),
-      // cancelButtonProps: {
-      //   size: "large",
-      // },
-      // okButtonProps: {
-      //   danger: true,
-      //   size: "large",
-      //   type: "primary",
-      // },
-      // cancelText: t("team_setting.delete_modal.cancel"),
     })
   }
 
   const handleLeaveOrDeleteTeamModal = () => {
-    // track(
-    //   ILLA_MIXPANEL_EVENT_TYPE.SHOW,
-    //   ILLA_MIXPANEL_CLOUD_PAGE_NAME.TEAM_SETTING,
-    //   {
-    //     element: "delete_modal",
-    //     parameter1: isOwner ? "delete_button" : undefined,
-    //     team_id: teamInfo?.identifier || "-1",
-    //   },
-    // )
     if (teamInfo.myRole === USER_ROLE.OWNER) {
       showDeleteTeamModal()
     } else {

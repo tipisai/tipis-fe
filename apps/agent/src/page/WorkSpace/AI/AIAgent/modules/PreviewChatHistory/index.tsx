@@ -1,13 +1,8 @@
 import { FC, memo, useCallback, useContext, useMemo } from "react"
 import { useFormContext } from "react-hook-form"
-import {
-  ILLA_MIXPANEL_BUILDER_PAGE_NAME,
-  MixpanelTrackProvider,
-} from "@illa-public/mixpanel-utils"
 import { PreviewChat } from "@/components/PreviewChat"
 import { ChatMessage } from "@/components/PreviewChat/interface"
 import { getSendMessageBody } from "@/utils/agent/wsUtils"
-import { track } from "@/utils/mixpanelHelper"
 import { AgentWSContext } from "../../../context/AgentWSContext"
 import { IAgentForm } from "../../interface"
 import { IPreviewChatHistoryProps } from "./interface"
@@ -69,14 +64,6 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
 
     const onSendMessage = useCallback(
       (message: ChatMessage) => {
-        // track(
-        //   ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-        //   ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_RUN,
-        //   {
-        //     element: "send",
-        //     parameter5: getValues("aiAgentID"),
-        //   },
-        // )
         const {
           payload,
           signal,
@@ -97,18 +84,13 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
 
     return (
       <div css={rightPanelContainerStyle}>
-        <MixpanelTrackProvider
-          basicTrack={track}
-          pageName={ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_EDIT}
-        >
-          <PreviewChat
-            isMobile={!!props.isMobile}
-            editState="EDIT"
-            blockInput={getIsBlockInputDirty()}
-            onSendMessage={onSendMessage}
-            wsContextValue={wsContext}
-          />
-        </MixpanelTrackProvider>
+        <PreviewChat
+          isMobile={!!props.isMobile}
+          editState="EDIT"
+          blockInput={getIsBlockInputDirty()}
+          onSendMessage={onSendMessage}
+          wsContextValue={wsContext}
+        />
       </div>
     )
   },
