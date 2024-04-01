@@ -40,6 +40,8 @@ const mergeUploadValues = (
   const mergeValues = (values ?? []).map((item) => {
     return {
       ...item,
+      loaded: 100,
+      total: 100,
       status: FILE_ITEM_DETAIL_STATUS_IN_UI.SUCCESS,
       queryID: item.fileID,
     }
@@ -194,6 +196,8 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
               </div>
               <div css={opeationStyle}>
                 <StatusIcon
+                  loaded={fileInfo.loaded}
+                  total={fileInfo.total}
                   status={fileInfo.status}
                   onClickRetry={() => handleClickRetry(fileInfo.queryID)}
                 />

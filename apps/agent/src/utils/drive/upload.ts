@@ -47,9 +47,17 @@ export const useUploadFileToDrive = () => {
       store.updateFileDetailInfo(queryID, {
         status: FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING,
       })
+
+      const processCallback = (loaded: number) => {
+        store.updateFileDetailInfo(queryID!, {
+          loaded: loaded,
+          status: FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING,
+        })
+      }
       const status = await uploadFileToObjectStorage(
         uploadAddress,
         needUploadFile,
+        processCallback,
         abortSignal,
       )
       const updateStatusRes = await putChatFileUploadStatus({
@@ -101,9 +109,17 @@ export const useUploadFileToDrive = () => {
       store.updateFileDetailInfo(queryID, {
         status: FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING,
       })
+
+      const processCallback = (loaded: number) => {
+        store.updateFileDetailInfo(queryID!, {
+          loaded: loaded,
+          status: FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING,
+        })
+      }
       const status = await uploadFileToObjectStorage(
         uploadAddress,
         needUploadFile,
+        processCallback,
         abortSignal,
       )
       const updateStatusRes = await putKnowledgeFileUploadStatus({
