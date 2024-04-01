@@ -15,6 +15,7 @@ env:
   DOCKER_PWD: ${{ secrets.DOCKER_PWD }}
   DO_TOKEN: ${{ secrets.DO_TOKEN }}
   ILLA_INTERCOM_APP_ID: ${{ secrets.ILLA_INTERCOM_APP_ID }}
+  ILLA_POSTHOG_KEY: ${{ secrets.ILLA_POSTHOG_KEY }}
 jobs:
   build:
     name: Build website
