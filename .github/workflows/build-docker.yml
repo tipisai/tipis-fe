@@ -13,7 +13,7 @@ env:
   DO_CLUSTER: ${{ secrets.DO_CLUSTER }}
   DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
   DOCKER_PWD: ${{ secrets.DOCKER_PWD }}
-
+  ILLA_INTERCOM_APP_ID: ${{ secrets.ILLA_INTERCOM_APP_ID }}
 jobs:
   build:
     name: Build website
