@@ -1,6 +1,6 @@
 import { ILLAMixpanel } from "@illa-public/mixpanel-utils"
 import { teamAPI, userAPI } from "@illa-public/user-data"
-import { getAuthToken, sendConfigEvent } from "@illa-public/utils"
+import { getAuthToken } from "@illa-public/utils"
 import store from "@/redux/store"
 import { findRecentTeamInfo } from "../../utils/team"
 
@@ -15,7 +15,6 @@ export const getUserInfoLoader = async () => {
         userAPI.endpoints.getUserInfo.initiate(null),
       )
       const currentUserInfo = await promise.unwrap()
-      sendConfigEvent(currentUserInfo.userID)
       ILLAMixpanel.setUserID(currentUserInfo.userID)
       const reportedUserInfo: Record<string, any> = {}
       Object.entries(currentUserInfo).forEach(([key, value]) => {

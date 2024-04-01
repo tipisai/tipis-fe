@@ -10,9 +10,7 @@ import {
 } from "@illa-public/mixpanel-utils"
 import { Page404 } from "@illa-public/status-page"
 import { useExchangeTokenMutation } from "@illa-public/user-data"
-import { getAuthToken, sendTagEvent, setAuthToken } from "@illa-public/utils"
-import { linkTrk, rdtSignUpTrk, twqTrk } from "@/utils/gaHelper"
-import { LINKEDIN_CONVERSION_ID, TWITTER_ID } from "@/utils/gaHelper/constent"
+import { getAuthToken, setAuthToken } from "@illa-public/utils"
 import { track } from "@/utils/mixpanelHelper"
 import { LINKED_PATH, LOGIN_PATH, REGISTER_PATH } from "@/utils/routeHelper"
 import { mobilePageStyle, pageStyle } from "./style"
@@ -59,12 +57,6 @@ const OAuth: FC = () => {
                   parameter3: !!isNewUser,
                 },
               )
-              if (isNewUser) {
-                sendTagEvent("sign_up", res?.userID)
-                linkTrk(LINKEDIN_CONVERSION_ID.SIGNUP)
-                twqTrk(TWITTER_ID.SIGNUP, res?.userID)
-                rdtSignUpTrk(res?.userID)
-              }
               message.success({
                 content: t("page.user.sign_in.tips.success"),
               })
@@ -90,12 +82,6 @@ const OAuth: FC = () => {
                   parameter3: !!isNewUser,
                 },
               )
-              if (isNewUser) {
-                sendTagEvent("sign_up", res?.userID)
-                linkTrk(LINKEDIN_CONVERSION_ID.SIGNUP)
-                twqTrk(TWITTER_ID.SIGNUP, res?.userID)
-                rdtSignUpTrk(res?.userID)
-              }
               message.success({
                 content: t("page.user.sign_in.tips.success"),
               })

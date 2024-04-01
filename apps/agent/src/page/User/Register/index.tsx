@@ -15,10 +15,8 @@ import {
   useSendVerificationCodeToEmailMutation,
   useSignUpMutation,
 } from "@illa-public/user-data"
-import { sendTagEvent, setAuthToken } from "@illa-public/utils"
+import { setAuthToken } from "@illa-public/utils"
 import { getLocalLanguage } from "@/i18n"
-import { linkTrk, rdtSignUpTrk, twqTrk } from "@/utils/gaHelper"
-import { LINKEDIN_CONVERSION_ID, TWITTER_ID } from "@/utils/gaHelper/constent"
 import { track } from "@/utils/mixpanelHelper"
 import { useNavigateTargetWorkspace } from "@/utils/routeHelper/hook"
 import { TIPISStorage } from "@/utils/storage"
@@ -66,10 +64,6 @@ const RegisterPage: FC = () => {
         language: getLocalLanguage(),
         ...data,
       }).unwrap()
-      sendTagEvent("sign_up", res.userID)
-      linkTrk(LINKEDIN_CONVERSION_ID.SIGNUP)
-      twqTrk(TWITTER_ID.SIGNUP, res.userID)
-      rdtSignUpTrk(res.userID)
       track(
         ILLA_MIXPANEL_EVENT_TYPE.REQUEST,
         ILLA_MIXPANEL_PUBLIC_PAGE_NAME.SIGNUP,
