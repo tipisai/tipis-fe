@@ -1,5 +1,6 @@
+import { isEqual } from "lodash-es"
 import { FC, memo, useCallback, useContext, useMemo } from "react"
-import { useFormContext } from "react-hook-form"
+import { useFormContext, useWatch } from "react-hook-form"
 import { PreviewChat } from "@/components/PreviewChat"
 import { PreviewChatUseProvider } from "@/components/PreviewChat/PreviewChatUseContext"
 import { PREVIEW_CHAT_USE_TO } from "@/components/PreviewChat/PreviewChatUseContext/constants"
@@ -12,7 +13,7 @@ import { rightPanelContainerStyle } from "./style"
 
 const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
   (props: IPreviewChatHistoryProps) => {
-    const { getValues, getFieldState } = useFormContext<IAgentForm>()
+    const { getValues, control } = useFormContext<IAgentForm>()
     const {
       wsStatus,
       isRunning,
@@ -22,10 +23,10 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
       setIsReceiving,
       lastRunAgent,
     } = useContext(AgentWSContext)
-
-    const isPromptDirty = getFieldState("prompt").isDirty
-    const isVariablesDirty = getFieldState("variables").isDirty
-    const isKnowledgeDirty = getFieldState("knowledge").isDirty
+    const [prompt, variables, knowledge] = useWatch({
+      control,
+      name: ["prompt", "variables", "knowledge"],
+    })
 
     const getIsBlockInputDirty = useCallback(() => {
       if (!isRunning) {
@@ -34,14 +35,20 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
       if (lastRunAgent.current === undefined) {
         return true
       }
+      const isPromptDirty = !isEqual(prompt, lastRunAgent.current.prompt)
+
+      const isVariablesDirty = !isEqual(
+        variables,
+        lastRunAgent.current.variables,
+      )
+
+      const isKnowledgeDirty = !isEqual(
+        knowledge,
+        lastRunAgent.current.knowledge,
+      )
+
       return isPromptDirty || isVariablesDirty || isKnowledgeDirty
-    }, [
-      isKnowledgeDirty,
-      isPromptDirty,
-      isRunning,
-      isVariablesDirty,
-      lastRunAgent,
-    ])
+    }, [isRunning, knowledge, lastRunAgent, prompt, variables])
 
     const wsContext = useMemo(
       () => ({
@@ -83,6 +90,8 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
       },
       [getValues, sendMessage],
     )
+
+    console.log("getIsBlockInputDirty()", getIsBlockInputDirty())
 
     return (
       <PreviewChatUseProvider

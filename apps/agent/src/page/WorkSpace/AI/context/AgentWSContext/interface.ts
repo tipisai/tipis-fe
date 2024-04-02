@@ -16,6 +16,7 @@ import {
   CollaboratorsInfo,
   IGroupMessage,
 } from "@/components/PreviewChat/interface"
+import { IAgentForm } from "../../AIAgent/interface"
 
 export interface IAgentWSProviderProps {
   children: ReactNode
@@ -26,7 +27,7 @@ export interface IAgentWSInject
     TipisWebSocketContextType,
     "connect" | "reconnect" | "sendMessage"
   > {
-  lastRunAgent: MutableRefObject<IRunAgentConfig | undefined>
+  lastRunAgent: MutableRefObject<IAgentForm | undefined>
   isConnecting: boolean
   isReceiving: boolean
   isRunning: boolean
