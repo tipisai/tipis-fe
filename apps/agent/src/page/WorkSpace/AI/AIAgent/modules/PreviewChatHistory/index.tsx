@@ -91,8 +91,6 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
       [getValues, sendMessage],
     )
 
-    console.log("getIsBlockInputDirty()", getIsBlockInputDirty())
-
     return (
       <PreviewChatUseProvider
         useTo={

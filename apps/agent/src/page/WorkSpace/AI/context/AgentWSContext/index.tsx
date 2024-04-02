@@ -22,7 +22,11 @@ import {
 import { BILLING_REPORT_FROM } from "@illa-public/upgrade-modal/constants"
 import { getCurrentId } from "@illa-public/user-data"
 import { getTextMessagePayload, getWithFileMessagePayload } from "@/api/ws"
-import { Callback, FILE_SOURCE } from "@/api/ws/interface"
+import {
+  Callback,
+  FILE_SOURCE,
+  ILLA_WEBSOCKET_STATUS,
+} from "@/api/ws/interface"
 import {
   TextSignal,
   TextTarget,
@@ -498,7 +502,13 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
   }, [innerConnect, innerLeaveRoom])
 
   const setCacheState = useCallback(async () => {
-    if (mode && finalTabID && teamID) {
+    if (
+      mode &&
+      finalTabID &&
+      teamID &&
+      wsStatus !== ILLA_WEBSOCKET_STATUS.INIT &&
+      !isConnecting
+    ) {
       setChatMessageAndUIState(
         teamID,
         finalTabID,
@@ -507,7 +517,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
         cacheChatMessages.current,
       )
     }
-  }, [finalTabID, mode, teamID])
+  }, [finalTabID, isConnecting, mode, teamID, wsStatus])
 
   useEffect(() => {
     return () => {
