@@ -3,8 +3,8 @@ import { useCallback } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
-import { isPremiumModel } from "@illa-public/market-agent"
 import { Agent } from "@illa-public/public-types"
+import { TipisTrack } from "@illa-public/track-utils"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import {
   useCreateAgentMutation,
@@ -17,23 +17,6 @@ import { updateUiHistoryData } from "@/utils/localForage/teamData"
 import { useUpdateRecentTabReducer } from "@/utils/recentTabs/baseHook"
 import { useCreateTipiToEditTipi } from "@/utils/recentTabs/hook"
 import { AgentInitial, IAgentForm } from "./interface"
-
-export const agentData2JSONReport = (agent: IAgentForm) => {
-  try {
-    const {
-      agentType,
-      modelConfig: {},
-      model,
-    } = agent
-
-    return JSON.stringify({
-      mode: agentType,
-      model,
-    })
-  } catch (e) {
-    return JSON.stringify({})
-  }
-}
 
 export const handleScrollToElement = (scrollId: string) => {
   const el = document.querySelector(`[data-scroll-id=${scrollId}]`)
@@ -57,15 +40,6 @@ export const useSubmitSaveAgent = () => {
   const handleSubmitSave = useCallback(
     async (data: IAgentForm) => {
       let currentData: IAgentForm = { ...data }
-      if (
-        !isPremiumModel(currentData.model) &&
-        currentData.knowledge?.length > 0
-      ) {
-        currentData = {
-          ...currentData,
-          knowledge: [],
-        }
-      }
 
       let agentInfo: Agent
       try {
@@ -116,6 +90,13 @@ export const useSubmitSaveAgent = () => {
           }).unwrap()
           agentInfo = serverAgent
         }
+
+        TipisTrack.track("save_suc", {
+          parameter1: currentData.aiAgentID ? "edit" : "create",
+          parameter3: Array.isArray(agentInfo.knowledge)
+            ? agentInfo.knowledge.length
+            : 0,
+        })
         const newFormData: Agent = {
           ...agentInfo,
           variables:

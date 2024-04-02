@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { InfoIcon, MoreIcon, PenIcon, ShareIcon } from "@illa-public/icon"
 import { ShareAgentMobile, ShareAgentPC } from "@illa-public/invite-modal"
 import { MemberInfo, USER_ROLE, USER_STATUS } from "@illa-public/public-types"
+import { TipisTrack } from "@illa-public/track-utils"
 import {
   getCurrentTeamInfo,
   getCurrentUser,
@@ -66,6 +67,9 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
 
   const onClickMenuItem: MenuProps["onClick"] = async ({ key, domEvent }) => {
     domEvent.stopPropagation()
+    TipisTrack.track("click_more", {
+      parameter1: "run",
+    })
     switch (key) {
       case "share":
         {
@@ -73,6 +77,9 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
         }
         break
       case "edit": {
+        TipisTrack.track("click_edit_tipi_entry", {
+          parameter1: "run",
+        })
         navigateToEditTipis(agentID)
         break
       }

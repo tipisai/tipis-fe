@@ -4,6 +4,7 @@ import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
 import { SuccessIcon } from "@illa-public/icon"
+import { TipisTrack } from "@illa-public/track-utils"
 import { teamActions, useGetTeamsInfoQuery } from "@illa-public/user-data"
 import { createTeamContext } from "@/Layout/Workspace/context"
 import { setLocalTeamIdentifier } from "@/utils/auth"
@@ -30,6 +31,9 @@ const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
 
   const handleClickCreateTeam = () => {
     onChangeTeamVisible?.(true)
+    TipisTrack.track("click_create_team_entry", {
+      parameter1: "team_selector",
+    })
     closePopover()
   }
 

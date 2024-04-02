@@ -2,6 +2,7 @@ import { List } from "antd"
 import Fuse from "fuse.js"
 import { FC, useContext, useMemo } from "react"
 import { useSelector } from "react-redux"
+import { TipisTrack } from "@illa-public/track-utils"
 import { getCurrentId } from "@illa-public/user-data"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import TeamNoData from "@/components/TeamNoData"
@@ -25,12 +26,19 @@ const TeamCardList: FC<ITeamCardListProps> = (props) => {
 
   const { data, isLoading } = useGetAIAgentListByPageQuery(agentQuery)
 
+  const handleClickCreateTipis = () => {
+    TipisTrack.track("click_create_tipi_entry", {
+      parameter2: "right_corner",
+    })
+    navigateToCreateTipis()
+  }
+
   if (isLoading) {
     return <FullSectionLoading />
   }
 
   if (!data?.aiAgentList || data.aiAgentList.length === 0) {
-    return <TeamNoData showCreate onClickButton={navigateToCreateTipis} />
+    return <TeamNoData showCreate onClickButton={handleClickCreateTipis} />
   }
 
   const fuseSearch = new Fuse(data.aiAgentList, {

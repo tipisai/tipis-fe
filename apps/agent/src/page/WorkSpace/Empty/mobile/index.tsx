@@ -3,6 +3,7 @@ import { Button } from "antd"
 import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { AddIcon } from "@illa-public/icon"
+import { TipisTrack } from "@illa-public/track-utils"
 import { createTeamContext } from "@/Layout/Workspace/context"
 import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayout"
 import EmptyTeamIcon from "@/assets/workspace/emptyTeam.svg?react"
@@ -28,6 +29,9 @@ const EmptyMobile: FC = () => {
             size="large"
             icon={<Icon component={AddIcon} />}
             onClick={() => {
+              TipisTrack.track("click_create_team_entry", {
+                parameter1: "right_blank_dashboard",
+              })
               onChangeTeamVisible?.(true)
             }}
           >

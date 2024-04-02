@@ -8,12 +8,20 @@ import {
   ShareIcon,
   StarOutlineIcon,
 } from "@illa-public/icon"
+import { TipisTrack } from "@illa-public/track-utils"
 import { IActionGroupProps } from "./interface"
 import { actionGroupContainerStyle } from "./style"
 
 const ActionGroup: FC<IActionGroupProps> = (props) => {
   const { isContribute, runNumber, forkNumber, starNumber } = props
   const { t } = useTranslation()
+
+  const handleClickRun = () => {
+    TipisTrack.track("click_run_tipi_entry", {
+      parameter1: "detail",
+    })
+  }
+
   return (
     <div css={actionGroupContainerStyle}>
       <Button
@@ -21,6 +29,7 @@ const ActionGroup: FC<IActionGroupProps> = (props) => {
         block
         icon={<Icon component={PlayFillIcon} />}
         style={{ maxWidth: "307px" }}
+        onClick={handleClickRun}
       >
         {t("dashboard.common.run")} {isContribute ? runNumber : ""}
       </Button>

@@ -1,7 +1,6 @@
 import { Divider } from "antd"
-import { FC, useState } from "react"
+import { FC } from "react"
 import { useGetTeamsInfoQuery } from "@illa-public/user-data"
-import CreateTeamModal from "@/Layout/Workspace/components/CreateTeamModal"
 import FeatureArea from "@/Layout/Workspace/modules/FeatureArea"
 import MenuFooter from "@/Layout/Workspace/modules/MenuFooter"
 import RecentTabs from "@/Layout/Workspace/modules/RecentTabs"
@@ -16,8 +15,6 @@ import {
 } from "./style"
 
 const PCWorkspaceMenu: FC = () => {
-  const [createTeamVisible, setCreateTeamVisible] = useState(false)
-
   const { data, isSuccess } = useGetTeamsInfoQuery(null)
 
   const hasTeamInfos = Array.isArray(data) && data.length > 0
@@ -51,10 +48,6 @@ const PCWorkspaceMenu: FC = () => {
             <MenuFooter />
           </div>
         </section>
-        <CreateTeamModal
-          visible={createTeamVisible}
-          onCancel={() => setCreateTeamVisible(false)}
-        />
       </>
     )
   )

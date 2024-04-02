@@ -1,6 +1,12 @@
 import { memo, useState } from "react"
-import { useFormContext, useFormState, useWatch } from "react-hook-form"
+import {
+  FieldErrors,
+  useFormContext,
+  useFormState,
+  useWatch,
+} from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { TipisTrack } from "@illa-public/track-utils"
 import BlackButton from "@/components/BlackButton"
 import { editPanelUpdateFileDetailStore } from "@/utils/drive"
 import { IAgentForm, SCROLL_ID } from "../../interface"
@@ -18,9 +24,22 @@ const SaveButton = memo(() => {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleVerifyOnSave = async () => {
+    TipisTrack.track("click_save", {
+      parameter1: aiAgentID ? "edit" : "create",
+    })
     setIsLoading(true)
     await trigger()
     let validate = true
+    let reportedErrors: string[] = []
+    Object.keys(errors).forEach((key: string) => {
+      const error = errors[key as keyof FieldErrors<IAgentForm>]
+      if (error && error.type === "required") {
+        reportedErrors.push(`${key}_blank`)
+      }
+      if (error && error.type === "validate" && key === "variables") {
+        reportedErrors.push("variable_key_or_value_blank")
+      }
+    })
     if (!!errors.name) {
       handleScrollToElement(SCROLL_ID.NAME)
       validate = false
@@ -42,6 +61,11 @@ const SaveButton = memo(() => {
       await handleSubmitSave(agentInfo)
       editPanelUpdateFileDetailStore.clearStore()
     }
+    TipisTrack.track("validate_save", {
+      parameter1: aiAgentID ? "edit" : "create",
+      parameter2: validate ? "suc" : "failed",
+      parameter3: reportedErrors,
+    })
     setIsLoading(false)
 
     return validate

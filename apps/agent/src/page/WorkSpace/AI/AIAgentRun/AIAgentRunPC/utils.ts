@@ -1,7 +1,6 @@
 import { useCallback, useContext } from "react"
 import { useFormContext } from "react-hook-form"
 import { useSelector } from "react-redux"
-import { isPremiumModel } from "@illa-public/market-agent"
 import { getCurrentTeamInfo, getPlanUtils } from "@illa-public/user-data"
 import { canUseUpgradeFeature } from "@illa-public/user-role-utils"
 import { IAgentForm } from "../../AIAgent/interface"
@@ -22,7 +21,7 @@ export const useReRerunAgent = () => {
 
   const rerunAgent = useCallback(
     async (data: IAgentForm) => {
-      if (isPremiumModel(data.model) && !canUseBillingFeature) {
+      if (!canUseBillingFeature) {
         // TODO: billing
         // upgradeModal({
         //   modalType: "agent",

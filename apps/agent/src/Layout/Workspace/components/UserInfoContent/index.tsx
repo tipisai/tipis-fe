@@ -1,6 +1,7 @@
 import { Avatar, Popover } from "antd"
 import { FC } from "react"
 import { useSelector } from "react-redux"
+import { TipisTrack } from "@illa-public/track-utils"
 import { getCurrentUser } from "@illa-public/user-data"
 import { getColorByString } from "@illa-public/utils"
 import UserInfoPopoverContent from "../UserInfoPopoverContent"
@@ -17,6 +18,10 @@ const UserInfoContent: FC<IUserInfoContentProps> = (props) => {
   const { isMiniSize = false } = props
   const userInfo = useSelector(getCurrentUser)
 
+  const onClickUserInfo = () => {
+    TipisTrack.track("click_user_name")
+  }
+
   return (
     <Popover
       arrow={false}
@@ -31,7 +36,10 @@ const UserInfoContent: FC<IUserInfoContentProps> = (props) => {
         padding: "8px",
       }}
     >
-      <div css={userInfoContentContainerStyle(isMiniSize)}>
+      <div
+        css={userInfoContentContainerStyle(isMiniSize)}
+        onClick={onClickUserInfo}
+      >
         <div css={avatarContainerStyle}>
           <Avatar
             src={userInfo.avatar}

@@ -4,6 +4,7 @@ import { FC, useContext } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { PlayFillIcon, ResetIcon } from "@illa-public/icon"
+import { TipisTrack } from "@illa-public/track-utils"
 import { editPanelUpdateFileDetailStore } from "@/utils/drive"
 import { AgentWSContext } from "../../../context/AgentWSContext"
 import { IAgentForm, SCROLL_ID } from "../../interface"
@@ -53,6 +54,10 @@ const StartButton: FC<IStartButtonProps> = (props) => {
   }
 
   const handleClickStart = async () => {
+    TipisTrack.track("click_start", {
+      parameter1: getValues("aiAgentID") ? "edit" : "create",
+      parameter3: isRunning ? "restart" : "start",
+    })
     if (!handleVerifyOnStart()) {
       return
     }

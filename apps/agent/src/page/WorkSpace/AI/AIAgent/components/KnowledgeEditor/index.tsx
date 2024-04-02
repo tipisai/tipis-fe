@@ -1,10 +1,10 @@
 import { FC, memo } from "react"
 import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { Agent, IKnowledgeFile } from "@illa-public/public-types"
+import { IKnowledgeFile } from "@illa-public/public-types"
 import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
-import { SCROLL_ID } from "@/page/WorkSpace/AI/AIAgent/interface"
+import { IAgentForm, SCROLL_ID } from "@/page/WorkSpace/AI/AIAgent/interface"
 import KnowledgeUpload from "@/page/WorkSpace/AI/components/KnowledgeUpload"
 import { editPanelUpdateFileDetailStore } from "@/utils/drive"
 import { descStyle } from "./style"
@@ -12,15 +12,15 @@ import { descStyle } from "./style"
 const KnowledgeEditor: FC = memo(() => {
   const { t } = useTranslation()
 
-  const methods = useFormContext<Agent>()
+  const { control } = useFormContext<IAgentForm>()
   const { errors } = useFormState({
-    control: methods.control,
+    control: control,
   })
 
   return (
     <Controller
       name="knowledge"
-      control={methods.control}
+      control={control}
       rules={{
         validate: () => {
           const isValidate = !editPanelUpdateFileDetailStore.hasPendingFile()

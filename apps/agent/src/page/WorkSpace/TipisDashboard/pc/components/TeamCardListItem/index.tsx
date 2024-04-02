@@ -15,6 +15,7 @@ import {
 } from "@illa-public/icon"
 import { ShareAgentPC } from "@illa-public/invite-modal"
 import { MemberInfo, USER_ROLE, USER_STATUS } from "@illa-public/public-types"
+import { TipisTrack } from "@illa-public/track-utils"
 import {
   getCurrentId,
   getCurrentTeamInfo,
@@ -89,11 +90,17 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
 
   const onClickEditButton: MouseEventHandler<HTMLElement> = (e) => {
     e.stopPropagation()
+    TipisTrack.track("click_edit_tipi_entry", {
+      parameter1: "dashboard",
+    })
     navigateToEditTIpis(id)
   }
 
   const onClickRunButton: MouseEventHandler<HTMLElement> = (e) => {
     e.stopPropagation()
+    TipisTrack.track("click_run_tipi_entry", {
+      parameter1: "dashboard",
+    })
     navigateRunTipis(
       {
         tipisID: id,

@@ -13,6 +13,7 @@ import {
   useState,
 } from "react"
 import { PlusIcon, SearchIcon } from "@illa-public/icon"
+import { TipisTrack } from "@illa-public/track-utils"
 import { useNavigateToCreateTipis } from "@/utils/routeHelper/hook"
 import { DASH_BOARD_UI_STATE_ACTION_TYPE } from "../../../context/interface"
 import { DashBoardUIStateContext } from "../../../context/marketListContext"
@@ -57,6 +58,13 @@ const HeaderTools: FC = () => {
     [debounceHandleChange],
   )
 
+  const handleClickCreateTIpis = () => {
+    TipisTrack.track("click_create_tipi_entry", {
+      parameter2: "right_corner",
+    })
+    navigateToCreateTipis()
+  }
+
   return (
     <div css={headerToolsContainerStyle}>
       <Input
@@ -70,7 +78,7 @@ const HeaderTools: FC = () => {
         type="primary"
         icon={<Icon component={PlusIcon} />}
         size="large"
-        onClick={navigateToCreateTipis}
+        onClick={handleClickCreateTIpis}
       >
         {t("dashboard.create")}
       </Button>

@@ -5,6 +5,7 @@ import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { Agent } from "@illa-public/public-types"
+import { TipisTrack } from "@illa-public/track-utils"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import AIIcon from "@/assets/agent/ai.svg?react"
@@ -48,7 +49,11 @@ const DescriptionEditor: FC = memo(() => {
             <div
               css={descContainerStyle}
               onClick={async () => {
-                if (!getValues("prompt")) {
+                TipisTrack.track("click_generate_desc", {
+                  parameter1: getValues("aiAgentID") ? "edit" : "create",
+                })
+                const prompt = getValues("prompt")
+                if (!prompt) {
                   messageApi.error({
                     content: t("editor.ai-agent.generate-desc.blank"),
                   })
@@ -58,7 +63,7 @@ const DescriptionEditor: FC = memo(() => {
                 try {
                   const desc = await generatePromptDescription({
                     teamID: currentTeamInfo.id,
-                    prompt: getValues("prompt"),
+                    prompt: prompt,
                   }).unwrap()
 
                   field.onChange(desc.payload)

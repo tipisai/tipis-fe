@@ -1,6 +1,7 @@
 import { ConfigProvider, List, Tag } from "antd"
 import { FC } from "react"
 import { v4 } from "uuid"
+import { TipisTrack } from "@illa-public/track-utils"
 import TeamCard from "@/components/TeamCard"
 import { useNavigateToRunTipis } from "@/utils/routeHelper/hook"
 import { ITeamCardListItemProps } from "../../../components/TeamCardList/interface"
@@ -15,6 +16,9 @@ const MobileTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
   const navigateRunTipis = useNavigateToRunTipis()
 
   const onClickCard = () => {
+    TipisTrack.track("click_run_tipi_entry", {
+      parameter1: "dashboard",
+    })
     navigateRunTipis(
       {
         tipisID: id,

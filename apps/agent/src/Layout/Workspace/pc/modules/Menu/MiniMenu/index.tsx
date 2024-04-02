@@ -1,10 +1,11 @@
 import Icon from "@ant-design/icons"
 import { Button, Divider } from "antd"
-import { FC, useContext } from "react"
+import { FC, useCallback, useContext } from "react"
 import { NextDoubleIcon } from "@illa-public/icon"
+import { TipisTrack } from "@illa-public/track-utils"
+import UserInfoContent from "@/Layout/Workspace/components/UserInfoContent"
+import RecentTabs from "@/Layout/Workspace/modules/RecentTabs"
 import LogoIcon from "@/assets/public/logo.svg?react"
-import UserInfoContent from "../../../../components/UserInfoContent"
-import RecentTabs from "../../../../modules/RecentTabs"
 import { MenuStatusUIContext } from "../context"
 import {
   dividerContainerStyle,
@@ -20,6 +21,12 @@ import {
 const MiniMenu: FC = () => {
   const { changeCollapsed } = useContext(MenuStatusUIContext)
 
+  const onClickFoldButton = useCallback(() => {
+    TipisTrack.track("click_collapse")
+
+    changeCollapsed(false)
+  }, [changeCollapsed])
+
   return (
     <section css={miniMenuContainerStyle}>
       <div css={miniMenuInnerContainerStyle}>
@@ -31,9 +38,7 @@ const MiniMenu: FC = () => {
             <Button
               icon={<Icon component={NextDoubleIcon} />}
               type="text"
-              onClick={() => {
-                changeCollapsed(false)
-              }}
+              onClick={onClickFoldButton}
             />
           </div>
           <div css={dividerContainerStyle}>
