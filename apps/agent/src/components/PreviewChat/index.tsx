@@ -66,8 +66,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const { isMobile, blockInput, editState, onSendMessage, wsContextValue } =
     props
 
-  const { clearErrors, getValues, setError, reset } =
-    useFormContext<IAgentForm>()
+  const { getValues } = useFormContext<IAgentForm>()
 
   const {
     wsStatus,
