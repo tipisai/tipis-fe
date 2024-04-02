@@ -322,7 +322,7 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
                 }),
               )
             }}
-            onShare={(platform) => {}}
+            onShare={(_platform) => {}}
             teamPlan={getPlanUtils(currentTeamInfo)}
           />
         )}
