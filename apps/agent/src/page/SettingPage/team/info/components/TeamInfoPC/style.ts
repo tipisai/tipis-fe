@@ -7,21 +7,6 @@ export const settingWrapperStyle = css`
   gap: 64px;
 `
 
-export const avatarStyle = css`
-  width: 120px;
-  height: 120px;
-  flex: none;
-`
-
-export const editLabelStyle = css`
-  margin-top: 8px;
-  text-align: center;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 22px;
-  color: ${getColor("grayBlue", "02")};
-`
-
 export const formStyle = css`
   width: 600px;
 `
@@ -61,4 +46,21 @@ export const forgotPwdContainerStyle: SerializedStyles = css`
 export const gridItemStyle: SerializedStyles = css`
   display: grid;
   gap: 8px;
+`
+
+export const uploadContentContainerStyle = css`
+  color: ${getColor("grayBlue", "04")};
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  object-fit: cover;
+  object-position: center;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  + .ant-image-mask {
+    border-radius: 50%;
+    inset: 1px;
+  }
 `

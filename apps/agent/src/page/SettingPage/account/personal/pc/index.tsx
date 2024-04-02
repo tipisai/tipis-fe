@@ -1,21 +1,21 @@
-import { Avatar, Button, Input } from "antd"
+import { App, Button, GetProp, Image, Input, Upload, UploadProps } from "antd"
+import ImgCrop from "antd-img-crop"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { AvatarUpload } from "@illa-public/cropper"
+import { FILE_SIZE_LIMIT } from "@illa-public/cropper/constants"
 import { useGetUserInfoQuery } from "@illa-public/user-data"
-import { getColorByString } from "@illa-public/utils"
 import ErrorMessage from "@/components/InputErrorMessage"
 import { Header } from "@/page/SettingPage/components/Header"
 import { AccountSettingFields, AccountSettingProps } from "../interface"
 import Logout from "./logout"
 import {
   contentContainerStyle,
-  editLabelStyle,
   formContainerStyle,
   formLabelStyle,
   gridItemStyle,
   tipTextStyle,
+  uploadContentContainerStyle,
 } from "./style"
 import { gridFormFieldStyle } from "./style"
 
@@ -27,16 +27,20 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
     control,
     formState,
     formState: { isDirty },
-    trigger,
   } = useFormContext<AccountSettingFields>()
+
+  const { message } = App.useApp()
 
   const { data: userInfo } = useGetUserInfoQuery(null)
 
-  const validReport = async () => {
-    let valid = await trigger()
-    if (!valid) {
-    } else {
+  const handleBeforeUpload = (
+    file: Parameters<GetProp<UploadProps, "beforeUpload">>[0],
+  ) => {
+    if (file.size >= FILE_SIZE_LIMIT) {
+      message.error(t("image_exceed"))
+      return false
     }
+    return true
   }
 
   return (
@@ -44,24 +48,33 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
       <Header title={t("profile.setting.personal_info")} extra={<Logout />} />
       <div css={contentContainerStyle}>
         <div>
-          <AvatarUpload onOk={handleUpdateAvatar}>
-            <Avatar
-              shape="circle"
-              size={120}
-              src={userInfo?.avatar}
-              style={{
-                fontSize: "60px",
-                background: userInfo?.avatar
-                  ? "#ffffff"
-                  : getColorByString(userInfo?.userID || ""),
-              }}
-            >
-              {userInfo?.nickname ? userInfo.nickname[0].toUpperCase() : "U"}
-            </Avatar>
-
-            <span css={editLabelStyle}>{t("editor.ai-agent.save")}</span>
-          </AvatarUpload>
+          <ImgCrop
+            rotationSlider
+            onModalOk={(v) => {
+              handleUpdateAvatar(v as File)
+            }}
+            beforeCrop={handleBeforeUpload}
+            cropShape="round"
+          >
+            <Upload listType="picture-circle" showUploadList={false}>
+              {userInfo?.avatar ? (
+                <Image
+                  src={userInfo?.avatar}
+                  width="100px"
+                  height="100px"
+                  css={uploadContentContainerStyle}
+                  preview={{
+                    visible: false,
+                    mask: "+ Upload",
+                  }}
+                />
+              ) : (
+                "+ Upload"
+              )}
+            </Upload>
+          </ImgCrop>
         </div>
+
         <form onSubmit={handleSubmit?.(onSubmit)} css={formContainerStyle}>
           <section css={gridFormFieldStyle}>
             <section css={gridItemStyle}>
@@ -122,7 +135,6 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
                 type="primary"
                 size="large"
                 disabled={!isDirty}
-                onClick={validReport}
                 htmlType="submit"
               >
                 {t("profile.setting.save")}

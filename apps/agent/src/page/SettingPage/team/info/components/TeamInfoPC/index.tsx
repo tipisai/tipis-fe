@@ -1,9 +1,9 @@
-import { App, Button, Input } from "antd"
+import { App, Button, GetProp, Image, Input, Upload, UploadProps } from "antd"
+import ImgCrop from "antd-img-crop"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { Avatar } from "@illa-public/avatar"
-import { AvatarUpload } from "@illa-public/cropper"
+import { FILE_SIZE_LIMIT } from "@illa-public/cropper/constants"
 import { USER_ROLE } from "@illa-public/public-types"
 import { isBiggerThanTargetRole } from "@illa-public/user-role-utils"
 import ErrorMessage from "@/components/InputErrorMessage"
@@ -15,8 +15,6 @@ import { TeamInfoFields } from "@/page/SettingPage/team/interface"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import { TeamInfoPCProps } from "./interface"
 import {
-  avatarStyle,
-  editLabelStyle,
   forgotPwdContainerStyle,
   formLabelStyle,
   formStyle,
@@ -25,14 +23,14 @@ import {
   gridItemStyle,
   leaveLabelStyle,
   settingWrapperStyle,
+  uploadContentContainerStyle,
 } from "./style"
 
 const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
   const { t } = useTranslation()
   const { message } = App.useApp()
   const { onSubmit, loading, disabled } = props
-  const { handleSubmit, control, formState, trigger } =
-    useFormContext<TeamInfoFields>()
+  const { handleSubmit, control, formState } = useFormContext<TeamInfoFields>()
   const teamInfo = useGetCurrentTeamInfo()!
   const handleLeaveOrDeleteTeamModal = useLeaveTeamModal()
 
@@ -40,7 +38,7 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
 
   const isOwner = teamInfo?.myRole === USER_ROLE.OWNER
 
-  const handleUpdateTeamIcon = async (file: Blob) => {
+  const handleUpdateTeamIcon = async (file: File) => {
     try {
       const icon = await uploadTeamIcon(file)
       return (await onSubmit?.({ icon })) as boolean
@@ -52,14 +50,17 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
     }
   }
 
-  const validReport = async () => {
-    let valid = await trigger()
-    if (!valid) {
-    } else {
+  const handleBeforeUpload = (
+    file: Parameters<GetProp<UploadProps, "beforeUpload">>[0],
+  ) => {
+    if (file.size >= FILE_SIZE_LIMIT) {
+      message.error(t("image_exceed"))
+      return false
     }
+    return true
   }
 
-  const canEditorTeamMobile = isBiggerThanTargetRole(
+  const canEditorTeamInfo = isBiggerThanTargetRole(
     USER_ROLE.OWNER,
     teamInfo?.myRole,
   )
@@ -73,23 +74,35 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
       <Header title={t("team_setting.team_info.title")} />
       <div css={settingWrapperStyle}>
         <div>
-          <AvatarUpload
-            onOk={handleUpdateTeamIcon}
-            disabled={!canEditorTeamMobile}
+          <ImgCrop
+            rotationSlider
+            onModalOk={(v) => {
+              handleUpdateTeamIcon(v as File)
+            }}
+            beforeCrop={handleBeforeUpload}
+            cropShape="round"
           >
-            <Avatar
-              css={avatarStyle}
-              id={teamInfo?.id}
-              name={teamInfo?.name}
-              avatarUrl={teamInfo?.icon}
-              onClick={() => {
-                if (!canEditorTeamMobile) return
-              }}
-            />
-            {canEditorTeamMobile && (
-              <span css={editLabelStyle}>{t("editor.ai-agent.save")}</span>
-            )}
-          </AvatarUpload>
+            <Upload
+              listType="picture-circle"
+              showUploadList={false}
+              disabled={!canEditorTeamInfo}
+            >
+              {teamInfo?.icon ? (
+                <Image
+                  src={teamInfo?.icon}
+                  width="100px"
+                  height="100px"
+                  css={uploadContentContainerStyle}
+                  preview={{
+                    visible: false,
+                    mask: "+ Upload",
+                  }}
+                />
+              ) : (
+                "+ Upload"
+              )}
+            </Upload>
+          </ImgCrop>
         </div>
         <form css={formStyle} onSubmit={handleSubmit?.(onSubmit)}>
           <header css={formTitleStyle}>
@@ -176,7 +189,6 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
             htmlType="submit"
             loading={loading}
             disabled={disabled}
-            onClick={validReport}
           >
             {t("team_setting.team_info.save")}
           </Button>

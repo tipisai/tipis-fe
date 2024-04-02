@@ -7,8 +7,9 @@ import RunPythonIcon from "@/assets/agent/message-python.svg?react"
 import GetTimeIcon from "@/assets/agent/message-time.svg?react"
 import LottieItem from "@/components/LottieItem"
 import { MESSAGE_STATUS } from "@/components/PreviewChat/interface"
-import reading from "@/config/lottieConfig/reading.json"
-import runningPythonCode from "@/config/lottieConfig/runningPythonCode.json"
+import GetCurrentTimeIcon from "@/config/lottieConfig/getCurrentTime.json"
+import ReadingIcon from "@/config/lottieConfig/reading.json"
+import RunningPythonCodeIcon from "@/config/lottieConfig/runningPythonCode.json"
 import { RUN_REQUEST_TYPE } from "./constants"
 import { infoIconStyle } from "./style"
 
@@ -40,7 +41,9 @@ export const useGetInfoByStatus = () => {
 
         default:
         case MESSAGE_STATUS.ANALYZE_PENDING: {
-          InfoIcon = <LottieItem configJson={runningPythonCode} autoplay loop />
+          InfoIcon = (
+            <LottieItem configJson={RunningPythonCodeIcon} autoplay loop />
+          )
           InfoTitle = t("homepage.tipi_chat.processing_status.title.python")
           infoDesc = t("homepage.tipi_chat.processing_status.processing")
           break
@@ -80,7 +83,7 @@ export const useGetInfoByStatus = () => {
 
         default:
         case MESSAGE_STATUS.ANALYZE_PENDING: {
-          InfoIcon = <LottieItem configJson={reading} autoplay loop />
+          InfoIcon = <LottieItem configJson={ReadingIcon} autoplay loop />
           InfoTitle = t("homepage.tipi_chat.processing_status.title.read_file")
           infoDesc = t("homepage.tipi_chat.processing_status.processing")
           break
@@ -126,7 +129,9 @@ export const useGetInfoByStatus = () => {
 
         default:
         case MESSAGE_STATUS.ANALYZE_PENDING: {
-          InfoIcon = <LottieItem configJson={reading} autoplay loop />
+          InfoIcon = (
+            <LottieItem configJson={GetCurrentTimeIcon} autoplay loop />
+          )
           InfoTitle = t(
             "homepage.tipi_chat.processing_status.title.current_time",
           )
@@ -145,6 +150,7 @@ export const useGetInfoByStatus = () => {
 
   const getInfoByStatus = useCallback(
     (status: MESSAGE_STATUS, runRequestType: RUN_REQUEST_TYPE | undefined) => {
+      return getTimeInfoByStatue(status)
       switch (runRequestType) {
         case RUN_REQUEST_TYPE._SYS_READ_FILE: {
           return getReadFileInfoByStatus(status)
