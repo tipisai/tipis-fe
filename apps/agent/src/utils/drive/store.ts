@@ -98,8 +98,7 @@ export class UploadFileStore {
     return this.fileDetailInfos.some(
       (item) =>
         item.status === FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING ||
-        item.status === FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING ||
-        item.status === FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
+        item.status === FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING,
     )
   }
 }

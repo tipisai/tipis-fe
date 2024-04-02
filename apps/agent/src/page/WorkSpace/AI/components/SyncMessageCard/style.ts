@@ -45,6 +45,33 @@ export const textAndIconContainerStyle = css`
   align-items: center;
 `
 
+export const iconStyle = (status: MESSAGE_STATUS) => {
+  let textColor = getColor("techPurple", "03")
+  let bgColor = getColor("techPurple", "08")
+  switch (status) {
+    case MESSAGE_STATUS.ANALYZE_FAILED:
+      textColor = getColor("red", "03")
+      bgColor = getColor("red", "08")
+      break
+    case MESSAGE_STATUS.ANALYZE_STOP:
+      textColor = getColor("grayBlue", "04")
+      bgColor = getColor("grayBlue", "09")
+      break
+  }
+
+  return css`
+    height: 32px;
+    width: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${bgColor};
+    border-radius: 50%;
+    flex: none;
+    color: ${textColor};
+  `
+}
+
 export const infoTextContainerStyle = css`
   display: flex;
   width: 100%;
@@ -129,20 +156,19 @@ export const messageContainerStyle = css`
 `
 
 export const infoIconStyle = css`
-  font-size: 32px;
-`
-export const codeRunningStyle = css`
-  height: 32px;
-  width: 32px;
-  background-color: ${getColor("techPurple", "08")};
-  border-radius: 50%;
-  flex: none;
+  font-size: 24px;
 `
 
 export const actionIconStyle = css`
   font-size: 16px;
   width: 16px;
   flex: none;
+`
+
+export const lottieLoadingStyle = css`
+  width: 32px;
+  height: 32px;
+  padding: 8px;
 `
 export const hoverCopyStyle = css`
   display: inline-flex;
@@ -160,7 +186,7 @@ export const hoverCopyStyle = css`
 
 export const lineContainerStyle = css`
   display: flex;
-  padding: 0px 28px;
+  padding: 0px 32px;
   align-items: flex-start;
   gap: 8px;
 `
