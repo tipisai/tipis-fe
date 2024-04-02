@@ -150,7 +150,6 @@ export const useGetInfoByStatus = () => {
 
   const getInfoByStatus = useCallback(
     (status: MESSAGE_STATUS, runRequestType: RUN_REQUEST_TYPE | undefined) => {
-      return getTimeInfoByStatue(status)
       switch (runRequestType) {
         case RUN_REQUEST_TYPE._SYS_READ_FILE: {
           return getReadFileInfoByStatus(status)
