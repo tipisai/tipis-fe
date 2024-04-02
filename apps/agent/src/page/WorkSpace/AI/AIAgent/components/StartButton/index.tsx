@@ -3,9 +3,18 @@ import { Button } from "antd"
 import { FC, useContext } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { useMatch } from "react-router-dom"
 import { PlayFillIcon, ResetIcon } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
+import { getCurrentId } from "@illa-public/user-data"
+import store from "@/redux/store"
+import {
+  EDIT_TIPI_TEMPLATE_PATH,
+  WORKSPACE_LAYOUT_PATH,
+} from "@/router/constants"
 import { editPanelUpdateFileDetailStore } from "@/utils/drive"
+import { removeChatMessageAndUIState } from "@/utils/localForage/teamData"
+import { CREATE_TIPIS_ID } from "@/utils/recentTabs/constants"
 import { AgentWSContext } from "../../../context/AgentWSContext"
 import { IAgentForm, SCROLL_ID } from "../../interface"
 import { handleScrollToElement } from "../../utils"
@@ -19,6 +28,10 @@ const StartButton: FC<IStartButtonProps> = (props) => {
 
   const { clearErrors, getValues, setError, reset } =
     useFormContext<IAgentForm>()
+
+  const editTipiPathMatch = useMatch(
+    `${WORKSPACE_LAYOUT_PATH}/${EDIT_TIPI_TEMPLATE_PATH}`,
+  )
 
   const handleVerifyOnStart = () => {
     clearErrors()
@@ -61,8 +74,26 @@ const StartButton: FC<IStartButtonProps> = (props) => {
     if (!handleVerifyOnStart()) {
       return
     }
+    if (isRunning) {
+      const currentTeamID = getCurrentId(store.getState())!
+      if (editTipiPathMatch) {
+        await removeChatMessageAndUIState(
+          currentTeamID,
+          editTipiPathMatch.params.agentID!,
+          "edit",
+        )
+      } else {
+        await removeChatMessageAndUIState(
+          currentTeamID,
+          CREATE_TIPIS_ID,
+          "create",
+        )
+      }
+      await reconnect()
+    } else {
+      await connect()
+    }
 
-    isRunning ? await reconnect() : await connect()
     reset(lastRunAgent.current)
     props.onClickCallback?.()
   }

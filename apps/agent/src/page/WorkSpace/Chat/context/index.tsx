@@ -4,11 +4,14 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
 } from "react"
 import { useTranslation } from "react-i18next"
+import { useSelector } from "react-redux"
+import { useBeforeUnload, useParams } from "react-router-dom"
 import {
   CreditModalType,
   handleCreditPurchaseError,
@@ -18,7 +21,11 @@ import { BILLING_REPORT_FROM } from "@illa-public/upgrade-modal/constants"
 import { getCurrentId } from "@illa-public/user-data"
 import { getTextMessagePayload, getWithFileMessagePayload } from "@/api/ws"
 import { Callback, FILE_SOURCE } from "@/api/ws/interface"
-import { TextSignal, TextTarget } from "@/api/ws/textSignal"
+import {
+  TextSignal,
+  TextTarget,
+  WEBSOCKET_ERROR_CODE,
+} from "@/api/ws/textSignal"
 import defaultChatIconURL from "@/assets/public/tipiChatAvatar.png"
 import { TipisWebSocketContext } from "@/components/PreviewChat/TipisWebscoketContext"
 import {
@@ -44,6 +51,10 @@ import {
   formatSendMessagePayload,
   groupReceivedMessagesForUI,
 } from "@/utils/agent/wsUtils"
+import {
+  getChatMessageAndUIState,
+  setChatMessageAndUIState,
+} from "@/utils/localForage/teamData"
 import {
   ICachePayloadQueue,
   IChatStableWSInject,
@@ -71,7 +82,10 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     (IGroupMessage | ChatMessage)[]
   >([])
   const chatMessagesRef = useRef<(IGroupMessage | ChatMessage)[]>([])
+  const cacheChatMessages = useRef<unknown[]>([])
   const cacheMessageQueue = useRef<ICachePayloadQueue[]>([])
+  const teamID = useSelector(getCurrentId)
+  const { chatID } = useParams()
 
   const [triggerGetAIAgentAnonymousAddressQuery] =
     useLazyGetAIAgentAnonymousAddressQuery()
@@ -98,11 +112,6 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     )
     chatMessagesRef.current = newMessageList
     setChatMessages(newMessageList)
-  }, [])
-
-  const cleanMessage = useCallback(() => {
-    chatMessagesRef.current = []
-    setChatMessages([])
   }, [])
 
   const { sendMessage, connect, wsStatus, leaveRoom } = useContext(
@@ -213,6 +222,48 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     }
   }, [startSendMessage])
 
+  const initChatMessage = useCallback(async () => {
+    if (!teamID || !chatID) {
+      return
+    }
+
+    const { chatMessageData, uiChatMessage } = await getChatMessageAndUIState(
+      teamID,
+      chatID,
+      "run",
+    )
+    if (
+      Array.isArray(uiChatMessage) &&
+      Array.isArray(chatMessageData) &&
+      uiChatMessage.length > 0 &&
+      chatMessageData.length > 0
+    ) {
+      setChatMessages(uiChatMessage)
+      chatMessagesRef.current = uiChatMessage
+      const textMessage = getTextMessagePayload(
+        TextSignal.RECOVER_HISTORY_MESSAGE,
+        TextTarget.ACTION,
+        true,
+        {
+          type: "",
+          payload: "",
+        },
+        "",
+        "",
+        chatMessageData,
+      )
+      sendMessage(textMessage)
+      return
+    }
+    setChatMessages([])
+    chatMessagesRef.current = []
+    startSendMessage(
+      {} as ChatSendRequestPayload,
+      TextSignal.CLEAN_CHAT_HISTORY,
+      SEND_MESSAGE_WS_TYPE.CLEAN,
+    )
+  }, [chatID, sendMessage, startSendMessage, teamID])
+
   const onMessageSuccessCallback = useCallback(
     (callback: Callback<unknown>) => {
       switch (callback.broadcast?.type) {
@@ -221,16 +272,10 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
             inRoomUsers: CollaboratorsInfo[]
           }
           onUpdateRoomUser(inRoomUsers)
-          cleanMessage()
-          startSendMessage(
-            {} as ChatSendRequestPayload,
-            TextSignal.CLEAN,
-            SEND_MESSAGE_WS_TYPE.CLEAN,
-          )
+          initChatMessage()
           break
         case "chat/remote":
           let chatCallback = callback.broadcast.payload as ChatWsAppendResponse
-
           onUpdateChatMessage(chatCallback)
           break
         case "stop_all/remote":
@@ -240,20 +285,20 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           break
       }
     },
-    [cleanMessage, startSendMessage, onUpdateChatMessage, onUpdateRoomUser],
+    [onUpdateRoomUser, initChatMessage, onUpdateChatMessage],
   )
 
   const onMessageFailedCallback = useCallback(
     (callback: Callback<unknown>) => {
       switch (callback.errorCode) {
-        case 1:
+        case WEBSOCKET_ERROR_CODE.ERROR_CODE_FAILED:
           setIsReceiving(false)
           setIsRunning(false)
           messageAPI.error({
             content: t("editor.ai-agent.message.start-failed"),
           })
           break
-        case 15:
+        case WEBSOCKET_ERROR_CODE.ERROR_MESSAGE_END:
           const needUpdateMessageList = cancelPendingMessage(
             chatMessagesRef.current,
           )
@@ -263,26 +308,51 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           }
           setIsReceiving(false)
           break
-        case 16:
+        case WEBSOCKET_ERROR_CODE.CONTEXT_LENGTH_EXCEEDED:
           messageAPI.error({
             content: t("editor.ai-agent.message.token"),
           })
           break
-        case 17:
-        case 18:
+        case WEBSOCKET_ERROR_CODE.INSUFFICIENT_CREDIT:
+        case WEBSOCKET_ERROR_CODE.AI_AGENT_MAX_TOKEN_OVER_CREDIT_BALANCE:
           creditModal({
             modalType: CreditModalType.TOKEN,
             from: BILLING_REPORT_FROM.RUN,
           })
           break
-        case 3:
-          break
-        case 21:
+        case WEBSOCKET_ERROR_CODE.CHAT_FILE_PROCESS_END:
           clearCacheQueue()
           break
+        default: {
+          break
+        }
       }
     },
     [clearCacheQueue, creditModal, messageAPI, t],
+  )
+
+  const onMessageCallBack = useCallback(
+    (callBackMessage: Callback<unknown>) => {
+      switch (callBackMessage.errorCode) {
+        case WEBSOCKET_ERROR_CODE.ERROR_CODE_OK: {
+          onMessageSuccessCallback(callBackMessage)
+          break
+        }
+        case WEBSOCKET_ERROR_CODE.HISTORY_MESSAGE: {
+          cacheChatMessages.current = [
+            ...cacheChatMessages.current,
+            callBackMessage.broadcast.payload,
+          ]
+
+          break
+        }
+        default: {
+          onMessageFailedCallback(callBackMessage)
+          break
+        }
+      }
+    },
+    [onMessageFailedCallback, onMessageSuccessCallback],
   )
 
   const getConnectParams = useCallback(async () => {
@@ -298,9 +368,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
         onReceiving: (isReceiving) => {
           setIsReceiving(isReceiving)
         },
-
-        onMessageSuccessCallback,
-        onMessageFailedCallback,
+        onMessageCallBack,
         address: aiAgentConnectionAddress,
       }
       return initConnectConfig
@@ -311,13 +379,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
         content: t("editor.ai-agent.message.start-failed"),
       })
     }
-  }, [
-    messageAPI,
-    onMessageFailedCallback,
-    onMessageSuccessCallback,
-    t,
-    triggerGetAIAgentAnonymousAddressQuery,
-  ])
+  }, [messageAPI, onMessageCallBack, t, triggerGetAIAgentAnonymousAddressQuery])
 
   const innerConnect = useCallback(async () => {
     const initConnectConfig = await getConnectParams()
@@ -328,9 +390,8 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
   }, [connect, getConnectParams])
 
   const innerLeaveRoom = useCallback(() => {
-    cleanMessage()
     leaveRoom()
-  }, [cleanMessage, leaveRoom])
+  }, [leaveRoom])
 
   const innerReconnect = useCallback(async () => {
     innerLeaveRoom()
@@ -359,6 +420,26 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     }),
     [chatMessages, inRoomUsers, isConnecting, isReceiving, isRunning, wsStatus],
   )
+
+  const setCacheState = useCallback(() => {
+    if (chatID && teamID && chatMessagesRef.current.length > 0) {
+      setChatMessageAndUIState(
+        teamID,
+        chatID,
+        "run",
+        chatMessagesRef.current,
+        cacheChatMessages.current,
+      )
+    }
+  }, [chatID, teamID])
+
+  useEffect(() => {
+    return () => {
+      setCacheState()
+    }
+  }, [setCacheState])
+
+  useBeforeUnload(setCacheState)
 
   return (
     <ChatStableWSContext.Provider value={stableValue}>

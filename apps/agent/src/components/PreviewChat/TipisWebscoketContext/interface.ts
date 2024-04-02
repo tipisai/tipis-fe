@@ -37,7 +37,6 @@ export interface TipisWebSocketProviderProps {
 export interface IInitWSCallback {
   onReceiving: (isReceiving: boolean) => void
   onConnecting: (isConnecting: boolean) => void
-  onMessageSuccessCallback: (callbackData: Callback<unknown>) => void
-  onMessageFailedCallback: (callbackData: Callback<unknown>) => void
+  onMessageCallBack: (callbackData: Callback<unknown>) => void
   address: string
 }

@@ -1,14 +1,18 @@
 import { FC, useCallback, useContext, useEffect, useMemo, useRef } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
+import { useSelector } from "react-redux"
+import { getCurrentId } from "@illa-public/user-data"
 import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { PreviewChat } from "@/components/PreviewChat"
 import { PreviewChatUseProvider } from "@/components/PreviewChat/PreviewChatUseContext"
 import { PREVIEW_CHAT_USE_TO } from "@/components/PreviewChat/PreviewChatUseContext/constants"
 import { ChatMessage } from "@/components/PreviewChat/interface"
 import { getSendMessageBody } from "@/utils/agent/wsUtils"
+import { getChatMessageAndUIState } from "@/utils/localForage/teamData"
 import { IAgentForm } from "../../AIAgent/interface"
 import { ChatContext } from "../../components/ChatContext"
 import { AgentWSContext } from "../../context/AgentWSContext"
+import { useGetModeAndTabID } from "../../hook"
 import { InputVariablesModalContext } from "./context/InputVariablesModalContext"
 import { rightPanelContainerStyle } from "./style"
 
@@ -20,6 +24,7 @@ export const AIAgentRunPC: FC = () => {
     name: ["variables", "model", "prompt", "agentType"],
   })
 
+  const teamID = useSelector(getCurrentId)
   const { canOpenModal, changeIsModalOpen } = useContext(
     InputVariablesModalContext,
   )
@@ -52,6 +57,7 @@ export const AIAgentRunPC: FC = () => {
   }, [isRunning, isVariablesDirty, lastRunAgent])
 
   const onlyConnectOnce = useRef(false)
+  const { mode, finalTabID } = useGetModeAndTabID()
 
   const wsContext = useMemo(
     () => ({
@@ -100,20 +106,42 @@ export const AIAgentRunPC: FC = () => {
     }
   }, [leaveRoom, wsStatus])
 
-  const initRunAgent = useCallback(() => {
-    if (!hasVariables) {
+  const initRunAgent = useCallback(async () => {
+    const { chatMessageData, uiChatMessage } = await getChatMessageAndUIState(
+      teamID!,
+      finalTabID,
+      mode,
+    )
+
+    const hasChatHistory =
+      Array.isArray(uiChatMessage) &&
+      Array.isArray(chatMessageData) &&
+      uiChatMessage.length > 0 &&
+      chatMessageData.length > 0
+
+    if (!hasVariables || hasChatHistory) {
       if (
         onlyConnectOnce.current === false &&
         wsStatus === ILLA_WEBSOCKET_STATUS.INIT
       ) {
         connect()
         onlyConnectOnce.current = true
+        canOpenModal.current = false
       }
       return
     }
     if (!canOpenModal.current) return
     changeIsModalOpen(true)
-  }, [canOpenModal, changeIsModalOpen, connect, hasVariables, wsStatus])
+  }, [
+    canOpenModal,
+    changeIsModalOpen,
+    connect,
+    finalTabID,
+    hasVariables,
+    mode,
+    teamID,
+    wsStatus,
+  ])
 
   useEffect(() => {
     initRunAgent()

@@ -3,18 +3,11 @@ import { SEND_MESSAGE_WS_TYPE } from "@/components/PreviewChat/TipisWebscoketCon
 import {
   ChatMessage,
   ChatSendRequestPayload,
-  ChatWsAppendResponse,
   IGroupMessage,
   MESSAGE_STATUS,
   MESSAGE_SYNC_TYPE,
 } from "@/components/PreviewChat/interface"
 import { AgentInitial } from "@/page/WorkSpace/AI/AIAgent/interface"
-import {
-  getEditCacheChatMessage,
-  getRunCacheChatMessage,
-  setEditCacheChatMessage,
-  setRunCacheChatMessage,
-} from "../localForage/teamData"
 import { isGroupMessage, isNormalMessage } from "./typeHelper"
 
 export const formatSendMessagePayload = (payload: ChatSendRequestPayload) => {
@@ -188,57 +181,5 @@ export const groupReceivedMessagesForUI = (
       handleUpdateMessageList(curMessage, message)
     }
   }
-  return newMessageList
-}
-
-export const groupReceivedMessagesForCache = async (
-  mode: "edit" | "run",
-  cacheInfo: {
-    teamID: string
-    cacheID: string
-  },
-  message: ChatWsAppendResponse,
-) => {
-  const setChatMessageCache =
-    mode === "run" ? setRunCacheChatMessage : setEditCacheChatMessage
-  const getChatMessageCache =
-    mode === "run" ? getRunCacheChatMessage : getEditCacheChatMessage
-  const oldMessage = await getChatMessageCache(
-    cacheInfo.teamID,
-    cacheInfo.cacheID,
-  )
-
-  const newMessageList = [...oldMessage] as ChatWsAppendResponse[]
-  switch (message.messageType) {
-    case MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_CHAT: {
-      const prevChatMessage = newMessageList.find(
-        (m) =>
-          m.threadID === message.threadID &&
-          m.messageType === message.messageType,
-      )
-      if (prevChatMessage) {
-        prevChatMessage.message = prevChatMessage.message + message.message
-      } else {
-        newMessageList.push(message)
-      }
-      break
-    }
-    case MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST: {
-      const prevChatMessage = newMessageList.find(
-        (m) =>
-          m.threadID === message.threadID &&
-          m.messageType === message.messageType,
-      )
-      if (prevChatMessage) {
-        prevChatMessage.message = prevChatMessage.message + message.message
-      } else {
-        newMessageList.push(message)
-      }
-      break
-    }
-    case MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_OK:
-    case MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_ERROR:
-  }
-  setChatMessageCache(cacheInfo.teamID, cacheInfo.cacheID, newMessageList)
   return newMessageList
 }

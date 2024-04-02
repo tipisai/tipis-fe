@@ -48,11 +48,13 @@ const TipisTab: FC<ITipsTab> = (props) => {
     e.preventDefault()
     TipisTrack.track("click_close_tab")
     const newTabs = allRecentTabs.filter((tab) => tab.tabID !== tabID)
-    function removeTab() {
-      deleteTab(tabID)
+    async function removeTab() {
+      await deleteTab(tabID)
 
       if (newTabs.length === 1) {
-        navigate(getChatPath(currentTeamInfo?.identifier ?? ""))
+        setTimeout(() => {
+          navigate(getChatPath(currentTeamInfo?.identifier ?? ""))
+        }, 180)
         return
       }
       const latestTab = newTabs[0]
@@ -62,7 +64,9 @@ const TipisTab: FC<ITipsTab> = (props) => {
         latestTab.cacheID,
         latestTab.tabID,
       )
-      navigate(newPath)
+      setTimeout(() => {
+        navigate(newPath)
+      }, 180)
     }
     if (shouldModelTipTabTypes.includes(tabType)) {
       const uiHistoryData = await getUiHistoryDataByCacheID(

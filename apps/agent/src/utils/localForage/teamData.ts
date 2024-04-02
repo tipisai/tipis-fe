@@ -1,12 +1,12 @@
 import { klona } from "klona/json"
-import {
-  ChatSendRequestPayload,
-  ChatWsAppendResponse,
-} from "@/components/PreviewChat/interface"
 import { ITabInfo } from "@/redux/ui/recentTab/interface"
 import { INIT_TABS } from "@/redux/ui/recentTab/state"
 import { teamDataDataBase } from "."
-import { ITeamData, IUiHistoryData } from "./interface"
+import {
+  ChatMessage,
+  IGroupMessage,
+} from "../../components/PreviewChat/interface"
+import { IChatUIState, ITeamData, IUiHistoryData } from "./interface"
 
 export const getTeamDataByTeamID = async (teamID: string) => {
   return await teamDataDataBase.getItem<ITeamData>(teamID)
@@ -66,6 +66,10 @@ export const getTabs = async (teamID: string) => {
   const tabsInfo = teamData.tabsInfo ?? INIT_TABS
   return tabsInfo
 }
+export const getTargetTab = async (teamID: string, tabID: string) => {
+  const tabs = await getTabs(teamID)
+  return tabs.find((tab) => tab.tabID === tabID)
+}
 
 export const setTabs = async (teamID: string, tabInfos: ITabInfo[]) => {
   const teamData = await getTeamDataByTeamID(teamID)
@@ -80,15 +84,20 @@ export const addTabs = async (teamID: string, tabInfo: ITabInfo) => {
   await setTabs(teamID, newTabs)
 }
 
-export const removeTabs = async (teamID: string, tabID: string) => {
-  const tabs = await getTabs(teamID)
+export const removeTabsAndCacheData = async (teamID: string, tabID: string) => {
+  const teamData = await getTeamDataByTeamID(teamID)
+  if (!teamData) return
+  const tabs = teamData.tabsInfo ?? []
   const targetTab = tabs.find((tab) => tab.tabID === tabID)
   if (!targetTab) return
   const cacheID = targetTab.cacheID
-
+  const cacheUIHistory = teamData.uiHistory ?? {}
+  delete cacheUIHistory[cacheID]
   const newTabs = tabs.filter((tab) => tab.tabID !== tabID)
-  await setTabs(teamID, newTabs)
-  await deleteUiHistoryData(teamID, cacheID)
+  const newTeamData = klona(teamData)
+  newTeamData.tabsInfo = newTabs
+  newTeamData.uiHistory = cacheUIHistory
+  setTeamDataByTeamID(teamID, newTeamData)
 }
 
 export const updateTabs = async (
@@ -109,11 +118,6 @@ export const updateTabs = async (
   await setTabs(teamID, newTabs)
 }
 
-export const getCacheChatMessage = async (teamID: string, cacheID: string) => {
-  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
-  return uiHistoryCacheData.chatMessage ?? []
-}
-
 export const getEditCacheChatMessage = async (
   teamID: string,
   cacheID: string,
@@ -128,104 +132,6 @@ export const getRunCacheChatMessage = async (
 ) => {
   const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
   return uiHistoryCacheData.chatMessage?.run ?? []
-}
-
-export const setEditCacheChatMessage = async (
-  teamID: string,
-  tabID: string,
-  chatMessages: (ChatWsAppendResponse | ChatSendRequestPayload)[],
-) => {
-  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, tabID)
-  const newUIHistoryCacheData = klona(uiHistoryCacheData ?? {})
-  if (!newUIHistoryCacheData.chatMessage) {
-    newUIHistoryCacheData.chatMessage = { edit: [], run: [] }
-  }
-  if (!Array.isArray(newUIHistoryCacheData.chatMessage.edit)) {
-    newUIHistoryCacheData.chatMessage.edit = []
-  }
-  newUIHistoryCacheData.chatMessage.edit = chatMessages
-
-  await setUiHistoryData(teamID, tabID, newUIHistoryCacheData)
-}
-
-export const addEditCacheChatMessage = async (
-  teamID: string,
-  tabID: string,
-  chatMessage: ChatWsAppendResponse | ChatSendRequestPayload,
-) => {
-  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, tabID)
-  const newUIHistoryCacheData = klona(uiHistoryCacheData ?? {})
-  if (!newUIHistoryCacheData.chatMessage) {
-    newUIHistoryCacheData.chatMessage = { edit: [], run: [] }
-  }
-  if (!Array.isArray(newUIHistoryCacheData.chatMessage.edit)) {
-    newUIHistoryCacheData.chatMessage.edit = []
-  }
-  newUIHistoryCacheData.chatMessage.edit.push(chatMessage)
-
-  await setUiHistoryData(teamID, tabID, newUIHistoryCacheData)
-}
-
-export const deleteEditCacheChatMessage = async (
-  teamID: string,
-  tabID: string,
-) => {
-  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, tabID)
-  const newUIHistoryCacheData = klona(uiHistoryCacheData ?? {})
-  if (!newUIHistoryCacheData.chatMessage) {
-    newUIHistoryCacheData.chatMessage = { edit: [], run: [] }
-  }
-  newUIHistoryCacheData.chatMessage.edit = []
-  await setUiHistoryData(teamID, tabID, newUIHistoryCacheData)
-}
-
-export const setRunCacheChatMessage = async (
-  teamID: string,
-  tabID: string,
-  chatMessages: (ChatWsAppendResponse | ChatSendRequestPayload)[],
-) => {
-  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, tabID)
-  const newUIHistoryCacheData = klona(uiHistoryCacheData ?? {})
-  if (!newUIHistoryCacheData.chatMessage) {
-    newUIHistoryCacheData.chatMessage = { edit: [], run: [] }
-  }
-  if (!Array.isArray(newUIHistoryCacheData.chatMessage.run)) {
-    newUIHistoryCacheData.chatMessage.run = []
-  }
-  newUIHistoryCacheData.chatMessage.run = chatMessages
-
-  await setUiHistoryData(teamID, tabID, newUIHistoryCacheData)
-}
-
-export const addRunCacheChatMessage = async (
-  teamID: string,
-  tabID: string,
-  chatMessage: ChatWsAppendResponse | ChatSendRequestPayload,
-) => {
-  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, tabID)
-  const newUIHistoryCacheData = klona(uiHistoryCacheData ?? {})
-  if (!newUIHistoryCacheData.chatMessage) {
-    newUIHistoryCacheData.chatMessage = { edit: [], run: [] }
-  }
-  if (!Array.isArray(newUIHistoryCacheData.chatMessage.run)) {
-    newUIHistoryCacheData.chatMessage.run = []
-  }
-  newUIHistoryCacheData.chatMessage.run.push(chatMessage)
-
-  await setUiHistoryData(teamID, tabID, newUIHistoryCacheData)
-}
-
-export const deleteRunCacheChatMessage = async (
-  teamID: string,
-  tabID: string,
-) => {
-  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, tabID)
-  const newUIHistoryCacheData = klona(uiHistoryCacheData ?? {})
-  if (!newUIHistoryCacheData.chatMessage) {
-    newUIHistoryCacheData.chatMessage = { edit: [], run: [] }
-  }
-  newUIHistoryCacheData.chatMessage.run = []
-  await setUiHistoryData(teamID, tabID, newUIHistoryCacheData)
 }
 
 export const getCacheUIState = async (teamID: string, cacheID: string) => {
@@ -248,5 +154,64 @@ export const deleteCacheUIState = async (teamID: string, cacheID: string) => {
   const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
   const newUIHistoryCacheData = klona(uiHistoryCacheData ?? {})
   newUIHistoryCacheData.uiState = undefined
+  await setUiHistoryData(teamID, cacheID, newUIHistoryCacheData)
+}
+
+export const getChatMessageAndUIState = async (
+  teamID: string,
+  cacheID: string,
+  mode: "edit" | "run" | "create",
+) => {
+  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
+  const chatMessageData = uiHistoryCacheData.chatMessage?.[mode] ?? []
+  const uiChatMessage =
+    (uiHistoryCacheData.uiState as IChatUIState)?.[mode] ?? []
+  return { chatMessageData, uiChatMessage }
+}
+
+export const setChatMessageAndUIState = async (
+  teamID: string,
+  cacheID: string,
+  mode: "edit" | "run" | "create",
+  uiChatMessage: (IGroupMessage | ChatMessage)[],
+  chatMessageData: unknown[],
+) => {
+  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
+  const newUIHistoryCacheData = klona(uiHistoryCacheData ?? {})
+  if (!newUIHistoryCacheData.chatMessage) {
+    newUIHistoryCacheData.chatMessage = { edit: [], run: [], create: [] }
+  }
+  if (!newUIHistoryCacheData.uiState) {
+    newUIHistoryCacheData.uiState = {
+      edit: [],
+      run: [],
+    }
+  }
+
+  newUIHistoryCacheData.chatMessage[mode] = chatMessageData
+  ;(newUIHistoryCacheData.uiState as IChatUIState)[mode] = uiChatMessage
+
+  await setUiHistoryData(teamID, cacheID, newUIHistoryCacheData)
+}
+
+export const removeChatMessageAndUIState = async (
+  teamID: string,
+  cacheID: string,
+  mode: "edit" | "run" | "create",
+) => {
+  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
+  const newUIHistoryCacheData = klona(uiHistoryCacheData ?? {})
+  if (!newUIHistoryCacheData.chatMessage) {
+    newUIHistoryCacheData.chatMessage = { edit: [], run: [], create: [] }
+  }
+  if (!newUIHistoryCacheData.uiState) {
+    newUIHistoryCacheData.uiState = {
+      edit: [],
+      run: [],
+      create: [],
+    }
+  }
+  newUIHistoryCacheData.chatMessage[mode] = []
+  ;(newUIHistoryCacheData.uiState as IChatUIState)[mode] = []
   await setUiHistoryData(teamID, cacheID, newUIHistoryCacheData)
 }
