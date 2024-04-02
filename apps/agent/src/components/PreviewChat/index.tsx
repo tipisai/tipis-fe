@@ -10,6 +10,7 @@ import {
   useRef,
   useState,
 } from "react"
+import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { v4 } from "uuid"
@@ -25,6 +26,7 @@ import {
   MAX_FILE_SIZE,
   MAX_MESSAGE_FILES_LENGTH,
 } from "@/config/constants/knowledge"
+import { IAgentForm } from "@/page/WorkSpace/AI/AIAgent/interface"
 import AIAgentMessage from "@/page/WorkSpace/AI/components/AIAgentMessage"
 import GroupAgentMessage from "@/page/WorkSpace/AI/components/GroupAgentMessage"
 import UserMessage from "@/page/WorkSpace/AI/components/UserMessage"
@@ -63,6 +65,9 @@ import {
 export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const { isMobile, blockInput, editState, onSendMessage, wsContextValue } =
     props
+
+  const { clearErrors, getValues, setError, reset } =
+    useFormContext<IAgentForm>()
 
   const {
     wsStatus,
@@ -137,13 +142,35 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   }, [chatMessages, currentUserInfo.userID, isMobile, isReceiving])
 
   const handleDeleteFile = (fileName: string, queryID?: string) => {
+    TipisTrack.track("chat_file_delete", {
+      parameter1:
+        editState === "EDIT"
+          ? getValues("aiAgentID")
+            ? "edit_tipi"
+            : "create_tipi"
+          : "run",
+    })
     const files = knowledgeFiles.filter((file) => file.fileName !== fileName)
     setKnowledgeFiles(files)
     queryID && chatUploadStore.deleteFileDetailInfo(queryID)
   }
 
   const handleClickUploadFile = () => {
+    const parameter1 =
+      editState === "EDIT"
+        ? getValues("aiAgentID")
+          ? "edit_tipi"
+          : "create_tipi"
+        : "run"
+
+    TipisTrack.track("click_upload_chat_file_entry", {
+      parameter1,
+    })
     if (knowledgeFiles.length >= MAX_MESSAGE_FILES_LENGTH) {
+      TipisTrack.track("chat_file_over_num", {
+        parameter1,
+        parameter3: knowledgeFiles.length + 1,
+      })
       messageAPI.warning({
         content: t("dashboard.message.support_for_up_to_10"),
       })
@@ -155,13 +182,27 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     let inputFiles = Array.from(e.target.files || [])
     inputRef.current && (inputRef.current.value = "")
+    const parameter1 =
+      editState === "EDIT"
+        ? getValues("aiAgentID")
+          ? "edit_tipi"
+          : "create_tipi"
+        : "run"
+
     if (!inputFiles.length) return
     if (inputFiles.length + knowledgeFiles.length > MAX_MESSAGE_FILES_LENGTH) {
+      TipisTrack.track("chat_file_over_num", {
+        parameter1,
+        parameter3: inputFiles.length + knowledgeFiles.length,
+      })
       messageAPI.warning({
         content: t("dashboard.message.support_for_up_to_10"),
       })
       return
     }
+    TipisTrack.track("start_upload_chat_file", {
+      parameter1,
+    })
     setUploadKnowledgeLoading(true)
     const currentFiles = [...knowledgeFiles]
 
@@ -183,14 +224,18 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
         const { fileName, file, abortController } = item
         if (!file) break
         if (file.size > MAX_FILE_SIZE) {
+          TipisTrack.track("chat_file_over_size", {
+            parameter1,
+            parameter3: file.size,
+          })
           messageAPI.warning({
             content: t("dashboard.message.please_use_a_file_wi"),
           })
-          setKnowledgeFiles(knowledgeFiles)
-          chatUploadStore.mulDeleteFileDetailInfo(
-            formatFiles.map((item) => item.queryID),
+          setKnowledgeFiles(
+            currentFiles.filter((file) => file.fileName !== item.fileName),
           )
-          return
+          chatUploadStore.deleteFileDetailInfo(item.queryID)
+          continue
         }
         const fileID = await uploadChatFile(
           item.queryID,

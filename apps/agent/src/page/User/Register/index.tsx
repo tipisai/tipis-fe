@@ -64,6 +64,7 @@ const RegisterPage: FC = () => {
 
       const token = res.token
       if (!token) return
+      TipisTrack.track("sign_up")
       message.success(t("page.user.sign_up.tips.success"))
       setAuthToken(token)
       searchParams.delete("inviteToken")

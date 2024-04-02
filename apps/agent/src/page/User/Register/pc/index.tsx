@@ -46,6 +46,7 @@ export const PCRegister: FC<RegisterProps> = (props) => {
     useFormContext<RegisterFields>()
 
   const handleClickLogin = () => {
+    TipisTrack.track("click_sign_in_entry")
     navigate({ pathname: LOGIN_PATH, search: location.search })
   }
 
