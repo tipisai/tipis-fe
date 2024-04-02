@@ -43,6 +43,7 @@ const UploadKnowledgeFiles: FC<UploadKnowledgeFilesPops> = ({
               padding: "5px 8px",
               borderRadius: "12px",
               backgroundColor: "white",
+              marginInlineEnd: 0,
             }}
             icon={
               <StatusIcon

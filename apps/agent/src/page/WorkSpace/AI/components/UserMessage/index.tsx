@@ -27,7 +27,9 @@ export const UserMessage: FC<UserMessageProps> = (props) => {
           )}
         {message.message && (
           <div css={messageContainerStyle}>
-            <MarkdownMessage isOwnMessage>{message.message}</MarkdownMessage>
+            <MarkdownMessage isOwnMessage disableTrigger={isMobile}>
+              {message.message}
+            </MarkdownMessage>
           </div>
         )}
       </div>

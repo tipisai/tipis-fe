@@ -8,6 +8,7 @@ export const fileItemContainerStyle = css`
   flex-wrap: wrap;
   max-height: 150px;
   overflow-y: auto;
+  gap: 8px;
 `
 
 export const fileNameStyle = css`
