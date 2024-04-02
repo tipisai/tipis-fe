@@ -304,9 +304,14 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   }, [currentUserInfo.userID, knowledgeFiles, onSendMessage, textAreaVal])
 
   const handleClickSend = () => {
+    const realSendKnowledgeFiles = knowledgeFiles.filter(
+      (item) => !!item.fileID,
+    )
     TipisTrack.track("click_send", {
+      parameter2: realSendKnowledgeFiles.length,
       parameter3: "click",
     })
+
     sendAndClearMessage()
   }
 
@@ -315,12 +320,17 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   ) => {
     if (event.keyCode === 13 && !event.shiftKey) {
       event.preventDefault()
-      TipisTrack.track("click_send", {
-        parameter3: "enter",
-      })
+
       if (disableSend) {
         return
       }
+      const realSendKnowledgeFiles = knowledgeFiles.filter(
+        (item) => !!item.fileID,
+      )
+      TipisTrack.track("click_send", {
+        parameter2: realSendKnowledgeFiles.length,
+        parameter3: "enter",
+      })
       sendAndClearMessage()
     }
   }

@@ -2,6 +2,7 @@ import Icon from "@ant-design/icons"
 import { Button } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
+import { v4 } from "uuid"
 import {
   ForkIcon,
   PlayFillIcon,
@@ -9,17 +10,35 @@ import {
   StarOutlineIcon,
 } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
+import { useNavigateToRunTipis } from "@/utils/routeHelper/hook"
 import { IActionGroupProps } from "./interface"
 import { actionGroupContainerStyle } from "./style"
 
 const ActionGroup: FC<IActionGroupProps> = (props) => {
-  const { isContribute, runNumber, forkNumber, starNumber } = props
+  const {
+    isContribute,
+    runNumber,
+    forkNumber,
+    starNumber,
+    tipisID,
+    tipisIcon,
+    tipisName,
+  } = props
   const { t } = useTranslation()
+  const navigateToRun = useNavigateToRunTipis()
 
   const handleClickRun = () => {
     TipisTrack.track("click_run_tipi_entry", {
       parameter1: "detail",
     })
+    navigateToRun(
+      {
+        tipisIcon,
+        tipisID,
+        tipisName,
+      },
+      v4(),
+    )
   }
 
   return (
