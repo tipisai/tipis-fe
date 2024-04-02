@@ -156,7 +156,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     if (knowledgeFiles.length >= MAX_MESSAGE_FILES_LENGTH) {
       TipisTrack.track("chat_file_over_num", {
         parameter1: useTo,
-        parameter3: knowledgeFiles.length + 1,
+        parameter3: knowledgeFiles.length,
       })
       messageAPI.warning({
         content: t("dashboard.message.support_for_up_to_10"),

@@ -19,9 +19,9 @@ const getUsedEnv = (env: Record<string, string>) => {
       usedEnv[`process.env.${key}`] = JSON.stringify(value)
     }
   })
-  const appVersion = `${JSON.stringify(pkg.name)}-${JSON.stringify(pkg.version)}`
-  usedEnv[`import.meta.env.ILLA_APP_VERSION`] = appVersion
-  usedEnv[`process.env.ILLA_APP_VERSION`] = appVersion
+  const appVersion = `${pkg.name}-${pkg.version}`
+  usedEnv[`import.meta.env.ILLA_APP_VERSION`] = JSON.stringify(appVersion)
+  usedEnv[`process.env.ILLA_APP_VERSION`] = JSON.stringify(appVersion)
   return usedEnv
 }
 
