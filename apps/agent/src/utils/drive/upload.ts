@@ -10,7 +10,6 @@ import {
   usePutKnowledgeFileUploadStatusMutation,
 } from "@/redux/services/driveAPI"
 import { uploadFileToObjectStorage } from "@/services/drive"
-import { DEFAULT_CONTENT_TYPE } from "./constant"
 import { FILE_ITEM_DETAIL_STATUS_IN_UI } from "./interface"
 import { UploadFileStore } from "./store"
 
@@ -39,7 +38,7 @@ export const useUploadFileToDrive = () => {
       })
       const { uploadAddress, fileID } = await triggerGetChatUploadAddress({
         name: needUploadFile.name,
-        contentType: needUploadFile.type || DEFAULT_CONTENT_TYPE,
+        contentType: needUploadFile.type,
         size: needUploadFile.size,
         teamID,
       }).unwrap()
