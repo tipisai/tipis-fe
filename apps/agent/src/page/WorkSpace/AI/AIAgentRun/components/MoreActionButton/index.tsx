@@ -291,7 +291,7 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
                 }),
               )
             }}
-            onShare={(platform) => {}}
+            onShare={(_platform) => {}}
             teamPlan={getPlanUtils(currentTeamInfo)}
           />
         ))}
