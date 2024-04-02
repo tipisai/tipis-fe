@@ -27,7 +27,7 @@ export function getWithFileMessagePayload(
   fileSource: FILE_SOURCE,
 ): string {
   return JSON.stringify({
-    signal: TextSignal.SIGNAL_ADD_CHAT_FILE,
+    signal: TextSignal.ADD_CHAT_FILE,
     target: TextTarget.ACTION,
     option: 0,
     broadcast: {

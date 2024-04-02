@@ -1,4 +1,4 @@
-import { TextSignal, TextTarget } from "./textSignal"
+import { TextSignal, TextTarget, WEBSOCKET_ERROR_CODE } from "./textSignal"
 
 export enum ILLA_WEBSOCKET_STATUS {
   INIT = "INIT",
@@ -21,7 +21,7 @@ export interface Callback<T> {
   // string
   errorMessage: string
   // 0 success, not zero error
-  errorCode: number
+  errorCode: WEBSOCKET_ERROR_CODE
   target: TextTarget
   signal: TextSignal
 }

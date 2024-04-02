@@ -1,15 +1,16 @@
-import {
-  ChatSendRequestPayload,
-  ChatWsAppendResponse,
-} from "@/components/PreviewChat/interface"
 import { IAgentForm } from "@/page/WorkSpace/AI/AIAgent/interface"
 import { ITabInfo } from "@/redux/ui/recentTab/interface"
+import {
+  ChatMessage,
+  IGroupMessage,
+} from "../../components/PreviewChat/interface"
 
 export interface IUiHistoryData {
   formData?: IAgentForm
   chatMessage?: {
-    edit: (ChatWsAppendResponse | ChatSendRequestPayload)[]
-    run: (ChatWsAppendResponse | ChatSendRequestPayload)[]
+    create: unknown[]
+    edit: unknown[]
+    run: unknown[]
   }
   uiState?: unknown
 }
@@ -23,4 +24,10 @@ export interface ITeamData {
 
 export interface ITeamDataDatabase {
   [key: string]: ITeamData
+}
+
+export interface IChatUIState {
+  edit: (IGroupMessage | ChatMessage)[]
+  run: (IGroupMessage | ChatMessage)[]
+  create: (IGroupMessage | ChatMessage)[]
 }

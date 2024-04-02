@@ -10,6 +10,15 @@ import RootPage from "../page/RootPage"
 import UserLayout from "../page/User/Layout/index"
 import Empty from "../page/WorkSpace/Empty"
 import { buildRouter } from "./buildRouter"
+import {
+  CHAT_TEMPLATE_PATH,
+  CREATE_TIPI_TEMPLATE_PATH,
+  EDIT_TIPI_TEMPLATE_PATH,
+  RUN_TIPI_TEMPLATE_PATH,
+  TIPIS_DASHBOARD_TEMPLATE_PATH,
+  TIPI_DETAIL_TEMPLATE_PATH,
+  WORKSPACE_LAYOUT_PATH,
+} from "./constants"
 import { RoutesObjectPro } from "./interface"
 import { rootLoader } from "./loader/rootLoader"
 
@@ -131,7 +140,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     ],
   },
   {
-    path: "/workspace",
+    path: WORKSPACE_LAYOUT_PATH,
     element: <WorkspaceLayout />,
     ProtectComponent: TeamAndLoginCheck,
     accessByMobile: true,
@@ -142,7 +151,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         element: <Navigate to="chat/DEFAULT_CHAT" replace />,
       },
       {
-        path: ":teamIdentifier/chat/:chatID",
+        path: CHAT_TEMPLATE_PATH,
         accessByMobile: true,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
@@ -151,7 +160,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         ),
       },
       {
-        path: ":teamIdentifier/tipis",
+        path: TIPIS_DASHBOARD_TEMPLATE_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <TipisDashboard />
@@ -160,7 +169,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         accessByMobile: true,
       },
       {
-        path: ":teamIdentifier/tipi/create",
+        path: CREATE_TIPI_TEMPLATE_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <CreateAgentPage />
@@ -169,7 +178,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         accessByMobile: true,
       },
       {
-        path: ":teamIdentifier/tipi/:agentID/edit",
+        path: EDIT_TIPI_TEMPLATE_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <EditAgentPage />
@@ -178,7 +187,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         accessByMobile: true,
       },
       {
-        path: ":teamIdentifier/tipi/:agentID/detail",
+        path: TIPI_DETAIL_TEMPLATE_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <TipiDetailPage />
@@ -195,7 +204,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         accessByMobile: true,
       },
       {
-        path: ":teamIdentifier/tipi/:agentID/run/:tabID?",
+        path: RUN_TIPI_TEMPLATE_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <RunAgentPage />

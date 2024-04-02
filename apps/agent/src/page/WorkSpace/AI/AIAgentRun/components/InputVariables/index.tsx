@@ -3,8 +3,12 @@ import { Modal } from "antd"
 import { FC, useContext } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { useParams } from "react-router-dom"
 import { PlayFillIcon, ResetIcon } from "@illa-public/icon"
+import { getCurrentId } from "@illa-public/user-data"
 import BlackButton from "@/components/BlackButton"
+import store from "@/redux/store"
+import { removeChatMessageAndUIState } from "@/utils/localForage/teamData"
 import { IAgentForm } from "../../../AIAgent/interface"
 import { AgentWSContext } from "../../../context/AgentWSContext"
 import { InputVariablesModalContext } from "../../AIAgentRunPC/context/InputVariablesModalContext"
@@ -16,6 +20,7 @@ const InputVariables: FC = () => {
   const { isModalOpen, changeCanOpenModal, changeIsModalOpen } = useContext(
     InputVariablesModalContext,
   )
+  const { tabID } = useParams()
   const [variables] = useWatch({
     control,
     name: ["variables"],
@@ -28,6 +33,8 @@ const InputVariables: FC = () => {
   const onClickStart = async () => {
     changeIsModalOpen(false)
     changeCanOpenModal(false)
+    const currentTeamID = getCurrentId(store.getState())!
+    await removeChatMessageAndUIState(currentTeamID, tabID!, "run")
     isRunning ? await reconnect() : await connect()
     reset(lastRunAgent.current)
   }

@@ -8,7 +8,7 @@ export const modalBodyCOntainerStyle = css`
 
 export const inputAreaContainerStyle = css`
   display: flex;
-  padding: 8px 24px;
+  padding: 8px 0;
   flex-direction: column;
   justify-content: center;
   align-items: center;

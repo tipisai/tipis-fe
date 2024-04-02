@@ -8,6 +8,7 @@ import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
 import store from "@/redux/store"
 import {
+  getTargetTab,
   getUiHistoryDataByCacheID,
   setUiHistoryData,
 } from "@/utils/localForage/teamData"
@@ -44,6 +45,8 @@ export const CreateAIAgentPage: FC = () => {
   const setUiHistoryFormData = useCallback(async () => {
     const cacheID = CREATE_TIPIS_ID
     const teamID = getCurrentId(store.getState())!
+    const tab = await getTargetTab(teamID, cacheID)
+    if (!tab) return
     const uiHistoryData = await getUiHistoryDataByCacheID(teamID, cacheID)
     if (uiHistoryData) {
       const { formData } = uiHistoryData
