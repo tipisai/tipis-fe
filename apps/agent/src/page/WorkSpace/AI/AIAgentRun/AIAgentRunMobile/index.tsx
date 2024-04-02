@@ -2,6 +2,8 @@ import { FC, useCallback, useContext, useEffect, useMemo } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { PreviewChat } from "@/components/PreviewChat"
+import { PreviewChatUseProvider } from "@/components/PreviewChat/PreviewChatUseContext"
+import { PREVIEW_CHAT_USE_TO } from "@/components/PreviewChat/PreviewChatUseContext/constants"
 import { ChatMessage } from "@/components/PreviewChat/interface"
 import { getSendMessageBody } from "@/utils/agent/wsUtils"
 import { IAgentForm } from "../../AIAgent/interface"
@@ -82,8 +84,8 @@ export const AIAgentRunMobile: FC = () => {
   }, [agentType, aiAgentID, connect, isConnecting, wsStatus])
 
   return (
-    <>
-      <ChatContext.Provider value={{ inRoomUsers }}>
+    <ChatContext.Provider value={{ inRoomUsers }}>
+      <PreviewChatUseProvider useTo={PREVIEW_CHAT_USE_TO.RUN}>
         <div css={previewChatContainer}>
           <PreviewChat
             editState="RUN"
@@ -93,8 +95,8 @@ export const AIAgentRunMobile: FC = () => {
             wsContextValue={wsContext}
           />
         </div>
-      </ChatContext.Provider>
-    </>
+      </PreviewChatUseProvider>
+    </ChatContext.Provider>
   )
 }
 

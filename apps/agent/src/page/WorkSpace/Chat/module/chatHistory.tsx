@@ -1,6 +1,8 @@
 import { FC, useCallback, useContext, useEffect, useMemo } from "react"
 import { TextSignal } from "@/api/ws/textSignal"
 import { PreviewChat } from "@/components/PreviewChat"
+import { PreviewChatUseProvider } from "@/components/PreviewChat/PreviewChatUseContext"
+import { PREVIEW_CHAT_USE_TO } from "@/components/PreviewChat/PreviewChatUseContext/constants"
 import { SEND_MESSAGE_WS_TYPE } from "@/components/PreviewChat/TipisWebscoketContext/interface"
 import {
   ChatMessage,
@@ -68,15 +70,17 @@ export const DefaultChat: FC<{ isMobile: boolean }> = ({
 
   return (
     <ChatContext.Provider value={{ inRoomUsers }}>
-      <div css={rightPanelContainerStyle}>
-        <PreviewChat
-          isMobile={isMobile}
-          editState="RUN"
-          blockInput={!isRunning}
-          wsContextValue={wsContext}
-          onSendMessage={onSendMessage}
-        />
-      </div>
+      <PreviewChatUseProvider useTo={PREVIEW_CHAT_USE_TO.DEFAULT_CHAT}>
+        <div css={rightPanelContainerStyle}>
+          <PreviewChat
+            isMobile={isMobile}
+            editState="RUN"
+            blockInput={!isRunning}
+            wsContextValue={wsContext}
+            onSendMessage={onSendMessage}
+          />
+        </div>
+      </PreviewChatUseProvider>
     </ChatContext.Provider>
   )
 }
