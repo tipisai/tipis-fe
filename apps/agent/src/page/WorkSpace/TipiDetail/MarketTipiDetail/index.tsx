@@ -95,6 +95,9 @@ const MarketTipiDetailPage: FC = () => {
         runNumber={aiAgentMarketPlaceInfo?.marketplace?.numRuns}
         forkNumber={aiAgentMarketPlaceInfo?.marketplace?.numForks}
         starNumber={aiAgentMarketPlaceInfo.marketplace.numStars}
+        tipisName={aiAgentMarketPlaceInfo.aiAgent.name}
+        tipisID={aiAgentMarketPlaceInfo.aiAgent.teamID}
+        tipisIcon={aiAgentMarketPlaceInfo.aiAgent.icon}
       />
       <ContributeInfo
         teamName={aiAgentMarketPlaceInfo?.marketplace?.contributorTeam?.name}

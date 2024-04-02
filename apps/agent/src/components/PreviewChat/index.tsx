@@ -5,6 +5,7 @@ import {
   ChangeEvent,
   FC,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useRef,
@@ -31,6 +32,7 @@ import UserMessage from "@/page/WorkSpace/AI/components/UserMessage"
 import { isGroupMessage } from "@/utils/agent/typeHelper"
 import { chatUploadStore, useUploadFileToDrive } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
+import { PreviewChatUseContext } from "./PreviewChatUseContext"
 import { SEND_MESSAGE_WS_TYPE } from "./TipisWebscoketContext/interface"
 import UploadButton from "./UploadButton"
 import UploadKnowledgeFiles from "./UploadKnowledgeFiles"
@@ -63,6 +65,8 @@ import {
 export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const { isMobile, blockInput, editState, onSendMessage, wsContextValue } =
     props
+
+  const { useTo } = useContext(PreviewChatUseContext)
 
   const {
     wsStatus,
@@ -137,13 +141,23 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   }, [chatMessages, currentUserInfo.userID, isMobile, isReceiving])
 
   const handleDeleteFile = (fileName: string, queryID?: string) => {
+    TipisTrack.track("chat_file_delete", {
+      parameter1: useTo,
+    })
     const files = knowledgeFiles.filter((file) => file.fileName !== fileName)
     setKnowledgeFiles(files)
     queryID && chatUploadStore.deleteFileDetailInfo(queryID)
   }
 
   const handleClickUploadFile = () => {
+    TipisTrack.track("click_upload_chat_file_entry", {
+      parameter1: useTo,
+    })
     if (knowledgeFiles.length >= MAX_MESSAGE_FILES_LENGTH) {
+      TipisTrack.track("chat_file_over_num", {
+        parameter1: useTo,
+        parameter3: knowledgeFiles.length + 1,
+      })
       messageAPI.warning({
         content: t("dashboard.message.support_for_up_to_10"),
       })
@@ -155,13 +169,21 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     let inputFiles = Array.from(e.target.files || [])
     inputRef.current && (inputRef.current.value = "")
+
     if (!inputFiles.length) return
     if (inputFiles.length + knowledgeFiles.length > MAX_MESSAGE_FILES_LENGTH) {
+      TipisTrack.track("chat_file_over_num", {
+        parameter1: useTo,
+        parameter3: inputFiles.length + knowledgeFiles.length,
+      })
       messageAPI.warning({
         content: t("dashboard.message.support_for_up_to_10"),
       })
       return
     }
+    TipisTrack.track("start_upload_chat_file", {
+      parameter1: useTo,
+    })
     setUploadKnowledgeLoading(true)
     const currentFiles = [...knowledgeFiles]
 
@@ -183,14 +205,18 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
         const { fileName, file, abortController } = item
         if (!file) break
         if (file.size > MAX_FILE_SIZE) {
+          TipisTrack.track("chat_file_over_size", {
+            parameter1: useTo,
+            parameter3: file.size,
+          })
           messageAPI.warning({
             content: t("dashboard.message.please_use_a_file_wi"),
           })
-          setKnowledgeFiles(knowledgeFiles)
-          chatUploadStore.mulDeleteFileDetailInfo(
-            formatFiles.map((item) => item.queryID),
+          setKnowledgeFiles(
+            currentFiles.filter((file) => file.fileName !== item.fileName),
           )
-          return
+          chatUploadStore.deleteFileDetailInfo(item.queryID)
+          continue
         }
         const fileID = await uploadChatFile(
           item.queryID,
@@ -259,9 +285,14 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   }, [currentUserInfo.userID, knowledgeFiles, onSendMessage, textAreaVal])
 
   const handleClickSend = () => {
+    const realSendKnowledgeFiles = knowledgeFiles.filter(
+      (item) => !!item.fileID,
+    )
     TipisTrack.track("click_send", {
+      parameter2: realSendKnowledgeFiles.length,
       parameter3: "click",
     })
+
     sendAndClearMessage()
   }
 
@@ -270,12 +301,17 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   ) => {
     if (event.keyCode === 13 && !event.shiftKey) {
       event.preventDefault()
-      TipisTrack.track("click_send", {
-        parameter3: "enter",
-      })
+
       if (disableSend) {
         return
       }
+      const realSendKnowledgeFiles = knowledgeFiles.filter(
+        (item) => !!item.fileID,
+      )
+      TipisTrack.track("click_send", {
+        parameter2: realSendKnowledgeFiles.length,
+        parameter3: "enter",
+      })
       sendAndClearMessage()
     }
   }

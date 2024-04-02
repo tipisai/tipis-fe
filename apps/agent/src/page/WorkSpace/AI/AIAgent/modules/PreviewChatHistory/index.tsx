@@ -1,6 +1,8 @@
 import { FC, memo, useCallback, useContext, useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import { PreviewChat } from "@/components/PreviewChat"
+import { PreviewChatUseProvider } from "@/components/PreviewChat/PreviewChatUseContext"
+import { PREVIEW_CHAT_USE_TO } from "@/components/PreviewChat/PreviewChatUseContext/constants"
 import { ChatMessage } from "@/components/PreviewChat/interface"
 import { getSendMessageBody } from "@/utils/agent/wsUtils"
 import { AgentWSContext } from "../../../context/AgentWSContext"
@@ -83,15 +85,23 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
     )
 
     return (
-      <div css={rightPanelContainerStyle}>
-        <PreviewChat
-          isMobile={!!props.isMobile}
-          editState="EDIT"
-          blockInput={getIsBlockInputDirty()}
-          onSendMessage={onSendMessage}
-          wsContextValue={wsContext}
-        />
-      </div>
+      <PreviewChatUseProvider
+        useTo={
+          !!getValues("aiAgentID")
+            ? PREVIEW_CHAT_USE_TO.EDIT_TIPI
+            : PREVIEW_CHAT_USE_TO.CREATE_TIPI
+        }
+      >
+        <div css={rightPanelContainerStyle}>
+          <PreviewChat
+            isMobile={!!props.isMobile}
+            editState="EDIT"
+            blockInput={getIsBlockInputDirty()}
+            onSendMessage={onSendMessage}
+            wsContextValue={wsContext}
+          />
+        </div>
+      </PreviewChatUseProvider>
     )
   },
 )

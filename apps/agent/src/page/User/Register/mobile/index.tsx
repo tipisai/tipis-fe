@@ -70,6 +70,7 @@ export const MobileRegister: FC<RegisterProps> = (props) => {
   }, [asyncValid, errors])
 
   const handleClickToLogin = () => {
+    TipisTrack.track("click_sign_in_entry")
     navigate({ pathname: LOGIN_PATH, search: location.search })
   }
 

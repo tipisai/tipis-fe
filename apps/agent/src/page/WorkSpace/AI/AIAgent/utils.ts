@@ -93,7 +93,7 @@ export const useSubmitSaveAgent = () => {
 
         TipisTrack.track("save_suc", {
           parameter1: currentData.aiAgentID ? "edit" : "create",
-          parameter3: Array.isArray(agentInfo.knowledge)
+          parameter2: Array.isArray(agentInfo.knowledge)
             ? agentInfo.knowledge.length
             : 0,
         })

@@ -84,11 +84,18 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
     inputRef.current && (inputRef.current.value = "")
     if (!inputFiles.length) return
     if (inputFiles.length + values.length > MAX_MESSAGE_FILES_LENGTH) {
+      TipisTrack.track("knowledge_file_over_num", {
+        parameter1: aiAgentID ? "edit_tipi" : "create_tipi",
+        parameter3: inputFiles.length + values.length,
+      })
       messageAPI.warning({
         content: t("dashboard.message.support_for_up_to_10"),
       })
       return
     }
+    TipisTrack.track("start_upload_knowledge_file", {
+      parameter1: aiAgentID ? "edit_tipi" : "create_tipi",
+    })
     const currentFiles = [...currentValue]
     const formatFiles = multipleFileHandler(
       inputFiles,
@@ -100,10 +107,15 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
         const { fileName, file, abortController, queryID } = item
         if (!file) break
         if (file.size > MAX_FILE_SIZE) {
+          TipisTrack.track("knowledge_file_over_size", {
+            parameter1: aiAgentID ? "edit_tipi" : "create_tipi",
+            parameter3: file.size,
+          })
+          editPanelUpdateFileDetailStore.deleteFileDetailInfo(queryID)
           messageAPI.warning({
             content: t("dashboard.message.please_use_a_file_wi"),
           })
-          return
+          continue
         }
         const fileID = await uploadKnowledgeFile(
           queryID,
@@ -143,6 +155,9 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
       centered: true,
       cancelText: t("homepage.edit_tipi.modal.remove_file_cancel"),
       onOk: () => {
+        TipisTrack.track("knowledge_file_delete", {
+          parameter1: aiAgentID ? "edit_tipi" : "create_tipi",
+        })
         try {
           removeFile(name)
           editPanelUpdateFileDetailStore.deleteFileDetailInfo(queryID)
@@ -158,9 +173,13 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
 
   const handleClickUpload = () => {
     TipisTrack.track("click_upload_knowledge_file_entry", {
-      parameter1: aiAgentID ? "edit" : "create",
+      parameter1: aiAgentID ? "edit_tipi" : "create_tipi",
     })
     if (Array.isArray(values) && values.length >= MAX_MESSAGE_FILES_LENGTH) {
+      TipisTrack.track("knowledge_file_over_num", {
+        parameter1: aiAgentID ? "edit_tipi" : "create_tipi",
+        parameter3: values.length + 1,
+      })
       messageAPI.warning(t("dashboard.message.support_for_up_to_10"))
       return
     }

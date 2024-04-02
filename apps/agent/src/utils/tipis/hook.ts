@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import { useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useParams, useSearchParams } from "react-router-dom"
 import { getCurrentId } from "@illa-public/user-data"
 import {
   useGetAgentContributeStateQuery,
@@ -32,6 +32,8 @@ export const useGetTipiContributed = () => {
 
 export const useGetTipiContributedDetail = () => {
   const { agentID, teamIdentifier } = useParams()
+  const [searchParams] = useSearchParams()
+  const ownerTeamIdentifier = searchParams.get("ownerTeamIdentifier")
 
   const {
     data: contributeAgentDetail,
@@ -39,7 +41,7 @@ export const useGetTipiContributedDetail = () => {
     isError: isGetContributedAgentDetailError,
   } = useGetContributedAgentDetailQuery({
     aiAgentID: agentID!,
-    ownerTeamIdentifier: teamIdentifier!,
+    ownerTeamIdentifier: ownerTeamIdentifier ?? teamIdentifier!,
   })
 
   const {

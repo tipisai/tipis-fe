@@ -40,12 +40,12 @@ const KnowledgeEditor: FC = memo(() => {
           </span>
           <KnowledgeUpload
             addFile={(file: IKnowledgeFile) => {
-              const files = [...field.value] || []
+              const files = field.value || []
               files.push(file)
               field.onChange(files)
             }}
             removeFile={(name: string) => {
-              const currentFiles = [...field.value] || []
+              const currentFiles = field.value || []
               const files = currentFiles.filter(
                 (item) => item.fileName !== name,
               )
