@@ -23,11 +23,10 @@ import { IStartButtonProps } from "./interface"
 const StartButton: FC<IStartButtonProps> = (props) => {
   const { t } = useTranslation()
 
-  const { isConnecting, isRunning, reconnect, connect, lastRunAgent } =
+  const { isConnecting, isRunning, reconnect, connect } =
     useContext(AgentWSContext)
 
-  const { clearErrors, getValues, setError, reset } =
-    useFormContext<IAgentForm>()
+  const { clearErrors, getValues, setError } = useFormContext<IAgentForm>()
 
   const editTipiPathMatch = useMatch(
     `${WORKSPACE_LAYOUT_PATH}/${EDIT_TIPI_TEMPLATE_PATH}`,
@@ -93,8 +92,6 @@ const StartButton: FC<IStartButtonProps> = (props) => {
     } else {
       await connect()
     }
-
-    reset(lastRunAgent.current)
     props.onClickCallback?.()
   }
   return (
