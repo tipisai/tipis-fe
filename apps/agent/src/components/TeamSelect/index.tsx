@@ -1,6 +1,7 @@
 import Icon from "@ant-design/icons"
 import { Avatar, Popover } from "antd"
 import { FC, useState } from "react"
+import { TipisTrack } from "@illa-public/track-utils"
 import UpAndDownArrowIcon from "@/assets/workspace/upAndDownArrow.svg?react"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import TeamSelectContent from "./Content"
@@ -16,13 +17,16 @@ const TeamSelect: FC<TeamSelectProps> = (props) => {
   const [openPopover, setOpenPopover] = useState(false)
   const currentTeam = useGetCurrentTeamInfo()
 
+  const onClickOpenPopover = () => {
+    TipisTrack.track("click_team_selector")
+  }
+
   return (
     currentTeam && (
       <Popover
         content={
           <TeamSelectContent
             showCreateTeamButton={props.showCreateTeamButton}
-            openCreateModal={props.openCreateModal}
             onChangeTeam={props.onChangeTeam}
             closePopover={() => setOpenPopover(false)}
           />
@@ -36,7 +40,7 @@ const TeamSelect: FC<TeamSelectProps> = (props) => {
         placement="bottomRight"
         onOpenChange={setOpenPopover}
       >
-        <div css={teamSelectContainerStyle}>
+        <div css={teamSelectContainerStyle} onClick={onClickOpenPopover}>
           <div css={teamAvatarContainerStyle}>
             <Avatar src={currentTeam?.icon} size={24} shape="square" />
           </div>

@@ -1,6 +1,7 @@
 import Icon from "@ant-design/icons"
 import { Button } from "antd"
-import { FC, useContext } from "react"
+import { FC, useCallback, useContext } from "react"
+import { TipisTrack } from "@illa-public/track-utils"
 import TextAndLogo from "@/assets/public/textLogo.svg?react"
 import MenuFoldIcon from "@/assets/workspace/menuFold.svg?react"
 import { MenuStatusUIContext } from "../Menu/context"
@@ -8,6 +9,13 @@ import { logoAndProjectNameContainerStyle, menuHeaderStyle } from "./style"
 
 const MenuHeader: FC = () => {
   const { changeCollapsed } = useContext(MenuStatusUIContext)
+
+  const onClickFoldButton = useCallback(() => {
+    TipisTrack.track("click_collapse")
+
+    changeCollapsed(true)
+  }, [changeCollapsed])
+
   return (
     <div css={menuHeaderStyle}>
       <div css={logoAndProjectNameContainerStyle}>
@@ -17,9 +25,7 @@ const MenuHeader: FC = () => {
         <Button
           icon={<Icon component={MenuFoldIcon} />}
           type="text"
-          onClick={() => {
-            changeCollapsed(true)
-          }}
+          onClick={onClickFoldButton}
         />
       </div>
     </div>

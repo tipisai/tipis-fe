@@ -1,13 +1,9 @@
 import Icon from "@ant-design/icons"
 import { App, Button, Dropdown, MenuProps } from "antd"
-import { FC, useCallback, useContext, useEffect, useMemo } from "react"
+import { FC, useCallback, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { AuthShown, SHOW_RULES } from "@illa-public/auth-shown"
 import { MoreIcon } from "@illa-public/icon"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  MixpanelTrackContext,
-} from "@illa-public/mixpanel-utils"
 import { USER_ROLE, USER_STATUS } from "@illa-public/public-types"
 import {
   FREE_TEAM_LIMIT_TYPE,
@@ -32,8 +28,6 @@ export const MoreAction: FC<MoreActionProps> = (props) => {
     email,
     teamID,
   } = props
-
-  const { track } = useContext(MixpanelTrackContext)
 
   const [removeTeamMember] = useRemoveTeamMemberByIDMutation()
   const [changeTeamMemberRole] = useChangeTeamMemberRoleMutation()
@@ -60,9 +54,6 @@ export const MoreAction: FC<MoreActionProps> = (props) => {
         danger: true,
       },
       onOk: async () => {
-        track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-          element: "remove_modal_remove",
-        })
         try {
           removeTeamMember({ teamID, teamMemberID }).unwrap()
           message.success({
@@ -75,26 +66,9 @@ export const MoreAction: FC<MoreActionProps> = (props) => {
           console.error(e)
         }
       },
-      onCancel: () => {
-        track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-          element: "remove_modal_cancel",
-        })
-      },
+      onCancel: () => {},
     })
-    track?.(ILLA_MIXPANEL_EVENT_TYPE.SHOW, {
-      element: "remove_modal",
-    })
-  }, [
-    email,
-    message,
-    modal,
-    name,
-    removeTeamMember,
-    t,
-    teamID,
-    teamMemberID,
-    track,
-  ])
+  }, [email, message, modal, name, removeTeamMember, t, teamID, teamMemberID])
 
   const handleClickTransOwner = useCallback(() => {
     modal.confirm({
@@ -106,9 +80,6 @@ export const MoreAction: FC<MoreActionProps> = (props) => {
         danger: true,
       },
       onOk: async () => {
-        track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-          element: "transfer_modal_transfer",
-        })
         try {
           await changeTeamMemberRole({
             teamID,
@@ -129,30 +100,17 @@ export const MoreAction: FC<MoreActionProps> = (props) => {
           })
         }
       },
-      onCancel: () => {
-        track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-          element: "transfer_modal_cancel",
-        })
-      },
+      onCancel: () => {},
     })
-    track?.(ILLA_MIXPANEL_EVENT_TYPE.SHOW, {
-      element: "transfer_modal",
-    })
-  }, [changeTeamMemberRole, message, modal, t, teamID, teamMemberID, track])
+  }, [changeTeamMemberRole, message, modal, t, teamID, teamMemberID])
 
   const onClickMenuItems: MenuProps["onClick"] = ({ key }) => {
     switch (key) {
       case "transfer": {
-        track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-          element: "transfer",
-        })
         handleClickTransOwner()
         break
       }
       case "remove": {
-        track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-          element: "remove",
-        })
         handleClickRemoveMember()
         break
       }
@@ -189,14 +147,6 @@ export const MoreAction: FC<MoreActionProps> = (props) => {
     },
   ]
 
-  useEffect(() => {
-    if (!disabled) {
-      track?.(ILLA_MIXPANEL_EVENT_TYPE.SHOW, {
-        element: "more_by_member",
-      })
-    }
-  }, [disabled, track])
-
   return disabled ? null : (
     <div css={moreActionWrapper}>
       <Dropdown
@@ -208,13 +158,7 @@ export const MoreAction: FC<MoreActionProps> = (props) => {
               currentUserRole === USER_ROLE.OWNER &&
               userStatus !== USER_STATUS.PENDING
             ) {
-              track?.(ILLA_MIXPANEL_EVENT_TYPE.SHOW, {
-                element: "transfer",
-              })
             }
-            track?.(ILLA_MIXPANEL_EVENT_TYPE.SHOW, {
-              element: "remove",
-            })
           }
         }}
         menu={{

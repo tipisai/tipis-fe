@@ -1,22 +1,17 @@
 import Icon from "@ant-design/icons"
 import { App, Button, Input } from "antd"
-import { FC, useContext } from "react"
+import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { Avatar } from "@illa-public/avatar"
 import { AvatarUpload } from "@illa-public/cropper"
 import { CameraIcon } from "@illa-public/icon"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  MixpanelTrackContext,
-} from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
 import { isBiggerThanTargetRole } from "@illa-public/user-role-utils"
 import ErrorMessage from "@/components/InputErrorMessage"
 import { useUploadAvatar } from "@/page/SettingPage/hooks/uploadAvatar"
 import { TEAM_IDENTIFY_FORMAT } from "@/page/SettingPage/team/info/constants"
 import { TeamInfoFields } from "@/page/SettingPage/team/interface"
-import { getValidTeamSettingError } from "@/page/SettingPage/utils"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import { TeamInfoMobileProps } from "./interface"
 import {
@@ -33,14 +28,11 @@ import {
 const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
   const { t } = useTranslation()
   const { onSubmit, disabled, loading } = props
-  const { handleSubmit, control, formState, getValues, trigger } =
+  const { handleSubmit, control, formState, trigger } =
     useFormContext<TeamInfoFields>()
   const { message } = App.useApp()
   const teamInfo = useGetCurrentTeamInfo()!
   const { uploadTeamIcon } = useUploadAvatar()
-  const { track } = useContext(MixpanelTrackContext)
-
-  const { errors } = formState
 
   const handleUpdateTeamIcon = async (file: Blob) => {
     try {
@@ -55,21 +47,9 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
   }
 
   const validReport = async () => {
-    track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      element: "save_change",
-    })
     let valid = await trigger()
     if (!valid) {
-      track(ILLA_MIXPANEL_EVENT_TYPE.VALIDATE, {
-        element: "save_change",
-        parameter2: "failed",
-        parameter3: getValidTeamSettingError(errors),
-      })
     } else {
-      track(ILLA_MIXPANEL_EVENT_TYPE.VALIDATE, {
-        element: "save_change",
-        parameter2: "suc",
-      })
     }
   }
 
@@ -92,12 +72,6 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
             name={teamInfo?.name}
             avatarUrl={teamInfo?.icon}
             size={100}
-            onClick={() => {
-              if (!canEditorTeamMobile) return
-              track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-                element: "avatar",
-              })
-            }}
           />
         </div>
       </AvatarUpload>
@@ -121,18 +95,6 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
                     placeholder={t(
                       "team_setting.team_info.team_name_placeholder",
                     )}
-                    onFocus={() => {
-                      track(ILLA_MIXPANEL_EVENT_TYPE.FOCUS, {
-                        element: "team_name",
-                        parameter2: getValues().name?.length ?? 0,
-                      })
-                    }}
-                    onBlur={() => {
-                      track(ILLA_MIXPANEL_EVENT_TYPE.BLUR, {
-                        element: "team_name",
-                        parameter2: getValues().name?.length ?? 0,
-                      })
-                    }}
                   />
                 )}
                 rules={{
@@ -166,18 +128,6 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
                     placeholder={t(
                       "team_setting.team_info.team_id_placeholder",
                     )}
-                    onFocus={() => {
-                      track(ILLA_MIXPANEL_EVENT_TYPE.FOCUS, {
-                        element: "team_identify",
-                        parameter2: getValues().identifier?.length ?? 0,
-                      })
-                    }}
-                    onBlur={() => {
-                      track(ILLA_MIXPANEL_EVENT_TYPE.BLUR, {
-                        element: "team_identify",
-                        parameter2: getValues().identifier?.length ?? 0,
-                      })
-                    }}
                   />
                 )}
                 rules={{

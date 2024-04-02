@@ -9,21 +9,6 @@ export const AIAgentRun: FC = () => {
   const { tabID } = useParams()
   const { data, isLoading, isError, agentID } = useGetTipiContributed()
 
-  // useEffect(() => {
-  //   track(
-  //     ILLA_MIXPANEL_EVENT_TYPE.VISIT,
-  //     ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_RUN,
-  //   )
-  //   trackPageDurationStart()
-  //   return () => {
-  //     trackPageDurationEnd(ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_RUN)
-  //   }
-  // }, [])
-
-  // useBeforeUnload(() => {
-  //   trackPageDurationEnd(ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_RUN)
-  // })
-
   if (isLoading) {
     return <FullSectionLoading />
   }

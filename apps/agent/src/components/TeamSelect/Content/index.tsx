@@ -4,11 +4,9 @@ import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
 import { SuccessIcon } from "@illa-public/icon"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  MixpanelTrackContext,
-} from "@illa-public/mixpanel-utils"
+import { TipisTrack } from "@illa-public/track-utils"
 import { teamActions, useGetTeamsInfoQuery } from "@illa-public/user-data"
+import { createTeamContext } from "@/Layout/Workspace/context"
 import { setLocalTeamIdentifier } from "@/utils/auth"
 import { isSubscribeForBilling } from "@/utils/billing/isSubscribe"
 import { useGetCurrentTeamInfo } from "@/utils/team"
@@ -20,11 +18,11 @@ interface TeamSelectContentProps extends TeamSelectProps {
 }
 
 const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
-  const { closePopover, openCreateModal, showCreateTeamButton, onChangeTeam } =
-    props
+  const { closePopover, showCreateTeamButton, onChangeTeam } = props
   const { t } = useTranslation()
   const teamInfo = useGetCurrentTeamInfo()!
-  const { track } = useContext(MixpanelTrackContext)
+
+  const { onChangeTeamVisible } = useContext(createTeamContext)
 
   const currentTeamId = teamInfo?.id
   const { data } = useGetTeamsInfoQuery(null)
@@ -32,12 +30,10 @@ const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
   const dispatch = useDispatch()
 
   const handleClickCreateTeam = () => {
-    track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      element: "create_team",
-      parameter2: "homepage_select",
-      parameter3: teamItems?.length,
+    onChangeTeamVisible?.(true)
+    TipisTrack.track("click_create_team_entry", {
+      parameter1: "team_selector",
     })
-    openCreateModal?.()
     closePopover()
   }
 
@@ -58,11 +54,6 @@ const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
             css={switchItemStyle}
             key={index}
             onClick={() => {
-              track?.(
-                ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-                { element: "change_team" },
-                "userRole",
-              )
               switchCurrentTeam(item.id, item.identifier)
             }}
           >

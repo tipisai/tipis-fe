@@ -1,8 +1,9 @@
 import Icon from "@ant-design/icons"
-import { FC } from "react"
+import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { v4 } from "uuid"
 import { PenIcon, PlusIcon } from "@illa-public/icon"
+import { TipisTrack } from "@illa-public/track-utils"
 import { getIsEmptyTeam } from "@illa-public/user-data"
 // import FunctionIcon from "@/assets/workspace/function.svg?react"
 import MarketplaceIcon from "@/assets/workspace/marketplace.svg?react"
@@ -14,40 +15,53 @@ import {
 } from "@/utils/routeHelper/hook"
 // import FeatureCard from "../../components/FeatureCard"
 import MenuItemButton from "../../components/MenuItemButton"
+import { createTeamContext } from "../../context"
 import { featureAreaContainerStyle } from "./style"
 
-interface FeatureAreaProps {
-  openCreateModal?: () => void
-}
-const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
+const FeatureArea: FC = () => {
   const { t } = useTranslation()
   const navigateToCreateTIpis = useNavigateToCreateTipis()
   const navigateToChat = useNavigateToNewChat()
   const navigateToExploreTipis = useNavigateToExploreTipis()
   // const navigateToExploreFunction = useNavigateToExploreFunction()
+  const { onChangeTeamVisible } = useContext(createTeamContext)
 
   const handleClickCreateTipis = () => {
+    TipisTrack.track("click_create_tipi_entry", {
+      parameter2: "left_panel",
+    })
     const isEmptyTeam = getIsEmptyTeam(store.getState())
     if (isEmptyTeam) {
-      openCreateModal?.()
+      TipisTrack.track("click_create_team_entry", {
+        parameter1: "left_panel_no_team",
+      })
+      onChangeTeamVisible?.(true)
       return
     }
     navigateToCreateTIpis()
   }
 
   const handleClickCreateChat = () => {
+    TipisTrack.track("click_new_chat")
     const isEmptyTeam = getIsEmptyTeam(store.getState())
     if (isEmptyTeam) {
-      openCreateModal?.()
+      TipisTrack.track("click_create_team_entry", {
+        parameter1: "left_panel_no_team",
+      })
+      onChangeTeamVisible?.(true)
       return
     }
     navigateToChat(v4())
   }
 
   const handleClickExploreTipis = () => {
+    TipisTrack.track("click_explore_tipi_entry")
     const isEmptyTeam = getIsEmptyTeam(store.getState())
     if (isEmptyTeam) {
-      openCreateModal?.()
+      TipisTrack.track("click_create_team_entry", {
+        parameter1: "left_panel_no_team",
+      })
+      onChangeTeamVisible?.(true)
       return
     }
     navigateToExploreTipis()
@@ -55,8 +69,13 @@ const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
 
   // const handleClickFunction = () => {
   //   const isEmptyTeam = getIsEmptyTeam(store.getState())
+  //   TipisTrack.track("click_function_entry")
+
   //   if (isEmptyTeam) {
-  //     openCreateModal?.()
+  //       TipisTrack.track("click_create_team_entry", {
+  //   parameter1: "left_panel_no_team",
+  // })
+  //     onChangeTeamVisible?.(true)
   //     return
   //   }
   //   navigateToExploreFunction()

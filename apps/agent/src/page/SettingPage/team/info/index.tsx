@@ -3,22 +3,20 @@ import { FC, useEffect, useMemo, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useNavigate, useParams } from "react-router-dom"
+import { useBeforeUnload, useNavigate, useParams } from "react-router-dom"
 import { isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
-import {
-  ILLA_MIXPANEL_CLOUD_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
-  MixpanelTrackProvider,
-} from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
+import {
+  TIPIS_TRACK_CLOUD_PAGE_NAME,
+  TipisTrack,
+} from "@illa-public/track-utils"
 import { useChangeTeamConfigMutation } from "@illa-public/user-data"
 import { isSmallThanTargetRole } from "@illa-public/user-role-utils"
 import TeamInfoMobile from "@/page/SettingPage/team/info/components/TeamInfoMobile"
 import TeamInfoPC from "@/page/SettingPage/team/info/components/TeamInfoPC"
 import { TeamInfoFields } from "@/page/SettingPage/team/interface"
 import { setLocalTeamIdentifier } from "@/utils/auth"
-import { track } from "@/utils/mixpanelHelper"
 import { getTeamInfoSetting } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 
@@ -81,50 +79,41 @@ const TeamInfo: FC = () => {
   }
 
   useEffect(() => {
-    track(
-      ILLA_MIXPANEL_EVENT_TYPE.VISIT,
-      ILLA_MIXPANEL_CLOUD_PAGE_NAME.TEAM_SETTING,
-      { element: "team_setting" },
-    )
+    TipisTrack.pageViewTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_INFO)
+    return () => {
+      TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_INFO)
+    }
   }, [])
 
-  useEffect(() => {
-    track(
-      ILLA_MIXPANEL_EVENT_TYPE.SHOW,
-      ILLA_MIXPANEL_CLOUD_PAGE_NAME.TEAM_SETTING,
-      { element: "save_change" },
-    )
-  }, [disableEdit])
+  useBeforeUnload(() => {
+    TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_INFO)
+  })
 
   return (
     <>
       <Helmet>
         <title>{t("team_setting.team_info.title")}</title>
       </Helmet>
-      <MixpanelTrackProvider
-        basicTrack={track}
-        pageName={ILLA_MIXPANEL_CLOUD_PAGE_NAME.TEAM_SETTING}
-      >
-        <FormProvider {...settingFormProps}>
-          <LayoutAutoChange
-            desktopPage={
-              <TeamInfoPC
-                disabled={disableEdit}
-                loading={loading}
-                onSubmit={onSubmit}
-                teamInfo={teamInfo}
-              />
-            }
-            mobilePage={
-              <TeamInfoMobile
-                disabled={disableEdit}
-                loading={loading}
-                onSubmit={onSubmit}
-              />
-            }
-          />
-        </FormProvider>
-      </MixpanelTrackProvider>
+
+      <FormProvider {...settingFormProps}>
+        <LayoutAutoChange
+          desktopPage={
+            <TeamInfoPC
+              disabled={disableEdit}
+              loading={loading}
+              onSubmit={onSubmit}
+              teamInfo={teamInfo}
+            />
+          }
+          mobilePage={
+            <TeamInfoMobile
+              disabled={disableEdit}
+              loading={loading}
+              onSubmit={onSubmit}
+            />
+          }
+        />
+      </FormProvider>
     </>
   )
 }

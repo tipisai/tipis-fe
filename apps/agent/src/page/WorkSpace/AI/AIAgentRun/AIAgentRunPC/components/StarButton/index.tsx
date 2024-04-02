@@ -4,17 +4,12 @@ import { FC, useContext, useState } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { StarFillIcon } from "@illa-public/icon"
-import {
-  ILLA_MIXPANEL_BUILDER_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
-} from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
 import { formatNumForAgent } from "@illa-public/utils"
 import {
   useStarAIAgentMutation,
   useUnstarAIAgentMutation,
 } from "@/redux/services/marketAPI"
-import { track } from "@/utils/mixpanelHelper"
 import { MarketplaceInfoContext } from "../../../contexts/MarketplaceInfoContext"
 
 const StarButton: FC = () => {
@@ -41,14 +36,7 @@ const StarButton: FC = () => {
 
   const handleClickStar = async () => {
     setStarLoading(true)
-    track(
-      ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-      ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_RUN,
-      {
-        element: "star",
-        parameter5: aiAgentID,
-      },
-    )
+
     try {
       if (starState) {
         await unstarAIAgent(aiAgentID).unwrap()

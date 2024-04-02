@@ -17,6 +17,7 @@ import {
   handleCreditPurchaseError,
   useCreditModal,
 } from "@illa-public/upgrade-modal"
+import { BILLING_REPORT_FROM } from "@illa-public/upgrade-modal/constants"
 import { getCurrentId } from "@illa-public/user-data"
 import { getTextMessagePayload, getWithFileMessagePayload } from "@/api/ws"
 import { Callback, FILE_SOURCE } from "@/api/ws/interface"
@@ -362,7 +363,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
         case 18:
           creditModal({
             modalType: CreditModalType.TOKEN,
-            from: "agent_run",
+            from: BILLING_REPORT_FROM.RUN,
           })
           break
         case 3:
@@ -408,11 +409,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       }
       return initConnectConfig
     } catch (e) {
-      const res = handleCreditPurchaseError(
-        e,
-        CreditModalType.TOKEN,
-        "agent_run",
-      )
+      const res = handleCreditPurchaseError(e, CreditModalType.TOKEN)
       if (res) return
       messageAPI.error({
         content: t("editor.ai-agent.message.start-failed"),

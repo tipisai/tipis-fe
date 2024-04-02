@@ -5,5 +5,5 @@ export interface OAuthButtonProps {
   children?: ReactNode
   type: "github" | "google"
   isMobile: boolean
-  landing: "signin" | "signup" | "connect"
+  landing: "signin" | "signup"
 }

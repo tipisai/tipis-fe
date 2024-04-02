@@ -1,13 +1,9 @@
 import { App } from "antd"
-import { FC, useCallback, useContext, useState } from "react"
+import { FC, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Navigate } from "react-router-dom"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  MixpanelTrackContext,
-} from "@illa-public/mixpanel-utils"
 import { USER_ROLE } from "@illa-public/public-types"
 import {
   useChangeTeamMemberRoleMutation,
@@ -28,7 +24,6 @@ export const MemberListPage: FC = () => {
   const teamInfo = useGetCurrentTeamInfo()!
   const { data: currentUserInfo } = useGetUserInfoQuery(null)
   const { message } = App.useApp()
-  const { track } = useContext(MixpanelTrackContext)
   const showInviteButton = showInviteModal(teamInfo)
 
   const {
@@ -82,11 +77,8 @@ export const MemberListPage: FC = () => {
   )
 
   const handleClickInviteButton = useCallback(() => {
-    track?.(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      element: "invite_entry",
-    })
     setInviteModalVisible(true)
-  }, [track])
+  }, [])
 
   const handleCopy = useCallback(
     (inviteLink: string) => {

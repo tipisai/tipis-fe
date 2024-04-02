@@ -6,7 +6,6 @@ export const contentContainerStyle = css`
   padding-top: 86px;
   flex-direction: column;
   align-items: center;
-  align-self: stretch;
 `
 
 export const contentStyle = css`

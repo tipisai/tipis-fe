@@ -41,14 +41,6 @@ export const DefaultChat: FC<{ isMobile: boolean }> = ({
 
   const onSendMessage = useCallback(
     (message: ChatMessage) => {
-      // track(
-      //   ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-      //   ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_RUN,
-      //   {
-      //     element: "send",
-      //     parameter5: getValues("aiAgentID"),
-      //   },
-      // )
       sendMessage(
         {
           threadID: message.threadID,

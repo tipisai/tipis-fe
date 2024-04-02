@@ -1,21 +1,16 @@
 import Icon from "@ant-design/icons"
 import { Button, Input } from "antd"
-import { FC, useContext, useEffect, useState } from "react"
+import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { PreviousIcon } from "@illa-public/icon"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  ILLA_MIXPANEL_PUBLIC_PAGE_NAME,
-  MixpanelTrackContext,
-} from "@illa-public/mixpanel-utils"
+import { TipisTrack } from "@illa-public/track-utils"
 import { EmailCode } from "@/components/EmailCode"
 import ErrorMessage from "@/components/InputErrorMessage"
 import { LOGIN_PATH } from "@/utils/routeHelper"
 import { EMAIL_FORMAT } from "../../constants"
 import { ResetPwdFields } from "../../interface"
-import { getValidReportParams } from "../../utils"
 import { ResetProps } from "../interface"
 import {
   formItemStyle,
@@ -43,52 +38,15 @@ export const PCReset: FC<ResetProps> = (props) => {
     onCountDownChange,
     sendEmail,
   } = props
-  const { handleSubmit, control, formState, getValues, trigger } =
-    useFormContext<ResetPwdFields>()
+  const { handleSubmit, control, formState } = useFormContext<ResetPwdFields>()
+
   const backToLogin = () => {
     navigate({ pathname: LOGIN_PATH, search: location.search })
   }
 
-  const { track } = useContext(MixpanelTrackContext)
-  const { errors } = formState
-  const [asyncValid, setAsyncValid] = useState<
-    { isValid: boolean } | undefined
-  >()
-
-  const validReport = async () => {
-    track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      element: "reset_password",
-    })
-    let isValid = await trigger()
-    if (isValid) {
-      const params = getValidReportParams(
-        ILLA_MIXPANEL_PUBLIC_PAGE_NAME.FORGET_PASSWORD,
-        true,
-        {},
-      )
-      params &&
-        track(ILLA_MIXPANEL_EVENT_TYPE.VALIDATE, {
-          ...params,
-          element: "reset_password",
-        })
-    }
-    setAsyncValid({ isValid })
+  const handleSubmitClick = async () => {
+    TipisTrack.track("click_reset_password")
   }
-
-  useEffect(() => {
-    if (asyncValid && !asyncValid.isValid) {
-      const params = getValidReportParams(
-        ILLA_MIXPANEL_PUBLIC_PAGE_NAME.FORGET_PASSWORD,
-        false,
-        errors,
-      )
-      params &&
-        track(ILLA_MIXPANEL_EVENT_TYPE.VALIDATE, {
-          ...params,
-          element: "reset_password",
-        })
-    }
-  }, [errors, asyncValid, track])
 
   return (
     <form css={formStyle} autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
@@ -124,18 +82,6 @@ export const PCReset: FC<ResetProps> = (props) => {
                 variant="filled"
                 placeholder={t("page.user.forgot_password.placeholder.email")}
                 {...(lockedEmail && { value: lockedEmail, disabled: true })}
-                onFocus={() => {
-                  track(ILLA_MIXPANEL_EVENT_TYPE.FOCUS, {
-                    element: "username_input",
-                    parameter3: getValues().email?.length ?? 0,
-                  })
-                }}
-                onBlur={() => {
-                  track(ILLA_MIXPANEL_EVENT_TYPE.BLUR, {
-                    element: "username_input",
-                    parameter3: getValues().email?.length ?? 0,
-                  })
-                }}
               />
             )}
             rules={{
@@ -187,18 +133,6 @@ export const PCReset: FC<ResetProps> = (props) => {
                     sendEmail={sendEmail}
                   />
                 }
-                onFocus={() => {
-                  track(ILLA_MIXPANEL_EVENT_TYPE.FOCUS, {
-                    element: "verification_code_input",
-                    parameter3: getValues().verificationCode?.length ?? 0,
-                  })
-                }}
-                onBlur={() => {
-                  track(ILLA_MIXPANEL_EVENT_TYPE.BLUR, {
-                    element: "verification_code_input",
-                    parameter3: getValues().verificationCode?.length ?? 0,
-                  })
-                }}
                 placeholder={t(
                   "page.user.forgot_password.placeholder.verification_code",
                 )}
@@ -238,18 +172,6 @@ export const PCReset: FC<ResetProps> = (props) => {
                 status={!!formState?.errors.newPassword ? "error" : undefined}
                 variant="filled"
                 placeholder={t("page.user.password.placeholder")}
-                onFocus={() => {
-                  track(ILLA_MIXPANEL_EVENT_TYPE.FOCUS, {
-                    element: "password_input",
-                    parameter3: getValues().newPassword?.length ?? 0,
-                  })
-                }}
-                onBlur={() => {
-                  track(ILLA_MIXPANEL_EVENT_TYPE.BLUR, {
-                    element: "password_input",
-                    parameter3: getValues().newPassword?.length ?? 0,
-                  })
-                }}
               />
             )}
             rules={{
@@ -275,7 +197,7 @@ export const PCReset: FC<ResetProps> = (props) => {
         loading={loading}
         block
         htmlType="submit"
-        onClick={validReport}
+        onClick={handleSubmitClick}
       >
         {resetLabel ? resetLabel : t("page.user.forgot_password.actions.reset")}
       </Button>

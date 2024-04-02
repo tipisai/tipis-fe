@@ -14,12 +14,8 @@ import {
   ShareIcon,
 } from "@illa-public/icon"
 import { ShareAgentPC } from "@illa-public/invite-modal"
-import {
-  ILLA_MIXPANEL_CLOUD_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
-  MixpanelTrackProvider,
-} from "@illa-public/mixpanel-utils"
 import { MemberInfo, USER_ROLE, USER_STATUS } from "@illa-public/public-types"
+import { TipisTrack } from "@illa-public/track-utils"
 import {
   getCurrentId,
   getCurrentTeamInfo,
@@ -42,7 +38,6 @@ import {
   useDuplicateAIAgentMutation,
 } from "@/redux/services/agentAPI"
 import { copyToClipboard } from "@/utils/copyToClipboard"
-import { track } from "@/utils/mixpanelHelper"
 import { getEditTipiPath, getRunTipiPath } from "@/utils/routeHelper"
 import {
   useNavigateToEditTipis,
@@ -95,11 +90,17 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
 
   const onClickEditButton: MouseEventHandler<HTMLElement> = (e) => {
     e.stopPropagation()
+    TipisTrack.track("click_edit_tipi_entry", {
+      parameter1: "dashboard",
+    })
     navigateToEditTIpis(id)
   }
 
   const onClickRunButton: MouseEventHandler<HTMLElement> = (e) => {
     e.stopPropagation()
+    TipisTrack.track("click_run_tipi_entry", {
+      parameter1: "dashboard",
+    })
     navigateRunTipis(
       {
         tipisID: id,
@@ -231,10 +232,7 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
           }
         />
       </List.Item>
-      <MixpanelTrackProvider
-        basicTrack={track}
-        pageName={ILLA_MIXPANEL_CLOUD_PAGE_NAME.AI_AGENT_DASHBOARD}
-      >
+      <>
         {shareVisible && (
           <ShareAgentPC
             itemID={id}
@@ -295,14 +293,6 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
               }
             }}
             onCopyInviteLink={(link) => {
-              track(
-                ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-                ILLA_MIXPANEL_CLOUD_PAGE_NAME.AI_AGENT_DASHBOARD,
-                {
-                  element: "share_modal_copy_team",
-                  parameter5: id,
-                },
-              )
               copyToClipboard(
                 t("user_management.modal.custom_copy_text_agent_invite", {
                   userName: currentUser.nickname,
@@ -312,14 +302,6 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
               )
             }}
             onCopyAgentMarketLink={(link) => {
-              track(
-                ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-                ILLA_MIXPANEL_CLOUD_PAGE_NAME.AI_AGENT_DASHBOARD,
-                {
-                  element: "share_modal_link",
-                  parameter5: id,
-                },
-              )
               copyToClipboard(
                 t("user_management.modal.contribute.default_text.agent", {
                   agentName: title,
@@ -340,21 +322,11 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
                 }),
               )
             }}
-            onShare={(platform) => {
-              track(
-                ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-                ILLA_MIXPANEL_CLOUD_PAGE_NAME.AI_AGENT_DASHBOARD,
-                {
-                  element: "share_modal_social_media",
-                  parameter4: platform,
-                  parameter5: id,
-                },
-              )
-            }}
+            onShare={(platform) => {}}
             teamPlan={getPlanUtils(currentTeamInfo)}
           />
         )}
-      </MixpanelTrackProvider>
+      </>
     </>
   )
 }

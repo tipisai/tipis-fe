@@ -1,10 +1,6 @@
 import { useCallback } from "react"
-import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import {
-  getCurrentTeamInfo,
-  useLazyGetTeamsInfoQuery,
-} from "@illa-public/user-data"
+import { useLazyGetTeamsInfoQuery } from "@illa-public/user-data"
 import {
   getChatPath,
   getCreateTipiPath,
@@ -25,7 +21,7 @@ import {
   useAddRunTipisTab,
   useAddTipisDetailTab,
 } from "../recentTabs/hook"
-import { findRecentTeamInfo } from "../team"
+import { findRecentTeamInfo, useGetCurrentTeamInfo } from "../team"
 
 export const NOT_HAS_TEAM_INFO_KEY = "NOT_HAS_TEAM_INFO"
 export const NOT_HAS_TARGET_TEAM_INFO_KEY = "NOT_HAS_TARGET_TEAM_INFO"
@@ -79,12 +75,14 @@ export const useNavigateTargetWorkspace = () => {
 
 export const useNavigateToCreateTipis = () => {
   const navigate = useNavigate()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+  const currentTeamInfo = useGetCurrentTeamInfo()
   const addCreateTipisTab = useAddCreateTipisTab()
 
   const navigateToCreteTipis = useCallback(() => {
     addCreateTipisTab()
-    navigate(getCreateTipiPath(currentTeamInfo?.identifier))
+    if (currentTeamInfo?.identifier) {
+      navigate(getCreateTipiPath(currentTeamInfo?.identifier))
+    }
   }, [addCreateTipisTab, currentTeamInfo?.identifier, navigate])
   return navigateToCreteTipis
 }
@@ -92,12 +90,14 @@ export const useNavigateToCreateTipis = () => {
 export const useNavigateToEditTipis = () => {
   const navigate = useNavigate()
   const addEditTipisTab = useAddEditTipisTab()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+  const currentTeamInfo = useGetCurrentTeamInfo()
 
   const navigateToEditTipis = useCallback(
     (tipisID: string) => {
       addEditTipisTab(tipisID)
-      navigate(getEditTipiPath(currentTeamInfo?.identifier, tipisID))
+      if (currentTeamInfo?.identifier) {
+        navigate(getEditTipiPath(currentTeamInfo.identifier, tipisID))
+      }
     },
     [addEditTipisTab, currentTeamInfo?.identifier, navigate],
   )
@@ -106,7 +106,7 @@ export const useNavigateToEditTipis = () => {
 
 export const useNavigateToRunTipis = () => {
   const navigate = useNavigate()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+  const currentTeamInfo = useGetCurrentTeamInfo()
   const addRunTipisTab = useAddRunTipisTab()
 
   const navigateToRunTipis = useCallback(
@@ -119,80 +119,92 @@ export const useNavigateToRunTipis = () => {
       tabID: string,
     ) => {
       addRunTipisTab(tabInfo, tabID)
-      navigate(
-        `${getRunTipiPath(currentTeamInfo.identifier, tabInfo.tipisID)}/${tabID}`,
-      )
+      if (currentTeamInfo?.identifier) {
+        navigate(
+          `${getRunTipiPath(currentTeamInfo.identifier, tabInfo.tipisID)}/${tabID}`,
+        )
+      }
     },
-    [addRunTipisTab, currentTeamInfo.identifier, navigate],
+    [addRunTipisTab, currentTeamInfo?.identifier, navigate],
   )
   return navigateToRunTipis
 }
 
 export const useNavigateToTipiDetail = () => {
   const navigate = useNavigate()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+  const currentTeamInfo = useGetCurrentTeamInfo()
   const addTipisDetailTab = useAddTipisDetailTab()
 
   const navigateToTipiDetail = useCallback(
     (tabInfo: { tipisID: string; title: string; tabIcon: string }) => {
       addTipisDetailTab(tabInfo)
-      navigate(getTipiDetailPath(currentTeamInfo.identifier, tabInfo.tipisID))
+      if (currentTeamInfo?.identifier) {
+        navigate(getTipiDetailPath(currentTeamInfo.identifier, tabInfo.tipisID))
+      }
     },
-    [addTipisDetailTab, currentTeamInfo.identifier, navigate],
+    [addTipisDetailTab, currentTeamInfo?.identifier, navigate],
   )
   return navigateToTipiDetail
 }
 
 export const useNavigateToMarketTipiDetail = () => {
   const navigate = useNavigate()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+  const currentTeamInfo = useGetCurrentTeamInfo()
   const addMarketTipisDetailTab = useAddMarketTipiDetailTab()
 
   const navigateToMarketTipiDetail = useCallback(
     (tabInfo: { tipisID: string; title: string; tabIcon: string }) => {
       addMarketTipisDetailTab(tabInfo)
-      navigate(getTipiDetailPath(currentTeamInfo.identifier, tabInfo.tipisID))
+      if (currentTeamInfo?.identifier) {
+        navigate(getTipiDetailPath(currentTeamInfo.identifier, tabInfo.tipisID))
+      }
     },
-    [addMarketTipisDetailTab, navigate, currentTeamInfo.identifier],
+    [addMarketTipisDetailTab, navigate, currentTeamInfo?.identifier],
   )
   return navigateToMarketTipiDetail
 }
 
 export const useNavigateToNewChat = () => {
   const navigate = useNavigate()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+  const currentTeamInfo = useGetCurrentTeamInfo()
   const addChatTab = useAddChatTab()
 
   const navigateToChat = useCallback(
     (chatID: string) => {
       addChatTab(chatID)
-      navigate(getChatPath(currentTeamInfo.identifier, chatID))
+      if (currentTeamInfo?.identifier) {
+        navigate(getChatPath(currentTeamInfo.identifier, chatID))
+      }
     },
-    [addChatTab, currentTeamInfo.identifier, navigate],
+    [addChatTab, currentTeamInfo?.identifier, navigate],
   )
   return navigateToChat
 }
 
 export const useNavigateToExploreTipis = () => {
   const navigate = useNavigate()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+  const currentTeamInfo = useGetCurrentTeamInfo()
   const addExploreTipisTab = useAddExploreTipisTab()
 
   const navigateToExploreTipis = useCallback(() => {
     addExploreTipisTab()
-    navigate(getExploreTipisPath(currentTeamInfo?.identifier))
+    if (currentTeamInfo?.identifier) {
+      navigate(getExploreTipisPath(currentTeamInfo.identifier))
+    }
   }, [addExploreTipisTab, currentTeamInfo?.identifier, navigate])
   return navigateToExploreTipis
 }
 
 export const useNavigateToExploreFunction = () => {
   const navigate = useNavigate()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+  const currentTeamInfo = useGetCurrentTeamInfo()
   const addExploreFunctionTab = useAddExploreFunctionsTab()
 
   const navigateToExploreTipis = useCallback(() => {
     addExploreFunctionTab()
-    navigate(getExploreFunctionsPath(currentTeamInfo?.identifier))
+    if (currentTeamInfo?.identifier) {
+      navigate(getExploreFunctionsPath(currentTeamInfo.identifier))
+    }
   }, [addExploreFunctionTab, currentTeamInfo?.identifier, navigate])
   return navigateToExploreTipis
 }

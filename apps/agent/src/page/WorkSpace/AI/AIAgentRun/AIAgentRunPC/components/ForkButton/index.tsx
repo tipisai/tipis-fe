@@ -6,15 +6,10 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { ForkIcon } from "@illa-public/icon"
-import {
-  ILLA_MIXPANEL_BUILDER_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
-} from "@illa-public/mixpanel-utils"
 import { Agent } from "@illa-public/public-types"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { formatNumForAgent } from "@illa-public/utils"
 import { useForkAIAgentToTeamMutation } from "@/redux/services/agentAPI"
-import { track } from "@/utils/mixpanelHelper"
 import { MarketplaceInfoContext } from "../../../contexts/MarketplaceInfoContext"
 
 const ForkButton: FC = () => {
@@ -34,14 +29,6 @@ const ForkButton: FC = () => {
   const [forkAIAgentToTeam] = useForkAIAgentToTeamMutation()
 
   const handleClickFork = async () => {
-    track(
-      ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-      ILLA_MIXPANEL_BUILDER_PAGE_NAME.AI_AGENT_RUN,
-      {
-        element: "fork",
-        parameter5: aiAgentID,
-      },
-    )
     setForkLoading(true)
     try {
       const newAgent = await forkAIAgentToTeam({

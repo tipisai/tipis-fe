@@ -1,11 +1,7 @@
 import { Button } from "antd"
 import { FC, useState } from "react"
 import { useSearchParams } from "react-router-dom"
-import {
-  ILLAMixpanel,
-  ILLA_MIXPANEL_EVENT_TYPE,
-  ILLA_MIXPANEL_PUBLIC_PAGE_NAME,
-} from "@illa-public/mixpanel-utils"
+import { TipisTrack } from "@illa-public/track-utils"
 import {
   OAUTH_REDIRECT_URL,
   openOAuthUrl,
@@ -13,17 +9,24 @@ import {
 } from "@illa-public/user-data"
 import { OAuthButtonProps } from "./interface"
 
-export const OAuthButton: FC<OAuthButtonProps> = (props) => {
+export const OAuthButton: FC<OAuthButtonProps> = ({
+  landing,
+  type,
+  icon,
+  isMobile,
+  children,
+}) => {
   const [loading, setLoading] = useState(false)
   const [searchParams] = useSearchParams()
   const utmKeys = ["utm_source", "utm_medium", "utm_campaign"]
   const [triggerGetOAuthURIQuery] = useLazyGetOAuthURIQuery()
 
   const onClickButton = async () => {
-    ILLAMixpanel.track(ILLA_MIXPANEL_EVENT_TYPE.CLICK, {
-      page: ILLA_MIXPANEL_PUBLIC_PAGE_NAME.LOGIN,
-      element: `${props.type}_sign_in`,
-    })
+    if (landing === "signin") {
+      TipisTrack.track("click_github_sign_in")
+    } else {
+      TipisTrack.track("click_github_sign_up")
+    }
 
     const targetURL = new URL(OAUTH_REDIRECT_URL)
     searchParams.forEach((value, key) => {
@@ -39,8 +42,8 @@ export const OAuthButton: FC<OAuthButtonProps> = (props) => {
     try {
       setLoading(true)
       const response = await triggerGetOAuthURIQuery({
-        oauthAgency: props.type,
-        landing: props.landing,
+        oauthAgency: type,
+        landing: landing,
         redirectURI: targetURL.toString(),
       }).unwrap()
 
@@ -53,14 +56,14 @@ export const OAuthButton: FC<OAuthButtonProps> = (props) => {
 
   return (
     <Button
-      icon={props.icon}
-      shape={props.isMobile ? "circle" : "default"}
+      icon={icon}
+      shape={isMobile ? "circle" : "default"}
       size="large"
-      block={props.isMobile ? false : true}
+      block={isMobile ? false : true}
       onClick={onClickButton}
       loading={loading}
     >
-      {props.children}
+      {children}
     </Button>
   )
 }

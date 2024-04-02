@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom"
 import { MinusIcon } from "@illa-public/icon"
+import { TipisTrack } from "@illa-public/track-utils"
 import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
@@ -45,6 +46,7 @@ const TipisTab: FC<ITipsTab> = (props) => {
   const onClickRemoveTab: MouseEventHandler<HTMLElement> = async (e) => {
     e.stopPropagation()
     e.preventDefault()
+    TipisTrack.track("click_close_tab")
     const newTabs = allRecentTabs.filter((tab) => tab.tabID !== tabID)
     function removeTab() {
       deleteTab(tabID)

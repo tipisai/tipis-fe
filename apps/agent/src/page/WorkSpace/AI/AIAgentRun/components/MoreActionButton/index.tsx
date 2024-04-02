@@ -5,11 +5,8 @@ import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { InfoIcon, MoreIcon, PenIcon, ShareIcon } from "@illa-public/icon"
 import { ShareAgentMobile, ShareAgentPC } from "@illa-public/invite-modal"
-import {
-  ILLA_MIXPANEL_CLOUD_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
-} from "@illa-public/mixpanel-utils"
 import { MemberInfo, USER_ROLE, USER_STATUS } from "@illa-public/public-types"
+import { TipisTrack } from "@illa-public/track-utils"
 import {
   getCurrentTeamInfo,
   getCurrentUser,
@@ -26,7 +23,6 @@ import {
   getILLACloudURL,
 } from "@illa-public/utils"
 import { copyToClipboard } from "@/utils/copyToClipboard"
-import { track } from "@/utils/mixpanelHelper"
 import { getRunTipiPath } from "@/utils/routeHelper"
 import {
   useNavigateToEditTipis,
@@ -71,6 +67,9 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
 
   const onClickMenuItem: MenuProps["onClick"] = async ({ key, domEvent }) => {
     domEvent.stopPropagation()
+    TipisTrack.track("click_more", {
+      parameter1: "run",
+    })
     switch (key) {
       case "share":
         {
@@ -78,6 +77,9 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
         }
         break
       case "edit": {
+        TipisTrack.track("click_edit_tipi_entry", {
+          parameter1: "run",
+        })
         navigateToEditTipis(agentID)
         break
       }
@@ -169,14 +171,6 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
               }
             }}
             onCopyInviteLink={(link) => {
-              track(
-                ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-                ILLA_MIXPANEL_CLOUD_PAGE_NAME.AI_AGENT_DASHBOARD,
-                {
-                  element: "share_modal_copy_team",
-                  parameter5: agentID,
-                },
-              )
               copyToClipboard(
                 t("user_management.modal.custom_copy_text_agent_invite", {
                   userName: currentUser.nickname,
@@ -186,14 +180,6 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
               )
             }}
             onCopyAgentMarketLink={(link) => {
-              track(
-                ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-                ILLA_MIXPANEL_CLOUD_PAGE_NAME.AI_AGENT_DASHBOARD,
-                {
-                  element: "share_modal_link",
-                  parameter5: agentID,
-                },
-              )
               copyToClipboard(
                 t("user_management.modal.contribute.default_text.agent", {
                   agentName: agentName,
@@ -212,17 +198,6 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
                     balance: balance,
                   },
                 }),
-              )
-            }}
-            onShare={(platform) => {
-              track(
-                ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-                ILLA_MIXPANEL_CLOUD_PAGE_NAME.AI_AGENT_DASHBOARD,
-                {
-                  element: "share_modal_social_media",
-                  parameter4: platform,
-                  parameter5: agentID,
-                },
               )
             }}
             teamPlan={getPlanUtils(currentTeamInfo)}
@@ -287,14 +262,6 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
               }
             }}
             onCopyInviteLink={(link) => {
-              track(
-                ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-                ILLA_MIXPANEL_CLOUD_PAGE_NAME.AI_AGENT_DASHBOARD,
-                {
-                  element: "share_modal_copy_team",
-                  parameter5: agentID,
-                },
-              )
               copyToClipboard(
                 t("user_management.modal.custom_copy_text_agent_invite", {
                   userName: currentUser.nickname,
@@ -304,14 +271,6 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
               )
             }}
             onCopyAgentMarketLink={(link) => {
-              track(
-                ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-                ILLA_MIXPANEL_CLOUD_PAGE_NAME.AI_AGENT_DASHBOARD,
-                {
-                  element: "share_modal_link",
-                  parameter5: agentID,
-                },
-              )
               copyToClipboard(
                 t("user_management.modal.contribute.default_text.agent", {
                   agentName: agentName,
@@ -332,17 +291,7 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
                 }),
               )
             }}
-            onShare={(platform) => {
-              track(
-                ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-                ILLA_MIXPANEL_CLOUD_PAGE_NAME.AI_AGENT_DASHBOARD,
-                {
-                  element: "share_modal_social_media",
-                  parameter4: platform,
-                  parameter5: agentID,
-                },
-              )
-            }}
+            onShare={(platform) => {}}
             teamPlan={getPlanUtils(currentTeamInfo)}
           />
         ))}

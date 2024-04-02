@@ -15,6 +15,7 @@ import { useSelector } from "react-redux"
 import { v4 } from "uuid"
 import { SendIcon } from "@illa-public/icon"
 import { IKnowledgeFile } from "@illa-public/public-types"
+import { TipisTrack } from "@illa-public/track-utils"
 import { getCurrentUser } from "@illa-public/user-data"
 import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { TextSignal } from "@/api/ws/textSignal"
@@ -223,6 +224,11 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     }
   }
 
+  const handleClickStopGenerating = () => {
+    TipisTrack.track("click_stop_generate")
+    onCancelReceiving()
+  }
+
   useEffect(() => {
     chatRef.current?.scrollTo({
       top: chatRef.current.scrollHeight,
@@ -251,6 +257,28 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       chatUploadStore.clearStore()
     }
   }, [currentUserInfo.userID, knowledgeFiles, onSendMessage, textAreaVal])
+
+  const handleClickSend = () => {
+    TipisTrack.track("click_send", {
+      parameter3: "click",
+    })
+    sendAndClearMessage()
+  }
+
+  const handleInputKeyDown = (
+    event: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>,
+  ) => {
+    if (event.keyCode === 13 && !event.shiftKey) {
+      event.preventDefault()
+      TipisTrack.track("click_send", {
+        parameter3: "enter",
+      })
+      if (disableSend) {
+        return
+      }
+      sendAndClearMessage()
+    }
+  }
 
   return (
     <div css={previewChatContainerStyle}>
@@ -285,9 +313,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
                   <div css={generatingDividerStyle} />
                   <StopIcon
                     css={stopIconStyle}
-                    onClick={() => {
-                      onCancelReceiving()
-                    }}
+                    onClick={handleClickStopGenerating}
                   />
                 </div>
               </motion.div>
@@ -335,15 +361,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
                 css={mobileInputElementStyle}
                 value={textAreaVal}
                 placeholder={t("editor.ai-agent.placeholder.send")}
-                onKeyDown={(event) => {
-                  if (event.keyCode === 13 && !event.shiftKey) {
-                    event.preventDefault()
-                    if (disableSend) {
-                      return
-                    }
-                    sendAndClearMessage()
-                  }
-                }}
+                onKeyDown={handleInputKeyDown}
                 onChange={(v) => {
                   setTextAreaVal(v.target.value)
                 }}
@@ -358,7 +376,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
                 size="large"
                 icon={<Icon component={SendIcon} />}
                 disabled={disableSend}
-                onClick={sendAndClearMessage}
+                onClick={handleClickSend}
               >
                 {t("editor.ai-agent.button.send")}
               </Button>
@@ -375,15 +393,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
               value={textAreaVal}
               css={inputStyle}
               placeholder={t("editor.ai-agent.placeholder.send")}
-              onKeyDown={(event) => {
-                if (event.keyCode === 13 && !event.shiftKey) {
-                  event.preventDefault()
-                  if (disableSend) {
-                    return
-                  }
-                  sendAndClearMessage()
-                }
-              }}
+              onKeyDown={handleInputKeyDown}
               onChange={(event) => {
                 setTextAreaVal(event.target.value)
               }}
@@ -405,7 +415,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
                   size="large"
                   icon={<Icon component={SendIcon} />}
                   disabled={disableSend}
-                  onClick={sendAndClearMessage}
+                  onClick={handleClickSend}
                 >
                   {t("editor.ai-agent.button.send")}
                 </Button>

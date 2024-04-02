@@ -1,23 +1,21 @@
 import { App } from "antd"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useParams, useSearchParams } from "react-router-dom"
+import { useBeforeUnload, useParams, useSearchParams } from "react-router-dom"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  ILLA_MIXPANEL_PUBLIC_PAGE_NAME,
-  MixpanelTrackProvider,
-} from "@illa-public/mixpanel-utils"
+  TIPIS_TRACK_PUBLIC_PAGE_NAME,
+  TipisTrack,
+} from "@illa-public/track-utils"
 import {
   useSendVerificationCodeToEmailMutation,
   useSignUpMutation,
 } from "@illa-public/user-data"
 import { setAuthToken } from "@illa-public/utils"
 import { getLocalLanguage } from "@/i18n"
-import { track } from "@/utils/mixpanelHelper"
 import { useNavigateTargetWorkspace } from "@/utils/routeHelper/hook"
 import { TIPISStorage } from "@/utils/storage"
 import { RegisterFields } from "../interface"
@@ -55,7 +53,6 @@ const RegisterPage: FC = () => {
       "verificationToken",
     ) as string
     const inviteToken = searchParams.get("inviteToken")
-    const currentTime = new Date().getTime()
     try {
       setLoading(true)
       const res = await signUp({
@@ -64,16 +61,7 @@ const RegisterPage: FC = () => {
         language: getLocalLanguage(),
         ...data,
       }).unwrap()
-      track(
-        ILLA_MIXPANEL_EVENT_TYPE.REQUEST,
-        ILLA_MIXPANEL_PUBLIC_PAGE_NAME.SIGNUP,
-        {
-          element: "sign_up",
-          consume: new Date().getTime() - currentTime,
-          parameter2: "suc",
-          parameter3: true,
-        },
-      )
+
       const token = res.token
       if (!token) return
       message.success(t("page.user.sign_up.tips.success"))
@@ -82,30 +70,11 @@ const RegisterPage: FC = () => {
       await navigateToWorkspace()
     } catch (e) {
       if (isILLAAPiError(e)) {
-        track(
-          ILLA_MIXPANEL_EVENT_TYPE.REQUEST,
-          ILLA_MIXPANEL_PUBLIC_PAGE_NAME.SIGNUP,
-          {
-            element: "sign_up",
-            consume: new Date().getTime() - currentTime,
-            parameter2: "failed",
-            parameter3: e?.data?.errorFlag,
-          },
-        )
         switch (e?.data?.errorFlag) {
           case ERROR_FLAG.ERROR_FLAG_EMAIL_HAS_BEEN_TAKEN:
             message.error(t("page.user.sign_up.error_message.email.registered"))
             break
           case ERROR_FLAG.ERROR_FLAG_VALIDATE_VERIFICATION_CODE_FAILED:
-            track(
-              ILLA_MIXPANEL_EVENT_TYPE.VALIDATE,
-              ILLA_MIXPANEL_PUBLIC_PAGE_NAME.SIGNUP,
-              {
-                element: "send_code",
-                parameter2: "failed",
-                parameter3: "invalid_code",
-              },
-            )
             message.error(
               t("page.user.sign_up.error_message.verification_code.invalid"),
             )
@@ -122,15 +91,6 @@ const RegisterPage: FC = () => {
             })
             break
           case "invalid verification code":
-            track(
-              ILLA_MIXPANEL_EVENT_TYPE.VALIDATE,
-              ILLA_MIXPANEL_PUBLIC_PAGE_NAME.SIGNUP,
-              {
-                element: "send_code",
-                parameter2: "failed",
-                parameter3: "invalid_code",
-              },
-            )
             setErrorMsg({
               ...errorMsg,
               verificationCode: t(
@@ -154,41 +114,48 @@ const RegisterPage: FC = () => {
       })
     } catch (e) {}
   }
+
+  useEffect(() => {
+    TipisTrack.pageViewTrack(TIPIS_TRACK_PUBLIC_PAGE_NAME.SIGNUP)
+    return () => {
+      TipisTrack.pageLeaveTrack(TIPIS_TRACK_PUBLIC_PAGE_NAME.SIGNUP)
+    }
+  }, [])
+
+  useBeforeUnload(() => {
+    TipisTrack.pageLeaveTrack(TIPIS_TRACK_PUBLIC_PAGE_NAME.SIGNUP)
+  })
+
   return (
     <>
       <Helmet>
         <title>{t("meta.register_meta_title")}</title>
       </Helmet>
       <FormProvider {...formProps}>
-        <MixpanelTrackProvider
-          basicTrack={track}
-          pageName={ILLA_MIXPANEL_PUBLIC_PAGE_NAME.SIGNUP}
-        >
-          <LayoutAutoChange
-            desktopPage={
-              <PCRegister
-                loading={loading}
-                errorMsg={errorMsg}
-                onSubmit={onSubmit}
-                sendEmail={handleSendEmail}
-                lockedEmail={email ?? searchParams.get("email") ?? ""}
-                showCountDown={showCountDown}
-                onCountDownChange={setShowCountDown}
-              />
-            }
-            mobilePage={
-              <MobileRegister
-                loading={loading}
-                errorMsg={errorMsg}
-                onSubmit={onSubmit}
-                sendEmail={handleSendEmail}
-                lockedEmail={email ?? searchParams.get("email") ?? ""}
-                showCountDown={showCountDown}
-                onCountDownChange={setShowCountDown}
-              />
-            }
-          />
-        </MixpanelTrackProvider>
+        <LayoutAutoChange
+          desktopPage={
+            <PCRegister
+              loading={loading}
+              errorMsg={errorMsg}
+              onSubmit={onSubmit}
+              sendEmail={handleSendEmail}
+              lockedEmail={email ?? searchParams.get("email") ?? ""}
+              showCountDown={showCountDown}
+              onCountDownChange={setShowCountDown}
+            />
+          }
+          mobilePage={
+            <MobileRegister
+              loading={loading}
+              errorMsg={errorMsg}
+              onSubmit={onSubmit}
+              sendEmail={handleSendEmail}
+              lockedEmail={email ?? searchParams.get("email") ?? ""}
+              showCountDown={showCountDown}
+              onCountDownChange={setShowCountDown}
+            />
+          }
+        />
       </FormProvider>
     </>
   )

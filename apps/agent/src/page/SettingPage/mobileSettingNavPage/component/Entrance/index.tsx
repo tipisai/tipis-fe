@@ -2,19 +2,19 @@ import Icon from "@ant-design/icons"
 import { FC, useEffect, useMemo } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
-import {
-  ILLA_MIXPANEL_CLOUD_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
-} from "@illa-public/mixpanel-utils"
+import { useBeforeUnload } from "react-router-dom"
 import { USER_ROLE } from "@illa-public/public-types"
-import { getPlanUtils, useGetTeamsInfoQuery } from "@illa-public/user-data"
+import {
+  TIPIS_TRACK_CLOUD_PAGE_NAME,
+  TipisTrack,
+} from "@illa-public/track-utils"
+import { getPlanUtils } from "@illa-public/user-data"
 import { canAccessMember, canManagePayment } from "@illa-public/user-role-utils"
 import ProfileIcon from "@/assets/setting/profile.svg?react"
 import TeamIcon from "@/assets/setting/team.svg?react"
 import TeamSelect from "@/components/TeamSelect"
 import { useLeaveTeamModal } from "@/page/SettingPage/hooks/useLeaveTeamModal"
 import { useLogout } from "@/page/SettingPage/hooks/useLogout"
-import { track } from "@/utils/mixpanelHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import SettingMenu from "../Menu"
 import {
@@ -26,11 +26,8 @@ import {
 
 const Entrance: FC = () => {
   const { t } = useTranslation()
-  const { data: teams } = useGetTeamsInfoQuery(null)
   const currentTeamInfo = useGetCurrentTeamInfo()
   const logout = useLogout()
-
-  const isOwner = currentTeamInfo?.myRole === USER_ROLE.OWNER
 
   const handleLeaveOrDeleteTeamModal = useLeaveTeamModal()
   const { hiddenMember, leaveLabel } = useMemo(() => {
@@ -71,11 +68,6 @@ const Entrance: FC = () => {
       path: "",
       label: t("profile.setting.logout"),
       onClick: () => {
-        track(
-          ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-          ILLA_MIXPANEL_CLOUD_PAGE_NAME.SETTING,
-          { element: "log_out", parameter3: teams?.length },
-        )
         logout()
       },
     },
@@ -101,15 +93,6 @@ const Entrance: FC = () => {
           path: "",
           label: leaveLabel,
           onClick: () => {
-            track(
-              ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-              ILLA_MIXPANEL_CLOUD_PAGE_NAME.TEAM_SETTING,
-              {
-                element: isOwner ? "delete" : "leave",
-                parameter1: isOwner ? "delete_button" : undefined,
-                parameter11: currentTeamInfo?.myRole,
-              },
-            )
             handleLeaveOrDeleteTeamModal()
           },
         },
@@ -117,24 +100,15 @@ const Entrance: FC = () => {
     : []
 
   useEffect(() => {
-    track(
-      ILLA_MIXPANEL_EVENT_TYPE.SHOW,
-      ILLA_MIXPANEL_CLOUD_PAGE_NAME.TEAM_SETTING,
-      {
-        element: isOwner ? "delete" : "leave",
-        parameter1: isOwner ? "delete_button" : undefined,
-        parameter11: currentTeamInfo?.myRole,
-      },
-    )
-  }, [currentTeamInfo?.myRole, isOwner])
+    TipisTrack.pageViewTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.MOBILE_SETTING_NAV)
+    return () => {
+      TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.MOBILE_SETTING_NAV)
+    }
+  }, [])
 
-  useEffect(() => {
-    track(
-      ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-      ILLA_MIXPANEL_CLOUD_PAGE_NAME.SETTING,
-      { element: "log_out", parameter3: teams?.length },
-    )
-  }, [teams?.length])
+  useBeforeUnload(() => {
+    TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.MOBILE_SETTING_NAV)
+  })
 
   return (
     <>

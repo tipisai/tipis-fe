@@ -4,6 +4,7 @@ import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { Avatar } from "@illa-public/avatar"
 import { CopyIcon } from "@illa-public/icon"
+import { TipisTrack } from "@illa-public/track-utils"
 import { copyToClipboard } from "@illa-public/utils"
 import { SenderType } from "@/components/PreviewChat/interface"
 import { ChatContext } from "@/page/WorkSpace/AI/components/ChatContext"
@@ -59,6 +60,7 @@ export const AIAgentMessage: FC<AIAgentMessageProps> = (props) => {
             css={hoverCopyStyle}
             onClick={() => {
               copyToClipboard(message.message ?? "")
+              TipisTrack.track("click_copy_result")
               messageAPI.success({
                 content: t("copied"),
               })

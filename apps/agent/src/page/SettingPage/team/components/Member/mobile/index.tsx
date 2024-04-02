@@ -1,12 +1,8 @@
 import { Button } from "antd"
-import { FC, useContext, useEffect } from "react"
+import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
 import { InviteMemberMobile } from "@illa-public/invite-modal"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  MixpanelTrackContext,
-} from "@illa-public/mixpanel-utils"
 import { MemberInfo, USER_ROLE, USER_STATUS } from "@illa-public/public-types"
 import { teamActions } from "@illa-public/user-data"
 import { canManageInvite, showInviteModal } from "@illa-public/user-role-utils"
@@ -20,21 +16,12 @@ export const MobileMemberPage: FC = () => {
   const teamInfo = useGetCurrentTeamInfo()!
   const dispatch = useDispatch()
   const currentUserRole = teamInfo?.myRole ?? USER_ROLE.VIEWER
-  const { track } = useContext(MixpanelTrackContext)
   const {
-    showInviteButton,
     handleClickInviteButton,
     handleCopy,
     inviteModalVisible,
     closeInviteModal,
   } = useContext(MemberContext)
-
-  useEffect(() => {
-    showInviteButton &&
-      track?.(ILLA_MIXPANEL_EVENT_TYPE.SHOW, {
-        element: "invite_entry",
-      })
-  }, [showInviteButton, track])
 
   return (
     <div css={mobileMemberContainerStyle}>

@@ -1,14 +1,10 @@
 import { App } from "antd"
-import { FC, useContext, useState } from "react"
+import { FC, useState } from "react"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
-import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  MixpanelTrackContext,
-} from "@illa-public/mixpanel-utils"
 import {
   FREE_TEAM_LIMIT_TYPE,
   handleFreeTeamLimitError,
@@ -34,7 +30,6 @@ const CreateTeamModal: FC<CreateTeamModalProps> = (props) => {
 
   const createFormProps = useForm<CreateTeamFields>({})
   const [loading, setLoading] = useState(false)
-  const { track } = useContext(MixpanelTrackContext)
 
   const onCloseCreateModal = () => {
     onCancel?.()
@@ -49,10 +44,7 @@ const CreateTeamModal: FC<CreateTeamModalProps> = (props) => {
       message.success({
         content: t("team_create_suc"),
       })
-      track?.(ILLA_MIXPANEL_EVENT_TYPE.REQUEST, {
-        element: "team_modal_create_button",
-        parameter2: "suc",
-      })
+
       setLocalTeamIdentifier(res.identifier)
       navigate(`/workspace/${res.identifier}`, { replace: true })
     } catch (e) {
@@ -64,11 +56,7 @@ const CreateTeamModal: FC<CreateTeamModalProps> = (props) => {
             message.error({
               content: t("page.user.sign_in.tips.fail_account"),
             })
-            track?.(ILLA_MIXPANEL_EVENT_TYPE.REQUEST, {
-              element: "team_modal_create_button",
-              parameter2: "failed",
-              parameter3: "existed_identify",
-            })
+
             break
           case ERROR_FLAG.ERROR_FLAG_PROMOTE_CODE_ALREADY_USED:
             message.error({
@@ -80,11 +68,7 @@ const CreateTeamModal: FC<CreateTeamModalProps> = (props) => {
             message.error({
               content: t("team.create.error_invite_code"),
             })
-            track?.(ILLA_MIXPANEL_EVENT_TYPE.REQUEST, {
-              element: "team_modal_create_button",
-              parameter2: "failed",
-              parameter3: "invalid_invitation_code",
-            })
+
             break
           case ERROR_FLAG.ERROR_FLAG_CAN_NOT_CREATE_TEAM:
             message.error({

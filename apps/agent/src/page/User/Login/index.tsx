@@ -3,17 +3,15 @@ import { FC, useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useParams, useSearchParams } from "react-router-dom"
+import { useBeforeUnload, useParams, useSearchParams } from "react-router-dom"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
-  ILLA_MIXPANEL_EVENT_TYPE,
-  ILLA_MIXPANEL_PUBLIC_PAGE_NAME,
-  MixpanelTrackProvider,
-} from "@illa-public/mixpanel-utils"
+  TIPIS_TRACK_PUBLIC_PAGE_NAME,
+  TipisTrack,
+} from "@illa-public/track-utils"
 import { useSignInMutation } from "@illa-public/user-data"
 import { setAuthToken } from "@illa-public/utils"
-import { track } from "@/utils/mixpanelHelper"
 import { useNavigateTargetWorkspace } from "@/utils/routeHelper/hook"
 import { LoginFields } from "../interface"
 import { LoginErrorMsg } from "./interface"
@@ -48,6 +46,7 @@ const LoginPage: FC = () => {
       message.success({
         content: t("page.user.sign_in.tips.success"),
       })
+      TipisTrack.track("sign_in")
       await navigateToWorkspace()
     } catch (e) {
       if (isILLAAPiError(e)) {
@@ -88,8 +87,15 @@ const LoginPage: FC = () => {
   }
 
   useEffect(() => {
-    track(ILLA_MIXPANEL_EVENT_TYPE.VISIT, ILLA_MIXPANEL_PUBLIC_PAGE_NAME.LOGIN)
+    TipisTrack.pageViewTrack(TIPIS_TRACK_PUBLIC_PAGE_NAME.LOGIN)
+    return () => {
+      TipisTrack.pageLeaveTrack(TIPIS_TRACK_PUBLIC_PAGE_NAME.LOGIN)
+    }
   }, [])
+
+  useBeforeUnload(() => {
+    TipisTrack.pageLeaveTrack(TIPIS_TRACK_PUBLIC_PAGE_NAME.LOGIN)
+  })
 
   return (
     <>
@@ -97,29 +103,24 @@ const LoginPage: FC = () => {
         <title>{t("meta.login_meta_title")}</title>
       </Helmet>
       <FormProvider {...formProps}>
-        <MixpanelTrackProvider
-          basicTrack={track}
-          pageName={ILLA_MIXPANEL_PUBLIC_PAGE_NAME.LOGIN}
-        >
-          <LayoutAutoChange
-            desktopPage={
-              <PCLogin
-                loading={isLoading}
-                errorMsg={errorMsg}
-                onSubmit={onSubmit}
-                lockedEmail={email ?? searchParams.get("email") ?? ""}
-              />
-            }
-            mobilePage={
-              <MobileLogin
-                loading={isLoading}
-                errorMsg={errorMsg}
-                onSubmit={onSubmit}
-                lockedEmail={email ?? searchParams.get("email") ?? ""}
-              />
-            }
-          />
-        </MixpanelTrackProvider>
+        <LayoutAutoChange
+          desktopPage={
+            <PCLogin
+              loading={isLoading}
+              errorMsg={errorMsg}
+              onSubmit={onSubmit}
+              lockedEmail={email ?? searchParams.get("email") ?? ""}
+            />
+          }
+          mobilePage={
+            <MobileLogin
+              loading={isLoading}
+              errorMsg={errorMsg}
+              onSubmit={onSubmit}
+              lockedEmail={email ?? searchParams.get("email") ?? ""}
+            />
+          }
+        />
       </FormProvider>
     </>
   )

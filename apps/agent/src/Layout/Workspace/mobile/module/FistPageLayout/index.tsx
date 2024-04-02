@@ -1,6 +1,5 @@
 import { Divider, Drawer } from "antd"
 import { FC, useState } from "react"
-import CreateTeamModal from "@/Layout/Workspace/components/CreateTeamModal"
 import FeatureArea from "@/Layout/Workspace/modules/FeatureArea"
 import MenuFooter from "@/Layout/Workspace/modules/MenuFooter"
 import RecentTabs from "@/Layout/Workspace/modules/RecentTabs"
@@ -18,7 +17,6 @@ import {
 const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
   const { headerExtra, children, customRenderTitle, title } = props
   const [openDrawer, setOpenDrawer] = useState(false)
-  const [createTeamVisible, setCreateTeamVisible] = useState(false)
 
   const showDrawer = () => {
     setOpenDrawer(true)
@@ -39,13 +37,7 @@ const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
       />
       {children}
       <Drawer
-        title={
-          <TeamSelectAndInviteButton
-            openCreateModal={() => {
-              setCreateTeamVisible(true)
-            }}
-          />
-        }
+        title={<TeamSelectAndInviteButton />}
         onClose={onClose}
         open={openDrawer}
         placement="left"
@@ -54,11 +46,7 @@ const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
         css={customDrawStyle}
       >
         <div css={menuContentStyle}>
-          <FeatureArea
-            openCreateModal={() => {
-              setCreateTeamVisible(true)
-            }}
-          />
+          <FeatureArea />
           <div css={dividerContainerStyle}>
             <Divider
               style={{
@@ -70,10 +58,6 @@ const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
         </div>
         <MenuFooter />
       </Drawer>
-      <CreateTeamModal
-        visible={createTeamVisible}
-        onCancel={() => setCreateTeamVisible(false)}
-      />
     </div>
   )
 }

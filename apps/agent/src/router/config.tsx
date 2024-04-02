@@ -1,15 +1,14 @@
 import { Suspense, lazy } from "react"
 import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom"
-import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { Page403, Page404, Page500 } from "@illa-public/status-page"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import SettingLayout from "@/page/SettingPage"
-import { MobileWorkspaceLayout } from "../Layout/Workspace/mobile"
-import PCWorkspaceLayout from "../Layout/Workspace/pc"
+import WorkspaceLayout from "../Layout/Workspace"
 import LoginAuth from "../components/Auth/LoginAuth"
 import TeamAndLoginCheck from "../components/Auth/TeamAndLoginCheck"
 import RootPage from "../page/RootPage"
 import UserLayout from "../page/User/Layout/index"
+import Empty from "../page/WorkSpace/Empty"
 import { buildRouter } from "./buildRouter"
 import { RoutesObjectPro } from "./interface"
 import { rootLoader } from "./loader/rootLoader"
@@ -56,7 +55,6 @@ const MarketTipiDetailPage = lazy(
   () => import("@/page/WorkSpace/TipiDetail/MarketTipiDetail"),
 )
 
-const EmptyTeam = lazy(() => import("@/page/WorkSpace/EmptyTeam"))
 const SubScribeRedirect = lazy(
   () => import("@/page/SettingPage/subscribedRedirect"),
 )
@@ -115,23 +113,26 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     ],
   },
   {
-    path: "/empty",
+    path: "/workspace",
     ProtectComponent: LoginAuth,
     accessByMobile: true,
-    element: (
-      <Suspense fallback={<FullSectionLoading />}>
-        <EmptyTeam />
-      </Suspense>
-    ),
+    element: <WorkspaceLayout />,
+    children: [
+      {
+        index: true,
+        path: "empty",
+        accessByMobile: true,
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <Empty />
+          </Suspense>
+        ),
+      },
+    ],
   },
   {
     path: "/workspace",
-    element: (
-      <LayoutAutoChange
-        desktopPage={<PCWorkspaceLayout />}
-        mobilePage={<MobileWorkspaceLayout />}
-      />
-    ),
+    element: <WorkspaceLayout />,
     ProtectComponent: TeamAndLoginCheck,
     accessByMobile: true,
     children: [

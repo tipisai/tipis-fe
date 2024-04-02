@@ -1,18 +1,17 @@
 import { FC, useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
+import { useBeforeUnload } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
-  ILLA_MIXPANEL_CLOUD_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
-  MixpanelTrackProvider,
-} from "@illa-public/mixpanel-utils"
+  TIPIS_TRACK_CLOUD_PAGE_NAME,
+  TipisTrack,
+} from "@illa-public/track-utils"
 import {
   useGetUserInfoQuery,
   useUpdateUserLanguageMutation,
 } from "@illa-public/user-data"
 import { defaultLanguage } from "@/i18n"
-import { track } from "@/utils/mixpanelHelper"
 import MobileLanguageSetting from "./mobile"
 import PCLanguageSetting from "./pc"
 
@@ -27,16 +26,6 @@ const LanguageSetting: FC = () => {
 
   const [updateUserLanguage] = useUpdateUserLanguageMutation()
 
-  useEffect(() => {
-    track(
-      ILLA_MIXPANEL_EVENT_TYPE.VISIT,
-      ILLA_MIXPANEL_CLOUD_PAGE_NAME.LANGUAGE_SETTING,
-      {
-        element: "language",
-      },
-    )
-  }, [])
-
   const onSaveLanguageChange = async () => {
     try {
       setLanguageLoading(true)
@@ -47,36 +36,43 @@ const LanguageSetting: FC = () => {
       setLanguageLoading(false)
     }
   }
+
+  useEffect(() => {
+    TipisTrack.pageViewTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_LANGUAGE)
+    return () => {
+      TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_LANGUAGE)
+    }
+  }, [])
+
+  useBeforeUnload(() => {
+    TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_LANGUAGE)
+  })
+
   return (
     <>
       <Helmet>
         <title>{t("profile.setting.language")}</title>
       </Helmet>
-      <MixpanelTrackProvider
-        basicTrack={track}
-        pageName={ILLA_MIXPANEL_CLOUD_PAGE_NAME.LANGUAGE_SETTING}
-      >
-        <LayoutAutoChange
-          desktopPage={
-            <PCLanguageSetting
-              loading={languageLoading}
-              language={language}
-              currentLanguage={currentLanguage}
-              onChangeLanguage={setCurrentLanguage}
-              onSubmit={onSaveLanguageChange}
-            />
-          }
-          mobilePage={
-            <MobileLanguageSetting
-              loading={languageLoading}
-              language={language}
-              currentLanguage={currentLanguage}
-              onChangeLanguage={setCurrentLanguage}
-              onSubmit={onSaveLanguageChange}
-            />
-          }
-        />
-      </MixpanelTrackProvider>
+      <LayoutAutoChange
+        desktopPage={
+          <PCLanguageSetting
+            loading={languageLoading}
+            language={language}
+            currentLanguage={currentLanguage}
+            onChangeLanguage={setCurrentLanguage}
+            onSubmit={onSaveLanguageChange}
+          />
+        }
+        mobilePage={
+          <MobileLanguageSetting
+            loading={languageLoading}
+            language={language}
+            currentLanguage={currentLanguage}
+            onChangeLanguage={setCurrentLanguage}
+            onSubmit={onSaveLanguageChange}
+          />
+        }
+      />
     </>
   )
 }

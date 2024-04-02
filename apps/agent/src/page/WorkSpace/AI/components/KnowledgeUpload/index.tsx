@@ -1,11 +1,13 @@
 import Icon from "@ant-design/icons"
 import { App, Button } from "antd"
 import { ChangeEvent, FC, useMemo, useRef, useSyncExternalStore } from "react"
+import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { getFileIconByContentType } from "@illa-public/icon"
 import { DeleteIcon, UploadIcon } from "@illa-public/icon"
 import { GCS_OBJECT_TYPE, IKnowledgeFile } from "@illa-public/public-types"
+import { TipisTrack } from "@illa-public/track-utils"
 import { getCurrentId } from "@illa-public/user-data"
 import {
   ACCEPT,
@@ -20,6 +22,7 @@ import {
   useUploadFileToDrive,
 } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
+import { IAgentForm } from "../../AIAgent/interface"
 import StatusIcon from "./StatusIcon"
 import { IKnowledgeUploadProps } from "./interface"
 import {
@@ -60,6 +63,11 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
   const { uploadKnowledgeFile } = useUploadFileToDrive()
   const [deleteKnowledgeFile] = useDeleteKnowledgeFileMutation()
   const teamID = useSelector(getCurrentId)!
+  const { control } = useFormContext<IAgentForm>()
+  const [aiAgentID] = useWatch({
+    control,
+    name: ["aiAgentID"],
+  })
 
   const uploadFiles = useSyncExternalStore(
     (listener) => editPanelUpdateFileDetailStore.subscribe(listener),
@@ -149,6 +157,9 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
   }
 
   const handleClickUpload = () => {
+    TipisTrack.track("click_upload_knowledge_file_entry", {
+      parameter1: aiAgentID ? "edit" : "create",
+    })
     if (Array.isArray(values) && values.length >= MAX_MESSAGE_FILES_LENGTH) {
       messageAPI.warning(t("dashboard.message.support_for_up_to_10"))
       return

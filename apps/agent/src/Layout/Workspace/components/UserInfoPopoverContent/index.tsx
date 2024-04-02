@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { useIntercom } from "react-use-intercom"
+import { TipisTrack } from "@illa-public/track-utils"
 import {
   getCurrentTeamInfo,
   getCurrentUser,
@@ -27,6 +28,7 @@ const UserInfoPopoverContent: FC = () => {
   const currentTeam = useSelector(getCurrentTeamInfo)!
 
   const onClickChatWithUs = () => {
+    TipisTrack.track("click_help_center")
     boot({
       userId: userInfo.userID,
       email: userInfo.email,
@@ -60,7 +62,12 @@ const UserInfoPopoverContent: FC = () => {
         </Button>
         <Button type="text" block size="large">
           <Link to="/setting">
-            <div css={buttonContentContainerStyle}>
+            <div
+              css={buttonContentContainerStyle}
+              onClick={() => {
+                TipisTrack.track("click_settings_entry")
+              }}
+            >
               <Icon component={SettingIcon} css={iconContainerStyle} />
               {t("page.left.menu.setting")}
             </div>

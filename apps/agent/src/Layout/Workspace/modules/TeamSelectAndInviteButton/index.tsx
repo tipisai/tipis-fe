@@ -5,10 +5,6 @@ import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { InviteMemberPC } from "@illa-public/invite-modal"
-import {
-  ILLA_MIXPANEL_CLOUD_PAGE_NAME,
-  ILLA_MIXPANEL_EVENT_TYPE,
-} from "@illa-public/mixpanel-utils"
 import { MemberInfo, USER_ROLE, USER_STATUS } from "@illa-public/public-types"
 import {
   getCurrentTeamInfo,
@@ -19,20 +15,13 @@ import { canManageInvite } from "@illa-public/user-role-utils"
 import InviteIcon from "@/assets/workspace/invite.svg?react"
 import TeamSelect from "@/components/TeamSelect"
 import { copyToClipboard } from "@/utils/copyToClipboard"
-import { track } from "@/utils/mixpanelHelper"
 import { getChatPath } from "@/utils/routeHelper"
 import {
   inviteButtonContainerStyle,
   teamSelectAndInviteButtonContainerStyle,
 } from "./style"
 
-interface TeamSelectAndInviteButton {
-  openCreateModal: () => void
-}
-
-const TeamSelectAndInviteButton: FC<TeamSelectAndInviteButton> = ({
-  openCreateModal,
-}) => {
+const TeamSelectAndInviteButton: FC = () => {
   const [inviteModalVisible, setInviteModalVisible] = useState(false)
   const currentTeamInfo = useSelector(getCurrentTeamInfo)
   const currentUserRole = currentTeamInfo?.myRole ?? USER_ROLE.VIEWER
@@ -42,11 +31,6 @@ const TeamSelectAndInviteButton: FC<TeamSelectAndInviteButton> = ({
   const navigate = useNavigate()
 
   const handleClickInvite = () => {
-    track(
-      ILLA_MIXPANEL_EVENT_TYPE.CLICK,
-      ILLA_MIXPANEL_CLOUD_PAGE_NAME.HOMEPAGE,
-      { element: "invite_entry" },
-    )
     setInviteModalVisible(true)
   }
 
@@ -57,11 +41,7 @@ const TeamSelectAndInviteButton: FC<TeamSelectAndInviteButton> = ({
   return (
     <>
       <div css={teamSelectAndInviteButtonContainerStyle}>
-        <TeamSelect
-          openCreateModal={openCreateModal}
-          showCreateTeamButton
-          onChangeTeam={handleSwitchTeam}
-        />
+        <TeamSelect showCreateTeamButton onChangeTeam={handleSwitchTeam} />
         <div css={inviteButtonContainerStyle}>
           <Button
             icon={<Icon component={InviteIcon} />}
