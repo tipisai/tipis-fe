@@ -37,9 +37,9 @@ export const senderNicknameStyle = css`
 `
 
 export const messageContainerStyle = css`
-  border-radius: 8px;
+  border-radius: 16px;
   background: ${getColor("grayBlue", "09")};
-  padding: 12px;
+  padding: 8px 12px;
   margin-top: 4px;
   max-width: 100%;
   ${applyMobileStyle(css`

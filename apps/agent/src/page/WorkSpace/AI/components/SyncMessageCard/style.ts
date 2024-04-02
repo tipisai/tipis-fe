@@ -116,9 +116,9 @@ export const infoDescStyle = (status: MESSAGE_STATUS) => {
 }
 
 export const pureMessageContainerStyle = css`
-  border-radius: 8px;
+  border-radius: 16px;
   background: ${getColor("grayBlue", "09")};
-  padding: 12px;
+  padding: 8px 12px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -131,7 +131,7 @@ export const pureMessageContainerStyle = css`
 export const messageCardAnimation: Variants = {
   enter: {
     height: "auto",
-    padding: 12,
+    padding: "8px 12px",
     transitionEnd: { display: "flex" },
   },
   exit: {
@@ -142,9 +142,9 @@ export const messageCardAnimation: Variants = {
 }
 
 export const messageContainerStyle = css`
-  border-radius: 8px;
+  border-radius: 16px;
   background: ${getColor("grayBlue", "09")};
-  padding: 12px;
+  padding: 8px 12px;
   display: flex;
   height: auto;
   flex-direction: column;

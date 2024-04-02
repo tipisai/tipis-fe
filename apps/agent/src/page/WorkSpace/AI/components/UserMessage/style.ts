@@ -41,9 +41,9 @@ export const senderAvatarStyle = css`
 `
 
 export const messageContainerStyle = css`
-  border-radius: 8px;
+  border-radius: 16px;
   background: ${getColor("techPurple", "08")};
-  padding: 12px;
+  padding: 8px 12px;
   ${applyMobileStyle(css`
     margin-left: 0;
   `)}
