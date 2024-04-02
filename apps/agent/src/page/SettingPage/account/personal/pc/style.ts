@@ -55,3 +55,20 @@ export const formLabelStyle = css`
 export const formContainerStyle = css`
   width: 600px;
 `
+
+export const uploadContentContainerStyle = css`
+  color: ${getColor("grayBlue", "04")};
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  object-fit: cover;
+  object-position: center;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  + .ant-image-mask {
+    border-radius: 50%;
+    inset: 1px;
+  }
+`

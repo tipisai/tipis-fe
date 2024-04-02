@@ -15,7 +15,7 @@ export const useUploadAvatar = () => {
 
   const teamInfo = useGetCurrentTeamInfo()!
 
-  const uploadUserAvatar = (file: Blob) => {
+  const uploadUserAvatar = (file: File) => {
     const fileName = v4()
     return new Promise<string>(async (resolve, reject) => {
       try {
@@ -34,7 +34,7 @@ export const useUploadAvatar = () => {
     })
   }
 
-  const uploadTeamIcon = (file: Blob) => {
+  const uploadTeamIcon = (file: File) => {
     const fileName = v4()
     return new Promise<string>(async (resolve, reject) => {
       try {

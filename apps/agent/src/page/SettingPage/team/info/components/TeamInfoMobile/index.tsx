@@ -1,11 +1,9 @@
-import Icon from "@ant-design/icons"
-import { App, Button, Input } from "antd"
+import { App, Button, GetProp, Image, Input, Upload, UploadProps } from "antd"
+import ImgCrop from "antd-img-crop"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { Avatar } from "@illa-public/avatar"
-import { AvatarUpload } from "@illa-public/cropper"
-import { CameraIcon } from "@illa-public/icon"
+import { FILE_SIZE_LIMIT } from "@illa-public/cropper/constants"
 import { USER_ROLE } from "@illa-public/public-types"
 import { isBiggerThanTargetRole } from "@illa-public/user-role-utils"
 import ErrorMessage from "@/components/InputErrorMessage"
@@ -15,26 +13,25 @@ import { TeamInfoFields } from "@/page/SettingPage/team/interface"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import { TeamInfoMobileProps } from "./interface"
 import {
-  cameraIconContainerStyle,
   forgotPwdContainerStyle,
   formLabelStyle,
   formStyle,
   gridFormFieldStyle,
   gridItemStyle,
   mobileSettingContainerStyle,
+  uploadContentContainerStyle,
   uploadTeamLogoContainerStyle,
 } from "./style"
 
 const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
   const { t } = useTranslation()
   const { onSubmit, disabled, loading } = props
-  const { handleSubmit, control, formState, trigger } =
-    useFormContext<TeamInfoFields>()
+  const { handleSubmit, control, formState } = useFormContext<TeamInfoFields>()
   const { message } = App.useApp()
   const teamInfo = useGetCurrentTeamInfo()!
   const { uploadTeamIcon } = useUploadAvatar()
 
-  const handleUpdateTeamIcon = async (file: Blob) => {
+  const handleUpdateTeamIcon = async (file: File) => {
     try {
       const icon = await uploadTeamIcon(file)
       return (await onSubmit?.({ icon })) as boolean
@@ -46,35 +43,56 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
     }
   }
 
-  const validReport = async () => {
-    let valid = await trigger()
-    if (!valid) {
-    } else {
+  const handleBeforeUpload = (
+    file: Parameters<GetProp<UploadProps, "beforeUpload">>[0],
+  ) => {
+    if (file.size >= FILE_SIZE_LIMIT) {
+      message.error(t("image_exceed"))
+      return false
     }
+    return true
   }
 
-  const canEditorTeamMobile = isBiggerThanTargetRole(
+  const canEditorTeamInfo = isBiggerThanTargetRole(
     USER_ROLE.OWNER,
     teamInfo?.myRole,
   )
 
   return (
     <div css={mobileSettingContainerStyle}>
-      <AvatarUpload
-        isMobile
-        onOk={handleUpdateTeamIcon}
-        disabled={!canEditorTeamMobile}
-      >
-        <div css={uploadTeamLogoContainerStyle}>
-          <Icon component={CameraIcon} css={cameraIconContainerStyle} />
-          <Avatar
-            id={teamInfo?.id}
-            name={teamInfo?.name}
-            avatarUrl={teamInfo?.icon}
-            size={100}
-          />
+      <div css={uploadTeamLogoContainerStyle}>
+        <div>
+          <ImgCrop
+            rotationSlider
+            onModalOk={(v) => {
+              handleUpdateTeamIcon(v as File)
+            }}
+            beforeCrop={handleBeforeUpload}
+            cropShape="round"
+          >
+            <Upload
+              listType="picture-circle"
+              showUploadList={false}
+              disabled={!canEditorTeamInfo}
+            >
+              {teamInfo?.icon ? (
+                <Image
+                  src={teamInfo?.icon}
+                  width="100px"
+                  height="100px"
+                  css={uploadContentContainerStyle}
+                  preview={{
+                    visible: false,
+                    mask: "+ Upload",
+                  }}
+                />
+              ) : (
+                "+ Upload"
+              )}
+            </Upload>
+          </ImgCrop>
         </div>
-      </AvatarUpload>
+      </div>
       <form css={formStyle} onSubmit={handleSubmit(onSubmit)}>
         <section css={gridFormFieldStyle}>
           <section css={gridItemStyle}>
@@ -151,7 +169,6 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
           loading={loading}
           disabled={disabled}
           block
-          onClick={validReport}
         >
           {t("profile.setting.save")}
         </Button>

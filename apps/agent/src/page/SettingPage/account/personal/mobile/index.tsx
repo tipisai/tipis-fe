@@ -1,22 +1,20 @@
-import Icon from "@ant-design/icons"
-import { Button, Input } from "antd"
+import { App, Button, GetProp, Image, Input, Upload, UploadProps } from "antd"
+import ImgCrop from "antd-img-crop"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { Avatar } from "@illa-public/avatar"
-import { AvatarUpload } from "@illa-public/cropper"
-import { CameraIcon } from "@illa-public/icon"
+import { FILE_SIZE_LIMIT } from "@illa-public/cropper/constants"
 import { useGetUserInfoQuery } from "@illa-public/user-data"
 import ErrorMessage from "@/components/InputErrorMessage"
 import { AccountSettingFields, AccountSettingProps } from "../interface"
 import {
   avatarContainerStyle,
-  cameraIconContainerStyle,
   containerStyle,
   controllerContainerStyle,
   formContainerStyle,
   formLabelStyle,
   tipTextStyle,
+  uploadContentContainerStyle,
 } from "./style"
 
 const MobileAccountSetting: FC<AccountSettingProps> = (props) => {
@@ -27,31 +25,51 @@ const MobileAccountSetting: FC<AccountSettingProps> = (props) => {
     control,
     formState,
     formState: { isDirty },
-    trigger,
   } = useFormContext<AccountSettingFields>()
   const { data: userInfo } = useGetUserInfoQuery(null)
 
-  const validReport = async () => {
-    let valid = await trigger()
-    if (!valid) {
-    } else {
+  const { message } = App.useApp()
+
+  const handleBeforeUpload = (
+    file: Parameters<GetProp<UploadProps, "beforeUpload">>[0],
+  ) => {
+    if (file.size >= FILE_SIZE_LIMIT) {
+      message.error(t("image_exceed"))
+      return false
     }
+    return true
   }
 
   return (
     <div css={containerStyle}>
       <div css={avatarContainerStyle}>
-        <AvatarUpload isMobile onOk={handleUpdateAvatar}>
-          <div css={cameraIconContainerStyle}>
-            <Icon component={CameraIcon} />
-          </div>
-          <Avatar
-            size={100}
-            id={userInfo?.userID}
-            name={userInfo?.nickname}
-            avatarUrl={userInfo?.avatar}
-          />
-        </AvatarUpload>
+        <div>
+          <ImgCrop
+            rotationSlider
+            onModalOk={(v) => {
+              handleUpdateAvatar(v as File)
+            }}
+            beforeCrop={handleBeforeUpload}
+            cropShape="round"
+          >
+            <Upload listType="picture-circle" showUploadList={false}>
+              {userInfo?.avatar ? (
+                <Image
+                  src={userInfo?.avatar}
+                  width="100px"
+                  height="100px"
+                  css={uploadContentContainerStyle}
+                  preview={{
+                    visible: false,
+                    mask: "+ Upload",
+                  }}
+                />
+              ) : (
+                "+ Upload"
+              )}
+            </Upload>
+          </ImgCrop>
+        </div>
       </div>
       <form onSubmit={handleSubmit?.(onSubmit)} css={formContainerStyle}>
         <section css={controllerContainerStyle}>
@@ -101,13 +119,7 @@ const MobileAccountSetting: FC<AccountSettingProps> = (props) => {
             />
           </div>
         </section>
-        <Button
-          type="primary"
-          size="large"
-          disabled={!isDirty}
-          block
-          onClick={validReport}
-        >
+        <Button type="primary" size="large" disabled={!isDirty} block>
           {t("profile.setting.save")}
         </Button>
       </form>

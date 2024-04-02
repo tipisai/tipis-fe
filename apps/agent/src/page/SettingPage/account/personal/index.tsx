@@ -43,7 +43,7 @@ export const PersonalSetting: FC = () => {
     } catch (e) {}
   }
 
-  const handleUpdateAvatar = async (file: Blob) => {
+  const handleUpdateAvatar = async (file: File) => {
     try {
       const icon = await uploadUserAvatar(file)
       await updateUserAvatar(icon)

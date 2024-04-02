@@ -7,5 +7,5 @@ export interface AccountSettingFields {
 export interface AccountSettingProps {
   onSubmit: SubmitHandler<AccountSettingFields>
   validAccountReport?: () => void
-  handleUpdateAvatar: (file: Blob) => Promise<boolean>
+  handleUpdateAvatar: (file: File) => Promise<boolean>
 }
