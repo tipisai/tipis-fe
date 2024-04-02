@@ -178,7 +178,7 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
     if (Array.isArray(values) && values.length >= MAX_MESSAGE_FILES_LENGTH) {
       TipisTrack.track("knowledge_file_over_num", {
         parameter1: aiAgentID ? "edit_tipi" : "create_tipi",
-        parameter3: values.length + 1,
+        parameter3: values.length,
       })
       messageAPI.warning(t("dashboard.message.support_for_up_to_10"))
       return
