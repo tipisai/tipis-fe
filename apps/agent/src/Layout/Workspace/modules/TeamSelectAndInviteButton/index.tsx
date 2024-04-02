@@ -21,13 +21,7 @@ import {
   teamSelectAndInviteButtonContainerStyle,
 } from "./style"
 
-interface TeamSelectAndInviteButton {
-  openCreateModal: () => void
-}
-
-const TeamSelectAndInviteButton: FC<TeamSelectAndInviteButton> = ({
-  openCreateModal,
-}) => {
+const TeamSelectAndInviteButton: FC = () => {
   const [inviteModalVisible, setInviteModalVisible] = useState(false)
   const currentTeamInfo = useSelector(getCurrentTeamInfo)
   const currentUserRole = currentTeamInfo?.myRole ?? USER_ROLE.VIEWER
@@ -47,11 +41,7 @@ const TeamSelectAndInviteButton: FC<TeamSelectAndInviteButton> = ({
   return (
     <>
       <div css={teamSelectAndInviteButtonContainerStyle}>
-        <TeamSelect
-          openCreateModal={openCreateModal}
-          showCreateTeamButton
-          onChangeTeam={handleSwitchTeam}
-        />
+        <TeamSelect showCreateTeamButton onChangeTeam={handleSwitchTeam} />
         <div css={inviteButtonContainerStyle}>
           <Button
             icon={<Icon component={InviteIcon} />}

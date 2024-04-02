@@ -1,10 +1,11 @@
 import Icon from "@ant-design/icons"
 import { Avatar, Divider, Tag } from "antd"
-import { FC } from "react"
+import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
 import { SuccessIcon } from "@illa-public/icon"
 import { teamActions, useGetTeamsInfoQuery } from "@illa-public/user-data"
+import { createTeamContext } from "@/Layout/Workspace/context"
 import { setLocalTeamIdentifier } from "@/utils/auth"
 import { isSubscribeForBilling } from "@/utils/billing/isSubscribe"
 import { useGetCurrentTeamInfo } from "@/utils/team"
@@ -16,10 +17,11 @@ interface TeamSelectContentProps extends TeamSelectProps {
 }
 
 const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
-  const { closePopover, openCreateModal, showCreateTeamButton, onChangeTeam } =
-    props
+  const { closePopover, showCreateTeamButton, onChangeTeam } = props
   const { t } = useTranslation()
   const teamInfo = useGetCurrentTeamInfo()!
+
+  const { onChangeTeamVisible } = useContext(createTeamContext)
 
   const currentTeamId = teamInfo?.id
   const { data } = useGetTeamsInfoQuery(null)
@@ -27,7 +29,7 @@ const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
   const dispatch = useDispatch()
 
   const handleClickCreateTeam = () => {
-    openCreateModal?.()
+    onChangeTeamVisible?.(true)
     closePopover()
   }
 

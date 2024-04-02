@@ -21,7 +21,6 @@ export const menuInnerContainerStyle = css`
 export const menuContentStyle = css`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 8px;
   width: 100%;

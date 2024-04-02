@@ -1,5 +1,5 @@
 import Icon from "@ant-design/icons"
-import { FC } from "react"
+import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { v4 } from "uuid"
 import { PenIcon, PlusIcon } from "@illa-public/icon"
@@ -14,22 +14,21 @@ import {
 } from "@/utils/routeHelper/hook"
 // import FeatureCard from "../../components/FeatureCard"
 import MenuItemButton from "../../components/MenuItemButton"
+import { createTeamContext } from "../../context"
 import { featureAreaContainerStyle } from "./style"
 
-interface FeatureAreaProps {
-  openCreateModal?: () => void
-}
-const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
+const FeatureArea: FC = () => {
   const { t } = useTranslation()
   const navigateToCreateTIpis = useNavigateToCreateTipis()
   const navigateToChat = useNavigateToNewChat()
   const navigateToExploreTipis = useNavigateToExploreTipis()
   // const navigateToExploreFunction = useNavigateToExploreFunction()
+  const { onChangeTeamVisible } = useContext(createTeamContext)
 
   const handleClickCreateTipis = () => {
     const isEmptyTeam = getIsEmptyTeam(store.getState())
     if (isEmptyTeam) {
-      openCreateModal?.()
+      onChangeTeamVisible?.(true)
       return
     }
     navigateToCreateTIpis()
@@ -38,7 +37,7 @@ const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
   const handleClickCreateChat = () => {
     const isEmptyTeam = getIsEmptyTeam(store.getState())
     if (isEmptyTeam) {
-      openCreateModal?.()
+      onChangeTeamVisible?.(true)
       return
     }
     navigateToChat(v4())
@@ -47,7 +46,7 @@ const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
   const handleClickExploreTipis = () => {
     const isEmptyTeam = getIsEmptyTeam(store.getState())
     if (isEmptyTeam) {
-      openCreateModal?.()
+      onChangeTeamVisible?.(true)
       return
     }
     navigateToExploreTipis()
@@ -56,7 +55,7 @@ const FeatureArea: FC<FeatureAreaProps> = ({ openCreateModal }) => {
   // const handleClickFunction = () => {
   //   const isEmptyTeam = getIsEmptyTeam(store.getState())
   //   if (isEmptyTeam) {
-  //     openCreateModal?.()
+  //     onChangeTeamVisible?.(true)
   //     return
   //   }
   //   navigateToExploreFunction()

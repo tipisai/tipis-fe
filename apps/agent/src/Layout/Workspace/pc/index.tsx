@@ -11,13 +11,16 @@ import { contentContainerStyle, workspaceLayoutContainerStyle } from "./style"
 
 const PCWorkspaceLayout: FC = () => {
   const { collapsed } = useContext(MenuStatusUIContext)
+
   return (
-    <div css={workspaceLayoutContainerStyle}>
-      {collapsed ? <MiniMenu /> : <PCWorkspaceMenu />}
-      <section css={contentContainerStyle}>
-        <Outlet />
-      </section>
-    </div>
+    <>
+      <div css={workspaceLayoutContainerStyle}>
+        {collapsed ? <MiniMenu /> : <PCWorkspaceMenu />}
+        <section css={contentContainerStyle}>
+          <Outlet />
+        </section>
+      </div>
+    </>
   )
 }
 
