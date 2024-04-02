@@ -3,11 +3,11 @@ import { FC, useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useParams, useSearchParams } from "react-router-dom"
+import { useBeforeUnload, useParams, useSearchParams } from "react-router-dom"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
-  TIPIS_TRACK_CLOUD_PAGE_NAME,
+  TIPIS_TRACK_PUBLIC_PAGE_NAME,
   TipisTrack,
 } from "@illa-public/track-utils"
 import { useSignInMutation } from "@illa-public/user-data"
@@ -46,6 +46,7 @@ const LoginPage: FC = () => {
       message.success({
         content: t("page.user.sign_in.tips.success"),
       })
+      TipisTrack.track("sign_in")
       await navigateToWorkspace()
     } catch (e) {
       if (isILLAAPiError(e)) {
@@ -86,11 +87,15 @@ const LoginPage: FC = () => {
   }
 
   useEffect(() => {
-    TipisTrack.pageViewTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.LOGIN)
+    TipisTrack.pageViewTrack(TIPIS_TRACK_PUBLIC_PAGE_NAME.LOGIN)
     return () => {
-      TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.LOGIN)
+      TipisTrack.pageLeaveTrack(TIPIS_TRACK_PUBLIC_PAGE_NAME.LOGIN)
     }
   }, [])
+
+  useBeforeUnload(() => {
+    TipisTrack.pageLeaveTrack(TIPIS_TRACK_PUBLIC_PAGE_NAME.LOGIN)
+  })
 
   return (
     <>

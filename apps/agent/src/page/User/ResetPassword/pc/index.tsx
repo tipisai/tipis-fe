@@ -5,6 +5,7 @@ import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { PreviousIcon } from "@illa-public/icon"
+import { TipisTrack } from "@illa-public/track-utils"
 import { EmailCode } from "@/components/EmailCode"
 import ErrorMessage from "@/components/InputErrorMessage"
 import { LOGIN_PATH } from "@/utils/routeHelper"
@@ -38,8 +39,13 @@ export const PCReset: FC<ResetProps> = (props) => {
     sendEmail,
   } = props
   const { handleSubmit, control, formState } = useFormContext<ResetPwdFields>()
+
   const backToLogin = () => {
     navigate({ pathname: LOGIN_PATH, search: location.search })
+  }
+
+  const handleSubmitClick = async () => {
+    TipisTrack.track("click_reset_password")
   }
 
   return (
@@ -191,6 +197,7 @@ export const PCReset: FC<ResetProps> = (props) => {
         loading={loading}
         block
         htmlType="submit"
+        onClick={handleSubmitClick}
       >
         {resetLabel ? resetLabel : t("page.user.forgot_password.actions.reset")}
       </Button>

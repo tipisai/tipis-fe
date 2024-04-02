@@ -1,10 +1,11 @@
 import Icon from "@ant-design/icons"
 import { Button, Divider, Input } from "antd"
-import { FC } from "react"
+import { FC, useEffect, useState } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { GithubIcon } from "@illa-public/icon"
+import { TipisTrack } from "@illa-public/track-utils"
 import { EmailCode } from "@/components/EmailCode"
 import ErrorMessage from "@/components/InputErrorMessage"
 import LinkButton from "@/components/LinkButton"
@@ -12,6 +13,7 @@ import { LOGIN_PATH } from "@/utils/routeHelper"
 import { OAuthButton } from "../../components/OAuthButton"
 import { CAN_SHOW_OAUTH, EMAIL_FORMAT } from "../../constants"
 import { RegisterFields } from "../../interface"
+import { getValidReportParamsFromRegister } from "../../utils"
 import { RegisterProps } from "../interface"
 import {
   containerStyle,
@@ -40,11 +42,38 @@ export const PCRegister: FC<RegisterProps> = (props) => {
     sendEmail,
   } = props
   const navigate = useNavigate()
-  const { handleSubmit, control, formState } = useFormContext<RegisterFields>()
+  const { handleSubmit, control, formState, trigger } =
+    useFormContext<RegisterFields>()
 
   const handleClickLogin = () => {
     navigate({ pathname: LOGIN_PATH, search: location.search })
   }
+
+  const { errors } = formState
+  const [asyncValid, setAsyncValid] = useState<
+    { isValid: boolean } | undefined
+  >()
+
+  const validReport = async () => {
+    TipisTrack.track("click_create_account")
+    let isValid = await trigger()
+    if (isValid) {
+      TipisTrack.track("validate_create_account", {
+        parameter2: "suc",
+      })
+    }
+    setAsyncValid({ isValid })
+  }
+
+  useEffect(() => {
+    if (asyncValid && !asyncValid.isValid) {
+      const parameter3 = getValidReportParamsFromRegister(errors)
+      TipisTrack.track("validate_create_account", {
+        parameter2: "failed",
+        parameter3,
+      })
+    }
+  }, [asyncValid, errors])
 
   return (
     <div css={containerStyle}>
@@ -245,6 +274,7 @@ export const PCRegister: FC<RegisterProps> = (props) => {
           loading={loading}
           htmlType="submit"
           block
+          onClick={validReport}
         >
           {t("page.user.sign_up.actions.create")}
         </Button>

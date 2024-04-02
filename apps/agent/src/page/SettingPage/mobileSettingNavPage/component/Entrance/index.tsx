@@ -2,6 +2,7 @@ import Icon from "@ant-design/icons"
 import { FC, useEffect, useMemo } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
+import { useBeforeUnload } from "react-router-dom"
 import { USER_ROLE } from "@illa-public/public-types"
 import {
   TIPIS_TRACK_CLOUD_PAGE_NAME,
@@ -104,6 +105,10 @@ const Entrance: FC = () => {
       TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.MOBILE_SETTING_NAV)
     }
   }, [])
+
+  useBeforeUnload(() => {
+    TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.MOBILE_SETTING_NAV)
+  })
 
   return (
     <>

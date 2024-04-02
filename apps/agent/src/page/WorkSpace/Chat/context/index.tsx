@@ -305,11 +305,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       }
       return initConnectConfig
     } catch (e) {
-      const res = handleCreditPurchaseError(
-        e,
-        CreditModalType.TOKEN,
-        "agent_run",
-      )
+      const res = handleCreditPurchaseError(e, CreditModalType.TOKEN)
       if (res) return
       messageAPI.error({
         content: t("editor.ai-agent.message.start-failed"),

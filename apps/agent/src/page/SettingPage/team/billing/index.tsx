@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
-import { Navigate } from "react-router-dom"
+import { Navigate, useBeforeUnload } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { SUBSCRIBE_PLAN } from "@illa-public/public-types"
 import {
@@ -65,6 +65,10 @@ const Billing: FC = () => {
       TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_BILLING)
     }
   }, [])
+
+  useBeforeUnload(() => {
+    TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_BILLING)
+  })
 
   if (isError) return <Navigate to="/500" />
   if (isLoading) return <FullSectionLoading />

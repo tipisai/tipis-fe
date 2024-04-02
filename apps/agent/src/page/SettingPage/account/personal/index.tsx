@@ -3,6 +3,7 @@ import { FC, useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { useBeforeUnload } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
   TIPIS_TRACK_CLOUD_PAGE_NAME,
@@ -60,6 +61,10 @@ export const PersonalSetting: FC = () => {
       TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_ACCOUNT)
     }
   }, [])
+
+  useBeforeUnload(() => {
+    TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_ACCOUNT)
+  })
 
   return (
     <>

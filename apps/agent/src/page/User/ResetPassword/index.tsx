@@ -3,11 +3,16 @@ import { FC, useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useNavigate, useParams, useSearchParams } from "react-router-dom"
+import {
+  useBeforeUnload,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom"
 import { isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
-  TIPIS_TRACK_CLOUD_PAGE_NAME,
+  TIPIS_TRACK_PUBLIC_PAGE_NAME,
   TipisTrack,
 } from "@illa-public/track-utils"
 import {
@@ -52,7 +57,7 @@ export const ResetPasswordPage: FC = () => {
         verificationToken,
         ...data,
       })
-
+      TipisTrack.track("reset_password")
       navigate(LOGIN_PATH)
       message.success({
         content: t("page.user.forgot_password.tips.success"),
@@ -99,11 +104,15 @@ export const ResetPasswordPage: FC = () => {
   }
 
   useEffect(() => {
-    TipisTrack.pageViewTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.FORGET_PASSWORD)
+    TipisTrack.pageViewTrack(TIPIS_TRACK_PUBLIC_PAGE_NAME.FORGET_PASSWORD)
     return () => {
-      TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.FORGET_PASSWORD)
+      TipisTrack.pageLeaveTrack(TIPIS_TRACK_PUBLIC_PAGE_NAME.FORGET_PASSWORD)
     }
   }, [])
+
+  useBeforeUnload(() => {
+    TipisTrack.pageLeaveTrack(TIPIS_TRACK_PUBLIC_PAGE_NAME.FORGET_PASSWORD)
+  })
 
   return (
     <>

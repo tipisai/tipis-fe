@@ -1,6 +1,7 @@
 import { FC, useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
+import { useBeforeUnload } from "react-router-dom"
 import {
   TIPIS_TRACK_CLOUD_PAGE_NAME,
   TipisTrack,
@@ -19,6 +20,10 @@ const PasswordSettingPage: FC = () => {
       TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_PASSWORD)
     }
   }, [])
+
+  useBeforeUnload(() => {
+    TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_PASSWORD)
+  })
 
   return (
     <>

@@ -5,6 +5,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { Page404 } from "@illa-public/status-page"
+import { TipisTrack } from "@illa-public/track-utils"
 import { useExchangeTokenMutation } from "@illa-public/user-data"
 import { getAuthToken, setAuthToken } from "@illa-public/utils"
 import { LINKED_PATH, LOGIN_PATH, REGISTER_PATH } from "@/utils/routeHelper"
@@ -34,7 +35,11 @@ const OAuth: FC = () => {
         .then((res) => {
           const token = res.token
           token && setAuthToken(token)
-          // const isNewUser = res?.isNewUser
+          if (!res.isNewUser) {
+            TipisTrack.track("sign_in")
+          } else {
+            TipisTrack.track("sign_up")
+          }
           switch (landing) {
             case "connect":
               message.success(t("profile.setting.oauth.message.github"))
@@ -76,7 +81,6 @@ const OAuth: FC = () => {
         })
         .catch((error: unknown) => {
           if (isILLAAPiError(error)) {
-            // const errorFlag = error.data.errorFlag
             switch (error.data.errorFlag) {
               case ERROR_FLAG.ERROR_FLAG_OAUTH_FETCH_USER_INFO_FAILED: {
                 message.error({

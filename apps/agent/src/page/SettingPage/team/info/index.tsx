@@ -3,7 +3,7 @@ import { FC, useEffect, useMemo, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useNavigate, useParams } from "react-router-dom"
+import { useBeforeUnload, useNavigate, useParams } from "react-router-dom"
 import { isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { USER_ROLE } from "@illa-public/public-types"
@@ -84,6 +84,10 @@ const TeamInfo: FC = () => {
       TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_INFO)
     }
   }, [])
+
+  useBeforeUnload(() => {
+    TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_INFO)
+  })
 
   return (
     <>

@@ -117,11 +117,7 @@ export const TipisWebSocketProvider: FC<TipisWebSocketProviderProps> = (
           },
         })
       } catch (e) {
-        const res = handleCreditPurchaseError(
-          e,
-          CreditModalType.TOKEN,
-          "agent_run",
-        )
+        const res = handleCreditPurchaseError(e, CreditModalType.TOKEN)
         if (res) return
         messageAPI.error({
           content: t("editor.ai-agent.message.start-failed"),

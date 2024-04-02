@@ -1,6 +1,7 @@
 import { FC, useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
+import { useBeforeUnload } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
   TIPIS_TRACK_CLOUD_PAGE_NAME,
@@ -18,6 +19,11 @@ const LinkedSetting: FC = () => {
       TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_LINKED)
     }
   }, [])
+
+  useBeforeUnload(() => {
+    TipisTrack.pageLeaveTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.SETTING_LINKED)
+  })
+
   return (
     <>
       <Helmet>

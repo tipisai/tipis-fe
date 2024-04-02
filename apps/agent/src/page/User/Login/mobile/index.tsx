@@ -1,16 +1,18 @@
 import Icon from "@ant-design/icons"
 import { Button, Input } from "antd"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { GithubIcon } from "@illa-public/icon"
+import { TipisTrack } from "@illa-public/track-utils"
 import ErrorMessage from "@/components/InputErrorMessage"
 import LinkButton from "@/components/LinkButton"
 import { FORGOT_PASSWORD_PATH, REGISTER_PATH } from "@/utils/routeHelper"
 import { OAuthButton } from "../../components/OAuthButton"
 import { CAN_SHOW_OAUTH, EMAIL_FORMAT } from "../../constants"
 import { LoginFields } from "../../interface"
+import { getValidReportParamsFromLogin } from "../../utils"
 import { LoginPageProps } from "../interface"
 import {
   containerStyle,
@@ -32,26 +34,44 @@ export const MobileLogin: FC<LoginPageProps> = (props) => {
   const { t } = useTranslation()
   const { handleSubmit, control, formState, trigger } =
     useFormContext<LoginFields>()
-  const [_asyncValid, setAsyncValid] = useState<
+
+  const { errors } = formState
+  const [asyncValid, setAsyncValid] = useState<
     { isValid: boolean } | undefined
   >()
 
   const validReport = async () => {
+    TipisTrack.track("click_email_login_button")
     let isValid = await trigger()
     if (isValid) {
+      TipisTrack.track("validate_email_login", {
+        parameter2: "suc",
+      })
     }
     setAsyncValid({ isValid })
   }
 
   const handleClickRegister = () => {
+    TipisTrack.track("click_create_account_entry")
     navigate({ pathname: REGISTER_PATH, search: location.search })
   }
   const handleClickForgotPassword = () => {
+    TipisTrack.track("click_forget_password_entry")
     navigate({
       pathname: FORGOT_PASSWORD_PATH,
       search: location.search,
     })
   }
+
+  useEffect(() => {
+    if (asyncValid && !asyncValid.isValid) {
+      const parameter3 = getValidReportParamsFromLogin(errors)
+      TipisTrack.track("validate_email_login", {
+        parameter2: "failed",
+        parameter3,
+      })
+    }
+  }, [asyncValid, errors])
 
   return (
     <div css={containerStyle}>
