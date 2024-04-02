@@ -88,6 +88,9 @@ const ContributeTipiDetail: FC = () => {
         runNumber={aiAgentMarketPlaceInfo.marketplace.numRuns}
         forkNumber={aiAgentMarketPlaceInfo.marketplace.numForks}
         starNumber={aiAgentMarketPlaceInfo.marketplace.numStars}
+        tipisName={contributeAgentDetail.name}
+        tipisID={contributeAgentDetail.aiAgentID}
+        tipisIcon={contributeAgentDetail.icon}
       />
       <ContributeInfo
         teamName={aiAgentMarketPlaceInfo.marketplace.contributorTeam.name}

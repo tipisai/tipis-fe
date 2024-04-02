@@ -1,24 +1,10 @@
 import { FC, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { Navigate, useNavigate } from "react-router-dom"
-import { v4 } from "uuid"
-import { getCurrentTeamInfo } from "@illa-public/user-data"
+import { Navigate } from "react-router-dom"
 import DetailLayout from "@/Layout/DetailLayout"
 import DetailHeader from "@/Layout/DetailLayout/components/DetailHeader"
 import FullSectionLoading from "@/components/FullSectionLoading"
-import store from "@/redux/store"
-import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
-import {
-  getCurrentTabID,
-  getRecentTabInfos,
-} from "@/redux/ui/recentTab/selector"
-import { recentTabActions } from "@/redux/ui/recentTab/slice"
-import {
-  useAddRecentTabReducer,
-  useUpdateRecentTabReducer,
-} from "@/utils/recentTabs/baseHook"
 import { useAddTipisDetailTab } from "@/utils/recentTabs/hook"
-import { getExploreTipisPath } from "@/utils/routeHelper"
+import { useNavigateToExploreTipis } from "@/utils/routeHelper/hook"
 import { useGetNotContributeTipDetail } from "@/utils/tipis/hook"
 import ActionGroup from "../components/ActionGroup"
 import Knowledge from "../components/Knowledge"
@@ -28,13 +14,8 @@ import Prompt from "../components/Prompt"
 const NotContributeTipiDetail: FC = () => {
   const { data, isLoading, isError } = useGetNotContributeTipDetail()
 
-  const navigate = useNavigate()
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
-  const dispatch = useDispatch()
-  const updateRecentTab = useUpdateRecentTabReducer()
-  const addRecentTab = useAddRecentTabReducer()
-
   const addTipiDetailTab = useAddTipisDetailTab()
+  const navigateToExploreTipis = useNavigateToExploreTipis()
 
   useEffect(() => {
     if (data) {
@@ -47,26 +28,7 @@ const NotContributeTipiDetail: FC = () => {
   }, [addTipiDetailTab, data])
 
   const onClickBack = () => {
-    const currentTabID = getCurrentTabID(store.getState())
-    const recentTabs = getRecentTabInfos(store.getState())
-    const currentTab = recentTabs.find((tab) => tab.tabID === currentTabID)
-    const cacheID = v4()
-    const newTab = {
-      ...currentTab,
-      tabName: "",
-      tabIcon: "",
-      tabType: TAB_TYPE.EXPLORE_TIPIS,
-      tabID: cacheID,
-      cacheID: cacheID,
-    }
-    if (currentTab) {
-      updateRecentTab(currentTabID, newTab)
-
-      dispatch(recentTabActions.updateCurrentRecentTabIDReducer(cacheID))
-    } else {
-      addRecentTab(newTab)
-    }
-    navigate(getExploreTipisPath(currentTeamInfo.identifier))
+    navigateToExploreTipis()
   }
 
   if (isLoading) {
@@ -83,7 +45,12 @@ const NotContributeTipiDetail: FC = () => {
         title={data.name}
         description={data.description}
       />
-      <ActionGroup isContribute={false} />
+      <ActionGroup
+        isContribute={false}
+        tipisName={data.name}
+        tipisID={data.aiAgentID}
+        tipisIcon={data.icon}
+      />
       <Prompt parameters={data.variables ?? []} prompt={data.prompt} />
       <Parameters parameters={data.variables ?? []} />
       <Knowledge knowledge={data.knowledge ?? []} />
