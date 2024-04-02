@@ -1,6 +1,6 @@
 import Icon from "@ant-design/icons"
 import { App, Button, Dropdown, MenuProps } from "antd"
-import { FC, useCallback, useContext, useEffect, useMemo } from "react"
+import { FC, useCallback, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { AuthShown, SHOW_RULES } from "@illa-public/auth-shown"
 import { MoreIcon } from "@illa-public/icon"

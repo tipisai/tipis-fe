@@ -28,13 +28,11 @@ import {
 const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
   const { t } = useTranslation()
   const { onSubmit, disabled, loading } = props
-  const { handleSubmit, control, formState, getValues, trigger } =
+  const { handleSubmit, control, formState, trigger } =
     useFormContext<TeamInfoFields>()
   const { message } = App.useApp()
   const teamInfo = useGetCurrentTeamInfo()!
   const { uploadTeamIcon } = useUploadAvatar()
-
-  const { errors } = formState
 
   const handleUpdateTeamIcon = async (file: Blob) => {
     try {
