@@ -73,13 +73,14 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
                 messageStatus={
                   messageItem.status ?? MESSAGE_STATUS.ANALYZE_PENDING
                 }
+                disableTrigger={isMobile}
               />
             )
           } else {
             element = (
               <PureMessage
                 message={messageItem.message}
-                disableTrigger={isLastMessage && !isReceiving}
+                disableTrigger={(isLastMessage && !isReceiving) || isMobile}
               />
             )
           }

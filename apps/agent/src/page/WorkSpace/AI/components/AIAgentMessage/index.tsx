@@ -55,7 +55,7 @@ export const AIAgentMessage: FC<AIAgentMessageProps> = (props) => {
         />
       )}
       <div css={senderContainerStyle}>
-        {isLastMessage && !isReceiving && message.message && (
+        {!isMobile && isLastMessage && !isReceiving && message.message && (
           <span
             css={hoverCopyStyle}
             onClick={() => {
@@ -71,7 +71,9 @@ export const AIAgentMessage: FC<AIAgentMessageProps> = (props) => {
         )}
         <div css={senderNicknameStyle}>{senderNickname}</div>
         <div css={messageContainerStyle}>
-          <MarkdownMessage disableTrigger={isLastMessage && !isReceiving}>
+          <MarkdownMessage
+            disableTrigger={(isLastMessage && !isReceiving) || isMobile}
+          >
             {message.message}
           </MarkdownMessage>
         </div>
