@@ -5,11 +5,9 @@ import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { ContributeIcon } from "@illa-public/icon"
-import { ShareAgentTab } from "@illa-public/invite-modal"
 import { Agent } from "@illa-public/public-types"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { openShareAgentModal } from "@illa-public/user-role-utils"
-import ShareAndContributeModal from "../ShareAndContributeModal"
 
 const ContributeButton: FC = () => {
   const { control } = useFormContext<Agent>()
@@ -18,11 +16,11 @@ const ContributeButton: FC = () => {
     name: ["aiAgentID", "publishedToMarketplace"],
   })
 
-  const [shareDialogVisible, setShareDialogVisible] = useState(false)
-  const [defaultShareTag, setDefaultShareTag] = useState<ShareAgentTab>(
-    ShareAgentTab.SHARE_WITH_TEAM,
-  )
-  const [contributedDialogVisible, setContributedDialogVisible] =
+  const [_shareDialogVisible, setShareDialogVisible] = useState(false)
+  // const [_defaultShareTag, setDefaultShareTag] = useState<ShareAgentTab>(
+  //   ShareAgentTab.SHARE_WITH_TEAM,
+  // )
+  const [_contributedDialogVisible, setContributedDialogVisible] =
     useState(false)
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
 
@@ -30,7 +28,7 @@ const ContributeButton: FC = () => {
 
   const onShowContributeDialog = () => {
     if (publishedToMarketplace) {
-      setDefaultShareTag(ShareAgentTab.TO_MARKETPLACE)
+      // setDefaultShareTag(ShareAgentTab.TO_MARKETPLACE)
       setShareDialogVisible(true)
     } else {
       if (
@@ -60,14 +58,6 @@ const ContributeButton: FC = () => {
       >
         {t("editor.ai-agent.contribute")}
       </Button>
-      <ShareAndContributeModal
-        shareDialogVisible={shareDialogVisible}
-        contributedDialogVisible={contributedDialogVisible}
-        defaultShareTag={defaultShareTag}
-        setShareDialogVisible={setShareDialogVisible}
-        setContributedDialogVisible={setContributedDialogVisible}
-        setDefaultShareTag={setDefaultShareTag}
-      />
     </>
   )
 }

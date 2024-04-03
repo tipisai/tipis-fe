@@ -1,14 +1,12 @@
 import { Button } from "antd"
 import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
-import { useDispatch } from "react-redux"
-import { InviteMemberPC } from "@illa-public/invite-modal"
-import { MemberInfo, USER_ROLE, USER_STATUS } from "@illa-public/public-types"
-import { teamActions } from "@illa-public/user-data"
 import {
-  canManageInvite,
-  isBiggerThanTargetRole,
-} from "@illa-public/user-role-utils"
+  InviteMember,
+  InviteMemberProvider,
+} from "@illa-public/new-invite-modal"
+import { USER_ROLE } from "@illa-public/public-types"
+import { isBiggerThanTargetRole } from "@illa-public/user-role-utils"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import { MemberContext } from "../../../context"
 import { MoreAction } from "./moreAction"
@@ -16,9 +14,8 @@ import { buttonGroup, headerWrapperStyle, titleStyle } from "./style"
 
 export const Header: FC = () => {
   const { t } = useTranslation()
-  const dispatch = useDispatch()
-  const teamInfo = useGetCurrentTeamInfo()!
-  const currentUserRole = teamInfo?.myRole ?? USER_ROLE.VIEWER
+  const currentTeamInfo = useGetCurrentTeamInfo()!
+  const currentUserRole = currentTeamInfo?.myRole ?? USER_ROLE.VIEWER
   const {
     showInviteButton,
     inviteModalVisible,
@@ -49,50 +46,19 @@ export const Header: FC = () => {
           )}
         </div>
       </div>
-      {inviteModalVisible && (
-        <InviteMemberPC
-          itemID={teamInfo.id}
-          redirectURL=""
-          onClose={closeInviteModal}
-          canInvite={canManageInvite(
-            teamInfo.myRole,
-            teamInfo.permission.allowEditorManageTeamMember,
-            teamInfo.permission.allowViewerManageTeamMember,
-          )}
-          currentUserRole={currentUserRole}
-          defaultAllowInviteLink={teamInfo.permission.inviteLinkEnabled}
+      {inviteModalVisible && currentTeamInfo && (
+        <InviteMemberProvider
+          defaultAllowInviteLink={currentTeamInfo.permission.inviteLinkEnabled}
           defaultInviteUserRole={USER_ROLE.VIEWER}
-          defaultBalance={teamInfo?.totalTeamLicense?.balance}
-          onCopyInviteLink={handleCopy}
-          onInviteLinkStateChange={(isInviteLink) => {
-            dispatch(
-              teamActions.updateTeamMemberPermissionReducer({
-                teamID: teamInfo.id,
-                newPermission: {
-                  ...teamInfo.permission,
-                  inviteLinkEnabled: isInviteLink,
-                },
-              }),
-            )
-          }}
-          teamID={teamInfo.id}
-          onBalanceChange={() => {}}
-          onInvitedChange={(userList) => {
-            const memberListInfo: MemberInfo[] = userList.map((user) => {
-              return {
-                ...user,
-                userID: "",
-                nickname: "",
-                avatar: "",
-                userStatus: USER_STATUS.PENDING,
-                permission: {},
-                createdAt: "",
-                updatedAt: "",
-              }
-            })
-            dispatch(teamActions.updateInvitedUserReducer(memberListInfo))
-          }}
-        />
+          teamID={currentTeamInfo?.id ?? ""}
+          currentUserRole={currentUserRole}
+        >
+          <InviteMember
+            redirectURL={""}
+            onCopyInviteLink={handleCopy}
+            onClose={closeInviteModal}
+          />
+        </InviteMemberProvider>
       )}
     </>
   )

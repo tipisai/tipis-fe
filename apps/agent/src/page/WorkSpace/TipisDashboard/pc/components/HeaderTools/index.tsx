@@ -14,7 +14,9 @@ import {
 } from "react"
 import { PlusIcon, SearchIcon } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
+import { canShownCreateTipi } from "@/utils/UIHelper/tipis"
 import { useNavigateToCreateTipis } from "@/utils/routeHelper/hook"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { DASH_BOARD_UI_STATE_ACTION_TYPE } from "../../../context/interface"
 import { DashBoardUIStateContext } from "../../../context/marketListContext"
 import { headerToolsContainerStyle } from "./style"
@@ -26,6 +28,7 @@ const HeaderTools: FC = () => {
   const { search } = dashboardUIState
   const [searchValue, setSearchValue] = useState(search)
   const prevSearchRef = useRef(search)
+  const currentTeamInfo = useGetCurrentTeamInfo()
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -74,14 +77,16 @@ const HeaderTools: FC = () => {
         onChange={handleChangeSearchValue}
         value={searchValue}
       />
-      <Button
-        type="primary"
-        icon={<Icon component={PlusIcon} />}
-        size="large"
-        onClick={handleClickCreateTIpis}
-      >
-        {t("dashboard.create")}
-      </Button>
+      {canShownCreateTipi(currentTeamInfo) && (
+        <Button
+          type="primary"
+          icon={<Icon component={PlusIcon} />}
+          size="large"
+          onClick={handleClickCreateTIpis}
+        >
+          {t("dashboard.create")}
+        </Button>
+      )}
     </div>
   )
 }
