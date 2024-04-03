@@ -79,6 +79,14 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
                 {userInfo?.avatar ? (
                   <Image
                     src={userInfo?.avatar}
+                    wrapperStyle={{
+                      width: "100%",
+                      height: "100%",
+                      overflow: "hidden",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                     css={uploadContentContainerStyle}
                     preview={{
                       visible: false,

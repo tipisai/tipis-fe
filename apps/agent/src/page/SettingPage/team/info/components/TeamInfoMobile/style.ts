@@ -53,8 +53,7 @@ export const uploadTeamLogoContainerStyle = css`
 
 export const uploadContentContainerStyle = css`
   color: ${getColor("grayBlue", "04")};
-  height: 100%;
-  width: 100%;
+
   border-radius: 50%;
   overflow: hidden;
   object-fit: cover;
@@ -63,7 +62,8 @@ export const uploadContentContainerStyle = css`
   flex-direction: column;
   align-items: center;
   + .ant-image-mask {
+    height: 100%;
+    width: 100%;
     border-radius: 50%;
-    inset: 1px;
   }
 `
