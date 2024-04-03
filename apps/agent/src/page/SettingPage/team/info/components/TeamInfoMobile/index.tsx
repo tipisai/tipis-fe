@@ -96,6 +96,14 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
                 {teamInfo?.icon ? (
                   <Image
                     src={teamInfo?.icon}
+                    wrapperStyle={{
+                      width: "100%",
+                      height: "100%",
+                      overflow: "hidden",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
                     css={uploadContentContainerStyle}
                     preview={{
                       visible: false,
