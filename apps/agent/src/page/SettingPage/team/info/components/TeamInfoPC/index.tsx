@@ -117,10 +117,14 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
                       alignItems: "center",
                     }}
                     css={uploadContentContainerStyle}
-                    preview={{
-                      visible: false,
-                      mask: "+ Upload",
-                    }}
+                    preview={
+                      canEditorTeamInfo
+                        ? {
+                            visible: false,
+                            mask: "+ Upload",
+                          }
+                        : false
+                    }
                   />
                 ) : (
                   <Avatar
