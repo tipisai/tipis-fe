@@ -1,4 +1,14 @@
-import { App, Button, GetProp, Image, Input, Upload, UploadProps } from "antd"
+import {
+  App,
+  Avatar,
+  Button,
+  ConfigProvider,
+  GetProp,
+  Image,
+  Input,
+  Upload,
+  UploadProps,
+} from "antd"
 import ImgCrop from "antd-img-crop"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
@@ -6,6 +16,7 @@ import { useTranslation } from "react-i18next"
 import { FILE_SIZE_LIMIT } from "@illa-public/cropper/constants"
 import { USER_ROLE } from "@illa-public/public-types"
 import { isBiggerThanTargetRole } from "@illa-public/user-role-utils"
+import { getColorByString } from "@illa-public/utils"
 import ErrorMessage from "@/components/InputErrorMessage"
 import { useUploadAvatar } from "@/page/SettingPage/hooks/uploadAvatar"
 import { TEAM_IDENTIFY_FORMAT } from "@/page/SettingPage/team/info/constants"
@@ -62,35 +73,55 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
     <div css={mobileSettingContainerStyle}>
       <div css={uploadTeamLogoContainerStyle}>
         <div>
-          <ImgCrop
-            rotationSlider
-            onModalOk={(v) => {
-              handleUpdateTeamIcon(v as File)
+          <ConfigProvider
+            theme={{
+              token: {
+                controlHeightLG: 47,
+              },
             }}
-            beforeCrop={handleBeforeUpload}
-            cropShape="round"
           >
-            <Upload
-              listType="picture-circle"
-              showUploadList={false}
-              disabled={!canEditorTeamInfo}
+            <ImgCrop
+              rotationSlider
+              onModalOk={(v) => {
+                handleUpdateTeamIcon(v as File)
+              }}
+              beforeCrop={handleBeforeUpload}
+              cropShape="round"
             >
-              {teamInfo?.icon ? (
-                <Image
-                  src={teamInfo?.icon}
-                  width="100px"
-                  height="100px"
-                  css={uploadContentContainerStyle}
-                  preview={{
-                    visible: false,
-                    mask: "+ Upload",
-                  }}
-                />
-              ) : (
-                "+ Upload"
-              )}
-            </Upload>
-          </ImgCrop>
+              <Upload
+                listType="picture-circle"
+                showUploadList={false}
+                disabled={!canEditorTeamInfo}
+              >
+                {teamInfo?.icon ? (
+                  <Image
+                    src={teamInfo?.icon}
+                    css={uploadContentContainerStyle}
+                    preview={{
+                      visible: false,
+                      mask: "+ Upload",
+                    }}
+                  />
+                ) : (
+                  <Avatar
+                    src={teamInfo?.name}
+                    shape="circle"
+                    size={120}
+                    style={{
+                      fontSize: 36,
+                      background: teamInfo?.name
+                        ? "#ffffff"
+                        : getColorByString(teamInfo?.id || ""),
+                    }}
+                  >
+                    {teamInfo?.name[0]
+                      ? teamInfo.name[0].toLocaleUpperCase()
+                      : "T"}
+                  </Avatar>
+                )}
+              </Upload>
+            </ImgCrop>
+          </ConfigProvider>
         </div>
       </div>
       <form css={formStyle} onSubmit={handleSubmit(onSubmit)}>
