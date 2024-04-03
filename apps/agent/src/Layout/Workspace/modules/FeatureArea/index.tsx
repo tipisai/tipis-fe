@@ -8,11 +8,13 @@ import { getIsEmptyTeam } from "@illa-public/user-data"
 // import FunctionIcon from "@/assets/workspace/function.svg?react"
 import MarketplaceIcon from "@/assets/workspace/marketplace.svg?react"
 import store from "@/redux/store"
+import { canShownCreateTipi } from "@/utils/UIHelper/tipis"
 import {
   useNavigateToCreateTipis,
   useNavigateToExploreTipis,
   useNavigateToNewChat,
 } from "@/utils/routeHelper/hook"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 // import FeatureCard from "../../components/FeatureCard"
 import MenuItemButton from "../../components/MenuItemButton"
 import { createTeamContext } from "../../context"
@@ -25,6 +27,7 @@ const FeatureArea: FC = () => {
   const navigateToExploreTipis = useNavigateToExploreTipis()
   // const navigateToExploreFunction = useNavigateToExploreFunction()
   const { onChangeTeamVisible } = useContext(createTeamContext)
+  const currentTeamInfo = useGetCurrentTeamInfo()
 
   const handleClickCreateTipis = () => {
     TipisTrack.track("click_create_tipi_entry", {
@@ -107,11 +110,13 @@ const FeatureArea: FC = () => {
         icon={<Icon component={PlusIcon} />}
         onClick={handleClickCreateChat}
       />
-      <MenuItemButton
-        text={t("homepage.left_panel.feature.create_tipi")}
-        icon={<Icon component={PenIcon} />}
-        onClick={handleClickCreateTipis}
-      />
+      {canShownCreateTipi(currentTeamInfo) && (
+        <MenuItemButton
+          text={t("homepage.left_panel.feature.create_tipi")}
+          icon={<Icon component={PenIcon} />}
+          onClick={handleClickCreateTipis}
+        />
+      )}
     </div>
   )
 }

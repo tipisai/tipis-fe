@@ -44,6 +44,7 @@ const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
         closeIcon={false}
         width={300}
         css={customDrawStyle}
+        push={false}
       >
         <div css={menuContentStyle}>
           <FeatureArea />

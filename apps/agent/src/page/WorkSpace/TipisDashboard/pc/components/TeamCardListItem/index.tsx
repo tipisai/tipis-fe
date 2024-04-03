@@ -2,7 +2,7 @@ import Icon from "@ant-design/icons"
 import { App, Button, Dropdown, List, MenuProps, Tag } from "antd"
 import { FC, MouseEventHandler, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import { v4 } from "uuid"
 import {
@@ -13,30 +13,28 @@ import {
   PlayFillIcon,
   ShareIcon,
 } from "@illa-public/icon"
-import { ShareAgentPC } from "@illa-public/invite-modal"
-import { MemberInfo, USER_ROLE, USER_STATUS } from "@illa-public/public-types"
+import {
+  InviteMember,
+  InviteMemberProvider,
+} from "@illa-public/new-invite-modal"
+import { USER_ROLE } from "@illa-public/public-types"
 import { TipisTrack } from "@illa-public/track-utils"
 import {
   getCurrentId,
   getCurrentTeamInfo,
   getCurrentUser,
-  getPlanUtils,
-  teamActions,
 } from "@illa-public/user-data"
-import {
-  canManageInvite,
-  canUseUpgradeFeature,
-} from "@illa-public/user-role-utils"
-import {
-  getAgentPublicLink,
-  getAuthToken,
-  getILLACloudURL,
-} from "@illa-public/utils"
+import { getILLACloudURL } from "@illa-public/utils"
 import TeamCard from "@/components/TeamCard"
 import {
   useDeleteAIAgentMutation,
   useDuplicateAIAgentMutation,
 } from "@/redux/services/agentAPI"
+import {
+  canShowShareTipi,
+  canShownCreateTipi,
+  canShownEditTipi,
+} from "@/utils/UIHelper/tipis"
 import { copyToClipboard } from "@/utils/copyToClipboard"
 import { getEditTipiPath, getRunTipiPath } from "@/utils/routeHelper"
 import {
@@ -55,14 +53,14 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
 
   const currentTeamID = useSelector(getCurrentId)!
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
-  const currentUser = useSelector(getCurrentUser)
+  const currentUserInfo = useSelector(getCurrentUser)
+  const currentUserRole = currentTeamInfo?.myRole ?? USER_ROLE.VIEWER
 
   const tags = publishToMarketplace ? (
     <Tag color="purple">Marketplace</Tag>
   ) : undefined
 
   const navigate = useNavigate()
-  const dispatch = useDispatch()
   const navigateToEditTIpis = useNavigateToEditTipis()
   const navigateRunTipis = useNavigateToRunTipis()
   const navigateToTipiDetails = useNavigateToTipiDetail()
@@ -81,12 +79,6 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
 
   const [isMoreActionDropdownOpen, setIsMoreActionDropdownOpen] =
     useState(false)
-
-  const canInvite = canManageInvite(
-    currentTeamInfo.myRole,
-    currentTeamInfo.permission.allowEditorManageTeamMember,
-    currentTeamInfo.permission.allowViewerManageTeamMember,
-  )
 
   const onClickEditButton: MouseEventHandler<HTMLElement> = (e) => {
     e.stopPropagation()
@@ -166,25 +158,32 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
   }
 
   const menuItems: MenuProps["items"] = useMemo(() => {
-    return [
-      {
+    const originMenuItems: MenuProps["items"] = []
+    if (canShownCreateTipi(currentTeamInfo)) {
+      originMenuItems.push({
         label: t("dashboard.common.duplicate"),
         key: "duplicate",
         icon: <Icon component={CopyIcon} />,
-      },
-      {
+      })
+    }
+    if (canShowShareTipi(currentTeamInfo)) {
+      originMenuItems.push({
         label: t("dashboard.common.share"),
         key: "share",
         icon: <Icon component={ShareIcon} />,
-      },
-      {
+      })
+    }
+
+    if (canShownCreateTipi(currentTeamInfo)) {
+      originMenuItems.push({
         label: t("dashboard.common.delete"),
         key: "delete",
         danger: true,
         icon: <Icon component={DeleteIcon} />,
-      },
-    ]
-  }, [t])
+      })
+    }
+    return originMenuItems
+  }, [currentTeamInfo, t])
 
   return (
     <>
@@ -196,31 +195,35 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
           tags={tags}
           onClickCard={onClickCard}
           moreButton={
-            <Dropdown
-              open={isMoreActionDropdownOpen}
-              onOpenChange={setIsMoreActionDropdownOpen}
-              trigger={["click"]}
-              menu={{
-                items: menuItems,
-                onClick: onClickMenuItem,
-              }}
-            >
-              <Button
-                type="text"
-                icon={<Icon component={MoreIcon} />}
-                onClick={onClickMoreAction}
-              />
-            </Dropdown>
+            menuItems.length > 0 && (
+              <Dropdown
+                open={isMoreActionDropdownOpen}
+                onOpenChange={setIsMoreActionDropdownOpen}
+                trigger={["click"]}
+                menu={{
+                  items: menuItems,
+                  onClick: onClickMenuItem,
+                }}
+              >
+                <Button
+                  type="text"
+                  icon={<Icon component={MoreIcon} />}
+                  onClick={onClickMoreAction}
+                />
+              </Dropdown>
+            )
           }
           editButton={
             <>
-              <Button
-                type="text"
-                icon={<Icon component={PenIcon} />}
-                onClick={onClickEditButton}
-              >
-                {t("dashboard.common.edit")}
-              </Button>
+              {canShownEditTipi(currentTeamInfo) && (
+                <Button
+                  type="text"
+                  icon={<Icon component={PenIcon} />}
+                  onClick={onClickEditButton}
+                >
+                  {t("dashboard.common.edit")}
+                </Button>
+              )}
               <Button
                 type="text"
                 icon={<Icon component={PlayFillIcon} />}
@@ -232,101 +235,31 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
           }
         />
       </List.Item>
-      <>
-        {shareVisible && (
-          <ShareAgentPC
-            itemID={id}
-            onInvitedChange={(userList) => {
-              const memberListInfo: MemberInfo[] = userList.map((user) => {
-                return {
-                  ...user,
-                  userID: "",
-                  nickname: "",
-                  avatar: "",
-                  userStatus: USER_STATUS.PENDING,
-                  permission: {},
-                  createdAt: "",
-                  updatedAt: "",
-                }
-              })
-              dispatch(teamActions.updateInvitedUserReducer(memberListInfo))
-            }}
-            canUseBillingFeature={canUseUpgradeFeature(
-              currentTeamInfo.myRole,
-              getPlanUtils(currentTeamInfo),
-              currentTeamInfo.totalTeamLicense?.teamLicensePurchased,
-              currentTeamInfo.totalTeamLicense?.teamLicenseAllPaid,
-            )}
-            title={t("user_management.modal.social_media.default_text.agent", {
-              agentName: title,
-            })}
+
+      {shareVisible && currentTeamInfo && currentUserInfo && (
+        <InviteMemberProvider
+          defaultAllowInviteLink={currentTeamInfo.permission.inviteLinkEnabled}
+          defaultInviteUserRole={USER_ROLE.VIEWER}
+          teamID={currentTeamInfo?.id ?? ""}
+          currentUserRole={currentUserRole}
+        >
+          <InviteMember
             redirectURL={`${getILLACloudURL()}${getRunTipiPath(currentTeamInfo.identifier, id)}`}
-            onClose={() => {
-              setShareVisible(false)
-            }}
-            canInvite={canInvite}
-            defaultInviteUserRole={USER_ROLE.VIEWER}
-            teamID={currentTeamInfo.id}
-            currentUserRole={currentTeamInfo.myRole}
-            defaultBalance={currentTeamInfo.currentTeamLicense.balance}
-            defaultAllowInviteLink={
-              currentTeamInfo.permission.inviteLinkEnabled
-            }
-            onInviteLinkStateChange={(enableInviteLink) => {
-              dispatch(
-                teamActions.updateTeamMemberPermissionReducer({
-                  teamID: currentTeamInfo.id,
-                  newPermission: {
-                    ...currentTeamInfo.permission,
-                    inviteLinkEnabled: enableInviteLink,
-                  },
-                }),
-              )
-            }}
-            agentID={id}
-            defaultAgentContributed={publishToMarketplace}
-            onAgentContributed={(isAgentContributed) => {
-              if (isAgentContributed) {
-                const newUrl = new URL(getAgentPublicLink(id))
-                newUrl.searchParams.set("token", getAuthToken())
-                window.open(newUrl, "_blank")
-              }
-            }}
             onCopyInviteLink={(link) => {
               copyToClipboard(
                 t("user_management.modal.custom_copy_text_agent_invite", {
-                  userName: currentUser.nickname,
+                  userName: currentUserInfo.nickname,
                   teamName: currentTeamInfo.name,
                   inviteLink: link,
                 }),
               )
             }}
-            onCopyAgentMarketLink={(link) => {
-              copyToClipboard(
-                t("user_management.modal.contribute.default_text.agent", {
-                  agentName: title,
-                  agentLink: link,
-                }),
-              )
+            onClose={() => {
+              setShareVisible(false)
             }}
-            userRoleForThisAgent={currentTeamInfo.myRole}
-            ownerTeamID={currentTeamInfo.id}
-            onBalanceChange={(balance) => {
-              dispatch(
-                teamActions.updateTeamMemberSubscribeReducer({
-                  teamID: currentTeamInfo.id,
-                  subscribeInfo: {
-                    ...currentTeamInfo.currentTeamLicense,
-                    balance: balance,
-                  },
-                }),
-              )
-            }}
-            onShare={(_platform) => {}}
-            teamPlan={getPlanUtils(currentTeamInfo)}
           />
-        )}
-      </>
+        </InviteMemberProvider>
+      )}
     </>
   )
 }

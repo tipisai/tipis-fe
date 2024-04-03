@@ -3,10 +3,11 @@ import { useFormContext, useWatch } from "react-hook-form"
 import { useSelector } from "react-redux"
 import { Agent } from "@illa-public/public-types"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
-import {
-  // showShareAgentModal,
-  showShareAgentModalOnlyForShare,
-} from "@illa-public/user-role-utils"
+import { canShowShareTipi } from "@/utils/UIHelper/tipis"
+// import {
+// showShareAgentModal,
+// showShareAgentModalOnlyForShare,
+// } from "@illa-public/user-role-utils"
 // import ContributeButton from "../ContributeButton"
 import SaveButton from "../SaveButton"
 import ShareButton from "../ShareButton"
@@ -21,7 +22,7 @@ const HeaderTools: FC = () => {
     name: ["aiAgentID"],
   })
 
-  const showShareDialog = showShareAgentModalOnlyForShare(currentTeamInfo)
+  const showShareDialog = canShowShareTipi(currentTeamInfo)
   // const showContributeDialog = showShareAgentModal(
   //   currentTeamInfo,
   //   currentTeamInfo.myRole,
