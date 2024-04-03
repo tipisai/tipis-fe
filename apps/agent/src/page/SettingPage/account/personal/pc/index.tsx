@@ -1,10 +1,21 @@
-import { App, Button, GetProp, Image, Input, Upload, UploadProps } from "antd"
+import {
+  App,
+  Avatar,
+  Button,
+  ConfigProvider,
+  GetProp,
+  Image,
+  Input,
+  Upload,
+  UploadProps,
+} from "antd"
 import ImgCrop from "antd-img-crop"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { FILE_SIZE_LIMIT } from "@illa-public/cropper/constants"
 import { useGetUserInfoQuery } from "@illa-public/user-data"
+import { getColorByString } from "@illa-public/utils"
 import ErrorMessage from "@/components/InputErrorMessage"
 import { Header } from "@/page/SettingPage/components/Header"
 import { AccountSettingFields, AccountSettingProps } from "../interface"
@@ -36,6 +47,7 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
   const handleBeforeUpload = (
     file: Parameters<GetProp<UploadProps, "beforeUpload">>[0],
   ) => {
+    console.log(1)
     if (file.size >= FILE_SIZE_LIMIT) {
       message.error(t("image_exceed"))
       return false
@@ -48,31 +60,51 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
       <Header title={t("profile.setting.personal_info")} extra={<Logout />} />
       <div css={contentContainerStyle}>
         <div>
-          <ImgCrop
-            rotationSlider
-            onModalOk={(v) => {
-              handleUpdateAvatar(v as File)
+          <ConfigProvider
+            theme={{
+              token: {
+                controlHeightLG: 47,
+              },
             }}
-            beforeCrop={handleBeforeUpload}
-            cropShape="round"
           >
-            <Upload listType="picture-circle" showUploadList={false}>
-              {userInfo?.avatar ? (
-                <Image
-                  src={userInfo?.avatar}
-                  width="100px"
-                  height="100px"
-                  css={uploadContentContainerStyle}
-                  preview={{
-                    visible: false,
-                    mask: "+ Upload",
-                  }}
-                />
-              ) : (
-                "+ Upload"
-              )}
-            </Upload>
-          </ImgCrop>
+            <ImgCrop
+              rotationSlider
+              onModalOk={(v) => {
+                handleUpdateAvatar(v as File)
+              }}
+              beforeCrop={handleBeforeUpload}
+              cropShape="round"
+            >
+              <Upload listType="picture-circle" showUploadList={false}>
+                {userInfo?.avatar ? (
+                  <Image
+                    src={userInfo?.avatar}
+                    css={uploadContentContainerStyle}
+                    preview={{
+                      visible: false,
+                      mask: "+ Upload",
+                    }}
+                  />
+                ) : (
+                  <Avatar
+                    src={userInfo?.nickname}
+                    shape="circle"
+                    size={120}
+                    style={{
+                      fontSize: 36,
+                      background: userInfo?.avatar
+                        ? "#ffffff"
+                        : getColorByString(userInfo?.userID || ""),
+                    }}
+                  >
+                    {userInfo?.nickname[0]
+                      ? userInfo.nickname[0].toLocaleUpperCase()
+                      : "U"}
+                  </Avatar>
+                )}
+              </Upload>
+            </ImgCrop>
+          </ConfigProvider>
         </div>
 
         <form onSubmit={handleSubmit?.(onSubmit)} css={formContainerStyle}>
