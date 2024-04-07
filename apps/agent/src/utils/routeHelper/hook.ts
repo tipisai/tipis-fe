@@ -2,6 +2,7 @@ import { useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 import { useLazyGetTeamsInfoQuery } from "@illa-public/user-data"
 import {
+  EMPTY_TEAM_PATH,
   getChatPath,
   getCreateTipiPath,
   getEditTipiPath,
@@ -57,10 +58,10 @@ export const useNavigateTargetWorkspace = () => {
       }
     } catch (e) {
       if (e instanceof Error) {
-        if (e.message === NOT_HAS_TEAM_INFO_KEY) {
+        if (e.message === NOT_HAS_TARGET_TEAM_INFO_KEY) {
           navigate("/403")
-        } else if (e.message === NOT_HAS_TARGET_TEAM_INFO_KEY) {
-          navigate("/workspace")
+        } else if (e.message === NOT_HAS_TEAM_INFO_KEY) {
+          navigate(EMPTY_TEAM_PATH)
         } else {
           navigate("/404")
         }
