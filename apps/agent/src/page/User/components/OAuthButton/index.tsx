@@ -2,11 +2,8 @@ import { Button } from "antd"
 import { FC, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { TipisTrack } from "@illa-public/track-utils"
-import {
-  OAUTH_REDIRECT_URL,
-  openOAuthUrl,
-  useLazyGetOAuthURIQuery,
-} from "@illa-public/user-data"
+import { useLazyGetOAuthURIQuery } from "@illa-public/user-data"
+import { OAUTH_REDIRECT_URL, openOAuthUrl } from "@/utils/oauth"
 import { OAuthButtonProps } from "./interface"
 
 export const OAuthButton: FC<OAuthButtonProps> = ({
