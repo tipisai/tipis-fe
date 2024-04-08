@@ -104,6 +104,7 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
                 listType="picture-circle"
                 showUploadList={false}
                 disabled={!canEditorTeamInfo}
+                customRequest={() => {}}
               >
                 {teamInfo?.icon ? (
                   <Image

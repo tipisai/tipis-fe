@@ -92,6 +92,7 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
                 listType="picture-circle"
                 showUploadList={false}
                 disabled={!canEditorTeamInfo}
+                customRequest={() => {}}
               >
                 {teamInfo?.icon ? (
                   <Image

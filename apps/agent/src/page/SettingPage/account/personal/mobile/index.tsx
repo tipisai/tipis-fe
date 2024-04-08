@@ -70,7 +70,11 @@ const MobileAccountSetting: FC<AccountSettingProps> = (props) => {
               beforeCrop={handleBeforeUpload}
               cropShape="round"
             >
-              <Upload listType="picture-circle" showUploadList={false}>
+              <Upload
+                listType="picture-circle"
+                showUploadList={false}
+                customRequest={() => {}}
+              >
                 {userInfo?.avatar ? (
                   <Image
                     src={userInfo?.avatar}

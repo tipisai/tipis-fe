@@ -47,6 +47,7 @@ const AvatarUploader: FC = memo(() => {
               onRemove={() => {
                 field.onChange("")
               }}
+              customRequest={() => {}}
             >
               {field.value ? (
                 <Image
