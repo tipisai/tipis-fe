@@ -58,7 +58,6 @@ const TeamSelectAndInviteButton: FC = () => {
           teamID={currentTeamInfo?.id ?? ""}
           currentUserRole={currentUserRole}
         >
-          (
           <InviteMember
             redirectURL={""}
             onCopyInviteLink={(inviteLink) => {
@@ -74,7 +73,6 @@ const TeamSelectAndInviteButton: FC = () => {
               setInviteModalVisible(false)
             }}
           />
-          )
         </InviteMemberProvider>
       )}
     </>
