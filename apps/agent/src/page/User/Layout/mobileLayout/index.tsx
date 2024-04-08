@@ -36,7 +36,7 @@ const MobileUserLayout: FC<LayoutProps> = ({ children }) => {
     <div css={layoutStyle}>
       <div css={headerStyle}>
         <Icon component={LogoIcon} css={logoStyle} />
-        <h1 css={titleStyle}>tipis.AI</h1>
+        <h1 css={titleStyle}>tipis</h1>
       </div>
       <div css={contentStyle}>{children}</div>
       <div css={policyStyle}>
