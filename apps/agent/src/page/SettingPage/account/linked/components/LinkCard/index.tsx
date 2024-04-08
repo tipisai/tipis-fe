@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { useCancelLinkedMutation } from "@illa-public/user-data"
 import { useLazyGetOAuthURIQuery } from "@illa-public/user-data"
+import { OAUTH_REDIRECT_URL } from "@/utils/oauth"
 import { PASSWORD_PATH } from "@/utils/routeHelper"
 import { LinkCardProps } from "./interface"
 import {
@@ -72,6 +73,7 @@ export const LinkCard: FC<LinkCardProps> = (props) => {
       const OAuthURIResponse = await triggerGetOAuthURI({
         oauthAgency: type,
         landing: "connect",
+        redirectURI: OAUTH_REDIRECT_URL,
       }).unwrap()
       const { uri } = OAuthURIResponse
       window.open(uri, "_self")

@@ -459,9 +459,6 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
         onConnecting: (isConnecting) => {
           setIsConnecting(isConnecting)
         },
-        onReceiving: (isReceiving) => {
-          setIsReceiving(isReceiving)
-        },
         onMessageCallBack,
         address: address,
       }

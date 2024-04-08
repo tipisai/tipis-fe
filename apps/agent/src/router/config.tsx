@@ -122,14 +122,13 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     ],
   },
   {
-    path: "/workspace",
+    path: "/empty-workspace",
     ProtectComponent: LoginAuth,
     accessByMobile: true,
     element: <WorkspaceLayout />,
     children: [
       {
         index: true,
-        path: "empty",
         accessByMobile: true,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
