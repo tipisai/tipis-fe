@@ -106,3 +106,12 @@ export const formLabelStyle: SerializedStyles = css`
   font-weight: 500;
   color: ${getColor("grayBlue", "02")};
 `
+
+export const createBgStyle = css`
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  z-index: -1;
+  left: 0;
+  right: 0;
+`
