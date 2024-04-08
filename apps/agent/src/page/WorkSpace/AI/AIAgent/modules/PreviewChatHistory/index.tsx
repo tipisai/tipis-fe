@@ -35,9 +35,6 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
       if (lastRunAgent.current === undefined) {
         return true
       }
-      if (!getValues("aiAgentID") && isRunning) {
-        return false
-      }
       const isPromptDirty = !isEqual(prompt, lastRunAgent.current.prompt)
 
       const isVariablesDirty = !isEqual(
@@ -51,7 +48,7 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
       )
 
       return isPromptDirty || isVariablesDirty || isKnowledgeDirty
-    }, [getValues, isRunning, knowledge, lastRunAgent, prompt, variables])
+    }, [isRunning, knowledge, lastRunAgent, prompt, variables])
 
     const wsContext = useMemo(
       () => ({
