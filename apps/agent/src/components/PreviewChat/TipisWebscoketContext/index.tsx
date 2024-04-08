@@ -1,24 +1,18 @@
 import { App } from "antd"
-import {
-  FC,
-  createContext,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from "react"
+import { FC, createContext, useCallback, useMemo, useRef } from "react"
 import { useTranslation } from "react-i18next"
-import WebSocketClient from "@illa-public/illa-web-socket"
+import WebSocketClient, { WS_READYSTATE } from "@illa-public/illa-web-socket"
 import {
   CreditModalType,
   handleCreditPurchaseError,
 } from "@illa-public/upgrade-modal"
 import { getAuthToken } from "@illa-public/utils"
 import { getTextMessagePayload } from "@/api/ws"
-import { Callback, ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
+import { Callback } from "@/api/ws/interface"
 import { TextSignal, TextTarget } from "@/api/ws/textSignal"
 import {
   IInitWSCallback,
+  SEND_MESSAGE_WS_TYPE,
   TipisWebSocketContextType,
   TipisWebSocketProviderProps,
 } from "./interface"
@@ -35,10 +29,6 @@ export const TipisWebSocketProvider: FC<TipisWebSocketProviderProps> = (
   const tipisWSClient = useRef<WebSocketClient | null>(null)
   const { message: messageAPI } = App.useApp()
   const { t } = useTranslation()
-
-  const [wsStatus, setWSStatus] = useState<ILLA_WEBSOCKET_STATUS>(
-    ILLA_WEBSOCKET_STATUS.INIT,
-  )
 
   const sendMessage = useCallback(function (message: string) {
     tipisWSClient.current?.sendMessage(message)
@@ -62,7 +52,25 @@ export const TipisWebSocketProvider: FC<TipisWebSocketProviderProps> = (
       )
       tipisWSClient.current?.close()
       tipisWSClient.current = null
-      setWSStatus(ILLA_WEBSOCKET_STATUS.INIT)
+    }
+  }, [])
+
+  const cleanMessage = useCallback(() => {
+    if (tipisWSClient.current && tipisWSClient.current.getWebSocket().OPEN) {
+      tipisWSClient.current?.sendMessage(
+        getTextMessagePayload(
+          TextSignal.CLEAN_CHAT_HISTORY,
+          TextTarget.ACTION,
+          false,
+          {
+            type: SEND_MESSAGE_WS_TYPE.CLEAN,
+            payload: [],
+          },
+          "",
+          "",
+          [],
+        ),
+      )
     }
   }, [])
 
@@ -92,13 +100,6 @@ export const TipisWebSocketProvider: FC<TipisWebSocketProviderProps> = (
                 ],
               ),
             )
-            setWSStatus(ILLA_WEBSOCKET_STATUS.CONNECTED)
-          },
-          onClose: () => {
-            setWSStatus(ILLA_WEBSOCKET_STATUS.CLOSED)
-          },
-          onError: () => {
-            setWSStatus(ILLA_WEBSOCKET_STATUS.FAILED)
           },
           onMessage: (data) => {
             let callback: Callback<unknown> = JSON.parse(data)
@@ -116,14 +117,22 @@ export const TipisWebSocketProvider: FC<TipisWebSocketProviderProps> = (
     [messageAPI, t],
   )
 
+  const getReadyState = useCallback(() => {
+    if (tipisWSClient.current) {
+      return tipisWSClient.current?.getReadyState()
+    }
+    return WS_READYSTATE.UNINITIALIZED
+  }, [])
+
   const value = useMemo(
     () => ({
       connect,
       sendMessage,
       leaveRoom,
-      wsStatus,
+      cleanMessage,
+      getReadyState,
     }),
-    [connect, leaveRoom, sendMessage, wsStatus],
+    [connect, leaveRoom, sendMessage, cleanMessage, getReadyState],
   )
 
   return (

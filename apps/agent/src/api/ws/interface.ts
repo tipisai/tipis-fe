@@ -1,14 +1,5 @@
 import { TextSignal, TextTarget, WEBSOCKET_ERROR_CODE } from "./textSignal"
 
-export enum ILLA_WEBSOCKET_STATUS {
-  INIT = "INIT",
-  CONNECTING = "CONNECTING",
-  CONNECTED = "CONNECTED",
-  CLOSED = "CLOSED",
-  FAILED = "FAILED",
-  LOCKING = "LOCKING",
-}
-
 export interface Broadcast {
   type: string
   payload: any

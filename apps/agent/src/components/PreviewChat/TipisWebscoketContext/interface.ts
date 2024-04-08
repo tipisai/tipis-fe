@@ -1,5 +1,6 @@
 import { ReactNode } from "react"
-import { Callback, ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
+import { WS_READYSTATE } from "@illa-public/illa-web-socket"
+import { Callback } from "@/api/ws/interface"
 import { TextSignal } from "@/api/ws/textSignal"
 import { ChatMessage, ChatSendRequestPayload } from "../interface"
 
@@ -27,7 +28,8 @@ export type TipisWebSocketContextType = {
   connect: (initWSCallback: IInitWSCallback) => Promise<void>
   sendMessage: (message: string) => void
   leaveRoom: () => void
-  wsStatus: ILLA_WEBSOCKET_STATUS
+  cleanMessage: () => void
+  getReadyState: () => WS_READYSTATE
 }
 
 export interface TipisWebSocketProviderProps {

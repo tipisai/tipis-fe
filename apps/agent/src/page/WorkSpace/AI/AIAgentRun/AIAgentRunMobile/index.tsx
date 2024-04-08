@@ -1,6 +1,6 @@
 import { FC, useCallback, useContext, useEffect, useMemo } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
-import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
+import { WS_READYSTATE } from "@illa-public/illa-web-socket"
 import { PreviewChat } from "@/components/PreviewChat"
 import { PreviewChatUseProvider } from "@/components/PreviewChat/PreviewChatUseContext"
 import { PREVIEW_CHAT_USE_TO } from "@/components/PreviewChat/PreviewChatUseContext/constants"
@@ -20,7 +20,7 @@ export const AIAgentRunMobile: FC = () => {
   })
 
   const {
-    wsStatus,
+    getReadyState,
     isRunning,
     chatMessages,
     isReceiving,
@@ -34,7 +34,7 @@ export const AIAgentRunMobile: FC = () => {
 
   const wsContext = useMemo(
     () => ({
-      wsStatus,
+      getReadyState,
       isRunning,
       chatMessages,
       isReceiving,
@@ -49,7 +49,7 @@ export const AIAgentRunMobile: FC = () => {
       lastRunAgent,
       sendMessage,
       setIsReceiving,
-      wsStatus,
+      getReadyState,
     ],
   )
 
@@ -78,10 +78,10 @@ export const AIAgentRunMobile: FC = () => {
   )
 
   useEffect(() => {
-    if (wsStatus === ILLA_WEBSOCKET_STATUS.INIT && !isConnecting) {
+    if (getReadyState() === WS_READYSTATE.UNINITIALIZED && !isConnecting) {
       connect()
     }
-  }, [agentType, aiAgentID, connect, isConnecting, wsStatus])
+  }, [agentType, aiAgentID, connect, isConnecting, getReadyState])
 
   return (
     <ChatContext.Provider value={{ inRoomUsers }}>

@@ -53,6 +53,7 @@ import {
 } from "@/utils/agent/wsUtils"
 import {
   getChatMessageAndUIState,
+  removeChatMessageAndUIState,
   setChatMessageAndUIState,
 } from "@/utils/localForage/teamData"
 import {
@@ -114,9 +115,8 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     setChatMessages(newMessageList)
   }, [])
 
-  const { sendMessage, connect, wsStatus, leaveRoom } = useContext(
-    TipisWebSocketContext,
-  )
+  const { sendMessage, connect, getReadyState, leaveRoom, cleanMessage } =
+    useContext(TipisWebSocketContext)
 
   const startSendMessage = useCallback(
     (
@@ -390,10 +390,14 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
   }, [leaveRoom])
 
   const innerReconnect = useCallback(async () => {
-    innerLeaveRoom()
-    setIsRunning(false)
-    await innerConnect()
-  }, [innerConnect, innerLeaveRoom])
+    if (!teamID || !chatID) {
+      return
+    }
+    cleanMessage()
+    setChatMessages([])
+    chatMessagesRef.current = []
+    await removeChatMessageAndUIState(teamID, chatID, "run")
+  }, [chatID, cleanMessage, teamID])
 
   const stableValue = useMemo(() => {
     return {
@@ -407,14 +411,21 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
 
   const unStableValue = useMemo(
     () => ({
-      wsStatus,
+      getReadyState,
       isConnecting,
       isReceiving,
       isRunning,
       inRoomUsers,
       chatMessages,
     }),
-    [chatMessages, inRoomUsers, isConnecting, isReceiving, isRunning, wsStatus],
+    [
+      chatMessages,
+      inRoomUsers,
+      isConnecting,
+      isReceiving,
+      isRunning,
+      getReadyState,
+    ],
   )
 
   const setCacheState = useCallback(() => {

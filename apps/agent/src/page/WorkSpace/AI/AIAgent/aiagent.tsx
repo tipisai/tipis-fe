@@ -1,10 +1,10 @@
 import { FC, useCallback, useContext, useEffect, useRef } from "react"
 import { useFormContext, useFormState } from "react-hook-form"
 import { useSelector } from "react-redux"
+import { WS_READYSTATE } from "@illa-public/illa-web-socket"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { Agent } from "@illa-public/public-types"
 import { getCurrentId } from "@illa-public/user-data"
-import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { getChatMessageAndUIState } from "@/utils/localForage/teamData"
 import { ChatContext } from "../components/ChatContext"
 import { AgentWSContext } from "../context/AgentWSContext"
@@ -22,11 +22,12 @@ export const AIAgent: FC = () => {
   })
   const teamID = useSelector(getCurrentId)!
 
-  const { inRoomUsers, wsStatus, leaveRoom, connect } =
+  const { inRoomUsers, getReadyState, leaveRoom, connect } =
     useContext(AgentWSContext)
   const { mode, finalTabID } = useGetModeAndTabID()
 
   const initRunAgent = useCallback(async () => {
+    const wsStatus = getReadyState()
     const { chatMessageData, uiChatMessage } = await getChatMessageAndUIState(
       teamID,
       finalTabID,
@@ -40,12 +41,12 @@ export const AIAgent: FC = () => {
     if (
       hasChatHistory &&
       onlyConnectOnce.current === false &&
-      wsStatus === ILLA_WEBSOCKET_STATUS.INIT
+      wsStatus === WS_READYSTATE.UNINITIALIZED
     ) {
       connect()
       onlyConnectOnce.current = true
     }
-  }, [connect, finalTabID, mode, teamID, wsStatus])
+  }, [connect, finalTabID, mode, teamID, getReadyState])
 
   useEffect(() => {
     initRunAgent()
@@ -68,11 +69,12 @@ export const AIAgent: FC = () => {
 
   useEffect(() => {
     return () => {
-      if (wsStatus === ILLA_WEBSOCKET_STATUS.CONNECTED) {
+      const wsStatus = getReadyState()
+      if (wsStatus === WS_READYSTATE.OPEN) {
         leaveRoom()
       }
     }
-  }, [leaveRoom, wsStatus])
+  }, [leaveRoom, getReadyState])
 
   return (
     <ChatContext.Provider value={{ inRoomUsers }}>
