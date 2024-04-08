@@ -11,11 +11,9 @@ export const UsageContext = createContext<UsageContextProps>(
 
 export const UsageProvider: FC<UsageContextProviderProps> = (props) => {
   const teamInfo = useGetCurrentTeamInfo()!
-  // const [dataNums, setsDataNums] = useState<number[]>([0, 0, 0])
-  const [dataNums, setsDataNums] = useState<number[]>([0])
+  const [dataNums, setsDataNums] = useState<number[]>([0, 0])
   const [allNum, setAllNum] = useState<number>(0)
-  // const [percentNum, setPercentNum] = useState<number[]>([0, 0, 0])
-  const [percentNum, setPercentNum] = useState<number[]>([0])
+  const [percentNum, setPercentNum] = useState<number[]>([0, 0])
   const [loading, setLoading] = useState(false)
 
   const [triggerGetCreditUsageInfo] = useLazyGetCreditUsageInfoQuery()
@@ -35,7 +33,9 @@ export const UsageProvider: FC<UsageContextProviderProps> = (props) => {
       if (!teamInfo?.id || !date) return
       setLoading(true)
       const fromDate = new Date(date)
+      fromDate.setDate(1)
       const endDate = new Date(date)
+      endDate.setDate(1)
       endDate.setMonth(endDate.getMonth() + 1)
       try {
         const res = await triggerGetCreditUsageInfo({
@@ -46,24 +46,14 @@ export const UsageProvider: FC<UsageContextProviderProps> = (props) => {
         if (res) {
           const {
             aiTokenGeneralUsage = 0,
-            // driveVolumeUsage = 0,
-            // driveTrafficUsage = 0,
+            driveTrafficUsage = 0,
             totalCreditUsage = 0,
             aiTokenGeneralUsagePercent = 0,
-            // driveVolumeUsagePercent = 0,
-            // driveTrafficUsagePercent = 0,
+            driveTrafficUsagePercent = 0,
           } = res
-          setsDataNums([
-            aiTokenGeneralUsage,
-            // driveVolumeUsage,
-            // driveTrafficUsage,
-          ])
+          setsDataNums([aiTokenGeneralUsage, driveTrafficUsage])
           setAllNum(totalCreditUsage)
-          setPercentNum([
-            aiTokenGeneralUsagePercent,
-            // driveVolumeUsagePercent,
-            // driveTrafficUsagePercent,
-          ])
+          setPercentNum([aiTokenGeneralUsagePercent, driveTrafficUsagePercent])
         }
       } catch (e) {
       } finally {

@@ -28,7 +28,7 @@ export const AgentInitial: IAgentForm = {
   modelConfig: {
     stream: true,
   },
-  icon: "https://cdn.tipis.ai.sfo3.cdn.digitaloceanspaces.com/tipis/default-tipi-icon.png",
+  icon: "https://cdn.tipis.ai/tipis/default-tipi-icon.png",
   description: "",
   aiAgentID: "",
   cacheID: "",
