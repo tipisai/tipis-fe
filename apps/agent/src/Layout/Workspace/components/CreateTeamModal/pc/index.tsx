@@ -6,11 +6,12 @@ import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { getColor } from "@illa-public/color-scheme"
 import { CloseIcon } from "@illa-public/icon"
-import createTeamBg from "@/assets/workspace/create-team-bg.svg"
+import CreateTeamBg from "@/assets/workspace/create-team-bg.svg?react"
 import ErrorMessage from "@/components/InputErrorMessage"
 import { TEAM_IDENTIFY_FORMAT } from "../constants"
 import { CreateTeamFields, CreateTeamModalProps } from "../interface"
 import {
+  createBgStyle,
   descriptionStyle,
   formHeaderStyle,
   formLabelStyle,
@@ -41,11 +42,13 @@ const CreateTeamPCModal: FC<CreateTeamModalProps> = (props) => {
       styles={{
         content: {
           border: "unset",
-          background: `#f7fff9 url(${createTeamBg}) no-repeat`,
-          backgroundPosition: "bottom",
+          background: "#f7fff9 ",
           minHeight: "540px",
           borderRadius: "16px",
           boxShadow: "0px 4px 16px rgb(0 0 0 / 8%)",
+          position: "relative",
+          zIndex: 1,
+          overflow: "hidden",
         },
         mask: {
           backgroundColor: getColor("white", "05"),
@@ -59,6 +62,7 @@ const CreateTeamPCModal: FC<CreateTeamModalProps> = (props) => {
       open={visible}
       centered
     >
+      <CreateTeamBg css={createBgStyle} />
       <div css={modalCloseIconStyle} onClick={onCancel}>
         <Icon component={CloseIcon} />
       </div>
