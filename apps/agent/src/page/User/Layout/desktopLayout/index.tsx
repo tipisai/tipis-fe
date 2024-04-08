@@ -35,7 +35,7 @@ const UserLayout: FC<LayoutProps> = ({ children }) => {
     <div css={layoutWrapperStyle}>
       <div css={topWrapperStyle}>
         <Icon component={Logo} css={logoStyle} />
-        <span css={sloganStyle}>tipis.AI</span>
+        <span css={sloganStyle}>tipis</span>
       </div>
       <div css={bottomWrapperStyle}>
         {children}
