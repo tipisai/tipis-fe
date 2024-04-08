@@ -159,6 +159,10 @@ export const infoIconStyle = css`
   font-size: 24px;
 `
 
+export const stopIconStyle = css`
+  font-size: 16px;
+`
+
 export const actionIconStyle = css`
   font-size: 16px;
   width: 16px;

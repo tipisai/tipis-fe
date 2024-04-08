@@ -22,11 +22,6 @@ export const useReRerunAgent = () => {
   const rerunAgent = useCallback(
     async (data: IAgentForm) => {
       if (!canUseBillingFeature) {
-        // TODO: billing
-        // upgradeModal({
-        //   modalType: "agent",
-        //   from: "agent_run_gpt4",
-        // })
         return
       }
       reset(data)

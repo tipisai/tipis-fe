@@ -54,6 +54,7 @@ import store from "@/redux/store"
 import {
   cancelPendingMessage,
   formatSendMessagePayload,
+  getNeedCacheUIMessage,
   groupReceivedMessagesForUI,
 } from "@/utils/agent/wsUtils"
 import {
@@ -509,11 +510,12 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       wsStatus !== WS_READYSTATE.UNINITIALIZED &&
       !isConnecting
     ) {
+      const uiMessageList = getNeedCacheUIMessage(chatMessagesRef.current)
       setChatMessageAndUIState(
         teamID,
         finalTabID,
         mode,
-        chatMessagesRef.current,
+        uiMessageList,
         cacheChatMessages.current,
       )
     }

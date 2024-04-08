@@ -11,7 +11,7 @@ import GetCurrentTimeIcon from "@/config/lottieConfig/getCurrentTime.json"
 import ReadingIcon from "@/config/lottieConfig/reading.json"
 import RunningPythonCodeIcon from "@/config/lottieConfig/runningPythonCode.json"
 import { RUN_REQUEST_TYPE } from "./constants"
-import { infoIconStyle } from "./style"
+import { infoIconStyle, stopIconStyle } from "./style"
 
 export const useGetInfoByStatus = () => {
   const { t } = useTranslation()
@@ -33,7 +33,7 @@ export const useGetInfoByStatus = () => {
           break
         }
         case MESSAGE_STATUS.ANALYZE_STOP: {
-          InfoIcon = <Icon component={CloseIcon} css={infoIconStyle} />
+          InfoIcon = <Icon component={CloseIcon} css={stopIconStyle} />
           InfoTitle = t("homepage.tipi_chat.processing_status.title.python")
           infoDesc = t("homepage.tipi_chat.processing_status.stopped")
           break
@@ -75,7 +75,7 @@ export const useGetInfoByStatus = () => {
           break
         }
         case MESSAGE_STATUS.ANALYZE_STOP: {
-          InfoIcon = <Icon component={CloseIcon} css={infoIconStyle} />
+          InfoIcon = <Icon component={CloseIcon} css={stopIconStyle} />
           InfoTitle = t("homepage.tipi_chat.processing_status.title.read_file")
           infoDesc = t("homepage.tipi_chat.processing_status.stopped")
           break
@@ -119,7 +119,7 @@ export const useGetInfoByStatus = () => {
           break
         }
         case MESSAGE_STATUS.ANALYZE_STOP: {
-          InfoIcon = <Icon component={CloseIcon} css={infoIconStyle} />
+          InfoIcon = <Icon component={CloseIcon} css={stopIconStyle} />
           InfoTitle = t(
             "homepage.tipi_chat.processing_status.title.current_time",
           )
