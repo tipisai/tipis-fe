@@ -6,11 +6,12 @@ import {
   SenderType,
 } from "@/components/PreviewChat/interface"
 import { ChatContext } from "@/page/WorkSpace/AI/components/ChatContext"
-import { isRequestMessage } from "@/utils/agent/wsUtils"
+import { isErrorMessageRes, isRequestMessage } from "@/utils/agent/wsUtils"
 import {
   PureMessage,
   SyncMessageCard,
   SyncMessageLine,
+  SyncMessageResult,
 } from "../SyncMessageCard"
 import {
   agentMessageContainer,
@@ -78,6 +79,8 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
                 disableTrigger={isMobile}
               />
             )
+          } else if (isErrorMessageRes(messageItem)) {
+            element = <SyncMessageResult message={messageItem.message} />
           } else {
             element = (
               <PureMessage
