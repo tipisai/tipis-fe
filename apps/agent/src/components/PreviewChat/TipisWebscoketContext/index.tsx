@@ -69,8 +69,7 @@ export const TipisWebSocketProvider: FC<TipisWebSocketProviderProps> = (
   const connect = useCallback(
     async (callbackOptions: IInitWSCallback) => {
       if (tipisWSClient.current) return
-      const { onReceiving, onConnecting, onMessageCallBack, address } =
-        callbackOptions
+      const { onConnecting, onMessageCallBack, address } = callbackOptions
       onConnecting(true)
       try {
         tipisWSClient.current = new WebSocketClient(address, {
@@ -97,7 +96,6 @@ export const TipisWebSocketProvider: FC<TipisWebSocketProviderProps> = (
           },
           onClose: () => {
             setWSStatus(ILLA_WEBSOCKET_STATUS.CLOSED)
-            onReceiving(true)
           },
           onError: () => {
             setWSStatus(ILLA_WEBSOCKET_STATUS.FAILED)

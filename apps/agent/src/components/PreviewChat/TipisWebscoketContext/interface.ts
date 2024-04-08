@@ -35,7 +35,6 @@ export interface TipisWebSocketProviderProps {
 }
 
 export interface IInitWSCallback {
-  onReceiving: (isReceiving: boolean) => void
   onConnecting: (isConnecting: boolean) => void
   onMessageCallBack: (callbackData: Callback<unknown>) => void
   address: string

@@ -47,7 +47,6 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
   const handleBeforeUpload = (
     file: Parameters<GetProp<UploadProps, "beforeUpload">>[0],
   ) => {
-    console.log(1)
     if (file.size >= FILE_SIZE_LIMIT) {
       message.error(t("image_exceed"))
       return false

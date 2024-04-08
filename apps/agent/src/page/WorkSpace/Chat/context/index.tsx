@@ -125,7 +125,6 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       type: SEND_MESSAGE_WS_TYPE,
       options?: ISendMessageOptions,
     ) => {
-      setIsReceiving(true)
       const encodePayload: ChatSendRequestPayload = formatSendMessagePayload(
         JSON.parse(JSON.stringify(payload)),
       )
@@ -364,9 +363,6 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       const initConnectConfig: IInitWSCallback = {
         onConnecting: (isConnecting) => {
           setIsConnecting(isConnecting)
-        },
-        onReceiving: (isReceiving) => {
-          setIsReceiving(isReceiving)
         },
         onMessageCallBack,
         address: aiAgentConnectionAddress,
