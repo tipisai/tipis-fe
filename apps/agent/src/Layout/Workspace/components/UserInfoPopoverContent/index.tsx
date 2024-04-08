@@ -11,7 +11,7 @@ import {
   getCurrentUser,
   getTeamItems,
 } from "@illa-public/user-data"
-import DiscordIcon from "@/assets/public/discord.svg?react"
+import HelpCenterIcon from "@/assets/public/help-center.svg?react"
 import SettingIcon from "@/assets/public/setting.svg?react"
 import {
   buttonContentContainerStyle,
@@ -56,7 +56,7 @@ const UserInfoPopoverContent: FC = () => {
       <div css={popoverContentContainerStyle}>
         <Button type="text" block size="large" onClick={onClickChatWithUs}>
           <div css={buttonContentContainerStyle}>
-            <Icon component={DiscordIcon} css={iconContainerStyle} />
+            <Icon component={HelpCenterIcon} css={iconContainerStyle} />
             {t("homepage.left_panel.setting.help_center")}
           </div>
         </Button>

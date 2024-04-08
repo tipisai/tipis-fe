@@ -183,3 +183,31 @@ export const groupReceivedMessagesForUI = (
   }
   return newMessageList
 }
+
+export const getNeedCacheUIMessage = (
+  messageList: (IGroupMessage | ChatMessage)[],
+): (IGroupMessage | ChatMessage)[] => {
+  const newMessageList = messageList.map((message) => {
+    if (
+      isGroupMessage(message) &&
+      message.items.some((messageItem) => isPendingRequestMessage(messageItem))
+    ) {
+      let updateMessageItem = message.items.filter(
+        (messageItem) => !isPendingRequestMessage(messageItem),
+      )
+      if (updateMessageItem.length === 0) {
+        return null
+      }
+      return {
+        ...message,
+        items: updateMessageItem,
+      }
+    }
+    return message
+  })
+
+  return newMessageList.filter((item) => !!item) as (
+    | IGroupMessage
+    | ChatMessage
+  )[]
+}

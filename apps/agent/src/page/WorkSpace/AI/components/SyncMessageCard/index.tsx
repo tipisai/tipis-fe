@@ -3,6 +3,7 @@ import { motion } from "framer-motion"
 import { FC, useState } from "react"
 import { DownIcon, UpIcon } from "@illa-public/icon"
 import LottieItem from "@/components/LottieItem"
+import { MESSAGE_STATUS } from "@/components/PreviewChat/interface"
 import tipiRunLoading from "@/config/lottieConfig/tipiRunLoading.json"
 import MarkdownMessage from "../MarkdownMessage"
 import { RUN_REQUEST_TYPE } from "./constants"
@@ -85,7 +86,7 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
         onClick={() => setShowMessage(!showMessage)}
       >
         <div css={infoContainerStyle}>
-          {runRequestType ? (
+          {runRequestType || messageStatus === MESSAGE_STATUS.ANALYZE_STOP ? (
             <>
               <div css={textAndIconContainerStyle}>
                 <div css={iconStyle(messageStatus)}>{InfoIcon}</div>
