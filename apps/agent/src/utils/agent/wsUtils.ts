@@ -76,7 +76,7 @@ export const handleUpdateMessageList = (
         ? MESSAGE_STATUS.ANALYZE_FAILED
         : MESSAGE_STATUS.ANALYZE_SUCCESS
     }
-    if (isErrorMessageRes(message) || isSuccessMessageRes(message)) {
+    if (isSuccessMessageRes(message)) {
       curMessage.items.push({
         ...message,
         message: "",

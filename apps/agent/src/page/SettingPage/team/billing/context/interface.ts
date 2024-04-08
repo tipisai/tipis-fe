@@ -1,4 +1,4 @@
-import { ICreditInfo } from "@illa-public/public-types"
+import { ICreditInfo, SUBSCRIPTION_CYCLE } from "@illa-public/public-types"
 
 export interface BillingContextTypeProps {
   creditInfo: ICreditInfo
@@ -6,5 +6,5 @@ export interface BillingContextTypeProps {
   isCancelSubscribedCredit: boolean
   isExpiredCredit: boolean
   loading: boolean
-  openCreditDrawer?: () => void
+  openCreditDrawer: (subCycle?: SUBSCRIPTION_CYCLE) => void
 }

@@ -61,7 +61,7 @@ const CreditCard: FC = () => {
             {!isExpiredCredit &&
               !isUnSubscribeCredit &&
               !isCancelSubscribedCredit && (
-                <Button onClick={openCreditDrawer}>
+                <Button onClick={() => openCreditDrawer()}>
                   {t("tipi_billing.manage_credits")}
                 </Button>
               )}

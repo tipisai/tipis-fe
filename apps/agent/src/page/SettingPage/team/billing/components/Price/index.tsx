@@ -6,16 +6,19 @@ import { infoTitleStyle, priceCardContainerStyle, priceStyle } from "./style"
 
 export const Price = () => {
   const { t } = useTranslation()
-  const { isUnSubscribeCredit, isExpiredCredit } = useContext(BillingContext)
+  const { isUnSubscribeCredit, isExpiredCredit, isCancelSubscribedCredit } =
+    useContext(BillingContext)
 
-  if (!isUnSubscribeCredit && !isExpiredCredit) {
+  if (!isUnSubscribeCredit && !isExpiredCredit && !isCancelSubscribedCredit) {
     return null
   }
   return (
     <section css={priceStyle} id="pricing">
       <span css={infoTitleStyle}>{t("tipi_billing.pricing")}</span>
       <div css={priceCardContainerStyle}>
-        {(isUnSubscribeCredit || isExpiredCredit) && <PriceCard />}
+        {(isUnSubscribeCredit ||
+          isExpiredCredit ||
+          isCancelSubscribedCredit) && <PriceCard />}
       </div>
     </section>
   )
