@@ -498,7 +498,8 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
     setChatMessages([])
     chatMessagesRef.current = []
     await removeChatMessageAndUIState(teamID, finalTabID, mode)
-  }, [cleanMessage, finalTabID, teamID, mode])
+    setAndGetRunAgentConfig()
+  }, [teamID, cleanMessage, finalTabID, mode, setAndGetRunAgentConfig])
 
   const setCacheState = useCallback(async () => {
     const wsStatus = getReadyState()
