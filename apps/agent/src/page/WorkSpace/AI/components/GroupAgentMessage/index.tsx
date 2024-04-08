@@ -30,6 +30,8 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
   const { message, isMobile, isReceiving, isLastMessage } = props
   const chatContext = useContext(ChatContext)
 
+  const uiMessage = message.items.filter((item) => item.message)
+
   const senderNickname =
     message.items[0].sender.senderType === SenderType.ANONYMOUS_AGENT
       ? chatContext.inRoomUsers.find(
@@ -61,7 +63,7 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
       )}
       <div css={senderContainerStyle}>
         <div css={senderNicknameStyle}>{senderNickname}</div>
-        {message.items.map((messageItem, i) => {
+        {uiMessage.map((messageItem, i) => {
           if (!messageItem.message) {
             return null
           }
@@ -86,7 +88,7 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
           }
           return (
             <Fragment key={`${messageItem.messageType}${i}`}>
-              {element} {i !== message.items.length - 1 && <SyncMessageLine />}
+              {element} {i !== uiMessage.length - 1 && <SyncMessageLine />}
             </Fragment>
           )
         })}
