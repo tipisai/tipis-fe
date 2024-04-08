@@ -1,8 +1,8 @@
 import { FC, useCallback, useContext, useEffect, useMemo, useRef } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { useSelector } from "react-redux"
+import { WS_READYSTATE } from "@illa-public/illa-web-socket"
 import { getCurrentId } from "@illa-public/user-data"
-import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { PreviewChat } from "@/components/PreviewChat"
 import { PreviewChatUseProvider } from "@/components/PreviewChat/PreviewChatUseContext"
 import { PREVIEW_CHAT_USE_TO } from "@/components/PreviewChat/PreviewChatUseContext/constants"
@@ -35,7 +35,7 @@ export const AIAgentRunPC: FC = () => {
     inRoomUsers,
     isRunning,
     connect,
-    wsStatus,
+    getReadyState,
     leaveRoom,
     chatMessages,
     isReceiving,
@@ -61,7 +61,7 @@ export const AIAgentRunPC: FC = () => {
 
   const wsContext = useMemo(
     () => ({
-      wsStatus,
+      getReadyState,
       isRunning,
       chatMessages,
       isReceiving,
@@ -76,7 +76,7 @@ export const AIAgentRunPC: FC = () => {
       lastRunAgent,
       sendMessage,
       setIsReceiving,
-      wsStatus,
+      getReadyState,
     ],
   )
 
@@ -97,14 +97,14 @@ export const AIAgentRunPC: FC = () => {
   useEffect(() => {
     return () => {
       if (
-        wsStatus === ILLA_WEBSOCKET_STATUS.CONNECTED &&
+        getReadyState() === WS_READYSTATE.OPEN &&
         onlyConnectOnce.current === true
       ) {
         leaveRoom()
         onlyConnectOnce.current = false
       }
     }
-  }, [leaveRoom, wsStatus])
+  }, [leaveRoom, getReadyState])
 
   const initRunAgent = useCallback(async () => {
     const { chatMessageData, uiChatMessage } = await getChatMessageAndUIState(
@@ -122,7 +122,7 @@ export const AIAgentRunPC: FC = () => {
     if (!hasVariables || hasChatHistory) {
       if (
         onlyConnectOnce.current === false &&
-        wsStatus === ILLA_WEBSOCKET_STATUS.INIT
+        getReadyState() === WS_READYSTATE.UNINITIALIZED
       ) {
         connect()
         onlyConnectOnce.current = true
@@ -140,7 +140,7 @@ export const AIAgentRunPC: FC = () => {
     hasVariables,
     mode,
     teamID,
-    wsStatus,
+    getReadyState,
   ])
 
   useEffect(() => {

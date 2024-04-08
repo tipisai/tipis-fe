@@ -19,12 +19,12 @@ export const DefaultChat: FC<{ isMobile: boolean }> = ({
   const { connect, leaveRoom, sendMessage, setIsReceiving } =
     useContext(ChatStableWSContext)
 
-  const { wsStatus, isRunning, chatMessages, isReceiving, inRoomUsers } =
+  const { getReadyState, isRunning, chatMessages, isReceiving, inRoomUsers } =
     useContext(ChatUnStableWSContext)
 
   const wsContext = useMemo(
     () => ({
-      wsStatus,
+      getReadyState,
       isRunning,
       chatMessages,
       isReceiving,
@@ -37,7 +37,7 @@ export const DefaultChat: FC<{ isMobile: boolean }> = ({
       isRunning,
       sendMessage,
       setIsReceiving,
-      wsStatus,
+      getReadyState,
     ],
   )
 

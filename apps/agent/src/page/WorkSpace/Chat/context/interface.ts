@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
+import { WS_READYSTATE } from "@illa-public/illa-web-socket"
 import { TextSignal } from "@/api/ws/textSignal"
 import {
   IChatSendMessage,
@@ -43,7 +43,7 @@ export interface IChatUnStableWSInject {
   isRunning: boolean
   inRoomUsers: CollaboratorsInfo[]
   chatMessages: (IGroupMessage | ChatMessage)[]
-  wsStatus: ILLA_WEBSOCKET_STATUS
+  getReadyState: () => WS_READYSTATE
 }
 
 export interface ICachePayloadQueue {

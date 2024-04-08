@@ -15,7 +15,7 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
   (props: IPreviewChatHistoryProps) => {
     const { getValues, control } = useFormContext<IAgentForm>()
     const {
-      wsStatus,
+      getReadyState,
       isRunning,
       chatMessages,
       isReceiving,
@@ -52,7 +52,7 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
 
     const wsContext = useMemo(
       () => ({
-        wsStatus,
+        getReadyState,
         isRunning,
         chatMessages,
         isReceiving,
@@ -67,7 +67,7 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
         lastRunAgent,
         sendMessage,
         setIsReceiving,
-        wsStatus,
+        getReadyState,
       ],
     )
 

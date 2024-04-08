@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useBeforeUnload } from "react-router-dom"
 import { v4 } from "uuid"
+import { WS_READYSTATE } from "@illa-public/illa-web-socket"
 import {
   CreditModalType,
   handleCreditPurchaseError,
@@ -22,11 +23,7 @@ import {
 import { BILLING_REPORT_FROM } from "@illa-public/upgrade-modal/constants"
 import { getCurrentId } from "@illa-public/user-data"
 import { getTextMessagePayload, getWithFileMessagePayload } from "@/api/ws"
-import {
-  Callback,
-  FILE_SOURCE,
-  ILLA_WEBSOCKET_STATUS,
-} from "@/api/ws/interface"
+import { Callback, FILE_SOURCE } from "@/api/ws/interface"
 import {
   TextSignal,
   TextTarget,
@@ -61,6 +58,7 @@ import {
 } from "@/utils/agent/wsUtils"
 import {
   getChatMessageAndUIState,
+  removeChatMessageAndUIState,
   setChatMessageAndUIState,
 } from "@/utils/localForage/teamData"
 import { IAgentForm } from "../../AIAgent/interface"
@@ -167,9 +165,8 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
     setChatMessages(newMessageList)
   }, [])
 
-  const { sendMessage, connect, wsStatus, leaveRoom } = useContext(
-    TipisWebSocketContext,
-  )
+  const { sendMessage, connect, getReadyState, leaveRoom, cleanMessage } =
+    useContext(TipisWebSocketContext)
 
   const startSendMessage = useCallback(
     (
@@ -493,17 +490,23 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
   }, [leaveRoom])
 
   const innerReconnect = useCallback(async () => {
-    innerLeaveRoom()
-    setIsRunning(false)
-    await innerConnect()
-  }, [innerConnect, innerLeaveRoom])
+    if (!teamID) {
+      return
+    }
+    cleanMessage()
+    setChatMessages([])
+    chatMessagesRef.current = []
+    await removeChatMessageAndUIState(teamID, finalTabID, mode)
+  }, [cleanMessage, finalTabID, teamID, mode])
 
   const setCacheState = useCallback(async () => {
+    const wsStatus = getReadyState()
     if (
       mode &&
       finalTabID &&
       teamID &&
-      wsStatus !== ILLA_WEBSOCKET_STATUS.INIT &&
+      wsStatus !== WS_READYSTATE.CONNECTING &&
+      wsStatus !== WS_READYSTATE.UNINITIALIZED &&
       !isConnecting
     ) {
       setChatMessageAndUIState(
@@ -514,7 +517,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
         cacheChatMessages.current,
       )
     }
-  }, [finalTabID, isConnecting, mode, teamID, wsStatus])
+  }, [finalTabID, getReadyState, isConnecting, mode, teamID])
 
   useEffect(() => {
     return () => {
@@ -530,7 +533,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       chatMessages,
       reconnect: innerReconnect,
       connect: innerConnect,
-      wsStatus,
+      getReadyState,
       lastRunAgent: lastRunAgent,
       isConnecting,
       isReceiving,
@@ -549,7 +552,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
     isConnecting,
     isReceiving,
     isRunning,
-    wsStatus,
+    getReadyState,
   ])
 
   return (

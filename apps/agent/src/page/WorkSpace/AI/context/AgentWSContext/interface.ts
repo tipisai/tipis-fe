@@ -25,7 +25,7 @@ export interface IAgentWSProviderProps {
 export interface IAgentWSInject
   extends Omit<
     TipisWebSocketContextType,
-    "connect" | "reconnect" | "sendMessage"
+    "connect" | "reconnect" | "sendMessage" | "cleanMessage"
   > {
   lastRunAgent: MutableRefObject<IAgentForm | undefined>
   isConnecting: boolean

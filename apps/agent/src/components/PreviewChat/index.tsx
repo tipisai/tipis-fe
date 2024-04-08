@@ -15,10 +15,10 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { v4 } from "uuid"
 import { SendIcon } from "@illa-public/icon"
+import { WS_READYSTATE } from "@illa-public/illa-web-socket"
 import { IKnowledgeFile } from "@illa-public/public-types"
 import { TipisTrack } from "@illa-public/track-utils"
 import { getCurrentUser } from "@illa-public/user-data"
-import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { TextSignal } from "@/api/ws/textSignal"
 import AgentBlockInput from "@/assets/agent/agent-block-input.svg?react"
 import StopIcon from "@/assets/agent/stop.svg?react"
@@ -69,7 +69,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const { useTo } = useContext(PreviewChatUseContext)
 
   const {
-    wsStatus,
+    getReadyState,
     isRunning,
     chatMessages,
     isReceiving,
@@ -323,63 +323,59 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       </div>
       <div css={inputTextContainerStyle}>
         <AnimatePresence>
-          {isReceiving &&
-            wsStatus !== ILLA_WEBSOCKET_STATUS.CLOSED &&
-            wsStatus !== ILLA_WEBSOCKET_STATUS.FAILED && (
-              <motion.div
-                css={generatingContainerStyle}
-                initial={{
-                  y: 0,
-                  opacity: 0,
-                }}
-                animate={{
-                  y: -16,
-                  opacity: 1,
-                }}
-                exit={{
-                  y: 0,
-                  opacity: 0,
-                }}
-                transition={{ duration: 0.2 }}
-              >
-                <div css={generatingContentContainerStyle}>
-                  <div css={generatingTextStyle}>
-                    {t("editor.ai-agent.button.generating")}
-                  </div>
-                  <div css={generatingDividerStyle} />
-                  <StopIcon
-                    css={stopIconStyle}
-                    onClick={handleClickStopGenerating}
-                  />
+          {isReceiving && getReadyState() !== WS_READYSTATE.CLOSED && (
+            <motion.div
+              css={generatingContainerStyle}
+              initial={{
+                y: 0,
+                opacity: 0,
+              }}
+              animate={{
+                y: -16,
+                opacity: 1,
+              }}
+              exit={{
+                y: 0,
+                opacity: 0,
+              }}
+              transition={{ duration: 0.2 }}
+            >
+              <div css={generatingContentContainerStyle}>
+                <div css={generatingTextStyle}>
+                  {t("editor.ai-agent.button.generating")}
                 </div>
-              </motion.div>
-            )}
-          {isRunning &&
-            (wsStatus === ILLA_WEBSOCKET_STATUS.CLOSED ||
-              wsStatus === ILLA_WEBSOCKET_STATUS.FAILED) && (
-              <motion.div
-                css={generatingContainerStyle}
-                initial={{
-                  y: 0,
-                  opacity: 0,
-                }}
-                animate={{
-                  y: -16,
-                  opacity: 1,
-                }}
-                exit={{
-                  y: 0,
-                  opacity: 0,
-                }}
-                transition={{ duration: 0.2 }}
-              >
-                <div css={generatingContentContainerStyle}>
-                  <div css={generatingTextStyle}>
-                    {t("editor.ai-agent.message.reconnect")}
-                  </div>
+                <div css={generatingDividerStyle} />
+                <StopIcon
+                  css={stopIconStyle}
+                  onClick={handleClickStopGenerating}
+                />
+              </div>
+            </motion.div>
+          )}
+          {isRunning && getReadyState() === WS_READYSTATE.CLOSED && (
+            <motion.div
+              css={generatingContainerStyle}
+              initial={{
+                y: 0,
+                opacity: 0,
+              }}
+              animate={{
+                y: -16,
+                opacity: 1,
+              }}
+              exit={{
+                y: 0,
+                opacity: 0,
+              }}
+              transition={{ duration: 0.2 }}
+            >
+              <div css={generatingContentContainerStyle}>
+                <div css={generatingTextStyle}>
+                  {t("editor.ai-agent.message.reconnect")}
                 </div>
-              </motion.div>
-            )}
+              </div>
+            </motion.div>
+          )}
         </AnimatePresence>
         {blockInput ? (
           <div css={blockInputContainerStyle}>

@@ -1,3 +1,4 @@
+import { WS_READYSTATE } from "@illa-public/illa-web-socket"
 import {
   AI_AGENT_MODEL,
   AI_AGENT_TYPE,
@@ -5,7 +6,6 @@ import {
   IKnowledgeFile,
 } from "@illa-public/public-types"
 import { Params } from "@illa-public/record-editor"
-import { ILLA_WEBSOCKET_STATUS } from "@/api/ws/interface"
 import { IChatSendMessage } from "./TipisWebscoketContext/interface"
 
 export type EDIT_STATE = "EDIT" | "RUN"
@@ -80,7 +80,7 @@ export interface PreviewChatProps {
   isMobile: boolean
   onSendMessage: (cheatMessage: ChatMessage) => void
   wsContextValue: {
-    wsStatus: ILLA_WEBSOCKET_STATUS
+    getReadyState: () => WS_READYSTATE
     isRunning: boolean
     chatMessages: (IGroupMessage | ChatMessage)[]
     isReceiving: boolean
