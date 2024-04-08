@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
 import { Navigate, useBeforeUnload } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
-import { SUBSCRIBE_PLAN } from "@illa-public/public-types"
+import { SUBSCRIBE_PLAN, SUBSCRIPTION_CYCLE } from "@illa-public/public-types"
 import {
   TIPIS_TRACK_CLOUD_PAGE_NAME,
   TipisTrack,
@@ -44,11 +44,15 @@ const Billing: FC = () => {
     }
   }, [refetch, teamInfo?.id, triggerGetTeamsInfo])
 
-  const openCreditDrawer = useCallback(() => {
-    creditDrawer(BILLING_REPORT_FROM.SETTING_BILLING, {
-      onSuccessCallback: fetchSubscriptionInfo,
-    })
-  }, [creditDrawer, fetchSubscriptionInfo])
+  const openCreditDrawer = useCallback(
+    (subCycle?: SUBSCRIPTION_CYCLE) => {
+      creditDrawer(BILLING_REPORT_FROM.SETTING_BILLING, {
+        onSuccessCallback: fetchSubscriptionInfo,
+        subCycle,
+      })
+    },
+    [creditDrawer, fetchSubscriptionInfo],
+  )
 
   const isUnSubscribeCredit =
     !creditInfo?.plan || creditInfo?.plan === SUBSCRIBE_PLAN.CREDIT_FREE
