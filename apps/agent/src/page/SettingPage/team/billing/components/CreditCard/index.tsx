@@ -105,7 +105,7 @@ const CreditCard: FC = () => {
               !isCancelSubscribedCredit && (
                 <div css={cardPayDetailItemStyle}>
                   <span css={cardPayDetailNameStyle}>
-                    {t("billing.subscription_general.table_title.colla_sub")}
+                    {t("tipi_billing.subscribed_credits")}
                   </span>
                   <span css={cardPayDetailNumStyle}>
                     {toThousands(creditNum || 0)}
