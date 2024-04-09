@@ -27,7 +27,7 @@ export const hoverCopyStyle = (isOwnMessage?: boolean) => css`
   background: ${getColor("white", "01")};
   cursor: pointer;
   color: ${getColor("grayBlue", "02")};
-  transform: translate(${isOwnMessage ? "-8px" : "8px"}, 12px);
+  transform: translate(${isOwnMessage ? "-8px" : "8px"}, 8px);
 `
 
 export const cellStyle = css`
