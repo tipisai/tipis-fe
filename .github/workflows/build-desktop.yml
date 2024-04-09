@@ -74,4 +74,4 @@ jobs:
           releaseBody: "See the assets to download and install this version."
           releaseDraft: true
           prerelease: false
-          projectPath: "./apps/agent/src-tauri"
+          projectPath: "./apps/agent"
