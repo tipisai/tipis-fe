@@ -6,12 +6,11 @@ export const gridFormFieldStyle: SerializedStyles = css`
   flex-direction: column;
   gap: 24px;
   width: 100%;
+  margin-bottom: 40px;
 `
 
 export const passwordFormContainerStyle = css`
-  display: flex;
   width: 600px;
-  justify-content: center;
 `
 
 export const formTitleStyle: SerializedStyles = css`

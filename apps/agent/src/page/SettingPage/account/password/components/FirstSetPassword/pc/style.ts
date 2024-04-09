@@ -4,6 +4,7 @@ export const gridFormFieldStyle: SerializedStyles = css`
   display: inline-flex;
   flex-direction: column;
   gap: 24px;
+  margin-bottom: 40px;
 `
 
 export const gridItemStyle: SerializedStyles = css`

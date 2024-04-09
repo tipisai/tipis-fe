@@ -323,59 +323,63 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       </div>
       <div css={inputTextContainerStyle}>
         <AnimatePresence>
-          {isReceiving && getReadyState() !== WS_READYSTATE.CLOSED && (
-            <motion.div
-              css={generatingContainerStyle}
-              initial={{
-                y: 0,
-                opacity: 0,
-              }}
-              animate={{
-                y: -16,
-                opacity: 1,
-              }}
-              exit={{
-                y: 0,
-                opacity: 0,
-              }}
-              transition={{ duration: 0.2 }}
-            >
-              <div css={generatingContentContainerStyle}>
-                <div css={generatingTextStyle}>
-                  {t("editor.ai-agent.button.generating")}
+          {isRunning &&
+            isReceiving &&
+            getReadyState() === WS_READYSTATE.OPEN && (
+              <motion.div
+                css={generatingContainerStyle}
+                initial={{
+                  y: 0,
+                  opacity: 0,
+                }}
+                animate={{
+                  y: -16,
+                  opacity: 1,
+                }}
+                exit={{
+                  y: 0,
+                  opacity: 0,
+                }}
+                transition={{ duration: 0.2 }}
+              >
+                <div css={generatingContentContainerStyle}>
+                  <div css={generatingTextStyle}>
+                    {t("editor.ai-agent.button.generating")}
+                  </div>
+                  <div css={generatingDividerStyle} />
+                  <StopIcon
+                    css={stopIconStyle}
+                    onClick={handleClickStopGenerating}
+                  />
                 </div>
-                <div css={generatingDividerStyle} />
-                <StopIcon
-                  css={stopIconStyle}
-                  onClick={handleClickStopGenerating}
-                />
-              </div>
-            </motion.div>
-          )}
-          {isRunning && getReadyState() === WS_READYSTATE.CLOSED && (
-            <motion.div
-              css={generatingContainerStyle}
-              initial={{
-                y: 0,
-                opacity: 0,
-              }}
-              animate={{
-                y: -16,
-                opacity: 1,
-              }}
-              exit={{
-                y: 0,
-                opacity: 0,
-              }}
-              transition={{ duration: 0.2 }}
-            >
-              <div css={generatingContentContainerStyle}>
-                <div css={generatingTextStyle}>
-                  {t("editor.ai-agent.message.reconnect")}
+              </motion.div>
+            )}
+          {isRunning &&
+            getReadyState() !== WS_READYSTATE.CONNECTING &&
+            getReadyState() !== WS_READYSTATE.OPEN && (
+              <motion.div
+                css={generatingContainerStyle}
+                initial={{
+                  y: 0,
+                  opacity: 0,
+                }}
+                animate={{
+                  y: -16,
+                  opacity: 1,
+                }}
+                exit={{
+                  y: 0,
+                  opacity: 0,
+                }}
+                transition={{ duration: 0.2 }}
+              >
+                <div css={generatingContentContainerStyle}>
+                  <div css={generatingTextStyle}>
+                    {t("editor.ai-agent.message.reconnect")}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          )}
+              </motion.div>
+            )}
         </AnimatePresence>
         {blockInput ? (
           <div css={blockInputContainerStyle}>
