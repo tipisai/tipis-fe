@@ -52,8 +52,12 @@ const NotContributeTipiDetail: FC = () => {
         tipisIcon={data.icon}
       />
       <Prompt parameters={data.variables ?? []} prompt={data.prompt} />
-      {data.variables && <Parameters parameters={data.variables} />}
-      {data.knowledge && <Knowledge knowledge={data.knowledge} />}
+      {Array.isArray(data.variables) && data.variables.length > 0 && (
+        <Parameters parameters={data.variables} />
+      )}
+      {Array.isArray(data.knowledge) && data.knowledge.length > 0 && (
+        <Knowledge knowledge={data.knowledge} />
+      )}
     </DetailLayout>
   ) : null
 }
