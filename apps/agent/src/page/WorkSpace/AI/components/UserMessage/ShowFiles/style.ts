@@ -9,7 +9,6 @@ export const containerStyle = css`
   justify-content: flex-end;
   align-items: flex-start;
   flex-wrap: wrap;
-  margin-bottom: 8px;
   ${applyMobileStyle(css`
     display: flex;
     flex-direction: column;
@@ -21,7 +20,7 @@ export const containerStyle = css`
 export const fileItemStyle = css`
   display: flex;
   width: 284px;
-  padding: 8px;
+  padding: 16px;
   align-items: center;
   gap: 4px;
   align-self: stretch;
