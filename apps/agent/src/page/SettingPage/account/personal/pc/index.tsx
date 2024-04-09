@@ -173,17 +173,15 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
                 />
               </div>
             </section>
-            <span>
-              <Button
-                type="primary"
-                size="large"
-                disabled={!isDirty}
-                htmlType="submit"
-              >
-                {t("profile.setting.save")}
-              </Button>
-            </span>
           </section>
+          <Button
+            type="primary"
+            size="large"
+            disabled={!isDirty}
+            htmlType="submit"
+          >
+            {t("profile.setting.save")}
+          </Button>
         </form>
       </div>
     </>

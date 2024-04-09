@@ -1,6 +1,8 @@
+import Icon from "@ant-design/icons"
 import { Button } from "antd"
 import { FC, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { ExitIcon } from "@illa-public/icon"
 import { useLogout } from "@/page/SettingPage/hooks/useLogout"
 
 const Logout: FC = () => {
@@ -10,9 +12,8 @@ const Logout: FC = () => {
 
   return (
     <Button
-      type="primary"
-      danger
       size="large"
+      icon={<Icon component={ExitIcon} />}
       loading={isLoading}
       onClick={() => {
         setIsLoading(true)
