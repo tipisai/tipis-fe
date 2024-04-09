@@ -8,6 +8,7 @@ import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 import {
   addTabs,
   getTabs,
+  removeAllTabsAndCacheData,
   removeTabsAndCacheData,
   updateTabs,
 } from "../localForage/teamData"
@@ -40,6 +41,18 @@ export const useRemoveRecentTabReducer = () => {
   )
 
   return removeRecentTabReducer
+}
+
+export const useRemoveAllRecentTabReducer = () => {
+  const dispatch = useDispatch()
+
+  const removeAllRecentTabReducer = useCallback(async () => {
+    const teamID = getCurrentId(store.getState())!
+    dispatch(recentTabActions.deleteAllRecentTabReducer())
+    await removeAllTabsAndCacheData(teamID)
+  }, [dispatch])
+
+  return removeAllRecentTabReducer
 }
 
 export const useUpdateRecentTabReducer = () => {
