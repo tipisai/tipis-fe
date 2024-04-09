@@ -1,8 +1,10 @@
-import { GetProp, Image, Upload, UploadProps } from "antd"
+import Icon from "@ant-design/icons"
+import { ConfigProvider, GetProp, Image, Upload, UploadProps } from "antd"
 import ImgCrop from "antd-img-crop"
 import { FC, memo } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { PlusIcon } from "@illa-public/icon"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { IAgentForm } from "../../interface"
 import { uploadContentContainerStyle } from "./style"
@@ -31,40 +33,48 @@ const AvatarUploader: FC = memo(() => {
           title={t("editor.ai-agent.label.icon")}
           subtitleTips={t("editor.ai-agent.generate-icon.tooltips")}
         >
-          <ImgCrop
-            rotationSlider
-            onModalOk={(v) => {
-              getBase64(v as FileType, (url) => {
-                field.onChange(url)
-              })
+          <ConfigProvider
+            theme={{
+              token: {
+                controlHeightLG: 26,
+              },
             }}
-            beforeCrop={beforeUpload}
-            cropShape="round"
           >
-            <Upload
-              listType="picture-card"
-              showUploadList={false}
-              onRemove={() => {
-                field.onChange("")
+            <ImgCrop
+              rotationSlider
+              onModalOk={(v) => {
+                getBase64(v as FileType, (url) => {
+                  field.onChange(url)
+                })
               }}
-              customRequest={() => {}}
+              beforeCrop={beforeUpload}
+              cropShape="round"
             >
-              {field.value ? (
-                <Image
-                  src={field.value}
-                  css={uploadContentContainerStyle}
-                  width="100px"
-                  height="100px"
-                  preview={{
-                    visible: false,
-                    mask: "+ Upload",
-                  }}
-                />
-              ) : (
-                "+ Upload"
-              )}
-            </Upload>
-          </ImgCrop>
+              <Upload
+                listType="picture-card"
+                showUploadList={false}
+                onRemove={() => {
+                  field.onChange("")
+                }}
+                customRequest={() => {}}
+              >
+                {field.value ? (
+                  <Image
+                    src={field.value}
+                    css={uploadContentContainerStyle}
+                    width="64px"
+                    height="64px"
+                    preview={{
+                      visible: false,
+                      mask: <Icon component={PlusIcon} />,
+                    }}
+                  />
+                ) : (
+                  <Icon component={PlusIcon} />
+                )}
+              </Upload>
+            </ImgCrop>
+          </ConfigProvider>
         </LayoutBlock>
       )}
     />
