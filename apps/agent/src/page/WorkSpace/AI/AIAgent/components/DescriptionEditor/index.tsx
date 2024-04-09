@@ -103,7 +103,10 @@ const DescriptionEditor: FC = memo(() => {
             status={!!errors.description ? "error" : undefined}
             maxLength={160}
             placeholder={t("editor.ai-agent.placeholder.desc")}
-            rows={5}
+            autoSize={{
+              minRows: 1,
+              maxRows: 5,
+            }}
           />
         </LayoutBlock>
       )}
