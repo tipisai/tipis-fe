@@ -76,7 +76,6 @@ const ContributeTipiDetail: FC = () => {
   if (isError) {
     return <Navigate to="/404" />
   }
-
   return contributeAgentDetail && aiAgentMarketPlaceInfo ? (
     <DetailLayout title={contributeAgentDetail?.name} onClickBack={onClickBack}>
       <DetailHeader
@@ -104,12 +103,8 @@ const ContributeTipiDetail: FC = () => {
         parameters={contributeAgentDetail.variables ?? []}
         prompt={contributeAgentDetail.prompt}
       />
-      {contributeAgentDetail.variables && (
-        <Parameters parameters={contributeAgentDetail.variables} />
-      )}
-      {contributeAgentDetail.knowledge && (
-        <Knowledge knowledge={contributeAgentDetail.knowledge} />
-      )}
+      <Parameters parameters={contributeAgentDetail.variables ?? []} />
+      <Knowledge knowledge={contributeAgentDetail.knowledge ?? []} />
     </DetailLayout>
   ) : null
 }
