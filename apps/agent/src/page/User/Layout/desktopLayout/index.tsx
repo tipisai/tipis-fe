@@ -1,9 +1,8 @@
-import Icon from "@ant-design/icons"
 import { FC } from "react"
 import { Trans, useTranslation } from "react-i18next"
 import { useMatch } from "react-router-dom"
 import { TipisTrack } from "@illa-public/track-utils"
-import Logo from "@/assets/public/logo.svg?react"
+import TextAndLogo from "@/assets/public/textLogo.svg?react"
 import LinkButton from "@/components/LinkButton"
 import { LOGIN_PATH } from "@/utils/routeHelper"
 import { DOC_PREFIX } from "../../constants"
@@ -13,7 +12,6 @@ import {
   layoutWrapperStyle,
   logoStyle,
   policyStyle,
-  sloganStyle,
   topWrapperStyle,
 } from "./style"
 
@@ -34,8 +32,7 @@ const UserLayout: FC<LayoutProps> = ({ children }) => {
   return (
     <div css={layoutWrapperStyle}>
       <div css={topWrapperStyle}>
-        <Icon component={Logo} css={logoStyle} />
-        <span css={sloganStyle}>tipis</span>
+        <TextAndLogo css={logoStyle} />
       </div>
       <div css={bottomWrapperStyle}>
         {children}

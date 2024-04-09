@@ -17,8 +17,8 @@ export const headerStyle = css`
 `
 
 export const logoStyle = css`
-  font-size: 32px;
-  flex: none;
+  height: 32px;
+  width: auto;
 `
 
 export const titleStyle = css`
