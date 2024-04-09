@@ -99,6 +99,7 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
         minWidth: "24px",
         boxShadow: "none",
       }}
+      mouseEnterDelay={0}
       title={
         <span
           css={hoverCopyStyle(isOwnMessage)}

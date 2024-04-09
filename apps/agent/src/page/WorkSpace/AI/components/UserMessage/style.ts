@@ -20,7 +20,7 @@ export const senderContainerStyle = css`
   overflow-x: hidden;
   flex-direction: column;
   align-items: end;
-  gap: 4px;
+  gap: 8px;
   max-width: 100%;
 `
 
