@@ -20,11 +20,11 @@ export const containerStyle = css`
 export const fileItemStyle = css`
   display: flex;
   width: 284px;
-  padding: 16px;
+  padding: 8px;
   align-items: center;
   gap: 4px;
   align-self: stretch;
-  border-radius: 12px;
+  border-radius: 16px;
   background: ${getColor("grayBlue", "09")};
   ${applyMobileStyle(css`
     width: 100%;
