@@ -157,19 +157,17 @@ const ChangePasswordPC: FC<ChangePasswordProps> = (props) => {
                 )}
               </div>
             </section>
-            <span>
-              <Button
-                type="primary"
-                size="large"
-                loading={loading}
-                disabled={disabled}
-                onClick={validReport}
-                htmlType="submit"
-              >
-                {t("profile.setting.save")}
-              </Button>
-            </span>
           </section>
+          <Button
+            type="primary"
+            size="large"
+            loading={loading}
+            disabled={disabled}
+            onClick={validReport}
+            htmlType="submit"
+          >
+            {t("profile.setting.save")}
+          </Button>
         </form>
       </div>
     </>

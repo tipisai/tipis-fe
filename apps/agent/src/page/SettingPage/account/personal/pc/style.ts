@@ -6,6 +6,7 @@ export const gridFormFieldStyle: SerializedStyles = css`
   flex-direction: column;
   gap: 24px;
   width: 100%;
+  margin-bottom: 40px;
 `
 
 export const tipTextStyle: SerializedStyles = css`

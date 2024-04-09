@@ -49,7 +49,7 @@ export const AIAgent: FC = () => {
   useEffect(() => {
     return () => {
       const wsStatus = getReadyState()
-      if (wsStatus === WS_READYSTATE.OPEN) {
+      if (wsStatus !== WS_READYSTATE.UNINITIALIZED) {
         leaveRoom()
       }
     }

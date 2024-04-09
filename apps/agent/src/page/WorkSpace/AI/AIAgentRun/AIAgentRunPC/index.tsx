@@ -97,7 +97,7 @@ export const AIAgentRunPC: FC = () => {
   useEffect(() => {
     return () => {
       if (
-        getReadyState() === WS_READYSTATE.OPEN &&
+        getReadyState() !== WS_READYSTATE.UNINITIALIZED &&
         onlyConnectOnce.current === true
       ) {
         leaveRoom()

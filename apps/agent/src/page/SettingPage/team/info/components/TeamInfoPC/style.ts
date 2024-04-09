@@ -11,17 +11,9 @@ export const formStyle = css`
   width: 600px;
 `
 
-export const formTitleStyle: SerializedStyles = css`
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 26px;
-  color: ${getColor("grayBlue", "02")};
-  margin-bottom: 24px;
-`
-
 export const gridFormFieldStyle = css`
   display: grid;
-  gap: 64px;
+  gap: 24px;
   margin-bottom: 40px;
 `
 
@@ -30,11 +22,6 @@ export const formLabelStyle = css`
   line-height: 22px;
   font-weight: 500;
   color: ${getColor("grayBlue", "02")};
-`
-
-export const leaveLabelStyle = css`
-  margin: 64px 0 16px;
-  ${formLabelStyle};
 `
 
 export const forgotPwdContainerStyle: SerializedStyles = css`
