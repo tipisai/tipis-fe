@@ -103,8 +103,14 @@ const ContributeTipiDetail: FC = () => {
         parameters={contributeAgentDetail.variables ?? []}
         prompt={contributeAgentDetail.prompt}
       />
-      <Parameters parameters={contributeAgentDetail.variables ?? []} />
-      <Knowledge knowledge={contributeAgentDetail.knowledge ?? []} />
+      {Array.isArray(contributeAgentDetail.variables) &&
+        contributeAgentDetail.variables.length > 0 && (
+          <Parameters parameters={contributeAgentDetail.variables} />
+        )}
+      {Array.isArray(contributeAgentDetail.knowledge) &&
+        contributeAgentDetail.knowledge.length > 0 && (
+          <Knowledge knowledge={contributeAgentDetail.knowledge} />
+        )}
     </DetailLayout>
   ) : null
 }
