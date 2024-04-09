@@ -2,6 +2,7 @@
   "productName": "Tipis",
   "version": "0.1.0",
   "identifier": "ai.tipis.app",
+
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:5555",
@@ -20,6 +21,10 @@
         "fullscreen": false
       }
     ],
+    "trayIcon": {
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": true
+    },
     "security": {
       "csp": null
     }
@@ -27,6 +32,7 @@
   "bundle": {
     "active": true,
     "targets": "all",
+    "category": "Utility",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
