@@ -1,4 +1,3 @@
-import basicSsl from "@vitejs/plugin-basic-ssl"
 import react from "@vitejs/plugin-react-swc"
 import { resolve } from "path"
 import copy from "rollup-plugin-copy"
@@ -45,11 +44,11 @@ export default defineConfig(({ mode }) => {
           },
         ],
         hook: "buildStart",
-      }) as PluginOption,
+      }),
       react({
         jsxImportSource: "@emotion/react",
       }),
-      svgr() as unknown as PluginOption,
+      svgr(),
       checker({
         typescript: {
           root: process.cwd(),
@@ -62,12 +61,11 @@ export default defineConfig(({ mode }) => {
           },
         },
         root: process.cwd(),
-      }) as unknown as PluginOption,
-      basicSsl() as unknown as PluginOption,
+      }),
       visualizer({
         template: "treemap",
       }),
-    ],
+    ] as PluginOption[],
     resolve: {
       alias: {
         "@": resolve(__dirname, "src"),
