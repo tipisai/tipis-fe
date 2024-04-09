@@ -2,7 +2,7 @@ export const ACCEPT = [
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "application/vnd.sealed.csv",
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  "application/pdf",
+  // "application/pdf", TODO: WTF, not support yet
   "application/json",
   "text/plain",
   "text/markdown",

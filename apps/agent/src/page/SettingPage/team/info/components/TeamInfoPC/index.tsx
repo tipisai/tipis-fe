@@ -1,3 +1,4 @@
+import Icon from "@ant-design/icons"
 import {
   App,
   Avatar,
@@ -14,6 +15,7 @@ import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { FILE_SIZE_LIMIT } from "@illa-public/cropper/constants"
+import { DeleteIcon } from "@illa-public/icon"
 import { USER_ROLE } from "@illa-public/public-types"
 import { isBiggerThanTargetRole } from "@illa-public/user-role-utils"
 import { getColorByString } from "@illa-public/utils"
@@ -29,10 +31,8 @@ import {
   forgotPwdContainerStyle,
   formLabelStyle,
   formStyle,
-  formTitleStyle,
   gridFormFieldStyle,
   gridItemStyle,
-  leaveLabelStyle,
   settingWrapperStyle,
   uploadContentContainerStyle,
 } from "./style"
@@ -82,7 +82,20 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
 
   return (
     <>
-      <Header title={t("team_setting.team_info.title")} />
+      <Header
+        title={t("team_setting.team_info.title")}
+        extra={
+          <Button
+            icon={<Icon component={DeleteIcon} />}
+            size="large"
+            onClick={handleClickLeave}
+          >
+            {isOwner
+              ? t("team_setting.left_panel.delete")
+              : t("team_setting.left_panel.leave")}
+          </Button>
+        }
+      />
       <div css={settingWrapperStyle}>
         <div>
           <ConfigProvider
@@ -149,9 +162,6 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
           </ConfigProvider>
         </div>
         <form css={formStyle} onSubmit={handleSubmit?.(onSubmit)}>
-          <header css={formTitleStyle}>
-            {t("team_setting.team_info.title")}
-          </header>
           <section css={gridFormFieldStyle}>
             <section css={gridItemStyle}>
               <label css={formLabelStyle}>
@@ -236,23 +246,6 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
           >
             {t("team_setting.team_info.save")}
           </Button>
-          <div>
-            <div css={leaveLabelStyle}>
-              {isOwner
-                ? t("team_setting.left_panel.delete")
-                : t("team_setting.left_panel.leave")}
-            </div>
-            <Button
-              danger
-              type="primary"
-              size="large"
-              onClick={handleClickLeave}
-            >
-              {isOwner
-                ? t("team_setting.left_panel.delete")
-                : t("team_setting.left_panel.leave")}
-            </Button>
-          </div>
         </form>
       </div>
     </>
