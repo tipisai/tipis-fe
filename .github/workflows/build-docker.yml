@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - main
 
 env:
   ILLA_MIXPANEL_API_KEY: ${{ secrets.ILLA_MIXPANEL_API_KEY }}
