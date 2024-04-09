@@ -394,11 +394,17 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     if (!teamID || !chatID) {
       return
     }
+    startSendMessage(
+      {} as ChatSendRequestPayload,
+      TextSignal.STOP_RUN,
+      SEND_MESSAGE_WS_TYPE.STOP_ALL,
+    )
+    setIsReceiving(false)
     cleanMessage()
     setChatMessages([])
     chatMessagesRef.current = []
     await removeChatMessageAndUIState(teamID, chatID, "run")
-  }, [chatID, cleanMessage, teamID])
+  }, [chatID, cleanMessage, startSendMessage, teamID])
 
   const stableValue = useMemo(() => {
     return {
