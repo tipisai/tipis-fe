@@ -31,14 +31,10 @@ export const bottomWrapperStyle = css`
 `
 
 export const logoStyle = css`
-  font-size: 32px;
+  height: 32px;
+  width: auto;
 `
 
-export const sloganStyle = css`
-  font-size: 22px;
-  font-weight: 400;
-  line-height: 32px;
-`
 export const policyStyle = css`
   margin-top: 24px;
   font-size: 12px;

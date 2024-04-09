@@ -1,9 +1,8 @@
-import Icon from "@ant-design/icons"
 import { FC } from "react"
 import { Trans, useTranslation } from "react-i18next"
 import { useMatch } from "react-router-dom"
 import { TipisTrack } from "@illa-public/track-utils"
-import LogoIcon from "@/assets/public/logo.svg?react"
+import TextAndLogo from "@/assets/public/textLogo.svg?react"
 import LinkButton from "@/components/LinkButton"
 import { LOGIN_PATH } from "@/utils/routeHelper"
 import { DOC_PREFIX } from "../../constants"
@@ -14,7 +13,6 @@ import {
   layoutStyle,
   logoStyle,
   policyStyle,
-  titleStyle,
 } from "./style"
 
 const MobileUserLayout: FC<LayoutProps> = ({ children }) => {
@@ -35,8 +33,7 @@ const MobileUserLayout: FC<LayoutProps> = ({ children }) => {
   return (
     <div css={layoutStyle}>
       <div css={headerStyle}>
-        <Icon component={LogoIcon} css={logoStyle} />
-        <h1 css={titleStyle}>tipis</h1>
+        <TextAndLogo css={logoStyle} />
       </div>
       <div css={contentStyle}>{children}</div>
       <div css={policyStyle}>
