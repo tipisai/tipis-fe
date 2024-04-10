@@ -275,7 +275,10 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
         top: chatRef.current.scrollHeight,
       })
     } else {
-      if (cacheMessageLength.current !== chatMessages.length) {
+      if (
+        cacheMessageLength.current !== chatMessages.length ||
+        chatMessages.length === 0
+      ) {
         scrollDirectRef.current = SCROLL_DIRECTION.DOWN
       }
     }
