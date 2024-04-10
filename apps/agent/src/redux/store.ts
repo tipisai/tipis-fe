@@ -7,6 +7,7 @@ import {
   teamReducer,
   userAPI,
 } from "@illa-public/user-data"
+import { rtkQueryErrorLogger } from "./middleware/rtkQuery401ErrorHandler"
 import { agentAuthAPI } from "./services/agentAPI"
 import { driveAPI } from "./services/driveAPI"
 import { marketAPI } from "./services/marketAPI"
@@ -33,6 +34,7 @@ const store = configureStore({
       driveAPI.middleware,
       userAPI.middleware,
       teamAPI.middleware,
+      rtkQueryErrorLogger,
     ),
 })
 
