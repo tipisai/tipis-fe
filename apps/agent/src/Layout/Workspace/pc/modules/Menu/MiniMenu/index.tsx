@@ -1,6 +1,7 @@
 import Icon from "@ant-design/icons"
-import { Button, Divider, Tooltip } from "antd"
+import { Button, ConfigProvider, Divider, Tooltip } from "antd"
 import { FC, useCallback, useContext } from "react"
+import { useTranslation } from "react-i18next"
 import { TipisTrack } from "@illa-public/track-utils"
 import UserInfoContent from "@/Layout/Workspace/components/UserInfoContent"
 import RecentTabs from "@/Layout/Workspace/modules/RecentTabs"
@@ -21,6 +22,8 @@ import {
 const MiniMenu: FC = () => {
   const { changeCollapsed } = useContext(MenuStatusUIContext)
 
+  const { t } = useTranslation()
+
   const onClickFoldButton = useCallback(() => {
     TipisTrack.track("click_collapse")
 
@@ -36,7 +39,7 @@ const MiniMenu: FC = () => {
           </div>
           <div css={miniMenuLockSideBarContainerStyle}>
             <Tooltip
-              title="展開"
+              title={t("homepage.left_panel.tab.expand_menu")}
               placement="right"
               align={{
                 offset: [16, 0],
@@ -50,21 +53,43 @@ const MiniMenu: FC = () => {
             </Tooltip>
           </div>
           <div css={dividerContainerStyle}>
-            <Divider
-              style={{
-                margin: "0",
+            <ConfigProvider
+              theme={{
+                components: {
+                  Divider: {
+                    textPaddingInline: 0,
+                    colorSplit: "rgba(16, 9, 116, 0.08);",
+                  },
+                },
               }}
-            />
+            >
+              <Divider
+                style={{
+                  margin: "0",
+                }}
+              />
+            </ConfigProvider>
           </div>
           <RecentTabs isMiniSize />
         </div>
         <div css={miniMenuFooterContainerStyle}>
           <div css={dividerContainerStyle}>
-            <Divider
-              style={{
-                margin: "0",
+            <ConfigProvider
+              theme={{
+                components: {
+                  Divider: {
+                    textPaddingInline: 0,
+                    colorSplit: "rgba(16, 9, 116, 0.08);",
+                  },
+                },
               }}
-            />
+            >
+              <Divider
+                style={{
+                  margin: "0",
+                }}
+              />
+            </ConfigProvider>
           </div>
           <div css={userInfoContainerStyle}>
             <UserInfoContent isMiniSize />

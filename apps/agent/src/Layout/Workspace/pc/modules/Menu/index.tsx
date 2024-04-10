@@ -70,6 +70,7 @@ const PCWorkspaceMenu: FC = () => {
                         components: {
                           Divider: {
                             textPaddingInline: 0,
+                            colorSplit: "rgba(16, 9, 116, 0.08);",
                           },
                         },
                       }}
