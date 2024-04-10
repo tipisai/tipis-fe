@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import {
   ChangeEvent,
   FC,
+  UIEvent,
   useCallback,
   useContext,
   useEffect,
@@ -35,6 +36,7 @@ import { PreviewChatUseContext } from "./PreviewChatUseContext"
 import { SEND_MESSAGE_WS_TYPE } from "./TipisWebscoketContext/interface"
 import UploadButton from "./UploadButton"
 import UploadKnowledgeFiles from "./UploadKnowledgeFiles"
+import { SCROLL_DIRECTION } from "./constants"
 import {
   ChatMessage,
   ChatSendRequestPayload,
@@ -95,6 +97,9 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const [textAreaVal, setTextAreaVal] = useState("")
   const [knowledgeFiles, setKnowledgeFiles] = useState<IKnowledgeFile[]>([])
   const [uploadKnowledgeLoading, setUploadKnowledgeLoading] = useState(false)
+  const scrollDirectRef = useRef<SCROLL_DIRECTION>(SCROLL_DIRECTION.DOWN)
+  const cacheLastScroll = useRef<number>(0)
+  const cacheMessageLength = useRef(chatMessages.length)
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -257,11 +262,25 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     onCancelReceiving()
   }
 
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    if (e.currentTarget.scrollTop < cacheLastScroll.current) {
+      scrollDirectRef.current = SCROLL_DIRECTION.UP
+    }
+    cacheLastScroll.current = e.currentTarget.scrollTop
+  }
+
   useEffect(() => {
-    chatRef.current?.scrollTo({
-      top: chatRef.current.scrollHeight,
-    })
-  }, [chatMessages])
+    if (scrollDirectRef.current === SCROLL_DIRECTION.DOWN) {
+      chatRef.current?.scrollTo({
+        top: chatRef.current.scrollHeight,
+      })
+    } else {
+      if (cacheMessageLength.current !== chatMessages.length) {
+        scrollDirectRef.current = SCROLL_DIRECTION.DOWN
+      }
+    }
+    cacheMessageLength.current = chatMessages.length
+  }, [chatMessages.length])
 
   const sendAndClearMessage = useCallback(() => {
     const realSendKnowledgeFiles = knowledgeFiles.filter(
@@ -327,7 +346,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
 
   return (
     <div css={previewChatContainerStyle}>
-      <div ref={chatRef} css={chatContainerStyle}>
+      <div ref={chatRef} css={chatContainerStyle} onScroll={handleScroll}>
         {messagesList}
       </div>
       <div css={inputTextContainerStyle}>

@@ -13,4 +13,5 @@ export interface PureMessageProps {
 
 export interface SyncMessageResultProps {
   message: string
+  disableTrigger: boolean
 }

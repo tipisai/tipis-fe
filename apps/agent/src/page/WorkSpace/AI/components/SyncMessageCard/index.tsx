@@ -31,16 +31,24 @@ import {
 } from "./style"
 import { useGetInfoByStatus } from "./utils"
 
-export const PureMessage: FC<PureMessageProps> = ({ message }) => {
+export const PureMessage: FC<PureMessageProps> = ({
+  message,
+  disableTrigger,
+}) => {
   if (!message) return null
   return (
     <div css={pureMessageContainerStyle}>
-      <MarkdownMessage>{message}</MarkdownMessage>
+      <MarkdownMessage disableTrigger={disableTrigger}>
+        {message}
+      </MarkdownMessage>
     </div>
   )
 }
 
-export const SyncMessageResult: FC<SyncMessageResultProps> = ({ message }) => {
+export const SyncMessageResult: FC<SyncMessageResultProps> = ({
+  message,
+  disableTrigger,
+}) => {
   let formatMessage
   try {
     formatMessage = `\`\`\`json\n${JSON.stringify(JSON.parse(message) || {}, null, 2)}\n\`\`\``
@@ -49,7 +57,9 @@ export const SyncMessageResult: FC<SyncMessageResultProps> = ({ message }) => {
   }
   return (
     <div css={pureMessageContainerStyle}>
-      <MarkdownMessage>{formatMessage}</MarkdownMessage>
+      <MarkdownMessage disableTrigger={disableTrigger}>
+        {formatMessage}
+      </MarkdownMessage>
     </div>
   )
 }
@@ -57,6 +67,7 @@ export const SyncMessageResult: FC<SyncMessageResultProps> = ({ message }) => {
 export const SyncMessageCard: FC<SyncMessageCardProps> = ({
   message,
   messageStatus,
+  disableTrigger,
 }) => {
   const [showMessage, setShowMessage] = useState(false)
   let formatMessage, runRequestType: RUN_REQUEST_TYPE | undefined
@@ -118,7 +129,9 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
         initial="exit"
         exit="exit"
       >
-        <MarkdownMessage>{formatMessage}</MarkdownMessage>
+        <MarkdownMessage disableTrigger={disableTrigger}>
+          {formatMessage}
+        </MarkdownMessage>
       </motion.div>
     </div>
   )
