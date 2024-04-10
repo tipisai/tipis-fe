@@ -33,6 +33,9 @@ export const useUploadFileToDrive = () => {
     store: UploadFileStore,
   ) => {
     try {
+      if (!store.getFileInfo(queryID)) {
+        return
+      }
       store.updateFileDetailInfo(queryID, {
         status: FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING,
       })
@@ -94,6 +97,9 @@ export const useUploadFileToDrive = () => {
     abortSignal: AbortSignal,
     store: UploadFileStore,
   ) => {
+    if (!store.getFileInfo(queryID)) {
+      return
+    }
     try {
       store.updateFileDetailInfo(queryID, {
         status: FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING,
