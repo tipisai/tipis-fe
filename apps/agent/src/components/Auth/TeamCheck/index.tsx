@@ -2,7 +2,6 @@ import { FC } from "react"
 import { Navigate, useParams, useSearchParams } from "react-router-dom"
 import { TipisTrack } from "@illa-public/track-utils"
 import { useGetTeamsInfoAndCurrentIDQuery } from "@illa-public/user-data"
-import { getILLACloudURL } from "@illa-public/utils"
 import { BaseProtectComponentProps } from "@/router/interface"
 import { EMPTY_TEAM_PATH } from "@/utils/routeHelper"
 
@@ -21,13 +20,6 @@ const TeamCheck: FC<BaseProtectComponentProps> = (props) => {
   )
 
   if (error && "status" in error) {
-    if (error.status === 401) {
-      TipisTrack.reset()
-      window.location.href = `${getILLACloudURL(window.customDomain)}/user/login?redirectURL=${encodeURIComponent(
-        window.location.href,
-      )}`
-      return null
-    }
     return <Navigate to="/404" />
   }
 
