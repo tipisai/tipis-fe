@@ -9,7 +9,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material"
-import { App, Tooltip, Typography } from "antd"
+import { App, Image, Tooltip, Typography } from "antd"
 import { FC, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import ReactMarkdown from "react-markdown"
@@ -80,6 +80,7 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
             </TableContainer>
           ),
           code: (props) => <Code {...props} />,
+          img: ({ src, alt }) => <Image src={src} alt={alt} preview={false} />,
         }}
       >
         {handleParseText(children ?? "", isOwnMessage)}
