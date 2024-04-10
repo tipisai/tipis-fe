@@ -6,18 +6,18 @@
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:5555",
-    "beforeDevCommand": "pnpm run dev",
-    "beforeBuildCommand": "pnpm run build"
+    "beforeDevCommand": "ILLA_USE_IN_CLIENT=1 pnpm run dev --force",
+    "beforeBuildCommand": "ILLA_USE_IN_CLIENT=1 pnpm run build"
   },
   "app": {
     "windows": [
       {
         "title": "Tipis",
-        "width": 800,
-        "height": 600,
-        "minWidth": 800,
-        "minHeight": 600,
-        "resizable": true,
+        "width": 1280,
+        "height": 720,
+        "minWidth": 1280,
+        "minHeight": 720,
+        "resizable": false,
         "fullscreen": false
       }
     ],
