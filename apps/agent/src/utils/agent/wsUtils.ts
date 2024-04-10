@@ -8,6 +8,7 @@ import {
   MESSAGE_SYNC_TYPE,
 } from "@/components/PreviewChat/interface"
 import { AgentInitial } from "@/page/WorkSpace/AI/AIAgent/interface"
+import { DELAY_TASK_TIME } from "./constants"
 import { isGroupMessage, isNormalMessage } from "./typeHelper"
 
 export const formatSendMessagePayload = (payload: ChatSendRequestPayload) => {
@@ -210,4 +211,13 @@ export const getNeedCacheUIMessage = (
     | IGroupMessage
     | ChatMessage
   )[]
+}
+
+export const delayHandleTask = (task: () => void) => {
+  return new Promise((resolve) => {
+    task()
+    setTimeout(() => {
+      resolve(true)
+    }, DELAY_TASK_TIME)
+  })
 }
