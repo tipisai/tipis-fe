@@ -48,6 +48,7 @@ import { useLazyGetAIAgentAnonymousAddressQuery } from "@/redux/services/agentAP
 import store from "@/redux/store"
 import {
   cancelPendingMessage,
+  delayHandleTask,
   formatSendMessagePayload,
   getNeedCacheUIMessage,
   groupReceivedMessagesForUI,
@@ -394,12 +395,14 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     if (!teamID || !chatID) {
       return
     }
-    startSendMessage(
-      {} as ChatSendRequestPayload,
-      TextSignal.STOP_RUN,
-      SEND_MESSAGE_WS_TYPE.STOP_ALL,
-    )
-    setIsReceiving(false)
+    await delayHandleTask(() => {
+      startSendMessage(
+        {} as ChatSendRequestPayload,
+        TextSignal.STOP_RUN,
+        SEND_MESSAGE_WS_TYPE.STOP_ALL,
+      )
+      setIsReceiving(false)
+    })
     cleanMessage()
     setChatMessages([])
     chatMessagesRef.current = []

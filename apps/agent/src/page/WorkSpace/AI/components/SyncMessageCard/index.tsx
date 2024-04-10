@@ -86,7 +86,8 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
         onClick={() => setShowMessage(!showMessage)}
       >
         <div css={infoContainerStyle}>
-          {runRequestType || messageStatus === MESSAGE_STATUS.ANALYZE_STOP ? (
+          {runRequestType ||
+          messageStatus !== MESSAGE_STATUS.ANALYZE_PENDING ? (
             <>
               <div css={textAndIconContainerStyle}>
                 <div css={iconStyle(messageStatus)}>{InfoIcon}</div>

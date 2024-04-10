@@ -119,7 +119,7 @@ export const useSubmitSaveAgent = () => {
           cacheID: newFormData.aiAgentID,
         })
 
-        updateUiHistoryData(
+        await updateUiHistoryData(
           currentTeamInfo.id,
           data.cacheID,
           newFormData.aiAgentID,
