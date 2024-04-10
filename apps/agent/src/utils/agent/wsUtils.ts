@@ -61,6 +61,25 @@ export const isSuccessMessageRes = (message: ChatMessage) => {
   )
 }
 
+export const isLinkedPendingMessage = (
+  targetMessage: ChatMessage,
+  message: ChatMessage,
+): boolean => {
+  if (
+    !isPendingRequestMessage(targetMessage) ||
+    (!isErrorMessageRes(message) && !isSuccessMessageRes(message))
+  )
+    return false
+  let targetCallId, callId
+  try {
+    targetCallId = JSON.parse(targetMessage.message)?.["tool_call_id"]
+    callId = JSON.parse(message.message)?.["tool_call_id"]
+    return !!targetCallId && targetCallId === callId
+  } catch (e) {
+    return false
+  }
+}
+
 export const handleUpdateMessageList = (
   curMessage: IGroupMessage,
   message: ChatMessage,
@@ -69,10 +88,7 @@ export const handleUpdateMessageList = (
   if (needUpdateMessage.messageType === message.messageType) {
     needUpdateMessage.message = needUpdateMessage.message + message.message
   } else {
-    if (
-      isPendingRequestMessage(needUpdateMessage) &&
-      (isErrorMessageRes(message) || isSuccessMessageRes(message))
-    ) {
+    if (isLinkedPendingMessage(needUpdateMessage, message)) {
       needUpdateMessage.status = isErrorMessageRes(message)
         ? MESSAGE_STATUS.ANALYZE_FAILED
         : MESSAGE_STATUS.ANALYZE_SUCCESS
@@ -177,7 +193,26 @@ export const groupReceivedMessagesForUI = (
   } else {
     const curMessage = newMessageList[index]
     if (isNormalMessage(curMessage)) {
-      curMessage.message = curMessage.message + message.message
+      if (curMessage.messageType === message.messageType) {
+        curMessage.message = curMessage.message + message.message
+      } else {
+        // compliant not use request type start
+        newMessageList[index] = {
+          threadID: curMessage.threadID,
+          items: [
+            {
+              sender: curMessage.sender,
+              message: curMessage.message,
+              threadID: curMessage.threadID,
+              messageType: curMessage.messageType,
+              status: isRequestMessage(curMessage)
+                ? MESSAGE_STATUS.ANALYZE_PENDING
+                : undefined,
+            },
+          ],
+        }
+        handleUpdateMessageList(newMessageList[index] as IGroupMessage, message)
+      }
     } else {
       handleUpdateMessageList(curMessage, message)
     }
