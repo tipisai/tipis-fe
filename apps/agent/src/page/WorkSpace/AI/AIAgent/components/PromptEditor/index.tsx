@@ -38,6 +38,7 @@ const PromptEditor: FC = memo(() => {
               {...promptField}
               css={codeEditorErrorStyle(!!errors.prompt)}
               placeholder={t("editor.ai-agent.placeholder.prompt")}
+              height="100%"
               minHeight="200px"
               maxHeight="600px"
               completionOptions={variables}
