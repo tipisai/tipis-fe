@@ -6,10 +6,11 @@ export const inlineCodeStyle = css`
   margin: 0 4px;
   font-size: 12px;
   border-radius: 4px;
-  padding: 3px 4px;
+  padding: 0 4px;
   font-weight: 450;
   line-height: 18px;
   border: 1px solid ${getColor("grayBlue", "08")};
+  background-color: ${getColor("white", "03")};
 `
 
 export const codeBlockContainerStyle = css`
