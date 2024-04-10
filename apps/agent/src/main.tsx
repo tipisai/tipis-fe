@@ -9,6 +9,7 @@ import { Provider } from "react-redux"
 import { initGTMConfig } from "@illa-public/utils"
 import "@/api/http/base"
 import "@/i18n"
+import { initI18n } from "@/i18n"
 import App from "./App.tsx"
 import store from "./redux/store.ts"
 
@@ -28,15 +29,16 @@ if (import.meta.env.ILLA_MUI_LICENSE) {
 }
 
 initGTMConfig()
-
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <PostHogProvider apiKey={import.meta.env.ILLA_POSTHOG_KEY}>
-      <ErrorBoundary>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </ErrorBoundary>
-    </PostHogProvider>
-  </StrictMode>,
-)
+initI18n().then(() => {
+  createRoot(document.getElementById("root")!).render(
+    <StrictMode>
+      <PostHogProvider apiKey={import.meta.env.ILLA_POSTHOG_KEY}>
+        <ErrorBoundary>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </ErrorBoundary>
+      </PostHogProvider>
+    </StrictMode>,
+  )
+})

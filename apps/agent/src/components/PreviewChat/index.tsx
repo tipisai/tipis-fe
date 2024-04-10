@@ -97,10 +97,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const disableSend =
-    isReceiving ||
-    uploadKnowledgeLoading ||
-    (textAreaVal === "" &&
-      knowledgeFiles.filter((item) => !!item.fileID).length !== 0)
+    isReceiving || uploadKnowledgeLoading || textAreaVal === ""
 
   const { uploadChatFile } = useUploadFileToDrive()
 

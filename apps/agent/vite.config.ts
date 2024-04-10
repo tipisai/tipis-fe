@@ -8,7 +8,9 @@ import svgr from "vite-plugin-svgr"
 import pkg from "./package.json"
 
 const I18N_SOURCE_PATH = resolve(__dirname, "../../packages/", "locales/*.json")
-const I18N_TARGET_PATH = resolve(__dirname, "public/locales")
+const I18N_PUBLIC_TARGET_PATH = resolve(__dirname, "public/locales")
+const I18N_SRC_TARGET_PATH = resolve(__dirname, "src/locales")
+
 const getUsedEnv = (env: Record<string, string>) => {
   const usedEnv: Record<string, string> = {}
   Object.keys(env).forEach((key) => {
@@ -31,18 +33,20 @@ const getUsedEnv = (env: Record<string, string>) => {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "")
 
+  let copyTarget = {
+    src: [I18N_SOURCE_PATH, "!**/package.json"],
+    dest:
+      env["ILLA_USE_IN_CLIENT"] === "1"
+        ? I18N_SRC_TARGET_PATH
+        : I18N_PUBLIC_TARGET_PATH,
+  }
+
   return {
-    base: env.ILLA_BASE_PATH ?? "/",
     envPrefix: ["ILLA_"],
     define: getUsedEnv(env),
     plugins: [
       copy({
-        targets: [
-          {
-            src: [I18N_SOURCE_PATH, "!**/package.json"],
-            dest: I18N_TARGET_PATH,
-          },
-        ],
+        targets: [copyTarget],
         hook: "buildStart",
       }),
       react({

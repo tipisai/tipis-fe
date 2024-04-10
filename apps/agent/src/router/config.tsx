@@ -361,9 +361,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   },
 ]
 
-const ILLARoute = createBrowserRouter(buildRouter(ILLA_ROUTE_CONFIG), {
-  basename: import.meta.env.ILLA_BASE_PATH ?? "/",
-})
+const ILLARoute = createBrowserRouter(buildRouter(ILLA_ROUTE_CONFIG))
 
 export const ILLARouterProvider = () => {
   return <RouterProvider router={ILLARoute} />

@@ -15,7 +15,6 @@ import {
   useSignUpMutation,
 } from "@illa-public/user-data"
 import { setAuthToken } from "@illa-public/utils"
-import { getLocalLanguage } from "@/i18n"
 import { useNavigateTargetWorkspace } from "@/utils/routeHelper/hook"
 import { TIPISStorage } from "@/utils/storage"
 import { RegisterFields } from "../interface"
@@ -27,7 +26,7 @@ const RegisterPage: FC = () => {
   const [showCountDown, setShowCountDown] = useState(false)
   const { email } = useParams()
   const [searchParams] = useSearchParams()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const [signUp] = useSignUpMutation()
   const [sendVerificationCodeToEmail] = useSendVerificationCodeToEmailMutation()
@@ -58,7 +57,7 @@ const RegisterPage: FC = () => {
       const res = await signUp({
         inviteToken,
         verificationToken,
-        language: getLocalLanguage(),
+        language: i18n.language,
         ...data,
       }).unwrap()
 

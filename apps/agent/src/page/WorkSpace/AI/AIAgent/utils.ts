@@ -74,7 +74,7 @@ export const useSubmitSaveAgent = () => {
               ),
             },
           }).unwrap()
-          changeCreateToEdit(currentData.cacheID, serverAgent.aiAgentID)
+          await changeCreateToEdit(currentData.cacheID, serverAgent.aiAgentID)
           agentInfo = serverAgent
         } else {
           const serverAgent = await putAgentDetail({
@@ -107,12 +107,14 @@ export const useSubmitSaveAgent = () => {
             ? agentInfo.knowledge
             : [],
         }
-        reset({
-          ...newFormData,
-          cacheID: newFormData.aiAgentID,
-          formIsDirty: false,
-        })
-        updateTabInfo(data.cacheID, {
+        if (!currentData.aiAgentID) {
+          reset({
+            ...newFormData,
+            cacheID: newFormData.aiAgentID,
+            formIsDirty: false,
+          })
+        }
+        await updateTabInfo(data.cacheID, {
           tabName: newFormData.name,
           tabIcon: newFormData.icon,
           tabType: TAB_TYPE.EDIT_TIPIS,
@@ -121,7 +123,7 @@ export const useSubmitSaveAgent = () => {
 
         await updateUiHistoryData(
           currentTeamInfo.id,
-          data.cacheID,
+          newFormData.aiAgentID,
           newFormData.aiAgentID,
           {
             formData: {

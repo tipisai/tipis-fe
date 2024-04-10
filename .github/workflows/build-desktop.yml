@@ -6,11 +6,12 @@ on:
       - main
 env:
   ILLA_MUI_LICENSE: ${{ secrets.ILLA_MUI_LICENSE }}
+  ILLA_USE_IN_CLIENT: "1"
+  ILLA_INTERCOM_APP_ID: ${{ secrets.ILLA_INTERCOM_APP_ID }}
+  ILLA_POSTHOG_KEY: ${{ secrets.ILLA_POSTHOG_KEY }}
   DO_CLUSTER: ${{ secrets.DO_CLUSTER }}
   DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
   DOCKER_PWD: ${{ secrets.DOCKER_PWD }}
-  ILLA_INTERCOM_APP_ID: ${{ secrets.ILLA_INTERCOM_APP_ID }}
-  ILLA_POSTHOG_KEY: ${{ secrets.ILLA_POSTHOG_KEY }}
 jobs:
   release:
     permissions:
