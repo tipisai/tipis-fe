@@ -1,6 +1,14 @@
 import Icon from "@ant-design/icons"
 import { App, Button } from "antd"
-import { ChangeEvent, FC, useMemo, useRef, useSyncExternalStore } from "react"
+import {
+  ChangeEvent,
+  FC,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useSyncExternalStore,
+} from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
@@ -18,10 +26,10 @@ import { useDeleteKnowledgeFileMutation } from "@/redux/services/driveAPI"
 import {
   FILE_ITEM_DETAIL_STATUS_IN_UI,
   IFileDetailInfo,
-  editPanelUpdateFileDetailStore,
   useUploadFileToDrive,
 } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
+import { UploadContext } from "../../AIAgent/components/UploadContext"
 import { IAgentForm } from "../../AIAgent/interface"
 import StatusIcon from "./StatusIcon"
 import { IKnowledgeUploadProps } from "./interface"
@@ -68,10 +76,11 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
     control,
     name: ["aiAgentID"],
   })
+  const { uploadFileStore } = useContext(UploadContext)
 
   const uploadFiles = useSyncExternalStore(
-    (listener) => editPanelUpdateFileDetailStore.subscribe(listener),
-    () => editPanelUpdateFileDetailStore.getSnapshot(),
+    (listener) => uploadFileStore.subscribe(listener),
+    () => uploadFileStore.getSnapshot(),
   )
 
   const currentValue = useMemo(
@@ -100,7 +109,7 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
     const formatFiles = multipleFileHandler(
       inputFiles,
       currentFiles,
-      editPanelUpdateFileDetailStore,
+      uploadFileStore,
     )
     try {
       for (let item of formatFiles) {
@@ -111,7 +120,7 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
             parameter1: aiAgentID ? "edit_tipi" : "create_tipi",
             parameter3: file.size,
           })
-          editPanelUpdateFileDetailStore.deleteFileDetailInfo(queryID)
+          uploadFileStore.deleteFileDetailInfo(queryID)
           messageAPI.warning({
             content: t("dashboard.message.please_use_a_file_wi"),
           })
@@ -121,7 +130,7 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
           queryID,
           file,
           abortController.signal,
-          editPanelUpdateFileDetailStore,
+          uploadFileStore,
         )
         if (!!fileID) {
           const res = {
@@ -129,7 +138,7 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
             contentType: file.type,
             fileID,
           }
-          editPanelUpdateFileDetailStore.deleteFileDetailInfo(queryID)
+          uploadFileStore.deleteFileDetailInfo(queryID)
           addFile(res)
         }
       }
@@ -160,7 +169,7 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
         })
         try {
           removeFile(name)
-          editPanelUpdateFileDetailStore.deleteFileDetailInfo(queryID)
+          uploadFileStore.deleteFileDetailInfo(queryID)
           needDelFromDrive &&
             deleteKnowledgeFile({
               fileID: queryID,
@@ -187,10 +196,16 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
   }
 
   const handleClickRetry = (queryId: string) => {
-    editPanelUpdateFileDetailStore.retryUpload(queryId, (...params) => {
-      uploadKnowledgeFile(...params, editPanelUpdateFileDetailStore)
+    uploadFileStore.retryUpload(queryId, (...params) => {
+      uploadKnowledgeFile(...params, uploadFileStore)
     })
   }
+
+  useEffect(() => {
+    return () => {
+      uploadFileStore.clearStore()
+    }
+  }, [uploadFileStore])
 
   return (
     <div css={containerStyle}>

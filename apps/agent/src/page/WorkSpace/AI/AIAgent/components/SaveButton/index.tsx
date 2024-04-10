@@ -1,4 +1,4 @@
-import { memo, useState } from "react"
+import { memo, useContext, useState } from "react"
 import {
   FieldErrors,
   useFormContext,
@@ -8,9 +8,9 @@ import {
 import { useTranslation } from "react-i18next"
 import { TipisTrack } from "@illa-public/track-utils"
 import BlackButton from "@/components/BlackButton"
-import { editPanelUpdateFileDetailStore } from "@/utils/drive"
 import { IAgentForm, SCROLL_ID } from "../../interface"
 import { handleScrollToElement, useSubmitSaveAgent } from "../../utils"
+import { UploadContext } from "../UploadContext"
 
 const SaveButton = memo(() => {
   const { control, trigger, getValues } = useFormContext<IAgentForm>()
@@ -21,6 +21,7 @@ const SaveButton = memo(() => {
   })
   const { t } = useTranslation()
   const handleSubmitSave = useSubmitSaveAgent()
+  const { uploadFileStore } = useContext(UploadContext)
   const [isLoading, setIsLoading] = useState(false)
 
   const handleVerifyOnSave = async () => {
@@ -59,7 +60,7 @@ const SaveButton = memo(() => {
     if (validate) {
       const agentInfo = getValues()
       await handleSubmitSave(agentInfo)
-      editPanelUpdateFileDetailStore.clearStore()
+      uploadFileStore.clearStore()
     }
     TipisTrack.track("validate_save", {
       parameter1: aiAgentID ? "edit" : "create",

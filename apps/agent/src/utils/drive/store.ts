@@ -59,9 +59,9 @@ export class UploadFileStore {
   }
 
   mulDeleteFileDetailInfo(queryIDs: string[]) {
-    this.fileDetailInfos = this.fileDetailInfos.filter(
-      (item) => !queryIDs.includes(item.queryID),
-    )
+    for (let queryID of queryIDs) {
+      this.deleteFileDetailInfo(queryID)
+    }
     this.listeners.forEach((listener) => listener())
   }
 
@@ -90,6 +90,22 @@ export class UploadFileStore {
   }
 
   clearStore() {
+    if (
+      this.fileDetailInfos.some(
+        (item) =>
+          item.status === FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING ||
+          item.status === FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING,
+      )
+    ) {
+      for (let { queryID, status } of this.fileDetailInfos) {
+        if (
+          status === FILE_ITEM_DETAIL_STATUS_IN_UI.PROCESSING ||
+          status === FILE_ITEM_DETAIL_STATUS_IN_UI.WAITING
+        ) {
+          this.deleteFileDetailInfo(queryID)
+        }
+      }
+    }
     this.fileDetailInfos = []
     this.listeners.forEach((listener) => listener())
   }
@@ -102,7 +118,3 @@ export class UploadFileStore {
     )
   }
 }
-
-export const editPanelUpdateFileDetailStore = new UploadFileStore()
-
-export const chatUploadStore = new UploadFileStore()

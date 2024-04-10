@@ -12,12 +12,12 @@ import {
   EDIT_TIPI_TEMPLATE_PATH,
   WORKSPACE_LAYOUT_PATH,
 } from "@/router/constants"
-import { editPanelUpdateFileDetailStore } from "@/utils/drive"
 import { removeChatMessageAndUIState } from "@/utils/localForage/teamData"
 import { CREATE_TIPIS_ID } from "@/utils/recentTabs/constants"
 import { AgentWSContext } from "../../../context/AgentWSContext"
 import { IAgentForm, SCROLL_ID } from "../../interface"
 import { handleScrollToElement } from "../../utils"
+import { UploadContext } from "../UploadContext"
 import { IStartButtonProps } from "./interface"
 
 const StartButton: FC<IStartButtonProps> = (props) => {
@@ -27,6 +27,7 @@ const StartButton: FC<IStartButtonProps> = (props) => {
     useContext(AgentWSContext)
 
   const { clearErrors, getValues, setError } = useFormContext<IAgentForm>()
+  const { uploadFileStore } = useContext(UploadContext)
 
   const editTipiPathMatch = useMatch(
     `${WORKSPACE_LAYOUT_PATH}/${EDIT_TIPI_TEMPLATE_PATH}`,
@@ -54,7 +55,7 @@ const StartButton: FC<IStartButtonProps> = (props) => {
       })
       handleScrollToElement(SCROLL_ID.VARIABLES)
       return false
-    } else if (editPanelUpdateFileDetailStore.hasPendingFile()) {
+    } else if (uploadFileStore.hasPendingFile()) {
       setError("knowledge", {
         type: "knowledge",
         message: t("dashboard.message.parsing_file_in_prog"),
