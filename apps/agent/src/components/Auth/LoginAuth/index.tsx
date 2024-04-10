@@ -3,7 +3,6 @@ import { Navigate } from "react-router-dom"
 import { TipisTrack } from "@illa-public/track-utils"
 import { UpgradeModalGroup } from "@illa-public/upgrade-modal"
 import { useGetUserInfoQuery } from "@illa-public/user-data"
-import { getILLACloudURL } from "@illa-public/utils"
 import i18n from "@/i18n"
 import { BaseProtectComponentProps } from "@/router/interface"
 
@@ -14,13 +13,6 @@ const LoginAuth: FC<BaseProtectComponentProps> = (props) => {
   })
 
   if (error && "status" in error) {
-    if (error.status === 401) {
-      TipisTrack.reset()
-      window.location.href = `${getILLACloudURL(window.customDomain)}/user/login?redirectURL=${encodeURIComponent(
-        window.location.href,
-      )}`
-      return null
-    }
     return <Navigate to="/404" />
   }
 
