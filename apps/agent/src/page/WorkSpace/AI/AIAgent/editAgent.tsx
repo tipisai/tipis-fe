@@ -18,6 +18,7 @@ import { AgentWSProvider } from "../context/AgentWSContext"
 import { AIAgent } from "./aiagent"
 import FormContext from "./components/FormContext"
 import HeaderTools from "./components/HeaderTools"
+import { UploadContextProvider } from "./components/UploadContext"
 import { AgentInitial, IAgentForm } from "./interface"
 
 export const EditAIAgentPage: FC = () => {
@@ -128,15 +129,17 @@ export const EditAIAgentPage: FC = () => {
       <TipisWebSocketProvider key={agentID}>
         <AgentWSProvider>
           <FormContext>
-            <LayoutAutoChange
-              desktopPage={
-                <WorkspacePCHeaderLayout
-                  title={data.name}
-                  extra={<HeaderTools />}
-                />
-              }
-            />
-            <AIAgent />
+            <UploadContextProvider>
+              <LayoutAutoChange
+                desktopPage={
+                  <WorkspacePCHeaderLayout
+                    title={data.name}
+                    extra={<HeaderTools />}
+                  />
+                }
+              />
+              <AIAgent />
+            </UploadContextProvider>
           </FormContext>
         </AgentWSProvider>
       </TipisWebSocketProvider>

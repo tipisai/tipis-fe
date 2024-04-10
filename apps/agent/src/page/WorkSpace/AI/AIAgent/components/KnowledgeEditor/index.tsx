@@ -1,4 +1,4 @@
-import { FC, memo } from "react"
+import { FC, memo, useContext } from "react"
 import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { IKnowledgeFile } from "@illa-public/public-types"
@@ -6,7 +6,7 @@ import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { IAgentForm, SCROLL_ID } from "@/page/WorkSpace/AI/AIAgent/interface"
 import KnowledgeUpload from "@/page/WorkSpace/AI/components/KnowledgeUpload"
-import { editPanelUpdateFileDetailStore } from "@/utils/drive"
+import { UploadContext } from "../UploadContext"
 import { descStyle } from "./style"
 
 const KnowledgeEditor: FC = memo(() => {
@@ -16,6 +16,7 @@ const KnowledgeEditor: FC = memo(() => {
   const { errors } = useFormState({
     control: control,
   })
+  const { uploadFileStore } = useContext(UploadContext)
 
   return (
     <Controller
@@ -23,7 +24,7 @@ const KnowledgeEditor: FC = memo(() => {
       control={control}
       rules={{
         validate: () => {
-          const isValidate = !editPanelUpdateFileDetailStore.hasPendingFile()
+          const isValidate = !uploadFileStore.hasPendingFile()
           return isValidate
             ? isValidate
             : t("dashboard.message.parsing_file_in_prog")
