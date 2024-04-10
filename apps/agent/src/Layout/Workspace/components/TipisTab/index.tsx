@@ -1,5 +1,5 @@
 import Icon from "@ant-design/icons"
-import { App, Button } from "antd"
+import { App, Button, Tooltip } from "antd"
 import { FC, MouseEventHandler } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
@@ -94,7 +94,7 @@ const TipisTab: FC<ITipsTab> = (props) => {
     dispatch(recentTabActions.updateCurrentRecentTabIDReducer(tabID))
   }
 
-  return (
+  const navLinkComp = (
     <NavLink
       to={genTabNavigateLink(
         currentTeamInfo?.identifier,
@@ -137,6 +137,20 @@ const TipisTab: FC<ITipsTab> = (props) => {
         </div>
       )}
     </NavLink>
+  )
+
+  return isMiniSize ? (
+    <Tooltip
+      title={getTabName(tabName, tabType, tabID)}
+      placement="right"
+      align={{
+        offset: [6, 0],
+      }}
+    >
+      {navLinkComp}
+    </Tooltip>
+  ) : (
+    navLinkComp
   )
 }
 

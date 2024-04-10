@@ -1,11 +1,11 @@
 import Icon from "@ant-design/icons"
-import { Button, Divider } from "antd"
+import { Button, Divider, Tooltip } from "antd"
 import { FC, useCallback, useContext } from "react"
-import { NextDoubleIcon } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
 import UserInfoContent from "@/Layout/Workspace/components/UserInfoContent"
 import RecentTabs from "@/Layout/Workspace/modules/RecentTabs"
 import LogoIcon from "@/assets/public/logo.svg?react"
+import MenuExpandIcon from "@/assets/workspace/menuExpand.svg?react"
 import { MenuStatusUIContext } from "../context"
 import {
   dividerContainerStyle,
@@ -35,11 +35,19 @@ const MiniMenu: FC = () => {
             <Icon component={LogoIcon} />
           </div>
           <div css={miniMenuLockSideBarContainerStyle}>
-            <Button
-              icon={<Icon component={NextDoubleIcon} />}
-              type="text"
-              onClick={onClickFoldButton}
-            />
+            <Tooltip
+              title="展開"
+              placement="right"
+              align={{
+                offset: [16, 0],
+              }}
+            >
+              <Button
+                icon={<Icon component={MenuExpandIcon} />}
+                type="text"
+                onClick={onClickFoldButton}
+              />
+            </Tooltip>
           </div>
           <div css={dividerContainerStyle}>
             <Divider
