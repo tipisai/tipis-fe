@@ -270,20 +270,20 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   }
 
   useEffect(() => {
+    if (chatMessages.length === 0) {
+      scrollDirectRef.current = SCROLL_DIRECTION.DOWN
+    }
     if (scrollDirectRef.current === SCROLL_DIRECTION.DOWN) {
       chatRef.current?.scrollTo({
         top: chatRef.current.scrollHeight,
       })
     } else {
-      if (
-        cacheMessageLength.current !== chatMessages.length ||
-        chatMessages.length === 0
-      ) {
+      if (cacheMessageLength.current !== chatMessages.length) {
         scrollDirectRef.current = SCROLL_DIRECTION.DOWN
       }
     }
     cacheMessageLength.current = chatMessages.length
-  }, [chatMessages.length])
+  }, [chatMessages])
 
   const sendAndClearMessage = useCallback(() => {
     const realSendKnowledgeFiles = knowledgeFiles.filter(
