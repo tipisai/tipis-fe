@@ -1,12 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
-import {
-  authAPI,
-  currentUserReducer,
-  teamAPI,
-  teamReducer,
-  userAPI,
-} from "@illa-public/user-data"
+import { authAPI, teamAPI, teamReducer, userAPI } from "@illa-public/user-data"
 import { rtkQueryErrorLogger } from "./middleware/rtkQuery401ErrorHandler"
 import { agentAuthAPI } from "./services/agentAPI"
 import { driveAPI } from "./services/driveAPI"
@@ -16,7 +10,6 @@ import { uiReducer } from "./ui/slice"
 const store = configureStore({
   reducer: {
     team: teamReducer,
-    currentUser: currentUserReducer,
     ui: uiReducer,
     [authAPI.reducerPath]: authAPI.reducer,
     [agentAuthAPI.reducerPath]: agentAuthAPI.reducer,

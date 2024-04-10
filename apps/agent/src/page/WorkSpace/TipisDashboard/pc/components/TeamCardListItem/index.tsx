@@ -22,7 +22,7 @@ import { TipisTrack } from "@illa-public/track-utils"
 import {
   getCurrentId,
   getCurrentTeamInfo,
-  getCurrentUser,
+  useGetUserInfoQuery,
 } from "@illa-public/user-data"
 import { getILLACloudURL } from "@illa-public/utils"
 import TeamCard from "@/components/TeamCard"
@@ -53,7 +53,7 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
 
   const currentTeamID = useSelector(getCurrentId)!
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
-  const currentUserInfo = useSelector(getCurrentUser)
+  const { data: currentUserInfo } = useGetUserInfoQuery(null)
   const currentUserRole = currentTeamInfo?.myRole ?? USER_ROLE.VIEWER
 
   const tags = publishToMarketplace ? (
