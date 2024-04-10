@@ -5,11 +5,12 @@ export const inlineCodeStyle = css`
   display: inline-block;
   margin: 0 4px;
   font-size: 12px;
-  border-radius: 4px;
-  padding: 3px 4px;
+  border-radius: 8px;
+  padding: 4px 8px;
   font-weight: 450;
   line-height: 18px;
   border: 1px solid ${getColor("grayBlue", "08")};
+  background-color: ${getColor("white", "04")};
 `
 
 export const codeBlockContainerStyle = css`

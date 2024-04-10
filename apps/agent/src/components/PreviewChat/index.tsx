@@ -270,6 +270,9 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   }
 
   useEffect(() => {
+    if (chatMessages.length === 0) {
+      scrollDirectRef.current = SCROLL_DIRECTION.DOWN
+    }
     if (scrollDirectRef.current === SCROLL_DIRECTION.DOWN) {
       chatRef.current?.scrollTo({
         top: chatRef.current.scrollHeight,
@@ -280,7 +283,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       }
     }
     cacheMessageLength.current = chatMessages.length
-  }, [chatMessages.length])
+  }, [chatMessages])
 
   const sendAndClearMessage = useCallback(() => {
     const realSendKnowledgeFiles = knowledgeFiles.filter(
