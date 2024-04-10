@@ -1,7 +1,8 @@
 import { isRejectedWithValue } from "@reduxjs/toolkit"
 import type { Middleware, MiddlewareAPI } from "@reduxjs/toolkit"
+import { TipisTrack } from "@illa-public/track-utils"
 import { teamAPI, userAPI } from "@illa-public/user-data"
-import { removeAuthToken } from "@illa-public/utils"
+import { getILLACloudURL, removeAuthToken } from "@illa-public/utils"
 import { isFetchBaseQueryError } from "../helper"
 
 export const rtkQueryErrorLogger: Middleware =
@@ -14,6 +15,10 @@ export const rtkQueryErrorLogger: Middleware =
           removeAuthToken()
           dispatch(teamAPI.util.resetApiState())
           dispatch(userAPI.util.resetApiState())
+          TipisTrack.reset()
+          window.location.href = `${getILLACloudURL()}/user/login?redirectURL=${encodeURIComponent(
+            window.location.href,
+          )}`
           break
         }
         default: {
