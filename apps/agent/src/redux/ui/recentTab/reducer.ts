@@ -1,5 +1,6 @@
 import { CaseReducer, PayloadAction } from "@reduxjs/toolkit"
 import { IRecentTabState, ITabInfo } from "./interface"
+import { DEFAULT_CHAT_ID, INIT_TABS } from "./state"
 
 export const initRecentTabReducer: CaseReducer<
   IRecentTabState,
@@ -37,6 +38,13 @@ export const deleteRecentTabReducer: CaseReducer<
       state.currentTabID = newTabs[index - 1].tabID
     }
   }
+}
+
+export const deleteAllRecentTabReducer: CaseReducer<IRecentTabState> = (
+  state,
+) => {
+  state.tabs = INIT_TABS
+  state.currentTabID = DEFAULT_CHAT_ID
 }
 
 export const updateRecentTabReducer: CaseReducer<
