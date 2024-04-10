@@ -3,7 +3,7 @@ import { Button } from "antd"
 import { FC, useCallback, useContext } from "react"
 import { TipisTrack } from "@illa-public/track-utils"
 import TextAndLogo from "@/assets/public/textLogo.svg?react"
-import MenuFoldIcon from "@/assets/workspace/menuFold.svg?react"
+import MenuCollapseIcon from "@/assets/workspace/menuCollapse.svg?react"
 import { MenuStatusUIContext } from "../Menu/context"
 import { logoAndProjectNameContainerStyle, menuHeaderStyle } from "./style"
 
@@ -23,7 +23,7 @@ const MenuHeader: FC = () => {
       </div>
       <div>
         <Button
-          icon={<Icon component={MenuFoldIcon} />}
+          icon={<Icon component={MenuCollapseIcon} />}
           type="text"
           onClick={onClickFoldButton}
         />
