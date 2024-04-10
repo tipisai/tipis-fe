@@ -124,14 +124,13 @@ export const useAddRunTipisTab = () => {
   return addRunTipisTab
 }
 
-// TODO
 export const useCreateTipiToEditTipi = () => {
   const navigate = useNavigate()
   const addRecentTab = useAddRecentTabReducer()
   const updateRecentTab = useUpdateRecentTabReducer()
 
   const changeCreateTipiToEditTipi = useCallback(
-    (cacheID: string, tipisID: string) => {
+    async (cacheID: string, tipisID: string) => {
       const historyTabs = getRecentTabInfos(store.getState())
       const currentTeamInfo = getCurrentTeamInfo(store.getState())!
 
@@ -147,12 +146,13 @@ export const useCreateTipiToEditTipi = () => {
           tabID: v4(),
           cacheID: tipisID,
         }
-        addRecentTab(currentTab)
+        await addRecentTab(currentTab)
       } else {
-        updateRecentTab(cacheID, {
+        await updateRecentTab(cacheID, {
           ...currentTab,
           tabType: TAB_TYPE.EDIT_TIPIS,
           cacheID: tipisID,
+          tabID: v4(),
         })
       }
 

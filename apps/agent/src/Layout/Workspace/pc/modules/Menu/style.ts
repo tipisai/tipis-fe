@@ -1,4 +1,5 @@
 import { css } from "@emotion/react"
+import { getColor } from "@illa-public/color-scheme"
 
 export const menuContainerStyle = css`
   width: 256px;
@@ -36,4 +37,24 @@ export const dividerContainerStyle = css`
 export const teamSelectAndInviteButtonContainerStyle = css`
   width: 100%;
   padding: 8px 16px 8px 24px;
+`
+
+export const closeAllContainerStyle = css`
+  display: flex;
+  align-items: center;
+  padding: 1px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  :hover {
+    span {
+      color: ${getColor("grayBlue", "03")};
+    }
+  }
+`
+
+export const closeAllTextStyle = css`
+  color: ${getColor("grayBlue", "05")};
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 22px;
 `

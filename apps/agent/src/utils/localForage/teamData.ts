@@ -57,6 +57,16 @@ export const updateUiHistoryData = async (
   await deleteUiHistoryData(teamID, oldCacheID)
 }
 
+export const changeUIHistoryKey = async (
+  teamID: string,
+  oldCacheID: string,
+  newCacheID: string,
+) => {
+  const oldData = await getUiHistoryDataByCacheID(teamID, oldCacheID)
+  await setUiHistoryData(teamID, newCacheID, oldData)
+  await deleteUiHistoryData(teamID, oldCacheID)
+}
+
 export const getTabs = async (teamID: string) => {
   const teamData = await getTeamDataByTeamID(teamID)
   if (!teamData) {
