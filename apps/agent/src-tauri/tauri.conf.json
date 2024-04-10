@@ -1,15 +1,62 @@
 {
-  "productName": "Tipis",
-  "version": "0.1.0",
-  "identifier": "ai.tipis.app",
-
+  "package": {
+    "productName": "Tipis",
+    "version": "0.1.0"
+  },
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
-    "frontendDist": "../dist",
-    "devUrl": "http://localhost:5555",
+    "distDir": "../dist",
+    "devPath": "http://localhost:5555",
     "beforeDevCommand": "ILLA_USE_IN_CLIENT=1 pnpm run dev --force",
     "beforeBuildCommand": "ILLA_USE_IN_CLIENT=1 pnpm run build"
   },
-  "app": {
+  "tauri": {
+    "systemTray": {
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": true
+    },
+    "allowlist": {
+      "all": false
+    },
+    "bundle": {
+      "active": true,
+      "category": "DeveloperTool",
+      "copyright": "",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "identifier": "ai.tipis.app",
+      "longDescription": "",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "resources": [],
+      "shortDescription": "",
+      "targets": "all",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
+    },
+    "security": {
+      "csp": null
+    },
+    "updater": {
+      "active": false
+    },
     "windows": [
       {
         "title": "Tipis",
@@ -20,26 +67,6 @@
         "resizable": false,
         "fullscreen": false
       }
-    ],
-    "trayIcon": {
-      "iconPath": "icons/icon.png",
-      "iconAsTemplate": true
-    },
-    "security": {
-      "csp": null
-    }
-  },
-  "bundle": {
-    "active": true,
-    "targets": "all",
-    "category": "Utility",
-    "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
     ]
-  },
-  "$schema": "../node_modules/@tauri-apps/cli/schema.json"
+  }
 }
