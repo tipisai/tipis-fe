@@ -1,7 +1,6 @@
 import { FC } from "react"
-import { useSelector } from "react-redux"
 import { Avatar } from "@illa-public/avatar"
-import { getCurrentUser } from "@illa-public/user-data"
+import { useGetUserInfoQuery } from "@illa-public/user-data"
 import MarkdownMessage from "@/page/WorkSpace/AI/components/MarkdownMessage"
 import { UserMessageProps } from "@/page/WorkSpace/AI/components/UserMessage/interface"
 import {
@@ -15,12 +14,12 @@ import ShowFiles from "./ShowFiles"
 
 export const UserMessage: FC<UserMessageProps> = (props) => {
   const { message, isMobile } = props
-  const currentUserInfo = useSelector(getCurrentUser)
+  const { data: currentUserInfo } = useGetUserInfoQuery(null)
 
   return (
     <div css={agentMessageContainer}>
       <div css={senderContainerStyle}>
-        <span css={senderNicknameStyle}>{currentUserInfo.nickname}</span>
+        <span css={senderNicknameStyle}>{currentUserInfo?.nickname}</span>
         {Array.isArray(message.knowledgeFiles) &&
           message.knowledgeFiles.length > 0 && (
             <ShowFiles knowledgeFiles={message.knowledgeFiles} />
@@ -37,9 +36,9 @@ export const UserMessage: FC<UserMessageProps> = (props) => {
         <Avatar
           size={32}
           css={senderAvatarStyle}
-          avatarUrl={currentUserInfo.avatar}
-          name={currentUserInfo.nickname}
-          id={currentUserInfo.userID}
+          avatarUrl={currentUserInfo?.avatar}
+          name={currentUserInfo?.nickname}
+          id={currentUserInfo?.userID}
         />
       )}
     </div>

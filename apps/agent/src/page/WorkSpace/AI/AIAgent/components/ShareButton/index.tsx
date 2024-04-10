@@ -3,14 +3,13 @@ import { Button } from "antd"
 import { FC, useState } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { ShareIcon } from "@illa-public/icon"
 import {
   InviteMember,
   InviteMemberProvider,
 } from "@illa-public/new-invite-modal"
 import { Agent, USER_ROLE } from "@illa-public/public-types"
-import { getCurrentUser } from "@illa-public/user-data"
+import { useGetUserInfoQuery } from "@illa-public/user-data"
 import { copyToClipboard } from "@/utils/copyToClipboard"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 
@@ -23,7 +22,7 @@ const ShareButton: FC = () => {
 
   const currentTeamInfo = useGetCurrentTeamInfo()!
   const currentUserRole = currentTeamInfo?.myRole ?? USER_ROLE.VIEWER
-  const currentUserInfo = useSelector(getCurrentUser)!
+  const { data: currentUserInfo } = useGetUserInfoQuery(null)
 
   const [shareDialogVisible, setShareDialogVisible] = useState(false)
 

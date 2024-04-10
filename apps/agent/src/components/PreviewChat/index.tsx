@@ -12,13 +12,12 @@ import {
   useState,
 } from "react"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { v4 } from "uuid"
 import { SendIcon } from "@illa-public/icon"
 import { WS_READYSTATE } from "@illa-public/illa-web-socket"
 import { IKnowledgeFile } from "@illa-public/public-types"
 import { TipisTrack } from "@illa-public/track-utils"
-import { getCurrentUser } from "@illa-public/user-data"
+import { useGetUserInfoQuery } from "@illa-public/user-data"
 import { TextSignal } from "@/api/ws/textSignal"
 import AgentBlockInput from "@/assets/agent/agent-block-input.svg?react"
 import StopIcon from "@/assets/agent/stop.svg?react"
@@ -86,7 +85,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     setIsReceiving(false)
   }, [sendMessage, setIsReceiving])
 
-  const currentUserInfo = useSelector(getCurrentUser)
+  const { data: currentUserInfo } = useGetUserInfoQuery(null)
   const { message: messageAPI } = App.useApp()
 
   const chatRef = useRef<HTMLDivElement>(null)
@@ -121,7 +120,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
         )
       } else if (
         message.sender.senderType === SenderType.USER &&
-        message.sender.senderID === currentUserInfo.userID
+        message.sender.senderID === currentUserInfo?.userID
       ) {
         return (
           <UserMessage
@@ -142,7 +141,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
         )
       }
     })
-  }, [chatMessages, currentUserInfo.userID, isMobile, isReceiving])
+  }, [chatMessages, currentUserInfo?.userID, isMobile, isReceiving])
 
   const handleDeleteFile = (fileName: string, queryID?: string) => {
     TipisTrack.track("chat_file_delete", {
@@ -277,7 +276,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
         threadID: v4(),
         message: textAreaVal,
         sender: {
-          senderID: currentUserInfo.userID,
+          senderID: currentUserInfo?.userID,
           senderType: SenderType.USER,
         },
         knowledgeFiles: realSendKnowledgeFiles,
@@ -286,7 +285,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       setKnowledgeFiles([])
       chatUploadStore.clearStore()
     }
-  }, [currentUserInfo.userID, knowledgeFiles, onSendMessage, textAreaVal])
+  }, [currentUserInfo?.userID, knowledgeFiles, onSendMessage, textAreaVal])
 
   const handleClickSend = () => {
     const realSendKnowledgeFiles = knowledgeFiles.filter(

@@ -2,7 +2,6 @@ import Icon from "@ant-design/icons"
 import { Button, Dropdown, MenuProps } from "antd"
 import { FC, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { InfoIcon, MoreIcon, PenIcon, ShareIcon } from "@illa-public/icon"
 import {
   InviteMember,
@@ -10,8 +9,9 @@ import {
 } from "@illa-public/new-invite-modal"
 import { USER_ROLE } from "@illa-public/public-types"
 import { TipisTrack } from "@illa-public/track-utils"
-import { getCurrentUser } from "@illa-public/user-data"
+import { useGetUserInfoQuery } from "@illa-public/user-data"
 import { getILLACloudURL } from "@illa-public/utils"
+import { canShowShareTipi, canShownEditTipi } from "@/utils/UIHelper/tipis"
 import { copyToClipboard } from "@/utils/copyToClipboard"
 import { getRunTipiPath } from "@/utils/routeHelper"
 import {
@@ -19,10 +19,6 @@ import {
   useNavigateToTipiDetail,
 } from "@/utils/routeHelper/hook"
 import { useGetCurrentTeamInfo } from "@/utils/team"
-import {
-  canShowShareTipi,
-  canShownEditTipi,
-} from "../../../../../../utils/UIHelper/tipis"
 import { IMoreActionButtonProps } from "./interface"
 
 const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
@@ -32,7 +28,7 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
   const currentTeamInfo = useGetCurrentTeamInfo()
   const currentUserRole = currentTeamInfo?.myRole ?? USER_ROLE.VIEWER
 
-  const currentUserInfo = useSelector(getCurrentUser)
+  const { data: currentUserInfo } = useGetUserInfoQuery(null)
   const navigateToEditTipis = useNavigateToEditTipis()
   const navigateToTipiDetails = useNavigateToTipiDetail()
 

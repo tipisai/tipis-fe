@@ -1,8 +1,7 @@
 import { Avatar, Popover } from "antd"
 import { FC } from "react"
-import { useSelector } from "react-redux"
 import { TipisTrack } from "@illa-public/track-utils"
-import { getCurrentUser } from "@illa-public/user-data"
+import { useGetUserInfoQuery } from "@illa-public/user-data"
 import { getColorByString } from "@illa-public/utils"
 import UserInfoPopoverContent from "../UserInfoPopoverContent"
 import { IUserInfoContentProps } from "./interface"
@@ -16,7 +15,7 @@ import {
 
 const UserInfoContent: FC<IUserInfoContentProps> = (props) => {
   const { isMiniSize = false } = props
-  const userInfo = useSelector(getCurrentUser)
+  const { data: currentUserInfo } = useGetUserInfoQuery(null)
 
   const onClickUserInfo = () => {
     TipisTrack.track("click_user_name")
@@ -42,25 +41,25 @@ const UserInfoContent: FC<IUserInfoContentProps> = (props) => {
       >
         <div css={avatarContainerStyle}>
           <Avatar
-            src={userInfo.avatar}
+            src={currentUserInfo?.avatar}
             shape="circle"
             size={isMiniSize ? 24 : 32}
             style={{
               fontSize: isMiniSize ? 12 : 16,
-              background: userInfo?.avatar
+              background: currentUserInfo?.avatar
                 ? "#ffffff"
-                : getColorByString(userInfo?.userID || ""),
+                : getColorByString(currentUserInfo?.userID || ""),
             }}
           >
-            {userInfo.nickname[0]
-              ? userInfo.nickname[0].toLocaleUpperCase()
+            {currentUserInfo?.nickname[0]
+              ? currentUserInfo?.nickname[0].toLocaleUpperCase()
               : "U"}
           </Avatar>
         </div>
         {!isMiniSize && (
           <div css={nickNameAndEmailContainerStyle}>
-            <span css={nicknameStyle}>{userInfo.nickname}</span>
-            <span css={emailStyle}>{userInfo.email}</span>
+            <span css={nicknameStyle}>{currentUserInfo?.nickname}</span>
+            <span css={emailStyle}>{currentUserInfo?.email}</span>
           </div>
         )}
       </div>
