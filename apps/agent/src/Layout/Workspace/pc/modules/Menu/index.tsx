@@ -1,4 +1,4 @@
-import { App, Button, ConfigProvider, Divider } from "antd"
+import { App, ConfigProvider, Divider } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
@@ -14,6 +14,8 @@ import { getChatPath } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import MenuHeader from "../MenuHeader"
 import {
+  closeAllContainerStyle,
+  closeAllTextStyle,
   dividerContainerStyle,
   menuContainerStyle,
   menuContentStyle,
@@ -80,13 +82,14 @@ const PCWorkspaceMenu: FC = () => {
                         orientationMargin={0}
                       >
                         {recentTabInfos.length > 1 && (
-                          <Button
-                            size="small"
-                            type="text"
+                          <div
+                            css={closeAllContainerStyle}
                             onClick={handleClickCloseAll}
                           >
-                            {t("Clear All")}
-                          </Button>
+                            <span css={closeAllTextStyle}>
+                              {t("homepage.left_panel.tab.clear_all")}
+                            </span>
+                          </div>
                         )}
                       </Divider>
                     </ConfigProvider>
