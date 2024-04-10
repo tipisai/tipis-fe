@@ -29,7 +29,7 @@ import AIAgentMessage from "@/page/WorkSpace/AI/components/AIAgentMessage"
 import GroupAgentMessage from "@/page/WorkSpace/AI/components/GroupAgentMessage"
 import UserMessage from "@/page/WorkSpace/AI/components/UserMessage"
 import { isGroupMessage } from "@/utils/agent/typeHelper"
-import { chatUploadStore, useUploadFileToDrive } from "@/utils/drive"
+import { UploadFileStore, useUploadFileToDrive } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
 import { PreviewChatUseContext } from "./PreviewChatUseContext"
 import { SEND_MESSAGE_WS_TYPE } from "./TipisWebscoketContext/interface"
@@ -66,6 +66,8 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     props
 
   const { useTo } = useContext(PreviewChatUseContext)
+
+  const chatUploadStoreRef = useRef(new UploadFileStore())
 
   const {
     getReadyState,
@@ -146,7 +148,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     })
     const files = knowledgeFiles.filter((file) => file.fileName !== fileName)
     setKnowledgeFiles(files)
-    queryID && chatUploadStore.deleteFileDetailInfo(queryID)
+    queryID && chatUploadStoreRef.current.deleteFileDetailInfo(queryID)
   }
 
   const handleClickUploadFile = () => {
@@ -190,7 +192,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     const formatFiles = multipleFileHandler(
       inputFiles,
       currentFiles,
-      chatUploadStore,
+      chatUploadStoreRef.current,
     )
     currentFiles.push(
       ...formatFiles.map((item) => ({
@@ -215,14 +217,14 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
           setKnowledgeFiles(
             currentFiles.filter((file) => file.fileName !== item.fileName),
           )
-          chatUploadStore.deleteFileDetailInfo(item.queryID)
+          chatUploadStoreRef.current.deleteFileDetailInfo(item.queryID)
           continue
         }
         const fileID = await uploadChatFile(
           item.queryID,
           file,
           abortController.signal,
-          chatUploadStore,
+          chatUploadStoreRef.current,
         )
 
         if (!!fileID) {
@@ -280,7 +282,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       } as ChatMessage)
       setTextAreaVal("")
       setKnowledgeFiles([])
-      chatUploadStore.clearStore()
+      chatUploadStoreRef.current.clearStore()
     }
   }, [currentUserInfo?.userID, knowledgeFiles, onSendMessage, textAreaVal])
 
@@ -315,6 +317,13 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       sendAndClearMessage()
     }
   }
+
+  useEffect(() => {
+    const chatUploadStore = chatUploadStoreRef.current
+    return () => {
+      chatUploadStore.clearStore()
+    }
+  }, [])
 
   return (
     <div css={previewChatContainerStyle}>
@@ -420,7 +429,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
             <UploadKnowledgeFiles
               knowledgeFiles={knowledgeFiles}
               handleDeleteFile={handleDeleteFile}
-              chatUploadStore={chatUploadStore}
+              chatUploadStore={chatUploadStoreRef.current}
             />
           </div>
         ) : (
@@ -438,7 +447,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
               <UploadKnowledgeFiles
                 knowledgeFiles={knowledgeFiles}
                 handleDeleteFile={handleDeleteFile}
-                chatUploadStore={chatUploadStore}
+                chatUploadStore={chatUploadStoreRef.current}
               />
               <div css={sendButtonStyle}>
                 <UploadButton
