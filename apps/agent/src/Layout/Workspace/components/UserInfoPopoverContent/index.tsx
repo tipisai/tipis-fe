@@ -8,8 +8,8 @@ import { useIntercom } from "react-use-intercom"
 import { TipisTrack } from "@illa-public/track-utils"
 import {
   getCurrentTeamInfo,
-  getCurrentUser,
   getTeamItems,
+  useGetUserInfoQuery,
 } from "@illa-public/user-data"
 import HelpCenterIcon from "@/assets/public/help-center.svg?react"
 import SettingIcon from "@/assets/public/setting.svg?react"
@@ -23,15 +23,15 @@ const UserInfoPopoverContent: FC = () => {
   const { t } = useTranslation()
 
   const { boot, show } = useIntercom()
-  const userInfo = useSelector(getCurrentUser)
+  const { data: currentUserInfo } = useGetUserInfoQuery(null)
   const teams = useSelector(getTeamItems)!
   const currentTeam = useSelector(getCurrentTeamInfo)!
 
   const onClickChatWithUs = () => {
     TipisTrack.track("click_help_center")
     boot({
-      userId: userInfo.userID,
-      email: userInfo.email,
+      userId: currentUserInfo?.userID,
+      email: currentUserInfo?.email,
       company: {
         companyId: currentTeam?.id,
         name: currentTeam?.identifier,
