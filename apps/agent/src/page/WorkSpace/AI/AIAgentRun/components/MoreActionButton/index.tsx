@@ -73,7 +73,10 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
         TipisTrack.track("click_edit_tipi_entry", {
           parameter1: "run",
         })
-        navigateToEditTipis(agentID)
+        navigateToEditTipis({
+          tipisID: agentID,
+          tipisName: agentName,
+        })
         break
       }
       case "detail": {

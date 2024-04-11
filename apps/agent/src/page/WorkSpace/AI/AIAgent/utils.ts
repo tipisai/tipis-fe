@@ -74,7 +74,7 @@ export const useSubmitSaveAgent = () => {
           }).unwrap()
           await deleteFormDataByTabID(currentTeamInfo.id, CREATE_TIPIS_ID)
           await updateCreateTipiTabToEditTipiTab(CREATE_TIPIS_ID, {
-            tabName: "",
+            tabName: serverAgent.name,
             tabIcon: "",
             cacheID: serverAgent.aiAgentID,
           })

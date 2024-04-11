@@ -34,10 +34,13 @@ const EditAIAgentGetValuePage: FC = () => {
   const addEditTipiTab = useAddEditTipisTab()
 
   useEffect(() => {
-    if (agentID && !isError) {
-      addEditTipiTab(agentID)
+    if (data) {
+      addEditTipiTab({
+        tipisID: data.aiAgentID,
+        tipisName: data.name,
+      })
     }
-  }, [agentID, addEditTipiTab, isError])
+  }, [addEditTipiTab, data])
 
   const [cacheData, setCacheData] = useState<undefined | Agent>(undefined)
 
