@@ -49,7 +49,7 @@ const InputVariables: FC = () => {
 
   return (
     <Modal
-      title="complete the information"
+      title={t("homepage.tipi_chat.variable_modal.title")}
       open={isModalOpen}
       onCancel={onClickCancel}
       centered
