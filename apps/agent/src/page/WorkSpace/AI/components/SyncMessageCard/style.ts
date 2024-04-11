@@ -1,5 +1,4 @@
 import { css } from "@emotion/react"
-import { Variants } from "framer-motion"
 import { getColor } from "@illa-public/color-scheme"
 import { applyMobileStyle } from "@illa-public/utils"
 import { MESSAGE_STATUS } from "@/components/PreviewChat/interface"
@@ -127,19 +126,6 @@ export const pureMessageContainerStyle = css`
     margin-right: 0;
   `)}
 `
-
-export const messageCardAnimation: Variants = {
-  enter: {
-    height: "auto",
-    padding: "8px 12px",
-    transitionEnd: { display: "flex" },
-  },
-  exit: {
-    height: 0,
-    padding: 0,
-    transitionEnd: { display: "none" },
-  },
-}
 
 export const messageContainerStyle = css`
   border-radius: 16px;

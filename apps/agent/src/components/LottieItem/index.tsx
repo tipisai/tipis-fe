@@ -3,7 +3,12 @@ import { FC, useCallback, useEffect, useRef } from "react"
 import { ILottieItemProps } from "./interface"
 import { lottieItemStyle } from "./style"
 
-const LottieItem: FC<ILottieItemProps> = ({ configJson, autoplay, loop }) => {
+const LottieItem: FC<ILottieItemProps> = ({
+  configJson,
+  autoplay,
+  loop,
+  size,
+}) => {
   const lottieContainerRef = useRef<HTMLDivElement>(null)
   const animationRef = useRef<AnimationItem | null>(null)
   const loadAnimation = useCallback(() => {
@@ -26,7 +31,7 @@ const LottieItem: FC<ILottieItemProps> = ({ configJson, autoplay, loop }) => {
       }
     }
   }, [loadAnimation])
-  return <div ref={lottieContainerRef} css={lottieItemStyle} />
+  return <div ref={lottieContainerRef} css={lottieItemStyle(size)} />
 }
 
 export default LottieItem

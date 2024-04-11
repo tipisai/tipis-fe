@@ -66,7 +66,7 @@ export const AIAgentMessage: FC<AIAgentMessageProps> = (props) => {
               })
             }}
           >
-            <Icon component={CopyIcon} size={14} />
+            <Icon component={CopyIcon} />
           </span>
         )}
         <div css={senderNicknameStyle}>{senderNickname}</div>

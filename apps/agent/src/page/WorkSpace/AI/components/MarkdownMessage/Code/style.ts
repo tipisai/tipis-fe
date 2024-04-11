@@ -32,7 +32,8 @@ export const codeBlockContainerStyle = (codeStatus: CODE_STATUS) => {
     display: flex;
     flex-direction: column;
     align-self: stretch;
-    border-radius: 8px;
+    border-radius: 12px;
+    margin: 4px 0;
     border: 1px solid ${borderColor};
   `
 }

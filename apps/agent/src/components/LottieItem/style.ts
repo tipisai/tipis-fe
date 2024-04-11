@@ -1,6 +1,6 @@
 import { css } from "@emotion/react"
 
-export const lottieItemStyle = css`
-  width: 100%;
-  height: 100%;
+export const lottieItemStyle = (size?: number) => css`
+  width: ${size ? `${size}px` : "100%"};
+  height: ${size ? `${size}px` : "100%"};
 `

@@ -42,7 +42,12 @@ export const useGetInfoByStatus = () => {
         default:
         case MESSAGE_STATUS.ANALYZE_PENDING: {
           InfoIcon = (
-            <LottieItem configJson={RunningPythonCodeIcon} autoplay loop />
+            <LottieItem
+              configJson={RunningPythonCodeIcon}
+              autoplay
+              loop
+              size={24}
+            />
           )
           InfoTitle = t("homepage.tipi_chat.processing_status.title.python")
           infoDesc = t("homepage.tipi_chat.processing_status.processing")
@@ -83,7 +88,9 @@ export const useGetInfoByStatus = () => {
 
         default:
         case MESSAGE_STATUS.ANALYZE_PENDING: {
-          InfoIcon = <LottieItem configJson={ReadingIcon} autoplay loop />
+          InfoIcon = (
+            <LottieItem configJson={ReadingIcon} autoplay loop size={24} />
+          )
           InfoTitle = t("homepage.tipi_chat.processing_status.title.read_file")
           infoDesc = t("homepage.tipi_chat.processing_status.processing")
           break
@@ -130,7 +137,12 @@ export const useGetInfoByStatus = () => {
         default:
         case MESSAGE_STATUS.ANALYZE_PENDING: {
           InfoIcon = (
-            <LottieItem configJson={GetCurrentTimeIcon} autoplay loop />
+            <LottieItem
+              configJson={GetCurrentTimeIcon}
+              autoplay
+              loop
+              size={24}
+            />
           )
           InfoTitle = t(
             "homepage.tipi_chat.processing_status.title.current_time",
