@@ -1,5 +1,5 @@
 import Icon from "@ant-design/icons"
-import { Avatar, Divider, Tag } from "antd"
+import { Avatar, Divider } from "antd"
 import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
@@ -8,7 +8,6 @@ import { TipisTrack } from "@illa-public/track-utils"
 import { teamActions, useGetTeamsInfoQuery } from "@illa-public/user-data"
 import { createTeamContext } from "@/Layout/Workspace/context"
 import { setLocalTeamIdentifier } from "@/utils/auth"
-import { isSubscribeForBilling } from "@/utils/billing/isSubscribe"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import { TeamSelectProps } from "../interface"
 import { containerStyle, switchItemStyle, teamInfoStyle } from "./style"
@@ -48,7 +47,6 @@ const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
     <div css={containerStyle}>
       {teamItems?.map((item, index) => {
         const isCurrent = currentTeamId === item.id
-        const isFree = !isSubscribeForBilling(item.credit?.plan)
         return (
           <div
             css={switchItemStyle}
@@ -60,11 +58,6 @@ const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
             <div css={teamInfoStyle}>
               <Avatar src={item.icon} size={24} shape="square" />
               <span>{item.name}</span>
-              {isFree && (
-                <Tag color="purple">
-                  {t("billing.subscription_general.plan.free")}
-                </Tag>
-              )}
             </div>
             {isCurrent && <Icon component={SuccessIcon} />}
           </div>
