@@ -9,6 +9,6 @@ export interface SyncMessageCardProps {
 
 export interface PureMessageProps {
   message: string
-  isReceiving: boolean
   isMobile: boolean
+  disableTrigger: boolean
 }
