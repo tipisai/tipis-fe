@@ -6,7 +6,6 @@ export enum CODE_STATUS {
 
 export interface MarkdownMessageProps {
   isReceiving: boolean
-  disableTrigger?: boolean
   isOwnMessage?: boolean
   children?: string
   codeStatus?: CODE_STATUS
