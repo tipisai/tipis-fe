@@ -1,5 +1,6 @@
 import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
+import { CODE_STATUS } from "../interface"
 
 export const inlineCodeStyle = css`
   display: inline-block;
@@ -13,26 +14,52 @@ export const inlineCodeStyle = css`
   background-color: ${getColor("white", "03")};
 `
 
-export const codeBlockContainerStyle = css`
-  background-color: #fafafa;
-  display: flex;
-  flex-direction: column;
-  align-self: stretch;
-  border-radius: 8px;
-  border: 1px solid ${getColor("grayBlue", "08")};
-`
+export const codeBlockContainerStyle = (codeStatus: CODE_STATUS) => {
+  let bgColor, borderColor
+  switch (codeStatus) {
+    default:
+    case CODE_STATUS.DEFAULT:
+      bgColor = "#fafafa"
+      borderColor = getColor("grayBlue", "08")
+      break
+    case CODE_STATUS.ERROR:
+      bgColor = "#FFF9F7"
+      borderColor = getColor("red", "07")
+      break
+  }
+  return css`
+    background-color: ${bgColor};
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    border-radius: 8px;
+    border: 1px solid ${borderColor};
+  `
+}
 
-export const codeBlockHeaderStyle = css`
-  display: flex;
-  padding: 4px 16px;
-  justify-content: space-between;
-  align-items: center;
-  align-self: stretch;
-  border-bottom: 1px solid ${getColor("grayBlue", "08")};
-  color: #444;
-  font-size: 12px;
-  font-weight: 400;
-`
+export const codeBlockHeaderStyle = (codeStatus: CODE_STATUS) => {
+  let borderColor
+  switch (codeStatus) {
+    default:
+    case CODE_STATUS.DEFAULT:
+      borderColor = getColor("grayBlue", "08")
+      break
+    case CODE_STATUS.ERROR:
+      borderColor = getColor("red", "07")
+      break
+  }
+  return css`
+    display: flex;
+    padding: 4px 16px;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    border-bottom: 1px solid ${borderColor};
+    color: ${getColor("grayBlue", "02")};
+    font-size: 12px;
+    font-weight: 400;
+  `
+}
 
 export const copyStyle = css`
   display: flex;

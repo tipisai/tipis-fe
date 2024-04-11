@@ -200,3 +200,16 @@ export const lineStyle = css`
   height: 16px;
   background-color: ${getColor("grayBlue", "08")};
 `
+
+export const errorInfoLineStyle = css`
+  display: flex;
+  padding: 0px 16px;
+  align-items: flex-start;
+  gap: 8px;
+`
+
+export const responseStyle = css`
+  color: ${getColor("grayBlue", "02")};
+  font-size: 14px;
+  font-weight: 500;
+`
