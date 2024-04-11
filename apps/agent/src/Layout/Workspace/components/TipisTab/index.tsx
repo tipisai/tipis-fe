@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom"
 import { MinusIcon } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
-import { IAgentForm } from "@/page/WorkSpace/AI/AIAgent/interface"
 import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
@@ -14,7 +13,6 @@ import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 import { useRemoveRecentTabReducer } from "@/utils/recentTabs/baseHook"
 import { getChatPath } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
-import { getFormDataByTabID } from "../../../../utils/localForage/teamData"
 import { ITipsTab } from "./interface"
 import {
   deleteButtonContainerStyle,
@@ -53,9 +51,7 @@ const TipisTab: FC<ITipsTab> = (props) => {
       await deleteTab(tabID)
 
       if (newTabs.length === 1) {
-        setTimeout(() => {
-          navigate(getChatPath(currentTeamInfo?.identifier ?? ""))
-        }, 180)
+        navigate(getChatPath(currentTeamInfo?.identifier ?? ""))
         return
       }
       const latestTab = newTabs[0]
@@ -65,30 +61,19 @@ const TipisTab: FC<ITipsTab> = (props) => {
         latestTab.cacheID,
         latestTab.tabID,
       )
-      setTimeout(() => {
-        navigate(newPath)
-      }, 180)
+      navigate(newPath)
     }
     if (shouldModelTipTabTypes.includes(tabType)) {
-      const formData = (await getFormDataByTabID(
-        currentTeamInfo?.id ?? "",
-        tabID,
-      )) as IAgentForm
-      const isDirty = formData?.formIsDirty
-      if (isDirty || tabType === TAB_TYPE.CREATE_TIPIS) {
-        modal.confirm({
-          content: t("homepage.edit_tipi.modal.not_save_desc"),
-          okText: t("homepage.edit_tipi.modal.not_save_ok"),
-          cancelText: t("homepage.edit_tipi.modal.not_save_cancel"),
-          onOk: removeTab,
-        })
-      } else {
-        removeTab()
-      }
+      modal.confirm({
+        content: t("homepage.edit_tipi.modal.not_save_desc"),
+        okText: t("homepage.edit_tipi.modal.not_save_ok"),
+        cancelText: t("homepage.edit_tipi.modal.not_save_cancel"),
+        onOk: removeTab,
+      })
 
       return
     }
-    removeTab()
+    await removeTab()
   }
 
   const onClick = () => {

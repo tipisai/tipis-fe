@@ -12,9 +12,9 @@ import {
   usePutAgentDetailMutation,
 } from "@/redux/services/agentAPI"
 import { fetchUploadBase64 } from "@/utils/file"
+import { deleteFormDataByTabID } from "@/utils/localForage/teamData"
 import { CREATE_TIPIS_ID } from "@/utils/recentTabs/constants"
 import { useUpdateCreateTipiTabToEditTipiTab } from "@/utils/recentTabs/hook"
-import { deleteFormDataByTabID } from "../../../../utils/localForage/teamData"
 import { AgentInitial, IAgentForm } from "./interface"
 
 export const handleScrollToElement = (scrollId: string) => {
@@ -73,10 +73,12 @@ export const useSubmitSaveAgent = () => {
             },
           }).unwrap()
           await deleteFormDataByTabID(currentTeamInfo.id, CREATE_TIPIS_ID)
-          await updateCreateTipiTabToEditTipiTab(
-            CREATE_TIPIS_ID,
-            serverAgent.aiAgentID,
-          )
+          await updateCreateTipiTabToEditTipiTab(CREATE_TIPIS_ID, {
+            tabName: "",
+            tabIcon: "",
+            cacheID: serverAgent.aiAgentID,
+          })
+
           agentInfo = serverAgent
         } else {
           const serverAgent = await putAgentDetail({
@@ -109,12 +111,7 @@ export const useSubmitSaveAgent = () => {
             ? agentInfo.knowledge
             : [],
         }
-        if (!currentData.aiAgentID) {
-          reset({
-            ...newFormData,
-            formIsDirty: false,
-          })
-        }
+        reset(newFormData)
 
         message.success({
           content: t("dashboard.message.create-suc"),
@@ -127,14 +124,14 @@ export const useSubmitSaveAgent = () => {
       }
     },
     [
-      updateCreateTipiTabToEditTipiTab,
-      createAgent,
-      currentTeamInfo.id,
-      getAgentIconUploadAddress,
-      message,
-      putAgentDetail,
       reset,
+      message,
       t,
+      getAgentIconUploadAddress,
+      currentTeamInfo.id,
+      createAgent,
+      updateCreateTipiTabToEditTipiTab,
+      putAgentDetail,
     ],
   )
 

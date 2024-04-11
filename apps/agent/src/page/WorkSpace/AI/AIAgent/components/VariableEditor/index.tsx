@@ -17,6 +17,7 @@ const VariableEditor: FC = memo(() => {
 
   const isEmptyValue = (params: Params[]) => {
     return (
+      !Array.isArray(params) ||
       params.length === 0 ||
       params.every((param) => {
         return param.key === "" && param.value === ""

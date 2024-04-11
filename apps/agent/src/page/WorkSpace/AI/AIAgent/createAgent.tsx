@@ -29,7 +29,7 @@ export const CreateAIAgentPage: FC = () => {
   }, [createTipiTab])
 
   const methods = useForm<IAgentForm>({
-    values: AgentInitial,
+    defaultValues: AgentInitial,
   })
 
   const { reset, getValues } = methods
@@ -44,6 +44,7 @@ export const CreateAIAgentPage: FC = () => {
     if (!currentTab) return
     const formData = await getFormDataByTabID(teamID, tabID)
     const values = getValues()
+
     if (formData) {
       await setFormDataByTabID(teamID, tabID, {
         ...formData,
@@ -75,8 +76,8 @@ export const CreateAIAgentPage: FC = () => {
   }, [setUiHistoryFormData])
 
   return (
-    <FormProvider {...methods}>
-      <TipisWebSocketProvider key={CREATE_TIPIS_ID}>
+    <FormProvider {...methods} key={CREATE_TIPIS_ID}>
+      <TipisWebSocketProvider>
         <AgentWSProvider>
           <FormContext>
             <UploadContextProvider>

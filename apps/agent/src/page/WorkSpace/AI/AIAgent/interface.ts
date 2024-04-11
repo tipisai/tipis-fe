@@ -13,9 +13,7 @@ export interface IAgentForm
     | "updatedBy"
     | "updatedAt"
     | "editedBy"
-  > {
-  formIsDirty?: boolean
-}
+  > {}
 
 export const AgentInitial: IAgentForm = {
   name: "",

@@ -130,7 +130,14 @@ export const useUpdateCreateTipiTabToEditTipiTab = () => {
   const updateRecentTab = useUpdateRecentTabReducer()
 
   const changeCreateTipiToEditTipi = useCallback(
-    async (tabID: string, tipisID: string) => {
+    async (
+      tabID: string,
+      tabInfo: {
+        tabName: string
+        tabIcon: string
+        cacheID: string
+      },
+    ) => {
       const historyTabs = getRecentTabInfos(store.getState())
       const currentTeamInfo = getCurrentTeamInfo(store.getState())!
 
@@ -139,23 +146,21 @@ export const useUpdateCreateTipiTabToEditTipiTab = () => {
       )
       if (!currentTab) {
         currentTab = {
-          tabName: "",
-          tabIcon: "",
+          ...tabInfo,
           tabType: TAB_TYPE.EDIT_TIPIS,
           tabID: v4(),
-          cacheID: tipisID,
         }
         await addRecentTab(currentTab)
       } else {
         await updateRecentTab(tabID, {
           ...currentTab,
+          ...tabInfo,
           tabType: TAB_TYPE.EDIT_TIPIS,
-          cacheID: tipisID,
           tabID: v4(),
         })
       }
 
-      navigate(getEditTipiPath(currentTeamInfo.identifier, tipisID))
+      navigate(getEditTipiPath(currentTeamInfo.identifier, tabInfo.cacheID))
     },
     [addRecentTab, navigate, updateRecentTab],
   )
@@ -321,7 +326,7 @@ export const useAddExploreTipisTab = () => {
       cacheID: EXPLORE_TIPIS_ID,
     }
     if (exploreTipiTab) {
-      updateRecentTab(exploreTipiTab.tabID, newTab)
+      await updateRecentTab(exploreTipiTab.tabID, newTab)
       dispatch(recentTabActions.updateCurrentRecentTabIDReducer(newTab.tabID))
     } else {
       const recentTabs = getRecentTabInfos(store.getState())
@@ -355,7 +360,7 @@ export const useAddExploreFunctionsTab = () => {
       cacheID: EXPLORE_FUNCTION_ID,
     }
     if (exploreFunctionTab) {
-      updateRecentTab(exploreFunctionTab.tabID, newTab)
+      await updateRecentTab(exploreFunctionTab.tabID, newTab)
       dispatch(recentTabActions.updateCurrentRecentTabIDReducer(newTab.tabID))
     } else {
       const recentTabs = getRecentTabInfos(store.getState())
