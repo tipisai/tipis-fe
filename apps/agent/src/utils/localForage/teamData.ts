@@ -6,7 +6,7 @@ import {
   ChatMessage,
   IGroupMessage,
 } from "../../components/PreviewChat/interface"
-import { IChatUIState, ITeamData, IUiHistoryData } from "./interface"
+import { ITeamData, IUiHistoryData } from "./interface"
 
 export const getTeamDataByTeamID = async (teamID: string) => {
   return await teamDataDataBase.getItem<ITeamData>(teamID)
@@ -16,7 +16,7 @@ export const setTeamDataByTeamID = (teamID: string, teamData: ITeamData) => {
   teamDataDataBase.setItem(teamID, teamData)
 }
 
-export const getUiHistoryDataByCacheID = async (
+export const getUiHistoryDataByTabID = async (
   teamID: string,
   cacheID: string,
 ) => {
@@ -38,33 +38,56 @@ export const setUiHistoryData = async (
   setTeamDataByTeamID(teamID, newTeamData)
 }
 
-export const deleteUiHistoryData = async (teamID: string, cacheID: string) => {
+export const getFormDataByTabID = async (teamID: string, tabID: string) => {
+  const uiHistoryData = await getUiHistoryDataByTabID(teamID, tabID)
+  return uiHistoryData.formData
+}
+
+export const setFormDataByTabID = async (
+  teamID: string,
+  tabID: string,
+  formData: unknown,
+) => {
+  const uiHistoryData = await getUiHistoryDataByTabID(teamID, tabID)
+  const newUiHistoryData = klona(uiHistoryData ?? {})
+  newUiHistoryData.formData = formData
+  await setUiHistoryData(teamID, tabID, newUiHistoryData)
+}
+
+export const deleteFormDataByTabID = async (teamID: string, tabID: string) => {
+  const uiHistoryData = await getUiHistoryDataByTabID(teamID, tabID)
+  const newUiHistoryData = klona(uiHistoryData ?? {})
+  delete newUiHistoryData.formData
+  await setUiHistoryData(teamID, tabID, newUiHistoryData)
+}
+
+export const deleteUiHistoryData = async (teamID: string, tabID: string) => {
   const teamData = await getTeamDataByTeamID(teamID)
   let newTeamData = klona(teamData ?? ({} as ITeamData))
-  if (!newTeamData.uiHistory || !newTeamData.uiHistory[cacheID]) return
-  delete newTeamData.uiHistory[cacheID]
+  if (!newTeamData.uiHistory || !newTeamData.uiHistory[tabID]) return
+  delete newTeamData.uiHistory[tabID]
   setTeamDataByTeamID(teamID, newTeamData)
 }
 
 export const updateUiHistoryData = async (
   teamID: string,
-  oldCacheID: string,
-  newCacheID: string,
+  oldTabID: string,
+  newTabID: string,
   uiHistoryData: IUiHistoryData,
 ) => {
-  const oldData = await getUiHistoryDataByCacheID(teamID, oldCacheID)
-  await setUiHistoryData(teamID, newCacheID, { ...oldData, ...uiHistoryData })
-  await deleteUiHistoryData(teamID, oldCacheID)
+  const oldData = await getUiHistoryDataByTabID(teamID, oldTabID)
+  await setUiHistoryData(teamID, newTabID, { ...oldData, ...uiHistoryData })
+  await deleteUiHistoryData(teamID, oldTabID)
 }
 
 export const changeUIHistoryKey = async (
   teamID: string,
-  oldCacheID: string,
-  newCacheID: string,
+  oldTabID: string,
+  newTabID: string,
 ) => {
-  const oldData = await getUiHistoryDataByCacheID(teamID, oldCacheID)
-  await setUiHistoryData(teamID, newCacheID, oldData)
-  await deleteUiHistoryData(teamID, oldCacheID)
+  const oldData = await getUiHistoryDataByTabID(teamID, oldTabID)
+  await setUiHistoryData(teamID, newTabID, oldData)
+  await deleteUiHistoryData(teamID, oldTabID)
 }
 
 export const getTabs = async (teamID: string) => {
@@ -76,6 +99,7 @@ export const getTabs = async (teamID: string) => {
   const tabsInfo = teamData.tabsInfo ?? INIT_TABS
   return tabsInfo
 }
+
 export const getTargetTab = async (teamID: string, tabID: string) => {
   const tabs = await getTabs(teamID)
   return tabs.find((tab) => tab.tabID === tabID)
@@ -100,9 +124,8 @@ export const removeTabsAndCacheData = async (teamID: string, tabID: string) => {
   const tabs = teamData.tabsInfo ?? []
   const targetTab = tabs.find((tab) => tab.tabID === tabID)
   if (!targetTab) return
-  const cacheID = targetTab.cacheID
   const cacheUIHistory = teamData.uiHistory ?? {}
-  delete cacheUIHistory[cacheID]
+  delete cacheUIHistory[tabID]
   const newTabs = tabs.filter((tab) => tab.tabID !== tabID)
   const newTeamData = klona(teamData)
   newTeamData.tabsInfo = newTabs
@@ -140,100 +163,53 @@ export const updateTabs = async (
   await setTabs(teamID, newTabs)
 }
 
-export const getEditCacheChatMessage = async (
-  teamID: string,
-  cacheID: string,
-) => {
-  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
-  return uiHistoryCacheData.chatMessage?.edit ?? []
-}
-
-export const getRunCacheChatMessage = async (
-  teamID: string,
-  cacheID: string,
-) => {
-  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
-  return uiHistoryCacheData.chatMessage?.run ?? []
-}
-
-export const getCacheUIState = async (teamID: string, cacheID: string) => {
-  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
+// dashboard cache
+export const getCacheUIState = async (teamID: string, tabID: string) => {
+  const uiHistoryCacheData = await getUiHistoryDataByTabID(teamID, tabID)
   return uiHistoryCacheData.uiState
 }
-
 export const setCacheUIState = async (
   teamID: string,
-  cacheID: string,
+  tabID: string,
   uiState: unknown,
 ) => {
-  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
+  const uiHistoryCacheData = await getUiHistoryDataByTabID(teamID, tabID)
   const newUIHistoryCacheData = klona(uiHistoryCacheData ?? {})
   newUIHistoryCacheData.uiState = uiState
-  await setUiHistoryData(teamID, cacheID, newUIHistoryCacheData)
-}
-
-export const deleteCacheUIState = async (teamID: string, cacheID: string) => {
-  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
-  const newUIHistoryCacheData = klona(uiHistoryCacheData ?? {})
-  newUIHistoryCacheData.uiState = undefined
-  await setUiHistoryData(teamID, cacheID, newUIHistoryCacheData)
+  await setUiHistoryData(teamID, tabID, newUIHistoryCacheData)
 }
 
 export const getChatMessageAndUIState = async (
   teamID: string,
-  cacheID: string,
-  mode: "edit" | "run" | "create",
+  tabID: string,
 ) => {
-  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
-  const chatMessageData = uiHistoryCacheData.chatMessage?.[mode] ?? []
-  const uiChatMessage =
-    (uiHistoryCacheData.uiState as IChatUIState)?.[mode] ?? []
+  const uiHistoryCacheData = await getUiHistoryDataByTabID(teamID, tabID)
+  const chatMessageData = uiHistoryCacheData.chatMessage ?? []
+  const uiChatMessage = uiHistoryCacheData.uiState ?? []
+
   return { chatMessageData, uiChatMessage }
 }
 
 export const setChatMessageAndUIState = async (
   teamID: string,
-  cacheID: string,
-  mode: "edit" | "run" | "create",
+  tabID: string,
   uiChatMessage: (IGroupMessage | ChatMessage)[],
   chatMessageData: unknown[],
 ) => {
-  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
+  const uiHistoryCacheData = await getUiHistoryDataByTabID(teamID, tabID)
   const newUIHistoryCacheData = klona(uiHistoryCacheData ?? {})
-  if (!newUIHistoryCacheData.chatMessage) {
-    newUIHistoryCacheData.chatMessage = { edit: [], run: [], create: [] }
-  }
-  if (!newUIHistoryCacheData.uiState) {
-    newUIHistoryCacheData.uiState = {
-      edit: [],
-      run: [],
-    }
-  }
-
-  newUIHistoryCacheData.chatMessage[mode] = chatMessageData
-  ;(newUIHistoryCacheData.uiState as IChatUIState)[mode] = uiChatMessage
-
-  await setUiHistoryData(teamID, cacheID, newUIHistoryCacheData)
+  newUIHistoryCacheData.chatMessage = chatMessageData
+  newUIHistoryCacheData.uiState = uiChatMessage
+  await setUiHistoryData(teamID, tabID, newUIHistoryCacheData)
 }
 
 export const removeChatMessageAndUIState = async (
   teamID: string,
-  cacheID: string,
-  mode: "edit" | "run" | "create",
+  tabID: string,
 ) => {
-  const uiHistoryCacheData = await getUiHistoryDataByCacheID(teamID, cacheID)
+  const uiHistoryCacheData = await getUiHistoryDataByTabID(teamID, tabID)
   const newUIHistoryCacheData = klona(uiHistoryCacheData ?? {})
-  if (!newUIHistoryCacheData.chatMessage) {
-    newUIHistoryCacheData.chatMessage = { edit: [], run: [], create: [] }
-  }
-  if (!newUIHistoryCacheData.uiState) {
-    newUIHistoryCacheData.uiState = {
-      edit: [],
-      run: [],
-      create: [],
-    }
-  }
-  newUIHistoryCacheData.chatMessage[mode] = []
-  ;(newUIHistoryCacheData.uiState as IChatUIState)[mode] = []
-  await setUiHistoryData(teamID, cacheID, newUIHistoryCacheData)
+  newUIHistoryCacheData.chatMessage = []
+  newUIHistoryCacheData.uiState = []
+  await setUiHistoryData(teamID, tabID, newUIHistoryCacheData)
 }

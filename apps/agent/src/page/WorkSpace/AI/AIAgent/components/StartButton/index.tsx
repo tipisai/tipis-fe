@@ -80,14 +80,9 @@ const StartButton: FC<IStartButtonProps> = (props) => {
         await removeChatMessageAndUIState(
           currentTeamID,
           editTipiPathMatch.params.agentID!,
-          "edit",
         )
       } else {
-        await removeChatMessageAndUIState(
-          currentTeamID,
-          CREATE_TIPIS_ID,
-          "create",
-        )
+        await removeChatMessageAndUIState(currentTeamID, CREATE_TIPIS_ID)
       }
       await reconnect()
     } else {

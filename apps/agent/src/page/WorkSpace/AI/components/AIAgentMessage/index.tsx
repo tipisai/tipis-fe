@@ -73,6 +73,7 @@ export const AIAgentMessage: FC<AIAgentMessageProps> = (props) => {
         <div css={messageContainerStyle}>
           <MarkdownMessage
             disableTrigger={(isLastMessage && !isReceiving) || isMobile}
+            isReceiving={isReceiving}
           >
             {message.message}
           </MarkdownMessage>

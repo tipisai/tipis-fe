@@ -28,7 +28,7 @@ export const useAddCreateTipisTab = () => {
   const dispatch = useDispatch()
   const addRecentTab = useAddRecentTabReducer()
 
-  const addCreateTipTab = useCallback(() => {
+  const addCreateTipTab = useCallback(async () => {
     const historyTabs = getRecentTabInfos(store.getState())
     const createTipisTab = historyTabs.find(
       (tab) => tab.tabType === TAB_TYPE.CREATE_TIPIS,
@@ -41,7 +41,7 @@ export const useAddCreateTipisTab = () => {
         tabID: CREATE_TIPIS_ID,
         cacheID: CREATE_TIPIS_ID,
       }
-      addRecentTab(tabsInfo)
+      await addRecentTab(tabsInfo)
     } else {
       dispatch(
         recentTabActions.updateCurrentRecentTabIDReducer(createTipisTab.tabID),
@@ -57,7 +57,7 @@ export const useAddEditTipisTab = () => {
   const dispatch = useDispatch()
 
   const addEditTipisTab = useCallback(
-    (tipisID: string) => {
+    async (tipisID: string) => {
       const historyTabs = getRecentTabInfos(store.getState())
 
       let currentTab = historyTabs.find(
@@ -71,7 +71,7 @@ export const useAddEditTipisTab = () => {
           tabID: v4(),
           cacheID: tipisID,
         }
-        addRecentTab(currentTab)
+        await addRecentTab(currentTab)
       } else {
         dispatch(
           recentTabActions.updateCurrentRecentTabIDReducer(currentTab.tabID),
@@ -115,7 +115,7 @@ export const useAddRunTipisTab = () => {
           tabID: tabID,
           cacheID: tipisID,
         }
-        addRecentTab(tabsInfo)
+        await addRecentTab(tabsInfo)
       }
     },
     [addRecentTab, dispatch],
@@ -124,39 +124,43 @@ export const useAddRunTipisTab = () => {
   return addRunTipisTab
 }
 
-export const useCreateTipiToEditTipi = () => {
+export const useUpdateCreateTipiTabToEditTipiTab = () => {
   const navigate = useNavigate()
   const addRecentTab = useAddRecentTabReducer()
   const updateRecentTab = useUpdateRecentTabReducer()
 
   const changeCreateTipiToEditTipi = useCallback(
-    async (cacheID: string, tipisID: string) => {
+    async (
+      tabID: string,
+      tabInfo: {
+        tabName: string
+        tabIcon: string
+        cacheID: string
+      },
+    ) => {
       const historyTabs = getRecentTabInfos(store.getState())
       const currentTeamInfo = getCurrentTeamInfo(store.getState())!
 
       let currentTab = historyTabs.find(
-        (tab) =>
-          tab.cacheID === cacheID && tab.tabType === TAB_TYPE.CREATE_TIPIS,
+        (tab) => tab.tabID === tabID && tab.tabType === TAB_TYPE.CREATE_TIPIS,
       )
       if (!currentTab) {
         currentTab = {
-          tabName: "",
-          tabIcon: "",
+          ...tabInfo,
           tabType: TAB_TYPE.EDIT_TIPIS,
           tabID: v4(),
-          cacheID: tipisID,
         }
         await addRecentTab(currentTab)
       } else {
-        await updateRecentTab(cacheID, {
+        await updateRecentTab(tabID, {
           ...currentTab,
+          ...tabInfo,
           tabType: TAB_TYPE.EDIT_TIPIS,
-          cacheID: tipisID,
           tabID: v4(),
         })
       }
 
-      navigate(getEditTipiPath(currentTeamInfo.identifier, tipisID))
+      navigate(getEditTipiPath(currentTeamInfo.identifier, tabInfo.cacheID))
     },
     [addRecentTab, navigate, updateRecentTab],
   )
@@ -170,7 +174,7 @@ export const useAddTipisDetailTab = () => {
   const addRecentTab = useAddRecentTabReducer()
 
   const addTipisDetailTab = useCallback(
-    (tabInfo: { tipisID: string; title: string; tabIcon: string }) => {
+    async (tabInfo: { tipisID: string; title: string; tabIcon: string }) => {
       const { tipisID, title, tabIcon } = tabInfo
       const exploreTipiTab = getExploreTipisTab(store.getState())
 
@@ -182,7 +186,7 @@ export const useAddTipisDetailTab = () => {
         cacheID: tipisID,
       }
       if (exploreTipiTab) {
-        updateRecentTab(exploreTipiTab.tabID, newTab)
+        await updateRecentTab(exploreTipiTab.tabID, newTab)
         dispatch(recentTabActions.updateCurrentRecentTabIDReducer(newTab.tabID))
       } else {
         const recentTabs = getRecentTabInfos(store.getState())
@@ -192,7 +196,7 @@ export const useAddTipisDetailTab = () => {
             tab.tabType === TAB_TYPE.EXPLORE_TIPIS_DETAIL,
         )
         if (!currentTipiTab) {
-          addRecentTab(newTab)
+          await addRecentTab(newTab)
         }
       }
     },
@@ -281,10 +285,10 @@ export const useAddChatTab = () => {
   const dispatch = useDispatch()
 
   const addChatTab = useCallback(
-    (chatID: string) => {
+    async (chatID: string) => {
       const historyTabs = getRecentTabInfos(store.getState())
       const createTipisTab = historyTabs.find(
-        (tab) => tab.tabType === TAB_TYPE.CHAT && tab.cacheID === chatID,
+        (tab) => tab.tabType === TAB_TYPE.CHAT && tab.tabID === chatID,
       )
 
       if (createTipisTab) {
@@ -297,7 +301,7 @@ export const useAddChatTab = () => {
           tabID: chatID,
           cacheID: chatID,
         }
-        addRecentTab(tabsInfo)
+        await addRecentTab(tabsInfo)
       }
     },
     [addRecentTab, dispatch],
@@ -311,7 +315,7 @@ export const useAddExploreTipisTab = () => {
   const addRecentTab = useAddRecentTabReducer()
   const updateRecentTab = useUpdateRecentTabReducer()
 
-  const addExploreTipisTab = useCallback(() => {
+  const addExploreTipisTab = useCallback(async () => {
     const exploreTipiTab = getExploreTipisTab(store.getState())
 
     const newTab = {
@@ -322,7 +326,7 @@ export const useAddExploreTipisTab = () => {
       cacheID: EXPLORE_TIPIS_ID,
     }
     if (exploreTipiTab) {
-      updateRecentTab(exploreTipiTab.tabID, newTab)
+      await updateRecentTab(exploreTipiTab.tabID, newTab)
       dispatch(recentTabActions.updateCurrentRecentTabIDReducer(newTab.tabID))
     } else {
       const recentTabs = getRecentTabInfos(store.getState())
@@ -332,7 +336,7 @@ export const useAddExploreTipisTab = () => {
           tab.tabType === TAB_TYPE.EXPLORE_TIPIS,
       )
       if (!currentTipiTab) {
-        addRecentTab(newTab)
+        await addRecentTab(newTab)
       }
     }
   }, [addRecentTab, dispatch, updateRecentTab])
@@ -345,7 +349,7 @@ export const useAddExploreFunctionsTab = () => {
   const addRecentTab = useAddRecentTabReducer()
   const updateRecentTab = useUpdateRecentTabReducer()
 
-  const addExploreTipisTab = useCallback(() => {
+  const addExploreTipisTab = useCallback(async () => {
     const exploreFunctionTab = getExploreFunctionTab(store.getState())
 
     const newTab = {
@@ -356,7 +360,7 @@ export const useAddExploreFunctionsTab = () => {
       cacheID: EXPLORE_FUNCTION_ID,
     }
     if (exploreFunctionTab) {
-      updateRecentTab(exploreFunctionTab.tabID, newTab)
+      await updateRecentTab(exploreFunctionTab.tabID, newTab)
       dispatch(recentTabActions.updateCurrentRecentTabIDReducer(newTab.tabID))
     } else {
       const recentTabs = getRecentTabInfos(store.getState())
@@ -366,7 +370,7 @@ export const useAddExploreFunctionsTab = () => {
           tab.tabType === TAB_TYPE.EXPLORE_FUNCTION,
       )
       if (!currentTipiTab) {
-        addRecentTab(newTab)
+        await addRecentTab(newTab)
       }
     }
   }, [addRecentTab, dispatch, updateRecentTab])
@@ -378,7 +382,7 @@ export const useCreateFunction = () => {
   const navigate = useNavigate()
   const addRecentTab = useAddRecentTabReducer()
 
-  const createFunction = useCallback(() => {
+  const createFunction = useCallback(async () => {
     const currentTeamInfo = getCurrentTeamInfo(store.getState())!
     const tempID = v4()
     const tabsInfo: ITabInfo = {
@@ -388,7 +392,7 @@ export const useCreateFunction = () => {
       tabID: tempID,
       cacheID: tempID,
     }
-    addRecentTab(tabsInfo)
+    await addRecentTab(tabsInfo)
     navigate(getCreateFunctionPath(currentTeamInfo?.identifier, tempID))
   }, [addRecentTab, navigate])
 

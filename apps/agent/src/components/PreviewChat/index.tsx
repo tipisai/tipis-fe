@@ -130,6 +130,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
             key={message.threadID}
             message={message}
             isMobile={isMobile}
+            isReceiving={isReceiving}
           />
         )
       } else {

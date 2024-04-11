@@ -1,17 +1,19 @@
-import { FC, useCallback, useEffect, useMemo } from "react"
+import { FC, useCallback, useEffect, useState } from "react"
 import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useSelector } from "react-redux"
 import { Navigate, useBeforeUnload, useParams } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
+import { Agent } from "@illa-public/public-types"
 import { getCurrentId } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
 import { useGetAgentDetailQuery } from "@/redux/services/agentAPI"
 import store from "@/redux/store"
+import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import {
-  getUiHistoryDataByCacheID,
-  setUiHistoryData,
+  getFormDataByTabID,
+  setFormDataByTabID,
 } from "@/utils/localForage/teamData"
 import { useAddEditTipisTab } from "@/utils/recentTabs/hook"
 import { AgentWSProvider } from "../context/AgentWSContext"
@@ -19,9 +21,9 @@ import { AIAgent } from "./aiagent"
 import FormContext from "./components/FormContext"
 import HeaderTools from "./components/HeaderTools"
 import { UploadContextProvider } from "./components/UploadContext"
-import { AgentInitial, IAgentForm } from "./interface"
+import { IAgentForm } from "./interface"
 
-export const EditAIAgentPage: FC = () => {
+const EditAIAgentGetValuePage: FC = () => {
   const { agentID } = useParams()
   const teamID = useSelector(getCurrentId)
 
@@ -29,111 +31,102 @@ export const EditAIAgentPage: FC = () => {
     aiAgentID: agentID!,
     teamID: teamID!,
   })
-
   const addEditTipiTab = useAddEditTipisTab()
 
-  const initAgent = useMemo(
-    () => ({
-      ...AgentInitial,
-      cacheID: agentID!,
-    }),
-    [agentID],
-  )
-
-  const methods = useForm<IAgentForm>({
-    values: data
-      ? {
-          ...data,
-          cacheID: data.aiAgentID,
-        }
-      : initAgent,
-  })
-
-  const isDirty = methods.formState.isDirty
-
-  const values = useWatch({
-    control: methods.control,
-  })
-
-  const setUiHistoryFormData = useCallback(async () => {
-    const cacheID = values.cacheID!
-    const uiHistoryData = await getUiHistoryDataByCacheID(teamID!, cacheID)
-
-    if (uiHistoryData) {
-      const { formData } = uiHistoryData
-      if (values.aiAgentID) {
-        setUiHistoryData(teamID!, cacheID!, {
-          ...uiHistoryData,
-          formData: {
-            ...(formData as IAgentForm),
-            ...(values as IAgentForm),
-            formIsDirty: isDirty,
-          },
-        })
-      }
-    } else {
-      if (values.aiAgentID) {
-        setUiHistoryData(teamID!, cacheID!, {
-          formData: {
-            ...(values as IAgentForm),
-            formIsDirty: isDirty,
-          },
-        })
-      }
+  useEffect(() => {
+    if (agentID && !isError) {
+      addEditTipiTab(agentID)
     }
-  }, [isDirty, teamID, values])
-  const { reset } = methods
+  }, [agentID, addEditTipiTab, isError])
+
+  const [cacheData, setCacheData] = useState<undefined | Agent>(undefined)
 
   useEffect(() => {
     const getHistoryDataAndSetFormData = async () => {
-      const cacheID = values.aiAgentID!
+      if (!agentID) return
+      const historyTabs = getRecentTabInfos(store.getState())
+      const currentTab = historyTabs.find((tab) => tab.cacheID === agentID)
+      if (!currentTab) return
       const teamID = getCurrentId(store.getState())!
-      const uiHistoryData = await getUiHistoryDataByCacheID(teamID, cacheID)
-      if (uiHistoryData) {
-        const { formData } = uiHistoryData
-        if (formData) {
-          reset(
-            {
-              ...formData,
-              cacheID: (formData as IAgentForm).aiAgentID,
-            },
-            {
-              keepDirty: true,
-            },
-          )
-        }
+      const formData = (await getFormDataByTabID(teamID, currentTab.tabID)) as
+        | Agent
+        | undefined
+
+      if (formData) {
+        setCacheData(formData)
       }
     }
     getHistoryDataAndSetFormData()
-  }, [reset, values.aiAgentID])
-
-  useBeforeUnload(setUiHistoryFormData)
-
-  useEffect(() => {
-    return () => {
-      setUiHistoryFormData()
-    }
-  }, [setUiHistoryFormData])
-
-  useEffect(() => {
-    if (agentID) {
-      addEditTipiTab(agentID)
-    }
-  }, [agentID, addEditTipiTab])
+  }, [agentID])
 
   if (isError) return <Navigate to="/500" />
   if (isLoading) return <FullSectionLoading />
 
   return data ? (
-    <FormProvider {...methods}>
-      <TipisWebSocketProvider key={agentID}>
+    <EditAIAgentPage originAgent={data} cacheData={cacheData} />
+  ) : null
+}
+
+const EditAIAgentPage: FC<{
+  cacheData: Agent | undefined
+  originAgent: Agent
+}> = (props) => {
+  const { originAgent, cacheData } = props
+  const { agentID } = useParams()
+  const teamID = useSelector(getCurrentId)
+
+  const methods = useForm<IAgentForm>({
+    defaultValues: originAgent,
+  })
+
+  const { control, reset } = methods
+
+  useEffect(() => {
+    if (cacheData) {
+      reset(cacheData, {
+        keepDefaultValues: true,
+      })
+    }
+  }, [cacheData, reset])
+
+  const values = useWatch({
+    control,
+  })
+
+  const setUiHistoryFormData = useCallback(async () => {
+    if (!agentID) return
+    const historyTabs = getRecentTabInfos(store.getState())
+    const currentTab = historyTabs.find((tab) => tab.cacheID === agentID)
+    if (!currentTab) return
+    const formData = await getFormDataByTabID(teamID!, currentTab.tabID)
+    if (formData) {
+      await setFormDataByTabID(teamID!, currentTab.tabID, {
+        ...formData,
+        ...values,
+      })
+    } else {
+      await setFormDataByTabID(teamID!, currentTab.tabID, {
+        ...values,
+      })
+    }
+  }, [agentID, teamID, values])
+
+  useBeforeUnload(setUiHistoryFormData)
+
+  useEffect(() => {
+    setUiHistoryFormData()
+  }, [setUiHistoryFormData])
+
+  return (
+    <FormProvider {...methods} key={agentID}>
+      <TipisWebSocketProvider>
         <AgentWSProvider>
           <FormContext>
             <UploadContextProvider>
               <LayoutAutoChange
                 desktopPage={
                   <WorkspacePCHeaderLayout
-                    title={data.name}
+                    title={values.name!}
                     extra={<HeaderTools />}
                   />
                 }
@@ -144,8 +137,8 @@ export const EditAIAgentPage: FC = () => {
         </AgentWSProvider>
       </TipisWebSocketProvider>
     </FormProvider>
-  ) : null
+  )
 }
 
-EditAIAgentPage.displayName = "AIAgentRun"
-export default EditAIAgentPage
+EditAIAgentGetValuePage.displayName = "EditAIAgentGetValuePage"
+export default EditAIAgentGetValuePage

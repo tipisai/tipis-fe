@@ -37,11 +37,15 @@ import { useGetInfoByStatus } from "./utils"
 export const PureMessage: FC<PureMessageProps> = ({
   message,
   disableTrigger,
+  isReceiving,
 }) => {
   if (!message) return null
   return (
     <div css={pureMessageContainerStyle}>
-      <MarkdownMessage disableTrigger={disableTrigger}>
+      <MarkdownMessage
+        isReceiving={isReceiving}
+        disableTrigger={disableTrigger}
+      >
         {message}
       </MarkdownMessage>
     </div>
@@ -51,6 +55,7 @@ export const PureMessage: FC<PureMessageProps> = ({
 export const SyncMessageResult: FC<SyncMessageResultProps> = ({
   message,
   disableTrigger,
+  isReceiving,
 }) => {
   let formatMessage
   try {
@@ -60,7 +65,10 @@ export const SyncMessageResult: FC<SyncMessageResultProps> = ({
   }
   return (
     <div css={pureMessageContainerStyle}>
-      <MarkdownMessage disableTrigger={disableTrigger}>
+      <MarkdownMessage
+        isReceiving={isReceiving}
+        disableTrigger={disableTrigger}
+      >
         {formatMessage}
       </MarkdownMessage>
     </div>
@@ -71,6 +79,7 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
   message,
   messageStatus,
   messageResult,
+  isReceiving,
 }) => {
   const { t } = useTranslation()
   const [showMessage, setShowMessage] = useState(false)
@@ -136,7 +145,7 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
         <>
           <SyncMessageLine />
           <div css={messageContainerStyle}>
-            <MarkdownMessage disableTrigger={true}>
+            <MarkdownMessage isReceiving={isReceiving} disableTrigger={true}>
               {formatMessage}
             </MarkdownMessage>
             {errorInfo && (
@@ -148,6 +157,7 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
                   {t("homepage.tipi_chat.response.resonse")}
                 </span>
                 <MarkdownMessage
+                  isReceiving={isReceiving}
                   disableTrigger={true}
                   codeStatus={CODE_STATUS.ERROR}
                 >

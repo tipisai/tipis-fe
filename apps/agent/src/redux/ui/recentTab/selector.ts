@@ -21,6 +21,13 @@ export const getRecentTabInfos = createSelector(
   },
 )
 
+export const getCurrentTabInfo = createSelector(
+  [getCurrentTabID, getRecentTabInfos],
+  (currentTabID, recentTabs) => {
+    return recentTabs.find((tab) => tab.tabID === currentTabID)
+  },
+)
+
 export const getCreateTipsTab = createSelector(
   [getRecentTabInfos],
   (recentTabs) => {

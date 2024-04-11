@@ -29,7 +29,8 @@ import Code from "./Code"
 import { handleParseText } from "./utils"
 
 export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
-  const { children, isOwnMessage, disableTrigger, codeStatus } = props
+  const { children, isOwnMessage, disableTrigger, codeStatus, isReceiving } =
+    props
   const { t } = useTranslation()
   const { message: messageAPI } = App.useApp()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -42,19 +43,29 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
         components={{
           pre: ({ children }) => <Typography>{children}</Typography>,
           h1: ({ children }) => (
-            <Typography.Title level={1}>{children}</Typography.Title>
+            <Typography.Title level={1} style={{ margin: "20px 0" }}>
+              {children}
+            </Typography.Title>
           ),
           h2: ({ children }) => (
-            <Typography.Title level={2}>{children}</Typography.Title>
+            <Typography.Title level={2} style={{ margin: "18px 0" }}>
+              {children}
+            </Typography.Title>
           ),
           h3: ({ children }) => (
-            <Typography.Title level={3}>{children}</Typography.Title>
+            <Typography.Title level={3} style={{ margin: "18px 0" }}>
+              {children}
+            </Typography.Title>
           ),
           h4: ({ children }) => (
-            <Typography.Title level={4}>{children}</Typography.Title>
+            <Typography.Title level={4} style={{ margin: "18px 0" }}>
+              {children}
+            </Typography.Title>
           ),
           h5: ({ children }) => (
-            <Typography.Title level={5}>{children}</Typography.Title>
+            <Typography.Title level={5} style={{ margin: "20px 0" }}>
+              {children}
+            </Typography.Title>
           ),
           a: ({ href, children }) => (
             <Typography.Link href={href} target="_blank">
@@ -79,7 +90,13 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
               <Table sx={{ minWidth: 650 }}>{children}</Table>
             </TableContainer>
           ),
-          code: (props) => <Code {...props} codeStatus={codeStatus} />,
+          code: (props) => (
+            <Code
+              {...props}
+              codeStatus={codeStatus}
+              isReceiving={isReceiving}
+            />
+          ),
           img: ({ src, alt }) => <Image src={src} alt={alt} preview={false} />,
         }}
       >

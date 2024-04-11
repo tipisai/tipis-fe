@@ -7,7 +7,6 @@ import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 import {
   addTabs,
-  changeUIHistoryKey,
   getTabs,
   removeAllTabsAndCacheData,
   removeTabsAndCacheData,
@@ -70,9 +69,6 @@ export const useUpdateRecentTabReducer = () => {
         }),
       )
       await updateTabs(teamID, oldTabID, newTabInfo)
-      if (newTabInfo.cacheID) {
-        await changeUIHistoryKey(teamID, oldTabID, newTabInfo.cacheID)
-      }
     },
     [dispatch],
   )

@@ -16,14 +16,24 @@ import {
   inlineCodeStyle,
 } from "./style"
 
-const Code: FC<CodeProps & Pick<MarkdownMessageProps, "codeStatus">> = (
-  props,
-) => {
-  const { codeStatus = CODE_STATUS.DEFAULT } = props
+const Code: FC<
+  CodeProps & Pick<MarkdownMessageProps, "codeStatus" | "isReceiving">
+> = (props) => {
+  const { codeStatus = CODE_STATUS.DEFAULT, isReceiving } = props
   const { t } = useTranslation()
   const { message: messageAPI } = App.useApp()
   const language =
     /language-(\w+)/.exec(props.className || "")?.[1] ?? "markdown"
+
+  const handleCopyClick = () => {
+    if (isReceiving) {
+      return
+    }
+    copyToClipboard(props.children?.[0])
+    messageAPI.success({
+      content: t("copied"),
+    })
+  }
 
   return !!props.inline ? (
     <Typography.Text css={inlineCodeStyle}>
@@ -33,15 +43,7 @@ const Code: FC<CodeProps & Pick<MarkdownMessageProps, "codeStatus">> = (
     <div css={codeBlockContainerStyle(codeStatus)}>
       <div css={codeBlockHeaderStyle(codeStatus)}>
         <span>{language.toLocaleLowerCase()}</span>
-        <div
-          css={copyStyle}
-          onClick={() => {
-            copyToClipboard(props.children?.[0])
-            messageAPI.success({
-              content: t("copied"),
-            })
-          }}
-        >
+        <div css={copyStyle(isReceiving)} onClick={handleCopyClick}>
           <Icon component={CopyIcon} size={16} />
           <span>{t("editor.ai-agent.copy_code")}</span>
         </div>
