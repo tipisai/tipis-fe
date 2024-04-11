@@ -336,6 +336,13 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
           onUpdateChatMessage(chatCallback)
           break
         case "stop_all/remote":
+          const needUpdateMessageList = cancelPendingMessage(
+            chatMessagesRef.current,
+          )
+          if (needUpdateMessageList) {
+            chatMessagesRef.current = needUpdateMessageList
+            setChatMessages(needUpdateMessageList)
+          }
           break
         case "clean/remote":
           const partAgentInfo = {
