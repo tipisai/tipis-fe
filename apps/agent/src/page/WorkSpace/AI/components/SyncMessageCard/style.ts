@@ -199,3 +199,9 @@ export const responseStyle = css`
   font-size: 14px;
   font-weight: 500;
 `
+
+export const inlineLineStyle = css`
+  width: 1px;
+  height: 16px;
+  background-color: ${getColor("grayBlue", "07")};
+`
