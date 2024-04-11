@@ -281,6 +281,13 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           onUpdateChatMessage(chatCallback)
           break
         case "stop_all/remote":
+          const needUpdateMessageList = cancelPendingMessage(
+            chatMessagesRef.current,
+          )
+          if (needUpdateMessageList) {
+            chatMessagesRef.current = needUpdateMessageList
+            setChatMessages(needUpdateMessageList)
+          }
           break
         case "clean/remote":
           setIsReceiving(false)

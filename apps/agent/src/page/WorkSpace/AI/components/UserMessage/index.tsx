@@ -1,10 +1,16 @@
-import { FC } from "react"
+import Icon from "@ant-design/icons"
+import { App, Tooltip } from "antd"
+import { FC, useRef } from "react"
+import { useTranslation } from "react-i18next"
 import { Avatar } from "@illa-public/avatar"
+import { CopyIcon } from "@illa-public/icon"
 import { useGetUserInfoQuery } from "@illa-public/user-data"
+import { copyToClipboard } from "@illa-public/utils"
 import MarkdownMessage from "@/page/WorkSpace/AI/components/MarkdownMessage"
 import { UserMessageProps } from "@/page/WorkSpace/AI/components/UserMessage/interface"
 import {
   agentMessageContainer,
+  markdownHoverCopyStyle,
   messageContainerStyle,
   senderAvatarStyle,
   senderContainerStyle,
@@ -15,6 +21,17 @@ import ShowFiles from "./ShowFiles"
 export const UserMessage: FC<UserMessageProps> = (props) => {
   const { message, isMobile, isReceiving } = props
   const { data: currentUserInfo } = useGetUserInfoQuery(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const { t } = useTranslation()
+  const { message: messageAPI } = App.useApp()
+
+  const contentBody = (
+    <div css={messageContainerStyle}>
+      <MarkdownMessage isOwnMessage isReceiving={isReceiving}>
+        {message.message}
+      </MarkdownMessage>
+    </div>
+  )
 
   return (
     <div css={agentMessageContainer}>
@@ -24,17 +41,43 @@ export const UserMessage: FC<UserMessageProps> = (props) => {
           message.knowledgeFiles.length > 0 && (
             <ShowFiles knowledgeFiles={message.knowledgeFiles} />
           )}
-        {message.message && (
-          <div css={messageContainerStyle}>
-            <MarkdownMessage
-              isOwnMessage
-              disableTrigger={isMobile}
-              isReceiving={isReceiving}
+        {message.message &&
+          (isMobile ? (
+            contentBody
+          ) : (
+            <Tooltip
+              color="transparent"
+              zIndex={0}
+              overlayInnerStyle={{
+                padding: 0,
+                minHeight: "24px",
+                minWidth: "24px",
+                boxShadow: "none",
+              }}
+              mouseEnterDelay={0}
+              mouseLeaveDelay={0.5}
+              title={
+                <span
+                  css={markdownHoverCopyStyle}
+                  onClick={() => {
+                    copyToClipboard(message.message ?? "")
+                    messageAPI.success({
+                      content: t("copied"),
+                    })
+                  }}
+                >
+                  <Icon component={CopyIcon} />
+                </span>
+              }
+              placement="leftBottom"
+              showArrow={false}
+              autoAdjustOverflow={false}
+              trigger="hover"
+              getTooltipContainer={() => containerRef.current!}
             >
-              {message.message}
-            </MarkdownMessage>
-          </div>
-        )}
+              {contentBody}
+            </Tooltip>
+          ))}
       </div>
       {!isMobile && (
         <Avatar
