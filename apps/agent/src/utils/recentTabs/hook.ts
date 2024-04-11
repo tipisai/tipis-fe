@@ -57,7 +57,8 @@ export const useAddEditTipisTab = () => {
   const dispatch = useDispatch()
 
   const addEditTipisTab = useCallback(
-    async (tipisID: string) => {
+    async (tipisInfo: { tipisName: string; tipisID: string }) => {
+      const { tipisID, tipisName } = tipisInfo
       const historyTabs = getRecentTabInfos(store.getState())
 
       let currentTab = historyTabs.find(
@@ -65,7 +66,7 @@ export const useAddEditTipisTab = () => {
       )
       if (!currentTab) {
         currentTab = {
-          tabName: "",
+          tabName: tipisName,
           tabIcon: "",
           tabType: TAB_TYPE.EDIT_TIPIS,
           tabID: v4(),

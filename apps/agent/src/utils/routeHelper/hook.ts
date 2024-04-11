@@ -94,10 +94,10 @@ export const useNavigateToEditTipis = () => {
   const currentTeamInfo = useGetCurrentTeamInfo()
 
   const navigateToEditTipis = useCallback(
-    (tipisID: string) => {
-      addEditTipisTab(tipisID)
+    (tipisInfo: { tipisName: string; tipisID: string }) => {
+      addEditTipisTab(tipisInfo)
       if (currentTeamInfo?.identifier) {
-        navigate(getEditTipiPath(currentTeamInfo.identifier, tipisID))
+        navigate(getEditTipiPath(currentTeamInfo.identifier, tipisInfo.tipisID))
       }
     },
     [addEditTipisTab, currentTeamInfo?.identifier, navigate],
