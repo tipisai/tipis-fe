@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect } from "react"
-import { FormProvider, useForm } from "react-hook-form"
+import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useBeforeUnload } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
@@ -32,7 +32,10 @@ export const CreateAIAgentPage: FC = () => {
     defaultValues: AgentInitial,
   })
 
-  const { reset, getValues } = methods
+  const { reset, control } = methods
+  const values = useWatch({
+    control,
+  })
 
   const { t } = useTranslation()
 
@@ -43,7 +46,6 @@ export const CreateAIAgentPage: FC = () => {
     const currentTab = historyTabs.find((tab) => tab.tabID === tabID)
     if (!currentTab) return
     const formData = await getFormDataByTabID(teamID, tabID)
-    const values = getValues()
 
     if (formData) {
       await setFormDataByTabID(teamID, tabID, {
@@ -53,7 +55,7 @@ export const CreateAIAgentPage: FC = () => {
     } else {
       await setFormDataByTabID(teamID, tabID, values)
     }
-  }, [getValues])
+  }, [values])
 
   useEffect(() => {
     const getHistoryDataAndSetFormData = async () => {
@@ -70,9 +72,7 @@ export const CreateAIAgentPage: FC = () => {
   useBeforeUnload(setUiHistoryFormData)
 
   useEffect(() => {
-    return () => {
-      setUiHistoryFormData()
-    }
+    setUiHistoryFormData()
   }, [setUiHistoryFormData])
 
   return (
