@@ -17,7 +17,7 @@ import {
 } from "./style"
 
 export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
-  const { message, isMobile, isReceiving } = props
+  const { message, isMobile, isReceiving, isLastMessage } = props
   const chatContext = useContext(ChatContext)
 
   const uiMessage = message.items.filter((item) => item.message)
@@ -74,7 +74,7 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
               <PureMessage
                 message={messageItem.message}
                 isMobile={isMobile}
-                isReceiving={isReceiving}
+                disableTrigger={isReceiving && isLastMessage}
               />
             )
           }

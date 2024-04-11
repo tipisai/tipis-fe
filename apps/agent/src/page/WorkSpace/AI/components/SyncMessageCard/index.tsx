@@ -35,7 +35,7 @@ import { useGetInfoByStatus } from "./utils"
 
 export const PureMessage: FC<PureMessageProps> = ({
   message,
-  isReceiving,
+  disableTrigger,
   isMobile,
 }) => {
   const { message: messageAPI } = App.useApp()
@@ -44,12 +44,12 @@ export const PureMessage: FC<PureMessageProps> = ({
 
   const contentBody = (
     <div css={pureMessageContainerStyle}>
-      <MarkdownMessage isReceiving={isReceiving}>{message}</MarkdownMessage>
+      <MarkdownMessage isReceiving={false}>{message}</MarkdownMessage>
     </div>
   )
 
   if (!message) return null
-  return isMobile ? (
+  return isMobile || disableTrigger ? (
     contentBody
   ) : (
     <Tooltip
