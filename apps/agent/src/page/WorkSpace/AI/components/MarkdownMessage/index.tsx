@@ -29,7 +29,8 @@ import Code from "./Code"
 import { handleParseText } from "./utils"
 
 export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
-  const { children, isOwnMessage, disableTrigger, codeStatus } = props
+  const { children, isOwnMessage, disableTrigger, codeStatus, isReceiving } =
+    props
   const { t } = useTranslation()
   const { message: messageAPI } = App.useApp()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -89,7 +90,13 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
               <Table sx={{ minWidth: 650 }}>{children}</Table>
             </TableContainer>
           ),
-          code: (props) => <Code {...props} codeStatus={codeStatus} />,
+          code: (props) => (
+            <Code
+              {...props}
+              codeStatus={codeStatus}
+              isReceiving={isReceiving}
+            />
+          ),
           img: ({ src, alt }) => <Image src={src} alt={alt} preview={false} />,
         }}
       >

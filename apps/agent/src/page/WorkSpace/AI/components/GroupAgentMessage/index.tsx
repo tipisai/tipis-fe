@@ -67,6 +67,7 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
                   messageItem.status ?? MESSAGE_STATUS.ANALYZE_PENDING
                 }
                 messageResult={messageItem.messageResult}
+                isReceiving={isReceiving}
               />
             )
           } else if (isErrorMessageRes(messageItem)) {
@@ -74,6 +75,7 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
               <SyncMessageResult
                 disableTrigger={isMobile || isReceiving}
                 message={messageItem.message}
+                isReceiving={isReceiving}
               />
             )
           } else {
@@ -81,6 +83,7 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
               <PureMessage
                 message={messageItem.message}
                 disableTrigger={isMobile || isReceiving}
+                isReceiving={isReceiving}
               />
             )
           }

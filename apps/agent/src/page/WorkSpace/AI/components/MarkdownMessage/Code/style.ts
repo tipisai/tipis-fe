@@ -62,17 +62,19 @@ export const codeBlockHeaderStyle = (codeStatus: CODE_STATUS) => {
   `
 }
 
-export const copyStyle = css`
+export const copyStyle = (isReceiving: boolean) => css`
   display: flex;
   padding: 2px 8px;
   justify-content: center;
   align-items: center;
   gap: 4px;
   border-radius: 4px;
-  color: ${getColor("grayBlue", "02")};
+  color: ${isReceiving
+    ? getColor("grayBlue", "04")
+    : getColor("grayBlue", "02")};
   font-size: 12px;
   font-weight: 400;
   line-height: 20px;
   text-transform: capitalize;
-  cursor: pointer;
+  cursor: ${isReceiving ? "not-allowed" : "pointer"};
 `
