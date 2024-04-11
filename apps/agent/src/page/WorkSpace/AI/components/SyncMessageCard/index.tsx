@@ -1,11 +1,13 @@
 import Icon from "@ant-design/icons"
 import { motion } from "framer-motion"
 import { FC, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { DownIcon, UpIcon } from "@illa-public/icon"
 import LottieItem from "@/components/LottieItem"
 import { MESSAGE_STATUS } from "@/components/PreviewChat/interface"
 import tipiRunLoading from "@/config/lottieConfig/tipiRunLoading.json"
 import MarkdownMessage from "../MarkdownMessage"
+import { CODE_STATUS } from "../MarkdownMessage/interface"
 import { RUN_REQUEST_TYPE } from "./constants"
 import {
   PureMessageProps,
@@ -15,6 +17,7 @@ import {
 import {
   actionIconStyle,
   containerStyle,
+  errorInfoLineStyle,
   headerContainerStyle,
   iconStyle,
   infoContainerStyle,
@@ -27,6 +30,7 @@ import {
   messageCardAnimation,
   messageContainerStyle,
   pureMessageContainerStyle,
+  responseStyle,
   textAndIconContainerStyle,
 } from "./style"
 import { useGetInfoByStatus } from "./utils"
@@ -67,8 +71,9 @@ export const SyncMessageResult: FC<SyncMessageResultProps> = ({
 export const SyncMessageCard: FC<SyncMessageCardProps> = ({
   message,
   messageStatus,
-  disableTrigger,
+  messageResult,
 }) => {
+  const { t } = useTranslation()
   const [showMessage, setShowMessage] = useState(false)
   let formatMessage, runRequestType: RUN_REQUEST_TYPE | undefined
   try {
@@ -80,6 +85,13 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
     }
     if (functionName) {
       runRequestType = functionName
+    }
+  } catch (e) {}
+
+  let errorInfo
+  try {
+    if (messageResult) {
+      errorInfo = `\`\`\`json\n${JSON.stringify(JSON.parse(messageResult) || {}, null, 2)}\n\`\`\``
     }
   } catch (e) {}
 
@@ -121,6 +133,7 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
           )}
         </div>
       </div>
+      {!!(formatMessage && showMessage) && <SyncMessageLine />}
       <motion.div
         variants={messageCardAnimation}
         animate={!!(formatMessage && showMessage) ? "enter" : "exit"}
@@ -129,9 +142,23 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
         initial="exit"
         exit="exit"
       >
-        <MarkdownMessage disableTrigger={disableTrigger}>
-          {formatMessage}
-        </MarkdownMessage>
+        <MarkdownMessage disableTrigger={true}>{formatMessage}</MarkdownMessage>
+        {errorInfo && (
+          <>
+            <div css={errorInfoLineStyle}>
+              <div css={lineStyle} />
+            </div>
+            <span css={responseStyle}>
+              {t("homepage.tipi_chat.response.resonse")}
+            </span>
+            <MarkdownMessage
+              disableTrigger={true}
+              codeStatus={CODE_STATUS.ERROR}
+            >
+              {errorInfo}
+            </MarkdownMessage>
+          </>
+        )}
       </motion.div>
     </div>
   )

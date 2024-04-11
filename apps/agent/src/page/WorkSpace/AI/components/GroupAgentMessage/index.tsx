@@ -1,10 +1,6 @@
 import { FC, Fragment, ReactNode, useContext } from "react"
 import { Avatar } from "@illa-public/avatar"
-import {
-  IGroupMessage,
-  MESSAGE_STATUS,
-  SenderType,
-} from "@/components/PreviewChat/interface"
+import { MESSAGE_STATUS, SenderType } from "@/components/PreviewChat/interface"
 import { ChatContext } from "@/page/WorkSpace/AI/components/ChatContext"
 import { isErrorMessageRes, isRequestMessage } from "@/utils/agent/wsUtils"
 import {
@@ -13,6 +9,7 @@ import {
   SyncMessageLine,
   SyncMessageResult,
 } from "../SyncMessageCard"
+import { GroupAgentMessageProps } from "./interface"
 import {
   agentMessageContainer,
   senderAvatarStyle,
@@ -20,15 +17,8 @@ import {
   senderNicknameStyle,
 } from "./style"
 
-interface GroupAgentMessageProps {
-  message: IGroupMessage
-  isMobile: boolean
-  isReceiving: boolean
-  isLastMessage: boolean
-}
-
 export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
-  const { message, isMobile, isReceiving, isLastMessage } = props
+  const { message, isMobile, isReceiving } = props
   const chatContext = useContext(ChatContext)
 
   const uiMessage = message.items.filter((item) => item.message)
@@ -76,7 +66,7 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
                 messageStatus={
                   messageItem.status ?? MESSAGE_STATUS.ANALYZE_PENDING
                 }
-                disableTrigger={isMobile || isReceiving}
+                messageResult={messageItem.messageResult}
               />
             )
           } else if (isErrorMessageRes(messageItem)) {
@@ -90,9 +80,7 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
             element = (
               <PureMessage
                 message={messageItem.message}
-                disableTrigger={
-                  (isLastMessage && !isReceiving) || isMobile || isReceiving
-                }
+                disableTrigger={isMobile || isReceiving}
               />
             )
           }

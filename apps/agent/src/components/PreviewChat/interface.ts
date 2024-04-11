@@ -57,6 +57,7 @@ export interface ChatMessage {
   messageType: MESSAGE_SYNC_TYPE
   knowledgeFiles?: IKnowledgeFile[]
   status?: MESSAGE_STATUS
+  messageResult?: string
 }
 
 export interface IGroupMessage {

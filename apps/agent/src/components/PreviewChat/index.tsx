@@ -118,7 +118,6 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
             key={message.threadID}
             message={message}
             isMobile={isMobile}
-            isLastMessage={i === chatMessages.length - 1}
             isReceiving={isReceiving}
           />
         )

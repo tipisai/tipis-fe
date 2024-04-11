@@ -12,8 +12,12 @@ export const getEditTipiPath = (teamIdentifier: string, tipiID: string) => {
   return `/workspace/${teamIdentifier}/tipi/${tipiID}/edit`
 }
 
-export const getRunTipiPath = (teamIdentifier: string, tipiID: string) => {
-  return `/workspace/${teamIdentifier}/tipi/${tipiID}/run`
+export const getRunTipiPath = (
+  teamIdentifier: string,
+  tipiID: string,
+  tabID: string,
+) => {
+  return `/workspace/${teamIdentifier}/tipi/${tipiID}/run${tabID ? `/${tabID}` : ""}`
 }
 
 export const getTipiDetailPath = (teamIdentifier: string, tipiID: string) => {

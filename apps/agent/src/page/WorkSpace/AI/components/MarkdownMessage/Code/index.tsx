@@ -7,6 +7,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism"
 import { CopyIcon } from "@illa-public/icon"
 import { copyToClipboard } from "@illa-public/utils"
+import { CODE_STATUS, MarkdownMessageProps } from "../interface"
 import { getTextValue } from "../utils"
 import {
   codeBlockContainerStyle,
@@ -15,20 +16,23 @@ import {
   inlineCodeStyle,
 } from "./style"
 
-const Code: FC<CodeProps> = (props) => {
+const Code: FC<CodeProps & Pick<MarkdownMessageProps, "codeStatus">> = (
+  props,
+) => {
+  const { codeStatus = CODE_STATUS.DEFAULT } = props
   const { t } = useTranslation()
   const { message: messageAPI } = App.useApp()
+  const language =
+    /language-(\w+)/.exec(props.className || "")?.[1] ?? "markdown"
 
   return !!props.inline ? (
     <Typography.Text css={inlineCodeStyle}>
       {getTextValue(props.children)}
     </Typography.Text>
   ) : (
-    <div css={codeBlockContainerStyle}>
-      <div css={codeBlockHeaderStyle}>
-        <span>
-          {/language-(\w+)/.exec(props.className || "")?.[1] ?? "markdown"}
-        </span>
+    <div css={codeBlockContainerStyle(codeStatus)}>
+      <div css={codeBlockHeaderStyle(codeStatus)}>
+        <span>{language.toLocaleLowerCase()}</span>
         <div
           css={copyStyle}
           onClick={() => {
@@ -43,17 +47,19 @@ const Code: FC<CodeProps> = (props) => {
         </div>
       </div>
       <SyntaxHighlighter
-        {...props}
         CodeTag="div"
         PreTag="div"
         wrapLongLines={true}
         customStyle={{
           background: "transparent",
         }}
-        language={
-          /language-(\w+)/.exec(props.className || "")?.[1] ?? "markdown"
-        }
-        style={oneLight}
+        language={language.toLocaleLowerCase()}
+        style={{
+          ...oneLight,
+          ['code[class*="language-"]']: {
+            background: "transparent",
+          },
+        }}
         wrapLines
         lineProps={{ style: { wordBreak: "break-all" } }}
       >

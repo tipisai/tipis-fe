@@ -267,7 +267,7 @@ export const useRunMarketTipis = () => {
       }
       dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
       navigate(
-        `${getRunTipiPath(ownerTeamIdentifier, tipisID)}/${tabID}?myTeamIdentifier=${currentTeamInfo.identifier}`,
+        `${getRunTipiPath(ownerTeamIdentifier, tipisID, tabID)}?myTeamIdentifier=${currentTeamInfo.identifier}`,
       )
     },
     [dispatch, navigate],

@@ -122,7 +122,7 @@ export const useNavigateToRunTipis = () => {
       addRunTipisTab(tabInfo, tabID)
       if (currentTeamInfo?.identifier) {
         navigate(
-          `${getRunTipiPath(currentTeamInfo.identifier, tabInfo.tipisID)}/${tabID}`,
+          `${getRunTipiPath(currentTeamInfo.identifier, tabInfo.tipisID, tabID)}`,
         )
       }
     },
