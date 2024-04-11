@@ -114,9 +114,7 @@ const EditAIAgentPage: FC<{
   useBeforeUnload(setUiHistoryFormData)
 
   useEffect(() => {
-    return () => {
-      setUiHistoryFormData()
-    }
+    setUiHistoryFormData()
   }, [setUiHistoryFormData])
 
   return (
