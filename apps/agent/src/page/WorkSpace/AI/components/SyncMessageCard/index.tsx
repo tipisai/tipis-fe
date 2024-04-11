@@ -1,5 +1,4 @@
 import Icon from "@ant-design/icons"
-import { motion } from "framer-motion"
 import { FC, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { DownIcon, UpIcon } from "@illa-public/icon"
@@ -27,7 +26,6 @@ import {
   lineContainerStyle,
   lineStyle,
   lottieLoadingStyle,
-  messageCardAnimation,
   messageContainerStyle,
   pureMessageContainerStyle,
   responseStyle,
@@ -133,33 +131,32 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
           )}
         </div>
       </div>
-      {!!(formatMessage && showMessage) && <SyncMessageLine />}
-      <motion.div
-        variants={messageCardAnimation}
-        animate={!!(formatMessage && showMessage) ? "enter" : "exit"}
-        css={messageContainerStyle}
-        transition={{ duration: 0.2 }}
-        initial="exit"
-        exit="exit"
-      >
-        <MarkdownMessage disableTrigger={true}>{formatMessage}</MarkdownMessage>
-        {errorInfo && (
-          <>
-            <div css={errorInfoLineStyle}>
-              <div css={lineStyle} />
-            </div>
-            <span css={responseStyle}>
-              {t("homepage.tipi_chat.response.resonse")}
-            </span>
-            <MarkdownMessage
-              disableTrigger={true}
-              codeStatus={CODE_STATUS.ERROR}
-            >
-              {errorInfo}
+      {!!(formatMessage && showMessage) && (
+        <>
+          <SyncMessageLine />
+          <div css={messageContainerStyle}>
+            <MarkdownMessage disableTrigger={true}>
+              {formatMessage}
             </MarkdownMessage>
-          </>
-        )}
-      </motion.div>
+            {errorInfo && (
+              <>
+                <div css={errorInfoLineStyle}>
+                  <div css={lineStyle} />
+                </div>
+                <span css={responseStyle}>
+                  {t("homepage.tipi_chat.response.resonse")}
+                </span>
+                <MarkdownMessage
+                  disableTrigger={true}
+                  codeStatus={CODE_STATUS.ERROR}
+                >
+                  {errorInfo}
+                </MarkdownMessage>
+              </>
+            )}
+          </div>
+        </>
+      )}
     </div>
   )
 }
