@@ -119,6 +119,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
             message={message}
             isMobile={isMobile}
             isReceiving={isReceiving}
+            isLastMessage={i === chatMessages.length - 1}
           />
         )
       } else if (

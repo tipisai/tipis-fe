@@ -60,3 +60,16 @@ export const hoverCopyStyle = css`
   bottom: 0;
   right: -32px;
 `
+
+export const markdownHoverCopyStyle = css`
+  display: inline-flex;
+  padding: 4px;
+  align-items: center;
+  gap: 8px;
+  border-radius: 4px;
+  border: 1px solid ${getColor("grayBlue", "08")};
+  background: ${getColor("white", "01")};
+  cursor: pointer;
+  color: ${getColor("grayBlue", "02")};
+  transform: translateX(-4px);
+`

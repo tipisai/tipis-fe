@@ -1,18 +1,16 @@
 import Icon from "@ant-design/icons"
-import { FC, useState } from "react"
+import { App, Tooltip } from "antd"
+import { FC, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { DownIcon, UpIcon } from "@illa-public/icon"
+import { CopyIcon, DownIcon, UpIcon } from "@illa-public/icon"
+import { copyToClipboard } from "@illa-public/utils"
 import LottieItem from "@/components/LottieItem"
 import { MESSAGE_STATUS } from "@/components/PreviewChat/interface"
 import tipiRunLoading from "@/config/lottieConfig/tipiRunLoading.json"
 import MarkdownMessage from "../MarkdownMessage"
 import { CODE_STATUS } from "../MarkdownMessage/interface"
 import { RUN_REQUEST_TYPE } from "./constants"
-import {
-  PureMessageProps,
-  SyncMessageCardProps,
-  SyncMessageResultProps,
-} from "./interface"
+import { PureMessageProps, SyncMessageCardProps } from "./interface"
 import {
   actionIconStyle,
   containerStyle,
@@ -27,6 +25,7 @@ import {
   lineContainerStyle,
   lineStyle,
   lottieLoadingStyle,
+  markdownHoverCopyStyle,
   messageContainerStyle,
   pureMessageContainerStyle,
   responseStyle,
@@ -37,41 +36,54 @@ import { useGetInfoByStatus } from "./utils"
 export const PureMessage: FC<PureMessageProps> = ({
   message,
   disableTrigger,
-  isReceiving,
+  isMobile,
 }) => {
-  if (!message) return null
-  return (
+  const { message: messageAPI } = App.useApp()
+  const { t } = useTranslation()
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const contentBody = (
     <div css={pureMessageContainerStyle}>
-      <MarkdownMessage
-        isReceiving={isReceiving}
-        disableTrigger={disableTrigger}
-      >
-        {message}
-      </MarkdownMessage>
+      <MarkdownMessage isReceiving={false}>{message}</MarkdownMessage>
     </div>
   )
-}
 
-export const SyncMessageResult: FC<SyncMessageResultProps> = ({
-  message,
-  disableTrigger,
-  isReceiving,
-}) => {
-  let formatMessage
-  try {
-    formatMessage = `\`\`\`json\n${JSON.stringify(JSON.parse(message) || {}, null, 2)}\n\`\`\``
-  } catch (e) {
-    formatMessage = `\`\`\`json\n${message}\n\`\`\``
-  }
-  return (
-    <div css={pureMessageContainerStyle}>
-      <MarkdownMessage
-        isReceiving={isReceiving}
-        disableTrigger={disableTrigger}
-      >
-        {formatMessage}
-      </MarkdownMessage>
-    </div>
+  if (!message) return null
+  return isMobile || disableTrigger ? (
+    contentBody
+  ) : (
+    <Tooltip
+      color="transparent"
+      zIndex={0}
+      overlayInnerStyle={{
+        padding: 0,
+        minHeight: "24px",
+        minWidth: "24px",
+        boxShadow: "none",
+      }}
+      mouseEnterDelay={0}
+      mouseLeaveDelay={0.5}
+      title={
+        <span
+          css={markdownHoverCopyStyle}
+          onClick={() => {
+            copyToClipboard(message ?? "")
+            messageAPI.success({
+              content: t("copied"),
+            })
+          }}
+        >
+          <Icon component={CopyIcon} />
+        </span>
+      }
+      placement="rightBottom"
+      showArrow={false}
+      autoAdjustOverflow={false}
+      trigger="hover"
+      getTooltipContainer={() => containerRef.current!}
+    >
+      {contentBody}
+    </Tooltip>
   )
 }
 
@@ -145,7 +157,7 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
         <>
           <SyncMessageLine />
           <div css={messageContainerStyle}>
-            <MarkdownMessage isReceiving={isReceiving} disableTrigger={true}>
+            <MarkdownMessage isReceiving={isReceiving}>
               {formatMessage}
             </MarkdownMessage>
             {errorInfo && (
@@ -158,7 +170,6 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
                 </span>
                 <MarkdownMessage
                   isReceiving={isReceiving}
-                  disableTrigger={true}
                   codeStatus={CODE_STATUS.ERROR}
                 >
                   {errorInfo}

@@ -2,12 +2,11 @@ import { FC, Fragment, ReactNode, useContext } from "react"
 import { Avatar } from "@illa-public/avatar"
 import { MESSAGE_STATUS, SenderType } from "@/components/PreviewChat/interface"
 import { ChatContext } from "@/page/WorkSpace/AI/components/ChatContext"
-import { isErrorMessageRes, isRequestMessage } from "@/utils/agent/wsUtils"
+import { isRequestMessage } from "@/utils/agent/wsUtils"
 import {
   PureMessage,
   SyncMessageCard,
   SyncMessageLine,
-  SyncMessageResult,
 } from "../SyncMessageCard"
 import { GroupAgentMessageProps } from "./interface"
 import {
@@ -18,7 +17,7 @@ import {
 } from "./style"
 
 export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
-  const { message, isMobile, isReceiving } = props
+  const { message, isMobile, isReceiving, isLastMessage } = props
   const chatContext = useContext(ChatContext)
 
   const uiMessage = message.items.filter((item) => item.message)
@@ -70,20 +69,12 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
                 isReceiving={isReceiving}
               />
             )
-          } else if (isErrorMessageRes(messageItem)) {
-            element = (
-              <SyncMessageResult
-                disableTrigger={isMobile || isReceiving}
-                message={messageItem.message}
-                isReceiving={isReceiving}
-              />
-            )
           } else {
             element = (
               <PureMessage
                 message={messageItem.message}
-                disableTrigger={isMobile || isReceiving}
-                isReceiving={isReceiving}
+                isMobile={isMobile}
+                disableTrigger={isReceiving && isLastMessage}
               />
             )
           }

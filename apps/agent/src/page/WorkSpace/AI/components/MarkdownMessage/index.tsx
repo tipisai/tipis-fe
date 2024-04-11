@@ -1,4 +1,3 @@
-import Icon from "@ant-design/icons"
 import {
   Paper,
   Table,
@@ -9,18 +8,14 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material"
-import { App, Image, Tooltip, Typography } from "antd"
-import { FC, useRef } from "react"
-import { useTranslation } from "react-i18next"
+import { Image, Typography } from "antd"
+import { FC } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkBreaks from "remark-breaks"
 import remarkGfm from "remark-gfm"
-import { CopyIcon } from "@illa-public/icon"
-import { copyToClipboard } from "@illa-public/utils"
 import { MarkdownMessageProps } from "@/page/WorkSpace/AI/components/MarkdownMessage/interface"
 import {
   cellStyle,
-  hoverCopyStyle,
   markdownMessageContainerStyle,
   markdownMessageStyle,
   tableStyle,
@@ -29,14 +24,10 @@ import Code from "./Code"
 import { handleParseText } from "./utils"
 
 export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
-  const { children, isOwnMessage, disableTrigger, codeStatus, isReceiving } =
-    props
-  const { t } = useTranslation()
-  const { message: messageAPI } = App.useApp()
-  const containerRef = useRef<HTMLDivElement>(null)
+  const { children, isOwnMessage, codeStatus, isReceiving } = props
 
-  const contentBody = (
-    <div ref={containerRef} css={markdownMessageContainerStyle}>
+  return (
+    <div css={markdownMessageContainerStyle}>
       <ReactMarkdown
         css={markdownMessageStyle}
         remarkPlugins={[remarkGfm, remarkBreaks]}
@@ -103,43 +94,6 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
         {handleParseText(children ?? "", isOwnMessage)}
       </ReactMarkdown>
     </div>
-  )
-
-  return disableTrigger ? (
-    contentBody
-  ) : (
-    <Tooltip
-      color="transparent"
-      zIndex={0}
-      overlayInnerStyle={{
-        padding: 0,
-        minHeight: "24px",
-        minWidth: "24px",
-        boxShadow: "none",
-      }}
-      mouseEnterDelay={0}
-      mouseLeaveDelay={0.5}
-      title={
-        <span
-          css={hoverCopyStyle(isOwnMessage)}
-          onClick={() => {
-            copyToClipboard(children ?? "")
-            messageAPI.success({
-              content: t("copied"),
-            })
-          }}
-        >
-          <Icon component={CopyIcon} />
-        </span>
-      }
-      placement={isOwnMessage ? "leftBottom" : "rightBottom"}
-      showArrow={false}
-      autoAdjustOverflow={false}
-      trigger="hover"
-      getTooltipContainer={() => containerRef.current!}
-    >
-      {contentBody}
-    </Tooltip>
   )
 }
 
