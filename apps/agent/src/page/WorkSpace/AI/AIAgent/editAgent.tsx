@@ -1,8 +1,9 @@
-import { FC, useCallback, useEffect } from "react"
-import { FormProvider, useForm } from "react-hook-form"
+import { FC, useCallback, useEffect, useState } from "react"
+import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useSelector } from "react-redux"
 import { Navigate, useBeforeUnload, useParams } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
+import { Agent } from "@illa-public/public-types"
 import { getCurrentId } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
@@ -20,9 +21,9 @@ import { AIAgent } from "./aiagent"
 import FormContext from "./components/FormContext"
 import HeaderTools from "./components/HeaderTools"
 import { UploadContextProvider } from "./components/UploadContext"
-import { AgentInitial, IAgentForm } from "./interface"
+import { IAgentForm } from "./interface"
 
-export const EditAIAgentPage: FC = () => {
+const EditAIAgentGetValuePage: FC = () => {
   const { agentID } = useParams()
   const teamID = useSelector(getCurrentId)
 
@@ -30,22 +31,69 @@ export const EditAIAgentPage: FC = () => {
     aiAgentID: agentID!,
     teamID: teamID!,
   })
-
   const addEditTipiTab = useAddEditTipisTab()
 
+  useEffect(() => {
+    if (agentID && !isError) {
+      addEditTipiTab(agentID)
+    }
+  }, [agentID, addEditTipiTab, isError])
+
+  const [cacheData, setCacheData] = useState<undefined | Agent>(undefined)
+
+  useEffect(() => {
+    const getHistoryDataAndSetFormData = async () => {
+      if (!agentID) return
+      const historyTabs = getRecentTabInfos(store.getState())
+      const currentTab = historyTabs.find((tab) => tab.cacheID === agentID)
+      if (!currentTab) return
+      const teamID = getCurrentId(store.getState())!
+      const formData = (await getFormDataByTabID(teamID, currentTab.tabID)) as
+        | Agent
+        | undefined
+
+      if (formData) {
+        setCacheData(formData)
+      }
+    }
+    getHistoryDataAndSetFormData()
+  }, [agentID])
+
+  if (isError) return <Navigate to="/500" />
+  if (isLoading) return <FullSectionLoading />
+
+  return data ? (
+    <EditAIAgentPage originAgent={data} cacheData={cacheData} />
+  ) : null
+}
+
+const EditAIAgentPage: FC<{
+  cacheData: Agent | undefined
+  originAgent: Agent
+}> = (props) => {
+  const { originAgent, cacheData } = props
+  const { agentID } = useParams()
+  const teamID = useSelector(getCurrentId)
+
   const methods = useForm<IAgentForm>({
-    values: data
-      ? {
-          ...data,
-        }
-      : AgentInitial,
+    defaultValues: originAgent,
   })
 
-  const { getValues, reset } = methods
-  const isDirty = methods.formState.isDirty
+  const { control, reset } = methods
+
+  useEffect(() => {
+    if (cacheData) {
+      reset(cacheData, {
+        keepDefaultValues: true,
+      })
+    }
+  }, [cacheData, reset])
+
+  const values = useWatch({
+    control,
+  })
 
   const setUiHistoryFormData = useCallback(async () => {
-    const values = getValues()
     if (!agentID) return
     const historyTabs = getRecentTabInfos(store.getState())
     const currentTab = historyTabs.find((tab) => tab.cacheID === agentID)
@@ -55,32 +103,13 @@ export const EditAIAgentPage: FC = () => {
       await setFormDataByTabID(teamID!, currentTab.tabID, {
         ...formData,
         ...values,
-        formIsDirty: isDirty,
       })
     } else {
       await setFormDataByTabID(teamID!, currentTab.tabID, {
         ...values,
-        formIsDirty: isDirty,
       })
     }
-  }, [agentID, getValues, isDirty, teamID])
-
-  useEffect(() => {
-    const getHistoryDataAndSetFormData = async () => {
-      if (!agentID) return
-      const historyTabs = getRecentTabInfos(store.getState())
-      const currentTab = historyTabs.find((tab) => tab.cacheID === agentID)
-      if (!currentTab) return
-      const teamID = getCurrentId(store.getState())!
-      const formData = await getFormDataByTabID(teamID, currentTab.tabID)
-      if (formData) {
-        reset(formData, {
-          keepDirty: true,
-        })
-      }
-    }
-    getHistoryDataAndSetFormData()
-  }, [agentID, reset])
+  }, [agentID, teamID, values])
 
   useBeforeUnload(setUiHistoryFormData)
 
@@ -90,25 +119,16 @@ export const EditAIAgentPage: FC = () => {
     }
   }, [setUiHistoryFormData])
 
-  useEffect(() => {
-    if (agentID) {
-      addEditTipiTab(agentID)
-    }
-  }, [agentID, addEditTipiTab])
-
-  if (isError) return <Navigate to="/500" />
-  if (isLoading) return <FullSectionLoading />
-
-  return data ? (
-    <FormProvider {...methods}>
-      <TipisWebSocketProvider key={agentID}>
+  return (
+    <FormProvider {...methods} key={agentID}>
+      <TipisWebSocketProvider>
         <AgentWSProvider>
           <FormContext>
             <UploadContextProvider>
               <LayoutAutoChange
                 desktopPage={
                   <WorkspacePCHeaderLayout
-                    title={data.name}
+                    title={values.name!}
                     extra={<HeaderTools />}
                   />
                 }
@@ -119,8 +139,8 @@ export const EditAIAgentPage: FC = () => {
         </AgentWSProvider>
       </TipisWebSocketProvider>
     </FormProvider>
-  ) : null
+  )
 }
 
-EditAIAgentPage.displayName = "AIAgentRun"
-export default EditAIAgentPage
+EditAIAgentGetValuePage.displayName = "EditAIAgentGetValuePage"
+export default EditAIAgentGetValuePage

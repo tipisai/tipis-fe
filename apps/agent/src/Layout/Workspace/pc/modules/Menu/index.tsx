@@ -37,9 +37,7 @@ const PCWorkspaceMenu: FC = () => {
   const handleClickCloseAll = () => {
     const onOkModal = async () => {
       await closeAll()
-      setTimeout(() => {
-        navigate(getChatPath(currentTeamInfo?.identifier ?? ""))
-      }, 180)
+      navigate(getChatPath(currentTeamInfo?.identifier ?? ""))
     }
     modal.confirm({
       content: t("homepage.edit_tipi.modal.not_save_desc"),
