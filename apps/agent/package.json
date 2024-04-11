@@ -20,6 +20,7 @@
     "@types/qs": "^6.9.12",
     "@types/react-syntax-highlighter": "^15.5.11",
     "@types/uuid": "^9.0.8",
+    "cross-env": "^7.0.3",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-visualizer": "^5.12.0"
   },

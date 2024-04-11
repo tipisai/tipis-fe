@@ -2,6 +2,7 @@ import Icon from "@ant-design/icons"
 import { Button, Dropdown, MenuProps } from "antd"
 import { FC, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { v4 } from "uuid"
 import { InfoIcon, MoreIcon, PenIcon, ShareIcon } from "@illa-public/icon"
 import {
   InviteMember,
@@ -108,7 +109,7 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
           currentUserRole={currentUserRole}
         >
           <InviteMember
-            redirectURL={`${getILLACloudURL()}${getRunTipiPath(currentTeamInfo.identifier, agentID)}`}
+            redirectURL={`${getILLACloudURL()}${getRunTipiPath(currentTeamInfo.identifier, agentID, v4())}`}
             onCopyInviteLink={(link) => {
               copyToClipboard(
                 t("user_management.modal.custom_copy_text_agent_invite", {

@@ -120,7 +120,7 @@ export const genTabNavigateLink = (
     case TAB_TYPE.EDIT_TIPIS:
       return getEditTipiPath(teamIdentifier, cacheID)
     case TAB_TYPE.RUN_TIPIS:
-      return `${getRunTipiPath(teamIdentifier, cacheID)}/${tabID ? tabID : ""}`
+      return `${getRunTipiPath(teamIdentifier, cacheID, tabID)}`
     case TAB_TYPE.CHAT:
       return getChatPath(teamIdentifier, cacheID)
     case TAB_TYPE.CREATE_FUNCTION:

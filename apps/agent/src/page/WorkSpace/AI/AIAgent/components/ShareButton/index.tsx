@@ -10,7 +10,9 @@ import {
 } from "@illa-public/new-invite-modal"
 import { Agent, USER_ROLE } from "@illa-public/public-types"
 import { useGetUserInfoQuery } from "@illa-public/user-data"
+import { getILLACloudURL } from "@illa-public/utils"
 import { copyToClipboard } from "@/utils/copyToClipboard"
+import { getEditTipiPath } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 
 const ShareButton: FC = () => {
@@ -45,12 +47,13 @@ const ShareButton: FC = () => {
       {shareDialogVisible && currentTeamInfo && currentUserInfo && (
         <InviteMemberProvider
           defaultAllowInviteLink={currentTeamInfo.permission.inviteLinkEnabled}
-          defaultInviteUserRole={USER_ROLE.VIEWER}
+          defaultInviteUserRole={USER_ROLE.EDITOR}
           teamID={currentTeamInfo?.id ?? ""}
           currentUserRole={currentUserRole}
         >
           <InviteMember
-            redirectURL={""}
+            redirectURL={`${getILLACloudURL()}${getEditTipiPath(currentTeamInfo.identifier, aiAgentID)}`}
+            excludeUserRole={[USER_ROLE.VIEWER]}
             onCopyInviteLink={(link) => {
               copyToClipboard(
                 t("user_management.modal.custom_copy_text_agent_invite", {
