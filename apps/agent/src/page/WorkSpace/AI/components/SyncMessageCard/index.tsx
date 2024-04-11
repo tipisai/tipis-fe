@@ -23,6 +23,7 @@ import {
   infoDescStyle,
   infoTextContainerStyle,
   infoTitleStyle,
+  inlineLineStyle,
   lineContainerStyle,
   lineStyle,
   lottieLoadingStyle,
@@ -141,7 +142,7 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
             {errorInfo && (
               <>
                 <div css={errorInfoLineStyle}>
-                  <div css={lineStyle} />
+                  <div css={inlineLineStyle} />
                 </div>
                 <span css={responseStyle}>
                   {t("homepage.tipi_chat.response.resonse")}
