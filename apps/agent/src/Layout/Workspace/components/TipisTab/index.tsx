@@ -6,14 +6,15 @@ import { useDispatch, useSelector } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom"
 import { MinusIcon } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
+import { IAgentForm } from "@/page/WorkSpace/AI/AIAgent/interface"
 import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
-import { getUiHistoryDataByCacheID } from "@/utils/localForage/teamData"
 import { useRemoveRecentTabReducer } from "@/utils/recentTabs/baseHook"
 import { getChatPath } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
+import { getFormDataByTabID } from "../../../../utils/localForage/teamData"
 import { ITipsTab } from "./interface"
 import {
   deleteButtonContainerStyle,
@@ -25,9 +26,9 @@ import {
 import { genTabNavigateLink, getIconByTabInfo, useGetTabName } from "./utils"
 
 const shouldModelTipTabTypes = [
-  TAB_TYPE.CREATE_FUNCTION,
+  // TAB_TYPE.CREATE_FUNCTION,
   TAB_TYPE.CREATE_TIPIS,
-  TAB_TYPE.EDIT_FUNCTION,
+  // TAB_TYPE.EDIT_FUNCTION,
   TAB_TYPE.EDIT_TIPIS,
 ]
 
@@ -69,11 +70,11 @@ const TipisTab: FC<ITipsTab> = (props) => {
       }, 180)
     }
     if (shouldModelTipTabTypes.includes(tabType)) {
-      const uiHistoryData = await getUiHistoryDataByCacheID(
+      const formData = (await getFormDataByTabID(
         currentTeamInfo?.id ?? "",
-        cacheID,
-      )
-      const isDirty = uiHistoryData?.formData?.formIsDirty
+        tabID,
+      )) as IAgentForm
+      const isDirty = formData?.formIsDirty
       if (isDirty || tabType === TAB_TYPE.CREATE_TIPIS) {
         modal.confirm({
           content: t("homepage.edit_tipi.modal.not_save_desc"),

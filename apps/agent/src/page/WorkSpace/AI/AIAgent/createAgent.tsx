@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect } from "react"
-import { FormProvider, useForm, useWatch } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useBeforeUnload } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
@@ -7,10 +7,10 @@ import { getCurrentId } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
 import store from "@/redux/store"
+import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import {
-  getTargetTab,
-  getUiHistoryDataByCacheID,
-  setUiHistoryData,
+  getFormDataByTabID,
+  setFormDataByTabID,
 } from "@/utils/localForage/teamData"
 import { CREATE_TIPIS_ID } from "@/utils/recentTabs/constants"
 import { useAddCreateTipisTab } from "@/utils/recentTabs/hook"
@@ -29,52 +29,38 @@ export const CreateAIAgentPage: FC = () => {
   }, [createTipiTab])
 
   const methods = useForm<IAgentForm>({
-    values: {
-      ...AgentInitial,
-      cacheID: CREATE_TIPIS_ID!,
-    },
+    values: AgentInitial,
   })
 
-  const { reset } = methods
-
-  const values = useWatch({
-    control: methods.control,
-  })
+  const { reset, getValues } = methods
 
   const { t } = useTranslation()
 
   const setUiHistoryFormData = useCallback(async () => {
-    const cacheID = CREATE_TIPIS_ID
+    const tabID = CREATE_TIPIS_ID
     const teamID = getCurrentId(store.getState())!
-    const tab = await getTargetTab(teamID, cacheID)
-    if (!tab) return
-    const uiHistoryData = await getUiHistoryDataByCacheID(teamID, cacheID)
-    if (uiHistoryData) {
-      const { formData } = uiHistoryData
-      setUiHistoryData(teamID, cacheID!, {
-        ...uiHistoryData,
-        formData: {
-          ...(formData as IAgentForm),
-          ...(values as IAgentForm),
-        },
+    const historyTabs = getRecentTabInfos(store.getState())
+    const currentTab = historyTabs.find((tab) => tab.tabID === tabID)
+    if (!currentTab) return
+    const formData = await getFormDataByTabID(teamID, tabID)
+    const values = getValues()
+    if (formData) {
+      await setFormDataByTabID(teamID, tabID, {
+        ...formData,
+        ...values,
       })
     } else {
-      setUiHistoryData(teamID, cacheID!, {
-        formData: values as IAgentForm,
-      })
+      await setFormDataByTabID(teamID, tabID, values)
     }
-  }, [values])
+  }, [getValues])
 
   useEffect(() => {
     const getHistoryDataAndSetFormData = async () => {
-      const cacheID = CREATE_TIPIS_ID
+      const tabID = CREATE_TIPIS_ID
       const teamID = getCurrentId(store.getState())!
-      const uiHistoryData = await getUiHistoryDataByCacheID(teamID, cacheID)
-      if (uiHistoryData) {
-        const { formData } = uiHistoryData
-        if (formData) {
-          reset(formData as IAgentForm)
-        }
+      const formData = await getFormDataByTabID(teamID, tabID)
+      if (formData) {
+        reset(formData)
       }
     }
     getHistoryDataAndSetFormData()

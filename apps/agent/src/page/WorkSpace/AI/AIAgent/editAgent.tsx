@@ -1,5 +1,5 @@
-import { FC, useCallback, useEffect, useMemo } from "react"
-import { FormProvider, useForm, useWatch } from "react-hook-form"
+import { FC, useCallback, useEffect } from "react"
+import { FormProvider, useForm } from "react-hook-form"
 import { useSelector } from "react-redux"
 import { Navigate, useBeforeUnload, useParams } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
@@ -9,9 +9,10 @@ import FullSectionLoading from "@/components/FullSectionLoading"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
 import { useGetAgentDetailQuery } from "@/redux/services/agentAPI"
 import store from "@/redux/store"
+import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import {
-  getUiHistoryDataByCacheID,
-  setUiHistoryData,
+  getFormDataByTabID,
+  setFormDataByTabID,
 } from "@/utils/localForage/teamData"
 import { useAddEditTipisTab } from "@/utils/recentTabs/hook"
 import { AgentWSProvider } from "../context/AgentWSContext"
@@ -32,80 +33,54 @@ export const EditAIAgentPage: FC = () => {
 
   const addEditTipiTab = useAddEditTipisTab()
 
-  const initAgent = useMemo(
-    () => ({
-      ...AgentInitial,
-      cacheID: agentID!,
-    }),
-    [agentID],
-  )
-
   const methods = useForm<IAgentForm>({
     values: data
       ? {
           ...data,
-          cacheID: data.aiAgentID,
         }
-      : initAgent,
+      : AgentInitial,
   })
 
+  const { getValues, reset } = methods
   const isDirty = methods.formState.isDirty
 
-  const values = useWatch({
-    control: methods.control,
-  })
-
   const setUiHistoryFormData = useCallback(async () => {
-    const cacheID = values.cacheID!
-    const uiHistoryData = await getUiHistoryDataByCacheID(teamID!, cacheID)
-
-    if (uiHistoryData) {
-      const { formData } = uiHistoryData
-      if (values.aiAgentID) {
-        setUiHistoryData(teamID!, cacheID!, {
-          ...uiHistoryData,
-          formData: {
-            ...(formData as IAgentForm),
-            ...(values as IAgentForm),
-            formIsDirty: isDirty,
-          },
-        })
-      }
+    const values = getValues()
+    if (!agentID) return
+    const historyTabs = getRecentTabInfos(store.getState())
+    const currentTab = historyTabs.find((tab) => tab.cacheID === agentID)
+    if (!currentTab) return
+    const formData = await getFormDataByTabID(teamID!, currentTab.tabID)
+    if (formData) {
+      await setFormDataByTabID(teamID!, currentTab.tabID, {
+        ...formData,
+        ...values,
+        formIsDirty: isDirty,
+      })
     } else {
-      if (values.aiAgentID) {
-        setUiHistoryData(teamID!, cacheID!, {
-          formData: {
-            ...(values as IAgentForm),
-            formIsDirty: isDirty,
-          },
-        })
-      }
+      await setFormDataByTabID(teamID!, currentTab.tabID, {
+        ...values,
+        formIsDirty: isDirty,
+      })
     }
-  }, [isDirty, teamID, values])
-  const { reset } = methods
+  }, [agentID, getValues, isDirty, teamID])
 
   useEffect(() => {
     const getHistoryDataAndSetFormData = async () => {
-      const cacheID = values.aiAgentID!
+      if (!agentID) return
+      const historyTabs = getRecentTabInfos(store.getState())
+      const currentTab = historyTabs.find((tab) => tab.cacheID === agentID)
+      if (!currentTab) return
       const teamID = getCurrentId(store.getState())!
-      const uiHistoryData = await getUiHistoryDataByCacheID(teamID, cacheID)
-      if (uiHistoryData) {
-        const { formData } = uiHistoryData
-        if (formData) {
-          reset(
-            {
-              ...formData,
-              cacheID: (formData as IAgentForm).aiAgentID,
-            },
-            {
-              keepDirty: true,
-            },
-          )
-        }
+      const formData = await getFormDataByTabID(teamID, currentTab.tabID)
+      if (formData) {
+        reset(formData, {
+          keepDirty: true,
+        })
       }
     }
     getHistoryDataAndSetFormData()
-  }, [reset, values.aiAgentID])
+  }, [agentID, reset])
 
   useBeforeUnload(setUiHistoryFormData)
 

@@ -23,12 +23,7 @@ import { MarketplaceInfoProvider } from "./contexts/MarketplaceInfoContext"
 export const NotContributedAgent: FC = () => {
   const { data, isLoading, isError, isSuccess } = useGetNotContributeTipDetail()
   const methods = useForm<IAgentForm>({
-    values: data
-      ? {
-          ...data,
-          cacheID: data.aiAgentID,
-        }
-      : AgentInitial,
+    values: data ? data : AgentInitial,
   })
 
   const { tabID } = useParams()

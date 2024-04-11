@@ -11,11 +11,10 @@ import {
   useGetAgentIconUploadAddressMutation,
   usePutAgentDetailMutation,
 } from "@/redux/services/agentAPI"
-import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { fetchUploadBase64 } from "@/utils/file"
-import { updateUiHistoryData } from "@/utils/localForage/teamData"
-import { useUpdateRecentTabReducer } from "@/utils/recentTabs/baseHook"
-import { useCreateTipiToEditTipi } from "@/utils/recentTabs/hook"
+import { CREATE_TIPIS_ID } from "@/utils/recentTabs/constants"
+import { useUpdateCreateTipiTabToEditTipiTab } from "@/utils/recentTabs/hook"
+import { deleteFormDataByTabID } from "../../../../utils/localForage/teamData"
 import { AgentInitial, IAgentForm } from "./interface"
 
 export const handleScrollToElement = (scrollId: string) => {
@@ -31,11 +30,10 @@ export const useSubmitSaveAgent = () => {
   const [getAgentIconUploadAddress] = useGetAgentIconUploadAddressMutation()
   const [putAgentDetail] = usePutAgentDetailMutation()
   const [createAgent] = useCreateAgentMutation()
-  const changeCreateToEdit = useCreateTipiToEditTipi()
+  const updateCreateTipiTabToEditTipiTab = useUpdateCreateTipiTabToEditTipiTab()
 
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const { reset } = useFormContext<IAgentForm>()
-  const updateTabInfo = useUpdateRecentTabReducer()
 
   const handleSubmitSave = useCallback(
     async (data: IAgentForm) => {
@@ -74,7 +72,11 @@ export const useSubmitSaveAgent = () => {
               ),
             },
           }).unwrap()
-          await changeCreateToEdit(currentData.cacheID, serverAgent.aiAgentID)
+          await deleteFormDataByTabID(currentTeamInfo.id, CREATE_TIPIS_ID)
+          await updateCreateTipiTabToEditTipiTab(
+            CREATE_TIPIS_ID,
+            serverAgent.aiAgentID,
+          )
           agentInfo = serverAgent
         } else {
           const serverAgent = await putAgentDetail({
@@ -110,29 +112,10 @@ export const useSubmitSaveAgent = () => {
         if (!currentData.aiAgentID) {
           reset({
             ...newFormData,
-            cacheID: newFormData.aiAgentID,
             formIsDirty: false,
           })
         }
-        await updateTabInfo(data.cacheID, {
-          tabName: newFormData.name,
-          tabIcon: newFormData.icon,
-          tabType: TAB_TYPE.EDIT_TIPIS,
-          cacheID: newFormData.aiAgentID,
-        })
 
-        await updateUiHistoryData(
-          currentTeamInfo.id,
-          newFormData.aiAgentID,
-          newFormData.aiAgentID,
-          {
-            formData: {
-              ...newFormData,
-              cacheID: newFormData.aiAgentID,
-              formIsDirty: false,
-            },
-          },
-        )
         message.success({
           content: t("dashboard.message.create-suc"),
         })
@@ -144,7 +127,7 @@ export const useSubmitSaveAgent = () => {
       }
     },
     [
-      changeCreateToEdit,
+      updateCreateTipiTabToEditTipiTab,
       createAgent,
       currentTeamInfo.id,
       getAgentIconUploadAddress,
@@ -152,7 +135,6 @@ export const useSubmitSaveAgent = () => {
       putAgentDetail,
       reset,
       t,
-      updateTabInfo,
     ],
   )
 
