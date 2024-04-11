@@ -28,10 +28,6 @@ import {
 const CreditCardPC: FC<CreditCardProps> = ({ openCreditDrawer }) => {
   const { t } = useTranslation()
   const [cycle, setCycle] = useState(SUBSCRIPTION_CYCLE.MONTHLY)
-  const price =
-    cycle === SUBSCRIPTION_CYCLE.MONTHLY
-      ? CREDIT_UNIT_PRICE[cycle]
-      : (CREDIT_UNIT_PRICE[cycle] / 12).toFixed(1)
 
   return (
     <div css={containerStyle}>
@@ -66,7 +62,7 @@ const CreditCardPC: FC<CreditCardProps> = ({ openCreditDrawer }) => {
         <CollaCardPcBg css={bgStyle} />
         <div css={cardHeaderStyle}>
           <div css={priceStyle}>
-            <span css={priceNumStyle}>${price}</span>
+            <span css={priceNumStyle}>${CREDIT_UNIT_PRICE[cycle]}</span>
             <span css={priceUnitStyle}>
               {cycle === SUBSCRIPTION_CYCLE.MONTHLY
                 ? t("tipi_billing.monthly_price_unit")
