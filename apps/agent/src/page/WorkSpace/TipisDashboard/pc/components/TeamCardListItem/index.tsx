@@ -85,7 +85,10 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
     TipisTrack.track("click_edit_tipi_entry", {
       parameter1: "dashboard",
     })
-    navigateToEditTIpis(id)
+    navigateToEditTIpis({
+      tipisID: id,
+      tipisName: title,
+    })
   }
 
   const onClickRunButton: MouseEventHandler<HTMLElement> = (e) => {
