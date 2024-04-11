@@ -34,7 +34,7 @@ const InputVariables: FC = () => {
     changeIsModalOpen(false)
     changeCanOpenModal(false)
     const currentTeamID = getCurrentId(store.getState())!
-    await removeChatMessageAndUIState(currentTeamID, tabID!, "run")
+    await removeChatMessageAndUIState(currentTeamID, tabID!)
     isRunning ? await reconnect() : await connect()
     reset(lastRunAgent.current)
   }

@@ -34,7 +34,7 @@ const StartButton: FC = () => {
     } else {
       if (isRunning) {
         const currentTeamID = getCurrentId(store.getState())!
-        await removeChatMessageAndUIState(currentTeamID, tabID!, "run")
+        await removeChatMessageAndUIState(currentTeamID, tabID!)
         reconnect()
       } else {
         connect()

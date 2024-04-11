@@ -79,8 +79,8 @@ export const useNavigateToCreateTipis = () => {
   const currentTeamInfo = useGetCurrentTeamInfo()
   const addCreateTipisTab = useAddCreateTipisTab()
 
-  const navigateToCreteTipis = useCallback(() => {
-    addCreateTipisTab()
+  const navigateToCreteTipis = useCallback(async () => {
+    await addCreateTipisTab()
     if (currentTeamInfo?.identifier) {
       navigate(getCreateTipiPath(currentTeamInfo?.identifier))
     }
@@ -171,8 +171,8 @@ export const useNavigateToNewChat = () => {
   const addChatTab = useAddChatTab()
 
   const navigateToChat = useCallback(
-    (chatID: string) => {
-      addChatTab(chatID)
+    async (chatID: string) => {
+      await addChatTab(chatID)
       if (currentTeamInfo?.identifier) {
         navigate(getChatPath(currentTeamInfo.identifier, chatID))
       }
@@ -187,8 +187,8 @@ export const useNavigateToExploreTipis = () => {
   const currentTeamInfo = useGetCurrentTeamInfo()
   const addExploreTipisTab = useAddExploreTipisTab()
 
-  const navigateToExploreTipis = useCallback(() => {
-    addExploreTipisTab()
+  const navigateToExploreTipis = useCallback(async () => {
+    await addExploreTipisTab()
     if (currentTeamInfo?.identifier) {
       navigate(getExploreTipisPath(currentTeamInfo.identifier))
     }
@@ -201,8 +201,8 @@ export const useNavigateToExploreFunction = () => {
   const currentTeamInfo = useGetCurrentTeamInfo()
   const addExploreFunctionTab = useAddExploreFunctionsTab()
 
-  const navigateToExploreTipis = useCallback(() => {
-    addExploreFunctionTab()
+  const navigateToExploreTipis = useCallback(async () => {
+    await addExploreFunctionTab()
     if (currentTeamInfo?.identifier) {
       navigate(getExploreFunctionsPath(currentTeamInfo.identifier))
     }

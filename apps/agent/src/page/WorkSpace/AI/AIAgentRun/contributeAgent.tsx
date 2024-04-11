@@ -41,12 +41,7 @@ export const ContributedAgent: FC = () => {
   }, [addAgentRunTab, contributeAgentDetail, tabID])
 
   const methods = useForm<IAgentForm>({
-    values: contributeAgentDetail
-      ? {
-          ...contributeAgentDetail,
-          cacheID: contributeAgentDetail.aiAgentID,
-        }
-      : AgentInitial,
+    values: contributeAgentDetail ? contributeAgentDetail : AgentInitial,
   })
 
   if (isLoading) {

@@ -14,7 +14,6 @@ export interface IAgentForm
     | "updatedAt"
     | "editedBy"
   > {
-  cacheID: string
   formIsDirty?: boolean
 }
 
@@ -31,7 +30,6 @@ export const AgentInitial: IAgentForm = {
   icon: "https://cdn.tipis.ai/tipis/default-tipi-icon.png",
   description: "",
   aiAgentID: "",
-  cacheID: "",
 }
 
 export enum SCROLL_ID {

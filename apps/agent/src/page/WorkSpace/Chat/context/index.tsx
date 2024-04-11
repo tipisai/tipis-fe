@@ -231,7 +231,6 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     const { chatMessageData, uiChatMessage } = await getChatMessageAndUIState(
       teamID,
       chatID,
-      "run",
     )
     if (
       Array.isArray(uiChatMessage) &&
@@ -241,6 +240,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     ) {
       setChatMessages(uiChatMessage)
       chatMessagesRef.current = uiChatMessage
+      cacheChatMessages.current = chatMessageData
       const textMessage = getTextMessagePayload(
         TextSignal.RECOVER_HISTORY_MESSAGE,
         TextTarget.ACTION,
@@ -258,6 +258,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     }
     setChatMessages([])
     chatMessagesRef.current = []
+    cacheChatMessages.current = []
     startSendMessage(
       {} as ChatSendRequestPayload,
       TextSignal.CLEAN_CHAT_HISTORY,
@@ -406,7 +407,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     cleanMessage()
     setChatMessages([])
     chatMessagesRef.current = []
-    await removeChatMessageAndUIState(teamID, chatID, "run")
+    await removeChatMessageAndUIState(teamID, chatID)
   }, [chatID, cleanMessage, startSendMessage, teamID])
 
   const stableValue = useMemo(() => {
@@ -444,7 +445,6 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       setChatMessageAndUIState(
         teamID,
         chatID,
-        "run",
         uiMessageList,
         cacheChatMessages.current,
       )
