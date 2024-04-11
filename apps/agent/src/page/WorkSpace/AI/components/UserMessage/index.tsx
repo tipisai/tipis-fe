@@ -13,7 +13,7 @@ import {
 import ShowFiles from "./ShowFiles"
 
 export const UserMessage: FC<UserMessageProps> = (props) => {
-  const { message, isMobile } = props
+  const { message, isMobile, isReceiving } = props
   const { data: currentUserInfo } = useGetUserInfoQuery(null)
 
   return (
@@ -26,7 +26,11 @@ export const UserMessage: FC<UserMessageProps> = (props) => {
           )}
         {message.message && (
           <div css={messageContainerStyle}>
-            <MarkdownMessage isOwnMessage disableTrigger={isMobile}>
+            <MarkdownMessage
+              isOwnMessage
+              disableTrigger={isMobile}
+              isReceiving={isReceiving}
+            >
               {message.message}
             </MarkdownMessage>
           </div>
