@@ -14,6 +14,7 @@ import { OAuthButton } from "../../components/OAuthButton"
 import { CAN_SHOW_OAUTH, EMAIL_FORMAT } from "../../constants"
 import { RegisterFields } from "../../interface"
 import { getValidReportParamsFromRegister } from "../../utils"
+import { CREATE_BUTTON_CLASS_NAME } from "../constants"
 import { RegisterProps } from "../interface"
 import {
   containerStyle,
@@ -275,6 +276,7 @@ export const PCRegister: FC<RegisterProps> = (props) => {
           loading={loading}
           htmlType="submit"
           block
+          className={CREATE_BUTTON_CLASS_NAME}
           onClick={validReport}
         >
           {t("page.user.sign_up.actions.create")}
