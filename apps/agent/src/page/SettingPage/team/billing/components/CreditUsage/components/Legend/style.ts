@@ -11,7 +11,7 @@ export const legendContainerStyle = css`
   ${applyMobileStyle(css`
     width: 100%;
     justify-content: center;
-    gap: 0;
+    gap: 24px;
   `)}
 `
 
