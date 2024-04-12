@@ -24,7 +24,7 @@ import {
   chatIconStyle,
   menuItemButtonCustomIconContainerStyle,
   menuItemButtonIconContainerStyle,
-} from "./style"
+} from "./pc/style"
 
 export const getIconByTabInfo = (icon: string, tabType: TAB_TYPE) => {
   if (icon) {

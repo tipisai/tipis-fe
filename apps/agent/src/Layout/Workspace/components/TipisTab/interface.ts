@@ -1,10 +1,9 @@
 import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 
-export interface ITipsTab {
+export interface ITipisTabProps {
   icon: string
   tabType: TAB_TYPE
   tabName: string
   tabID: string
   cacheID: string
-  isMiniSize: boolean
 }

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom"
 import { useGetTeamsInfoQuery } from "@illa-public/user-data"
 import FeatureArea from "@/Layout/Workspace/modules/FeatureArea"
 import MenuFooter from "@/Layout/Workspace/modules/MenuFooter"
-import RecentTabs from "@/Layout/Workspace/modules/RecentTabs"
+import PCRecentTabs from "@/Layout/Workspace/modules/RecentTabs/pc"
 import TeamSelectAndInviteButton from "@/Layout/Workspace/modules/TeamSelectAndInviteButton"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { useRemoveAllRecentTabReducer } from "@/utils/recentTabs/baseHook"
@@ -93,7 +93,7 @@ const PCWorkspaceMenu: FC = () => {
                       </Divider>
                     </ConfigProvider>
                   </div>
-                  <RecentTabs isMiniSize={false} />
+                  <PCRecentTabs isMiniSize={false} />
                 </>
               )}
             </div>
