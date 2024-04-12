@@ -228,9 +228,6 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       return
     }
 
-    console.log("initTeamID", teamID)
-    console.log("initChatID", chatID)
-
     const { chatMessageData, uiChatMessage } = await getChatMessageAndUIState(
       teamID,
       chatID,
@@ -452,9 +449,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
   const setCacheState = useCallback(() => {
     if (chatID && teamID && chatMessagesRef.current.length > 0) {
       const uiMessageList = getNeedCacheUIMessage(chatMessagesRef.current)
-      console.log("chatID", chatID)
-      console.log("teamID", teamID)
-      console.log("cacheChatMessages.current", cacheChatMessages.current)
+
       setChatMessageAndUIState(
         teamID,
         chatID,
