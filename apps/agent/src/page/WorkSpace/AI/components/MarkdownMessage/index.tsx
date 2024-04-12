@@ -16,6 +16,7 @@ import remarkGfm from "remark-gfm"
 import { MarkdownMessageProps } from "@/page/WorkSpace/AI/components/MarkdownMessage/interface"
 import {
   cellStyle,
+  listStyle,
   markdownMessageContainerStyle,
   markdownMessageStyle,
   tableStyle,
@@ -38,6 +39,8 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
               {children}
             </Typography.Title>
           ),
+          ol: ({ children }) => <ol css={listStyle}>{children}</ol>,
+          ul: ({ children }) => <ul css={listStyle}>{children}</ul>,
           h2: ({ children }) => (
             <Typography.Title level={2} style={{ margin: "18px 0" }}>
               {children}
