@@ -78,7 +78,7 @@ jobs:
 
       - name: Build Docker
         run: |
-          docker build --cache-from=tipisai-fe -f Dockerfile -t tipisai-fe
+          docker build --cache-from=tipisai-fe -f Dockerfile -t tipisai-fe .
 
       - name: Push application Docker image
         run: |
