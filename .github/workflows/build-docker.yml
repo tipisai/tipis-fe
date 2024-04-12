@@ -47,6 +47,57 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build website
+        run: |
+          echo "Building for $GITHUB_REF_NAME branch,ILLA APP ENV is $ILLA_APP_ENV"
+          pnpm build
+
+      - name: Compress tipis
+        run: |
+          tar -czvf tipis-fe.tar.gz ./apps/agent/dist ./nginx.conf ./Dockerfile ./tipisai-frontend.conf
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: tipis-fe.tar.gz
+
+  build-docker:
+    needs: build
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts
+
+      - name: Load build artifacts
+        run: |
+          tar -xzvf tipis-fe.tar.gz
+
+      - name: Build Docker
+        run: |
+          docker build --cache-from=tipisai-fe -f Dockerfile -t tipisai-fe
+
+      - name: Push application Docker image
+        run: |
+          docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
+          docker tag tipisai-fe "illasoft/tipisai-fe:$GITHUB_REF_NAME"
+          docker push "illasoft/tipisai-fe:$GITHUB_REF_NAME"
+
+  deploy:
+    needs: build-docker
+    name: Deploy to k8s
+    runs-on: ubuntu-latest
+    environment:
+      name:
+        ${{ (github.ref == 'refs/heads/main') && 'production' || (github.ref ==
+        'refs/heads/develop') && 'test' || (github.ref == 'refs/heads/beta') &&
+        'beta' }}
+    env:
+      ILLA_APP_ENV: ${{ vars.ILLA_APP_ENV }}
+    steps:
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
@@ -60,21 +111,6 @@ jobs:
         run: |
           doctl kubernetes cluster kubeconfig save $DO_CLUSTER
           kubectl version
-
-      - name: Build website
-        run: |
-          echo "Building for $GITHUB_REF_NAME branch,ILLA APP ENV is $ILLA_APP_ENV"
-          pnpm build
-      - name: Build Docker
-        run: |
-          docker build --cache-from=tipisai-fe -f Dockerfile -t tipisai-fe .
-
-      - name: Push application Docker image
-        run: |
-          docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
-          docker tag tipisai-fe "illasoft/tipisai-fe:$GITHUB_REF_NAME"
-          docker push "illasoft/tipisai-fe:$GITHUB_REF_NAME"
-
       - name: Deploy to Kubernetes
         run: |
           kubectl -n $ILLA_APP_ENV rollout restart deployment tipisai-cloud-frontend
