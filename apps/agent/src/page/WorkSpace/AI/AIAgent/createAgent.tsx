@@ -78,7 +78,7 @@ export const CreateAIAgentPage: FC = () => {
   return (
     <FormProvider {...methods} key={CREATE_TIPIS_ID}>
       <TipisWebSocketProvider>
-        <AgentWSProvider>
+        <AgentWSProvider tabID={CREATE_TIPIS_ID}>
           <FormContext>
             <UploadContextProvider>
               <LayoutAutoChange

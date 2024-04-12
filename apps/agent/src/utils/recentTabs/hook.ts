@@ -169,6 +169,8 @@ export const useUpdateCreateTipiTabToEditTipiTab = () => {
   return changeCreateTipiToEditTipi
 }
 
+export const useUpdateTipiTabsInfo = () => {}
+
 export const useAddTipisDetailTab = () => {
   const dispatch = useDispatch()
   const updateRecentTab = useUpdateRecentTabReducer()

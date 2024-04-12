@@ -20,7 +20,7 @@ const ChatPage: FC = () => {
 
   return (
     <TipisWebSocketProvider key={chatID}>
-      <ChatWSProvider key={chatID}>
+      <ChatWSProvider>
         <LayoutAutoChange
           desktopPage={<PCChatPage />}
           mobilePage={<MobileChatPage />}

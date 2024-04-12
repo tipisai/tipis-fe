@@ -20,6 +20,7 @@ import { IAgentForm } from "../../AIAgent/interface"
 
 export interface IAgentWSProviderProps {
   children: ReactNode
+  tabID: string
 }
 
 export interface IAgentWSInject
@@ -37,6 +38,7 @@ export interface IAgentWSInject
   connect: () => Promise<void>
   reconnect: () => Promise<void>
   sendMessage: IChatSendMessage
+  tabID: string
 }
 
 export interface ICachePayloadQueue {

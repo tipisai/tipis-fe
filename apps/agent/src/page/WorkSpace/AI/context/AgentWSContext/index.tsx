@@ -51,7 +51,6 @@ import {
   useLazyGetAIAgentWsAddressQuery,
 } from "@/redux/services/agentAPI"
 import store from "@/redux/store"
-import { getCurrentTabID } from "@/redux/ui/recentTab/selector"
 import {
   cancelPendingMessage,
   delayHandleTask,
@@ -74,7 +73,7 @@ import {
 export const AgentWSContext = createContext({} as IAgentWSInject)
 
 export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
-  const { children } = props
+  const { children, tabID } = props
 
   const { message: messageAPI } = App.useApp()
 
@@ -101,8 +100,6 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
   >([])
   const chatMessagesRef = useRef<(IGroupMessage | ChatMessage)[]>([])
   const cacheChatMessages = useRef<unknown[]>([])
-
-  const currentTabID = useSelector(getCurrentTabID)
 
   const setAndGetRunAgentConfig = useCallback(() => {
     lastRunAgent.current = getValues()
@@ -282,7 +279,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
 
     const { chatMessageData, uiChatMessage } = await getChatMessageAndUIState(
       teamID,
-      currentTabID,
+      tabID,
     )
 
     if (
@@ -318,7 +315,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       TextSignal.CLEAN_CHAT_HISTORY,
       SEND_MESSAGE_WS_TYPE.CLEAN,
     )
-  }, [currentTabID, sendMessage, startSendMessage, teamID])
+  }, [sendMessage, startSendMessage, tabID, teamID])
 
   const onMessageSuccessCallback = useCallback(
     (callback: Callback<unknown>) => {
@@ -515,35 +512,28 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
     cleanMessage()
     setChatMessages([])
     chatMessagesRef.current = []
-    await removeChatMessageAndUIState(teamID, currentTabID)
+    await removeChatMessageAndUIState(teamID, tabID)
     setAndGetRunAgentConfig()
-  }, [
-    teamID,
-    cleanMessage,
-    currentTabID,
-    setAndGetRunAgentConfig,
-    startSendMessage,
-  ])
+  }, [teamID, cleanMessage, tabID, setAndGetRunAgentConfig, startSendMessage])
 
   const setCacheState = useCallback(async () => {
     const wsStatus = getReadyState()
     if (
-      currentTabID &&
+      tabID &&
       teamID &&
       wsStatus !== WS_READYSTATE.CONNECTING &&
       wsStatus !== WS_READYSTATE.UNINITIALIZED &&
       !isConnecting
     ) {
       const uiMessageList = getNeedCacheUIMessage(chatMessagesRef.current)
-
       await setChatMessageAndUIState(
         teamID,
-        currentTabID,
+        tabID,
         uiMessageList,
         cacheChatMessages.current,
       )
     }
-  }, [currentTabID, getReadyState, isConnecting, teamID])
+  }, [getReadyState, isConnecting, tabID, teamID])
 
   useEffect(() => {
     return () => {
@@ -567,18 +557,20 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       inRoomUsers,
       setIsReceiving,
       leaveRoom: innerLeaveRoom,
+      tabID,
     }
   }, [
-    chatMessages,
-    inRoomUsers,
-    innerConnect,
-    innerLeaveRoom,
-    innerReconnect,
     chatSendMessage,
+    chatMessages,
+    innerReconnect,
+    innerConnect,
+    getReadyState,
     isConnecting,
     isReceiving,
     isRunning,
-    getReadyState,
+    inRoomUsers,
+    innerLeaveRoom,
+    tabID,
   ])
 
   return (

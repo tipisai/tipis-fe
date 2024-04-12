@@ -67,6 +67,25 @@ export const updateRecentTabReducer: CaseReducer<
   state.tabs = newTabs
 }
 
+export const batchUpdateRecentTabReducer: CaseReducer<
+  IRecentTabState,
+  PayloadAction<{
+    [oldTabID: string]: Partial<ITabInfo>
+  }>
+> = (state, action) => {
+  const newTabs = [...state.tabs].map((tab) => {
+    if (action.payload[tab.tabID]) {
+      return {
+        ...tab,
+        ...action.payload[tab.tabID],
+      }
+    }
+    return tab
+  })
+
+  state.tabs = newTabs
+}
+
 export const updateCurrentRecentTabIDReducer: CaseReducer<
   IRecentTabState,
   PayloadAction<string>

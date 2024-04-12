@@ -4,7 +4,6 @@ import { WS_READYSTATE } from "@illa-public/illa-web-socket"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { getCurrentId } from "@illa-public/user-data"
 import { getChatMessageAndUIState } from "@/utils/localForage/teamData"
-import { getCurrentTabID } from "../../../../redux/ui/recentTab/selector"
 import { ChatContext } from "../components/ChatContext"
 import { AgentWSContext } from "../context/AgentWSContext"
 import EditPanel from "./modules/EditPanel"
@@ -16,15 +15,14 @@ export const AIAgent: FC = () => {
 
   const teamID = useSelector(getCurrentId)!
 
-  const { inRoomUsers, getReadyState, leaveRoom, connect } =
+  const { inRoomUsers, getReadyState, leaveRoom, connect, tabID } =
     useContext(AgentWSContext)
-  const currentTabID = useSelector(getCurrentTabID)
 
   const initRunAgent = useCallback(async () => {
     const wsStatus = getReadyState()
     const { chatMessageData, uiChatMessage } = await getChatMessageAndUIState(
       teamID,
-      currentTabID,
+      tabID,
     )
     const hasChatHistory =
       Array.isArray(uiChatMessage) &&
@@ -39,7 +37,7 @@ export const AIAgent: FC = () => {
       connect()
       onlyConnectOnce.current = true
     }
-  }, [getReadyState, teamID, currentTabID, connect])
+  }, [getReadyState, teamID, tabID, connect])
 
   useEffect(() => {
     initRunAgent()
