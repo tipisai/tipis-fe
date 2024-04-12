@@ -41,7 +41,6 @@ const SettingLayout: FC<SettingLayoutProps> = (props) => {
   const showBilling = canManagePayment(
     currentTeamInfo?.myRole,
     getPlanUtils(currentTeamInfo),
-    currentTeamInfo?.totalTeamLicense?.teamLicenseAllPaid,
   )
 
   const isPurchased =

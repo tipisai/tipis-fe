@@ -24,7 +24,6 @@ export const BillingMobilePage = () => {
   const showBilling = canManagePayment(
     currentTeamInfo?.myRole,
     getPlanUtils(currentTeamInfo),
-    currentTeamInfo?.totalTeamLicense?.teamLicenseAllPaid,
   )
   const isPurchased = creditInfo?.plan !== SUBSCRIBE_PLAN.CREDIT_FREE
 

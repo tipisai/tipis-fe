@@ -44,7 +44,6 @@ const Entrance: FC = () => {
   const showBilling = canManagePayment(
     currentTeamInfo?.myRole,
     getPlanUtils(currentTeamInfo),
-    currentTeamInfo?.totalTeamLicense?.teamLicenseAllPaid,
   )
 
   const accountOptions = [
