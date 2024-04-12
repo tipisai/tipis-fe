@@ -1,6 +1,7 @@
 import Icon from "@ant-design/icons"
 import { Button } from "antd"
 import { FC } from "react"
+import { useTranslation } from "react-i18next"
 import { PreviousIcon } from "@illa-public/icon"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import { IDetailLayoutProps } from "./interface"
@@ -11,6 +12,7 @@ import {
 } from "./style"
 
 const DetailLayout: FC<IDetailLayoutProps> = (props) => {
+  const { t } = useTranslation()
   return (
     <div css={tipiDetailContainerStyle}>
       <WorkspacePCHeaderLayout
@@ -24,7 +26,7 @@ const DetailLayout: FC<IDetailLayoutProps> = (props) => {
                 size="large"
                 onClick={props.onClickBack}
               >
-                Tipi detail
+                {t("homepage.tipi_dashboard.title.tipi_dashboard")}
               </Button>
             </div>
           )
