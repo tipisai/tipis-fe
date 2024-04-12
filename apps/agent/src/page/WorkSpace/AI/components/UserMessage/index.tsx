@@ -26,7 +26,7 @@ export const UserMessage: FC<UserMessageProps> = (props) => {
   const { message: messageAPI } = App.useApp()
 
   const contentBody = (
-    <div css={messageContainerStyle}>
+    <div css={messageContainerStyle} ref={containerRef}>
       <MarkdownMessage isOwnMessage isReceiving={isReceiving}>
         {message.message}
       </MarkdownMessage>
