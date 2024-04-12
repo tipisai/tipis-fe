@@ -1,6 +1,12 @@
 import { css } from "@emotion/react"
 
 export const customDrawStyle = css`
+  background: linear-gradient(
+    180deg,
+    #f6effb 0%,
+    #f1ebf8 49.5%,
+    #efe9f5 100%
+  ) !important;
   .ant-drawer-header {
     border-bottom: none;
   }

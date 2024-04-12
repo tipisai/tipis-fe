@@ -25,6 +25,7 @@ export const menuItemButtonContentContainerStyle = css`
   gap: 8px;
   align-items: center;
   transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  color: ${getColor("grayBlue", "02")};
 `
 
 export const menuItemButtonContentStyle = css`

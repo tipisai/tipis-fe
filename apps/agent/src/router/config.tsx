@@ -73,6 +73,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     index: true,
     loader: rootLoader,
     element: <RootPage />,
+    accessByMobile: true,
   },
   {
     path: "/user",
@@ -81,6 +82,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     children: [
       {
         index: true,
+        accessByMobile: true,
         element: <Navigate to="./login" replace />,
       },
       {
