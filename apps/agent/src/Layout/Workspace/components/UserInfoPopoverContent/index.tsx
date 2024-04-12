@@ -11,6 +11,7 @@ import {
   getTeamItems,
   useGetUserInfoQuery,
 } from "@illa-public/user-data"
+import DocumentIcon from "@/assets/public/document.svg?react"
 import HelpCenterIcon from "@/assets/public/help-center.svg?react"
 import SettingIcon from "@/assets/public/setting.svg?react"
 import {
@@ -58,6 +59,12 @@ const UserInfoPopoverContent: FC = () => {
           <div css={buttonContentContainerStyle}>
             <Icon component={HelpCenterIcon} css={iconContainerStyle} />
             {t("homepage.left_panel.setting.help_center")}
+          </div>
+        </Button>
+        <Button type="text" block size="large" onClick={onClickChatWithUs}>
+          <div css={buttonContentContainerStyle}>
+            <Icon component={DocumentIcon} css={iconContainerStyle} />
+            {t("homepage.left_panel.setting.documentation")}
           </div>
         </Button>
         <Button type="text" block size="large">
