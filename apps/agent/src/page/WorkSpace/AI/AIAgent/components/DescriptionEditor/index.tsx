@@ -6,6 +6,10 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { Agent } from "@illa-public/public-types"
 import { TipisTrack } from "@illa-public/track-utils"
+import {
+  CreditModalType,
+  handleCreditPurchaseError,
+} from "@illa-public/upgrade-modal"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import AIIcon from "@/assets/agent/ai.svg?react"
@@ -68,9 +72,14 @@ const DescriptionEditor: FC = memo(() => {
 
                   field.onChange(desc.payload)
                 } catch (e) {
-                  messageApi.error({
-                    content: t("editor.ai-agent.generate-desc.failed"),
-                  })
+                  const isCreditError = handleCreditPurchaseError(
+                    e,
+                    CreditModalType.TOKEN,
+                  )
+                  !isCreditError &&
+                    messageApi.error({
+                      content: t("editor.ai-agent.generate-desc.failed"),
+                    })
                 } finally {
                   setGenerateDescLoading(false)
                 }
