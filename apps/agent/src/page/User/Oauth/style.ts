@@ -5,7 +5,7 @@ export const centerStyle = css`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(var(--dvh, 1vh) * 100);
+  height: 100%;
 `
 
 export const pageStyle = css`
