@@ -24,3 +24,8 @@ export const cellStyle = css`
 export const tableStyle = css`
   margin: 8px 0;
 `
+
+export const listStyle = css`
+  margin: auto;
+  padding-left: 16px;
+`
