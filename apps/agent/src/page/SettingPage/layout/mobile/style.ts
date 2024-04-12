@@ -3,6 +3,7 @@ import { getColor } from "@illa-public/color-scheme"
 
 export const containerStyle = css`
   position: relative;
+  height: 100%;
 `
 
 export const navStyle = css`
@@ -18,7 +19,7 @@ export const navStyle = css`
 `
 
 export const contentStyle = css`
-  height: calc(var(--dvh, 1vh) * 100);
+  height: 100%;
   padding: 68px 0 4px 0;
   font-size: 14px;
   overflow: auto;
