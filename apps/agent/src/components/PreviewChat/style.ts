@@ -54,7 +54,7 @@ export const inputTextContainerStyle = css`
   flex: none;
   ${applyMobileStyle(css`
     border-top: 1px solid ${getColor("grayBlue", "09")};
-    padding: 12px 20px;
+    padding: 20px;
   `)}
 `
 
@@ -65,21 +65,6 @@ export const chatContainerStyle = css`
   height: 100%;
   padding-bottom: 110px;
   width: 100%;
-`
-
-export const mobileInputElementStyle = css`
-  color: ${getColor("grayBlue", "02")};
-  font-size: 14px;
-  width: 100%;
-  font-style: normal;
-  border: none;
-  font-weight: 400;
-  line-height: 22px;
-  padding: 8px 8px 8px 0;
-
-  ::placeholder {
-    color: ${getColor("grayBlue", "04")};
-  }
 `
 
 export const inputContainerStyle = css`
@@ -177,18 +162,6 @@ export const generatingDividerStyle = css`
 
 export const stopIconStyle = css`
   cursor: pointer;
-`
-
-export const mobileInputContainerStyle = css`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`
-export const mobileInputStyle = css`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 4px;
 `
 
 export const operationStyle = css`

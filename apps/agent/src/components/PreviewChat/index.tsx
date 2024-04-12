@@ -54,9 +54,6 @@ import {
   inputContainerStyle,
   inputStyle,
   inputTextContainerStyle,
-  mobileInputContainerStyle,
-  mobileInputElementStyle,
-  mobileInputStyle,
   operationStyle,
   previewChatContainerStyle,
   sendButtonStyle,
@@ -326,7 +323,6 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   ) => {
     if (event.keyCode === 13 && !event.shiftKey) {
       event.preventDefault()
-
       if (disableSend) {
         return
       }
@@ -423,37 +419,39 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
             </div>
           </div>
         ) : isMobile ? (
-          <div css={mobileInputContainerStyle}>
-            <div css={mobileInputStyle}>
-              <input
-                css={mobileInputElementStyle}
-                value={textAreaVal}
-                placeholder={t("editor.ai-agent.placeholder.send")}
-                onKeyDown={handleInputKeyDown}
-                onChange={(v) => {
-                  setTextAreaVal(v.target.value)
-                }}
-              />
-              <UploadButton
-                handleClick={handleClickUploadFile}
-                handleFileChange={handleFileChange}
-                ref={inputRef}
-              />
-              <Button
-                type="primary"
-                size="large"
-                icon={<Icon component={SendIcon} />}
-                disabled={disableSend}
-                onClick={handleClickSend}
-              >
-                {t("editor.ai-agent.button.send")}
-              </Button>
-            </div>
-            <UploadKnowledgeFiles
-              knowledgeFiles={knowledgeFiles}
-              handleDeleteFile={handleDeleteFile}
-              chatUploadStore={chatUploadStoreRef.current}
+          <div>
+            <textarea
+              value={textAreaVal}
+              css={inputStyle}
+              placeholder={t("editor.ai-agent.placeholder.send")}
+              onKeyDown={handleInputKeyDown}
+              onChange={(event) => {
+                setTextAreaVal(event.target.value)
+              }}
             />
+            <div css={operationStyle}>
+              <UploadKnowledgeFiles
+                knowledgeFiles={knowledgeFiles}
+                handleDeleteFile={handleDeleteFile}
+                chatUploadStore={chatUploadStoreRef.current}
+              />
+              <div css={sendButtonStyle}>
+                <UploadButton
+                  handleClick={handleClickUploadFile}
+                  handleFileChange={handleFileChange}
+                  ref={inputRef}
+                />
+                <Button
+                  type="primary"
+                  size="large"
+                  icon={<Icon component={SendIcon} />}
+                  disabled={disableSend}
+                  onClick={handleClickSend}
+                >
+                  {t("editor.ai-agent.button.send")}
+                </Button>
+              </div>
+            </div>
           </div>
         ) : (
           <div css={inputContainerStyle}>
