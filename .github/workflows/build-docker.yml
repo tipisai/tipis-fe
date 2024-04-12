@@ -46,19 +46,19 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # - name: Install doctl
-      #   uses: digitalocean/action-doctl@v2
-      #   with:
-      #     token: ${{ secrets.DO_TOKEN }}
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_TOKEN }}
 
-      # - name: Install kubectl
-      #   run: |
-      #     sudo snap install kubectl --classic
+      - name: Install kubectl
+        run: |
+          sudo snap install kubectl --classic
 
-      # - name: Setup kubectl
-      #   run: |
-      #     doctl kubernetes cluster kubeconfig save $DO_CLUSTER
-      #     kubectl version
+      - name: Setup kubectl
+        run: |
+          doctl kubernetes cluster kubeconfig save $DO_CLUSTER
+          kubectl version
 
       - name: Build website
         run: |
@@ -74,14 +74,6 @@ jobs:
           docker tag tipisai-fe "illasoft/tipisai-fe:$GITHUB_REF_NAME"
           docker push "illasoft/tipisai-fe:$GITHUB_REF_NAME"
 
-      # - uses: actions/checkout@v4
-      #   with:
-      #     repository: tipisai/k8s-application-do
-      #     token: ${{ secrets.ILLA_BOT_TOKEN }}
-      #     path: k8s-application-do
-
-      # - name: Deploy to Kubernetes
-      #   run: |
-      #     cd k8s-application-do/namespace-$ILLA_APP_ENV
-      #     kubectl apply -f ./tipisai-cloud-frontend/ -n $ILLA_APP_ENV
-      #     kubectl -n $ILLA_APP_ENV rollout restart deployment tipisai-cloud-frontend
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl -n $ILLA_APP_ENV rollout restart deployment tipisai-cloud-frontend
