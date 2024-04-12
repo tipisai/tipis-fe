@@ -14,6 +14,7 @@ env:
   DO_CLUSTER: ${{ secrets.DO_CLUSTER }}
   DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
   DOCKER_PWD: ${{ secrets.DOCKER_PWD }}
+  DO_TOKEN: ${{ secrets.DO_TOKEN }}
   ILLA_INTERCOM_APP_ID: ${{ secrets.ILLA_INTERCOM_APP_ID }}
   ILLA_POSTHOG_KEY: ${{ secrets.ILLA_POSTHOG_KEY }}
 jobs:
@@ -77,7 +78,7 @@ jobs:
 
       - name: Build Docker
         run: |
-          docker build --cache-from=tipisai-fe -f Dockerfile -t tipisai-fe
+          docker build --cache-from=tipisai-fe -f Dockerfile -t tipisai-fe .
 
       - name: Push application Docker image
         run: |
