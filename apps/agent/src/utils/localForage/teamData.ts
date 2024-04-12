@@ -163,6 +163,23 @@ export const updateTabs = async (
   await setTabs(teamID, newTabs)
 }
 
+export const batchUpdateTabs = async (
+  teamID: string,
+  oldTabIDMapTabInfos: Record<string, Partial<ITabInfo>>,
+) => {
+  const tabs = await getTabs(teamID)
+  const newTabs = tabs.map((tab) => {
+    if (oldTabIDMapTabInfos[tab.tabID]) {
+      return {
+        ...tab,
+        ...oldTabIDMapTabInfos[tab.tabID],
+      }
+    }
+    return tab
+  })
+  await setTabs(teamID, newTabs)
+}
+
 // dashboard cache
 export const getCacheUIState = async (teamID: string, tabID: string) => {
   const uiHistoryCacheData = await getUiHistoryDataByTabID(teamID, tabID)

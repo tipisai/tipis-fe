@@ -16,6 +16,7 @@ import {
   setFormDataByTabID,
 } from "@/utils/localForage/teamData"
 import { useAddEditTipisTab } from "@/utils/recentTabs/hook"
+import { TAB_TYPE } from "../../../../redux/ui/recentTab/interface"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import { AIAgent } from "./aiagent"
 import FormContext from "./components/FormContext"
@@ -48,7 +49,9 @@ const EditAIAgentGetValuePage: FC = () => {
     const getHistoryDataAndSetFormData = async () => {
       if (!agentID) return
       const historyTabs = getRecentTabInfos(store.getState())
-      const currentTab = historyTabs.find((tab) => tab.cacheID === agentID)
+      const currentTab = historyTabs.find(
+        (tab) => tab.cacheID === agentID && tab.tabType === TAB_TYPE.EDIT_TIPIS,
+      )
       if (!currentTab) return
       const teamID = getCurrentId(store.getState())!
       const formData = (await getFormDataByTabID(teamID, currentTab.tabID)) as
@@ -77,6 +80,10 @@ const EditAIAgentPage: FC<{
   const { originAgent, cacheData } = props
   const { agentID } = useParams()
   const teamID = useSelector(getCurrentId)
+  const historyTabs = useSelector(getRecentTabInfos)
+  const currentTab = historyTabs.find(
+    (tab) => tab.cacheID === agentID && tab.tabType === TAB_TYPE.EDIT_TIPIS,
+  )
 
   const methods = useForm<IAgentForm>({
     defaultValues: originAgent,
@@ -123,7 +130,7 @@ const EditAIAgentPage: FC<{
   return (
     <FormProvider {...methods} key={agentID}>
       <TipisWebSocketProvider>
-        <AgentWSProvider>
+        <AgentWSProvider tabID={currentTab?.tabID ?? ""}>
           <FormContext>
             <UploadContextProvider>
               <LayoutAutoChange

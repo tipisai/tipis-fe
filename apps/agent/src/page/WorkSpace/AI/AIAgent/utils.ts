@@ -11,8 +11,11 @@ import {
   useGetAgentIconUploadAddressMutation,
   usePutAgentDetailMutation,
 } from "@/redux/services/agentAPI"
+import store from "@/redux/store"
+import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { fetchUploadBase64 } from "@/utils/file"
 import { deleteFormDataByTabID } from "@/utils/localForage/teamData"
+import { useBatchUpdateRecentTabReducer } from "@/utils/recentTabs/baseHook"
 import { CREATE_TIPIS_ID } from "@/utils/recentTabs/constants"
 import { useUpdateCreateTipiTabToEditTipiTab } from "@/utils/recentTabs/hook"
 import { AgentInitial, IAgentForm } from "./interface"
@@ -31,9 +34,81 @@ export const useSubmitSaveAgent = () => {
   const [putAgentDetail] = usePutAgentDetailMutation()
   const [createAgent] = useCreateAgentMutation()
   const updateCreateTipiTabToEditTipiTab = useUpdateCreateTipiTabToEditTipiTab()
+  const batchUpdateTabInfo = useBatchUpdateRecentTabReducer()
 
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const { reset } = useFormContext<IAgentForm>()
+
+  const handleCreateAgent = useCallback(
+    async (currentData: IAgentForm) => {
+      const serverAgent = await createAgent({
+        teamID: currentTeamInfo.id,
+        agentRaw: {
+          ...currentData,
+          variables: currentData.variables.filter(
+            (v) => v.key !== "" && v.value !== "",
+          ),
+        },
+      }).unwrap()
+      await deleteFormDataByTabID(currentTeamInfo.id, CREATE_TIPIS_ID)
+      await updateCreateTipiTabToEditTipiTab(CREATE_TIPIS_ID, {
+        tabName: serverAgent.name,
+        tabIcon: "",
+        cacheID: serverAgent.aiAgentID,
+      })
+      TipisTrack.track("save_suc", {
+        parameter1: "create",
+        parameter2: Array.isArray(currentData.knowledge)
+          ? currentData.knowledge.length
+          : 0,
+      })
+      return serverAgent
+    },
+    [createAgent, currentTeamInfo.id, updateCreateTipiTabToEditTipiTab],
+  )
+
+  const handleChangeAgent = useCallback(
+    async (currentData: IAgentForm) => {
+      const serverAgent = await putAgentDetail({
+        teamID: currentTeamInfo.id,
+        aiAgentID: currentData.aiAgentID,
+        agentRaw: {
+          ...currentData,
+          variables: currentData.variables.filter(
+            (v) => v.key !== "" && v.value !== "",
+          ),
+        },
+      }).unwrap()
+      const recentTabs = getRecentTabInfos(store.getState())
+      const currentAgentTabs = recentTabs.filter(
+        (tabInfo) => tabInfo.cacheID === currentData.aiAgentID,
+      )
+      if (currentAgentTabs.length > 0) {
+        const newTabInfo = {
+          tabName: serverAgent.name,
+          tabIcon: serverAgent.icon,
+          cacheID: serverAgent.aiAgentID,
+        }
+        const oldTabIDMapNewInfos = currentAgentTabs.reduce(
+          (acc, tabInfo) => {
+            acc[tabInfo.tabID] = newTabInfo
+            return acc
+          },
+          {} as { [oldTabID: string]: typeof newTabInfo },
+        )
+        await batchUpdateTabInfo(oldTabIDMapNewInfos)
+      }
+
+      TipisTrack.track("save_suc", {
+        parameter1: "edit",
+        parameter2: Array.isArray(currentData.knowledge)
+          ? currentData.knowledge.length
+          : 0,
+      })
+      return serverAgent
+    },
+    [batchUpdateTabInfo, currentTeamInfo.id, putAgentDetail],
+  )
 
   const handleSubmitSave = useCallback(
     async (data: IAgentForm) => {
@@ -41,9 +116,8 @@ export const useSubmitSaveAgent = () => {
 
       let agentInfo: Agent
       try {
-        let updateIconURL = currentData.icon
-        if (!updateIconURL) {
-          updateIconURL = AgentInitial.icon
+        if (!currentData.icon) {
+          currentData.icon = AgentInitial.icon
         } else {
           const iconURL = new URL(currentData.icon)
           if (iconURL.protocol === "data:") {
@@ -51,7 +125,7 @@ export const useSubmitSaveAgent = () => {
               teamID: currentTeamInfo.id,
               base64: currentData.icon,
             }).unwrap()
-            updateIconURL = await fetchUploadBase64(
+            currentData.icon = await fetchUploadBase64(
               responseData.uploadAddress,
               currentData.icon,
             )
@@ -62,45 +136,11 @@ export const useSubmitSaveAgent = () => {
           currentData.aiAgentID === undefined ||
           currentData.aiAgentID === ""
         ) {
-          const serverAgent = await createAgent({
-            teamID: currentTeamInfo.id,
-            agentRaw: {
-              ...currentData,
-              icon: updateIconURL,
-              variables: currentData.variables.filter(
-                (v) => v.key !== "" && v.value !== "",
-              ),
-            },
-          }).unwrap()
-          await deleteFormDataByTabID(currentTeamInfo.id, CREATE_TIPIS_ID)
-          await updateCreateTipiTabToEditTipiTab(CREATE_TIPIS_ID, {
-            tabName: serverAgent.name,
-            tabIcon: "",
-            cacheID: serverAgent.aiAgentID,
-          })
-
-          agentInfo = serverAgent
+          agentInfo = await handleCreateAgent(currentData)
         } else {
-          const serverAgent = await putAgentDetail({
-            teamID: currentTeamInfo.id,
-            aiAgentID: currentData.aiAgentID,
-            agentRaw: {
-              ...currentData,
-              icon: updateIconURL,
-              variables: data.variables.filter(
-                (v) => v.key !== "" && v.value !== "",
-              ),
-            },
-          }).unwrap()
-          agentInfo = serverAgent
+          agentInfo = await handleChangeAgent(currentData)
         }
 
-        TipisTrack.track("save_suc", {
-          parameter1: currentData.aiAgentID ? "edit" : "create",
-          parameter2: Array.isArray(agentInfo.knowledge)
-            ? agentInfo.knowledge.length
-            : 0,
-        })
         const newFormData: Agent = {
           ...agentInfo,
           variables:
@@ -129,9 +169,8 @@ export const useSubmitSaveAgent = () => {
       t,
       getAgentIconUploadAddress,
       currentTeamInfo.id,
-      createAgent,
-      updateCreateTipiTabToEditTipiTab,
-      putAgentDetail,
+      handleCreateAgent,
+      handleChangeAgent,
     ],
   )
 

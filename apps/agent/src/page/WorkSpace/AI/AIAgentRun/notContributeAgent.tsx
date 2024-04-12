@@ -54,7 +54,7 @@ export const NotContributedAgent: FC = () => {
   return data && isSuccess ? (
     <FormProvider {...methods}>
       <TipisWebSocketProvider>
-        <AgentWSProvider>
+        <AgentWSProvider tabID={tabID!}>
           <MarketplaceInfoProvider marketplaceInfo={undefined}>
             <FormContext>
               <LayoutAutoChange

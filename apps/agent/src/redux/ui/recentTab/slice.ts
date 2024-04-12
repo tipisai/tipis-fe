@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import {
   addRecentTabReducer,
+  batchUpdateRecentTabReducer,
   deleteAllRecentTabReducer,
   deleteRecentTabReducer,
   initRecentTabReducer,
@@ -19,6 +20,7 @@ const recentTabSlice = createSlice({
     deleteAllRecentTabReducer,
     updateRecentTabReducer,
     updateCurrentRecentTabIDReducer,
+    batchUpdateRecentTabReducer,
   },
 })
 

@@ -37,6 +37,7 @@ const TeamCheck: FC<BaseProtectComponentProps> = (props) => {
     TipisTrack.group(currentTeam.id, {
       name: currentTeam.name,
       identifier: currentTeam.identifier,
+      paymentPlan: currentTeam.currentTeamLicense.plan,
     })
     if (
       Array.isArray(props.needRole) &&

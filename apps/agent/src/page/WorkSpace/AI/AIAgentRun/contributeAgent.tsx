@@ -55,7 +55,7 @@ export const ContributedAgent: FC = () => {
   return contributeAgentDetail && aiAgentMarketPlaceInfo ? (
     <FormProvider {...methods}>
       <TipisWebSocketProvider>
-        <AgentWSProvider>
+        <AgentWSProvider tabID={tabID!}>
           <MarketplaceInfoProvider marketplaceInfo={aiAgentMarketPlaceInfo}>
             <FormContext>
               <LayoutAutoChange
