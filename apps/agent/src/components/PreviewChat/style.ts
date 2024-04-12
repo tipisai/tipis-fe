@@ -47,6 +47,7 @@ export const previewChatContainerStyle = css`
 export const inputTextContainerStyle = css`
   padding: 16px;
   position: relative;
+  background-color: ${getColor("white", "01")};
   display: flex;
   flex-direction: column;
   box-sizing: border-box;

@@ -43,7 +43,7 @@ export const PureMessage: FC<PureMessageProps> = ({
   const containerRef = useRef<HTMLDivElement>(null)
 
   const contentBody = (
-    <div css={pureMessageContainerStyle}>
+    <div css={pureMessageContainerStyle} ref={containerRef}>
       <MarkdownMessage isReceiving={false}>{message}</MarkdownMessage>
     </div>
   )
