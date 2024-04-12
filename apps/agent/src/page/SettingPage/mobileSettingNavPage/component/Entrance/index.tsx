@@ -2,7 +2,7 @@ import Icon from "@ant-design/icons"
 import { FC, useEffect, useMemo } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
-import { useBeforeUnload } from "react-router-dom"
+import { useBeforeUnload, useNavigate } from "react-router-dom"
 import { USER_ROLE } from "@illa-public/public-types"
 import {
   TIPIS_TRACK_CLOUD_PAGE_NAME,
@@ -28,6 +28,7 @@ const Entrance: FC = () => {
   const { t } = useTranslation()
   const currentTeamInfo = useGetCurrentTeamInfo()
   const logout = useLogout()
+  const navigate = useNavigate()
 
   const handleLeaveOrDeleteTeamModal = useLeaveTeamModal()
   const { hiddenMember, leaveLabel } = useMemo(() => {
@@ -99,6 +100,10 @@ const Entrance: FC = () => {
       ]
     : []
 
+  const handleSwitchTeam = () => {
+    navigate("/setting")
+  }
+
   useEffect(() => {
     TipisTrack.pageViewTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.MOBILE_SETTING_NAV)
     return () => {
@@ -129,7 +134,7 @@ const Entrance: FC = () => {
             <span>{t("profile.setting.group.team")}</span>
           </div>
           <div css={teamSwitchStyle}>
-            <TeamSelect />
+            <TeamSelect onChangeTeam={handleSwitchTeam} />
           </div>
         </>
       )}
