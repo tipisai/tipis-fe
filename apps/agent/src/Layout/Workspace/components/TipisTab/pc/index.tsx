@@ -6,14 +6,15 @@ import { useDispatch, useSelector } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom"
 import { MinusIcon } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
-import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 import { useRemoveRecentTabReducer } from "@/utils/recentTabs/baseHook"
 import { getChatPath } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
-import { ITipsTab } from "./interface"
+import { SHOULD_MODEL_TIP_TAB_TYPES } from "../constant"
+import { genTabNavigateLink, getIconByTabInfo, useGetTabName } from "../utils"
+import { IPCTipisTab } from "./interface"
 import {
   deleteButtonContainerStyle,
   menuItemButtonContentContainerStyle,
@@ -21,16 +22,8 @@ import {
   menuItemButtonStyle,
   navLinkStyle,
 } from "./style"
-import { genTabNavigateLink, getIconByTabInfo, useGetTabName } from "./utils"
 
-const shouldModelTipTabTypes = [
-  // TAB_TYPE.CREATE_FUNCTION,
-  TAB_TYPE.CREATE_TIPIS,
-  // TAB_TYPE.EDIT_FUNCTION,
-  TAB_TYPE.EDIT_TIPIS,
-]
-
-const TipisTab: FC<ITipsTab> = (props) => {
+const PCTipisTab: FC<IPCTipisTab> = (props) => {
   const { icon, tabName, tabType, tabID, cacheID, isMiniSize } = props
   const dispatch = useDispatch()
   const currentTeamInfo = useGetCurrentTeamInfo()
@@ -63,7 +56,7 @@ const TipisTab: FC<ITipsTab> = (props) => {
       )
       navigate(newPath)
     }
-    if (shouldModelTipTabTypes.includes(tabType)) {
+    if (SHOULD_MODEL_TIP_TAB_TYPES.includes(tabType)) {
       modal.confirm({
         content: t("homepage.edit_tipi.modal.not_save_desc"),
         okText: t("homepage.edit_tipi.modal.not_save_ok"),
@@ -140,4 +133,4 @@ const TipisTab: FC<ITipsTab> = (props) => {
   )
 }
 
-export default TipisTab
+export default PCTipisTab

@@ -4,7 +4,7 @@ import { FC, useCallback, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { TipisTrack } from "@illa-public/track-utils"
 import UserInfoContent from "@/Layout/Workspace/components/UserInfoContent"
-import RecentTabs from "@/Layout/Workspace/modules/RecentTabs"
+import PCRecentTabs from "@/Layout/Workspace/modules/RecentTabs/pc"
 import LogoIcon from "@/assets/public/logo.svg?react"
 import MenuExpandIcon from "@/assets/workspace/menuExpand.svg?react"
 import { MenuStatusUIContext } from "../context"
@@ -70,7 +70,7 @@ const MiniMenu: FC = () => {
               />
             </ConfigProvider>
           </div>
-          <RecentTabs isMiniSize />
+          <PCRecentTabs isMiniSize />
         </div>
         <div css={miniMenuFooterContainerStyle}>
           <div css={dividerContainerStyle}>
