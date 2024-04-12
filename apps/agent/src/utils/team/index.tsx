@@ -31,18 +31,30 @@ export const useGetCurrentTeamInfo = () => {
   const [searchParams] = useSearchParams()
   const { teamIdentifier } = useParams()
   const myTeamIdentifier = searchParams.get("myTeamIdentifier")
-  const cacheTeamIdentifier = getLocalTeamIdentifier() as string | undefined
-  const mixedTeamIdentifier =
-    myTeamIdentifier || teamIdentifier || cacheTeamIdentifier
 
   const { data } = useGetTeamsInfoQuery(null)
 
   const currentTeamInfo = useMemo(() => {
     if (data) {
-      return data.find((team) => team.identifier === mixedTeamIdentifier)
+      const cacheTeamIdentifier = getLocalTeamIdentifier() as string | undefined
+
+      const priorityOrder = [
+        myTeamIdentifier,
+        teamIdentifier,
+        cacheTeamIdentifier,
+      ]
+
+      for (let teamIdentifier of priorityOrder) {
+        const currentTeamInfo = data.find(
+          (team) => team.identifier === teamIdentifier,
+        )
+        if (currentTeamInfo) {
+          return currentTeamInfo
+        }
+      }
     }
     return undefined
-  }, [data, mixedTeamIdentifier])
+  }, [data, myTeamIdentifier, teamIdentifier])
 
   return currentTeamInfo
 }

@@ -7,6 +7,7 @@ import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 import {
   addTabs,
+  batchUpdateTabs,
   getTabs,
   removeAllTabsAndCacheData,
   removeTabsAndCacheData,
@@ -74,6 +75,24 @@ export const useUpdateRecentTabReducer = () => {
   )
 
   return updateRecentTabReducer
+}
+
+export const useBatchUpdateRecentTabReducer = () => {
+  const dispatch = useDispatch()
+
+  const batchUpdateRecentTabReducer = useCallback(
+    async (oldTabIDMapNewInfos: { [oldTabID: string]: Partial<ITabInfo> }) => {
+      const teamID = getCurrentId(store.getState())!
+
+      dispatch(
+        recentTabActions.batchUpdateRecentTabReducer(oldTabIDMapNewInfos),
+      )
+      await batchUpdateTabs(teamID, oldTabIDMapNewInfos)
+    },
+    [dispatch],
+  )
+
+  return batchUpdateRecentTabReducer
 }
 
 export const useInitRecentTab = () => {

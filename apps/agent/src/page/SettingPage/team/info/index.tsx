@@ -44,10 +44,13 @@ const TeamInfo: FC = () => {
   const onSubmit: SubmitHandler<TeamInfoFields> = async (data) => {
     try {
       setLoading(true)
+      if (data.identifier && data.identifier !== teamIdentifier) {
+        setLocalTeamIdentifier(data.identifier)
+      }
       await changeTeamConfig({
         data,
         teamID: teamInfo?.id as string,
-      })
+      }).unwrap()
       message.success({
         content: t("team_setting.message.save_suc"),
       })
@@ -56,7 +59,6 @@ const TeamInfo: FC = () => {
         identifier: data.identifier,
       })
       if (data.identifier && data.identifier !== teamIdentifier) {
-        setLocalTeamIdentifier(data.identifier)
         navigate(getTeamInfoSetting(data.identifier))
       }
       return true

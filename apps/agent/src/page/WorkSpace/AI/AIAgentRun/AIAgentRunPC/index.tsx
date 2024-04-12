@@ -9,7 +9,6 @@ import { PREVIEW_CHAT_USE_TO } from "@/components/PreviewChat/PreviewChatUseCont
 import { ChatMessage } from "@/components/PreviewChat/interface"
 import { getSendMessageBody } from "@/utils/agent/wsUtils"
 import { getChatMessageAndUIState } from "@/utils/localForage/teamData"
-import { getCurrentTabID } from "../../../../../redux/ui/recentTab/selector"
 import { IAgentForm } from "../../AIAgent/interface"
 import { ChatContext } from "../../components/ChatContext"
 import { AgentWSContext } from "../../context/AgentWSContext"
@@ -42,6 +41,7 @@ export const AIAgentRunPC: FC = () => {
     sendMessage,
     setIsReceiving,
     lastRunAgent,
+    tabID,
   } = useContext(AgentWSContext)
 
   const isVariablesDirty = getFieldState("variables").isDirty
@@ -57,7 +57,6 @@ export const AIAgentRunPC: FC = () => {
   }, [isRunning, isVariablesDirty, lastRunAgent])
 
   const onlyConnectOnce = useRef(false)
-  const currentTabID = useSelector(getCurrentTabID)
 
   const wsContext = useMemo(
     () => ({
@@ -109,7 +108,7 @@ export const AIAgentRunPC: FC = () => {
   const initRunAgent = useCallback(async () => {
     const { chatMessageData, uiChatMessage } = await getChatMessageAndUIState(
       teamID!,
-      currentTabID,
+      tabID,
     )
 
     const hasChatHistory =
@@ -133,7 +132,7 @@ export const AIAgentRunPC: FC = () => {
     changeIsModalOpen(true)
   }, [
     teamID,
-    currentTabID,
+    tabID,
     hasVariables,
     canOpenModal,
     changeIsModalOpen,
