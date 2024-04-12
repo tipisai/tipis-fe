@@ -10,7 +10,10 @@ import AntdStore from "./utils/antdStore"
 
 function App() {
   return (
-    <ConfigProvider theme={tipisThemConfig as ThemeConfig}>
+    <ConfigProvider
+      theme={tipisThemConfig as ThemeConfig}
+      wave={{ disabled: true }}
+    >
       <AntdContextProvider component={false}>
         <AntdStore />
         <HelmetProvider>
