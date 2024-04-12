@@ -17,6 +17,7 @@ const ChatPage: FC = () => {
       addChatTab(chatID)
     }
   }, [addChatTab, chatID])
+
   return (
     <TipisWebSocketProvider key={chatID}>
       <ChatWSProvider key={chatID}>
