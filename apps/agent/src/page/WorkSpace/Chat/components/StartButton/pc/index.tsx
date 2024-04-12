@@ -6,7 +6,9 @@ import BlackButton from "@/components/BlackButton"
 import { ChatStableWSContext, ChatUnStableWSContext } from "../../../context"
 
 const PCStartButton: FC = () => {
-  const { isConnecting, isRunning } = useContext(ChatUnStableWSContext)
+  const { isConnecting, isRunning, chatMessages } = useContext(
+    ChatUnStableWSContext,
+  )
   const { reconnect, connect } = useContext(ChatStableWSContext)
 
   const { t } = useTranslation()
@@ -18,6 +20,7 @@ const PCStartButton: FC = () => {
       type="primary"
       loading={isConnecting}
       onClick={isRunning ? reconnect : connect}
+      disabled={chatMessages.length === 0}
       icon={
         isRunning ? (
           <Icon component={ResetIcon} />
@@ -26,7 +29,9 @@ const PCStartButton: FC = () => {
         )
       }
     >
-      {!isRunning ? t("editor.ai-agent.start") : t("editor.ai-agent.restart")}
+      {!isRunning
+        ? t("editor.ai-agent.start")
+        : t("homepage.tipi_chat.clear_all")}
     </BlackButton>
   )
 }
