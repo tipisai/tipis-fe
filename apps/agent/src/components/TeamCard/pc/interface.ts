@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
 
-export interface ITeamCardProps {
+export interface IPCTeamCardProps {
   icon: string
   title: string
   description: string

@@ -1,6 +1,6 @@
 import { Avatar, Card, Typography } from "antd"
 import { FC } from "react"
-import { ITeamCardProps } from "./interface"
+import { IPCTeamCardProps } from "./interface"
 import {
   cardContainerStyle,
   cardHeaderContainerStyle,
@@ -14,7 +14,7 @@ import {
   teamCardFooterContainerStyle,
 } from "./style"
 
-const TeamCard: FC<ITeamCardProps> = (props) => {
+const PCTeamCard: FC<IPCTeamCardProps> = (props) => {
   const {
     title,
     icon,
@@ -59,4 +59,4 @@ const TeamCard: FC<ITeamCardProps> = (props) => {
   )
 }
 
-export default TeamCard
+export default PCTeamCard

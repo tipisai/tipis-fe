@@ -1,11 +1,16 @@
 import { FC } from "react"
-import StartButton from "../StartButton"
+import { LayoutAutoChange } from "@illa-public/layout-auto-change"
+import MobileStartButton from "../StartButton/mobile"
+import PCStartButton from "../StartButton/pc"
 import { headerToolsContainerStyle } from "./style"
 
 const HeaderTools: FC = () => {
   return (
     <div css={headerToolsContainerStyle}>
-      <StartButton />
+      <LayoutAutoChange
+        desktopPage={<PCStartButton />}
+        mobilePage={<MobileStartButton />}
+      />
     </div>
   )
 }

@@ -194,6 +194,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
             <TipiDetailPage />
           </Suspense>
         ),
+        accessByMobile: true,
       },
       {
         path: ":teamIdentifier/marketTipi/:agentID/detail",

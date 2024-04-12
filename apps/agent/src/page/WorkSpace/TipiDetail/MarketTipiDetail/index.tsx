@@ -5,7 +5,7 @@ import { v4 } from "uuid"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import DetailLayout from "@/Layout/DetailLayout"
 import ContributeInfo from "@/Layout/DetailLayout/components/ContributeInfo"
-import DetailHeader from "@/Layout/DetailLayout/components/DetailHeader"
+import PCDetailHeader from "@/Layout/DetailLayout/components/DetailHeader/pc"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { useGetAIAgentMarketplaceInfoQuery } from "@/redux/services/marketAPI"
 import store from "@/redux/store"
@@ -17,7 +17,7 @@ import {
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { useAddMarketTipiDetailTab } from "@/utils/recentTabs/hook"
 import { getExploreTipisPath } from "@/utils/routeHelper"
-import ActionGroup from "../components/ActionGroup"
+import PCActionGroup from "../components/ActionGroup/pc"
 import Parameters from "../components/Parameters"
 import Prompt from "../components/Prompt"
 
@@ -85,12 +85,12 @@ const MarketTipiDetailPage: FC = () => {
       title={aiAgentMarketPlaceInfo?.aiAgent.name}
       onClickBack={onClickBack}
     >
-      <DetailHeader
+      <PCDetailHeader
         avatarURL={aiAgentMarketPlaceInfo?.aiAgent?.icon}
         title={aiAgentMarketPlaceInfo?.aiAgent?.name}
         description={aiAgentMarketPlaceInfo?.aiAgent?.description}
       />
-      <ActionGroup
+      <PCActionGroup
         isContribute
         runNumber={aiAgentMarketPlaceInfo?.marketplace?.numRuns}
         forkNumber={aiAgentMarketPlaceInfo?.marketplace?.numForks}
