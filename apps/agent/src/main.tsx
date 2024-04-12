@@ -33,10 +33,11 @@ initI18n().then(() => {
   createRoot(document.getElementById("root")!).render(
     <StrictMode>
       <PostHogProvider
-        apiKey={import.meta.env.ILLA_POSTHOG_KEY}
-        options={{
-          debug: import.meta.env.ILLA_APP_ENV !== "production",
-        }}
+        apiKey={
+          import.meta.env.ILLA_APP_ENV !== "production"
+            ? ""
+            : import.meta.env.ILLA_POSTHOG_KEY
+        }
       >
         <ErrorBoundary>
           <Provider store={store}>
