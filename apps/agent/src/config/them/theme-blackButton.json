@@ -1,4 +1,6 @@
 {
+  "cssVar": true,
+  "hashed": false,
   "token": {
     "colorPrimary": "#654aec",
     "colorSuccess": "#0bc957",
