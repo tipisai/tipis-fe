@@ -66,7 +66,11 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
               {children}
             </Typography.Link>
           ),
-          p: ({ children }) => <Typography.Text>{children}</Typography.Text>,
+          p: ({ children }) => (
+            <Typography.Paragraph style={{ margin: 0 }}>
+              {children}
+            </Typography.Paragraph>
+          ),
           tr: ({ children }) => <TableRow>{children}</TableRow>,
           th: ({ children }) => (
             <TableCell align="center">{children}</TableCell>
