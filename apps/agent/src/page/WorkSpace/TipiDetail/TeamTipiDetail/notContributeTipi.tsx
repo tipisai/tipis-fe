@@ -1,35 +1,13 @@
-import { FC, useEffect } from "react"
+import { FC } from "react"
 import { Navigate } from "react-router-dom"
-import DetailLayout from "@/Layout/DetailLayout"
-import DetailHeader from "@/Layout/DetailLayout/components/DetailHeader"
+import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import FullSectionLoading from "@/components/FullSectionLoading"
-import { useAddTipisDetailTab } from "@/utils/recentTabs/hook"
-import { useNavigateToExploreTipis } from "@/utils/routeHelper/hook"
 import { useGetNotContributeTipDetail } from "@/utils/tipis/hook"
-import ActionGroup from "../components/ActionGroup"
-import Knowledge from "../components/Knowledge"
-import Parameters from "../components/Parameters"
-import Prompt from "../components/Prompt"
+import MobileNotContributeTipi from "./mobile/notContributeTipi"
+import PCNotContributeTipi from "./pc/notContributeTipi"
 
 const NotContributeTipiDetail: FC = () => {
   const { data, isLoading, isError } = useGetNotContributeTipDetail()
-
-  const addTipiDetailTab = useAddTipisDetailTab()
-  const navigateToExploreTipis = useNavigateToExploreTipis()
-
-  useEffect(() => {
-    if (data) {
-      addTipiDetailTab({
-        tipisID: data.aiAgentID,
-        title: data.name,
-        tabIcon: data.icon,
-      })
-    }
-  }, [addTipiDetailTab, data])
-
-  const onClickBack = () => {
-    navigateToExploreTipis()
-  }
 
   if (isLoading) {
     return <FullSectionLoading />
@@ -39,26 +17,10 @@ const NotContributeTipiDetail: FC = () => {
     return <Navigate to="/404" />
   }
   return data ? (
-    <DetailLayout title={data.name} onClickBack={onClickBack}>
-      <DetailHeader
-        avatarURL={data.icon}
-        title={data.name}
-        description={data.description}
-      />
-      <ActionGroup
-        isContribute={false}
-        tipisName={data.name}
-        tipisID={data.aiAgentID}
-        tipisIcon={data.icon}
-      />
-      <Prompt parameters={data.variables ?? []} prompt={data.prompt} />
-      {Array.isArray(data.variables) && data.variables.length > 0 && (
-        <Parameters parameters={data.variables} />
-      )}
-      {Array.isArray(data.knowledge) && data.knowledge.length > 0 && (
-        <Knowledge knowledge={data.knowledge} />
-      )}
-    </DetailLayout>
+    <LayoutAutoChange
+      desktopPage={<PCNotContributeTipi agentInfo={data} />}
+      mobilePage={<MobileNotContributeTipi agentInfo={data} />}
+    />
   ) : null
 }
 

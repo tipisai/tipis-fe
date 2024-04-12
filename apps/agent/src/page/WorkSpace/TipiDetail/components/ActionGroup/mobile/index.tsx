@@ -11,10 +11,13 @@ import {
 } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
 import { useNavigateToRunTipis } from "@/utils/routeHelper/hook"
-import { IActionGroupProps } from "./interface"
-import { actionGroupContainerStyle } from "./style"
+import { IActionGroupProps } from "../interface"
+import {
+  actionGroupContainerStyle,
+  otherActionGroupContainerStyle,
+} from "./style"
 
-const ActionGroup: FC<IActionGroupProps> = (props) => {
+const MobileActionGroup: FC<IActionGroupProps> = (props) => {
   const {
     isContribute,
     runNumber,
@@ -45,30 +48,32 @@ const ActionGroup: FC<IActionGroupProps> = (props) => {
     <div css={actionGroupContainerStyle}>
       <Button
         type="primary"
+        size="large"
         block
         icon={<Icon component={PlayFillIcon} />}
-        style={{ maxWidth: "307px" }}
         onClick={handleClickRun}
       >
         {t("dashboard.common.run")} {isContribute ? runNumber : ""}
       </Button>
       {isContribute && (
-        <Button block icon={<Icon component={ForkIcon} />}>
-          {t("dashboard.common.fork")} {forkNumber}
-        </Button>
-      )}
-      {isContribute && (
-        <Button block icon={<Icon component={StarOutlineIcon} />}>
-          {t("marketplace.star")} {starNumber}
-        </Button>
-      )}
-      {isContribute && (
-        <Button block icon={<Icon component={ShareIcon} />}>
-          {t("dashboard.common.share")}
-        </Button>
+        <div css={otherActionGroupContainerStyle}>
+          <Button block icon={<Icon component={ForkIcon} />} size="large">
+            {t("dashboard.common.fork")} {forkNumber}
+          </Button>
+          <Button
+            block
+            icon={<Icon component={StarOutlineIcon} />}
+            size="large"
+          >
+            {t("marketplace.star")} {starNumber}
+          </Button>
+          <Button block icon={<Icon component={ShareIcon} />} size="large">
+            {t("dashboard.common.share")}
+          </Button>
+        </div>
       )}
     </div>
   )
 }
 
-export default ActionGroup
+export default MobileActionGroup
