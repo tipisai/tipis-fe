@@ -3,7 +3,7 @@ import { Button, List, Tag } from "antd"
 import { FC, MouseEventHandler } from "react"
 import { useNavigate } from "react-router-dom"
 import { MoreIcon, PenIcon, PlayFillIcon } from "@illa-public/icon"
-import TeamCard from "@/components/TeamCard"
+import PCTeamCard from "@/components/TeamCard/pc"
 import { ITeamCardListItemProps } from "./interface"
 
 const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
@@ -29,7 +29,7 @@ const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
 
   return (
     <List.Item>
-      <TeamCard
+      <PCTeamCard
         icon={icon}
         title={title}
         description={description}

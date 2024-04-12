@@ -3,9 +3,9 @@ import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { PlayFillIcon, ResetIcon } from "@illa-public/icon"
 import BlackButton from "@/components/BlackButton"
-import { ChatStableWSContext, ChatUnStableWSContext } from "../../context"
+import { ChatStableWSContext, ChatUnStableWSContext } from "../../../context"
 
-const StartButton: FC = () => {
+const PCStartButton: FC = () => {
   const { isConnecting, isRunning } = useContext(ChatUnStableWSContext)
   const { reconnect, connect } = useContext(ChatStableWSContext)
 
@@ -31,4 +31,4 @@ const StartButton: FC = () => {
   )
 }
 
-export default StartButton
+export default PCStartButton

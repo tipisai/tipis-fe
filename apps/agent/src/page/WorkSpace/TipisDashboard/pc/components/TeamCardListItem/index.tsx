@@ -25,7 +25,7 @@ import {
   useGetUserInfoQuery,
 } from "@illa-public/user-data"
 import { getILLACloudURL } from "@illa-public/utils"
-import TeamCard from "@/components/TeamCard"
+import PCTeamCard from "@/components/TeamCard/pc"
 import {
   useDeleteAIAgentMutation,
   useDuplicateAIAgentMutation,
@@ -191,7 +191,7 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
   return (
     <>
       <List.Item>
-        <TeamCard
+        <PCTeamCard
           icon={icon}
           title={title}
           description={description}
