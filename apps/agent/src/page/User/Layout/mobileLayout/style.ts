@@ -2,7 +2,7 @@ import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
 
 export const layoutStyle = css`
-  height: calc(var(--dvh, 1vh) * 100);
+  height: 100%;
   background: linear-gradient(180deg, #f5e9fe 0%, #e4e2ff 49.5%, #e9def3 100%);
   background-size: contain;
   display: flex;
