@@ -1,4 +1,5 @@
 import { FC, useCallback, useContext, useEffect, useMemo } from "react"
+import { useSearchParams } from "react-router-dom"
 import { TextSignal } from "@/api/ws/textSignal"
 import { PreviewChat } from "@/components/PreviewChat"
 import { PreviewChatUseProvider } from "@/components/PreviewChat/PreviewChatUseContext"
@@ -22,6 +23,8 @@ export const DefaultChat: FC<{ isMobile: boolean }> = ({
   const { getReadyState, isRunning, chatMessages, isReceiving, inRoomUsers } =
     useContext(ChatUnStableWSContext)
 
+  const [urlSearchParams] = useSearchParams()
+
   const wsContext = useMemo(
     () => ({
       getReadyState,
@@ -43,11 +46,19 @@ export const DefaultChat: FC<{ isMobile: boolean }> = ({
 
   const onSendMessage = useCallback(
     (message: ChatMessage) => {
+      const defaultModelConfig =
+        import.meta.env.ILLA_APP_ENV === "production"
+          ? INIT_CHAT_CONFIG.model
+          : urlSearchParams.get("defaultModel")
+            ? Number(urlSearchParams.get("defaultModel"))
+            : INIT_CHAT_CONFIG.model
+
       sendMessage(
         {
           threadID: message.threadID,
           prompt: message.message,
           ...INIT_CHAT_CONFIG,
+          model: defaultModelConfig,
         } as ChatSendRequestPayload,
         TextSignal.RUN,
         SEND_MESSAGE_WS_TYPE.CHAT,
@@ -58,7 +69,7 @@ export const DefaultChat: FC<{ isMobile: boolean }> = ({
         },
       )
     },
-    [sendMessage],
+    [sendMessage, urlSearchParams],
   )
 
   useEffect(() => {
