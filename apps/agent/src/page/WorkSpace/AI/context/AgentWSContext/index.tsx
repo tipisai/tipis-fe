@@ -495,6 +495,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
 
   const innerLeaveRoom = useCallback(() => {
     leaveRoom()
+    setIsRunning(false)
   }, [leaveRoom])
 
   const innerReconnect = useCallback(async () => {

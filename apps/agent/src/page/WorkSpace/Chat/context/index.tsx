@@ -397,6 +397,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
 
   const innerLeaveRoom = useCallback(() => {
     leaveRoom()
+    setIsRunning(false)
   }, [leaveRoom])
 
   const innerReconnect = useCallback(async () => {
