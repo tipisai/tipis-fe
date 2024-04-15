@@ -10,7 +10,7 @@ import {
   handleFreeTeamLimitError,
 } from "@illa-public/upgrade-modal"
 import { useCreateTeamMutation } from "@illa-public/user-data"
-import { setLocalTeamIdentifier } from "@/utils/auth"
+import { setLocalTeamIdentifier } from "@/utils/storage/cacheTeam"
 import { CreateTeamFields } from "./interface"
 import CreateTeamMobileModal from "./mobile"
 import CreateTeamPCModal from "./pc"

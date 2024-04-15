@@ -16,8 +16,8 @@ import { isSmallThanTargetRole } from "@illa-public/user-role-utils"
 import TeamInfoMobile from "@/page/SettingPage/team/info/components/TeamInfoMobile"
 import TeamInfoPC from "@/page/SettingPage/team/info/components/TeamInfoPC"
 import { TeamInfoFields } from "@/page/SettingPage/team/interface"
-import { setLocalTeamIdentifier } from "@/utils/auth"
 import { getTeamInfoSetting } from "@/utils/routeHelper"
+import { setLocalTeamIdentifier } from "@/utils/storage/cacheTeam"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 
 const TeamInfo: FC = () => {

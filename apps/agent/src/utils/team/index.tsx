@@ -6,7 +6,7 @@ import {
   getLocalTeamIdentifier,
   removeLocalTeamIdentifier,
   setLocalTeamIdentifier,
-} from "../auth"
+} from "../storage/cacheTeam"
 
 export const findRecentTeamInfo = (teamInfos: TeamInfo[]) => {
   const cacheTeamIdentifier = getLocalTeamIdentifier()

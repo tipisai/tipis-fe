@@ -14,8 +14,11 @@ import {
   useUpdateTeamPermissionConfigMutation,
 } from "@illa-public/user-data"
 import store from "@/redux/store"
-import { removeLocalTeamIdentifier, setLocalTeamIdentifier } from "@/utils/auth"
 import { EMPTY_TEAM_PATH, getChatPath } from "@/utils/routeHelper"
+import {
+  removeLocalTeamIdentifier,
+  setLocalTeamIdentifier,
+} from "@/utils/storage/cacheTeam"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import {
   allowEditorOrViewerInviteWrapperStyle,

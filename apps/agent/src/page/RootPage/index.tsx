@@ -5,8 +5,8 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { useJoinTeamMutation } from "@illa-public/user-data"
 import { getAuthToken } from "@illa-public/utils"
-import { setLocalTeamIdentifier } from "@/utils/auth"
 import { useNavigateTargetWorkspace } from "@/utils/routeHelper/hook"
+import { setLocalTeamIdentifier } from "@/utils/storage/cacheTeam"
 
 const RootPage: FC = () => {
   const [searchParams] = useSearchParams()

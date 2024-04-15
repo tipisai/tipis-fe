@@ -10,7 +10,7 @@ import {
 const MenuItemButton: FC<IMenuItemButtonProps> = (props) => {
   const { icon, extra, text, onClick } = props
   return (
-    <button css={menuItemButtonStyle} onClick={onClick}>
+    <div css={menuItemButtonStyle} onClick={onClick}>
       <div
         css={menuItemButtonContentContainerStyle}
         className="menu-item-inner-container"
@@ -19,7 +19,7 @@ const MenuItemButton: FC<IMenuItemButtonProps> = (props) => {
         <span css={menuItemButtonContentStyle}>{text}</span>
         {extra}
       </div>
-    </button>
+    </div>
   )
 }
 
