@@ -22,6 +22,7 @@ import { useGetUserInfoQuery } from "@illa-public/user-data"
 import { TextSignal } from "@/api/ws/textSignal"
 import AgentBlockInput from "@/assets/agent/agent-block-input.svg?react"
 import StopIcon from "@/assets/agent/stop.svg?react"
+import UnselectComponentIcon from "@/assets/agent/unselectComponent.svg?react"
 import {
   ACCEPT,
   MAX_FILE_SIZE,
@@ -59,6 +60,9 @@ import {
   previewChatContainerStyle,
   sendButtonStyle,
   stopIconStyle,
+  uploadContentStyle,
+  uploadContentTipStyle,
+  uploadDropZoneStyle,
 } from "./style"
 
 export const PreviewChat: FC<PreviewChatProps> = (props) => {
@@ -93,6 +97,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const chatRef = useRef<HTMLDivElement>(null)
 
   const [textAreaVal, setTextAreaVal] = useState("")
+  const [isDragFileOver, setIsDragFileOver] = useState(false)
   const [knowledgeFiles, setKnowledgeFiles] = useState<IKnowledgeFile[]>([])
   const [uploadKnowledgeLoading, setUploadKnowledgeLoading] = useState(false)
   const scrollDirectRef = useRef<SCROLL_DIRECTION>(SCROLL_DIRECTION.DOWN)
@@ -158,6 +163,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const handleClickUploadFile = () => {
     TipisTrack.track("click_upload_chat_file_entry", {
       parameter1: useTo,
+      parameter2: "select",
     })
     if (knowledgeFiles.length >= MAX_MESSAGE_FILES_LENGTH) {
       TipisTrack.track("chat_file_over_num", {
@@ -355,28 +361,84 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     }
   }, [])
 
-  const handleOnPaste = async (
-    e: React.ClipboardEvent<HTMLTextAreaElement>,
-  ) => {
+  const getNeedUploadAndNotAcceptFiles = (files: FileList) => {
     const acceptType = ACCEPT
-    const needUpdateFilesArray = Array.from(e.clipboardData.files).filter(
-      (file) => acceptType.includes(file.type),
+
+    const needUpdateFilesArray = Array.from(files).filter((file) =>
+      acceptType.includes(file.type),
     )
-    const notAcceptFilesArray = Array.from(e.clipboardData.files).filter(
+    const notAcceptFilesArray = Array.from(files).filter(
       (file) => !acceptType.includes(file.type),
     )
 
+    return { needUpdateFilesArray, notAcceptFilesArray }
+  }
+
+  const handleOnPaste = async (
+    e: React.ClipboardEvent<HTMLTextAreaElement>,
+  ) => {
+    if (e.clipboardData.files.length === 0) return
+    TipisTrack.track("click_upload_chat_file_entry", {
+      parameter1: useTo,
+      parameter2: "paste",
+    })
+    e.preventDefault()
+
+    const { needUpdateFilesArray, notAcceptFilesArray } =
+      getNeedUploadAndNotAcceptFiles(e.clipboardData.files)
+
     if (notAcceptFilesArray.length > 0) {
+      TipisTrack.track("chat_file_format_error", {
+        parameter1: useTo,
+        parameter2: "paste",
+        parameter3: notAcceptFilesArray.map((file) => file.type),
+      })
       messageAPI.warning({
         content: t("homepage.tipi_chat.message.failed_to_add"),
       })
     }
     if (needUpdateFilesArray.length > 0) {
-      e.preventDefault()
       const validateResult = validateFiles(needUpdateFilesArray)
       if (!validateResult) return
       await uploadFiles(needUpdateFilesArray)
     }
+  }
+
+  const handleOnDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    if (e.dataTransfer.items.length === 0) return
+    TipisTrack.track("click_upload_chat_file_entry", {
+      parameter1: useTo,
+      parameter2: "drag",
+    })
+    setIsDragFileOver(false)
+    const { needUpdateFilesArray, notAcceptFilesArray } =
+      getNeedUploadAndNotAcceptFiles(e.dataTransfer.files)
+
+    if (notAcceptFilesArray.length > 0) {
+      TipisTrack.track("chat_file_format_error", {
+        parameter1: useTo,
+        parameter2: "drag",
+        parameter3: notAcceptFilesArray.map((file) => file.type),
+      })
+      messageAPI.warning({
+        content: t("homepage.tipi_chat.message.failed_to_add"),
+      })
+    }
+    if (needUpdateFilesArray.length > 0) {
+      const validateResult = validateFiles(needUpdateFilesArray)
+      if (!validateResult) return
+      await uploadFiles(needUpdateFilesArray)
+    }
+  }
+
+  const handleOnDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    setIsDragFileOver(true)
+  }
+
+  const handleOnDragLeave = () => {
+    setIsDragFileOver(false)
   }
 
   return (
@@ -489,7 +551,12 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
             </div>
           </div>
         ) : (
-          <div css={inputContainerStyle}>
+          <div
+            css={inputContainerStyle}
+            onDrop={handleOnDrop}
+            onDragOver={handleOnDragOver}
+            onDragLeave={handleOnDragLeave}
+          >
             <textarea
               value={textAreaVal}
               css={inputStyle}
@@ -523,6 +590,16 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
                 </Button>
               </div>
             </div>
+            {isDragFileOver && (
+              <div css={uploadDropZoneStyle}>
+                <div css={uploadContentStyle}>
+                  <UnselectComponentIcon />
+                  <p css={uploadContentTipStyle}>
+                    {t("homepage.tipi_chat.message.release_to_upload")}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
