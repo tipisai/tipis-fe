@@ -56,7 +56,9 @@
     },
     "updater": {
       "active": true,
-      "endpoints": ["https://update.tipis.ai"],
+      "endpoints": [
+        "https://gist.githubusercontent.com/AruSeito/f126de179b10e52234d37c754668ae91/raw/tipis.ai-desktop-updater.json"
+      ],
       "dialog": true,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEE3QzcyMjBFMDIxRTREMUIKUldRYlRSNENEaUxIcDkrS2Mwa0gvL1VGd0M3NDVKRi9scUdiZWpWblZUM0xVbmRqcU9GaVV3bXcK",
       "windows": {
