@@ -1,3 +1,4 @@
+import legacy from "@vitejs/plugin-legacy"
 import react from "@vitejs/plugin-react-swc"
 import { resolve } from "path"
 import copy from "rollup-plugin-copy"
@@ -33,43 +34,52 @@ const getUsedEnv = (env: Record<string, string>) => {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "")
 
+  const buildToClient = env["ILLA_USE_IN_CLIENT"] === "1"
+
   let copyTarget = {
     src: [I18N_SOURCE_PATH, "!**/package.json"],
-    dest:
-      env["ILLA_USE_IN_CLIENT"] === "1"
-        ? I18N_SRC_TARGET_PATH
-        : I18N_PUBLIC_TARGET_PATH,
+    dest: buildToClient ? I18N_SRC_TARGET_PATH : I18N_PUBLIC_TARGET_PATH,
+  }
+
+  const VITE_PLUGINS = [
+    copy({
+      targets: [copyTarget],
+      hook: "buildStart",
+    }),
+    react({
+      jsxImportSource: "@emotion/react",
+    }),
+    svgr(),
+    checker({
+      typescript: {
+        root: process.cwd(),
+        tsconfigPath: "./tsconfig.json",
+      },
+      eslint: {
+        lintCommand: 'eslint "./src/**/**.{ts,tsx}" --config ".eslintrc.cjs"',
+        dev: {
+          logLevel: ["error", "warning"],
+        },
+      },
+      root: process.cwd(),
+    }),
+    visualizer({
+      template: "treemap",
+    }),
+  ]
+
+  if (buildToClient) {
+    VITE_PLUGINS.push(
+      legacy({
+        targets: ["last 3 Chrome versions", "safari 13"],
+      }),
+    )
   }
 
   return {
     envPrefix: ["ILLA_"],
     define: getUsedEnv(env),
-    plugins: [
-      copy({
-        targets: [copyTarget],
-        hook: "buildStart",
-      }),
-      react({
-        jsxImportSource: "@emotion/react",
-      }),
-      svgr(),
-      checker({
-        typescript: {
-          root: process.cwd(),
-          tsconfigPath: "./tsconfig.json",
-        },
-        eslint: {
-          lintCommand: 'eslint "./src/**/**.{ts,tsx}" --config ".eslintrc.cjs"',
-          dev: {
-            logLevel: ["error", "warning"],
-          },
-        },
-        root: process.cwd(),
-      }),
-      visualizer({
-        template: "treemap",
-      }),
-    ] as PluginOption[],
+    plugins: VITE_PLUGINS as PluginOption[],
     resolve: {
       alias: {
         "@": resolve(__dirname, "src"),
