@@ -69,3 +69,33 @@ export const iconHotSpotStyle = css`
   align-items: center;
   color: ${getColor("grayBlue", "02")};
 `
+
+export const uploadAreaContainerStyle = (isHovered: boolean) => css`
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid ${getColor("grayBlue", "08")};
+  background-color: ${isHovered
+    ? getColor("grayBlue", "09")
+    : getColor("white", "01")};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 0;
+  cursor: pointer;
+  :hover {
+    background-color: ${getColor("grayBlue", "09")};
+  }
+`
+
+export const uploadContentStyle = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+`
+
+export const uploadTipiStyle = css`
+  color: ${getColor("grayBlue", "04")};
+  font-size: 14px;
+  line-height: 22px;
+`
