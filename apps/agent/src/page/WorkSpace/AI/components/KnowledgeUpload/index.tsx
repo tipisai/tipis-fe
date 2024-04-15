@@ -1,5 +1,5 @@
 import Icon from "@ant-design/icons"
-import { App, Button } from "antd"
+import { App } from "antd"
 import {
   ChangeEvent,
   FC,
@@ -7,6 +7,7 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
   useSyncExternalStore,
 } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
@@ -42,6 +43,9 @@ import {
   iconHotSpotStyle,
   nameContainerStyle,
   opeationStyle,
+  uploadAreaContainerStyle,
+  uploadContentStyle,
+  uploadTipiStyle,
 } from "./style"
 
 const mergeUploadValues = (
@@ -76,6 +80,7 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
     control,
     name: ["aiAgentID"],
   })
+  const [isDragFileOver, setIsDragFileOver] = useState(false)
   const { uploadFileStore } = useContext(UploadContext)
 
   const uploadFiles = useSyncExternalStore(
@@ -88,26 +93,28 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
     [uploadFiles, values],
   )
 
-  const handleOnChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    let inputFiles = Array.from(e.target.files || [])
-    inputRef.current && (inputRef.current.value = "")
-    if (!inputFiles.length) return
-    if (inputFiles.length + values.length > MAX_MESSAGE_FILES_LENGTH) {
+  const validateFiles = (files: File[]) => {
+    if (!files.length) return false
+    if (files.length + values.length > MAX_MESSAGE_FILES_LENGTH) {
       TipisTrack.track("knowledge_file_over_num", {
         parameter1: aiAgentID ? "edit_tipi" : "create_tipi",
-        parameter3: inputFiles.length + values.length,
+        parameter3: files.length + values.length,
       })
       messageAPI.warning({
         content: t("dashboard.message.support_for_up_to_10"),
       })
-      return
+      return false
     }
+    return true
+  }
+
+  const uploadFilesToServer = async (files: File[]) => {
     TipisTrack.track("start_upload_knowledge_file", {
       parameter1: aiAgentID ? "edit_tipi" : "create_tipi",
     })
     const currentFiles = [...currentValue]
     const formatFiles = multipleFileHandler(
-      inputFiles,
+      files,
       currentFiles,
       uploadFileStore,
     )
@@ -147,6 +154,13 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
         content: t("dashboard.message.bad_file"),
       })
     }
+  }
+
+  const handleOnChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    let inputFiles = Array.from(e.target.files || [])
+    inputRef.current && (inputRef.current.value = "")
+    if (!validateFiles(inputFiles)) return
+    await uploadFilesToServer(inputFiles)
   }
 
   const handleDelete = (
@@ -207,17 +221,83 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
     }
   }, [uploadFileStore])
 
+  const getNeedUploadAndNotAcceptFiles = (files: FileList) => {
+    const acceptType = ACCEPT
+
+    const needUpdateFilesArray = Array.from(files).filter((file) =>
+      acceptType.includes(file.type),
+    )
+    const notAcceptFilesArray = Array.from(files).filter(
+      (file) => !acceptType.includes(file.type),
+    )
+
+    return { needUpdateFilesArray, notAcceptFilesArray }
+  }
+
+  const handleOnDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    if (e.dataTransfer.items.length === 0) return
+    TipisTrack.track("start_upload_knowledge_file", {
+      parameter1: aiAgentID ? "edit_tipi" : "create_tipi",
+      parameter2: "drag",
+    })
+    setIsDragFileOver(false)
+    const { needUpdateFilesArray, notAcceptFilesArray } =
+      getNeedUploadAndNotAcceptFiles(e.dataTransfer.files)
+
+    if (notAcceptFilesArray.length > 0) {
+      TipisTrack.track("knowledge_file_format_error", {
+        parameter1: aiAgentID ? "edit_tipi" : "create_tipi",
+        parameter2: "drag",
+        parameter3: notAcceptFilesArray.map((file) => file.type),
+      })
+      messageAPI.warning({
+        content: t("homepage.tipi_chat.message.failed_to_add"),
+      })
+    }
+    if (needUpdateFilesArray.length > 0) {
+      const validateResult = validateFiles(needUpdateFilesArray)
+      if (!validateResult) return
+      await uploadFilesToServer(needUpdateFilesArray)
+    }
+  }
+
+  const handleOnDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    setIsDragFileOver(true)
+  }
+
+  const handleOnDragLeave = () => {
+    setIsDragFileOver(false)
+  }
+
   return (
     <div css={containerStyle}>
       <div>
-        <Button
+        <div
+          css={uploadAreaContainerStyle(isDragFileOver)}
+          onClick={handleClickUpload}
+          onDrop={handleOnDrop}
+          onDragOver={handleOnDragOver}
+          onDragLeave={handleOnDragLeave}
+        >
+          <div css={uploadContentStyle}>
+            <Icon component={UploadIcon} />
+            <p css={uploadTipiStyle}>
+              {isDragFileOver
+                ? t("homepage.tipi_chat.message.drop_to_upload")
+                : t("homepage.tipi_chat.message.drag_to_upload")}
+            </p>
+          </div>
+        </div>
+        {/* <Button
           block
           size="large"
           icon={<Icon component={UploadIcon} />}
           onClick={handleClickUpload}
         >
           {t("homepage.edit_tipi.modal.upload")}
-        </Button>
+        </Button> */}
         <input
           style={{ display: "none" }}
           type="file"

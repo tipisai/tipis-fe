@@ -12,6 +12,8 @@ env:
   DO_CLUSTER: ${{ secrets.DO_CLUSTER }}
   DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
   DOCKER_PWD: ${{ secrets.DOCKER_PWD }}
+  TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
+  TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
 jobs:
   release:
     permissions:
