@@ -41,6 +41,10 @@
     "antd": "^5.15.2",
     "dayjs": "^1.11.10"
   },
+  "browserslist": [
+    "last 3 Chrome versions",
+    "safari 13"
+  ],
   "pnpm": {
     "overrides": {
       "react": "$react",

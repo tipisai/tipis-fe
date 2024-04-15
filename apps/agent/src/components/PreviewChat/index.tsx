@@ -23,6 +23,7 @@ import { TextSignal } from "@/api/ws/textSignal"
 import AgentBlockInput from "@/assets/agent/agent-block-input.svg?react"
 import StopIcon from "@/assets/agent/stop.svg?react"
 import {
+  ACCEPT,
   MAX_FILE_SIZE,
   MAX_MESSAGE_FILES_LENGTH,
 } from "@/config/constants/knowledge"
@@ -171,21 +172,22 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     inputRef.current?.click()
   }
 
-  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    let inputFiles = Array.from(e.target.files || [])
-    inputRef.current && (inputRef.current.value = "")
-
-    if (!inputFiles.length) return
-    if (inputFiles.length + knowledgeFiles.length > MAX_MESSAGE_FILES_LENGTH) {
+  const validateFiles = (files: File[]) => {
+    if (!files.length) return false
+    if (files.length + knowledgeFiles.length > MAX_MESSAGE_FILES_LENGTH) {
       TipisTrack.track("chat_file_over_num", {
         parameter1: useTo,
-        parameter3: inputFiles.length + knowledgeFiles.length,
+        parameter3: files.length + knowledgeFiles.length,
       })
       messageAPI.warning({
         content: t("dashboard.message.support_for_up_to_10"),
       })
-      return
+      return false
     }
+    return true
+  }
+
+  const uploadFiles = async (files: File[]) => {
     TipisTrack.track("start_upload_chat_file", {
       parameter1: useTo,
     })
@@ -193,7 +195,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     const currentFiles = [...knowledgeFiles]
 
     const formatFiles = multipleFileHandler(
-      inputFiles,
+      files,
       currentFiles,
       chatUploadStoreRef.current,
     )
@@ -253,6 +255,15 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     } finally {
       setUploadKnowledgeLoading(false)
     }
+  }
+
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    let inputFiles = Array.from(e.target.files || [])
+    inputRef.current && (inputRef.current.value = "")
+
+    const validateResult = validateFiles(inputFiles)
+    if (!validateResult) return
+    await uploadFiles(inputFiles)
   }
 
   const handleClickStopGenerating = () => {
@@ -343,6 +354,30 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       chatUploadStore.clearStore()
     }
   }, [])
+
+  const handleOnPaste = async (
+    e: React.ClipboardEvent<HTMLTextAreaElement>,
+  ) => {
+    const acceptType = ACCEPT
+    const needUpdateFilesArray = Array.from(e.clipboardData.files).filter(
+      (file) => acceptType.includes(file.type),
+    )
+    const notAcceptFilesArray = Array.from(e.clipboardData.files).filter(
+      (file) => !acceptType.includes(file.type),
+    )
+
+    if (notAcceptFilesArray.length > 0) {
+      messageAPI.warning({
+        content: t("homepage.tipi_chat.message.failed_to_add"),
+      })
+    }
+    if (needUpdateFilesArray.length > 0) {
+      e.preventDefault()
+      const validateResult = validateFiles(needUpdateFilesArray)
+      if (!validateResult) return
+      await uploadFiles(needUpdateFilesArray)
+    }
+  }
 
   return (
     <div css={previewChatContainerStyle}>
@@ -460,6 +495,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
               css={inputStyle}
               placeholder={t("editor.ai-agent.placeholder.send")}
               onKeyDown={handleInputKeyDown}
+              onPaste={handleOnPaste}
               onChange={(event) => {
                 setTextAreaVal(event.target.value)
               }}
