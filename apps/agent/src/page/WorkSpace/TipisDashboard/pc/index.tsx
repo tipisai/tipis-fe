@@ -12,7 +12,11 @@ import HeaderTools from "./components/HeaderTools"
 // import SortComponentPC from "./components/SortComponent"
 import PCTeamCardListItem from "./components/TeamCardListItem"
 import { TABS_KEY } from "./constant"
-import { tabsContainerStyle, tipisPCDashboardContainerStyle } from "./style"
+import {
+  cardListContainerStyle,
+  tabsContainerStyle,
+  tipisPCDashboardContainerStyle,
+} from "./style"
 
 const TipisPCDashboard: FC = () => {
   const { t } = useTranslation()
@@ -30,7 +34,11 @@ const TipisPCDashboard: FC = () => {
             {
               label: t("homepage.tipi_dashboard.tab.team"),
               key: TABS_KEY.TEAM,
-              children: <TeamCardList RenderItem={PCTeamCardListItem} />,
+              children: (
+                <div css={cardListContainerStyle}>
+                  <TeamCardList RenderItem={PCTeamCardListItem} />
+                </div>
+              ),
             },
             // {
             //   label: t("homepage.tipi_dashboard.tab.marketplace"),
