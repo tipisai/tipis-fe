@@ -6,6 +6,7 @@ import {
   deleteRecentTabReducer,
   initRecentTabReducer,
   updateCurrentRecentTabIDReducer,
+  updateCurrentRecentTabOrderReducer,
   updateRecentTabReducer,
 } from "./reducer"
 import { recentTabInitState } from "./state"
@@ -21,6 +22,7 @@ const recentTabSlice = createSlice({
     updateRecentTabReducer,
     updateCurrentRecentTabIDReducer,
     batchUpdateRecentTabReducer,
+    updateCurrentRecentTabOrderReducer,
   },
 })
 

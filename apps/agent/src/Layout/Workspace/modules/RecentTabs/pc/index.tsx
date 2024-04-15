@@ -1,22 +1,30 @@
 import { FC } from "react"
 import { useSelector } from "react-redux"
-import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
+import { getRecentTabInfosOrder } from "@/redux/ui/recentTab/selector"
+// import { recentTabActions } from "../../../../../redux/ui/recentTab/slice"
 import PCTipisTab from "../../../components/TipisTab/pc"
 import { recentTabsContainerStyle } from "../style"
 
 const PCRecentTabs: FC<{ isMiniSize: boolean }> = ({ isMiniSize = false }) => {
-  const recentTabInfos = useSelector(getRecentTabInfos)
+  const tabOrders = useSelector(getRecentTabInfosOrder)
+
+  // const dispatch = useDispatch()
+  // const onReorder = useCallback(
+  //   (newOrder: string[]) => {
+  //     console.log("newOrder", newOrder)
+  //     dispatch(recentTabActions.updateCurrentRecentTabOrderReducer(newOrder))
+  //   },
+  //   [dispatch],
+  // )
+
   return (
     <div css={recentTabsContainerStyle}>
-      {recentTabInfos.map((tabInfo) => (
+      {tabOrders.map((tabID, index) => (
         <PCTipisTab
-          tabID={tabInfo.tabID}
-          tabType={tabInfo.tabType}
-          tabName={tabInfo.tabName}
-          icon={tabInfo.tabIcon}
-          key={tabInfo.tabID}
-          cacheID={tabInfo.cacheID}
+          tabID={tabID}
+          key={tabID}
           isMiniSize={isMiniSize}
+          index={index}
         />
       ))}
     </div>
