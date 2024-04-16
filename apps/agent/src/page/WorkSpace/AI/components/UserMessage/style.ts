@@ -3,7 +3,7 @@ import { getColor } from "@illa-public/color-scheme"
 import { applyMobileStyle } from "@illa-public/utils"
 
 export const agentMessageContainer = css`
-  padding: 24px 24px 8px 72px;
+  padding: 24px 0 8px 48px;
   display: flex;
   justify-content: end;
   width: 100%;
