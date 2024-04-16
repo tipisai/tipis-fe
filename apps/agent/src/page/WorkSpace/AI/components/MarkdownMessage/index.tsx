@@ -8,7 +8,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material"
-import { Image, Typography } from "antd"
+import { Typography } from "antd"
 import { FC } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkBreaks from "remark-breaks"
@@ -22,6 +22,7 @@ import {
   tableStyle,
 } from "@/page/WorkSpace/AI/components/MarkdownMessage/style"
 import Code from "./Code"
+import CustomImage from "./CustomImage"
 import { handleParseText } from "./utils"
 
 export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
@@ -95,7 +96,9 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
               isReceiving={isReceiving}
             />
           ),
-          img: ({ src, alt }) => <Image src={src} alt={alt} preview={false} />,
+          img: ({ src, alt }) => (
+            <CustomImage src={src} alt={alt} isOwnMessage={isOwnMessage} />
+          ),
         }}
       >
         {handleParseText(children ?? "", isOwnMessage)}

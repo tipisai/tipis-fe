@@ -28,7 +28,13 @@ export enum MESSAGE_SYNC_TYPE {
   GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST = 2,
   GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_OK = 3,
   GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_ERROR = 4,
+  GPT_CHAT_MESSAGE_TYPE_TOOL_FILE = 5,
 }
+
+export const NEED_GROUP_MESSAGE_TYPE = [
+  MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_FILE,
+  MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST,
+]
 
 export interface CollaboratorsInfo {
   id: string
@@ -88,4 +94,10 @@ export interface PreviewChatProps {
     sendMessage: IChatSendMessage
     setIsReceiving: (isReceiving: boolean) => void
   }
+}
+
+export interface IFileMessage {
+  contentType: string
+  downloadURL: string
+  fileName: string
 }

@@ -5,10 +5,18 @@ import {
   ChatSendRequestPayload,
   IGroupMessage,
   MESSAGE_STATUS,
-  MESSAGE_SYNC_TYPE,
 } from "@/components/PreviewChat/interface"
 import { AgentInitial } from "@/page/WorkSpace/AI/AIAgent/interface"
 import { DELAY_TASK_TIME } from "./constants"
+import {
+  handleFileMessage,
+  isErrorMessageRes,
+  isLinkedPendingMessage,
+  isNeedStartGroupMessage,
+  isPendingRequestMessage,
+  isRequestMessage,
+  isSuccessMessageRes,
+} from "./groupUtils"
 import { isGroupMessage, isNormalMessage } from "./typeHelper"
 
 export const formatSendMessagePayload = (payload: ChatSendRequestPayload) => {
@@ -30,82 +38,32 @@ export const formatSendMessagePayload = (payload: ChatSendRequestPayload) => {
   return encodePayload
 }
 
-export const isChatMessage = (message: ChatMessage) => {
-  return message.messageType === MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_CHAT
-}
-
-export const isRequestMessage = (message: ChatMessage) => {
-  return (
-    message.messageType === MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_REQUEST
-  )
-}
-
-export const isPendingRequestMessage = (message: ChatMessage) => {
-  return (
-    isRequestMessage(message) &&
-    message.status == MESSAGE_STATUS.ANALYZE_PENDING
-  )
-}
-
-export const isErrorMessageRes = (message: ChatMessage) => {
-  return (
-    message.messageType ===
-    MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_ERROR
-  )
-}
-
-export const isSuccessMessageRes = (message: ChatMessage) => {
-  return (
-    message.messageType ===
-    MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_TOOL_RETURN_OK
-  )
-}
-
-export const isLinkedPendingMessage = (
-  targetMessage: ChatMessage,
-  message: ChatMessage,
-): boolean => {
-  if (
-    !isPendingRequestMessage(targetMessage) ||
-    (!isErrorMessageRes(message) && !isSuccessMessageRes(message))
-  )
-    return false
-  let targetCallId, callId
-  try {
-    targetCallId = JSON.parse(targetMessage.message)?.["tool_call_id"]
-    callId = JSON.parse(message.message)?.["tool_call_id"]
-    return !!targetCallId && targetCallId === callId
-  } catch (e) {
-    return false
-  }
-}
-
 export const handleUpdateMessageList = (
   curMessage: IGroupMessage,
-  message: ChatMessage,
+  nextMessage: ChatMessage,
 ) => {
-  const needUpdateMessage = curMessage.items[curMessage.items.length - 1]
-  if (needUpdateMessage.messageType === message.messageType) {
-    needUpdateMessage.message = needUpdateMessage.message + message.message
+  const currentMessage = curMessage.items[curMessage.items.length - 1]
+  if (currentMessage.messageType === nextMessage.messageType) {
+    currentMessage.message = currentMessage.message + nextMessage.message
   } else {
-    if (isLinkedPendingMessage(needUpdateMessage, message)) {
-      needUpdateMessage.status = isErrorMessageRes(message)
+    if (isLinkedPendingMessage(currentMessage, nextMessage)) {
+      currentMessage.status = isErrorMessageRes(nextMessage)
         ? MESSAGE_STATUS.ANALYZE_FAILED
         : MESSAGE_STATUS.ANALYZE_SUCCESS
 
-      needUpdateMessage.messageResult = isErrorMessageRes(message)
-        ? message.message
+      currentMessage.messageResult = isErrorMessageRes(nextMessage)
+        ? nextMessage.message
         : undefined
     }
-    if (isSuccessMessageRes(message) || isErrorMessageRes(message)) {
+    if (isSuccessMessageRes(nextMessage) || isErrorMessageRes(nextMessage)) {
       curMessage.items.push({
-        ...message,
+        ...nextMessage,
         message: "",
       })
     } else {
       curMessage.items.push({
-        ...message,
-        status: isRequestMessage(message)
+        ...nextMessage,
+        status: isRequestMessage(nextMessage)
           ? MESSAGE_STATUS.ANALYZE_PENDING
           : undefined,
       })
@@ -169,36 +127,40 @@ export const groupReceivedMessagesForUI = (
   message: ChatMessage,
 ) => {
   const newMessageList = [...oldMessage]
+  const nextMessage = handleFileMessage(message)
+  if (!nextMessage) return
   const index = newMessageList.findIndex((m) => {
-    return m.threadID === message.threadID
+    return m.threadID === nextMessage.threadID
   })
   if (index === -1) {
-    if (isRequestMessage(message)) {
+    if (isNeedStartGroupMessage(nextMessage)) {
       newMessageList.push({
-        threadID: message.threadID,
+        threadID: nextMessage.threadID,
         items: [
           {
-            sender: message.sender,
-            message: message.message,
-            threadID: message.threadID,
-            messageType: message.messageType,
-            status: MESSAGE_STATUS.ANALYZE_PENDING,
+            sender: nextMessage.sender,
+            message: nextMessage.message,
+            threadID: nextMessage.threadID,
+            messageType: nextMessage.messageType,
+            status: isRequestMessage(nextMessage)
+              ? MESSAGE_STATUS.ANALYZE_PENDING
+              : undefined,
           },
         ],
       })
     } else {
       newMessageList.push({
-        sender: message.sender,
-        message: message.message,
-        threadID: message.threadID,
-        messageType: message.messageType,
+        sender: nextMessage.sender,
+        message: nextMessage.message,
+        threadID: nextMessage.threadID,
+        messageType: nextMessage.messageType,
       })
     }
   } else {
     const curMessage = newMessageList[index]
     if (isNormalMessage(curMessage)) {
-      if (curMessage.messageType === message.messageType) {
-        curMessage.message = curMessage.message + message.message
+      if (curMessage.messageType === nextMessage.messageType) {
+        curMessage.message = curMessage.message + nextMessage.message
       } else {
         // compliant not use request type start
         newMessageList[index] = {
@@ -215,10 +177,13 @@ export const groupReceivedMessagesForUI = (
             },
           ],
         }
-        handleUpdateMessageList(newMessageList[index] as IGroupMessage, message)
+        handleUpdateMessageList(
+          newMessageList[index] as IGroupMessage,
+          nextMessage,
+        )
       }
     } else {
-      handleUpdateMessageList(curMessage, message)
+      handleUpdateMessageList(curMessage, nextMessage)
     }
   }
   return newMessageList
