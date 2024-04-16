@@ -1,10 +1,7 @@
 import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
 
-export const menuItemButtonStyle = (
-  isSelected: boolean,
-  isMiniSize: boolean,
-) => {
+export const menuItemButtonStyle = (isSelected: boolean) => {
   const menuItemInnerContainerStyle = isSelected
     ? css`
         .menu-item-inner-container {
@@ -21,8 +18,8 @@ export const menuItemButtonStyle = (
       `
 
   return css`
+    position: relative;
     display: block;
-    padding: ${isMiniSize ? "4px 12px" : "4px 16px"};
     border: unset;
     width: 100%;
     background-color: transparent;
@@ -120,7 +117,13 @@ export const deleteButtonContainerStyle = (canShow: boolean) => css`
   }
 `
 
-export const navLinkStyle = css`
+export const draggingStyle = css`
+  opacity: 0.5;
+`
+
+export const navLinkStyle = (isMiniSize: boolean) => css`
+  padding: ${isMiniSize ? "4px 12px" : "4px 16px"};
+
   :-webkit-any-link {
     text-decoration: none;
     color: inherit;

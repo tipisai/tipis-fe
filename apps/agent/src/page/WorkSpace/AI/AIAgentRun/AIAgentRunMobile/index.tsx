@@ -89,7 +89,6 @@ export const AIAgentRunMobile: FC = () => {
         <div css={previewChatContainer}>
           <PreviewChat
             editState="RUN"
-            isMobile
             blockInput={!isRunning || blockInputDirty}
             onSendMessage={onSendMessage}
             wsContextValue={wsContext}

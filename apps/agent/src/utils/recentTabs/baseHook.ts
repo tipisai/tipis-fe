@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { getCurrentId } from "@illa-public/user-data"
 import store from "@/redux/store"
 import { ITabInfo } from "@/redux/ui/recentTab/interface"
+import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 import {
@@ -11,6 +12,7 @@ import {
   getTabs,
   removeAllTabsAndCacheData,
   removeTabsAndCacheData,
+  setTabs,
   updateTabs,
 } from "../localForage/teamData"
 
@@ -77,6 +79,27 @@ export const useUpdateRecentTabReducer = () => {
   return updateRecentTabReducer
 }
 
+export const useUpdateRecentTabOrderReducer = () => {
+  const dispatch = useDispatch()
+
+  const updateRecentTabOrderReducer = useCallback(
+    async (newOrder: string[]) => {
+      const teamID = getCurrentId(store.getState())!
+      const oldOrderTabInfos = getRecentTabInfos(store.getState())
+      const newTabs = newOrder.map((tabID) => {
+        return oldOrderTabInfos.find((tab) => tab.tabID === tabID)!
+      })
+
+      dispatch(recentTabActions.setRecentTabReducer(newTabs))
+      await setTabs(teamID, newTabs)
+      // await updateTabs(teamID, oldTabID, newTabInfo)
+    },
+    [dispatch],
+  )
+
+  return updateRecentTabOrderReducer
+}
+
 export const useBatchUpdateRecentTabReducer = () => {
   const dispatch = useDispatch()
 
@@ -98,9 +121,10 @@ export const useBatchUpdateRecentTabReducer = () => {
 export const useInitRecentTab = () => {
   const dispatch = useDispatch()
   const currentTeamID = useSelector(getCurrentId)
+
   const initRecentTab = useCallback(async () => {
     const tabsInfo = await getTabs(currentTeamID!)
-    dispatch(recentTabActions.initRecentTabReducer(tabsInfo))
+    dispatch(recentTabActions.setRecentTabReducer(tabsInfo))
     dispatch(recentTabActions.updateCurrentRecentTabIDReducer(DEFAULT_CHAT_ID))
   }, [currentTeamID, dispatch])
 

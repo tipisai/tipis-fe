@@ -18,7 +18,7 @@ const ChatContent: FC = () => {
           <PCCustomTitle title={title} iconURL={defaultCHatIconURL} />
         )}
       />
-      <DefaultChat isMobile={false} />
+      <DefaultChat />
     </div>
   )
 }
