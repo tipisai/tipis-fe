@@ -4,8 +4,6 @@ import { getColor } from "@illa-public/color-scheme"
 export const rightPanelContainerStyle = css`
   height: 100%;
   display: flex;
-  width: 100%;
-  align-items: center;
   overflow-y: auto;
   flex-grow: 1;
   flex-direction: column;
