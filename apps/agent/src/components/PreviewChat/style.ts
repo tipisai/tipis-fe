@@ -37,8 +37,8 @@ export const previewChatContainerStyle = css`
   position: relative;
   height: 100%;
   width: 100%;
-  max-width: 800px;
   display: flex;
+  align-items: center;
   flex-direction: column;
   overflow: hidden;
   padding-bottom: 16px;
@@ -59,6 +59,7 @@ export const inputTextContainerStyle = css`
 
 export const chatContainerStyle = css`
   display: flex;
+  align-items: center;
   flex-direction: column;
   overflow-y: auto;
   height: 100%;
@@ -203,4 +204,9 @@ export const uploadContentTipStyle = css`
   font-weight: 400;
   line-height: 22px;
   color: ${getColor("grayBlue", "03")};
+`
+
+export const maxWidthStyle = css`
+  width: 100%;
+  max-width: 800px;
 `

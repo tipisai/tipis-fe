@@ -6,6 +6,7 @@ import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { useJoinTeamMutation } from "@illa-public/user-data"
 import { getAuthToken } from "@illa-public/utils"
 import { useNavigateTargetWorkspace } from "../routeHelper/hook"
+import { useRedirectToRedirectURL } from "../routeHelper/redirectHook"
 import { setLocalTeamIdentifier } from "../storage/cacheTeam"
 
 export const useAcceptInvite = () => {
@@ -14,6 +15,7 @@ export const useAcceptInvite = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const navigateWorkspace = useNavigateTargetWorkspace()
+  const redirect = useRedirectToRedirectURL()
 
   const acceptInvite = useCallback(
     async (inviteToken: string, redirectURL: string | undefined | null) => {
@@ -22,9 +24,7 @@ export const useAcceptInvite = () => {
         message.success({ content: t("homepage.message.join_suc") })
         setLocalTeamIdentifier(teamInfo.identifier)
         if (redirectURL) {
-          let parseRedirectURL = new URL(decodeURIComponent(redirectURL))
-          parseRedirectURL.searchParams.set("token", getAuthToken()!)
-          window.location.href = parseRedirectURL.toString()
+          redirect(redirectURL)
         } else {
           navigate(`/workspace/${teamInfo.identifier}`)
         }
@@ -65,7 +65,7 @@ export const useAcceptInvite = () => {
         }
       }
     },
-    [joinTeamMutation, message, navigate, navigateWorkspace, t],
+    [joinTeamMutation, message, navigate, navigateWorkspace, redirect, t],
   )
 
   return acceptInvite

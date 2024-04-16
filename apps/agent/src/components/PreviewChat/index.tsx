@@ -56,6 +56,7 @@ import {
   inputContainerStyle,
   inputStyle,
   inputTextContainerStyle,
+  maxWidthStyle,
   operationStyle,
   previewChatContainerStyle,
   sendButtonStyle,
@@ -444,9 +445,9 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   return (
     <div css={previewChatContainerStyle}>
       <div ref={chatRef} css={chatContainerStyle} onScroll={handleScroll}>
-        {messagesList}
+        <div css={maxWidthStyle}>{messagesList}</div>
       </div>
-      <div css={inputTextContainerStyle}>
+      <div css={[inputTextContainerStyle, maxWidthStyle]}>
         <AnimatePresence>
           {isRunning &&
             isReceiving &&
