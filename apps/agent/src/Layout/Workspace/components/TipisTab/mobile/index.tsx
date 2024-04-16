@@ -28,7 +28,7 @@ import {
 
 const MobileTipisTab: FC<IMobileTipisTabProps> = (props) => {
   const { tabID } = props
-  const tabInfos = useSelector((state) => getRecentTabInfosByID(state, tabID))
+  const tabInfo = useSelector((state) => getRecentTabInfosByID(state, tabID))!
   const dispatch = useDispatch()
   const currentTeamInfo = useGetCurrentTeamInfo()
   const { modal } = App.useApp()
@@ -39,9 +39,7 @@ const MobileTipisTab: FC<IMobileTipisTabProps> = (props) => {
 
   const getTabName = useGetTabName()
 
-  if (!tabInfos) return
-
-  const { tabIcon, tabName, tabType, cacheID } = tabInfos
+  const { tabIcon, tabName, tabType, cacheID } = tabInfo
 
   const onClickRemoveTab: MouseEventHandler<HTMLElement> = async (e) => {
     e.stopPropagation()

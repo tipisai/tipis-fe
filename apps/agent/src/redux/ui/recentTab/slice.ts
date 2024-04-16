@@ -4,7 +4,7 @@ import {
   batchUpdateRecentTabReducer,
   deleteAllRecentTabReducer,
   deleteRecentTabReducer,
-  initRecentTabReducer,
+  setRecentTabReducer,
   updateCurrentRecentTabIDReducer,
   updateCurrentRecentTabOrderReducer,
   updateRecentTabReducer,
@@ -15,7 +15,7 @@ const recentTabSlice = createSlice({
   name: "recentTab",
   initialState: recentTabInitState,
   reducers: {
-    initRecentTabReducer,
+    setRecentTabReducer,
     addRecentTabReducer,
     deleteRecentTabReducer,
     deleteAllRecentTabReducer,
