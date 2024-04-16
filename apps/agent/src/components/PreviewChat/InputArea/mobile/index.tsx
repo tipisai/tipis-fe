@@ -148,6 +148,7 @@ const MobileInputArea: FC<IInputAreaProps> = ({
             fileName: fileName,
             contentType: file.type,
             fileID: uploadRes.id,
+            downloadURL: uploadRes.downloadURL,
           }
           setKnowledgeFiles((prev) => {
             const currentItems = [...prev]

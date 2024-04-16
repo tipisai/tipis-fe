@@ -154,6 +154,7 @@ const PCInputArea: FC<IInputAreaProps> = ({ isReceiving, onSendMessage }) => {
             fileName: fileName,
             contentType: file.type,
             fileID: uploadRes.id,
+            downloadURL: uploadRes.downloadURL,
           }
           setKnowledgeFiles((prev) => {
             const currentItems = [...prev]
