@@ -33,19 +33,18 @@ export const blockInputTextStyle = css`
   margin-top: 4px;
   line-height: 22px;
 `
-
 export const previewChatContainerStyle = css`
   position: relative;
   height: 100%;
   width: 100%;
+  max-width: 800px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-top: 1px solid ${getColor("grayBlue", "08")};
+  padding-bottom: 16px;
 `
 
 export const inputTextContainerStyle = css`
-  padding: 16px;
   position: relative;
   background-color: ${getColor("white", "01")};
   display: flex;
