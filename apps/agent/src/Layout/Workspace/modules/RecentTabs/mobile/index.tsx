@@ -7,15 +7,6 @@ import { recentTabsContainerStyle } from "../style"
 const MobileRecentTabs: FC = () => {
   const tabOrders = useSelector(getRecentTabInfosOrder)
 
-  // const dispatch = useDispatch()
-  // const onReorder = useCallback(
-  //   (newOrder: string[]) => {
-  //     console.log("newOrder", newOrder)
-  //     dispatch(recentTabActions.updateCurrentRecentTabOrderReducer(newOrder))
-  //   },
-  //   [dispatch],
-  // )
-
   return (
     <div css={recentTabsContainerStyle}>
       {tabOrders.map((tabID, index) => (
