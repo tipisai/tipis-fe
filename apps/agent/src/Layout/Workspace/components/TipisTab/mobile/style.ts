@@ -18,8 +18,8 @@ export const menuItemButtonStyle = (isSelected: boolean) => {
       `
 
   return css`
+    position: relative;
     display: block;
-    padding: 4px 16px;
     border: unset;
     width: 100%;
     background-color: transparent;
@@ -94,6 +94,8 @@ export const deleteButtonContainerStyle = css`
 `
 
 export const navLinkStyle = css`
+  padding: 4px 16px;
+
   :-webkit-any-link {
     text-decoration: none;
     color: inherit;
@@ -134,4 +136,8 @@ export const navLinkStyle = css`
   ::view-transition-new(figure-caption) {
     animation: 0.25s 0.25s linear both grow-x;
   }
+`
+
+export const draggingStyle = css`
+  opacity: 0.5;
 `
