@@ -11,7 +11,6 @@ import {
   getRunTipiPath,
   getTipiDetailPath,
 } from "."
-import { removeLocalTeamIdentifier } from "../auth"
 import {
   useAddChatTab,
   useAddCreateTipisTab,
@@ -22,6 +21,7 @@ import {
   useAddRunTipisTab,
   useAddTipisDetailTab,
 } from "../recentTabs/hook"
+import { removeLocalTeamIdentifier } from "../storage/cacheTeam"
 import { findRecentTeamInfo, useGetCurrentTeamInfo } from "../team"
 
 export const NOT_HAS_TEAM_INFO_KEY = "NOT_HAS_TEAM_INFO"
