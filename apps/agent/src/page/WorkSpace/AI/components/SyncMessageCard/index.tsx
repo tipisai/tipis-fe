@@ -209,7 +209,7 @@ export const FileMessageCard: FC<IImageMessageProps> = ({ message }) => {
   } catch {}
 
   const handleDownload = (downloadURL: string, fileName: string) => {
-    if (!downloadURL) {
+    if (!downloadURL || !fileName) {
       return
     }
     const fileInfo = {

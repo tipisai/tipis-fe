@@ -70,7 +70,10 @@ export const driveAPI = createApi({
     }),
 
     putChatFileUploadStatus: builder.mutation<
-      {},
+      {
+        id: string
+        downloadURL: string
+      },
       {
         fileID: string
         status: UPLOAD_FILE_STATUS
@@ -87,7 +90,10 @@ export const driveAPI = createApi({
     }),
 
     putKnowledgeFileUploadStatus: builder.mutation<
-      {},
+      {
+        id: string
+        downloadURL: string
+      },
       {
         fileID: string
         status: UPLOAD_FILE_STATUS
