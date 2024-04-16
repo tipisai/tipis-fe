@@ -5,6 +5,7 @@ import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useMatch } from "react-router-dom"
 import { PlayFillIcon, ResetIcon } from "@illa-public/icon"
+import { WS_READYSTATE } from "@illa-public/illa-web-socket"
 import { TipisTrack } from "@illa-public/track-utils"
 import { getCurrentId } from "@illa-public/user-data"
 import store from "@/redux/store"
@@ -23,11 +24,16 @@ import { IStartButtonProps } from "./interface"
 const StartButton: FC<IStartButtonProps> = (props) => {
   const { t } = useTranslation()
 
-  const { isConnecting, isRunning, reconnect, connect } =
+  const { isConnecting, isRunning, reconnect, connect, getReadyState } =
     useContext(AgentWSContext)
 
   const { clearErrors, getValues, setError } = useFormContext<IAgentForm>()
   const { uploadFileStore } = useContext(UploadContext)
+
+  const disabledClickStart =
+    isRunning &&
+    getReadyState() !== WS_READYSTATE.CONNECTING &&
+    getReadyState() !== WS_READYSTATE.OPEN
 
   const editTipiPathMatch = useMatch(
     `${WORKSPACE_LAYOUT_PATH}/${EDIT_TIPI_TEMPLATE_PATH}`,
@@ -95,6 +101,7 @@ const StartButton: FC<IStartButtonProps> = (props) => {
       block
       size="large"
       type="default"
+      disabled={disabledClickStart}
       loading={isConnecting}
       icon={
         isRunning ? (
