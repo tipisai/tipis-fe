@@ -6,7 +6,10 @@ import { useDispatch, useSelector } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom"
 import { MinusIcon } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
-import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
+import {
+  getRecentTabInfos,
+  getRecentTabInfosByID,
+} from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 import { useRemoveRecentTabReducer } from "@/utils/recentTabs/baseHook"
@@ -24,7 +27,8 @@ import {
 } from "./style"
 
 const MobileTipisTab: FC<IMobileTipisTabProps> = (props) => {
-  const { icon, tabName, tabType, tabID, cacheID } = props
+  const { tabID } = props
+  const tabInfos = useSelector((state) => getRecentTabInfosByID(state, tabID))
   const dispatch = useDispatch()
   const currentTeamInfo = useGetCurrentTeamInfo()
   const { modal } = App.useApp()
@@ -34,6 +38,10 @@ const MobileTipisTab: FC<IMobileTipisTabProps> = (props) => {
   const { t } = useTranslation()
 
   const getTabName = useGetTabName()
+
+  if (!tabInfos) return
+
+  const { tabIcon, tabName, tabType, cacheID } = tabInfos
 
   const onClickRemoveTab: MouseEventHandler<HTMLElement> = async (e) => {
     e.stopPropagation()
@@ -93,7 +101,7 @@ const MobileTipisTab: FC<IMobileTipisTabProps> = (props) => {
             css={menuItemButtonContentContainerStyle}
             className="menu-item-inner-container"
           >
-            {getIconByTabInfo(icon, tabType)}
+            {getIconByTabInfo(tabIcon, tabType)}
             <span css={menuItemButtonContentStyle(isActive)}>
               {getTabName(tabName, tabType, tabID)}
             </span>

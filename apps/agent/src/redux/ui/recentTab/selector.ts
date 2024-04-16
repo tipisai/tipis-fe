@@ -21,6 +21,18 @@ export const getRecentTabInfos = createSelector(
   },
 )
 
+export const getRecentTabInfosOrder = createSelector(
+  [getRecentTabInfos],
+  (tabs) => tabs.map((tab) => tab.tabID),
+)
+
+export const getRecentTabInfosByID = createSelector(
+  [(state, id: string) => id, getRecentTabInfos],
+  (id, tabs) => {
+    return tabs.find((tab) => tab.tabID === id)
+  },
+)
+
 export const getCurrentTabInfo = createSelector(
   [getCurrentTabID, getRecentTabInfos],
   (currentTabID, recentTabs) => {
