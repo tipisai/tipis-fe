@@ -48,8 +48,14 @@ const SingleFile: FC<
           size="small"
         />
       }
+      align={{
+        offset: [-40, 4],
+      }}
+      placement="right"
     >
-      <FileContent contentType={contentType} fileName={fileName} />
+      <div>
+        <FileContent contentType={contentType} fileName={fileName} />
+      </div>
     </Tooltip>
   )
 }
