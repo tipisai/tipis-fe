@@ -63,6 +63,7 @@ export const fileInfoStyle = css`
   max-width: 168px;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 export const errorInfoStyle = css`
