@@ -14,6 +14,7 @@ import { useSignInMutation } from "@illa-public/user-data"
 import { setAuthToken } from "@illa-public/utils"
 import { useAcceptInvite } from "@/utils/invite/hook"
 import { useNavigateTargetWorkspace } from "@/utils/routeHelper/hook"
+import { useRedirectToRedirectURL } from "@/utils/routeHelper/redirectHook"
 import { LoginFields } from "../interface"
 import { LoginErrorMsg } from "./interface"
 import { MobileLogin } from "./mobile"
@@ -27,6 +28,7 @@ const LoginPage: FC = () => {
   const { t } = useTranslation()
   const navigateToWorkspace = useNavigateTargetWorkspace()
   const acceptInvite = useAcceptInvite()
+  const redirect = useRedirectToRedirectURL()
 
   const [errorMsg, setErrorMsg] = useState<LoginErrorMsg>({
     email: "",
@@ -52,10 +54,16 @@ const LoginPage: FC = () => {
       })
       TipisTrack.track("sign_in")
 
+      if (!inviteToken && !paramsRedirectURL) {
+        await navigateToWorkspace()
+      }
+
       if (inviteToken) {
         await acceptInvite(inviteToken, paramsRedirectURL)
-      } else {
-        await navigateToWorkspace()
+      }
+
+      if (!inviteToken && paramsRedirectURL) {
+        redirect(paramsRedirectURL)
       }
     } catch (e) {
       if (isILLAAPiError(e)) {
