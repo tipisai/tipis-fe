@@ -69,7 +69,6 @@ const RegisterPage: FC = () => {
       setAuthToken(token)
       TipisTrack.track("sign_up")
       message.success(t("page.user.sign_up.tips.success"))
-      searchParams.delete("inviteToken")
       if (!inviteToken && !paramsRedirectURL) {
         await navigateToWorkspace()
       }
@@ -77,6 +76,7 @@ const RegisterPage: FC = () => {
       if (paramsRedirectURL) {
         redirect(paramsRedirectURL)
       }
+      searchParams.delete("inviteToken")
     } catch (e) {
       if (isILLAAPiError(e)) {
         switch (e?.data?.errorFlag) {
