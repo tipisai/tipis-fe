@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@mui/material"
 import { Typography } from "antd"
-import { FC } from "react"
+import { memo } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkBreaks from "remark-breaks"
 import remarkGfm from "remark-gfm"
@@ -25,7 +25,7 @@ import Code from "./Code"
 import CustomImage from "./CustomImage"
 import { handleParseText } from "./utils"
 
-export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
+export const MarkdownMessage = memo((props: MarkdownMessageProps) => {
   const { children, isOwnMessage, codeStatus, isReceiving } = props
 
   return (
@@ -105,7 +105,7 @@ export const MarkdownMessage: FC<MarkdownMessageProps> = (props) => {
       </ReactMarkdown>
     </div>
   )
-}
+})
 
 MarkdownMessage.displayName = "MarkdownMessage"
 export default MarkdownMessage

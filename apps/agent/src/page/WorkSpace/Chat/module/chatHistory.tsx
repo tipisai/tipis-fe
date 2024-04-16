@@ -13,9 +13,7 @@ import { ChatStableWSContext, ChatUnStableWSContext } from "../context"
 import { INIT_CHAT_CONFIG } from "./constants"
 import { rightPanelContainerStyle } from "./style"
 
-export const DefaultChat: FC<{ isMobile: boolean }> = ({
-  isMobile = false,
-}) => {
+export const DefaultChat: FC = () => {
   const { connect, leaveRoom, sendMessage, setIsReceiving } =
     useContext(ChatStableWSContext)
 
@@ -73,7 +71,6 @@ export const DefaultChat: FC<{ isMobile: boolean }> = ({
       <PreviewChatUseProvider useTo={PREVIEW_CHAT_USE_TO.DEFAULT_CHAT}>
         <div css={rightPanelContainerStyle}>
           <PreviewChat
-            isMobile={isMobile}
             editState="RUN"
             blockInput={!isRunning}
             wsContextValue={wsContext}

@@ -16,6 +16,7 @@ import {
 } from "@illa-public/user-data"
 import { setAuthToken } from "@illa-public/utils"
 import { useNavigateTargetWorkspace } from "@/utils/routeHelper/hook"
+import { useRedirectToRedirectURL } from "@/utils/routeHelper/redirectHook"
 import { TIPISStorage } from "@/utils/storage"
 import { RegisterFields } from "../interface"
 import { RegisterErrorMsg } from "./interface"
@@ -27,10 +28,13 @@ const RegisterPage: FC = () => {
   const { email } = useParams()
   const [searchParams] = useSearchParams()
   const { t, i18n } = useTranslation()
+  const inviteToken = searchParams.get("inviteToken")
+  const paramsRedirectURL = searchParams.get("redirectURL")
 
   const [signUp] = useSignUpMutation()
   const [sendVerificationCodeToEmail] = useSendVerificationCodeToEmailMutation()
   const navigateToWorkspace = useNavigateTargetWorkspace()
+  const redirect = useRedirectToRedirectURL()
 
   const formProps = useForm<RegisterFields>({
     defaultValues: {
@@ -51,7 +55,6 @@ const RegisterPage: FC = () => {
     const verificationToken = TIPISStorage.getSessionStorage(
       "verificationToken",
     ) as string
-    const inviteToken = searchParams.get("inviteToken")
     try {
       setLoading(true)
       const res = await signUp({
@@ -63,11 +66,17 @@ const RegisterPage: FC = () => {
 
       const token = res.token
       if (!token) return
+      setAuthToken(token)
       TipisTrack.track("sign_up")
       message.success(t("page.user.sign_up.tips.success"))
-      setAuthToken(token)
       searchParams.delete("inviteToken")
-      await navigateToWorkspace()
+      if (!paramsRedirectURL) {
+        await navigateToWorkspace()
+      }
+
+      if (paramsRedirectURL) {
+        redirect(paramsRedirectURL)
+      }
     } catch (e) {
       if (isILLAAPiError(e)) {
         switch (e?.data?.errorFlag) {

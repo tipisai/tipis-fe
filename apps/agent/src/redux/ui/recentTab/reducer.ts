@@ -2,7 +2,7 @@ import { CaseReducer, PayloadAction } from "@reduxjs/toolkit"
 import { IRecentTabState, ITabInfo } from "./interface"
 import { DEFAULT_CHAT_ID, INIT_TABS } from "./state"
 
-export const initRecentTabReducer: CaseReducer<
+export const setRecentTabReducer: CaseReducer<
   IRecentTabState,
   PayloadAction<ITabInfo[]>
 > = (state, action) => {

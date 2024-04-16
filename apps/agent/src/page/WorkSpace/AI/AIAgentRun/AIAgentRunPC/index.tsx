@@ -149,7 +149,6 @@ export const AIAgentRunPC: FC = () => {
       <PreviewChatUseProvider useTo={PREVIEW_CHAT_USE_TO.RUN}>
         <div css={rightPanelContainerStyle}>
           <PreviewChat
-            isMobile={false}
             editState="RUN"
             blockInput={getIsBlockInputDirty()}
             wsContextValue={wsContext}
