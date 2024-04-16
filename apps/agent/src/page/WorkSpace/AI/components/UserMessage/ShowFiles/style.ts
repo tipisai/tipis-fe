@@ -50,6 +50,7 @@ export const fileNameStyle = css`
   font-size: 14px;
   font-weight: 500;
   line-height: 22px;
+  flex: 1;
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
