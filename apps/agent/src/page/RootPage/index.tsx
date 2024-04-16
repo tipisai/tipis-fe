@@ -1,8 +1,8 @@
 import { FC, useLayoutEffect } from "react"
 import { useSearchParams } from "react-router-dom"
-import { getAuthToken } from "@illa-public/utils"
 import { useNavigateTargetWorkspace } from "@/utils/routeHelper/hook"
 import { useAcceptInvite } from "../../utils/invite/hook"
+import { useRedirectToRedirectURL } from "../../utils/routeHelper/redirectHook"
 
 const RootPage: FC = () => {
   const [searchParams] = useSearchParams()
@@ -12,6 +12,7 @@ const RootPage: FC = () => {
   const navigateWorkspace = useNavigateTargetWorkspace()
 
   const acceptInvite = useAcceptInvite()
+  const redirect = useRedirectToRedirectURL()
 
   useLayoutEffect(() => {
     if (inviteToken) {
@@ -21,11 +22,9 @@ const RootPage: FC = () => {
 
   useLayoutEffect(() => {
     if (!inviteToken && paramsRedirectURL) {
-      const targetURL = new URL(decodeURIComponent(paramsRedirectURL))
-      targetURL.searchParams.set("token", getAuthToken()!)
-      window.location.href = targetURL.toString()
+      redirect(paramsRedirectURL)
     }
-  }, [inviteToken, paramsRedirectURL])
+  }, [inviteToken, paramsRedirectURL, redirect])
 
   useLayoutEffect(() => {
     if (!inviteToken && !paramsRedirectURL) {
