@@ -1,4 +1,3 @@
-import basicSsl from "@vitejs/plugin-basic-ssl"
 import legacy from "@vitejs/plugin-legacy"
 import react from "@vitejs/plugin-react-swc"
 import { resolve } from "path"
@@ -47,7 +46,6 @@ export default defineConfig(({ mode }) => {
       targets: [copyTarget],
       hook: "buildStart",
     }),
-    basicSsl(),
     react({
       jsxImportSource: "@emotion/react",
     }),
