@@ -77,7 +77,8 @@ export const TipisWebSocketProvider: FC<TipisWebSocketProviderProps> = (
   const connect = useCallback(
     async (callbackOptions: IInitWSCallback) => {
       if (tipisWSClient.current) return
-      const { onConnecting, onMessageCallBack, address } = callbackOptions
+      const { onConnecting, onMessageCallBack, onCloseCallback, address } =
+        callbackOptions
       onConnecting(true)
       try {
         tipisWSClient.current = new WebSocketClient(address, {
@@ -104,6 +105,9 @@ export const TipisWebSocketProvider: FC<TipisWebSocketProviderProps> = (
           onMessage: (data) => {
             let callback: Callback<unknown> = JSON.parse(data)
             onMessageCallBack(callback)
+          },
+          onClose() {
+            onCloseCallback()
           },
         })
       } catch (e) {

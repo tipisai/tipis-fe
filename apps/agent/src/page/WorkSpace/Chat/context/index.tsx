@@ -120,6 +120,19 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
   const { sendMessage, connect, getReadyState, leaveRoom, cleanMessage } =
     useContext(TipisWebSocketContext)
 
+  const setCacheState = useCallback(() => {
+    if (chatID && teamID && chatMessagesRef.current.length > 0) {
+      const uiMessageList = getNeedCacheUIMessage(chatMessagesRef.current)
+
+      setChatMessageAndUIState(
+        teamID,
+        chatID,
+        uiMessageList,
+        cacheChatMessages.current,
+      )
+    }
+  }, [chatID, teamID])
+
   const startSendMessage = useCallback(
     (
       payload: ChatSendRequestPayload,
@@ -375,6 +388,10 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           setIsConnecting(isConnecting)
         },
         onMessageCallBack,
+        onCloseCallback() {
+          setCacheState()
+          setIsReceiving(false)
+        },
         address: aiAgentConnectionAddress,
       }
       return initConnectConfig
@@ -385,7 +402,13 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
         content: t("editor.ai-agent.message.start-failed"),
       })
     }
-  }, [messageAPI, onMessageCallBack, t, triggerGetAIAgentAnonymousAddressQuery])
+  }, [
+    messageAPI,
+    onMessageCallBack,
+    setCacheState,
+    t,
+    triggerGetAIAgentAnonymousAddressQuery,
+  ])
 
   const innerConnect = useCallback(async () => {
     const initConnectConfig = await getConnectParams()
@@ -446,19 +469,6 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       getReadyState,
     ],
   )
-
-  const setCacheState = useCallback(() => {
-    if (chatID && teamID && chatMessagesRef.current.length > 0) {
-      const uiMessageList = getNeedCacheUIMessage(chatMessagesRef.current)
-
-      setChatMessageAndUIState(
-        teamID,
-        chatID,
-        uiMessageList,
-        cacheChatMessages.current,
-      )
-    }
-  }, [chatID, teamID])
 
   useEffect(() => {
     return () => {

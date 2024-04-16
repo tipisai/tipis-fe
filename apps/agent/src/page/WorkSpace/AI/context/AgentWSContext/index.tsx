@@ -167,6 +167,25 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
   const { sendMessage, connect, getReadyState, leaveRoom, cleanMessage } =
     useContext(TipisWebSocketContext)
 
+  const setCacheState = useCallback(async () => {
+    const wsStatus = getReadyState()
+    if (
+      tabID &&
+      teamID &&
+      wsStatus !== WS_READYSTATE.CONNECTING &&
+      wsStatus !== WS_READYSTATE.UNINITIALIZED &&
+      !isConnecting
+    ) {
+      const uiMessageList = getNeedCacheUIMessage(chatMessagesRef.current)
+      await setChatMessageAndUIState(
+        teamID,
+        tabID,
+        uiMessageList,
+        cacheChatMessages.current,
+      )
+    }
+  }, [getReadyState, isConnecting, tabID, teamID])
+
   const startSendMessage = useCallback(
     (
       payload: ChatSendRequestPayload,
@@ -465,6 +484,10 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
           setIsConnecting(isConnecting)
         },
         onMessageCallBack,
+        onCloseCallback() {
+          setCacheState()
+          setIsReceiving(false)
+        },
         address: address,
       }
       return initConnectConfig
@@ -479,6 +502,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
     getValues,
     messageAPI,
     onMessageCallBack,
+    setCacheState,
     t,
     triggerGetAIAgentAnonymousAddressQuery,
     triggerGetAIAgentWsAddressQuery,
@@ -516,25 +540,6 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
     await removeChatMessageAndUIState(teamID, tabID)
     setAndGetRunAgentConfig()
   }, [teamID, cleanMessage, tabID, setAndGetRunAgentConfig, startSendMessage])
-
-  const setCacheState = useCallback(async () => {
-    const wsStatus = getReadyState()
-    if (
-      tabID &&
-      teamID &&
-      wsStatus !== WS_READYSTATE.CONNECTING &&
-      wsStatus !== WS_READYSTATE.UNINITIALIZED &&
-      !isConnecting
-    ) {
-      const uiMessageList = getNeedCacheUIMessage(chatMessagesRef.current)
-      await setChatMessageAndUIState(
-        teamID,
-        tabID,
-        uiMessageList,
-        cacheChatMessages.current,
-      )
-    }
-  }, [getReadyState, isConnecting, tabID, teamID])
 
   useEffect(() => {
     return () => {
