@@ -28,6 +28,9 @@ export const fileInfoStyle = css`
   flex: 1;
   display: flex;
   flex-direction: column;
+  max-width: 168px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 export const errorInfoStyle = css`

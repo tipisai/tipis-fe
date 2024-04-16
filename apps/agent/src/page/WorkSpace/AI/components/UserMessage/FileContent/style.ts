@@ -60,6 +60,9 @@ export const fileInfoStyle = css`
   display: flex;
   flex-direction: column;
   flex: 1;
+  max-width: 168px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 export const errorInfoStyle = css`
