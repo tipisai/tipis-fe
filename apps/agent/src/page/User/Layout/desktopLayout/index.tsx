@@ -1,9 +1,9 @@
+import { Typography } from "antd"
 import { FC } from "react"
 import { Trans, useTranslation } from "react-i18next"
 import { useMatch } from "react-router-dom"
 import { TipisTrack } from "@illa-public/track-utils"
 import TextAndLogo from "@/assets/public/textLogo.svg?react"
-import LinkButton from "@/components/LinkButton"
 import { LOGIN_PATH } from "@/utils/routeHelper"
 import { DOC_PREFIX } from "../../constants"
 import { LayoutProps } from "../interface"
@@ -41,17 +41,23 @@ const UserLayout: FC<LayoutProps> = ({ children }) => {
             i18nKey="page.user.policy"
             t={t}
             components={[
-              <LinkButton
+              <Typography.Link
                 key="/privacy-policy"
                 href={`${DOC_PREFIX}/privacy-policy`}
                 target="__blank"
                 onClick={handlePrivacyClick}
+                style={{
+                  fontSize: 12,
+                }}
               />,
-              <LinkButton
+              <Typography.Link
                 key="/terms-of-service"
                 href={`${DOC_PREFIX}/terms-of-service`}
                 target="__blank"
                 onClick={handleTermsServiceClick}
+                style={{
+                  fontSize: 12,
+                }}
               />,
             ]}
           />
