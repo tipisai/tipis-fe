@@ -258,6 +258,9 @@ importers:
       dayjs:
         specifier: ^1.11.10
         version: 1.11.10
+      fflate:
+        specifier: ^0.8.2
+        version: 0.8.2
       framer-motion:
         specifier: ^11.0.8
         version: 11.0.8(react-dom@18.2.0)(react@18.2.0)
@@ -336,6 +339,9 @@ importers:
       remark-gfm:
         specifier: ^3.0.0
         version: 3.0.1
+      streamsaver:
+        specifier: ^2.0.6
+        version: 2.0.6
       tern:
         specifier: ^0.24.3
         version: 0.24.3
@@ -364,6 +370,9 @@ importers:
       '@types/react-syntax-highlighter':
         specifier: ^15.5.11
         version: 15.5.11
+      '@types/streamsaver':
+        specifier: ^2.0.4
+        version: 2.0.4
       '@types/uuid':
         specifier: ^9.0.8
         version: 9.0.8
@@ -4782,6 +4791,10 @@ packages:
     resolution: {integrity: sha512-G8hZ6XJiHnuhQKR7ZmysCeJWE08o8T0AXtk5darsCaTVsYZhhgUrq53jizaR2FvsoeCwJhlmwTjkXBY5Pn/ZHw==}
     dev: false
 
+  /@types/streamsaver@2.0.4:
+    resolution: {integrity: sha512-XxpGYIaBP+2NgZ5+4YeG7hI3wYAyOX8QB92xlPpNvStIAvlniml1th+D0bes1lUZz52IWkPlXMf88wy8NzFkbA==}
+    dev: true
+
   /@types/symlink-or-copy@1.2.2:
     resolution: {integrity: sha512-MQ1AnmTLOncwEf9IVU+B2e4Hchrku5N67NkgcAHW0p3sdzPe0FNMANxEm6OJUzPniEQGkeT3OROLlCwZJLWFZA==}
     dev: true
@@ -6922,6 +6935,10 @@ packages:
 
   /fflate@0.4.8:
     resolution: {integrity: sha512-FJqqoDBR00Mdj9ppamLa/Y7vxm+PRmNWA67N846RvsoYVMKB4q3y/de5PA7gUmRMYK/8CMz2GDZQmCRN1wBcWA==}
+    dev: false
+
+  /fflate@0.8.2:
+    resolution: {integrity: sha512-cPJU47OaAoCbg0pBvzsgpTPhmhqI5eJjh/JIu8tPj5q+T7iLvW/JAYUqmE7KOB4R1ZyEhzBaIQpQpardBF5z8A==}
     dev: false
 
   /file-entry-cache@6.0.1:
@@ -10580,6 +10597,10 @@ packages:
     dependencies:
       streamx: 2.16.1
     dev: true
+
+  /streamsaver@2.0.6:
+    resolution: {integrity: sha512-LK4e7TfCV8HzuM0PKXuVUfKyCB1FtT9L0EGxsFk5Up8njj0bXK8pJM9+Wq2Nya7/jslmCQwRK39LFm55h7NBTw==}
+    dev: false
 
   /streamx@2.16.1:
     resolution: {integrity: sha512-m9QYj6WygWyWa3H1YY69amr4nVgy61xfjys7xO7kviL5rfIEc2naf+ewFiOA+aEJD7y0JO3h2GoiUv4TDwEGzQ==}

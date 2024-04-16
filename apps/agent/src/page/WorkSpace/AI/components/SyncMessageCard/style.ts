@@ -218,3 +218,33 @@ export const markdownHoverCopyStyle = css`
   color: ${getColor("grayBlue", "02")};
   transform: translateX(-4px);
 `
+
+export const messageListContainerStyle = css`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 396px;
+`
+
+export const fileCardContainerStyle = css`
+  display: flex;
+  padding: 16px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 16px;
+  border: 1px solid ${getColor("grayBlue", "08")};
+  background: #fafbfc;
+`
+
+export const fileTypeIconStyle = css`
+  width: 24px;
+  height: 30px;
+`
+
+export const fileNameStyle = css`
+  color: ${getColor("grayBlue", "02")};
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+  flex: 1;
+`

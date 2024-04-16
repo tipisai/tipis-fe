@@ -12,3 +12,7 @@ export interface PureMessageProps {
   isMobile: boolean
   disableTrigger: boolean
 }
+
+export interface IImageMessageProps {
+  message: string
+}
