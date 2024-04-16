@@ -12,6 +12,7 @@ import {
 } from "@illa-public/track-utils"
 import { useSignInMutation } from "@illa-public/user-data"
 import { setAuthToken } from "@illa-public/utils"
+import { useAcceptInvite } from "@/utils/invite/hook"
 import { useNavigateTargetWorkspace } from "@/utils/routeHelper/hook"
 import { LoginFields } from "../interface"
 import { LoginErrorMsg } from "./interface"
@@ -21,8 +22,11 @@ import { PCLogin } from "./pc"
 const LoginPage: FC = () => {
   const { email } = useParams()
   const [searchParams] = useSearchParams()
+  const inviteToken = searchParams.get("inviteToken")
+  const paramsRedirectURL = searchParams.get("redirectURL")
   const { t } = useTranslation()
   const navigateToWorkspace = useNavigateTargetWorkspace()
+  const acceptInvite = useAcceptInvite()
 
   const [errorMsg, setErrorMsg] = useState<LoginErrorMsg>({
     email: "",
@@ -47,7 +51,12 @@ const LoginPage: FC = () => {
         content: t("page.user.sign_in.tips.success"),
       })
       TipisTrack.track("sign_in")
-      await navigateToWorkspace()
+
+      if (inviteToken) {
+        await acceptInvite(inviteToken, paramsRedirectURL)
+      } else {
+        await navigateToWorkspace()
+      }
     } catch (e) {
       if (isILLAAPiError(e)) {
         switch (e?.data?.errorFlag) {

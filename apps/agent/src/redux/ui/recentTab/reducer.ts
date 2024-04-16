@@ -92,3 +92,16 @@ export const updateCurrentRecentTabIDReducer: CaseReducer<
 > = (state, action) => {
   state.currentTabID = action.payload
 }
+
+export const updateCurrentRecentTabOrderReducer: CaseReducer<
+  IRecentTabState,
+  PayloadAction<string[]>
+> = (state, action) => {
+  const newIDSortOrder = action.payload
+
+  const newTabs = newIDSortOrder.map((tabID) => {
+    return state.tabs.find((tab) => tab.tabID === tabID)!
+  })
+
+  state.tabs = newTabs
+}
