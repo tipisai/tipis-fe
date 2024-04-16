@@ -208,5 +208,6 @@ export const uploadContentTipStyle = css`
 
 export const maxWidthStyle = css`
   width: 100%;
-  max-width: 800px;
+  max-width: 832px;
+  padding: 0 16px;
 `
