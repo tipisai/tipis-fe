@@ -3,9 +3,8 @@ import { Avatar } from "@illa-public/avatar"
 import { useIsMobile } from "@illa-public/utils"
 import { MESSAGE_STATUS, SenderType } from "@/components/PreviewChat/interface"
 import { ChatContext } from "@/page/WorkSpace/AI/components/ChatContext"
-import { isFileMessage, isRequestMessage } from "@/utils/agent/groupUtils"
+import { isRequestMessage } from "@/utils/agent/groupUtils"
 import {
-  FileMessageCard,
   PureMessage,
   SyncMessageCard,
   SyncMessageLine,
@@ -72,8 +71,6 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
                 isReceiving={isReceiving}
               />
             )
-          } else if (isFileMessage(messageItem)) {
-            element = <FileMessageCard message={messageItem.message} />
           } else {
             element = (
               <PureMessage

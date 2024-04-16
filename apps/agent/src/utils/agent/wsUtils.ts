@@ -9,10 +9,8 @@ import {
 import { AgentInitial } from "@/page/WorkSpace/AI/AIAgent/interface"
 import { DELAY_TASK_TIME } from "./constants"
 import {
-  handleFileMessage,
   isErrorMessageRes,
   isLinkedPendingMessage,
-  isNeedStartGroupMessage,
   isPendingRequestMessage,
   isRequestMessage,
   isSuccessMessageRes,
@@ -127,40 +125,36 @@ export const groupReceivedMessagesForUI = (
   message: ChatMessage,
 ) => {
   const newMessageList = [...oldMessage]
-  const nextMessage = handleFileMessage(message)
-  if (!nextMessage) return
   const index = newMessageList.findIndex((m) => {
-    return m.threadID === nextMessage.threadID
+    return m.threadID === message.threadID
   })
   if (index === -1) {
-    if (isNeedStartGroupMessage(nextMessage)) {
+    if (isRequestMessage(message)) {
       newMessageList.push({
-        threadID: nextMessage.threadID,
+        threadID: message.threadID,
         items: [
           {
-            sender: nextMessage.sender,
-            message: nextMessage.message,
-            threadID: nextMessage.threadID,
-            messageType: nextMessage.messageType,
-            status: isRequestMessage(nextMessage)
-              ? MESSAGE_STATUS.ANALYZE_PENDING
-              : undefined,
+            sender: message.sender,
+            message: message.message,
+            threadID: message.threadID,
+            messageType: message.messageType,
+            status: MESSAGE_STATUS.ANALYZE_PENDING,
           },
         ],
       })
     } else {
       newMessageList.push({
-        sender: nextMessage.sender,
-        message: nextMessage.message,
-        threadID: nextMessage.threadID,
-        messageType: nextMessage.messageType,
+        sender: message.sender,
+        message: message.message,
+        threadID: message.threadID,
+        messageType: message.messageType,
       })
     }
   } else {
     const curMessage = newMessageList[index]
     if (isNormalMessage(curMessage)) {
-      if (curMessage.messageType === nextMessage.messageType) {
-        curMessage.message = curMessage.message + nextMessage.message
+      if (curMessage.messageType === message.messageType) {
+        curMessage.message = curMessage.message + message.message
       } else {
         // compliant not use request type start
         newMessageList[index] = {
@@ -177,13 +171,10 @@ export const groupReceivedMessagesForUI = (
             },
           ],
         }
-        handleUpdateMessageList(
-          newMessageList[index] as IGroupMessage,
-          nextMessage,
-        )
+        handleUpdateMessageList(newMessageList[index] as IGroupMessage, message)
       }
     } else {
-      handleUpdateMessageList(curMessage, nextMessage)
+      handleUpdateMessageList(curMessage, message)
     }
   }
   return newMessageList
