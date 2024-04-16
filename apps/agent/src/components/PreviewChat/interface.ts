@@ -1,4 +1,3 @@
-import { WS_READYSTATE } from "@illa-public/illa-web-socket"
 import {
   AI_AGENT_MODEL,
   AI_AGENT_TYPE,
@@ -78,11 +77,8 @@ export interface ChatSendRequestPayload {
 export interface PreviewChatProps {
   editState: EDIT_STATE
   blockInput: boolean
-  isMobile: boolean
   onSendMessage: (cheatMessage: ChatMessage) => void
   wsContextValue: {
-    getReadyState: () => WS_READYSTATE
-    isRunning: boolean
     chatMessages: (IGroupMessage | ChatMessage)[]
     isReceiving: boolean
     sendMessage: IChatSendMessage

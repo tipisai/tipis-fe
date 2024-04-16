@@ -17,7 +17,7 @@ const MobileChatPage: FC = () => {
           <MobileCustomTitle title={title} iconURL={defaultCHatIconURL} />
         )}
       >
-        <DefaultChat isMobile />
+        <DefaultChat />
       </MobileFirstPageLayout>
     </>
   )

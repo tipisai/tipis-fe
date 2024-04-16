@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next"
 import { Avatar } from "@illa-public/avatar"
 import { CopyIcon } from "@illa-public/icon"
 import { useGetUserInfoQuery } from "@illa-public/user-data"
-import { copyToClipboard } from "@illa-public/utils"
+import { copyToClipboard, useIsMobile } from "@illa-public/utils"
 import MarkdownMessage from "@/page/WorkSpace/AI/components/MarkdownMessage"
 import { UserMessageProps } from "@/page/WorkSpace/AI/components/UserMessage/interface"
 import {
@@ -19,11 +19,12 @@ import {
 import ShowFiles from "./ShowFiles"
 
 export const UserMessage: FC<UserMessageProps> = (props) => {
-  const { message, isMobile, isReceiving } = props
+  const { message, isReceiving } = props
   const { data: currentUserInfo } = useGetUserInfoQuery(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
   const { message: messageAPI } = App.useApp()
+  const isMobile = useIsMobile()
 
   const contentBody = (
     <div css={messageContainerStyle} ref={containerRef}>

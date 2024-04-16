@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next"
 import { Avatar } from "@illa-public/avatar"
 import { CopyIcon } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
-import { copyToClipboard } from "@illa-public/utils"
+import { copyToClipboard, useIsMobile } from "@illa-public/utils"
 import { SenderType } from "@/components/PreviewChat/interface"
 import { ChatContext } from "@/page/WorkSpace/AI/components/ChatContext"
 import MarkdownMessage from "../MarkdownMessage"
@@ -21,11 +21,12 @@ import {
 } from "./style"
 
 export const AIAgentMessage: FC<AIAgentMessageProps> = (props) => {
-  const { message, isMobile, isReceiving, isLastMessage } = props
+  const { message, isReceiving, isLastMessage } = props
   const chatContext = useContext(ChatContext)
   const { message: messageAPI } = App.useApp()
   const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
+  const isMobile = useIsMobile()
 
   const senderNickname =
     message.sender.senderType === SenderType.ANONYMOUS_AGENT

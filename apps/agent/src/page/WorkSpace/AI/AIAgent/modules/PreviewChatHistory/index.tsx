@@ -8,13 +8,42 @@ import { ChatMessage } from "@/components/PreviewChat/interface"
 import { getSendMessageBody } from "@/utils/agent/wsUtils"
 import { AgentWSContext } from "../../../context/AgentWSContext"
 import { IAgentForm } from "../../interface"
-import { IPreviewChatHistoryProps } from "./interface"
 import { rightPanelContainerStyle } from "./style"
 
-const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
-  (props: IPreviewChatHistoryProps) => {
-    const { getValues, control } = useFormContext<IAgentForm>()
-    const {
+const PreviewChatHistory: FC = memo(() => {
+  const { getValues, control } = useFormContext<IAgentForm>()
+  const {
+    getReadyState,
+    isRunning,
+    chatMessages,
+    isReceiving,
+    sendMessage,
+    setIsReceiving,
+    lastRunAgent,
+  } = useContext(AgentWSContext)
+  const [prompt, variables, knowledge] = useWatch({
+    control,
+    name: ["prompt", "variables", "knowledge"],
+  })
+
+  const getIsBlockInputDirty = useCallback(() => {
+    if (!isRunning) {
+      return true
+    }
+    if (lastRunAgent.current === undefined) {
+      return true
+    }
+    const isPromptDirty = !isEqual(prompt, lastRunAgent.current.prompt)
+
+    const isVariablesDirty = !isEqual(variables, lastRunAgent.current.variables)
+
+    const isKnowledgeDirty = !isEqual(knowledge, lastRunAgent.current.knowledge)
+
+    return isPromptDirty || isVariablesDirty || isKnowledgeDirty
+  }, [isRunning, knowledge, lastRunAgent, prompt, variables])
+
+  const wsContext = useMemo(
+    () => ({
       getReadyState,
       isRunning,
       chatMessages,
@@ -22,96 +51,51 @@ const PreviewChatHistory: FC<IPreviewChatHistoryProps> = memo(
       sendMessage,
       setIsReceiving,
       lastRunAgent,
-    } = useContext(AgentWSContext)
-    const [prompt, variables, knowledge] = useWatch({
-      control,
-      name: ["prompt", "variables", "knowledge"],
-    })
+    }),
+    [
+      chatMessages,
+      isReceiving,
+      isRunning,
+      lastRunAgent,
+      sendMessage,
+      setIsReceiving,
+      getReadyState,
+    ],
+  )
 
-    const getIsBlockInputDirty = useCallback(() => {
-      if (!isRunning) {
-        return true
+  const onSendMessage = useCallback(
+    (message: ChatMessage) => {
+      const { payload, signal, type, fileIDs, updateMessage, messageContent } =
+        getSendMessageBody(message, getValues("aiAgentID"))
+
+      sendMessage(payload, signal, type, {
+        fileIDs,
+        updateMessage,
+        messageContent,
+      })
+    },
+    [getValues, sendMessage],
+  )
+
+  return (
+    <PreviewChatUseProvider
+      useTo={
+        !!getValues("aiAgentID")
+          ? PREVIEW_CHAT_USE_TO.EDIT_TIPI
+          : PREVIEW_CHAT_USE_TO.CREATE_TIPI
       }
-      if (lastRunAgent.current === undefined) {
-        return true
-      }
-      const isPromptDirty = !isEqual(prompt, lastRunAgent.current.prompt)
-
-      const isVariablesDirty = !isEqual(
-        variables,
-        lastRunAgent.current.variables,
-      )
-
-      const isKnowledgeDirty = !isEqual(
-        knowledge,
-        lastRunAgent.current.knowledge,
-      )
-
-      return isPromptDirty || isVariablesDirty || isKnowledgeDirty
-    }, [isRunning, knowledge, lastRunAgent, prompt, variables])
-
-    const wsContext = useMemo(
-      () => ({
-        getReadyState,
-        isRunning,
-        chatMessages,
-        isReceiving,
-        sendMessage,
-        setIsReceiving,
-        lastRunAgent,
-      }),
-      [
-        chatMessages,
-        isReceiving,
-        isRunning,
-        lastRunAgent,
-        sendMessage,
-        setIsReceiving,
-        getReadyState,
-      ],
-    )
-
-    const onSendMessage = useCallback(
-      (message: ChatMessage) => {
-        const {
-          payload,
-          signal,
-          type,
-          fileIDs,
-          updateMessage,
-          messageContent,
-        } = getSendMessageBody(message, getValues("aiAgentID"))
-
-        sendMessage(payload, signal, type, {
-          fileIDs,
-          updateMessage,
-          messageContent,
-        })
-      },
-      [getValues, sendMessage],
-    )
-
-    return (
-      <PreviewChatUseProvider
-        useTo={
-          !!getValues("aiAgentID")
-            ? PREVIEW_CHAT_USE_TO.EDIT_TIPI
-            : PREVIEW_CHAT_USE_TO.CREATE_TIPI
-        }
-      >
-        <div css={rightPanelContainerStyle}>
-          <PreviewChat
-            isMobile={!!props.isMobile}
-            editState="EDIT"
-            blockInput={getIsBlockInputDirty()}
-            onSendMessage={onSendMessage}
-            wsContextValue={wsContext}
-          />
-        </div>
-      </PreviewChatUseProvider>
-    )
-  },
-)
+    >
+      <div css={rightPanelContainerStyle}>
+        <PreviewChat
+          editState="EDIT"
+          blockInput={getIsBlockInputDirty()}
+          onSendMessage={onSendMessage}
+          wsContextValue={wsContext}
+        />
+      </div>
+    </PreviewChatUseProvider>
+  )
+})
 
 PreviewChatHistory.displayName = "PreviewChat"
 
