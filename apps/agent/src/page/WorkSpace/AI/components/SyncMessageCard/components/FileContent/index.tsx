@@ -67,6 +67,10 @@ const FileContent: FC<IFileContentProps> = ({
           size="small"
         />
       }
+      placement="right"
+      align={{
+        offset: [-40, 4],
+      }}
     >
       {contentBody}
     </Tooltip>
