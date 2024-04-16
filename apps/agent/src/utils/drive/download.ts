@@ -34,7 +34,13 @@ export const handleDownloadFiles = async (
     const { name, downloadURL } = downloadInfo[i]
     promise = promise.then(async () => {
       try {
-        const fileResponse = await fetch(downloadURL)
+        const fileResponse = await fetch(downloadURL, {
+          method: "GET",
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "x-amz-acl": "public-read",
+          },
+        })
 
         if (!asZip && window.WritableStream && fileResponse.body?.pipeTo) {
           const fileStream = createWriteStream(name)

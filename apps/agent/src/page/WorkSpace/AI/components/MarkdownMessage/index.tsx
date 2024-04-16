@@ -96,9 +96,7 @@ export const MarkdownMessage = memo((props: MarkdownMessageProps) => {
               isReceiving={isReceiving}
             />
           ),
-          img: ({ src, alt }) => (
-            <CustomImage src={src} alt={alt} isOwnMessage={isOwnMessage} />
-          ),
+          img: ({ src, alt }) => <CustomImage src={src} alt={alt} />,
         }}
       >
         {handleParseText(children ?? "", isOwnMessage)}

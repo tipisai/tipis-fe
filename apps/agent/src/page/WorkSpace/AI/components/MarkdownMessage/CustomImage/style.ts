@@ -9,3 +9,20 @@ export const imageContainerStyle = css`
 export const downloadIconStyle = css`
   font-size: 14px;
 `
+
+export const imageStyle = (isExpired: boolean) => {
+  if (isExpired) {
+    return {
+      width: "120px",
+      height: "120px",
+      borderRadius: "8px",
+    }
+  } else {
+    return {
+      width: "100%",
+      minWidth: "120px",
+      minHeight: "120px",
+      borderRadius: "12px",
+    }
+  }
+}

@@ -1,21 +1,20 @@
 import Icon from "@ant-design/icons"
-import { Button } from "antd"
-import { FC } from "react"
-import { DownloadIcon, getFileIconByContentType } from "@illa-public/icon"
-import { GCS_OBJECT_TYPE, IKnowledgeFile } from "@illa-public/public-types"
+import { Button, Tooltip } from "antd"
+import { FC, useState } from "react"
+import { DownloadIcon } from "@illa-public/icon"
+import { IKnowledgeFile } from "@illa-public/public-types"
 import { handleDownloadFiles } from "@/utils/drive/download"
-import {
-  containerStyle,
-  fileItemStyle,
-  fileNameStyle,
-  fileTypeIconStyle,
-  iconContainerStyle,
-} from "./style"
+import FileContent from "../FileContent"
+import { containerStyle } from "./style"
 
 interface ShowFilesProps {
   knowledgeFiles: IKnowledgeFile[]
 }
-const ShowFiles: FC<ShowFilesProps> = ({ knowledgeFiles }) => {
+
+const SingleFile: FC<
+  Pick<IKnowledgeFile, "downloadURL" | "fileName" | "contentType">
+> = ({ downloadURL, fileName, contentType }) => {
+  const [isExpired, setIsExpired] = useState(false)
   const handleDownload = (fileName: string, downloadURL: string) => {
     if (!downloadURL || !fileName) {
       return
@@ -24,27 +23,55 @@ const ShowFiles: FC<ShowFilesProps> = ({ knowledgeFiles }) => {
       name: fileName,
       downloadURL: downloadURL,
     }
-    handleDownloadFiles([fileInfo])
+    handleDownloadFiles([fileInfo]).catch((e) => {
+      console.log("download", e)
+      setIsExpired(true)
+    })
   }
+
+  return isExpired ? (
+    <FileContent contentType={contentType} fileName={fileName} isExpired />
+  ) : (
+    <Tooltip
+      key={fileName}
+      color="transparent"
+      overlayInnerStyle={{
+        padding: 0,
+        height: 24,
+        width: 24,
+        boxShadow: "none",
+      }}
+      title={
+        <Button
+          icon={<Icon component={DownloadIcon} />}
+          onClick={() => handleDownload(contentType, downloadURL!)}
+          size="small"
+        />
+      }
+    >
+      <FileContent contentType={contentType} fileName={fileName} />
+    </Tooltip>
+  )
+}
+const ShowFiles: FC<ShowFilesProps> = ({ knowledgeFiles }) => {
   return (
     <div css={containerStyle}>
-      {knowledgeFiles.map((item) => (
-        <div key={item.fileName} css={fileItemStyle}>
-          <span css={iconContainerStyle}>
-            {getFileIconByContentType(
-              GCS_OBJECT_TYPE.FILE,
-              item.contentType,
-              fileTypeIconStyle,
-            )}
-          </span>
-          <span css={fileNameStyle}>{item.fileName}</span>
-          <Button
-            icon={<Icon component={DownloadIcon} />}
-            onClick={() => handleDownload(item.fileName, item.downloadURL!)}
-            size="small"
+      {knowledgeFiles.map((item) =>
+        item.fileName && item.downloadURL ? (
+          <SingleFile
+            key={item.fileName}
+            contentType={item.contentType}
+            fileName={item.fileName}
+            downloadURL={item.downloadURL}
           />
-        </div>
-      ))}
+        ) : (
+          <FileContent
+            key={item.fileName}
+            contentType={item.contentType}
+            fileName={item.fileName}
+          />
+        ),
+      )}
     </div>
   )
 }
