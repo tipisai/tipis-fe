@@ -45,7 +45,6 @@ initI18n().then(() => {
           </Provider>
         </ErrorBoundary>
       </PostHogProvider>
-      ,
     </StrictMode>,
   )
 })
