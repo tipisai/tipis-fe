@@ -70,7 +70,7 @@ const RegisterPage: FC = () => {
       TipisTrack.track("sign_up")
       message.success(t("page.user.sign_up.tips.success"))
       searchParams.delete("inviteToken")
-      if (!inviteToken && !paramsRedirectURL) {
+      if (!paramsRedirectURL) {
         await navigateToWorkspace()
       }
 
