@@ -60,7 +60,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       }
     }
     cacheMessageLength.current = chatMessages.length
-  }, [chatMessages.length])
+  }, [chatMessages])
 
   return (
     <div css={previewChatContainerStyle}>

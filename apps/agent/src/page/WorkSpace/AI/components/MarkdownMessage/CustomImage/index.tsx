@@ -1,17 +1,16 @@
 import Icon from "@ant-design/icons"
 import { App, Button, Image, ImageProps, Tooltip } from "antd"
-import { FC } from "react"
+import { FC, useState } from "react"
 import { DownloadIcon } from "@illa-public/icon"
+import imageLoadErrSrc from "@/assets/agent/imageLoadErr.svg"
 import { handleDownloadFiles } from "@/utils/drive/download"
-import { MarkdownMessageProps } from "../interface"
-import { downloadIconStyle, imageContainerStyle } from "./style"
+import { downloadIconStyle, imageContainerStyle, imageStyle } from "./style"
 
-const CustomImage: FC<
-  ImageProps & Pick<MarkdownMessageProps, "isOwnMessage">
-> = ({ alt, src, isOwnMessage }) => {
+const CustomImage: FC<ImageProps> = ({ alt, src }) => {
   const { message } = App.useApp()
   const URL = new URLSearchParams(src)
   const fileName = URL.get("fileName")
+  const [isExpired, setIsExpired] = useState(false)
 
   const handleDownload = () => {
     if (!src) {
@@ -25,14 +24,34 @@ const CustomImage: FC<
       name: fileName,
       downloadURL: src,
     }
-    handleDownloadFiles([fileInfo])
+    handleDownloadFiles([fileInfo]).catch((e) => {
+      console.log("download", e)
+    })
   }
   const contentBody = (
     <div css={imageContainerStyle}>
-      <Image src={src} alt={alt} preview={false} width="100%" />
+      <Image
+        src={src}
+        alt={alt}
+        preview={false}
+        style={imageStyle(isExpired)}
+        fallback={imageLoadErrSrc}
+        placeholder={
+          <Image
+            preview={false}
+            src={imageLoadErrSrc}
+            width={120}
+            height={120}
+            style={{
+              borderRadius: "8px",
+            }}
+          />
+        }
+        onError={() => setIsExpired(true)}
+      />
     </div>
   )
-  return isOwnMessage || !fileName ? (
+  return !fileName || isExpired ? (
     contentBody
   ) : (
     <Tooltip

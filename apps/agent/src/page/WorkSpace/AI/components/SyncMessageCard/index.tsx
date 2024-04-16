@@ -1,15 +1,8 @@
 import Icon from "@ant-design/icons"
-import { App, Button, Tooltip } from "antd"
+import { App, Tooltip } from "antd"
 import { FC, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import {
-  CopyIcon,
-  DownIcon,
-  DownloadIcon,
-  UpIcon,
-  getFileIconByContentType,
-} from "@illa-public/icon"
-import { GCS_OBJECT_TYPE } from "@illa-public/public-types"
+import { CopyIcon, DownIcon, UpIcon } from "@illa-public/icon"
 import { copyToClipboard } from "@illa-public/utils"
 import LottieItem from "@/components/LottieItem"
 import {
@@ -17,9 +10,9 @@ import {
   MESSAGE_STATUS,
 } from "@/components/PreviewChat/interface"
 import tipiRunLoading from "@/config/lottieConfig/tipiRunLoading.json"
-import { handleDownloadFiles } from "@/utils/drive/download"
 import MarkdownMessage from "../MarkdownMessage"
 import { CODE_STATUS } from "../MarkdownMessage/interface"
+import FileContent from "./components/FileContent"
 import { RUN_REQUEST_TYPE } from "./constants"
 import {
   IImageMessageProps,
@@ -30,9 +23,6 @@ import {
   actionIconStyle,
   containerStyle,
   errorInfoLineStyle,
-  fileCardContainerStyle,
-  fileNameStyle,
-  fileTypeIconStyle,
   headerContainerStyle,
   iconStyle,
   infoContainerStyle,
@@ -208,33 +198,16 @@ export const FileMessageCard: FC<IImageMessageProps> = ({ message }) => {
     fileInfo = JSON.parse(message)
   } catch {}
 
-  const handleDownload = (downloadURL: string, fileName: string) => {
-    if (!downloadURL || !fileName) {
-      return
-    }
-    const fileInfo = {
-      name: fileName,
-      downloadURL: downloadURL,
-    }
-    handleDownloadFiles([fileInfo])
-  }
   if (!message) return null
   return (
     <div css={messageListContainerStyle}>
       {fileInfo.map(({ contentType, fileName, downloadURL }) => (
-        <div css={fileCardContainerStyle} key={fileName}>
-          {getFileIconByContentType(
-            GCS_OBJECT_TYPE.FILE,
-            contentType,
-            fileTypeIconStyle,
-          )}
-          <span css={fileNameStyle}>{fileName}</span>
-          <Button
-            icon={<Icon component={DownloadIcon} />}
-            onClick={() => handleDownload(downloadURL, fileName)}
-            size="small"
-          />
-        </div>
+        <FileContent
+          key={fileName}
+          contentType={contentType}
+          fileName={fileName}
+          downloadURL={downloadURL}
+        />
       ))}
     </div>
   )
