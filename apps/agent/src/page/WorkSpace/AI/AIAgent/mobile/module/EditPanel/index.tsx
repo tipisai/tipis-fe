@@ -63,7 +63,7 @@ const MobileEditPanel: FC = () => {
           onClickClose={onClickClosePreviewPage}
           headerExtra={<div css={placeholderDivStyle} />}
         >
-          <PreviewChatHistory isMobile />
+          <PreviewChatHistory />
         </MobileSecondPageLayout>
       )}
     </>

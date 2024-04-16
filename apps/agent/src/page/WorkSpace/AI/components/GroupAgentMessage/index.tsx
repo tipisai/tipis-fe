@@ -1,5 +1,6 @@
 import { FC, Fragment, ReactNode, useContext } from "react"
 import { Avatar } from "@illa-public/avatar"
+import { useIsMobile } from "@illa-public/utils"
 import { MESSAGE_STATUS, SenderType } from "@/components/PreviewChat/interface"
 import { ChatContext } from "@/page/WorkSpace/AI/components/ChatContext"
 import { isFileMessage, isRequestMessage } from "@/utils/agent/groupUtils"
@@ -18,8 +19,9 @@ import {
 } from "./style"
 
 export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
-  const { message, isMobile, isReceiving, isLastMessage } = props
+  const { message, isReceiving, isLastMessage } = props
   const chatContext = useContext(ChatContext)
+  const isMobile = useIsMobile()
 
   const uiMessage = message.items.filter((item) => item.message)
 

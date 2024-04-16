@@ -164,14 +164,14 @@ export const useGetInfoByStatus = () => {
     (status: MESSAGE_STATUS, runRequestType: RUN_REQUEST_TYPE | undefined) => {
       switch (runRequestType) {
         case RUN_REQUEST_TYPE._SYS_READ_FILE: {
-          return getReadFileInfoByStatus(status)
+          return getReadFileInfoByStatus(MESSAGE_STATUS.ANALYZE_PENDING)
         }
         case RUN_REQUEST_TYPE._SYS_GET_CURRENT_TIME_IN_UTC: {
-          return getTimeInfoByStatue(status)
+          return getTimeInfoByStatue(MESSAGE_STATUS.ANALYZE_PENDING)
         }
         default:
         case RUN_REQUEST_TYPE._SYS_RUN_PYTHON_CODE: {
-          return getRunPythonInfoByStatus(status)
+          return getRunPythonInfoByStatus(MESSAGE_STATUS.ANALYZE_PENDING)
         }
       }
     },
