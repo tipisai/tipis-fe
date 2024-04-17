@@ -6,7 +6,7 @@ import { IKnowledgeFile } from "@illa-public/public-types"
 import { handleCreditPurchaseError } from "@illa-public/upgrade-modal"
 import { handleDownloadFiles } from "@/utils/drive/download"
 import FileContent from "../FileContent"
-import { containerStyle } from "./style"
+import { containerStyle, fileContainerStyle } from "./style"
 
 interface ShowFilesProps {
   knowledgeFiles: IKnowledgeFile[]
@@ -62,7 +62,7 @@ const SingleFile: FC<
       }}
       placement="right"
     >
-      <div style={{ width: "100%" }}>
+      <div css={fileContainerStyle}>
         <FileContent contentType={contentType} fileName={fileName} />
       </div>
     </Tooltip>
