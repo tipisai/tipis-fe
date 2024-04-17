@@ -81,3 +81,9 @@ export interface PreviewChatProps {
     sendMessage: IChatSendMessage
   }
 }
+
+export interface IFileMessage {
+  contentType: string
+  downloadURL: string
+  fileName: string
+}

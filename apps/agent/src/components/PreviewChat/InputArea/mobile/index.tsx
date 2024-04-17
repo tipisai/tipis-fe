@@ -136,18 +136,19 @@ const MobileInputArea: FC<IInputAreaProps> = ({
           chatUploadStoreRef.current.deleteFileDetailInfo(item.queryID)
           continue
         }
-        const fileID = await uploadChatFile(
+        const uploadRes = await uploadChatFile(
           item.queryID,
           file,
           abortController.signal,
           chatUploadStoreRef.current,
         )
 
-        if (!!fileID) {
+        if (!!uploadRes) {
           const res = {
             fileName: fileName,
             contentType: file.type,
-            fileID,
+            fileID: uploadRes.id,
+            downloadURL: uploadRes.downloadURL,
           }
           setKnowledgeFiles((prev) => {
             const currentItems = [...prev]

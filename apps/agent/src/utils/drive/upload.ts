@@ -66,7 +66,7 @@ export const useUploadFileToDrive = () => {
         fileID,
         status,
         teamID,
-      })
+      }).unwrap()
       if (status === UPLOAD_FILE_STATUS.FAILED || "error" in updateStatusRes) {
         store.updateFileDetailInfo(queryID, {
           status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
@@ -81,7 +81,7 @@ export const useUploadFileToDrive = () => {
           status: FILE_ITEM_DETAIL_STATUS_IN_UI.SUCCESS,
         })
         message.success(t("editor.inspect.setter_message.uploadsuc"))
-        return fileID
+        return updateStatusRes
       }
     } catch (e) {
       store.updateFileDetailInfo(queryID, {
@@ -131,7 +131,7 @@ export const useUploadFileToDrive = () => {
         fileID,
         status,
         teamID,
-      })
+      }).unwrap()
       if (status === UPLOAD_FILE_STATUS.FAILED || "error" in updateStatusRes) {
         store.updateFileDetailInfo(queryID, {
           status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
@@ -146,7 +146,7 @@ export const useUploadFileToDrive = () => {
           status: FILE_ITEM_DETAIL_STATUS_IN_UI.SUCCESS,
         })
         message.success(t("editor.inspect.setter_message.uploadsuc"))
-        return fileID
+        return updateStatusRes
       }
     } catch (e) {
       store.updateFileDetailInfo(queryID, {
