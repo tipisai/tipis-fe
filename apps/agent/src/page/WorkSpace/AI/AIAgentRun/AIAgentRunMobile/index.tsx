@@ -25,7 +25,6 @@ export const AIAgentRunMobile: FC = () => {
     chatMessages,
     isReceiving,
     sendMessage,
-    setIsReceiving,
     lastRunAgent,
     connect,
     isConnecting,
@@ -39,7 +38,6 @@ export const AIAgentRunMobile: FC = () => {
       chatMessages,
       isReceiving,
       sendMessage,
-      setIsReceiving,
       lastRunAgent,
     }),
     [
@@ -48,7 +46,6 @@ export const AIAgentRunMobile: FC = () => {
       isRunning,
       lastRunAgent,
       sendMessage,
-      setIsReceiving,
       getReadyState,
     ],
   )

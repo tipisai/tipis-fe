@@ -82,6 +82,5 @@ export interface PreviewChatProps {
     chatMessages: (IGroupMessage | ChatMessage)[]
     isReceiving: boolean
     sendMessage: IChatSendMessage
-    setIsReceiving: (isReceiving: boolean) => void
   }
 }
