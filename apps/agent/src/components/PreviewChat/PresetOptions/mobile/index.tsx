@@ -1,24 +1,21 @@
-import { motion } from "framer-motion"
-import { FC } from "react"
+import { memo } from "react"
 import { useGetPresetOptions } from "../hook"
 import { IPresetOptionsProps } from "../interface"
 import PresetCard from "./PresetCard"
+import { useMenuAnimation } from "./hook"
 import {
   presetOptionsContainerStyle,
   presetOptionsPositionContainerStyle,
 } from "./style"
 
-const PresetOptions: FC<IPresetOptionsProps> = (props) => {
+const PresetOptions = memo((props: IPresetOptionsProps) => {
   const { onClickCard } = props
   const options = useGetPresetOptions()
+
+  const scope = useMenuAnimation()
   return (
-    <motion.div
-      css={presetOptionsPositionContainerStyle}
-      animate={{
-        y: "calc(-100% - 16px)",
-      }}
-    >
-      <div css={presetOptionsContainerStyle}>
+    <div css={presetOptionsPositionContainerStyle}>
+      <div css={presetOptionsContainerStyle} ref={scope}>
         {options.map((option) => (
           <PresetCard
             key={option.id}
@@ -29,8 +26,10 @@ const PresetOptions: FC<IPresetOptionsProps> = (props) => {
           />
         ))}
       </div>
-    </motion.div>
+    </div>
   )
-}
+})
+
+PresetOptions.displayName = "MobilePresetOptions"
 
 export default PresetOptions
