@@ -64,6 +64,9 @@ export const fileInfoStyle = css`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  ${applyMobileStyle(css`
+    max-width: 100%;
+  `)}
 `
 
 export const errorInfoStyle = css`
