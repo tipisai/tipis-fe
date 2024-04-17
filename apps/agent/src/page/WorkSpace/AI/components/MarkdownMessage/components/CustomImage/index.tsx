@@ -1,5 +1,5 @@
 import Icon from "@ant-design/icons"
-import { Button, Image, ImageProps, Tooltip } from "antd"
+import { Button, Image, ImageProps, Skeleton, Tooltip } from "antd"
 import { FC, useState } from "react"
 import { DownloadIcon } from "@illa-public/icon"
 import { handleCreditPurchaseError } from "@illa-public/upgrade-modal"
@@ -39,12 +39,11 @@ const CustomImage: FC<ImageProps> = ({ alt, src }) => {
         style={imageStyle(isExpired)}
         fallback={imageLoadErrSrc}
         placeholder={
-          <Image
-            preview={false}
-            src={imageLoadErrSrc}
-            width={120}
-            height={120}
+          <Skeleton.Image
+            active
             style={{
+              width: 120,
+              height: 120,
               borderRadius: "8px",
             }}
           />
