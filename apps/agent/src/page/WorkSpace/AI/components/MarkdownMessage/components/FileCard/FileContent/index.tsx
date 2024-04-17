@@ -4,6 +4,7 @@ import { FC, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { DownloadIcon, getFileIconByContentType } from "@illa-public/icon"
 import { GCS_OBJECT_TYPE } from "@illa-public/public-types"
+import { handleCreditPurchaseError } from "@illa-public/upgrade-modal"
 import { handleDownloadFiles } from "@/utils/drive/download"
 import { IFileContentProps } from "./interface"
 import {
@@ -30,8 +31,9 @@ const FileContent: FC<IFileContentProps> = ({
       downloadURL: downloadURL,
     }
     handleDownloadFiles([fileInfo]).catch((e) => {
-      console.log("download", e)
-      setIsExpired(true)
+      if (!handleCreditPurchaseError(e)) {
+        setIsExpired(true)
+      }
     })
   }
   const contentBody = (
