@@ -40,7 +40,10 @@ const PinedTipiTab: FC<IPCPinedTipisTab> = (props) => {
     e.stopPropagation()
   }
 
-  const onClick = () => {}
+  const onClick = () => {
+    if (isCurrentUserTeam) {
+    }
+  }
 
   const navLinkComp = (
     <div

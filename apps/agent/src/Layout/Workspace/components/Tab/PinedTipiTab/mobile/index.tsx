@@ -29,7 +29,10 @@ const MobileTipisTab: FC<IMobilePinedTipisTab> = (props) => {
     e.stopPropagation()
   }
 
-  const onClick = () => {}
+  const onClick = () => {
+    if (isCurrentUserTeam) {
+    }
+  }
 
   return (
     <div onClick={onClick} css={baseOuterContainerStyle(false)}>
