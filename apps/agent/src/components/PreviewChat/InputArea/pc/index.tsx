@@ -28,6 +28,7 @@ import { PRESET_OPTION_ID } from "../../PresetOptions/constants"
 import { useGetPrompt } from "../../PresetOptions/hook"
 import PresetOptions from "../../PresetOptions/pc"
 import { PreviewChatUseContext } from "../../PreviewChatUseContext"
+import { PREVIEW_CHAT_USE_TO } from "../../PreviewChatUseContext/constants"
 import UploadButton from "../../UploadButton"
 import UploadKnowledgeFiles from "../../UploadKnowledgeFiles"
 import { ChatMessage, SenderType } from "../../interface"
@@ -384,7 +385,7 @@ const PCInputArea: FC<IInputAreaProps> = (props) => {
 
   return (
     <>
-      {!hasMessage && (
+      {useTo === PREVIEW_CHAT_USE_TO.DEFAULT_CHAT && !hasMessage && (
         <motion.div
           css={presetOptionsContainerStyle}
           animate={{
