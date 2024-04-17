@@ -61,7 +61,7 @@ export const useGetPrompt = () => {
             messagePrompt: t(
               "homepage.tipi_chat.default_message.pdf.prompt.user",
             ),
-            filePrompt,
+            filePrompt: [filePrompt],
           }
         }
         case PRESET_OPTION_ID.PROCESS_EXCEL_FILES: {
