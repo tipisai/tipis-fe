@@ -1,4 +1,5 @@
 import { isString } from "lodash-es"
+import { HTTP_REQUEST_PUBLIC_BASE_URL } from "@illa-public/illa-net"
 
 const markCodeBlocks = (markdownText: string) => {
   const codeBlockRegex = /```[\s\S]*?```/g
@@ -133,4 +134,28 @@ export const handleParseText = (text: string, isOwnMessage?: boolean) => {
   res = handleMarkdownLine(text)
   res = handleMarkdownCode(res, isOwnMessage)
   return res
+}
+
+export const tipisStorageURLHelper = (
+  url: string = "",
+): {
+  isTipisStorageURL: boolean
+  fileName: string | null
+  contentType: string | null
+} => {
+  let isTipisStorageURL = false
+  const urlParams = url.split("?")[1]
+  const URL = new URLSearchParams(urlParams)
+  const fileName = URL.get("fileName")
+  const contentType = URL.get("contentType")
+  if (fileName && contentType) {
+    isTipisStorageURL = url.startsWith(
+      `${HTTP_REQUEST_PUBLIC_BASE_URL}/object-storage`,
+    )
+  }
+  return {
+    isTipisStorageURL,
+    fileName,
+    contentType,
+  }
 }

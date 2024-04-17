@@ -1,6 +1,6 @@
 import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
-import { CODE_STATUS } from "../interface"
+import { CODE_STATUS } from "../../interface"
 
 export const inlineCodeStyle = css`
   display: inline-block;

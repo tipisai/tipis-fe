@@ -160,8 +160,10 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       chatMessagesRef.current,
       message,
     )
-    chatMessagesRef.current = newMessageList
-    setChatMessages(newMessageList)
+    if (newMessageList) {
+      chatMessagesRef.current = newMessageList
+      setChatMessages(newMessageList)
+    }
   }, [])
 
   const { sendMessage, connect, getReadyState, leaveRoom, cleanMessage } =

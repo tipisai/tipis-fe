@@ -133,17 +133,17 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
           })
           continue
         }
-        const fileID = await uploadKnowledgeFile(
+        const uploadRes = await uploadKnowledgeFile(
           queryID,
           file,
           abortController.signal,
           uploadFileStore,
         )
-        if (!!fileID) {
+        if (!!uploadRes) {
           const res = {
             fileName: fileName,
             contentType: file.type,
-            fileID,
+            fileID: uploadRes.id,
           }
           uploadFileStore.deleteFileDetailInfo(queryID)
           addFile(res)

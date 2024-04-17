@@ -85,3 +85,9 @@ export interface PreviewChatProps {
     setIsReceiving: (isReceiving: boolean) => void
   }
 }
+
+export interface IFileMessage {
+  contentType: string
+  downloadURL: string
+  fileName: string
+}

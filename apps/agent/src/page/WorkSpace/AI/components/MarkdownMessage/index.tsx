@@ -8,7 +8,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material"
-import { Image, Typography } from "antd"
+import { Typography } from "antd"
 import { memo } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkBreaks from "remark-breaks"
@@ -21,7 +21,9 @@ import {
   markdownMessageStyle,
   tableStyle,
 } from "@/page/WorkSpace/AI/components/MarkdownMessage/style"
-import Code from "./Code"
+import CustomAnchor from "./components/CustomAnchor"
+import CustomCode from "./components/CustomCode"
+import CustomImage from "./components/CustomImage"
 import { handleParseText } from "./utils"
 
 export const MarkdownMessage = memo((props: MarkdownMessageProps) => {
@@ -62,9 +64,7 @@ export const MarkdownMessage = memo((props: MarkdownMessageProps) => {
             </Typography.Title>
           ),
           a: ({ href, children }) => (
-            <Typography.Link href={href} target="_blank">
-              {children}
-            </Typography.Link>
+            <CustomAnchor href={href}>{children}</CustomAnchor>
           ),
           p: ({ children }) => (
             <Typography.Paragraph style={{ margin: 0 }}>
@@ -89,13 +89,13 @@ export const MarkdownMessage = memo((props: MarkdownMessageProps) => {
             </TableContainer>
           ),
           code: (props) => (
-            <Code
+            <CustomCode
               {...props}
               codeStatus={codeStatus}
               isReceiving={isReceiving}
             />
           ),
-          img: ({ src, alt }) => <Image src={src} alt={alt} preview={false} />,
+          img: ({ src, alt }) => <CustomImage src={src} alt={alt} />,
         }}
       >
         {handleParseText(children ?? "", isOwnMessage)}
