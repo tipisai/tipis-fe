@@ -43,10 +43,3 @@ export const uploadContentTipStyle = css`
   line-height: 22px;
   color: ${getColor("grayBlue", "03")};
 `
-
-export const presetOptionsContainerStyle = css`
-  position: absolute;
-  left: 0;
-  width: 100%;
-  padding: 0 16px;
-`

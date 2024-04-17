@@ -1,6 +1,5 @@
 import Icon from "@ant-design/icons"
 import { App, Button } from "antd"
-import { motion } from "framer-motion"
 import {
   ChangeEvent,
   FC,
@@ -36,7 +35,6 @@ import { IInputAreaProps } from "../interface"
 import { inputStyle, operationStyle, sendButtonStyle } from "../style"
 import {
   inputContainerStyle,
-  presetOptionsContainerStyle,
   uploadContentStyle,
   uploadContentTipStyle,
   uploadDropZoneStyle,
@@ -386,14 +384,7 @@ const PCInputArea: FC<IInputAreaProps> = (props) => {
   return (
     <>
       {useTo === PREVIEW_CHAT_USE_TO.DEFAULT_CHAT && !hasMessage && (
-        <motion.div
-          css={presetOptionsContainerStyle}
-          animate={{
-            y: "calc(-100% - 16px)",
-          }}
-        >
-          <PresetOptions onClickCard={handleClickCard} />
-        </motion.div>
+        <PresetOptions onClickCard={handleClickCard} />
       )}
       <div
         css={inputContainerStyle}

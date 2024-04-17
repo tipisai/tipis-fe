@@ -21,17 +21,19 @@ import {
 } from "@/config/constants/knowledge"
 import { UploadFileStore, useUploadFileToDrive } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
+import { PRESET_OPTION_ID } from "../../PresetOptions/constants"
+import { useGetPrompt } from "../../PresetOptions/hook"
+import PresetOptions from "../../PresetOptions/mobile"
 import { PreviewChatUseContext } from "../../PreviewChatUseContext"
+import { PREVIEW_CHAT_USE_TO } from "../../PreviewChatUseContext/constants"
 import UploadButton from "../../UploadButton"
 import UploadKnowledgeFiles from "../../UploadKnowledgeFiles"
 import { ChatMessage, SenderType } from "../../interface"
 import { IInputAreaProps } from "../interface"
 import { inputStyle, operationStyle, sendButtonStyle } from "../style"
 
-const MobileInputArea: FC<IInputAreaProps> = ({
-  isReceiving,
-  onSendMessage,
-}) => {
+const MobileInputArea: FC<IInputAreaProps> = (props) => {
+  const { isReceiving, onSendMessage, hasMessage } = props
   const { t } = useTranslation()
   const { message: messageAPI } = App.useApp()
   const { useTo } = useContext(PreviewChatUseContext)
@@ -98,76 +100,79 @@ const MobileInputArea: FC<IInputAreaProps> = ({
     return true
   }
 
-  const uploadFiles = async (files: File[]) => {
-    TipisTrack.track("start_upload_chat_file", {
-      parameter1: useTo,
-    })
-    setUploadKnowledgeLoading(true)
-    const currentFiles = [...knowledgeFiles]
-
-    const formatFiles = multipleFileHandler(
-      files,
-      currentFiles,
-      chatUploadStoreRef.current,
-    )
-    currentFiles.push(
-      ...formatFiles.map((item) => ({
-        fileName: item.fileName,
-        contentType: item.file.type,
-        fileID: "",
-      })),
-    )
-    setKnowledgeFiles(currentFiles)
-    try {
-      for (let item of formatFiles) {
-        const { fileName, file, abortController } = item
-        if (!file) break
-        if (file.size > MAX_FILE_SIZE) {
-          TipisTrack.track("chat_file_over_size", {
-            parameter1: useTo,
-            parameter3: file.size,
-          })
-          messageAPI.warning({
-            content: t("dashboard.message.please_use_a_file_wi"),
-          })
-          setKnowledgeFiles(
-            currentFiles.filter((file) => file.fileName !== item.fileName),
-          )
-          chatUploadStoreRef.current.deleteFileDetailInfo(item.queryID)
-          continue
-        }
-        const uploadRes = await uploadChatFile(
-          item.queryID,
-          file,
-          abortController.signal,
-          chatUploadStoreRef.current,
-        )
-
-        if (!!uploadRes) {
-          const res = {
-            fileName: fileName,
-            contentType: file.type,
-            fileID: uploadRes.id,
-            downloadURL: uploadRes.downloadURL,
-          }
-          setKnowledgeFiles((prev) => {
-            const currentItems = [...prev]
-            const index = currentItems.findIndex(
-              (item) => item.fileName === fileName,
-            )
-            currentItems.splice(index, 1, res)
-            return currentItems
-          })
-        }
-      }
-    } catch (e) {
-      messageAPI.error({
-        content: t("dashboard.message.bad_file"),
+  const uploadFiles = useCallback(
+    async (files: File[], knowledgeFiles: IKnowledgeFile[]) => {
+      TipisTrack.track("start_upload_chat_file", {
+        parameter1: useTo,
       })
-    } finally {
-      setUploadKnowledgeLoading(false)
-    }
-  }
+      setUploadKnowledgeLoading(true)
+      const currentFiles = [...knowledgeFiles]
+
+      const formatFiles = multipleFileHandler(
+        files,
+        currentFiles,
+        chatUploadStoreRef.current,
+      )
+      currentFiles.push(
+        ...formatFiles.map((item) => ({
+          fileName: item.fileName,
+          contentType: item.file.type,
+          fileID: "",
+        })),
+      )
+      setKnowledgeFiles(currentFiles)
+      try {
+        for (let item of formatFiles) {
+          const { fileName, file, abortController } = item
+          if (!file) break
+          if (file.size > MAX_FILE_SIZE) {
+            TipisTrack.track("chat_file_over_size", {
+              parameter1: useTo,
+              parameter3: file.size,
+            })
+            messageAPI.warning({
+              content: t("dashboard.message.please_use_a_file_wi"),
+            })
+            setKnowledgeFiles(
+              currentFiles.filter((file) => file.fileName !== item.fileName),
+            )
+            chatUploadStoreRef.current.deleteFileDetailInfo(item.queryID)
+            continue
+          }
+          const uploadRes = await uploadChatFile(
+            item.queryID,
+            file,
+            abortController.signal,
+            chatUploadStoreRef.current,
+          )
+
+          if (!!uploadRes) {
+            const res = {
+              fileName: fileName,
+              contentType: file.type,
+              fileID: uploadRes.id,
+              downloadURL: uploadRes.downloadURL,
+            }
+            setKnowledgeFiles((prev) => {
+              const currentItems = [...prev]
+              const index = currentItems.findIndex(
+                (item) => item.fileName === fileName,
+              )
+              currentItems.splice(index, 1, res)
+              return currentItems
+            })
+          }
+        }
+      } catch (e) {
+        messageAPI.error({
+          content: t("dashboard.message.bad_file"),
+        })
+      } finally {
+        setUploadKnowledgeLoading(false)
+      }
+    },
+    [messageAPI, t, uploadChatFile, useTo],
+  )
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     let inputFiles = Array.from(e.target.files || [])
@@ -175,31 +180,34 @@ const MobileInputArea: FC<IInputAreaProps> = ({
 
     const validateResult = validateFiles(inputFiles)
     if (!validateResult) return
-    await uploadFiles(inputFiles)
+    await uploadFiles(inputFiles, knowledgeFiles)
   }
 
-  const sendAndClearMessage = useCallback(() => {
-    const realSendKnowledgeFiles = knowledgeFiles.filter(
-      (item) => !!item.fileID,
-    )
-    if (
-      (textAreaVal !== "" && realSendKnowledgeFiles.length > 0) ||
-      (textAreaVal !== "" && realSendKnowledgeFiles.length === 0)
-    ) {
-      onSendMessage({
-        threadID: v4(),
-        message: textAreaVal,
-        sender: {
-          senderID: currentUserID,
-          senderType: SenderType.USER,
-        },
-        knowledgeFiles: realSendKnowledgeFiles,
-      } as ChatMessage)
-      setTextAreaVal("")
-      setKnowledgeFiles([])
-      chatUploadStoreRef.current.clearStore()
-    }
-  }, [currentUserID, knowledgeFiles, onSendMessage, textAreaVal])
+  const sendAndClearMessage = useCallback(
+    (textMessage: string, knowledgeFiles: IKnowledgeFile[]) => {
+      const realSendKnowledgeFiles = knowledgeFiles.filter(
+        (item) => !!item.fileID,
+      )
+      if (
+        (textMessage !== "" && realSendKnowledgeFiles.length > 0) ||
+        (textMessage !== "" && realSendKnowledgeFiles.length === 0)
+      ) {
+        onSendMessage({
+          threadID: v4(),
+          message: textMessage,
+          sender: {
+            senderID: currentUserID,
+            senderType: SenderType.USER,
+          },
+          knowledgeFiles: realSendKnowledgeFiles,
+        } as ChatMessage)
+        setTextAreaVal("")
+        setKnowledgeFiles([])
+        chatUploadStoreRef.current.clearStore()
+      }
+    },
+    [currentUserID, onSendMessage],
+  )
 
   const handleClickSend = () => {
     const realSendKnowledgeFiles = knowledgeFiles.filter(
@@ -210,43 +218,69 @@ const MobileInputArea: FC<IInputAreaProps> = ({
       parameter3: "click",
     })
 
-    sendAndClearMessage()
+    sendAndClearMessage(textAreaVal, knowledgeFiles)
   }
 
+  const getPPromptByID = useGetPrompt()
+
+  const handleClickCard = useCallback(
+    async (cardID: PRESET_OPTION_ID) => {
+      const { messagePrompt, filePrompt } = await getPPromptByID(cardID)
+      switch (cardID) {
+        case PRESET_OPTION_ID.DATA_ANALYZE: {
+          sendAndClearMessage(messagePrompt, [])
+          break
+        }
+        case PRESET_OPTION_ID.INVOICE_PDF_PROCESS:
+        case PRESET_OPTION_ID.PROCESS_EXCEL_FILES:
+        case PRESET_OPTION_ID.GENERATE_A_GRAPHIC_REPORT: {
+          setTextAreaVal(messagePrompt)
+          await uploadFiles(filePrompt, [])
+        }
+      }
+    },
+    [getPPromptByID, sendAndClearMessage, uploadFiles],
+  )
+
   return (
-    <div>
-      <textarea
-        value={textAreaVal}
-        css={inputStyle}
-        placeholder={t("editor.ai-agent.placeholder.send")}
-        onChange={(event) => {
-          setTextAreaVal(event.target.value)
-        }}
-      />
-      <div css={operationStyle}>
-        <UploadKnowledgeFiles
-          knowledgeFiles={knowledgeFiles}
-          handleDeleteFile={handleDeleteFile}
-          chatUploadStore={chatUploadStoreRef.current}
+    <>
+      {useTo === PREVIEW_CHAT_USE_TO.DEFAULT_CHAT && !hasMessage && (
+        <PresetOptions onClickCard={handleClickCard} />
+      )}
+      <div>
+        <textarea
+          value={textAreaVal}
+          css={inputStyle}
+          placeholder={t("editor.ai-agent.placeholder.send")}
+          onChange={(event) => {
+            setTextAreaVal(event.target.value)
+          }}
         />
-        <div css={sendButtonStyle}>
-          <UploadButton
-            handleClick={handleClickUploadFile}
-            handleFileChange={handleFileChange}
-            ref={inputRef}
+        <div css={operationStyle}>
+          <UploadKnowledgeFiles
+            knowledgeFiles={knowledgeFiles}
+            handleDeleteFile={handleDeleteFile}
+            chatUploadStore={chatUploadStoreRef.current}
           />
-          <Button
-            type="primary"
-            size="large"
-            icon={<Icon component={SendIcon} />}
-            disabled={disableSend}
-            onClick={handleClickSend}
-          >
-            {t("editor.ai-agent.button.send")}
-          </Button>
+          <div css={sendButtonStyle}>
+            <UploadButton
+              handleClick={handleClickUploadFile}
+              handleFileChange={handleFileChange}
+              ref={inputRef}
+            />
+            <Button
+              type="primary"
+              size="large"
+              icon={<Icon component={SendIcon} />}
+              disabled={disableSend}
+              onClick={handleClickSend}
+            >
+              {t("editor.ai-agent.button.send")}
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
