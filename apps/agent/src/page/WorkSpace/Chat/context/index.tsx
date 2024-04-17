@@ -13,7 +13,6 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useBeforeUnload, useParams } from "react-router-dom"
 import {
-  CreditModalType,
   handleCreditPurchaseError,
   useCreditModal,
 } from "@illa-public/upgrade-modal"
@@ -327,7 +326,6 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
         case WEBSOCKET_ERROR_CODE.INSUFFICIENT_CREDIT:
         case WEBSOCKET_ERROR_CODE.AI_AGENT_MAX_TOKEN_OVER_CREDIT_BALANCE:
           creditModal({
-            modalType: CreditModalType.TOKEN,
             from: BILLING_REPORT_FROM.RUN,
           })
           break
@@ -381,7 +379,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       }
       return initConnectConfig
     } catch (e) {
-      const res = handleCreditPurchaseError(e, CreditModalType.TOKEN)
+      const res = handleCreditPurchaseError(e)
       if (res) return
       messageAPI.error({
         content: t("editor.ai-agent.message.start-failed"),

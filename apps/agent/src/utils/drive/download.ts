@@ -34,10 +34,17 @@ export const handleDownloadFiles = async (
     const { name, downloadURL } = downloadInfo[i]
     promise = promise.then(async () => {
       try {
-        const fileResponse = await fetch(downloadURL, {
+        const urlRes = await fetch(downloadURL, {
           method: "GET",
+          headers: {
+            "No-Redirect": "true",
+          },
         })
-
+        const realDownloadURL = await urlRes.json()
+        if (!realDownloadURL || typeof realDownloadURL !== "string") {
+          return Promise.reject(null)
+        }
+        const fileResponse = await fetch(realDownloadURL)
         if (!asZip && window.WritableStream && fileResponse.body?.pipeTo) {
           const fileStream = createWriteStream(name)
           return fileResponse.body.pipeTo(fileStream)
