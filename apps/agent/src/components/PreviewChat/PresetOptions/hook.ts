@@ -1,8 +1,7 @@
 import { useCallback } from "react"
 import { useTranslation } from "react-i18next"
 import { PRESET_OPTION_ID } from "./constants"
-import AmyPDFSrc from "./promptFiles/Amy.pdf?url"
-import JanePDFSrc from "./promptFiles/Jane.pdf?url"
+import rutherfordPDFSrc from "./promptFiles/rutherford.pdf?url"
 import salesDataSrc from "./promptFiles/salesData.csv?url"
 
 export const useGetPresetOptions = () => {
@@ -49,21 +48,13 @@ export const useGetPrompt = () => {
           }
         }
         case PRESET_OPTION_ID.INVOICE_PDF_PROCESS: {
-          const fileNameArray = ["Amy.pdf", "Jane.pdf"]
-          const filePrompt = await Promise.all([
-            fetch(AmyPDFSrc),
-            fetch(JanePDFSrc),
-          ])
-            .then((responses) =>
-              Promise.all(responses.map((res) => res.blob())),
-            )
-            .then((blobs) =>
-              blobs.map(
-                (blob, i) =>
-                  new File([blob], `${fileNameArray[i]}`, {
-                    type: blob.type,
-                  }),
-              ),
+          const filePrompt = await fetch(rutherfordPDFSrc)
+            .then((responses) => responses.blob())
+            .then(
+              (blob) =>
+                new File([blob], `rutherford.pdf`, {
+                  type: blob.type,
+                }),
             )
 
           return {
