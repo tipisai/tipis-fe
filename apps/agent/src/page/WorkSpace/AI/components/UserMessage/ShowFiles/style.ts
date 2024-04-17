@@ -1,5 +1,4 @@
 import { css } from "@emotion/react"
-import { getColor } from "@illa-public/color-scheme"
 import { applyMobileStyle } from "@illa-public/utils"
 
 export const containerStyle = css`
@@ -17,41 +16,9 @@ export const containerStyle = css`
   `)}
 `
 
-export const fileItemStyle = css`
-  display: flex;
-  width: 284px;
-  padding: 8px;
-  align-items: center;
-  gap: 4px;
-  align-self: stretch;
-  border-radius: 16px;
-  background: ${getColor("grayBlue", "09")};
+export const fileContainerStyle = css`
+  width: auto;
   ${applyMobileStyle(css`
     width: 100%;
   `)}
-`
-
-export const iconContainerStyle = css`
-  display: flex;
-  width: 32px;
-  height: 32px;
-  padding: 1px 4px;
-  justify-content: center;
-  align-items: center;
-`
-
-export const fileTypeIconStyle = css`
-  width: 24px;
-  height: 30px;
-`
-
-export const fileNameStyle = css`
-  color: ${getColor("grayBlue", "02")};
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 22px;
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 `

@@ -16,10 +16,9 @@ import {
 } from "./style"
 
 export const PreviewChat: FC<PreviewChatProps> = (props) => {
-  const { blockInput, editState, onSendMessage, wsContextValue } = props
+  const { blockInput, onSendMessage, wsContextValue } = props
 
-  const { chatMessages, isReceiving, sendMessage, setIsReceiving } =
-    wsContextValue
+  const { chatMessages, isReceiving, sendMessage } = wsContextValue
 
   const { data: currentUserInfo } = useGetUserInfoQuery(null)
 
@@ -36,8 +35,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       TextSignal.STOP_RUN,
       SEND_MESSAGE_WS_TYPE.STOP_ALL,
     )
-    setIsReceiving(false)
-  }, [sendMessage, setIsReceiving])
+  }, [sendMessage])
 
   const handleScroll = useCallback((e: UIEvent<HTMLDivElement>) => {
     if (e.currentTarget.scrollTop < cacheLastScroll.current) {
@@ -60,7 +58,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       }
     }
     cacheMessageLength.current = chatMessages.length
-  }, [chatMessages.length])
+  }, [chatMessages])
 
   return (
     <div css={previewChatContainerStyle}>
@@ -73,7 +71,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       />
       <div css={[inputTextContainerStyle, maxWidthStyle]}>
         {blockInput ? (
-          <BlockInputTip editState={editState} />
+          <BlockInputTip />
         ) : (
           <>
             <GeneratingBlock
@@ -83,6 +81,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
             <InputArea
               isReceiving={isReceiving}
               onSendMessage={onSendMessage}
+              hasMessage={chatMessages.length > 0}
             />
           </>
         )}

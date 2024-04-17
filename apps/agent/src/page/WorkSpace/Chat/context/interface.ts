@@ -30,7 +30,6 @@ export interface IAgentWSInject
 }
 
 export interface IChatStableWSInject {
-  setIsReceiving: (isReceiving: boolean) => void
   connect: () => Promise<void>
   reconnect: () => Promise<void>
   sendMessage: IChatSendMessage

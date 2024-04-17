@@ -13,7 +13,6 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useBeforeUnload, useParams } from "react-router-dom"
 import {
-  CreditModalType,
   handleCreditPurchaseError,
   useCreditModal,
 } from "@illa-public/upgrade-modal"
@@ -113,8 +112,10 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       chatMessagesRef.current,
       message,
     )
-    chatMessagesRef.current = newMessageList
-    setChatMessages(newMessageList)
+    if (newMessageList) {
+      chatMessagesRef.current = newMessageList
+      setChatMessages(newMessageList)
+    }
   }, [])
 
   const { sendMessage, connect, getReadyState, leaveRoom, cleanMessage } =
@@ -281,6 +282,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           onUpdateChatMessage(chatCallback)
           break
         case "stop_all/remote":
+          setIsReceiving(false)
           const needUpdateMessageList = cancelPendingMessage(
             chatMessagesRef.current,
           )
@@ -325,7 +327,6 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
         case WEBSOCKET_ERROR_CODE.INSUFFICIENT_CREDIT:
         case WEBSOCKET_ERROR_CODE.AI_AGENT_MAX_TOKEN_OVER_CREDIT_BALANCE:
           creditModal({
-            modalType: CreditModalType.TOKEN,
             from: BILLING_REPORT_FROM.RUN,
           })
           break
@@ -379,7 +380,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       }
       return initConnectConfig
     } catch (e) {
-      const res = handleCreditPurchaseError(e, CreditModalType.TOKEN)
+      const res = handleCreditPurchaseError(e)
       if (res) return
       messageAPI.error({
         content: t("editor.ai-agent.message.start-failed"),
@@ -423,7 +424,6 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       sendMessage: chatSendMessage,
       reconnect: innerReconnect,
       connect: innerConnect,
-      setIsReceiving,
       leaveRoom: innerLeaveRoom,
     }
   }, [innerConnect, innerLeaveRoom, innerReconnect, chatSendMessage])

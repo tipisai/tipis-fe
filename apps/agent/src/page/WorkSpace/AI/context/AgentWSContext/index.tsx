@@ -16,7 +16,6 @@ import { useBeforeUnload } from "react-router-dom"
 import { v4 } from "uuid"
 import { WS_READYSTATE } from "@illa-public/illa-web-socket"
 import {
-  CreditModalType,
   handleCreditPurchaseError,
   useCreditModal,
 } from "@illa-public/upgrade-modal"
@@ -160,8 +159,10 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       chatMessagesRef.current,
       message,
     )
-    chatMessagesRef.current = newMessageList
-    setChatMessages(newMessageList)
+    if (newMessageList) {
+      chatMessagesRef.current = newMessageList
+      setChatMessages(newMessageList)
+    }
   }, [])
 
   const { sendMessage, connect, getReadyState, leaveRoom, cleanMessage } =
@@ -320,19 +321,22 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
   const onMessageSuccessCallback = useCallback(
     (callback: Callback<unknown>) => {
       switch (callback.broadcast?.type) {
-        case "enter/remote":
+        case "enter/remote": {
           const { inRoomUsers } = callback.broadcast.payload as {
             inRoomUsers: CollaboratorsInfo[]
           }
           onUpdateRoomUser(inRoomUsers)
           initChatMessage()
           break
-        case "chat/remote":
+        }
+        case "chat/remote": {
           let chatCallback = callback.broadcast.payload as ChatWsAppendResponse
 
           onUpdateChatMessage(chatCallback)
           break
-        case "stop_all/remote":
+        }
+        case "stop_all/remote": {
+          setIsReceiving(false)
           const needUpdateMessageList = cancelPendingMessage(
             chatMessagesRef.current,
           )
@@ -341,7 +345,8 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
             setChatMessages(needUpdateMessageList)
           }
           break
-        case "clean/remote":
+        }
+        case "clean/remote": {
           const partAgentInfo = {
             prompt: getValues("prompt"),
             actionID: getValues("aiAgentID"),
@@ -364,6 +369,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
           )
 
           break
+        }
       }
     },
     [
@@ -403,7 +409,6 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
         case WEBSOCKET_ERROR_CODE.INSUFFICIENT_CREDIT:
         case WEBSOCKET_ERROR_CODE.AI_AGENT_MAX_TOKEN_OVER_CREDIT_BALANCE:
           creditModal({
-            modalType: CreditModalType.TOKEN,
             from: BILLING_REPORT_FROM.RUN,
           })
           break
@@ -469,7 +474,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       }
       return initConnectConfig
     } catch (e) {
-      const res = handleCreditPurchaseError(e, CreditModalType.TOKEN)
+      const res = handleCreditPurchaseError(e)
       if (res) return
       messageAPI.error({
         content: t("editor.ai-agent.message.start-failed"),
@@ -556,7 +561,6 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       isReceiving,
       isRunning,
       inRoomUsers,
-      setIsReceiving,
       leaveRoom: innerLeaveRoom,
       tabID,
     }

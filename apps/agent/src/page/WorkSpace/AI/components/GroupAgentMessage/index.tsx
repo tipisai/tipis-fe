@@ -3,7 +3,7 @@ import { Avatar } from "@illa-public/avatar"
 import { useIsMobile } from "@illa-public/utils"
 import { MESSAGE_STATUS, SenderType } from "@/components/PreviewChat/interface"
 import { ChatContext } from "@/page/WorkSpace/AI/components/ChatContext"
-import { isRequestMessage } from "@/utils/agent/wsUtils"
+import { isRequestMessage } from "@/utils/agent/groupUtils"
 import {
   PureMessage,
   SyncMessageCard,
