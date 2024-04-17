@@ -39,7 +39,6 @@ export const AIAgentRunPC: FC = () => {
     chatMessages,
     isReceiving,
     sendMessage,
-    setIsReceiving,
     lastRunAgent,
     tabID,
   } = useContext(AgentWSContext)
@@ -65,7 +64,6 @@ export const AIAgentRunPC: FC = () => {
       chatMessages,
       isReceiving,
       sendMessage,
-      setIsReceiving,
       lastRunAgent,
     }),
     [
@@ -74,7 +72,6 @@ export const AIAgentRunPC: FC = () => {
       isRunning,
       lastRunAgent,
       sendMessage,
-      setIsReceiving,
       getReadyState,
     ],
   )
@@ -149,7 +146,6 @@ export const AIAgentRunPC: FC = () => {
       <PreviewChatUseProvider useTo={PREVIEW_CHAT_USE_TO.RUN}>
         <div css={rightPanelContainerStyle}>
           <PreviewChat
-            editState="RUN"
             blockInput={getIsBlockInputDirty()}
             wsContextValue={wsContext}
             onSendMessage={onSendMessage}

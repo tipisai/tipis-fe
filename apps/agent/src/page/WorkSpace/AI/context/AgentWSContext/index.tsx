@@ -341,19 +341,22 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
   const onMessageSuccessCallback = useCallback(
     (callback: Callback<unknown>) => {
       switch (callback.broadcast?.type) {
-        case "enter/remote":
+        case "enter/remote": {
           const { inRoomUsers } = callback.broadcast.payload as {
             inRoomUsers: CollaboratorsInfo[]
           }
           onUpdateRoomUser(inRoomUsers)
           initChatMessage()
           break
-        case "chat/remote":
+        }
+        case "chat/remote": {
           let chatCallback = callback.broadcast.payload as ChatWsAppendResponse
 
           onUpdateChatMessage(chatCallback)
           break
-        case "stop_all/remote":
+        }
+        case "stop_all/remote": {
+          setIsReceiving(false)
           const needUpdateMessageList = cancelPendingMessage(
             chatMessagesRef.current,
           )
@@ -362,7 +365,8 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
             setChatMessages(needUpdateMessageList)
           }
           break
-        case "clean/remote":
+        }
+        case "clean/remote": {
           const partAgentInfo = {
             prompt: getValues("prompt"),
             actionID: getValues("aiAgentID"),
@@ -385,6 +389,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
           )
 
           break
+        }
       }
     },
     [
@@ -563,7 +568,6 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       isReceiving,
       isRunning,
       inRoomUsers,
-      setIsReceiving,
       leaveRoom: innerLeaveRoom,
       tabID,
     }

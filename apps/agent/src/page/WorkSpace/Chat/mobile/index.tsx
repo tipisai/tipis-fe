@@ -4,7 +4,7 @@ import MobileCustomTitle from "@/Layout/Workspace/mobile/components/CustomTitle"
 import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayout"
 import defaultCHatIconURL from "@/assets/public/tipiChatAvatar.svg"
 import HeaderTools from "../components/HeaderTools"
-import DefaultChat from "../module/chatHistory"
+import ChatHistory from "../module/chatHistory"
 
 const MobileChatPage: FC = () => {
   const { t } = useTranslation()
@@ -17,7 +17,7 @@ const MobileChatPage: FC = () => {
           <MobileCustomTitle title={title} iconURL={defaultCHatIconURL} />
         )}
       >
-        <DefaultChat />
+        <ChatHistory />
       </MobileFirstPageLayout>
     </>
   )

@@ -14,9 +14,8 @@ import { ChatStableWSContext, ChatUnStableWSContext } from "../context"
 import { INIT_CHAT_CONFIG } from "./constants"
 import { rightPanelContainerStyle } from "./style"
 
-export const DefaultChat: FC = () => {
-  const { connect, leaveRoom, sendMessage, setIsReceiving } =
-    useContext(ChatStableWSContext)
+export const ChatHistory: FC = () => {
+  const { connect, leaveRoom, sendMessage } = useContext(ChatStableWSContext)
 
   const { getReadyState, isRunning, chatMessages, isReceiving, inRoomUsers } =
     useContext(ChatUnStableWSContext)
@@ -30,16 +29,8 @@ export const DefaultChat: FC = () => {
       chatMessages,
       isReceiving,
       sendMessage,
-      setIsReceiving,
     }),
-    [
-      chatMessages,
-      isReceiving,
-      isRunning,
-      sendMessage,
-      setIsReceiving,
-      getReadyState,
-    ],
+    [chatMessages, isReceiving, isRunning, sendMessage, getReadyState],
   )
 
   const onSendMessage = useCallback(
@@ -82,7 +73,6 @@ export const DefaultChat: FC = () => {
       <PreviewChatUseProvider useTo={PREVIEW_CHAT_USE_TO.DEFAULT_CHAT}>
         <div css={rightPanelContainerStyle}>
           <PreviewChat
-            editState="RUN"
             blockInput={!isRunning}
             wsContextValue={wsContext}
             onSendMessage={onSendMessage}
@@ -93,6 +83,6 @@ export const DefaultChat: FC = () => {
   )
 }
 
-export default DefaultChat
+export default ChatHistory
 
-DefaultChat.displayName = "DefaultChat"
+ChatHistory.displayName = "DefaultChat"

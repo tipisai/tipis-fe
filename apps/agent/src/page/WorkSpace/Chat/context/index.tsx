@@ -296,6 +296,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           onUpdateChatMessage(chatCallback)
           break
         case "stop_all/remote":
+          setIsReceiving(false)
           const needUpdateMessageList = cancelPendingMessage(
             chatMessagesRef.current,
           )
@@ -448,7 +449,6 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       sendMessage: chatSendMessage,
       reconnect: innerReconnect,
       connect: innerConnect,
-      setIsReceiving,
       leaveRoom: innerLeaveRoom,
     }
   }, [innerConnect, innerLeaveRoom, innerReconnect, chatSendMessage])

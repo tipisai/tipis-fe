@@ -6,19 +6,21 @@ const MobileInputArea = lazy(() => import("./mobile"))
 const DesktopInputArea = lazy(() => import("./pc"))
 
 const InputArea = memo((props: IInputAreaProps) => {
-  const { isReceiving, onSendMessage } = props
+  const { isReceiving, hasMessage, onSendMessage } = props
   return (
     <LayoutAutoChange
       desktopPage={
         <DesktopInputArea
           isReceiving={isReceiving}
           onSendMessage={onSendMessage}
+          hasMessage={hasMessage}
         />
       }
       mobilePage={
         <MobileInputArea
           isReceiving={isReceiving}
           onSendMessage={onSendMessage}
+          hasMessage={hasMessage}
         />
       }
     />
