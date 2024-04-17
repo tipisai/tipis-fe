@@ -35,6 +35,7 @@ const CustomImage: FC<ImageProps> = ({ alt, src }) => {
         src={src}
         alt={alt}
         preview={false}
+        width="100%"
         style={imageStyle(isExpired)}
         fallback={imageLoadErrSrc}
         placeholder={
