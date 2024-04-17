@@ -28,7 +28,7 @@ const CustomImage: FC<ImageProps> = ({ alt, src }) => {
     }
     handleDownloadFiles([fileInfo])
       .catch((e) => {
-        if (!handleCreditPurchaseError(e)) {
+        if (handleCreditPurchaseError(e)) {
           setIsExpired(true)
         }
       })
@@ -54,6 +54,7 @@ const CustomImage: FC<ImageProps> = ({ alt, src }) => {
               borderRadius: "8px",
               background:
                 "linear-gradient(270deg, #FFF 0%, #F2F3F5 49.83%, #FFF 100%)",
+              backgroundSize: "400% 100%",
             }}
           >
             <Icon

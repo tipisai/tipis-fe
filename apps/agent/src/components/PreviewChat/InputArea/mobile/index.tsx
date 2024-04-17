@@ -21,11 +21,11 @@ import {
 } from "@/config/constants/knowledge"
 import { UploadFileStore, useUploadFileToDrive } from "@/utils/drive"
 import { multipleFileHandler } from "@/utils/drive/utils"
-import { PRESET_OPTION_ID } from "../../PresetOptions/constants"
-import { useGetPrompt } from "../../PresetOptions/hook"
-import PresetOptions from "../../PresetOptions/mobile"
+// import { PRESET_OPTION_ID } from "../../PresetOptions/constants"
+// import { useGetPrompt } from "../../PresetOptions/hook"
+// import PresetOptions from "../../PresetOptions/mobile"
 import { PreviewChatUseContext } from "../../PreviewChatUseContext"
-import { PREVIEW_CHAT_USE_TO } from "../../PreviewChatUseContext/constants"
+// import { PREVIEW_CHAT_USE_TO } from "../../PreviewChatUseContext/constants"
 import UploadButton from "../../UploadButton"
 import UploadKnowledgeFiles from "../../UploadKnowledgeFiles"
 import { ChatMessage, SenderType } from "../../interface"
@@ -33,7 +33,7 @@ import { IInputAreaProps } from "../interface"
 import { inputStyle, operationStyle, sendButtonStyle } from "../style"
 
 const MobileInputArea: FC<IInputAreaProps> = (props) => {
-  const { isReceiving, onSendMessage, hasMessage } = props
+  const { isReceiving, onSendMessage } = props
   const { t } = useTranslation()
   const { message: messageAPI } = App.useApp()
   const { useTo } = useContext(PreviewChatUseContext)
@@ -221,32 +221,32 @@ const MobileInputArea: FC<IInputAreaProps> = (props) => {
     sendAndClearMessage(textAreaVal, knowledgeFiles)
   }
 
-  const getPPromptByID = useGetPrompt()
+  // const getPPromptByID = useGetPrompt()
 
-  const handleClickCard = useCallback(
-    async (cardID: PRESET_OPTION_ID) => {
-      const { messagePrompt, filePrompt } = await getPPromptByID(cardID)
-      switch (cardID) {
-        case PRESET_OPTION_ID.DATA_ANALYZE: {
-          sendAndClearMessage(messagePrompt, [])
-          break
-        }
-        case PRESET_OPTION_ID.INVOICE_PDF_PROCESS:
-        case PRESET_OPTION_ID.PROCESS_EXCEL_FILES:
-        case PRESET_OPTION_ID.GENERATE_A_GRAPHIC_REPORT: {
-          setTextAreaVal(messagePrompt)
-          await uploadFiles(filePrompt, [])
-        }
-      }
-    },
-    [getPPromptByID, sendAndClearMessage, uploadFiles],
-  )
+  // const handleClickCard = useCallback(
+  //   async (cardID: PRESET_OPTION_ID) => {
+  //     const { messagePrompt, filePrompt } = await getPPromptByID(cardID)
+  //     switch (cardID) {
+  //       case PRESET_OPTION_ID.DATA_ANALYZE: {
+  //         sendAndClearMessage(messagePrompt, [])
+  //         break
+  //       }
+  //       case PRESET_OPTION_ID.INVOICE_PDF_PROCESS:
+  //       case PRESET_OPTION_ID.PROCESS_EXCEL_FILES:
+  //       case PRESET_OPTION_ID.GENERATE_A_GRAPHIC_REPORT: {
+  //         setTextAreaVal(messagePrompt)
+  //         await uploadFiles(filePrompt, [])
+  //       }
+  //     }
+  //   },
+  //   [getPPromptByID, sendAndClearMessage, uploadFiles],
+  // )
 
   return (
     <>
-      {useTo === PREVIEW_CHAT_USE_TO.DEFAULT_CHAT && !hasMessage && (
+      {/* {useTo === PREVIEW_CHAT_USE_TO.DEFAULT_CHAT && !hasMessage && (
         <PresetOptions onClickCard={handleClickCard} />
-      )}
+      )} */}
       <div>
         <textarea
           value={textAreaVal}

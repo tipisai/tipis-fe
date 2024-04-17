@@ -1,7 +1,11 @@
 import i18n from "@/i18n"
 
 export const LABEL_CONFIG = {
-  NAME: [i18n.t("tipi_billing.token"), i18n.t("tipi_billing.traffic")],
+  NAME: [
+    i18n.t("tipi_billing.token"),
+    i18n.t("tipi_billing.traffic"),
+    i18n.t("tipi_billing.function"),
+  ],
   COLOR: ["#165DFF", "#0EDAD5", "#CCED00"],
 }
 
