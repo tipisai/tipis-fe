@@ -16,6 +16,7 @@ const SingleFile: FC<
   Pick<IKnowledgeFile, "downloadURL" | "fileName" | "contentType">
 > = ({ downloadURL, fileName, contentType }) => {
   const [isExpired, setIsExpired] = useState(false)
+  const [disabled, setDisabled] = useState(false)
   const handleDownload = (fileName: string, downloadURL: string) => {
     if (!downloadURL || !fileName) {
       return
@@ -24,11 +25,16 @@ const SingleFile: FC<
       name: fileName,
       downloadURL: downloadURL,
     }
-    handleDownloadFiles([fileInfo]).catch((e) => {
-      if (!handleCreditPurchaseError(e)) {
-        setIsExpired(true)
-      }
-    })
+    setDisabled(true)
+    handleDownloadFiles([fileInfo])
+      .catch((e) => {
+        if (!handleCreditPurchaseError(e)) {
+          setIsExpired(true)
+        }
+      })
+      .finally(() => {
+        setDisabled(false)
+      })
   }
 
   return isExpired ? (
@@ -46,6 +52,7 @@ const SingleFile: FC<
       title={
         <Button
           icon={<Icon component={DownloadIcon} />}
+          disabled={disabled}
           onClick={() => handleDownload(fileName, downloadURL!)}
           size="small"
         />
@@ -55,7 +62,7 @@ const SingleFile: FC<
       }}
       placement="right"
     >
-      <div>
+      <div style={{ width: "100%" }}>
         <FileContent contentType={contentType} fileName={fileName} />
       </div>
     </Tooltip>

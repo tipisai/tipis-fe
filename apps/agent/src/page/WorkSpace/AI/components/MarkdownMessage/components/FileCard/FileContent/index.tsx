@@ -22,19 +22,25 @@ const FileContent: FC<IFileContentProps> = ({
 }) => {
   const { t } = useTranslation()
   const [isExpired, setIsExpired] = useState(false)
+  const [disabled, setDisabled] = useState(false)
   const handleDownload = (downloadURL: string, fileName: string) => {
     if (!downloadURL || !fileName) {
       return
     }
+    setDisabled(true)
     const fileInfo = {
       name: fileName,
       downloadURL: downloadURL,
     }
-    handleDownloadFiles([fileInfo]).catch((e) => {
-      if (!handleCreditPurchaseError(e)) {
-        setIsExpired(true)
-      }
-    })
+    handleDownloadFiles([fileInfo])
+      .catch((e) => {
+        if (!handleCreditPurchaseError(e)) {
+          setIsExpired(true)
+        }
+      })
+      .finally(() => {
+        setDisabled(false)
+      })
   }
   const contentBody = (
     <div css={fileCardContainerStyle}>
@@ -68,6 +74,7 @@ const FileContent: FC<IFileContentProps> = ({
         <Button
           icon={<Icon component={DownloadIcon} />}
           onClick={() => handleDownload(downloadURL, fileName)}
+          disabled={disabled}
           size="small"
         />
       }
