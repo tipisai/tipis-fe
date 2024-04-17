@@ -44,7 +44,7 @@ const SingleFile: FC<
       title={
         <Button
           icon={<Icon component={DownloadIcon} />}
-          onClick={() => handleDownload(contentType, downloadURL!)}
+          onClick={() => handleDownload(fileName, downloadURL!)}
           size="small"
         />
       }

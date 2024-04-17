@@ -36,10 +36,6 @@ export const handleDownloadFiles = async (
       try {
         const fileResponse = await fetch(downloadURL, {
           method: "GET",
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "x-amz-acl": "public-read",
-          },
         })
 
         if (!asZip && window.WritableStream && fileResponse.body?.pipeTo) {
