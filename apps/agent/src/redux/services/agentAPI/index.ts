@@ -181,17 +181,6 @@ export const agentAuthAPI = createApi({
         } catch {}
       },
     }),
-    generatePromptDescription: builder.mutation<
-      { payload: string },
-      { teamID: string; prompt: string }
-    >({
-      query: ({ teamID, prompt }) => ({
-        url: `/teams/${teamID}/aiAgent/generatePromptDescription`,
-        method: "POST",
-        timeout: 600000,
-        body: { prompt: encodeURIComponent(prompt) },
-      }),
-    }),
     getAgentIconUploadAddress: builder.mutation<
       { uploadAddress: string },
       { teamID: string; base64: string }
@@ -278,7 +267,6 @@ export const {
   useForkAIAgentToTeamMutation,
   usePutAgentDetailMutation,
   useCreateAgentMutation,
-  useGeneratePromptDescriptionMutation,
   useGetAgentIconUploadAddressMutation,
   useGetAIAgentListByPageQuery,
   useDuplicateAIAgentMutation,
