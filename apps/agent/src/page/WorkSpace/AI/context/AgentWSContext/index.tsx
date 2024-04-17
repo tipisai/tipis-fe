@@ -16,7 +16,6 @@ import { useBeforeUnload } from "react-router-dom"
 import { v4 } from "uuid"
 import { WS_READYSTATE } from "@illa-public/illa-web-socket"
 import {
-  CreditModalType,
   handleCreditPurchaseError,
   useCreditModal,
 } from "@illa-public/upgrade-modal"
@@ -429,7 +428,6 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
         case WEBSOCKET_ERROR_CODE.INSUFFICIENT_CREDIT:
         case WEBSOCKET_ERROR_CODE.AI_AGENT_MAX_TOKEN_OVER_CREDIT_BALANCE:
           creditModal({
-            modalType: CreditModalType.TOKEN,
             from: BILLING_REPORT_FROM.RUN,
           })
           break
@@ -499,7 +497,7 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
       }
       return initConnectConfig
     } catch (e) {
-      const res = handleCreditPurchaseError(e, CreditModalType.TOKEN)
+      const res = handleCreditPurchaseError(e)
       if (res) return
       messageAPI.error({
         content: t("editor.ai-agent.message.start-failed"),

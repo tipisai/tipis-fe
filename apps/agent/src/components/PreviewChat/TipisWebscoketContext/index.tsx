@@ -2,10 +2,7 @@ import { App } from "antd"
 import { FC, createContext, useCallback, useMemo, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import WebSocketClient, { WS_READYSTATE } from "@illa-public/illa-web-socket"
-import {
-  CreditModalType,
-  handleCreditPurchaseError,
-} from "@illa-public/upgrade-modal"
+import { handleCreditPurchaseError } from "@illa-public/upgrade-modal"
 import { getAuthToken } from "@illa-public/utils"
 import { getTextMessagePayload } from "@/api/ws"
 import { Callback } from "@/api/ws/interface"
@@ -111,7 +108,7 @@ export const TipisWebSocketProvider: FC<TipisWebSocketProviderProps> = (
           },
         })
       } catch (e) {
-        const res = handleCreditPurchaseError(e, CreditModalType.TOKEN)
+        const res = handleCreditPurchaseError(e)
         if (res) return
         messageAPI.error({
           content: t("editor.ai-agent.message.start-failed"),

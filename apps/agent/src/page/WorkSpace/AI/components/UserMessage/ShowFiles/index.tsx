@@ -3,6 +3,7 @@ import { Button, Tooltip } from "antd"
 import { FC, useState } from "react"
 import { DownloadIcon } from "@illa-public/icon"
 import { IKnowledgeFile } from "@illa-public/public-types"
+import { handleCreditPurchaseError } from "@illa-public/upgrade-modal"
 import { handleDownloadFiles } from "@/utils/drive/download"
 import FileContent from "../FileContent"
 import { containerStyle } from "./style"
@@ -24,8 +25,9 @@ const SingleFile: FC<
       downloadURL: downloadURL,
     }
     handleDownloadFiles([fileInfo]).catch((e) => {
-      console.log("download", e)
-      setIsExpired(true)
+      if (!handleCreditPurchaseError(e)) {
+        setIsExpired(true)
+      }
     })
   }
 

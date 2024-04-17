@@ -1,15 +1,14 @@
 import Icon from "@ant-design/icons"
-import { App, Button, Image, ImageProps, Tooltip } from "antd"
+import { Button, Image, ImageProps, Tooltip } from "antd"
 import { FC, useState } from "react"
 import { DownloadIcon } from "@illa-public/icon"
+import { handleCreditPurchaseError } from "@illa-public/upgrade-modal"
 import imageLoadErrSrc from "@/assets/agent/imageLoadErr.svg"
 import { handleDownloadFiles } from "@/utils/drive/download"
 import { tipisStorageURLHelper } from "../../utils"
 import { downloadIconStyle, imageContainerStyle, imageStyle } from "./style"
 
 const CustomImage: FC<ImageProps> = ({ alt, src }) => {
-  const { message } = App.useApp()
-
   const { fileName, isTipisStorageURL } = tipisStorageURLHelper(src)
   const [isExpired, setIsExpired] = useState(false)
 
@@ -18,7 +17,6 @@ const CustomImage: FC<ImageProps> = ({ alt, src }) => {
       return
     }
     if (!fileName) {
-      message.error("_error")
       return
     }
     const fileInfo = {
@@ -26,7 +24,9 @@ const CustomImage: FC<ImageProps> = ({ alt, src }) => {
       downloadURL: src,
     }
     handleDownloadFiles([fileInfo]).catch((e) => {
-      console.log("download", e)
+      if (!handleCreditPurchaseError(e)) {
+        setIsExpired(true)
+      }
     })
   }
   const contentBody = (
