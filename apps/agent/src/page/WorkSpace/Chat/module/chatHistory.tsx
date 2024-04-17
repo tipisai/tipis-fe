@@ -62,7 +62,6 @@ export const ChatHistory: FC = () => {
       <PreviewChatUseProvider useTo={PREVIEW_CHAT_USE_TO.DEFAULT_CHAT}>
         <div css={rightPanelContainerStyle}>
           <PreviewChat
-            editState="RUN"
             blockInput={!isRunning}
             wsContextValue={wsContext}
             onSendMessage={onSendMessage}

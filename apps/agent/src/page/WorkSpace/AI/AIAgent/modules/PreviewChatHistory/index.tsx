@@ -84,7 +84,6 @@ const PreviewChatHistory: FC = memo(() => {
     >
       <div css={rightPanelContainerStyle}>
         <PreviewChat
-          editState="EDIT"
           blockInput={getIsBlockInputDirty()}
           onSendMessage={onSendMessage}
           wsContextValue={wsContext}

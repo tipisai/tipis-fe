@@ -16,7 +16,7 @@ import {
 } from "./style"
 
 export const PreviewChat: FC<PreviewChatProps> = (props) => {
-  const { blockInput, editState, onSendMessage, wsContextValue } = props
+  const { blockInput, onSendMessage, wsContextValue } = props
 
   const { chatMessages, isReceiving, sendMessage } = wsContextValue
 
@@ -71,7 +71,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
       />
       <div css={[inputTextContainerStyle, maxWidthStyle]}>
         {blockInput ? (
-          <BlockInputTip editState={editState} />
+          <BlockInputTip />
         ) : (
           <>
             <GeneratingBlock
