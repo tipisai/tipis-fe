@@ -21,8 +21,9 @@ import {
   markdownMessageStyle,
   tableStyle,
 } from "@/page/WorkSpace/AI/components/MarkdownMessage/style"
-import Code from "./Code"
-import CustomImage from "./CustomImage"
+import CustomAnchor from "./components/CustomAnchor"
+import CustomCode from "./components/CustomCode"
+import CustomImage from "./components/CustomImage"
 import { handleParseText } from "./utils"
 
 export const MarkdownMessage = memo((props: MarkdownMessageProps) => {
@@ -63,9 +64,7 @@ export const MarkdownMessage = memo((props: MarkdownMessageProps) => {
             </Typography.Title>
           ),
           a: ({ href, children }) => (
-            <Typography.Link href={href} target="_blank">
-              {children}
-            </Typography.Link>
+            <CustomAnchor href={href}>{children}</CustomAnchor>
           ),
           p: ({ children }) => (
             <Typography.Paragraph style={{ margin: 0 }}>
@@ -90,7 +89,7 @@ export const MarkdownMessage = memo((props: MarkdownMessageProps) => {
             </TableContainer>
           ),
           code: (props) => (
-            <Code
+            <CustomCode
               {...props}
               codeStatus={codeStatus}
               isReceiving={isReceiving}

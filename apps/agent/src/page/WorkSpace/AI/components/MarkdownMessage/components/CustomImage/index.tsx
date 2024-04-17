@@ -4,12 +4,13 @@ import { FC, useState } from "react"
 import { DownloadIcon } from "@illa-public/icon"
 import imageLoadErrSrc from "@/assets/agent/imageLoadErr.svg"
 import { handleDownloadFiles } from "@/utils/drive/download"
+import { tipisStorageURLHelper } from "../../utils"
 import { downloadIconStyle, imageContainerStyle, imageStyle } from "./style"
 
 const CustomImage: FC<ImageProps> = ({ alt, src }) => {
   const { message } = App.useApp()
-  const URL = new URLSearchParams(src)
-  const fileName = URL.get("fileName")
+
+  const { fileName, isTipisStorageURL } = tipisStorageURLHelper(src)
   const [isExpired, setIsExpired] = useState(false)
 
   const handleDownload = () => {
@@ -51,7 +52,7 @@ const CustomImage: FC<ImageProps> = ({ alt, src }) => {
       />
     </div>
   )
-  return !fileName || isExpired ? (
+  return !isTipisStorageURL || isExpired ? (
     contentBody
   ) : (
     <Tooltip

@@ -218,10 +218,3 @@ export const markdownHoverCopyStyle = css`
   color: ${getColor("grayBlue", "02")};
   transform: translateX(-4px);
 `
-
-export const messageListContainerStyle = css`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 264px;
-`

@@ -7,8 +7,8 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism"
 import { CopyIcon } from "@illa-public/icon"
 import { copyToClipboard } from "@illa-public/utils"
-import { CODE_STATUS, MarkdownMessageProps } from "../interface"
-import { getTextValue } from "../utils"
+import { CODE_STATUS, MarkdownMessageProps } from "../../interface"
+import { getTextValue } from "../../utils"
 import {
   codeBlockContainerStyle,
   codeBlockHeaderStyle,
@@ -16,7 +16,7 @@ import {
   inlineCodeStyle,
 } from "./style"
 
-const Code: FC<
+const CustomCode: FC<
   CodeProps & Pick<MarkdownMessageProps, "codeStatus" | "isReceiving">
 > = (props) => {
   const { codeStatus = CODE_STATUS.DEFAULT, isReceiving } = props
@@ -71,4 +71,4 @@ const Code: FC<
   )
 }
 
-export default Code
+export default CustomCode

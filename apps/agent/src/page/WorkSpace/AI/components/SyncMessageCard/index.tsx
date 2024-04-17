@@ -5,20 +5,12 @@ import { useTranslation } from "react-i18next"
 import { CopyIcon, DownIcon, UpIcon } from "@illa-public/icon"
 import { copyToClipboard } from "@illa-public/utils"
 import LottieItem from "@/components/LottieItem"
-import {
-  IFileMessage,
-  MESSAGE_STATUS,
-} from "@/components/PreviewChat/interface"
+import { MESSAGE_STATUS } from "@/components/PreviewChat/interface"
 import tipiRunLoading from "@/config/lottieConfig/tipiRunLoading.json"
 import MarkdownMessage from "../MarkdownMessage"
 import { CODE_STATUS } from "../MarkdownMessage/interface"
-import FileContent from "./components/FileContent"
 import { RUN_REQUEST_TYPE } from "./constants"
-import {
-  IImageMessageProps,
-  PureMessageProps,
-  SyncMessageCardProps,
-} from "./interface"
+import { PureMessageProps, SyncMessageCardProps } from "./interface"
 import {
   actionIconStyle,
   containerStyle,
@@ -35,7 +27,6 @@ import {
   lottieLoadingStyle,
   markdownHoverCopyStyle,
   messageContainerStyle,
-  messageListContainerStyle,
   pureMessageContainerStyle,
   responseStyle,
   textAndIconContainerStyle,
@@ -188,27 +179,6 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
           </div>
         </>
       )}
-    </div>
-  )
-}
-
-export const FileMessageCard: FC<IImageMessageProps> = ({ message }) => {
-  let fileInfo: IFileMessage[] = []
-  try {
-    fileInfo = JSON.parse(message)
-  } catch {}
-
-  if (!message) return null
-  return (
-    <div css={messageListContainerStyle}>
-      {fileInfo.map(({ contentType, fileName, downloadURL }) => (
-        <FileContent
-          key={fileName}
-          contentType={contentType}
-          fileName={fileName}
-          downloadURL={downloadURL}
-        />
-      ))}
     </div>
   )
 }
