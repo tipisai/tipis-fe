@@ -11,9 +11,9 @@ export const UsageContext = createContext<UsageContextProps>(
 
 export const UsageProvider: FC<UsageContextProviderProps> = (props) => {
   const teamInfo = useGetCurrentTeamInfo()!
-  const [dataNums, setsDataNums] = useState<number[]>([0, 0])
+  const [dataNums, setsDataNums] = useState<number[]>([0, 0, 0])
   const [allNum, setAllNum] = useState<number>(0)
-  const [percentNum, setPercentNum] = useState<number[]>([0, 0])
+  const [percentNum, setPercentNum] = useState<number[]>([0, 0, 0])
   const [loading, setLoading] = useState(false)
 
   const [triggerGetCreditUsageInfo] = useLazyGetCreditUsageInfoQuery()
@@ -50,10 +50,16 @@ export const UsageProvider: FC<UsageContextProviderProps> = (props) => {
             totalCreditUsage = 0,
             aiTokenGeneralUsagePercent = 0,
             driveTrafficUsagePercent = 0,
+            toolCallUsage = 0,
+            toolCallUsagePercent = 0,
           } = res
-          setsDataNums([aiTokenGeneralUsage, driveTrafficUsage])
+          setsDataNums([aiTokenGeneralUsage, driveTrafficUsage, toolCallUsage])
           setAllNum(totalCreditUsage)
-          setPercentNum([aiTokenGeneralUsagePercent, driveTrafficUsagePercent])
+          setPercentNum([
+            aiTokenGeneralUsagePercent,
+            driveTrafficUsagePercent,
+            toolCallUsagePercent,
+          ])
         }
       } catch (e) {
       } finally {
