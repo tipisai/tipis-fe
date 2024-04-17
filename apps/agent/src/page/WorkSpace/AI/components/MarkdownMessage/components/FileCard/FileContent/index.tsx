@@ -44,7 +44,9 @@ const FileContent: FC<IFileContentProps> = ({
       <span css={fileInfoStyle}>
         <span css={fileNameStyle}>{fileName}</span>
         {isExpired && (
-          <span css={errorInfoStyle}>{t("The document has expired.")}</span>
+          <span css={errorInfoStyle}>
+            {t("homepage.tipi_chat.message.file_expired")}
+          </span>
         )}
       </span>
     </div>
