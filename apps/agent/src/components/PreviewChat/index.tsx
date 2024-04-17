@@ -81,6 +81,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
             <InputArea
               isReceiving={isReceiving}
               onSendMessage={onSendMessage}
+              hasMessage={chatMessages.length > 0}
             />
           </>
         )}
