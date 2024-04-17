@@ -28,7 +28,7 @@ const CustomImage: FC<ImageProps> = ({ alt, src }) => {
     }
     handleDownloadFiles([fileInfo])
       .catch((e) => {
-        if (handleCreditPurchaseError(e)) {
+        if (!handleCreditPurchaseError(e)) {
           setIsExpired(true)
         }
       })

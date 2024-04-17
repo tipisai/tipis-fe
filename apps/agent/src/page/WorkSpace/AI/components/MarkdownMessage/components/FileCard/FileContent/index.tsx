@@ -34,7 +34,7 @@ const FileContent: FC<IFileContentProps> = ({
     }
     handleDownloadFiles([fileInfo])
       .catch((e) => {
-        if (handleCreditPurchaseError(e)) {
+        if (!handleCreditPurchaseError(e)) {
           setIsExpired(true)
         }
       })
