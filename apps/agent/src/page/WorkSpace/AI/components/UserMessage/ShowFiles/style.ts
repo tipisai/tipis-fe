@@ -15,3 +15,10 @@ export const containerStyle = css`
     align-items: flex-start;
   `)}
 `
+
+export const fileContainerStyle = css`
+  width: auto;
+  ${applyMobileStyle(css`
+    width: 100%;
+  `)}
+`

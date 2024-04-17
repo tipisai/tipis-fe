@@ -4,6 +4,7 @@ import { FC, useState } from "react"
 import { DownloadIcon } from "@illa-public/icon"
 import { handleCreditPurchaseError } from "@illa-public/upgrade-modal"
 import imageLoadErrSrc from "@/assets/agent/imageLoadErr.svg"
+import ImageLoadingIcon from "@/assets/agent/message-image-loading.svg?react"
 import { handleDownloadFiles } from "@/utils/drive/download"
 import { tipisStorageURLHelper } from "../../utils"
 import { downloadIconStyle, imageContainerStyle, imageStyle } from "./style"
@@ -11,6 +12,7 @@ import { downloadIconStyle, imageContainerStyle, imageStyle } from "./style"
 const CustomImage: FC<ImageProps> = ({ alt, src }) => {
   const { fileName, isTipisStorageURL } = tipisStorageURLHelper(src)
   const [isExpired, setIsExpired] = useState(false)
+  const [disabled, setDisabled] = useState(false)
 
   const handleDownload = () => {
     if (!src) {
@@ -19,15 +21,20 @@ const CustomImage: FC<ImageProps> = ({ alt, src }) => {
     if (!fileName) {
       return
     }
+    setDisabled(true)
     const fileInfo = {
       name: fileName,
       downloadURL: src,
     }
-    handleDownloadFiles([fileInfo]).catch((e) => {
-      if (!handleCreditPurchaseError(e)) {
-        setIsExpired(true)
-      }
-    })
+    handleDownloadFiles([fileInfo])
+      .catch((e) => {
+        if (!handleCreditPurchaseError(e)) {
+          setIsExpired(true)
+        }
+      })
+      .finally(() => {
+        setDisabled(false)
+      })
   }
   const contentBody = (
     <div css={imageContainerStyle}>
@@ -39,14 +46,21 @@ const CustomImage: FC<ImageProps> = ({ alt, src }) => {
         style={imageStyle(isExpired)}
         fallback={imageLoadErrSrc}
         placeholder={
-          <Skeleton.Image
+          <Skeleton.Node
             active
             style={{
               width: 120,
               height: 120,
               borderRadius: "8px",
+              background:
+                "linear-gradient(270deg, #FFF 0%, #F2F3F5 49.83%, #FFF 100%)",
             }}
-          />
+          >
+            <Icon
+              component={ImageLoadingIcon}
+              style={{ fontSize: 40, color: "#A9AEB8" }}
+            />
+          </Skeleton.Node>
         }
         onError={() => setIsExpired(true)}
       />
@@ -66,6 +80,7 @@ const CustomImage: FC<ImageProps> = ({ alt, src }) => {
       title={
         <Button
           icon={<Icon component={DownloadIcon} css={downloadIconStyle} />}
+          disabled={disabled}
           onClick={handleDownload}
           size="small"
         />
