@@ -1,7 +1,7 @@
 import { stagger, useAnimate } from "framer-motion"
 import { useEffect } from "react"
 
-const staggerMenuItems = stagger(0.1, { startDelay: 0.2 })
+const staggerMenuItems = stagger(0.15, { startDelay: 0.1, ease: "easeInOut" })
 
 export function useMenuAnimation() {
   const [scope, animate] = useAnimate()
