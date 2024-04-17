@@ -8,7 +8,7 @@ import PCCustomTitle from "@/Layout/Workspace/pc/components/CustomTitle"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
-import { useAddRunTipisTab } from "@/utils/recentTabs/hook"
+import { useAddOrUpdateRunTipisTab } from "@/utils/recentTabs/hook"
 import { useGetTipiContributedDetail } from "@/utils/tipis/hook"
 import { AgentInitial, IAgentForm } from "../AIAgent/interface"
 import { AgentWSProvider } from "../context/AgentWSContext"
@@ -25,7 +25,7 @@ export const ContributedAgent: FC = () => {
     useGetTipiContributedDetail()
   const { tabID } = useParams()
 
-  const addAgentRunTab = useAddRunTipisTab()
+  const addAgentRunTab = useAddOrUpdateRunTipisTab()
 
   useEffect(() => {
     if (contributeAgentDetail && tabID) {

@@ -1,12 +1,11 @@
 import Icon from "@ant-design/icons"
-import { App, Button, Tooltip } from "antd"
-import { FC, MouseEventHandler, useRef } from "react"
+import { App, Button } from "antd"
+import { FC, MouseEventHandler } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom"
 import { MinusIcon } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
-import { useRecentTabSortableItem } from "@/Layout/Workspace/modules/RecentTabs/hook"
 import {
   getRecentTabInfos,
   getRecentTabInfosByID,
@@ -16,21 +15,17 @@ import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 import { useRemoveRecentTabReducer } from "@/utils/recentTabs/baseHook"
 import { getChatPath } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
-import DropIndicator from "../DropIndicator/DropIndicator"
-import { SHOULD_MODEL_TIP_TAB_TYPES } from "../constant"
-import { genTabNavigateLink, getIconByTabInfo, useGetTabName } from "../utils"
-import { IPCTipisTab } from "./interface"
 import {
-  deleteButtonContainerStyle,
-  draggingStyle,
-  menuItemButtonContentContainerStyle,
-  menuItemButtonContentStyle,
-  menuItemButtonStyle,
-  navLinkStyle,
-} from "./style"
+  baseActionIconContainerStyle,
+  baseMenuItemContainerStyle,
+} from "../../baseTabStyle"
+import { SHOULD_MODEL_TIP_TAB_TYPES } from "../constant"
+import { menuItemNameStyle, menuItemStyle, navLinkStyle } from "../style"
+import { genTabNavigateLink, getIconByTabInfo, useGetTabName } from "../utils"
+import { IMobileTipisTabProps } from "./interface"
 
-const PCTipisTab: FC<IPCTipisTab> = (props) => {
-  const { tabID, isMiniSize, index } = props
+const MobileTipisTab: FC<IMobileTipisTabProps> = (props) => {
+  const { tabID } = props
   const tabInfo = useSelector((state) => getRecentTabInfosByID(state, tabID))!
   const dispatch = useDispatch()
   const currentTeamInfo = useGetCurrentTeamInfo()
@@ -42,15 +37,7 @@ const PCTipisTab: FC<IPCTipisTab> = (props) => {
 
   const getTabName = useGetTabName()
 
-  const ref = useRef<HTMLAnchorElement>(null)
-
-  const { closestEdge, draggableState } = useRecentTabSortableItem(
-    index,
-    tabInfo,
-    ref,
-  )
-
-  const { tabType, tabIcon, cacheID, tabName } = tabInfo
+  const { tabIcon, tabName, tabType, cacheID } = tabInfo
 
   const onClickRemoveTab: MouseEventHandler<HTMLElement> = async (e) => {
     e.stopPropagation()
@@ -90,9 +77,8 @@ const PCTipisTab: FC<IPCTipisTab> = (props) => {
     dispatch(recentTabActions.updateCurrentRecentTabIDReducer(tabID))
   }
 
-  const navLinkComp = (
+  return (
     <NavLink
-      ref={ref}
       to={genTabNavigateLink(
         currentTeamInfo?.identifier,
         tabType,
@@ -100,61 +86,36 @@ const PCTipisTab: FC<IPCTipisTab> = (props) => {
         tabID,
       )}
       onClick={onClick}
-      css={[
-        navLinkStyle(isMiniSize),
-        draggableState.type === "dragging" && draggingStyle,
-      ]}
+      css={navLinkStyle(false)}
       unstable_viewTransition
       end
       reloadDocument={false}
     >
       {({ isActive }) => (
-        <>
-          <div css={menuItemButtonStyle(isActive)}>
-            <div
-              css={menuItemButtonContentContainerStyle(isMiniSize)}
-              className="menu-item-inner-container"
-            >
-              {getIconByTabInfo(tabIcon, tabType)}
-              {!isMiniSize && (
-                <span css={menuItemButtonContentStyle(isActive)}>
-                  {getTabName(tabName, tabType, tabID)}
-                </span>
-              )}
-              {!isMiniSize && tabID !== DEFAULT_CHAT_ID && (
-                <div
-                  css={deleteButtonContainerStyle(isActive)}
-                  className="delete-button"
-                >
-                  <Button
-                    size="small"
-                    icon={<Icon component={MinusIcon} />}
-                    onClick={onClickRemoveTab}
-                    type="text"
-                  />
-                </div>
-              )}
-            </div>
-            {closestEdge && <DropIndicator edge={closestEdge} />}
+        <div css={menuItemStyle(isActive)}>
+          <div
+            css={baseMenuItemContainerStyle(false)}
+            className="menu-item-inner-container"
+          >
+            {getIconByTabInfo(tabIcon, tabType)}
+            <span css={menuItemNameStyle(isActive)}>
+              {getTabName(tabName, tabType, tabID)}
+            </span>
+            {tabID !== DEFAULT_CHAT_ID && (
+              <div css={baseActionIconContainerStyle} className="delete-button">
+                <Button
+                  size="small"
+                  icon={<Icon component={MinusIcon} />}
+                  onClick={onClickRemoveTab}
+                  type="text"
+                />
+              </div>
+            )}
           </div>
-        </>
+        </div>
       )}
     </NavLink>
   )
-
-  return isMiniSize ? (
-    <Tooltip
-      title={getTabName(tabName, tabType, tabID)}
-      placement="right"
-      align={{
-        offset: [6, 0],
-      }}
-    >
-      {navLinkComp}
-    </Tooltip>
-  ) : (
-    navLinkComp
-  )
 }
 
-export default PCTipisTab
+export default MobileTipisTab

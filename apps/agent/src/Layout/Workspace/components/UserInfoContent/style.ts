@@ -15,9 +15,9 @@ export const userInfoContentContainerStyle = (isMiniSize: boolean) => {
   const defaultStyle = css`
     ${basicStyle};
     padding: 8px;
+    border-radius: 16px;
     :hover {
       background: rgba(16, 9, 116, 0.08);
-      border-radius: 16px;
     }
   `
 
@@ -25,9 +25,9 @@ export const userInfoContentContainerStyle = (isMiniSize: boolean) => {
     ${basicStyle};
     padding: 4px;
     justify-content: center;
+    border-radius: 8px;
     :hover {
       background: rgba(16, 9, 116, 0.06);
-      border-radius: 8px;
     }
   `
 

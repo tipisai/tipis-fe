@@ -14,11 +14,11 @@ import {
 import {
   useAddChatTab,
   useAddCreateTipisTab,
-  useAddEditTipisTab,
   useAddExploreFunctionsTab,
   useAddExploreTipisTab,
   useAddMarketTipiDetailTab,
-  useAddRunTipisTab,
+  useAddOrUpdateEditTipisTab,
+  useAddOrUpdateRunTipisTab,
   useAddTipisDetailTab,
 } from "../recentTabs/hook"
 import { removeLocalTeamIdentifier } from "../storage/cacheTeam"
@@ -90,7 +90,7 @@ export const useNavigateToCreateTipis = () => {
 
 export const useNavigateToEditTipis = () => {
   const navigate = useNavigate()
-  const addEditTipisTab = useAddEditTipisTab()
+  const addEditTipisTab = useAddOrUpdateEditTipisTab()
   const currentTeamInfo = useGetCurrentTeamInfo()
 
   const navigateToEditTipis = useCallback(
@@ -108,7 +108,7 @@ export const useNavigateToEditTipis = () => {
 export const useNavigateToRunTipis = () => {
   const navigate = useNavigate()
   const currentTeamInfo = useGetCurrentTeamInfo()
-  const addRunTipisTab = useAddRunTipisTab()
+  const addRunTipisTab = useAddOrUpdateRunTipisTab()
 
   const navigateToRunTipis = useCallback(
     (
