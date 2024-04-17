@@ -25,7 +25,6 @@ export const AIAgentRunMobile: FC = () => {
     chatMessages,
     isReceiving,
     sendMessage,
-    setIsReceiving,
     lastRunAgent,
     connect,
     isConnecting,
@@ -39,7 +38,6 @@ export const AIAgentRunMobile: FC = () => {
       chatMessages,
       isReceiving,
       sendMessage,
-      setIsReceiving,
       lastRunAgent,
     }),
     [
@@ -48,7 +46,6 @@ export const AIAgentRunMobile: FC = () => {
       isRunning,
       lastRunAgent,
       sendMessage,
-      setIsReceiving,
       getReadyState,
     ],
   )
@@ -88,7 +85,6 @@ export const AIAgentRunMobile: FC = () => {
       <PreviewChatUseProvider useTo={PREVIEW_CHAT_USE_TO.RUN}>
         <div css={previewChatContainer}>
           <PreviewChat
-            editState="RUN"
             blockInput={!isRunning || blockInputDirty}
             onSendMessage={onSendMessage}
             wsContextValue={wsContext}

@@ -9,3 +9,10 @@ export const rightPanelContainerStyle = css`
   flex-direction: column;
   border-top: 1px solid ${getColor("grayBlue", "08")};
 `
+
+export const chatContainerStyle = css`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`

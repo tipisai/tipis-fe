@@ -7,8 +7,6 @@ import {
 import { Params } from "@illa-public/record-editor"
 import { IChatSendMessage } from "./TipisWebscoketContext/interface"
 
-export type EDIT_STATE = "EDIT" | "RUN"
-
 export enum MESSAGE_STATUS {
   ANALYZE_SUCCESS = "analyze_success",
   ANALYZE_FAILED = "analyze_failed",
@@ -75,14 +73,12 @@ export interface ChatSendRequestPayload {
 }
 
 export interface PreviewChatProps {
-  editState: EDIT_STATE
   blockInput: boolean
   onSendMessage: (cheatMessage: ChatMessage) => void
   wsContextValue: {
     chatMessages: (IGroupMessage | ChatMessage)[]
     isReceiving: boolean
     sendMessage: IChatSendMessage
-    setIsReceiving: (isReceiving: boolean) => void
   }
 }
 
