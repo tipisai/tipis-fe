@@ -17,6 +17,7 @@ env:
   DO_TOKEN: ${{ secrets.DO_TOKEN }}
   ILLA_INTERCOM_APP_ID: ${{ secrets.ILLA_INTERCOM_APP_ID }}
   ILLA_POSTHOG_KEY: ${{ secrets.ILLA_POSTHOG_KEY }}
+  ILLA_SENTRY_AUTH_TOKEN: ${{ secrets.ILLA_SENTRY_AUTH_TOKEN }}
 jobs:
   build:
     name: Build website
