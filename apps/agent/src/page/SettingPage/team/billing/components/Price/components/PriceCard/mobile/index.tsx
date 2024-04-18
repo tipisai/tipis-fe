@@ -2,8 +2,12 @@ import { Button } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { SUBSCRIPTION_CYCLE } from "@illa-public/public-types"
-import { CREDIT_UNIT_PRICE } from "@illa-public/upgrade-modal"
+import {
+  CREDIT_UNIT_BY_CYCLE,
+  CREDIT_UNIT_PRICE,
+} from "@illa-public/upgrade-modal"
 import CollaCardMobileBg from "@/page/SettingPage/team/billing/assets/collaCardMobileBg.svg"
+import { toThousands } from "@/utils/billing/toThousands"
 import { CREDIT_LIST } from "../constant"
 import { CreditCardProps } from "../interface"
 import {
@@ -31,7 +35,11 @@ const CreditCardMobile: FC<CreditCardProps> = ({ openCreditDrawer }) => {
         <div css={priceStyle}>
           <span css={priceNumStyle}>${price}</span>
           <span css={priceUnitStyle}>
-            {t("tipi_billing.monthly_price_unit")}
+            {t("tipi_billing.monthly_price_unit", {
+              unit: toThousands(
+                CREDIT_UNIT_BY_CYCLE[SUBSCRIPTION_CYCLE.MONTHLY],
+              ),
+            })}
           </span>
         </div>
         <div css={cardContentStyle}>

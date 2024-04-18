@@ -28,7 +28,7 @@ export const Legend: FC<LegendProps> = ({ dataNums, percentNum }) => {
           </div>
           <div css={itemUnitContainerStyle}>
             <span css={itemUsedStyle}>{toThousands(item)}</span>
-            <span css={itemPercentStyle}>{`≈(${percentNum[i]}%)`}</span>
+            <span css={itemPercentStyle}>{`(≈${percentNum[i]}%)`}</span>
           </div>
         </div>
       ))}
