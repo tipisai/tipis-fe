@@ -12,7 +12,7 @@ import {
   EDIT_TIPI_TEMPLATE_PATH,
   WORKSPACE_LAYOUT_PATH,
 } from "@/router/constants"
-import { removeChatMessageAndUIState } from "@/utils/localForage/teamData"
+import { removeChatMessageAndUIState } from "@/utils/localForage/uiState"
 import { CREATE_TIPIS_ID } from "@/utils/recentTabs/constants"
 import { AgentWSContext } from "../../../context/AgentWSContext"
 import { IAgentForm, SCROLL_ID } from "../../interface"

@@ -80,6 +80,7 @@ export const NotContributedAgent: FC = () => {
                           publishToMarketplace={data.publishedToMarketplace}
                           agentIcon={data.icon}
                           isMobile
+                          ownerTeamIdentifier={data.teamIdentifier}
                         />
                       }
                       customRenderTitle={(title) => (

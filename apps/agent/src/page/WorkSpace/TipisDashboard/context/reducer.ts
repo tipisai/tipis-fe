@@ -4,7 +4,7 @@ import {
   PRODUCT_SORT_BY,
 } from "@/redux/services/marketAPI/constants"
 import store from "@/redux/store"
-import { setCacheUIState } from "@/utils/localForage/teamData"
+import { setCacheUIState } from "@/utils/localForage/uiState"
 import { EXPLORE_TIPIS_ID } from "@/utils/recentTabs/constants"
 import {
   DASH_BOARD_UI_STATE_ACTION_TYPE,

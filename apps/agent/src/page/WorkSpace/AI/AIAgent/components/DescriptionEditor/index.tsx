@@ -4,7 +4,6 @@ import { FC, memo, useState } from "react"
 import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
-import { Agent } from "@illa-public/public-types"
 import { TipisTrack } from "@illa-public/track-utils"
 import { handleCreditPurchaseError } from "@illa-public/upgrade-modal"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
@@ -12,12 +11,12 @@ import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import AIIcon from "@/assets/agent/ai.svg?react"
 import { useGeneratePromptDescriptionMutation } from "@/redux/services/agentAPI"
 import AILoadingIcon from "../../../components/AILoading/aiLoading.svg?react"
-import { SCROLL_ID } from "../../interface"
+import { IAgentForm, SCROLL_ID } from "../../interface"
 import { descContainerStyle, descTextStyle } from "./style"
 
 const DescriptionEditor: FC = memo(() => {
   const { t } = useTranslation()
-  const { control, getValues } = useFormContext<Agent>()
+  const { control, getValues } = useFormContext<IAgentForm>()
   const { message: messageApi } = App.useApp()
   const [generatePromptDescription] = useGeneratePromptDescriptionMutation()
   const [generateDescLoading, setGenerateDescLoading] = useState(false)

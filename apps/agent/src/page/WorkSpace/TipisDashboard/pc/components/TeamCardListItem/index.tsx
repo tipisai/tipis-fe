@@ -10,8 +10,10 @@ import {
   DeleteIcon,
   MoreIcon,
   PenIcon,
+  PinIcon,
   PlayFillIcon,
   ShareIcon,
+  UnPinIcon,
 } from "@illa-public/icon"
 import {
   InviteMember,
@@ -19,29 +21,31 @@ import {
 } from "@illa-public/new-invite-modal"
 import { USER_ROLE } from "@illa-public/public-types"
 import { TipisTrack } from "@illa-public/track-utils"
-import {
-  getCurrentId,
-  getCurrentTeamInfo,
-  useGetUserInfoQuery,
-} from "@illa-public/user-data"
+import { useGetUserInfoQuery } from "@illa-public/user-data"
 import { getILLACloudURL } from "@illa-public/utils"
 import PCTeamCard from "@/components/TeamCard/pc"
 import {
   useDeleteAIAgentMutation,
   useDuplicateAIAgentMutation,
 } from "@/redux/services/agentAPI"
+import { getPinedTipisByTipisID } from "@/redux/ui/pinedTipis/selector"
 import {
   canShowShareTipi,
   canShownCreateTipi,
   canShownEditTipi,
 } from "@/utils/UIHelper/tipis"
 import { copyToClipboard } from "@/utils/copyToClipboard"
+import {
+  useAddPinedTipiTabReducer,
+  useRemovePinedTipiTabByTipiIDReducer,
+} from "@/utils/pinedTabs/baseHook"
 import { getEditTipiPath, getRunTipiPath } from "@/utils/routeHelper"
 import {
   useNavigateToEditTipis,
   useNavigateToRunTipis,
   useNavigateToTipiDetail,
 } from "@/utils/routeHelper/hook"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { ITeamCardListItemProps } from "../../../components/TeamCardList/interface"
 
 const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
@@ -51,8 +55,10 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
 
   const { teamIdentifier } = useParams()
 
-  const currentTeamID = useSelector(getCurrentId)!
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+  const currentTeamInfo = useGetCurrentTeamInfo()!
+  const pinedInfos = useSelector((state) => getPinedTipisByTipisID(state, id))
+
+  const isPined = !!pinedInfos
   const { data: currentUserInfo } = useGetUserInfoQuery(null)
   const currentUserRole = currentTeamInfo?.myRole ?? USER_ROLE.VIEWER
 
@@ -64,6 +70,8 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
   const navigateToEditTIpis = useNavigateToEditTipis()
   const navigateRunTipis = useNavigateToRunTipis()
   const navigateToTipiDetails = useNavigateToTipiDetail()
+  const addPinedTipis = useAddPinedTipiTabReducer()
+  const removePinedTipiByTipisID = useRemovePinedTipiTabByTipiIDReducer()
   const [shareVisible, setShareVisible] = useState(false)
 
   const onClickCard = () => {
@@ -114,11 +122,25 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
   const onClickMenuItem: MenuProps["onClick"] = async ({ key, domEvent }) => {
     domEvent.stopPropagation()
     switch (key) {
+      case "pin": {
+        await addPinedTipis({
+          tabID: v4(),
+          tabName: title,
+          tabIcon: icon,
+          tipiID: id,
+          tipiOwnerTeamIdentity: currentTeamInfo.identifier,
+        })
+        break
+      }
+      case "unpin": {
+        await removePinedTipiByTipisID(id)
+        break
+      }
       case "duplicate":
         {
           try {
             const agentDetail = await duplicateAIAgent({
-              teamID: currentTeamID,
+              teamID: currentTeamInfo.id,
               aiAgentID: id,
             }).unwrap()
             // TODO: open newTab
@@ -148,7 +170,7 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
             },
             onOk: () => {
               deleteAIAgent({
-                teamID: currentTeamID,
+                teamID: currentTeamInfo.id,
                 aiAgentID: id,
               })
             },
@@ -161,7 +183,15 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
   }
 
   const menuItems: MenuProps["items"] = useMemo(() => {
-    const originMenuItems: MenuProps["items"] = []
+    const originMenuItems: MenuProps["items"] = [
+      {
+        label: isPined
+          ? t("dashboard.common.unpin")
+          : t("dashboard.common.pin"),
+        key: isPined ? "unpin" : "pin",
+        icon: <Icon component={isPined ? UnPinIcon : PinIcon} />,
+      },
+    ]
     if (canShownCreateTipi(currentTeamInfo)) {
       originMenuItems.push({
         label: t("dashboard.common.duplicate"),
@@ -186,7 +216,7 @@ const PCTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
       })
     }
     return originMenuItems
-  }, [currentTeamInfo, t])
+  }, [currentTeamInfo, isPined, t])
 
   return (
     <>

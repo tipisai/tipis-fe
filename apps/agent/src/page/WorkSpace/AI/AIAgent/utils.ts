@@ -14,7 +14,7 @@ import {
 import store from "@/redux/store"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { fetchUploadBase64 } from "@/utils/file"
-import { deleteFormDataByTabID } from "@/utils/localForage/teamData"
+import { deleteFormDataByTabID } from "@/utils/localForage/formData"
 import { useBatchUpdateRecentTabReducer } from "@/utils/recentTabs/baseHook"
 import { CREATE_TIPIS_ID } from "@/utils/recentTabs/constants"
 import { useUpdateCreateTipiTabToEditTipiTab } from "@/utils/recentTabs/hook"

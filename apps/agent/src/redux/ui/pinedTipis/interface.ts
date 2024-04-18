@@ -7,3 +7,7 @@ export interface IPinedTipiTabInfo {
 }
 
 export type TPinedTipisTabState = IPinedTipiTabInfo[]
+
+export interface IUpdatePinedTipiTabByTipisIDPayload {
+  [tipisID: string]: Partial<IPinedTipiTabInfo>
+}

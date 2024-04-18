@@ -96,6 +96,9 @@ export const ContributedAgent: FC = () => {
                               .publishedToMarketplace
                           }
                           agentIcon={aiAgentMarketPlaceInfo.aiAgent.icon}
+                          ownerTeamIdentifier={
+                            aiAgentMarketPlaceInfo.aiAgent.teamIdentifier
+                          }
                           isMobile
                         />
                       }

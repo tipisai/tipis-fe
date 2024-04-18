@@ -2,7 +2,7 @@ import Icon from "@ant-design/icons"
 import { Button } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { v4 } from "uuid"
 import {
   ForkIcon,
@@ -13,22 +13,37 @@ import {
 } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
 import { getPinedTipisByTipisID } from "@/redux/ui/pinedTipis/selector"
-import { pinedTipisActions } from "@/redux/ui/pinedTipis/slice"
+import { usePinOrUnpinTipis } from "@/utils/pinedTabs/hook"
 import { useNavigateToRunTipis } from "@/utils/routeHelper/hook"
 import { IActionGroupProps } from "../interface"
 import { actionGroupContainerStyle } from "./style"
 
 const PCActionGroup: FC<IActionGroupProps> = (props) => {
-  const { isContribute, runNumber, forkNumber, tipisID, tipisIcon, tipisName } =
-    props
+  const {
+    isContribute,
+    runNumber,
+    forkNumber,
+    tipisID,
+    tipisIcon,
+    tipisName,
+    ownerTeamIdentity,
+  } = props
   const { t } = useTranslation()
   const navigateToRun = useNavigateToRunTipis()
-  const dispatch = useDispatch()
   const pinedInfos = useSelector((state) =>
     getPinedTipisByTipisID(state, tipisID),
   )
 
   const isPined = !!pinedInfos
+  const pinOrUnpinTipis = usePinOrUnpinTipis()
+  const handleClickPinOrUnPin = async () => {
+    await pinOrUnpinTipis({
+      tipiName: tipisName,
+      tipiIcon: tipisIcon,
+      tipiID: tipisID,
+      tipiOwnerTeamIdentity: ownerTeamIdentity,
+    })
+  }
 
   const handleClickRun = () => {
     TipisTrack.track("click_run_tipi_entry", {
@@ -42,21 +57,6 @@ const PCActionGroup: FC<IActionGroupProps> = (props) => {
       },
       v4(),
     )
-  }
-
-  const handleClickPinOrUnPin = () => {
-    if (isPined) {
-    } else {
-      dispatch(
-        pinedTipisActions.addPinedTipiTab({
-          tabID: v4(),
-          tabName: tipisName,
-          tabIcon: tipisIcon,
-          tipiID: tipisID,
-          tipiOwnerTeamIdentity: "",
-        }),
-      )
-    }
   }
 
   return (

@@ -15,7 +15,7 @@ import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import {
   getFormDataByTabID,
   setFormDataByTabID,
-} from "@/utils/localForage/teamData"
+} from "@/utils/localForage/formData"
 import { useAddOrUpdateEditTipisTab } from "@/utils/recentTabs/hook"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import { AIAgent } from "./aiagent"

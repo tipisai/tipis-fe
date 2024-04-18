@@ -1,12 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { addPinedTipiTab } from "./reducer"
+import {
+  addPinedTipiTabReducer,
+  removePinedTipiTabByTabIDReducer,
+  removePinedTipiTabByTipisIDReducer,
+  setPinedTipiTabReducer,
+  updatePinedTipiTabByTipisIDReducer,
+} from "./reducer"
 import { pinedTipisState } from "./state"
 
 const pinedTipisSlice = createSlice({
   name: "pinedTipis",
   initialState: pinedTipisState,
   reducers: {
-    addPinedTipiTab,
+    setPinedTipiTabReducer,
+    addPinedTipiTabReducer,
+    removePinedTipiTabByTabIDReducer,
+    removePinedTipiTabByTipisIDReducer,
+    updatePinedTipiTabByTipisIDReducer,
   },
 })
 

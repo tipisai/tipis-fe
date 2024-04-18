@@ -2,19 +2,19 @@ import { useCallback, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getCurrentId } from "@illa-public/user-data"
 import store from "@/redux/store"
+import { pinedTipisActions } from "@/redux/ui/pinedTipis/slice"
 import { ITabInfo } from "@/redux/ui/recentTab/interface"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 import {
-  addTabs,
-  batchUpdateTabs,
-  getTabs,
-  removeAllTabsAndCacheData,
-  removeTabsAndCacheData,
-  setTabs,
-  updateTabs,
-} from "../localForage/teamData"
+  addRecentTabs,
+  batchUpdateRecentTabs,
+  removeAllRecentTabsAndCacheData,
+  removeRecentTabsAndCacheData,
+  setRecentTabs,
+} from "../localForage/recentTab"
+import { getRecentTabInfosAndPinedTabInfos } from "../localForage/teamData"
 
 export const useAddRecentTabReducer = () => {
   const dispatch = useDispatch()
@@ -23,7 +23,7 @@ export const useAddRecentTabReducer = () => {
     async (tabInfo: ITabInfo) => {
       const teamID = getCurrentId(store.getState())!
       dispatch(recentTabActions.addRecentTabReducer(tabInfo))
-      await addTabs(teamID, tabInfo)
+      await addRecentTabs(teamID, tabInfo)
     },
     [dispatch],
   )
@@ -38,7 +38,7 @@ export const useRemoveRecentTabReducer = () => {
     async (tabID: string) => {
       const teamID = getCurrentId(store.getState())!
       dispatch(recentTabActions.deleteRecentTabReducer(tabID))
-      await removeTabsAndCacheData(teamID, tabID)
+      await removeRecentTabsAndCacheData(teamID, tabID)
     },
     [dispatch],
   )
@@ -52,7 +52,7 @@ export const useRemoveAllRecentTabReducer = () => {
   const removeAllRecentTabReducer = useCallback(async () => {
     const teamID = getCurrentId(store.getState())!
     dispatch(recentTabActions.deleteAllRecentTabReducer())
-    await removeAllTabsAndCacheData(teamID)
+    await removeAllRecentTabsAndCacheData(teamID)
   }, [dispatch])
 
   return removeAllRecentTabReducer
@@ -71,7 +71,7 @@ export const useUpdateRecentTabReducer = () => {
           newTabInfo,
         }),
       )
-      await updateTabs(teamID, oldTabID, newTabInfo)
+      await batchUpdateRecentTabs(teamID, { [oldTabID]: newTabInfo })
     },
     [dispatch],
   )
@@ -91,7 +91,7 @@ export const useUpdateRecentTabOrderReducer = () => {
       })
 
       dispatch(recentTabActions.setRecentTabReducer(newTabs))
-      await setTabs(teamID, newTabs)
+      await setRecentTabs(teamID, newTabs)
       // await updateTabs(teamID, oldTabID, newTabInfo)
     },
     [dispatch],
@@ -110,7 +110,7 @@ export const useBatchUpdateRecentTabReducer = () => {
       dispatch(
         recentTabActions.batchUpdateRecentTabReducer(oldTabIDMapNewInfos),
       )
-      await batchUpdateTabs(teamID, oldTabIDMapNewInfos)
+      await batchUpdateRecentTabs(teamID, oldTabIDMapNewInfos)
     },
     [dispatch],
   )
@@ -123,8 +123,10 @@ export const useInitRecentTab = () => {
   const currentTeamID = useSelector(getCurrentId)
 
   const initRecentTab = useCallback(async () => {
-    const tabsInfo = await getTabs(currentTeamID!)
-    dispatch(recentTabActions.setRecentTabReducer(tabsInfo))
+    const { recentTabInfos, pinedTabInfos } =
+      await getRecentTabInfosAndPinedTabInfos(currentTeamID!)
+    dispatch(pinedTipisActions.setPinedTipiTabReducer(pinedTabInfos))
+    dispatch(recentTabActions.setRecentTabReducer(recentTabInfos))
     dispatch(recentTabActions.updateCurrentRecentTabIDReducer(DEFAULT_CHAT_ID))
   }, [currentTeamID, dispatch])
 

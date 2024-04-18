@@ -8,15 +8,16 @@ import {
   InviteMember,
   InviteMemberProvider,
 } from "@illa-public/new-invite-modal"
-import { Agent, USER_ROLE } from "@illa-public/public-types"
+import { USER_ROLE } from "@illa-public/public-types"
 import { useGetUserInfoQuery } from "@illa-public/user-data"
 import { getILLACloudURL } from "@illa-public/utils"
 import { copyToClipboard } from "@/utils/copyToClipboard"
 import { getEditTipiPath } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
+import { IAgentForm } from "../../interface"
 
 const ShareButton: FC = () => {
-  const { control } = useFormContext<Agent>()
+  const { control } = useFormContext<IAgentForm>()
   const [aiAgentID] = useWatch({
     control: control,
     name: ["aiAgentID"],

@@ -4,8 +4,8 @@ import { FC, useContext, useState } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { StarFillIcon } from "@illa-public/icon"
-import { Agent } from "@illa-public/public-types"
 import { formatNumForAgent } from "@illa-public/utils"
+import { IAgentForm } from "@/page/WorkSpace/AI/AIAgent/interface"
 import {
   useStarAIAgentMutation,
   useUnstarAIAgentMutation,
@@ -28,7 +28,7 @@ const StarButton: FC = () => {
   const [starAIAgent] = useStarAIAgentMutation()
   const [unstarAIAgent] = useUnstarAIAgentMutation()
 
-  const { control } = useFormContext<Agent>()
+  const { control } = useFormContext<IAgentForm>()
   const [aiAgentID] = useWatch({
     control,
     name: ["aiAgentID"],
