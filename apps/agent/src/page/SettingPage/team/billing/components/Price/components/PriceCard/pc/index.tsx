@@ -3,8 +3,12 @@ import { FC, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { getColor } from "@illa-public/color-scheme"
 import { SUBSCRIPTION_CYCLE } from "@illa-public/public-types"
-import { CREDIT_UNIT_PRICE } from "@illa-public/upgrade-modal"
+import {
+  CREDIT_UNIT_BY_CYCLE,
+  CREDIT_UNIT_PRICE,
+} from "@illa-public/upgrade-modal"
 import CollaCardPcBg from "@/page/SettingPage/team/billing/assets/collaCardPcBg.svg?react"
+import { toThousands } from "@/utils/billing/toThousands"
 import { CREDIT_LIST } from "../constant"
 import { CreditCardProps } from "../interface"
 import {
@@ -65,8 +69,16 @@ const CreditCardPC: FC<CreditCardProps> = ({ openCreditDrawer }) => {
             <span css={priceNumStyle}>${CREDIT_UNIT_PRICE[cycle]}</span>
             <span css={priceUnitStyle}>
               {cycle === SUBSCRIPTION_CYCLE.MONTHLY
-                ? t("tipi_billing.monthly_price_unit")
-                : t("tipi_billing.annual_price_unit")}
+                ? t("tipi_billing.monthly_price_unit", {
+                    unit: toThousands(
+                      CREDIT_UNIT_BY_CYCLE[SUBSCRIPTION_CYCLE.MONTHLY],
+                    ),
+                  })
+                : t("tipi_billing.annual_price_unit", {
+                    unit: toThousands(
+                      CREDIT_UNIT_BY_CYCLE[SUBSCRIPTION_CYCLE.YEARLY],
+                    ),
+                  })}
             </span>
           </div>
           <Button
