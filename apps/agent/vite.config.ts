@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from "@sentry/vite-plugin"
 import legacy from "@vitejs/plugin-legacy"
 import react from "@vitejs/plugin-react-swc"
 import { resolve } from "path"
@@ -65,6 +66,11 @@ export default defineConfig(({ mode }) => {
     }),
     visualizer({
       template: "treemap",
+    }),
+    sentryVitePlugin({
+      authToken: process.env.ILLA_SENTRY_AUTH_TOKEN,
+      org: "tipisai",
+      project: "tipis-fe",
     }),
   ]
 

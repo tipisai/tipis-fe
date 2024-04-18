@@ -1,9 +1,7 @@
-import Bugsnag from "@bugsnag/js"
-import BugsnagPluginReact, { BugsnagErrorBoundary } from "@bugsnag/plugin-react"
 import { LicenseInfo } from "@mui/x-data-grid-premium"
+import * as Sentry from "@sentry/react"
 import { PostHogProvider } from "posthog-js/react"
 import { StrictMode } from "react"
-import React from "react"
 import { createRoot } from "react-dom/client"
 import { Provider } from "react-redux"
 import { initGTMConfig } from "@illa-public/utils"
@@ -13,16 +11,12 @@ import { initI18n } from "@/i18n"
 import App from "./App.tsx"
 import store from "./redux/store.ts"
 
-Bugsnag.start({
-  apiKey: "a59ca89c3b66725e12abb0be6a68fbd3",
-  plugins: [new BugsnagPluginReact()],
-  autoDetectErrors: import.meta.env.ILLA_APP_ENV === "production",
-})
-
-// eslint-disable-next-line react-refresh/only-export-components
-const ErrorBoundary = Bugsnag.getPlugin("react")?.createErrorBoundary(
-  React,
-) as BugsnagErrorBoundary
+if (import.meta.env.ILLA_APP_ENV === "production") {
+  Sentry.init({
+    dsn: "https://c6853f0a62759ef3b650562f1a879658@o4507089449451520.ingest.us.sentry.io/4507105929330688",
+    allowUrls: ["cloud.tipis.ai"],
+  })
+}
 
 if (import.meta.env.ILLA_MUI_LICENSE) {
   LicenseInfo.setLicenseKey(import.meta.env.ILLA_MUI_LICENSE)
@@ -39,11 +33,9 @@ initI18n().then(() => {
             : import.meta.env.ILLA_POSTHOG_KEY
         }
       >
-        <ErrorBoundary>
-          <Provider store={store}>
-            <App />
-          </Provider>
-        </ErrorBoundary>
+        <Provider store={store}>
+          <App />
+        </Provider>
       </PostHogProvider>
     </StrictMode>,
   )

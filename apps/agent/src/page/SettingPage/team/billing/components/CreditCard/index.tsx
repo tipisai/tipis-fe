@@ -4,7 +4,12 @@ import dayjs from "dayjs"
 import { FC, useContext, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { DoubtIcon } from "@illa-public/icon"
-import { CREDIT_UNIT_BY_CYCLE } from "@illa-public/upgrade-modal"
+import { SUBSCRIPTION_CYCLE } from "@illa-public/public-types"
+import {
+  CREDIT_UNIT_BY_CYCLE,
+  UNIT_CREDIT_CONVERSION_FUNCTION_NUM,
+  UNIT_CREDIT_CONVERSION_TOKEN,
+} from "@illa-public/upgrade-modal"
 import { infoTitleStyle } from "@/page/SettingPage/team/billing/style"
 import { toThousands } from "@/utils/billing/toThousands"
 import { useGetCurrentTeamInfo } from "@/utils/team"
@@ -52,7 +57,22 @@ const CreditCard: FC = () => {
           <div css={cardTitleStyle}>
             <div css={collarCardNameStyle}>
               <span>Credit</span>
-              <Tooltip trigger="hover" title={t("tipi_billing.credits_desc")}>
+              <Tooltip
+                trigger="hover"
+                title={t("tipi_billing.credits_desc", {
+                  creditUnit: toThousands(
+                    CREDIT_UNIT_BY_CYCLE[SUBSCRIPTION_CYCLE.YEARLY],
+                  ),
+                  tokenUnit: toThousands(
+                    UNIT_CREDIT_CONVERSION_TOKEN *
+                      CREDIT_UNIT_BY_CYCLE[SUBSCRIPTION_CYCLE.YEARLY],
+                  ),
+                  functionUnit: toThousands(
+                    UNIT_CREDIT_CONVERSION_FUNCTION_NUM *
+                      CREDIT_UNIT_BY_CYCLE[SUBSCRIPTION_CYCLE.YEARLY],
+                  ),
+                })}
+              >
                 <span css={doubtColorStyle} ref={titleRef}>
                   <Icon component={DoubtIcon} />
                 </span>

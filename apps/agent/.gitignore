@@ -24,3 +24,6 @@ public/locales
 *.sln
 *.sw?
 stats.html
+
+# Sentry Config File
+.env.sentry-build-plugin
