@@ -5,12 +5,12 @@ import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { ContributeIcon } from "@illa-public/icon"
-import { Agent } from "@illa-public/public-types"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { openShareAgentModal } from "@illa-public/user-role-utils"
+import { IAgentForm } from "../../interface"
 
 const ContributeButton: FC = () => {
-  const { control } = useFormContext<Agent>()
+  const { control } = useFormContext<IAgentForm>()
   const [aiAgentID, publishedToMarketplace] = useWatch({
     control: control,
     name: ["aiAgentID", "publishedToMarketplace"],

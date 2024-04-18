@@ -1,9 +1,9 @@
 import { FC } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
-import { useSelector } from "react-redux"
-import { Agent } from "@illa-public/public-types"
-import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { canShowShareTipi } from "@/utils/UIHelper/tipis"
+import { useGetCurrentTeamInfo } from "@/utils/team"
+import { IAgentForm } from "../../interface"
+import PinOrUnpinButton from "../PinOrUnpinButton"
 // import {
 // showShareAgentModal,
 // showShareAgentModalOnlyForShare,
@@ -14,8 +14,8 @@ import ShareButton from "../ShareButton"
 import { headerToolsContainerStyle, saveButtonContainerStyle } from "./style"
 
 const HeaderTools: FC = () => {
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
-  const { control } = useFormContext<Agent>()
+  const currentTeamInfo = useGetCurrentTeamInfo()
+  const { control } = useFormContext<IAgentForm>()
 
   const [aiAgentID] = useWatch({
     control: control,
@@ -31,6 +31,7 @@ const HeaderTools: FC = () => {
 
   return (
     <div css={headerToolsContainerStyle}>
+      {!!aiAgentID && <PinOrUnpinButton />}
       {!!aiAgentID && showShareDialog && <ShareButton />}
       {/* {!!aiAgentID && showContributeDialog && <ContributeButton />} */}
       <div css={saveButtonContainerStyle}>

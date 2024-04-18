@@ -4,4 +4,5 @@ export interface IMoreActionButtonProps {
   agentIcon: string
   publishToMarketplace: boolean
   isMobile: boolean
+  ownerTeamIdentifier: string
 }

@@ -29,9 +29,33 @@ export const menuContentStyle = css`
   overflow: hidden;
 `
 
-export const dividerContainerStyle = css`
+export const dividerOuterContainerStyle = css`
   width: 100%;
   padding: 0 16px;
+  display: flex;
+  gap: 8px;
+`
+
+export const dividerInnerContainerStyle = (canResize: boolean) => css`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+  cursor: ${canResize ? "ns-resize" : "default"};
+  :hover {
+    .divider {
+      ${canResize && activeDividerStyle}
+    }
+  }
+`
+export const activeDividerStyle = css`
+  background-color: rgba(16, 9, 116, 0.5);
+`
+export const dividerStyle = css`
+  height: 1px;
+  width: 100%;
+  background-color: rgba(16, 9, 116, 0.08);
+  transition: background-color 0.2s;
 `
 
 export const teamSelectAndInviteButtonContainerStyle = css`
@@ -44,6 +68,7 @@ export const closeAllContainerStyle = css`
   align-items: center;
   padding: 1px 8px;
   cursor: pointer;
+  flex: none;
   border-radius: 4px;
   :hover {
     span {
@@ -58,3 +83,20 @@ export const closeAllTextStyle = css`
   font-weight: 500;
   line-height: 22px;
 `
+
+export const tabAreaContainerStyle = (isDragging: boolean) => {
+  const isDraggingStyle = css`
+    .recent-tabs-area,
+    .pined-tipis-area {
+      pointer-events: none;
+    }
+  `
+  return css`
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    ${isDragging && isDraggingStyle}
+  `
+}

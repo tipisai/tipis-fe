@@ -14,11 +14,11 @@ import {
 import {
   useAddChatTab,
   useAddCreateTipisTab,
-  useAddEditTipisTab,
   useAddExploreFunctionsTab,
   useAddExploreTipisTab,
   useAddMarketTipiDetailTab,
-  useAddRunTipisTab,
+  useAddOrUpdateEditTipisTab,
+  useAddOrUpdateRunTipisTab,
   useAddTipisDetailTab,
 } from "../recentTabs/hook"
 import { removeLocalTeamIdentifier } from "../storage/cacheTeam"
@@ -90,12 +90,12 @@ export const useNavigateToCreateTipis = () => {
 
 export const useNavigateToEditTipis = () => {
   const navigate = useNavigate()
-  const addEditTipisTab = useAddEditTipisTab()
+  const addEditTipisTab = useAddOrUpdateEditTipisTab()
   const currentTeamInfo = useGetCurrentTeamInfo()
 
   const navigateToEditTipis = useCallback(
-    (tipisInfo: { tipisName: string; tipisID: string }) => {
-      addEditTipisTab(tipisInfo)
+    async (tipisInfo: { tipisName: string; tipisID: string }) => {
+      await addEditTipisTab(tipisInfo)
       if (currentTeamInfo?.identifier) {
         navigate(getEditTipiPath(currentTeamInfo.identifier, tipisInfo.tipisID))
       }
@@ -108,10 +108,10 @@ export const useNavigateToEditTipis = () => {
 export const useNavigateToRunTipis = () => {
   const navigate = useNavigate()
   const currentTeamInfo = useGetCurrentTeamInfo()
-  const addRunTipisTab = useAddRunTipisTab()
+  const addRunTipisTab = useAddOrUpdateRunTipisTab()
 
   const navigateToRunTipis = useCallback(
-    (
+    async (
       tabInfo: {
         tipisID: string
         tipisIcon: string
@@ -119,7 +119,7 @@ export const useNavigateToRunTipis = () => {
       },
       tabID: string,
     ) => {
-      addRunTipisTab(tabInfo, tabID)
+      await addRunTipisTab(tabInfo, tabID)
       if (currentTeamInfo?.identifier) {
         navigate(
           `${getRunTipiPath(currentTeamInfo.identifier, tabInfo.tipisID, tabID)}`,

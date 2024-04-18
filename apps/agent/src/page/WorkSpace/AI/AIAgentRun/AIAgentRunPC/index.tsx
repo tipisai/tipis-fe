@@ -8,7 +8,7 @@ import { PreviewChatUseProvider } from "@/components/PreviewChat/PreviewChatUseC
 import { PREVIEW_CHAT_USE_TO } from "@/components/PreviewChat/PreviewChatUseContext/constants"
 import { ChatMessage } from "@/components/PreviewChat/interface"
 import { getSendMessageBody } from "@/utils/agent/wsUtils"
-import { getChatMessageAndUIState } from "@/utils/localForage/teamData"
+import { getChatMessageAndUIState } from "@/utils/localForage/uiState"
 import { IAgentForm } from "../../AIAgent/interface"
 import { ChatContext } from "../../components/ChatContext"
 import { AgentWSContext } from "../../context/AgentWSContext"

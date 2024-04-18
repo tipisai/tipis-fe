@@ -17,7 +17,11 @@ import {
   getMarketTipiDetailPath,
   getRunTipiPath,
 } from "../routeHelper"
-import { useAddRecentTabReducer, useUpdateRecentTabReducer } from "./baseHook"
+import {
+  useAddRecentTabReducer,
+  useBatchUpdateRecentTabReducer,
+  useUpdateRecentTabReducer,
+} from "./baseHook"
 import {
   CREATE_TIPIS_ID,
   EXPLORE_FUNCTION_ID,
@@ -52,42 +56,72 @@ export const useAddCreateTipisTab = () => {
   return addCreateTipTab
 }
 
-export const useAddEditTipisTab = () => {
+export const useAddOrUpdateEditTipisTab = () => {
   const addRecentTab = useAddRecentTabReducer()
   const dispatch = useDispatch()
+  const batchUpdateRecentTab = useBatchUpdateRecentTabReducer()
 
   const addEditTipisTab = useCallback(
     async (tipisInfo: { tipisName: string; tipisID: string }) => {
       const { tipisID, tipisName } = tipisInfo
       const historyTabs = getRecentTabInfos(store.getState())
-
-      let currentTab = historyTabs.find(
-        (tab) => tab.cacheID === tipisID && tab.tabType === TAB_TYPE.EDIT_TIPIS,
-      )
-      if (!currentTab) {
-        currentTab = {
-          tabName: tipisName,
-          tabIcon: "",
-          tabType: TAB_TYPE.EDIT_TIPIS,
-          tabID: v4(),
-          cacheID: tipisID,
-        }
-        await addRecentTab(currentTab)
-      } else {
-        dispatch(
-          recentTabActions.updateCurrentRecentTabIDReducer(currentTab.tabID),
+      const useThisTipTab = historyTabs.filter((tab) => tab.cacheID === tipisID)
+      const newTabInfo = {
+        tabName: tipisName,
+        tabIcon: "",
+        tabType: TAB_TYPE.EDIT_TIPIS,
+        tabID: v4(),
+        cacheID: tipisID,
+      }
+      if (useThisTipTab.length > 0) {
+        const currentTab = useThisTipTab.find(
+          (tab) => tab.tabType === TAB_TYPE.EDIT_TIPIS,
         )
+
+        const needUpdateTabInfoTab = useThisTipTab.filter(
+          (tab) =>
+            tab.tabType === TAB_TYPE.RUN_TIPIS ||
+            tab.tabType === TAB_TYPE.EDIT_TIPIS,
+        )
+        if (needUpdateTabInfoTab.length > 0) {
+          const updateSlice = needUpdateTabInfoTab
+            .map((tabInfo) => ({
+              ...tabInfo,
+              cacheID: tipisID,
+              tabName: tipisName,
+            }))
+            .reduce(
+              (acc, tabInfo) => {
+                acc[tabInfo.tabID] = tabInfo
+                return acc
+              },
+              {} as Record<string, ITabInfo>,
+            )
+
+          await batchUpdateRecentTab(updateSlice)
+        }
+
+        if (currentTab) {
+          dispatch(
+            recentTabActions.updateCurrentRecentTabIDReducer(currentTab.tabID),
+          )
+        } else {
+          await addRecentTab(newTabInfo)
+        }
+      } else {
+        await addRecentTab(newTabInfo)
       }
     },
-    [addRecentTab, dispatch],
+    [addRecentTab, batchUpdateRecentTab, dispatch],
   )
 
   return addEditTipisTab
 }
 
-export const useAddRunTipisTab = () => {
+export const useAddOrUpdateRunTipisTab = () => {
   const addRecentTab = useAddRecentTabReducer()
   const dispatch = useDispatch()
+  const batchUpdateRecentTab = useBatchUpdateRecentTabReducer()
 
   const addRunTipisTab = useCallback(
     async (
@@ -100,26 +134,54 @@ export const useAddRunTipisTab = () => {
     ) => {
       const { tipisID, tipisIcon, tipisName } = tabInfo
       const historyTabs = getRecentTabInfos(store.getState())
-      const runTipisTab = historyTabs.find(
-        (tab) =>
-          tab.tabType === TAB_TYPE.RUN_TIPIS &&
-          tab.cacheID === tipisID &&
-          tab.tabID === tabID,
-      )
-      if (runTipisTab) {
-        dispatch(recentTabActions.updateCurrentRecentTabIDReducer(tabID))
-      } else {
-        const tabsInfo: ITabInfo = {
-          tabName: tipisName,
-          tabIcon: tipisIcon,
-          tabType: TAB_TYPE.RUN_TIPIS,
-          tabID: tabID,
-          cacheID: tipisID,
+      const useThisTipTab = historyTabs.filter((tab) => tab.cacheID === tipisID)
+
+      const tabsInfo: ITabInfo = {
+        tabName: tipisName,
+        tabIcon: tipisIcon,
+        tabType: TAB_TYPE.RUN_TIPIS,
+        tabID: tabID,
+        cacheID: tipisID,
+      }
+
+      if (useThisTipTab.length > 0) {
+        const thisTab = useThisTipTab.find(
+          (tab) => tab.tabID === tabID && tab.tabType === TAB_TYPE.RUN_TIPIS,
+        )
+        const needUpdateTabInfoTab = useThisTipTab.filter(
+          (tab) =>
+            tab.tabType === TAB_TYPE.RUN_TIPIS ||
+            tab.tabType === TAB_TYPE.EDIT_TIPIS,
+        )
+        if (needUpdateTabInfoTab.length > 0) {
+          const updateSlice = needUpdateTabInfoTab
+            .map((tabInfo) => ({
+              ...tabInfo,
+              cacheID: tipisID,
+              tabName: tipisName,
+              tabIcon: tipisIcon,
+            }))
+            .reduce(
+              (acc, tabInfo) => {
+                acc[tabInfo.tabID] = tabInfo
+                return acc
+              },
+              {} as Record<string, ITabInfo>,
+            )
+
+          await batchUpdateRecentTab(updateSlice)
         }
+
+        if (thisTab) {
+          dispatch(recentTabActions.updateCurrentRecentTabIDReducer(tabID))
+        } else {
+          await addRecentTab(tabsInfo)
+        }
+      } else {
         await addRecentTab(tabsInfo)
       }
     },
-    [addRecentTab, dispatch],
+    [addRecentTab, batchUpdateRecentTab, dispatch],
   )
 
   return addRunTipisTab
@@ -168,8 +230,6 @@ export const useUpdateCreateTipiTabToEditTipiTab = () => {
 
   return changeCreateTipiToEditTipi
 }
-
-export const useUpdateTipiTabsInfo = () => {}
 
 export const useAddTipisDetailTab = () => {
   const dispatch = useDispatch()

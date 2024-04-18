@@ -1,3 +1,4 @@
+import { IPinedTipiTabInfo } from "@/redux/ui/pinedTipis/interface"
 import { ITabInfo } from "@/redux/ui/recentTab/interface"
 
 export enum UI_HISTORY_TYPE {
@@ -14,6 +15,7 @@ export interface IUiHistoryData {
 
 export interface ITeamData {
   tabsInfo: ITabInfo[]
+  pinedTipisTabInfo: IPinedTipiTabInfo[]
   uiHistory: {
     [tabID: string]: IUiHistoryData
   }

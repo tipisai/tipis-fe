@@ -1,7 +1,7 @@
 import { FC } from "react"
 import { useSelector } from "react-redux"
 import { getRecentTabInfosOrder } from "@/redux/ui/recentTab/selector"
-import MobileTipisTab from "../../../components/TipisTab/mobile"
+import MobileTipisTab from "../../../components/Tab/TipisTab/mobile"
 import { recentTabsContainerStyle } from "../style"
 
 const MobileRecentTabs: FC = () => {

@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect, useState } from "react"
 import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useSelector } from "react-redux"
-import { Navigate, useBeforeUnload, useParams } from "react-router-dom"
+import { useBeforeUnload, useParams } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { Agent } from "@illa-public/public-types"
 import { getCurrentId } from "@illa-public/user-data"
@@ -10,13 +10,14 @@ import FullSectionLoading from "@/components/FullSectionLoading"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
 import { useGetAgentDetailQuery } from "@/redux/services/agentAPI"
 import store from "@/redux/store"
+import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import {
   getFormDataByTabID,
   setFormDataByTabID,
-} from "@/utils/localForage/teamData"
-import { useAddEditTipisTab } from "@/utils/recentTabs/hook"
-import { TAB_TYPE } from "../../../../redux/ui/recentTab/interface"
+} from "@/utils/localForage/formData"
+import { useAddOrUpdateEditTipisTab } from "@/utils/recentTabs/hook"
+import EmptyTipis from "../components/EmptyTipis"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import { AIAgent } from "./aiagent"
 import FormContext from "./components/FormContext"
@@ -32,7 +33,7 @@ const EditAIAgentGetValuePage: FC = () => {
     aiAgentID: agentID!,
     teamID: teamID!,
   })
-  const addEditTipiTab = useAddEditTipisTab()
+  const addEditTipiTab = useAddOrUpdateEditTipisTab()
 
   useEffect(() => {
     if (data) {
@@ -65,7 +66,7 @@ const EditAIAgentGetValuePage: FC = () => {
     getHistoryDataAndSetFormData()
   }, [agentID])
 
-  if (isError) return <Navigate to="/500" />
+  if (isError) return <EmptyTipis tipisID={agentID!} />
   if (isLoading) return <FullSectionLoading />
 
   return data ? (

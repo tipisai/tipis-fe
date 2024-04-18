@@ -56,7 +56,7 @@ import {
   getChatMessageAndUIState,
   removeChatMessageAndUIState,
   setChatMessageAndUIState,
-} from "@/utils/localForage/teamData"
+} from "@/utils/localForage/uiState"
 import {
   ICachePayloadQueue,
   IChatStableWSInject,

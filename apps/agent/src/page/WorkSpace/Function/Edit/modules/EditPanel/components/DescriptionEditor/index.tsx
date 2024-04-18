@@ -2,13 +2,13 @@ import { Input } from "antd"
 import { FC, memo } from "react"
 import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { Agent } from "@illa-public/public-types"
 import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
+import { IAgentForm } from "@/page/WorkSpace/AI/AIAgent/interface"
 
 const DescriptionEditor: FC = memo(() => {
   const { t } = useTranslation()
-  const { control } = useFormContext<Agent>()
+  const { control } = useFormContext<IAgentForm>()
   const { errors } = useFormState({
     control: control,
   })

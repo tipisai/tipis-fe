@@ -6,9 +6,9 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { ForkIcon } from "@illa-public/icon"
-import { Agent } from "@illa-public/public-types"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { formatNumForAgent } from "@illa-public/utils"
+import { IAgentForm } from "@/page/WorkSpace/AI/AIAgent/interface"
 import { useForkAIAgentToTeamMutation } from "@/redux/services/agentAPI"
 import { MarketplaceInfoContext } from "../../../contexts/MarketplaceInfoContext"
 
@@ -21,7 +21,7 @@ const ForkButton: FC = () => {
   const { message: messageAPI } = App.useApp()
 
   const [forkLoading, setForkLoading] = useState(false)
-  const { control } = useFormContext<Agent>()
+  const { control } = useFormContext<IAgentForm>()
   const [aiAgentID] = useWatch({
     control,
     name: ["aiAgentID"],
