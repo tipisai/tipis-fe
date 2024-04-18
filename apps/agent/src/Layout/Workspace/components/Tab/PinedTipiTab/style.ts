@@ -7,6 +7,10 @@ export const menuItemStyle = css`
     .menu-item-inner-container {
       background-color: rgba(16, 9, 116, 0.06);
     }
+    .more-button {
+      visibility: visible;
+      opacity: 1;
+    }
   }
 `
 

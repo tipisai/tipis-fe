@@ -3,12 +3,7 @@ import { Button } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { v4 } from "uuid"
-import {
-  ForkIcon,
-  PlayFillIcon,
-  ShareIcon,
-  StarOutlineIcon,
-} from "@illa-public/icon"
+import { ForkIcon, PinIcon, PlayFillIcon, ShareIcon } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
 import { useNavigateToRunTipis } from "@/utils/routeHelper/hook"
 import { IActionGroupProps } from "../interface"
@@ -18,15 +13,8 @@ import {
 } from "./style"
 
 const MobileActionGroup: FC<IActionGroupProps> = (props) => {
-  const {
-    isContribute,
-    runNumber,
-    forkNumber,
-    starNumber,
-    tipisID,
-    tipisIcon,
-    tipisName,
-  } = props
+  const { isContribute, runNumber, forkNumber, tipisID, tipisIcon, tipisName } =
+    props
   const { t } = useTranslation()
   const navigateToRun = useNavigateToRunTipis()
 
@@ -55,23 +43,23 @@ const MobileActionGroup: FC<IActionGroupProps> = (props) => {
       >
         {t("dashboard.common.run")} {isContribute ? runNumber : ""}
       </Button>
-      {isContribute && (
-        <div css={otherActionGroupContainerStyle}>
+
+      <div css={otherActionGroupContainerStyle}>
+        {isContribute && (
           <Button block icon={<Icon component={ForkIcon} />} size="large">
             {t("dashboard.common.fork")} {forkNumber}
           </Button>
-          <Button
-            block
-            icon={<Icon component={StarOutlineIcon} />}
-            size="large"
-          >
-            {t("marketplace.star")} {starNumber}
-          </Button>
+        )}
+
+        <Button block icon={<Icon component={PinIcon} />}>
+          {t("dashboard.common.pin")}
+        </Button>
+        {isContribute && (
           <Button block icon={<Icon component={ShareIcon} />} size="large">
             {t("dashboard.common.share")}
           </Button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

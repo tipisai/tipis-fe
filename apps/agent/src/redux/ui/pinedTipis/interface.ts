@@ -1,9 +1,9 @@
-export interface IPinedTipiInfo {
-  ID: string
-  tipiName: string
-  tipiIcon: string
+export interface IPinedTipiTabInfo {
+  tabID: string
+  tabName: string
+  tabIcon: string
   tipiID: string
   tipiOwnerTeamIdentity: string
 }
 
-export type TPinedTipisState = IPinedTipiInfo[]
+export type TPinedTipisTabState = IPinedTipiTabInfo[]

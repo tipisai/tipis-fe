@@ -21,7 +21,7 @@ import {
   draggingStyle,
   pcActionButtonStyle,
 } from "../../baseTabStyle"
-import { useTabSortableItem } from "../../hook"
+import { DRAG_TAB_TYPES, useTabSortableItem } from "../../hook"
 import { SHOULD_MODEL_TIP_TAB_TYPES } from "../constant"
 import { menuItemNameStyle, menuItemStyle, navLinkStyle } from "../style"
 import { genTabNavigateLink, getIconByTabInfo, useGetTabName } from "../utils"
@@ -45,6 +45,7 @@ const PCTipisTab: FC<IPCTipisTab> = (props) => {
   const { closestEdge, draggableState } = useTabSortableItem(
     index,
     tabInfo ? { ...tabInfo } : undefined,
+    DRAG_TAB_TYPES.COMMON_TAB,
     ref,
   )
 
@@ -105,6 +106,7 @@ const PCTipisTab: FC<IPCTipisTab> = (props) => {
       unstable_viewTransition
       end
       reloadDocument={false}
+      data-can-drop-type={DRAG_TAB_TYPES.COMMON_TAB}
     >
       {({ isActive }) => (
         <>

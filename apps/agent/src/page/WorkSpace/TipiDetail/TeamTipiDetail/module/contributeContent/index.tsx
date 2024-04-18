@@ -8,43 +8,42 @@ import Prompt from "../../../components/Prompt"
 import { IContributeContentProps } from "./interface"
 
 const ContributeContent: FC<IContributeContentProps> = ({
-  contributeAgentDetail,
   aiAgentMarketPlaceInfo,
 }) => {
   return (
     <>
       <PCDetailHeader
-        avatarURL={contributeAgentDetail.icon}
-        title={contributeAgentDetail.name}
-        description={contributeAgentDetail.description}
+        avatarURL={aiAgentMarketPlaceInfo.aiAgent.icon}
+        title={aiAgentMarketPlaceInfo.aiAgent.name}
+        description={aiAgentMarketPlaceInfo.aiAgent.description}
       />
       <PCActionGroup
         isContribute
         runNumber={aiAgentMarketPlaceInfo.marketplace.numRuns}
         forkNumber={aiAgentMarketPlaceInfo.marketplace.numForks}
-        starNumber={aiAgentMarketPlaceInfo.marketplace.numStars}
-        tipisName={contributeAgentDetail.name}
-        tipisID={contributeAgentDetail.aiAgentID}
-        tipisIcon={contributeAgentDetail.icon}
+        tipisName={aiAgentMarketPlaceInfo.aiAgent.name}
+        tipisID={aiAgentMarketPlaceInfo.aiAgent.aiAgentID}
+        tipisIcon={aiAgentMarketPlaceInfo.aiAgent.icon}
+        ownerTeamIdentity={aiAgentMarketPlaceInfo.aiAgent.teamIdentifier}
       />
       <ContributeInfo
         teamName={aiAgentMarketPlaceInfo.marketplace.contributorTeam.name}
         teamAvatar={aiAgentMarketPlaceInfo.marketplace.contributorTeam.icon}
-        contributorAvatars={contributeAgentDetail.editedBy.map(
+        contributorAvatars={aiAgentMarketPlaceInfo.aiAgent.editedBy.map(
           (item) => item.avatar,
         )}
       />
       <Prompt
-        parameters={contributeAgentDetail.variables ?? []}
-        prompt={contributeAgentDetail.prompt}
+        parameters={aiAgentMarketPlaceInfo.aiAgent.variables ?? []}
+        prompt={aiAgentMarketPlaceInfo.aiAgent.prompt}
       />
-      {Array.isArray(contributeAgentDetail.variables) &&
-        contributeAgentDetail.variables.length > 0 && (
-          <Parameters parameters={contributeAgentDetail.variables} />
+      {Array.isArray(aiAgentMarketPlaceInfo.aiAgent.variables) &&
+        aiAgentMarketPlaceInfo.aiAgent.variables.length > 0 && (
+          <Parameters parameters={aiAgentMarketPlaceInfo.aiAgent.variables} />
         )}
-      {Array.isArray(contributeAgentDetail.knowledge) &&
-        contributeAgentDetail.knowledge.length > 0 && (
-          <Knowledge knowledge={contributeAgentDetail.knowledge} />
+      {Array.isArray(aiAgentMarketPlaceInfo.aiAgent.knowledge) &&
+        aiAgentMarketPlaceInfo.aiAgent.knowledge.length > 0 && (
+          <Knowledge knowledge={aiAgentMarketPlaceInfo.aiAgent.knowledge} />
         )}
     </>
   )

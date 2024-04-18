@@ -21,7 +21,7 @@ const MobileTipisTab: FC<IMobilePinedTipisTab> = (props) => {
   )!
   const currentTeamInfo = useGetCurrentTeamInfo()
 
-  const { tipiIcon, tipiName, tipiOwnerTeamIdentity } = pinedTipiTabInfo
+  const { tabIcon, tabName, tipiOwnerTeamIdentity } = pinedTipiTabInfo
   const isCurrentUserTeam =
     currentTeamInfo?.identifier === tipiOwnerTeamIdentity
 
@@ -42,9 +42,9 @@ const MobileTipisTab: FC<IMobilePinedTipisTab> = (props) => {
           className="menu-item-inner-container"
         >
           <span css={basePCMenuItemButtonCustomIconContainerStyle}>
-            <Avatar src={tipiIcon} shape="circle" size={24} />
+            <Avatar src={tabIcon} shape="circle" size={24} />
           </span>
-          <span css={menuItemNameStyle}>{tipiName}</span>
+          <span css={menuItemNameStyle}>{tabName}</span>
           <div css={baseActionIconContainerStyle} className="delete-button">
             <Button
               size="small"

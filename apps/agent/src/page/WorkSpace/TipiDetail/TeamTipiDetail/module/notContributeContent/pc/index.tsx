@@ -20,6 +20,7 @@ const PCNotContributeContent: FC<INotContributeContentProps> = (props) => {
         tipisName={agentInfo.name}
         tipisID={agentInfo.aiAgentID}
         tipisIcon={agentInfo.icon}
+        ownerTeamIdentity={agentInfo.teamIdentifier}
       />
       <Prompt
         parameters={agentInfo.variables ?? []}

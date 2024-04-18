@@ -12,6 +12,7 @@ import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { useRemoveAllRecentTabReducer } from "@/utils/recentTabs/baseHook"
 import { getChatPath } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
+import PinedTipisArea from "../../../modules/PinedTipis/pc"
 import MenuHeader from "../MenuHeader"
 import {
   closeAllContainerStyle,
@@ -60,6 +61,7 @@ const PCWorkspaceMenu: FC = () => {
                 </div>
               )}
               <FeatureArea />
+              <PinedTipisArea />
               {hasTeamInfos && (
                 <>
                   <div css={dividerContainerStyle}>

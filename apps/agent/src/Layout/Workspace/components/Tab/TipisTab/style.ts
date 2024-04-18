@@ -38,6 +38,10 @@ export const menuItemStyle = (isSelected: boolean) => {
       `
     : css`
         :hover {
+          .delete-button {
+            visibility: visible;
+            opacity: 1;
+          }
           .menu-item-inner-container {
             background-color: rgba(16, 9, 116, 0.06);
           }

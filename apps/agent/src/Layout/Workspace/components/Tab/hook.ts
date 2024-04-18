@@ -8,22 +8,26 @@ import {
   draggable,
   dropTargetForElements,
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
-import { pointerOutsideOfPreview } from "@atlaskit/pragmatic-drag-and-drop/element/pointer-outside-of-preview"
-import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview"
-import { token } from "@atlaskit/tokens"
+import { disableNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/disable-native-drag-preview"
 import { RefObject, useEffect, useState } from "react"
 
 type DraggableState =
   | { type: "idle" }
-  | { type: "preview"; container: HTMLElement }
+  | { type: "preview" }
   | { type: "dragging" }
 
 const idleState: DraggableState = { type: "idle" }
 const draggingState: DraggableState = { type: "dragging" }
 
+export enum DRAG_TAB_TYPES {
+  COMMON_TAB = "common-tab",
+  PINED_TAB = "pined-tab",
+}
+
 export const useTabSortableItem = (
   index: number,
   draggedData: Record<string, unknown> | undefined,
+  dragType: DRAG_TAB_TYPES,
   ref: RefObject<HTMLElement>,
 ) => {
   const [draggableState, setDraggableState] =
@@ -41,17 +45,7 @@ export const useTabSortableItem = (
           ...draggedData,
         }),
         onGenerateDragPreview({ nativeSetDragImage }) {
-          setCustomNativeDragPreview({
-            nativeSetDragImage,
-            getOffset: pointerOutsideOfPreview({
-              x: token("space.100", "16px"),
-              y: token("space.100", "8px"),
-            }),
-            render({ container }) {
-              setDraggableState({ type: "preview", container })
-              return () => setDraggableState(draggingState)
-            },
-          })
+          disableNativeDragPreview({ nativeSetDragImage })
         },
         onDragStart() {
           setDraggableState(draggingState)
@@ -63,6 +57,12 @@ export const useTabSortableItem = (
       dropTargetForElements({
         element: el,
         getIsSticky: () => true,
+        canDrop: ({ element, source }) => {
+          const canDropType = element.getAttribute("data-can-drop-type")
+          const sourceCanDropType =
+            source.element.getAttribute("data-can-drop-type")
+          return canDropType === dragType && sourceCanDropType === dragType
+        },
         getData({ input }) {
           return attachClosestEdge(
             {
@@ -108,7 +108,7 @@ export const useTabSortableItem = (
         },
       }),
     )
-  }, [draggedData, index, ref])
+  }, [dragType, draggedData, index, ref])
 
   return { closestEdge, draggableState }
 }
