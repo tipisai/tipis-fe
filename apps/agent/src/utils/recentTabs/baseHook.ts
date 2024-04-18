@@ -1,7 +1,8 @@
 import { useCallback, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getCurrentId } from "@illa-public/user-data"
+import { getCurrentId, useGetUserInfoQuery } from "@illa-public/user-data"
 import store from "@/redux/store"
+import { IPinedTipiTabInfo } from "@/redux/ui/pinedTipis/interface"
 import { pinedTipisActions } from "@/redux/ui/pinedTipis/slice"
 import { ITabInfo } from "@/redux/ui/recentTab/interface"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
@@ -121,14 +122,27 @@ export const useBatchUpdateRecentTabReducer = () => {
 export const useInitRecentTab = () => {
   const dispatch = useDispatch()
   const currentTeamID = useSelector(getCurrentId)
+  const { data } = useGetUserInfoQuery(null)
 
   const initRecentTab = useCallback(async () => {
-    const { recentTabInfos, pinedTabInfos } =
-      await getRecentTabInfosAndPinedTabInfos(currentTeamID!)
-    dispatch(pinedTipisActions.setPinedTipiTabReducer(pinedTabInfos))
+    if (!data || !currentTeamID) return
+    const { recentTabInfos } = await getRecentTabInfosAndPinedTabInfos(
+      currentTeamID!,
+    )
+
+    const serverPinedTabInfos =
+      (data?.personalization?.pinedTipisTabs as Record<
+        string,
+        IPinedTipiTabInfo[]
+      >) || {}
+    const currentTeamServerPinedTabInfos =
+      serverPinedTabInfos[currentTeamID] ?? []
+    dispatch(
+      pinedTipisActions.setPinedTipiTabReducer(currentTeamServerPinedTabInfos),
+    )
     dispatch(recentTabActions.setRecentTabReducer(recentTabInfos))
     dispatch(recentTabActions.updateCurrentRecentTabIDReducer(DEFAULT_CHAT_ID))
-  }, [currentTeamID, dispatch])
+  }, [currentTeamID, data, dispatch])
 
   useEffect(() => {
     initRecentTab()

@@ -6,4 +6,5 @@ export const recentTabsContainerStyle = css`
   width: 100%;
   height: 100%;
   overflow-y: auto;
+  min-height: 96px;
 `

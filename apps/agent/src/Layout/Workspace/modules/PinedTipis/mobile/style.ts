@@ -19,11 +19,11 @@ export const headerStyle = css`
   line-height: 20px;
 `
 
-export const listContainerStyle = (height: number) => css`
+export const listContainerStyle = css`
   width: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
-  height: var(--local-resizing-height, ${height}px);
+  height: 300 px;
   overflow-y: auto;
 `

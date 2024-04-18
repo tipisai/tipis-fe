@@ -73,3 +73,11 @@ export const batchUpdatePinedTipisTabs = async (
   })
   await setPinedTipisTabs(teamID, newTabs)
 }
+
+export const getTeamIDMapPinedTipisTabs = async (teamIDs: string[]) => {
+  const teamIDMapPinedTipisTabs: Record<string, IPinedTipiTabInfo[]> = {}
+  for (const teamID of teamIDs) {
+    teamIDMapPinedTipisTabs[teamID] = await getPinedTipisTabs(teamID)
+  }
+  return teamIDMapPinedTipisTabs
+}

@@ -68,6 +68,9 @@ export const basePCMenuItemButtonCustomIconContainerStyle = css`
   display: flex;
   align-items: center;
   justify-content: center;
+  img {
+    pointer-events: none;
+  }
 `
 
 export const pcActionButtonStyle = (canShow: boolean) => {
@@ -84,4 +87,5 @@ export const draggingStyle = css`
 
 export const baseOuterContainerStyle = (isMiniSize: boolean) => css`
   padding: ${isMiniSize ? "4px 12px" : "4px 16px"};
+  user-select: none;
 `
