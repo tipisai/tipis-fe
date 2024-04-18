@@ -11,7 +11,7 @@ const PCRecentTabs: FC<{ isMiniSize: boolean }> = ({ isMiniSize = false }) => {
   useMonitorRecentTabSort()
 
   return (
-    <div css={recentTabsContainerStyle}>
+    <div css={recentTabsContainerStyle} className="recent-tabs-area">
       {tabOrders.map((tabID, index) => (
         <PCTipisTab
           tabID={tabID}

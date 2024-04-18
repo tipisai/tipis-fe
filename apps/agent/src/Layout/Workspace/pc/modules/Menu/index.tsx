@@ -18,7 +18,10 @@ import { useRemoveAllRecentTabReducer } from "@/utils/recentTabs/baseHook"
 import { getChatPath } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import PinedTipisArea from "../../../modules/PinedTipis/pc"
-import { COMMON_MENU_PINED_AREA_SINGLE_MIN_HEIGHT } from "../../config"
+import {
+  COMMON_MENU_PINED_AREA_MIN_HEIGHT,
+  COMMON_MENU_PINED_AREA_SINGLE_MIN_HEIGHT,
+} from "../../config"
 import MenuHeader from "../MenuHeader"
 import {
   activeDividerStyle,
@@ -54,6 +57,8 @@ const PCWorkspaceMenu: FC = () => {
       setPinedAreaListHeight(
         COMMON_MENU_PINED_AREA_SINGLE_MIN_HEIGHT * pinedTipis.length,
       )
+    } else {
+      setPinedAreaListHeight(COMMON_MENU_PINED_AREA_MIN_HEIGHT)
     }
   }, [pinedTipis.length])
 
@@ -140,7 +145,10 @@ const PCWorkspaceMenu: FC = () => {
                 </div>
               )}
               <FeatureArea />
-              <div css={tabAreaContainerStyle} ref={tabAreaRef}>
+              <div
+                css={tabAreaContainerStyle(draggingState === "dragging")}
+                ref={tabAreaRef}
+              >
                 {hasPinedTipis && (
                   <PinedTipisArea
                     isMiniSize={false}

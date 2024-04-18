@@ -126,7 +126,10 @@ const MiniMenu: FC = () => {
               />
             </Tooltip>
           </div>
-          <div css={tabAreaContainerStyle} ref={tabAreaRef}>
+          <div
+            css={tabAreaContainerStyle(draggingState === "dragging")}
+            ref={tabAreaRef}
+          >
             {hasPinedTipis && (
               <PinedTipisArea
                 isMiniSize

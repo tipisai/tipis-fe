@@ -84,10 +84,19 @@ export const closeAllTextStyle = css`
   line-height: 22px;
 `
 
-export const tabAreaContainerStyle = css`
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-`
+export const tabAreaContainerStyle = (isDragging: boolean) => {
+  const isDraggingStyle = css`
+    .recent-tabs-area,
+    .pined-tipis-area {
+      pointer-events: none;
+    }
+  `
+  return css`
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    ${isDragging && isDraggingStyle}
+  `
+}
