@@ -12,3 +12,7 @@ export const getPinedTipisByTipisID = createSelector(
     return tipis.find((tipi) => tipi.tipiID === id)
   },
 )
+
+export const getPinedTipisOrder = createSelector([getPinedTipis], (tipisInfo) =>
+  tipisInfo.map((tipi) => tipi.tabID),
+)

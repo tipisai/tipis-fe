@@ -7,13 +7,13 @@ import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/ad
 import { reorder } from "@atlaskit/pragmatic-drag-and-drop/reorder"
 import { useCallback, useEffect } from "react"
 import { useSelector } from "react-redux"
-import { getRecentTabInfosOrder } from "@/redux/ui/recentTab/selector"
-import { useUpdateRecentTabOrderReducer } from "@/utils/recentTabs/baseHook"
+import { getPinedTipisOrder } from "@/redux/ui/pinedTipis/selector"
+import { useUpdatePinedTipiTabOrderReducer } from "@/utils/pinedTabs/baseHook"
 import { DRAG_TAB_TYPES } from "../../components/Tab/hook"
 
-export const useMonitorRecentTabSort = () => {
-  const updateRecentTabOrderReducer = useUpdateRecentTabOrderReducer()
-  const tabOrders = useSelector(getRecentTabInfosOrder)
+export const useMonitorPinedTipiTabTabSort = () => {
+  const updatePinedTipisTabOrderReducer = useUpdatePinedTipiTabOrderReducer()
+  const tabOrders = useSelector(getPinedTipisOrder)
 
   const reorderItem = useCallback(
     ({
@@ -41,9 +41,9 @@ export const useMonitorRecentTabSort = () => {
         startIndex,
         finishIndex,
       })
-      updateRecentTabOrderReducer(reorderResult)
+      updatePinedTipisTabOrderReducer(reorderResult)
     },
-    [tabOrders, updateRecentTabOrderReducer],
+    [tabOrders, updatePinedTipisTabOrderReducer],
   )
 
   useEffect(() => {
@@ -62,8 +62,8 @@ export const useMonitorRecentTabSort = () => {
           source.element.getAttribute("data-can-drop-type")
 
         if (
-          targetCanDropType !== DRAG_TAB_TYPES.COMMON_TAB ||
-          sourceCanDropType !== DRAG_TAB_TYPES.COMMON_TAB
+          targetCanDropType !== DRAG_TAB_TYPES.PINED_TAB ||
+          sourceCanDropType !== DRAG_TAB_TYPES.PINED_TAB
         ) {
           return
         }

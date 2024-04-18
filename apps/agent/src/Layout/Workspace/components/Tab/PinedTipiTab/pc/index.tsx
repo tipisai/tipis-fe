@@ -3,8 +3,11 @@ import { Avatar, Button, Dropdown, MenuProps, Tooltip } from "antd"
 import { FC, MouseEventHandler, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
+import { v4 } from "uuid"
 import { MoreIcon } from "@illa-public/icon"
 import { getPinedTipisByTipisID } from "@/redux/ui/pinedTipis/selector"
+import { useRemovePinedTipiTabByTipiIDReducer } from "@/utils/pinedTabs/baseHook"
+import { useNavigateToRunTipis } from "@/utils/routeHelper/hook"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import DropIndicator from "../../DropIndicator/DropIndicator"
 import {
@@ -24,6 +27,8 @@ const PCPinedTipiTab: FC<IPCPinedTipisTab> = (props) => {
     getPinedTipisByTipisID(state, tipiID),
   )!
   const currentTeamInfo = useGetCurrentTeamInfo()
+  const navigateToRunTipis = useNavigateToRunTipis()
+  const removePinedTipi = useRemovePinedTipiTabByTipiIDReducer()
   const { t } = useTranslation()
 
   const { tabIcon, tabName, tipiOwnerTeamIdentity } = pinedTipiTabInfo
@@ -55,8 +60,33 @@ const PCPinedTipiTab: FC<IPCPinedTipisTab> = (props) => {
     e.stopPropagation()
   }
 
-  const onClick = () => {
+  const handleNavigateToRunTipis = () => {
     if (isCurrentUserTeam) {
+      navigateToRunTipis(
+        {
+          tipisID: tipiID,
+          tipisIcon: tabIcon,
+          tipisName: tabName,
+        },
+        v4(),
+      )
+    }
+  }
+
+  const onClick = () => {
+    handleNavigateToRunTipis()
+  }
+
+  const handleMenuCLick: MenuProps["onClick"] = async ({ key, domEvent }) => {
+    domEvent.stopPropagation()
+    switch (key) {
+      case "run": {
+        handleNavigateToRunTipis()
+        break
+      }
+      case "unpin": {
+        await removePinedTipi(tipiID)
+      }
     }
   }
 
@@ -85,6 +115,7 @@ const PCPinedTipiTab: FC<IPCPinedTipisTab> = (props) => {
                 trigger={["click"]}
                 menu={{
                   items: menuItems,
+                  onClick: handleMenuCLick,
                 }}
               >
                 <Button

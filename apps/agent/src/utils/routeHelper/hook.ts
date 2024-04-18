@@ -94,8 +94,8 @@ export const useNavigateToEditTipis = () => {
   const currentTeamInfo = useGetCurrentTeamInfo()
 
   const navigateToEditTipis = useCallback(
-    (tipisInfo: { tipisName: string; tipisID: string }) => {
-      addEditTipisTab(tipisInfo)
+    async (tipisInfo: { tipisName: string; tipisID: string }) => {
+      await addEditTipisTab(tipisInfo)
       if (currentTeamInfo?.identifier) {
         navigate(getEditTipiPath(currentTeamInfo.identifier, tipisInfo.tipisID))
       }
@@ -111,7 +111,7 @@ export const useNavigateToRunTipis = () => {
   const addRunTipisTab = useAddOrUpdateRunTipisTab()
 
   const navigateToRunTipis = useCallback(
-    (
+    async (
       tabInfo: {
         tipisID: string
         tipisIcon: string
@@ -119,7 +119,7 @@ export const useNavigateToRunTipis = () => {
       },
       tabID: string,
     ) => {
-      addRunTipisTab(tabInfo, tabID)
+      await addRunTipisTab(tabInfo, tabID)
       if (currentTeamInfo?.identifier) {
         navigate(
           `${getRunTipiPath(currentTeamInfo.identifier, tabInfo.tipisID, tabID)}`,
