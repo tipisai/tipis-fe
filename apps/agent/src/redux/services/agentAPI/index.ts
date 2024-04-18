@@ -14,7 +14,7 @@ export const agentAuthAPI = createApi({
     baseUrl: `${HTTP_REQUEST_PUBLIC_BASE_URL}${AGENT_REQUEST_PREFIX}`,
     prepareHeaders: prepareHeaders,
   }),
-  tagTypes: ["Agents"],
+  tagTypes: ["Agents", "Agent-Info"],
   endpoints: (builder) => ({
     getAgentDetail: builder.query<
       Agent,
@@ -24,6 +24,9 @@ export const agentAuthAPI = createApi({
       }
     >({
       query: ({ aiAgentID, teamID }) => `/teams/${teamID}/aiAgent/${aiAgentID}`,
+      providesTags: (result, error, { aiAgentID }) => [
+        { type: "Agent-Info", id: aiAgentID },
+      ],
     }),
     getAgentContributeState: builder.query<
       {
@@ -36,6 +39,9 @@ export const agentAuthAPI = createApi({
     >({
       query: ({ aiAgentID, ownerTeamIdentifier }) =>
         `/teams/byIdentifier/${ownerTeamIdentifier}/publicAIAgent/${aiAgentID}/isPublishedToMarketplace`,
+      providesTags: (result, error, { aiAgentID }) => [
+        { type: "Agent-Info", id: aiAgentID },
+      ],
     }),
     getContributedAgentDetail: builder.query<
       Agent,
@@ -43,6 +49,9 @@ export const agentAuthAPI = createApi({
     >({
       query: ({ aiAgentID, ownerTeamIdentifier }) =>
         `/teams/byIdentifier/${ownerTeamIdentifier}/publicAIAgent/${aiAgentID}`,
+      providesTags: (result, error, { aiAgentID }) => [
+        { type: "Agent-Info", id: aiAgentID },
+      ],
     }),
     getAIAgentAnonymousAddress: builder.query<
       {
@@ -61,6 +70,9 @@ export const agentAuthAPI = createApi({
     >({
       query: ({ teamID, aiAgentID }) =>
         `/teams/${teamID}/aiAgent/${aiAgentID}/connectionAddress`,
+      providesTags: (result, error, { aiAgentID }) => [
+        { type: "Agent-Info", id: aiAgentID },
+      ],
     }),
     duplicateAIAgent: builder.mutation<
       Agent,
@@ -264,6 +276,9 @@ export const agentAuthAPI = createApi({
           patchResult.undo()
         }
       },
+      invalidatesTags: (result, error, { aiAgentID }) => [
+        { type: "Agent-Info", id: aiAgentID },
+      ],
     }),
   }),
 })

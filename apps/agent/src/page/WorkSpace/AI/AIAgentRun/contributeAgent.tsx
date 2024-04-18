@@ -1,6 +1,6 @@
 import { FC, useEffect } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { Navigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import MobileCustomTitle from "@/Layout/Workspace/mobile/components/CustomTitle"
 import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayout"
@@ -11,6 +11,7 @@ import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketC
 import { useGetAIAgentMarketplaceInfoQuery } from "@/redux/services/marketAPI"
 import { useAddOrUpdateRunTipisTab } from "@/utils/recentTabs/hook"
 import { AgentInitial, IAgentForm } from "../AIAgent/interface"
+import EmptyTipis from "../components/EmptyTipis"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import AIAgentRunMobile from "./AIAgentRunMobile"
 import AIAgentRunPC from "./AIAgentRunPC"
@@ -21,7 +22,7 @@ import MoreActionButton from "./components/MoreActionButton"
 import { MarketplaceInfoProvider } from "./contexts/MarketplaceInfoContext"
 
 export const ContributedAgent: FC = () => {
-  const { agentID } = useParams()
+  const { agentID, tabID } = useParams()
 
   const {
     data: aiAgentMarketPlaceInfo,
@@ -30,7 +31,6 @@ export const ContributedAgent: FC = () => {
   } = useGetAIAgentMarketplaceInfoQuery({
     aiAgentID: agentID!,
   })
-  const { tabID } = useParams()
 
   const addAgentRunTab = useAddOrUpdateRunTipisTab()
 
@@ -58,7 +58,7 @@ export const ContributedAgent: FC = () => {
   }
 
   if (isError) {
-    return <Navigate to="/404" />
+    return <EmptyTipis tipisID={agentID!} />
   }
 
   return aiAgentMarketPlaceInfo ? (

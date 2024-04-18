@@ -13,6 +13,7 @@ import {
   batchUpdateRecentTabs,
   removeAllRecentTabsAndCacheData,
   removeRecentTabsAndCacheData,
+  removeRecentTabsAndCacheDataByTipisID,
   setRecentTabs,
 } from "../localForage/recentTab"
 import { getRecentTabInfosAndPinedTabInfos } from "../localForage/teamData"
@@ -40,6 +41,21 @@ export const useRemoveRecentTabReducer = () => {
       const teamID = getCurrentId(store.getState())!
       dispatch(recentTabActions.deleteRecentTabReducer(tabID))
       await removeRecentTabsAndCacheData(teamID, tabID)
+    },
+    [dispatch],
+  )
+
+  return removeRecentTabReducer
+}
+
+export const useRemoveRecentTabByTipisIDReducer = () => {
+  const dispatch = useDispatch()
+
+  const removeRecentTabReducer = useCallback(
+    async (tipisID: string) => {
+      const teamID = getCurrentId(store.getState())!
+      dispatch(recentTabActions.deleteRecentTabByTipisIDReducer(tipisID))
+      await removeRecentTabsAndCacheDataByTipisID(teamID, tipisID)
     },
     [dispatch],
   )

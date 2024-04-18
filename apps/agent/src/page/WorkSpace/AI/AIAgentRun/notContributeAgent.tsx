@@ -1,6 +1,6 @@
 import { FC, useEffect } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { Navigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import MobileCustomTitle from "@/Layout/Workspace/mobile/components/CustomTitle"
 import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayout"
@@ -11,6 +11,7 @@ import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketC
 import { useAddOrUpdateRunTipisTab } from "@/utils/recentTabs/hook"
 import { useGetNotContributeTipDetail } from "@/utils/tipis/hook"
 import { AgentInitial, IAgentForm } from "../AIAgent/interface"
+import EmptyTipis from "../components/EmptyTipis"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import AIAgentRunMobile from "./AIAgentRunMobile"
 import AIAgentRunPC from "./AIAgentRunPC"
@@ -26,7 +27,7 @@ export const NotContributedAgent: FC = () => {
     values: data ? data : AgentInitial,
   })
 
-  const { tabID } = useParams()
+  const { tabID, agentID } = useParams()
 
   const addAgentRunTab = useAddOrUpdateRunTipisTab()
 
@@ -48,7 +49,7 @@ export const NotContributedAgent: FC = () => {
   }
 
   if (isError) {
-    return <Navigate to="/404" />
+    return <EmptyTipis tipisID={agentID!} />
   }
 
   return data && isSuccess ? (

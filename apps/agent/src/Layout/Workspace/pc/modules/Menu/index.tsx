@@ -18,7 +18,7 @@ import { useRemoveAllRecentTabReducer } from "@/utils/recentTabs/baseHook"
 import { getChatPath } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import PinedTipisArea from "../../../modules/PinedTipis/pc"
-import { COMMON_MENU_PINED_AREA_MIN_HEIGHT } from "../../config"
+import { COMMON_MENU_PINED_AREA_SINGLE_MIN_HEIGHT } from "../../config"
 import MenuHeader from "../MenuHeader"
 import {
   activeDividerStyle,
@@ -43,11 +43,19 @@ const PCWorkspaceMenu: FC = () => {
   const [pinedAreaListHeight, setPinedAreaListHeight] = useState(
     (ILLAPublicStorage.getLocalStorage("pinedAreaListHeight") as
       | undefined
-      | number) ?? COMMON_MENU_PINED_AREA_MIN_HEIGHT,
+      | number) ?? 0,
   )
   const pinedTipis = useSelector(getPinedTipis)
 
   const hasPinedTipis = pinedTipis.length > 0
+
+  useEffect(() => {
+    if (pinedTipis.length <= 3) {
+      setPinedAreaListHeight(
+        COMMON_MENU_PINED_AREA_SINGLE_MIN_HEIGHT * pinedTipis.length,
+      )
+    }
+  }, [pinedTipis.length])
 
   const [draggingState, setDraggingState] = useState<"idle" | "dragging">(
     "idle",
@@ -63,6 +71,7 @@ const PCWorkspaceMenu: FC = () => {
 
     return draggable({
       element: divider,
+      canDrag: () => pinedTipis.length > 3,
       onGenerateDragPreview: ({ nativeSetDragImage }) => {
         // we will be moving the line to indicate a drag
         // we can disable the native drag preview
@@ -98,7 +107,7 @@ const PCWorkspaceMenu: FC = () => {
         contentRef.current?.style.removeProperty("--local-resizing-height")
       },
     })
-  }, [pinedAreaListHeight])
+  }, [pinedAreaListHeight, pinedTipis.length])
 
   const hasTeamInfos = Array.isArray(data) && data.length > 0
   const recentTabInfos = useSelector(getRecentTabInfos)
@@ -143,7 +152,7 @@ const PCWorkspaceMenu: FC = () => {
                   <>
                     <div css={dividerOuterContainerStyle}>
                       <div
-                        css={dividerInnerContainerStyle(hasPinedTipis)}
+                        css={dividerInnerContainerStyle(pinedTipis.length > 3)}
                         ref={dividerRef}
                       >
                         <div
