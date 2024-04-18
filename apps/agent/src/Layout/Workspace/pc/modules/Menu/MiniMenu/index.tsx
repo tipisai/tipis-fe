@@ -135,7 +135,10 @@ const MiniMenu: FC = () => {
               />
             )}
             <div css={dividerContainerStyle}>
-              <div css={dividerInnerContainerStyle(false)} ref={dividerRef}>
+              <div
+                css={dividerInnerContainerStyle(pinedTipis.length > 3)}
+                ref={dividerRef}
+              >
                 <div
                   css={[
                     dividerStyle,
