@@ -6,6 +6,8 @@ export const pinedTipisAreaStyle = css`
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 240px;
+  max-height: 240px;
 `
 
 export const headerStyle = css`

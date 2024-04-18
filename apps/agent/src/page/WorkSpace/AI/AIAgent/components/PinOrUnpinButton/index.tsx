@@ -35,6 +35,7 @@ const PinOrUnpinButton: FC = () => {
 
   return (
     <Button
+      size="large"
       icon={<Icon component={isPined ? UnPinIcon : PinIcon} />}
       onClick={handleClickPinOrUnPin}
     >
