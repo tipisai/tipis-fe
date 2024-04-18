@@ -16,7 +16,7 @@ const PinedTipisArea = forwardRef<HTMLDivElement, IPinedTipiTabProps>(
     useMonitorPinedTipiTabTabSort()
 
     return (
-      <div css={pinedTipisAreaStyle}>
+      <div css={pinedTipisAreaStyle} className="pined-tipis-area">
         {!isMiniSize && (
           <div css={headerStyle}>{t("dashboard.common.pin")}</div>
         )}
