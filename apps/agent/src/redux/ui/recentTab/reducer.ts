@@ -40,6 +40,30 @@ export const deleteRecentTabReducer: CaseReducer<
   }
 }
 
+export const deleteRecentTabByTipisIDReducer: CaseReducer<
+  IRecentTabState,
+  PayloadAction<string>
+> = (state, action) => {
+  const index = state.tabs.findIndex((tab) => tab.cacheID === action.payload)
+  if (index === -1) return
+  const newTabs = state.tabs.filter((tab) => tab.cacheID !== action.payload)
+  state.tabs = newTabs
+  const notHasCurrentTabID =
+    newTabs.map((tab) => tab.tabID).indexOf(state.currentTabID) === -1
+  if (notHasCurrentTabID) {
+    state.currentTabID = ""
+  }
+  if (newTabs.length > 0) {
+    if (index >= newTabs.length - 1) {
+      state.currentTabID = newTabs[newTabs.length - 1].tabID
+    } else if (index === 0) {
+      state.currentTabID = newTabs[0].tabID
+    } else {
+      state.currentTabID = newTabs[index - 1].tabID
+    }
+  }
+}
+
 export const deleteAllRecentTabReducer: CaseReducer<IRecentTabState> = (
   state,
 ) => {

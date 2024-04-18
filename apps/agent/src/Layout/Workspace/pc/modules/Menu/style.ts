@@ -56,9 +56,6 @@ export const dividerStyle = css`
   width: 100%;
   background-color: rgba(16, 9, 116, 0.08);
   transition: background-color 0.2s;
-  :hover {
-    ${activeDividerStyle}
-  }
 `
 
 export const teamSelectAndInviteButtonContainerStyle = css`

@@ -1,20 +1,21 @@
 import { FC } from "react"
-import { Navigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import { useGetTipiContributed } from "@/utils/tipis/hook"
+import EmptyTipis from "../components/EmptyTipis"
 import { ContributedAgent } from "./contributeAgent"
 import { NotContributedAgent } from "./notContributeAgent"
 
 export const AIAgentRun: FC = () => {
-  const { tabID } = useParams()
-  const { data, isLoading, isError, agentID } = useGetTipiContributed()
+  const { tabID, agentID } = useParams()
+  const { data, isLoading, isError } = useGetTipiContributed()
 
   if (isLoading) {
     return <FullSectionLoading />
   }
 
   if (isError) {
-    return <Navigate to="/404" />
+    return <EmptyTipis tipisID={agentID!} />
   }
 
   return data ? (
