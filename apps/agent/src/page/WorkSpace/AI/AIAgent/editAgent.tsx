@@ -10,13 +10,13 @@ import FullSectionLoading from "@/components/FullSectionLoading"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
 import { useGetAgentDetailQuery } from "@/redux/services/agentAPI"
 import store from "@/redux/store"
+import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import {
   getFormDataByTabID,
   setFormDataByTabID,
-} from "@/utils/localForage/teamData"
-import { useAddEditTipisTab } from "@/utils/recentTabs/hook"
-import { TAB_TYPE } from "../../../../redux/ui/recentTab/interface"
+} from "@/utils/localForage/formData"
+import { useAddOrUpdateEditTipisTab } from "@/utils/recentTabs/hook"
 import { AgentWSProvider } from "../context/AgentWSContext"
 import { AIAgent } from "./aiagent"
 import FormContext from "./components/FormContext"
@@ -32,7 +32,7 @@ const EditAIAgentGetValuePage: FC = () => {
     aiAgentID: agentID!,
     teamID: teamID!,
   })
-  const addEditTipiTab = useAddEditTipisTab()
+  const addEditTipiTab = useAddOrUpdateEditTipisTab()
 
   useEffect(() => {
     if (data) {

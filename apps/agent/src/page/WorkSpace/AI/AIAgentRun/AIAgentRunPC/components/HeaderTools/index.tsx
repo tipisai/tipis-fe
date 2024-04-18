@@ -1,13 +1,13 @@
 import { FC } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { useSelector } from "react-redux"
-import { Agent } from "@illa-public/public-types"
 import { getCurrentTeamInfo, getPlanUtils } from "@illa-public/user-data"
 import {
   ACTION_MANAGE,
   ATTRIBUTE_GROUP,
   canManage,
 } from "@illa-public/user-role-utils"
+import { IAgentForm } from "@/page/WorkSpace/AI/AIAgent/interface"
 import MoreActionButton from "../../../components/MoreActionButton"
 import ForkButton from "../ForkButton"
 import StarButton from "../StarButton"
@@ -16,12 +16,24 @@ import { headerToolsContainerStyle } from "./style"
 
 const HeaderTools: FC = () => {
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
-  const { control } = useFormContext<Agent>()
+  const { control } = useFormContext<IAgentForm>()
 
   // agentID, agentName, publishToMarketplace, isMobile
-  const [publishedToMarketplace, agentID, agentName, agentIcon] = useWatch({
+  const [
+    publishedToMarketplace,
+    agentID,
+    agentName,
+    agentIcon,
+    ownerTeamIdentifier,
+  ] = useWatch({
     control: control,
-    name: ["publishedToMarketplace", "aiAgentID", "name", "icon"],
+    name: [
+      "publishedToMarketplace",
+      "aiAgentID",
+      "name",
+      "icon",
+      "teamIdentifier",
+    ],
   })
 
   const canManageFork = canManage(
@@ -39,6 +51,7 @@ const HeaderTools: FC = () => {
         agentName={agentName}
         isMobile={false}
         agentIcon={agentIcon}
+        ownerTeamIdentifier={ownerTeamIdentifier}
       />
       {canManageFork && publishedToMarketplace && <ForkButton />}
       {publishedToMarketplace && <StarButton />}

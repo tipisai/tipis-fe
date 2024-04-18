@@ -5,5 +5,5 @@ export interface IActionGroupProps {
   tipisIcon: string
   runNumber?: number
   forkNumber?: number
-  starNumber?: number
+  ownerTeamIdentity: string
 }

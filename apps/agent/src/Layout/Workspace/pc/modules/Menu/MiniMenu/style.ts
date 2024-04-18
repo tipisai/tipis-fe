@@ -24,6 +24,7 @@ export const miniMenuFooterContainerStyle = css`
   justify-content: center;
   width: 100%;
   padding-bottom: 4px;
+  flex: none;
 `
 
 export const miniMenuUserAvatarContainerStyle = css`
@@ -64,4 +65,12 @@ export const userInfoContainerStyle = css`
   height: 48px;
   flex: none;
   padding: 8px 12px;
+`
+
+export const tabAreaContainerStyle = css`
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 `

@@ -1,14 +1,21 @@
 import { FC } from "react"
-import { Navigate } from "react-router-dom"
+import { Navigate, useParams } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import FullSectionLoading from "@/components/FullSectionLoading"
-import { useGetTipiContributedDetail } from "@/utils/tipis/hook"
+import { useGetAIAgentMarketplaceInfoQuery } from "@/redux/services/marketAPI"
 import MobileContributeTipi from "./mobile/contributeTipi"
 import PCContributeTipi from "./pc/contributeTipi"
 
 const ContributeTipiDetail: FC = () => {
-  const { contributeAgentDetail, isError, isLoading, aiAgentMarketPlaceInfo } =
-    useGetTipiContributedDetail()
+  const { agentID } = useParams()
+
+  const {
+    data: aiAgentMarketPlaceInfo,
+    isLoading,
+    isError,
+  } = useGetAIAgentMarketplaceInfoQuery({
+    aiAgentID: agentID!,
+  })
 
   if (isLoading) {
     return <FullSectionLoading />
@@ -18,19 +25,13 @@ const ContributeTipiDetail: FC = () => {
     return <Navigate to="/404" />
   }
 
-  return contributeAgentDetail && aiAgentMarketPlaceInfo ? (
+  return aiAgentMarketPlaceInfo ? (
     <LayoutAutoChange
       desktopPage={
-        <PCContributeTipi
-          contributeAgentDetail={contributeAgentDetail}
-          aiAgentMarketPlaceInfo={aiAgentMarketPlaceInfo}
-        />
+        <PCContributeTipi aiAgentMarketPlaceInfo={aiAgentMarketPlaceInfo} />
       }
       mobilePage={
-        <MobileContributeTipi
-          contributeAgentDetail={contributeAgentDetail}
-          aiAgentMarketPlaceInfo={aiAgentMarketPlaceInfo}
-        />
+        <MobileContributeTipi aiAgentMarketPlaceInfo={aiAgentMarketPlaceInfo} />
       }
     />
   ) : null

@@ -1,16 +1,16 @@
 import { FC, memo } from "react"
 import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { Agent, Params } from "@illa-public/public-types"
+import { Params } from "@illa-public/public-types"
 import { RecordEditor } from "@illa-public/record-editor"
 import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
-import { SCROLL_ID } from "../../interface"
+import { IAgentForm, SCROLL_ID } from "../../interface"
 
 const VariableEditor: FC = memo(() => {
   const { t } = useTranslation()
 
-  const methods = useFormContext<Agent>()
+  const methods = useFormContext<IAgentForm>()
   const { errors } = useFormState({
     control: methods.control,
   })

@@ -21,6 +21,7 @@ const MobileNotContributeContent: FC<INotContributeContentProps> = (props) => {
         tipisName={agentInfo.name}
         tipisID={agentInfo.aiAgentID}
         tipisIcon={agentInfo.icon}
+        ownerTeamIdentity={agentInfo.teamIdentifier}
       />
       <Divider
         style={{

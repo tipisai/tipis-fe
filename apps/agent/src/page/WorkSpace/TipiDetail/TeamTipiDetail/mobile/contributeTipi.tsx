@@ -7,7 +7,7 @@ import ContributeContent from "../module/contributeContent"
 import { contentContainerStyle, placeholderDivStyle } from "./style"
 
 const MobileContributeTipi: FC<IContributeTipiProps> = (props) => {
-  const { contributeAgentDetail, aiAgentMarketPlaceInfo } = props
+  const { aiAgentMarketPlaceInfo } = props
   const { t } = useTranslation()
 
   const navigate = useNavigate()
@@ -23,10 +23,7 @@ const MobileContributeTipi: FC<IContributeTipiProps> = (props) => {
       headerExtra={<div css={placeholderDivStyle} />}
     >
       <div css={contentContainerStyle}>
-        <ContributeContent
-          contributeAgentDetail={contributeAgentDetail}
-          aiAgentMarketPlaceInfo={aiAgentMarketPlaceInfo}
-        />
+        <ContributeContent aiAgentMarketPlaceInfo={aiAgentMarketPlaceInfo} />
       </div>
     </MobileSecondPageLayout>
   )

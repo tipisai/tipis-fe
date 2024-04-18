@@ -2,14 +2,18 @@ import Icon from "@ant-design/icons"
 import { Button } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
+import { useSelector } from "react-redux"
 import { v4 } from "uuid"
 import {
   ForkIcon,
+  PinIcon,
   PlayFillIcon,
   ShareIcon,
-  StarOutlineIcon,
+  UnPinIcon,
 } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
+import { getPinedTipisByTipisID } from "@/redux/ui/pinedTipis/selector"
+import { usePinOrUnpinTipis } from "@/utils/pinedTabs/hook"
 import { useNavigateToRunTipis } from "@/utils/routeHelper/hook"
 import { IActionGroupProps } from "../interface"
 import { actionGroupContainerStyle } from "./style"
@@ -19,13 +23,27 @@ const PCActionGroup: FC<IActionGroupProps> = (props) => {
     isContribute,
     runNumber,
     forkNumber,
-    starNumber,
     tipisID,
     tipisIcon,
     tipisName,
+    ownerTeamIdentity,
   } = props
   const { t } = useTranslation()
   const navigateToRun = useNavigateToRunTipis()
+  const pinedInfos = useSelector((state) =>
+    getPinedTipisByTipisID(state, tipisID),
+  )
+
+  const isPined = !!pinedInfos
+  const pinOrUnpinTipis = usePinOrUnpinTipis()
+  const handleClickPinOrUnPin = async () => {
+    await pinOrUnpinTipis({
+      tipiName: tipisName,
+      tipiIcon: tipisIcon,
+      tipiID: tipisID,
+      tipiOwnerTeamIdentity: ownerTeamIdentity,
+    })
+  }
 
   const handleClickRun = () => {
     TipisTrack.track("click_run_tipi_entry", {
@@ -46,6 +64,7 @@ const PCActionGroup: FC<IActionGroupProps> = (props) => {
       <Button
         type="primary"
         block
+        size="large"
         icon={<Icon component={PlayFillIcon} />}
         style={{ maxWidth: "307px" }}
         onClick={handleClickRun}
@@ -53,17 +72,21 @@ const PCActionGroup: FC<IActionGroupProps> = (props) => {
         {t("dashboard.common.run")} {isContribute ? runNumber : ""}
       </Button>
       {isContribute && (
-        <Button block icon={<Icon component={ForkIcon} />}>
+        <Button icon={<Icon component={ForkIcon} />} size="large">
           {t("dashboard.common.fork")} {forkNumber}
         </Button>
       )}
+
+      <Button
+        icon={<Icon component={isPined ? UnPinIcon : PinIcon} />}
+        onClick={handleClickPinOrUnPin}
+        size="large"
+      >
+        {isPined ? t("dashboard.common.unpin") : t("dashboard.common.pin")}
+      </Button>
+
       {isContribute && (
-        <Button block icon={<Icon component={StarOutlineIcon} />}>
-          {t("marketplace.star")} {starNumber}
-        </Button>
-      )}
-      {isContribute && (
-        <Button block icon={<Icon component={ShareIcon} />}>
+        <Button icon={<Icon component={ShareIcon} />} size="large">
           {t("dashboard.common.share")}
         </Button>
       )}

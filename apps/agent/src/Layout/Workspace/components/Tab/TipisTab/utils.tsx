@@ -20,16 +20,13 @@ import {
   getRunTipiPath,
   getTipiDetailPath,
 } from "@/utils/routeHelper"
-import {
-  chatIconStyle,
-  menuItemButtonCustomIconContainerStyle,
-  menuItemButtonIconContainerStyle,
-} from "./pc/style"
+import { basePCMenuItemButtonCustomIconContainerStyle } from "../baseTabStyle"
+import { chatIconStyle, menuItemIconContainerStyle } from "./style"
 
 export const getIconByTabInfo = (icon: string, tabType: TAB_TYPE) => {
   if (icon) {
     return (
-      <span css={menuItemButtonCustomIconContainerStyle}>
+      <span css={basePCMenuItemButtonCustomIconContainerStyle}>
         <Avatar src={icon} shape="circle" size={24} />
       </span>
     )
@@ -40,26 +37,26 @@ export const getIconByTabInfo = (icon: string, tabType: TAB_TYPE) => {
     case TAB_TYPE.CREATE_FUNCTION:
     case TAB_TYPE.EDIT_FUNCTION:
       return (
-        <span css={menuItemButtonIconContainerStyle}>
+        <span css={menuItemIconContainerStyle}>
           <Icon component={PenIcon} />
         </span>
       )
     case TAB_TYPE.RUN_TIPIS:
       return (
-        <span css={menuItemButtonIconContainerStyle}>
+        <span css={menuItemIconContainerStyle}>
           <Icon component={ChatIcon} />
         </span>
       )
 
     case TAB_TYPE.EXPLORE_TIPIS:
       return (
-        <span css={menuItemButtonIconContainerStyle}>
+        <span css={menuItemIconContainerStyle}>
           <Icon component={MarketplaceIcon} />
         </span>
       )
     case TAB_TYPE.EXPLORE_FUNCTION:
       return (
-        <span css={menuItemButtonIconContainerStyle}>
+        <span css={menuItemIconContainerStyle}>
           <Icon component={FunctionIcon} />
         </span>
       )

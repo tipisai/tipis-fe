@@ -1,33 +1,104 @@
-import { App, ConfigProvider, Divider } from "antd"
-import { FC } from "react"
+import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
+import { disableNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/disable-native-drag-preview"
+import { preventUnhandled } from "@atlaskit/pragmatic-drag-and-drop/prevent-unhandled"
+import { App } from "antd"
+import { FC, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { useGetTeamsInfoQuery } from "@illa-public/user-data"
+import { ILLAPublicStorage } from "@illa-public/utils"
 import FeatureArea from "@/Layout/Workspace/modules/FeatureArea"
 import MenuFooter from "@/Layout/Workspace/modules/MenuFooter"
 import PCRecentTabs from "@/Layout/Workspace/modules/RecentTabs/pc"
 import TeamSelectAndInviteButton from "@/Layout/Workspace/modules/TeamSelectAndInviteButton"
+import { getPinedTipis } from "@/redux/ui/pinedTipis/selector"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { useRemoveAllRecentTabReducer } from "@/utils/recentTabs/baseHook"
 import { getChatPath } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
+import PinedTipisArea from "../../../modules/PinedTipis/pc"
+import { COMMON_MENU_PINED_AREA_MIN_HEIGHT } from "../../config"
 import MenuHeader from "../MenuHeader"
 import {
+  activeDividerStyle,
   closeAllContainerStyle,
   closeAllTextStyle,
-  dividerContainerStyle,
+  dividerInnerContainerStyle,
+  dividerOuterContainerStyle,
+  dividerStyle,
   menuContainerStyle,
   menuContentStyle,
   menuInnerContainerStyle,
+  tabAreaContainerStyle,
   teamSelectAndInviteButtonContainerStyle,
 } from "./style"
+import { getProposedHeight } from "./utils"
 
 const PCWorkspaceMenu: FC = () => {
   const { data, isSuccess } = useGetTeamsInfoQuery(null)
   const { modal } = App.useApp()
   const { t } = useTranslation()
   const currentTeamInfo = useGetCurrentTeamInfo()
+  const [pinedAreaListHeight, setPinedAreaListHeight] = useState(
+    (ILLAPublicStorage.getLocalStorage("pinedAreaListHeight") as
+      | undefined
+      | number) ?? COMMON_MENU_PINED_AREA_MIN_HEIGHT,
+  )
+  const pinedTipis = useSelector(getPinedTipis)
+
+  const hasPinedTipis = pinedTipis.length > 0
+
+  const [draggingState, setDraggingState] = useState<"idle" | "dragging">(
+    "idle",
+  )
+  const dividerRef = useRef<HTMLDivElement | null>(null)
+  const contentRef = useRef<HTMLDivElement | null>(null)
+  const tabAreaRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const divider = dividerRef.current
+    const tabArea = tabAreaRef.current
+    if (!divider || !contentRef) return
+
+    return draggable({
+      element: divider,
+      onGenerateDragPreview: ({ nativeSetDragImage }) => {
+        // we will be moving the line to indicate a drag
+        // we can disable the native drag preview
+        disableNativeDragPreview({ nativeSetDragImage })
+        // we don't want any native drop animation for when the user
+        // does not drop on a drop target. we want the drag to finish immediately
+        preventUnhandled.start()
+      },
+      onDragStart() {
+        setDraggingState("dragging")
+      },
+      onDrag({ location }) {
+        const tabAreaHeight = tabArea?.getBoundingClientRect().height ?? 0
+        contentRef.current?.style.setProperty(
+          "--local-resizing-height",
+          `${getProposedHeight({ initialHeight: pinedAreaListHeight, location, tabAreaHeight, isMiniSize: false })}px`,
+        )
+      },
+      onDrop({ location }) {
+        preventUnhandled.stop()
+        setDraggingState("idle")
+        const tabAreaHeight = tabArea?.getBoundingClientRect().height ?? 0
+
+        const finalHeight = getProposedHeight({
+          initialHeight: pinedAreaListHeight,
+          location,
+          tabAreaHeight,
+          isMiniSize: false,
+        })
+
+        setPinedAreaListHeight(finalHeight)
+        ILLAPublicStorage.setLocalStorage("pinedAreaListHeight", finalHeight)
+        contentRef.current?.style.removeProperty("--local-resizing-height")
+      },
+    })
+  }, [pinedAreaListHeight])
 
   const hasTeamInfos = Array.isArray(data) && data.length > 0
   const recentTabInfos = useSelector(getRecentTabInfos)
@@ -60,42 +131,44 @@ const PCWorkspaceMenu: FC = () => {
                 </div>
               )}
               <FeatureArea />
-              {hasTeamInfos && (
-                <>
-                  <div css={dividerContainerStyle}>
-                    <ConfigProvider
-                      theme={{
-                        components: {
-                          Divider: {
-                            textPaddingInline: 0,
-                            colorSplit: "rgba(16, 9, 116, 0.08);",
-                          },
-                        },
-                      }}
-                    >
-                      <Divider
-                        style={{
-                          margin: "0",
-                        }}
-                        orientation="right"
-                        orientationMargin={0}
+              <div css={tabAreaContainerStyle} ref={tabAreaRef}>
+                {hasPinedTipis && (
+                  <PinedTipisArea
+                    isMiniSize={false}
+                    height={pinedAreaListHeight}
+                    ref={contentRef}
+                  />
+                )}
+                {hasTeamInfos && (
+                  <>
+                    <div css={dividerOuterContainerStyle}>
+                      <div
+                        css={dividerInnerContainerStyle(hasPinedTipis)}
+                        ref={dividerRef}
                       >
-                        {recentTabInfos.length > 1 && (
-                          <div
-                            css={closeAllContainerStyle}
-                            onClick={handleClickCloseAll}
-                          >
-                            <span css={closeAllTextStyle}>
-                              {t("homepage.left_panel.tab.clear_all")}
-                            </span>
-                          </div>
-                        )}
-                      </Divider>
-                    </ConfigProvider>
-                  </div>
-                  <PCRecentTabs isMiniSize={false} />
-                </>
-              )}
+                        <div
+                          css={[
+                            dividerStyle,
+                            draggingState === "dragging" && activeDividerStyle,
+                          ]}
+                          className="divider"
+                        />
+                      </div>
+                      {recentTabInfos.length > 1 && (
+                        <div
+                          css={closeAllContainerStyle}
+                          onClick={handleClickCloseAll}
+                        >
+                          <span css={closeAllTextStyle}>
+                            {t("homepage.left_panel.tab.clear_all")}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <PCRecentTabs isMiniSize={false} />
+                  </>
+                )}
+              </div>
             </div>
             <MenuFooter />
           </div>

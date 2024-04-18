@@ -3,16 +3,7 @@ import { AI_AGENT_MODEL, AI_AGENT_TYPE, Agent } from "@illa-public/public-types"
 export interface IAgentForm
   extends Omit<
     Agent,
-    | "teamID"
-    | "teamIcon"
-    | "teamName"
-    | "publishedToMarketplace"
-    | "teamIdentifier"
-    | "createdAt"
-    | "createdBy"
-    | "updatedBy"
-    | "updatedAt"
-    | "editedBy"
+    "createdAt" | "createdBy" | "updatedBy" | "updatedAt" | "editedBy"
   > {}
 
 export const AgentInitial: IAgentForm = {
@@ -28,6 +19,11 @@ export const AgentInitial: IAgentForm = {
   icon: "https://cdn.tipis.ai/tipis/default-tipi-icon.png",
   description: "",
   aiAgentID: "",
+  teamID: "",
+  teamIcon: "",
+  teamName: "",
+  teamIdentifier: "",
+  publishedToMarketplace: false,
 }
 
 export enum SCROLL_ID {
