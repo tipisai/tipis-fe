@@ -43,11 +43,7 @@ const PCWorkspaceMenu: FC = () => {
   const { modal } = App.useApp()
   const { t } = useTranslation()
   const currentTeamInfo = useGetCurrentTeamInfo()
-  const [pinedAreaListHeight, setPinedAreaListHeight] = useState(
-    (ILLAPublicStorage.getLocalStorage("pinedAreaListHeight") as
-      | undefined
-      | number) ?? 0,
-  )
+  const [pinedAreaListHeight, setPinedAreaListHeight] = useState(0)
   const pinedTipis = useSelector(getPinedTipis)
 
   const hasPinedTipis = pinedTipis.length > 0
@@ -58,7 +54,11 @@ const PCWorkspaceMenu: FC = () => {
         COMMON_MENU_PINED_AREA_SINGLE_MIN_HEIGHT * pinedTipis.length,
       )
     } else {
-      setPinedAreaListHeight(COMMON_MENU_PINED_AREA_MIN_HEIGHT)
+      setPinedAreaListHeight(
+        (ILLAPublicStorage.getLocalStorage("pinedAreaListHeight") as
+          | undefined
+          | number) ?? COMMON_MENU_PINED_AREA_MIN_HEIGHT,
+      )
     }
   }, [pinedTipis.length])
 
