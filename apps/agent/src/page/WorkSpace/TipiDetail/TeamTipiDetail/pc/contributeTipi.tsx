@@ -18,7 +18,7 @@ import { useAddTipisDetailTab } from "@/utils/recentTabs/hook"
 import { getExploreTipisPath } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import { IContributeTipiProps } from "../interface"
-import ContributeContent from "../module/contributeContent"
+import PCContributeContent from "../module/contributeContent/pc"
 
 const PCContributeTipi: FC<IContributeTipiProps> = (props) => {
   const { aiAgentMarketPlaceInfo } = props
@@ -67,7 +67,7 @@ const PCContributeTipi: FC<IContributeTipiProps> = (props) => {
       title={aiAgentMarketPlaceInfo.aiAgent.name}
       onClickBack={onClickBack}
     >
-      <ContributeContent aiAgentMarketPlaceInfo={aiAgentMarketPlaceInfo} />
+      <PCContributeContent aiAgentMarketPlaceInfo={aiAgentMarketPlaceInfo} />
     </DetailLayout>
   )
 }

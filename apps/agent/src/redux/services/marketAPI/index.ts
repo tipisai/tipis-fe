@@ -1,14 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { isEqual } from "lodash-es"
 import {
   HTTP_REQUEST_PUBLIC_BASE_URL,
   MARKETPLACE_AUTH_PRODUCT_REQUEST_PREFIX,
 } from "@illa-public/illa-net"
-import { MarketAgentListData } from "@illa-public/market-agent"
-import { MarketAIAgent } from "@illa-public/public-types"
+import { IMarketAIAgent, IMarketAgentListData } from "@illa-public/public-types"
 import { prepareHeaders } from "@illa-public/user-data"
+import { INITIAL_PAGE, MARKET_LIST_LIMIT } from "./constants"
 import { ProductListParams } from "./interface"
-
-HTTP_REQUEST_PUBLIC_BASE_URL
 
 export const marketAPI = createApi({
   reducerPath: "marketAPI",
@@ -19,37 +18,40 @@ export const marketAPI = createApi({
   tagTypes: ["MarketProducts"],
   endpoints: (builder) => ({
     getAIAgentMarketplaceInfo: builder.query<
-      MarketAIAgent,
+      IMarketAIAgent,
       {
         aiAgentID: string
       }
     >({
       query: ({ aiAgentID }) => `/aiAgents/${aiAgentID}`,
     }),
-    starAIAgent: builder.mutation<{}, string>({
-      query: (aiAgentID) => ({
-        url: `/aiAgents/${aiAgentID}/star`,
-        method: "POST",
-      }),
-    }),
-    unstarAIAgent: builder.mutation<{}, string>({
-      query: (aiAgentID) => ({
-        url: `/aiAgents/${aiAgentID}/star`,
-        method: "DELETE",
-      }),
-    }),
 
-    getMarketList: builder.query<
-      MarketAgentListData,
-      {
-        params: ProductListParams
-      }
-    >({
-      query: ({ params }) => ({
+    getMarketList: builder.query<IMarketAgentListData, ProductListParams>({
+      query: (params) => ({
         url: "/aiAgents",
         method: "GET",
-        params: params,
+        params: {
+          ...params,
+          limit: MARKET_LIST_LIMIT,
+        },
       }),
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      merge: (currentCache, newItems, { arg }) => {
+        if (arg.page === INITIAL_PAGE) {
+          return newItems
+        }
+        return {
+          ...currentCache,
+          ...newItems,
+          products: [...currentCache.products, ...newItems.products],
+        }
+      },
+
+      forceRefetch({ currentArg, previousArg }) {
+        return !isEqual(currentArg, previousArg)
+      },
       providesTags: (result) =>
         result?.products
           ? [
@@ -57,17 +59,15 @@ export const marketAPI = createApi({
                 type: "MarketProducts" as const,
                 id: aiAgent.aiAgentID,
               })),
-              { type: "MarketProducts", id: "PARTIAL-LIST" },
+              { type: "MarketProducts", id: "MARKET-LIST" },
             ]
-          : [{ type: "MarketProducts", id: "PARTIAL-LIST" }],
+          : [{ type: "MarketProducts", id: "MARKET-LIST" }],
     }),
   }),
 })
 
 export const {
   useGetAIAgentMarketplaceInfoQuery,
-  useStarAIAgentMutation,
-  useUnstarAIAgentMutation,
   useLazyGetMarketListQuery,
   useGetMarketListQuery,
 } = marketAPI

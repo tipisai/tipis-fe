@@ -2,7 +2,6 @@ import Icon from "@ant-design/icons"
 import { List } from "antd"
 import { FC } from "react"
 import { ForkIcon, PlayOutlineIcon, StarOutlineIcon } from "@illa-public/icon"
-import { getLLM } from "@illa-public/market-agent"
 import { formatNumForAgent } from "@illa-public/utils"
 import { useNavigateToMarketTipiDetail } from "@/utils/routeHelper/hook"
 import TagList from "../TagList"
@@ -17,9 +16,6 @@ import {
   descriptionStyle,
   headerStyle,
   iconStyle,
-  modalInfoStyle,
-  modelLogoStyle,
-  modelNameStyle,
   nameStyle,
 } from "./style"
 
@@ -60,10 +56,6 @@ const MarketCard: FC<MarketAgentCardProps> = (props) => {
         </div>
         <div css={cardContentContainerStyle}>
           <span css={nameStyle}>{aiAgent?.name}</span>
-          <div css={modalInfoStyle}>
-            <div css={modelLogoStyle}>{getLLM(aiAgent?.model)?.logo}</div>
-            <div css={modelNameStyle}>{getLLM(aiAgent?.model)?.name}</div>
-          </div>
           <div css={descriptionStyle}>{aiAgent?.description}</div>
           {!!(marketplace?.hashtags && marketplace?.hashtags.length) && (
             <TagList tagList={marketplace?.hashtags} limitTagNum={2} />

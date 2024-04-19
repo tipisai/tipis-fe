@@ -1,7 +1,7 @@
-import { Agent, MarketAIAgent } from "@illa-public/public-types"
+import { Agent, IMarketAIAgent } from "@illa-public/public-types"
 
 export interface IContributeTipiProps {
-  aiAgentMarketPlaceInfo: MarketAIAgent
+  aiAgentMarketPlaceInfo: IMarketAIAgent
 }
 
 export interface INotContributeContentProps {

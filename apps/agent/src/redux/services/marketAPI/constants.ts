@@ -20,3 +20,5 @@ export enum PRODUCT_SORT_BY {
   LATEST = "latest",
   STARRED = "starred",
 }
+
+export const MARKET_LIST_LIMIT = 20

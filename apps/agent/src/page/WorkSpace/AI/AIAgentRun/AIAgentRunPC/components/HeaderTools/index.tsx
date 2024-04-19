@@ -10,7 +10,6 @@ import {
 import { IAgentForm } from "@/page/WorkSpace/AI/AIAgent/interface"
 import MoreActionButton from "../../../components/MoreActionButton"
 import ForkButton from "../ForkButton"
-import StarButton from "../StarButton"
 import StartButton from "../StartButton"
 import { headerToolsContainerStyle } from "./style"
 
@@ -54,7 +53,6 @@ const HeaderTools: FC = () => {
         ownerTeamIdentifier={ownerTeamIdentifier}
       />
       {canManageFork && publishedToMarketplace && <ForkButton />}
-      {publishedToMarketplace && <StarButton />}
       <StartButton />
     </div>
   )

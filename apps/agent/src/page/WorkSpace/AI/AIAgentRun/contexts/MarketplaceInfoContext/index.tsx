@@ -1,5 +1,5 @@
 import { FC, createContext, useMemo, useState } from "react"
-import { MarketAIAgent } from "@illa-public/public-types"
+import { IMarketAIAgent } from "@illa-public/public-types"
 import {
   IMarketPlaceInfoInject,
   IMarketPlaceInfoProviderProps,
@@ -15,7 +15,7 @@ export const MarketplaceInfoProvider: FC<IMarketPlaceInfoProviderProps> = (
   const { children, marketplaceInfo } = props
 
   const [currentMarketplaceInfo, setCurrentMarketplaceInfo] = useState<
-    MarketAIAgent | undefined
+    IMarketAIAgent | undefined
   >(marketplaceInfo)
 
   const value = useMemo(

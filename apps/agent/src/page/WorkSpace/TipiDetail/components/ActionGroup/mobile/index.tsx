@@ -29,6 +29,8 @@ const MobileActionGroup: FC<IActionGroupProps> = (props) => {
     tipisID,
     tipisIcon,
     tipisName,
+    isFromMarketplace,
+    isPublishConfiguration,
     ownerTeamIdentity,
   } = props
   const { t } = useTranslation()
@@ -58,6 +60,7 @@ const MobileActionGroup: FC<IActionGroupProps> = (props) => {
         tipisName,
       },
       v4(),
+      ownerTeamIdentity,
     )
   }
 
@@ -74,7 +77,7 @@ const MobileActionGroup: FC<IActionGroupProps> = (props) => {
       </Button>
 
       <div css={otherActionGroupContainerStyle}>
-        {isContribute && (
+        {isFromMarketplace && isPublishConfiguration && (
           <Button block icon={<Icon component={ForkIcon} />} size="large">
             {t("dashboard.common.fork")} {forkNumber}
           </Button>

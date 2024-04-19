@@ -180,12 +180,12 @@ importers:
       '@illa-public/illa-web-socket':
         specifier: workspace:^
         version: link:../../packages/utils/ILLAWebSocket
+      '@illa-public/invite-modal':
+        specifier: workspace:^
+        version: link:../../packages/components/InviteModal
       '@illa-public/layout-auto-change':
         specifier: workspace:^
         version: link:../../packages/components/LayoutAutoChange
-      '@illa-public/market-agent':
-        specifier: workspace:^
-        version: link:../../packages/components/MarketAgent
       '@illa-public/new-invite-modal':
         specifier: workspace:^
         version: link:../../packages/components/newInviteModal
@@ -730,7 +730,7 @@ importers:
         specifier: workspace:*
         version: link:../../devConfigs/tsconfig
 
-  packages/components/MarketAgent:
+  packages/components/MarketShare:
     dependencies:
       '@ant-design/icons':
         specifier: ^5.3.1
@@ -738,24 +738,15 @@ importers:
       '@emotion/react':
         specifier: ^11.11.4
         version: 11.11.4(@types/react@18.2.62)(react@18.2.0)
-      '@illa-public/avatar':
-        specifier: workspace:*
-        version: link:../Avatar
       '@illa-public/color-scheme':
         specifier: workspace:*
         version: link:../../utils/colorScheme
       '@illa-public/icon':
         specifier: workspace:*
         version: link:../Icon
-      '@illa-public/illa-net':
+      '@illa-public/layout-auto-change':
         specifier: workspace:*
-        version: link:../../utils/ILLANet
-      '@illa-public/public-types':
-        specifier: workspace:*
-        version: link:../../others/publicTypes
-      '@illa-public/record-editor':
-        specifier: workspace:*
-        version: link:../RecordEditor
+        version: link:../LayoutAutoChange
       '@illa-public/utils':
         specifier: workspace:*
         version: link:../../utils/public
@@ -768,12 +759,21 @@ importers:
       antd:
         specifier: ^5.15.2
         version: 5.15.2(react-dom@18.2.0)(react@18.2.0)
+      i18next:
+        specifier: ^23.10.0
+        version: 23.10.0
       react:
         specifier: ^18.2.0
         version: 18.2.0
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      react-i18next:
+        specifier: ^14.0.5
+        version: 14.0.5(i18next@23.10.0)(react-dom@18.2.0)(react@18.2.0)
+      react-share:
+        specifier: ^4.4.1
+        version: 4.4.1(react@18.2.0)
     devDependencies:
       tsconfig:
         specifier: workspace:*
@@ -9598,7 +9598,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.24.0
       classnames: 2.5.1
-      rc-util: 5.38.2(react-dom@18.2.0)(react@18.2.0)
+      rc-util: 5.39.1(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
@@ -9711,7 +9711,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.24.0
       classnames: 2.5.1
-      rc-util: 5.38.2(react-dom@18.2.0)(react@18.2.0)
+      rc-util: 5.39.1(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       resize-observer-polyfill: 1.5.1
@@ -9835,7 +9835,7 @@ packages:
       classnames: 2.5.1
       rc-input: 1.4.3(react-dom@18.2.0)(react@18.2.0)
       rc-resize-observer: 1.4.0(react-dom@18.2.0)(react@18.2.0)
-      rc-util: 5.38.2(react-dom@18.2.0)(react@18.2.0)
+      rc-util: 5.39.1(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
@@ -9878,7 +9878,7 @@ packages:
       '@babel/runtime': 7.24.0
       classnames: 2.5.1
       rc-motion: 2.9.0(react-dom@18.2.0)(react@18.2.0)
-      rc-util: 5.38.2(react-dom@18.2.0)(react@18.2.0)
+      rc-util: 5.39.1(react-dom@18.2.0)(react@18.2.0)
       rc-virtual-list: 3.11.4(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)

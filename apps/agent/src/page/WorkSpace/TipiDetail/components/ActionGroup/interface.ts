@@ -6,4 +6,6 @@ export interface IActionGroupProps {
   runNumber?: number
   forkNumber?: number
   ownerTeamIdentity: string
+  isFromMarketplace?: boolean
+  isPublishConfiguration?: boolean
 }

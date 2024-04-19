@@ -314,7 +314,6 @@ export const useAddMarketTipiDetailTab = () => {
   return addMarketTipiDetailTab
 }
 
-// TODO
 export const useRunMarketTipis = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -334,7 +333,7 @@ export const useRunMarketTipis = () => {
       }
       dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
       navigate(
-        `${getRunTipiPath(ownerTeamIdentifier, tipisID, tabID)}?myTeamIdentifier=${currentTeamInfo.identifier}`,
+        `${getRunTipiPath(currentTeamInfo.identifier, tipisID, tabID)}?&ownerTeamIdentifier=${ownerTeamIdentifier}=${ownerTeamIdentifier}`,
       )
     },
     [dispatch, navigate],
