@@ -1,6 +1,6 @@
 import Icon from "@ant-design/icons"
 import { Button, Tooltip } from "antd"
-import { FC, useState } from "react"
+import { FC, useRef, useState } from "react"
 import { DownloadIcon } from "@illa-public/icon"
 import { IKnowledgeFile } from "@illa-public/public-types"
 import { handleCreditPurchaseError } from "@illa-public/upgrade-modal"
@@ -17,6 +17,7 @@ const SingleFile: FC<
 > = ({ downloadURL, fileName, contentType }) => {
   const [isExpired, setIsExpired] = useState(false)
   const [disabled, setDisabled] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
   const handleDownload = (fileName: string, downloadURL: string) => {
     if (!downloadURL || !fileName) {
       return
@@ -61,8 +62,9 @@ const SingleFile: FC<
         offset: [-40, 4],
       }}
       placement="right"
+      getTooltipContainer={() => containerRef.current!}
     >
-      <div css={fileContainerStyle}>
+      <div css={fileContainerStyle} ref={containerRef}>
         <FileContent contentType={contentType} fileName={fileName} />
       </div>
     </Tooltip>

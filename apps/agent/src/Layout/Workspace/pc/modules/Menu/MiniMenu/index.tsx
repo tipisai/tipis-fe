@@ -14,7 +14,10 @@ import PCRecentTabs from "@/Layout/Workspace/modules/RecentTabs/pc"
 import LogoIcon from "@/assets/public/logo.svg?react"
 import MenuExpandIcon from "@/assets/workspace/menuExpand.svg?react"
 import { getPinedTipis } from "@/redux/ui/pinedTipis/selector"
-import { COMMON_MENU_PINED_AREA_MIN_HEIGHT } from "../../../config"
+import {
+  COMMON_MENU_PINED_AREA_MIN_HEIGHT,
+  COMMON_MENU_PINED_AREA_SINGLE_MIN_HEIGHT,
+} from "../../../config"
 import { MenuStatusUIContext } from "../context"
 import {
   activeDividerStyle,
@@ -38,12 +41,22 @@ const MiniMenu: FC = () => {
   const { changeCollapsed } = useContext(MenuStatusUIContext)
 
   const { t } = useTranslation()
-  const [pinedAreaListHeight, setPinedAreaListHeight] = useState(
-    (ILLAPublicStorage.getLocalStorage("pinedAreaListHeight") as
-      | undefined
-      | number) ?? COMMON_MENU_PINED_AREA_MIN_HEIGHT,
-  )
+  const [pinedAreaListHeight, setPinedAreaListHeight] = useState(0)
   const pinedTipis = useSelector(getPinedTipis)
+
+  useEffect(() => {
+    if (pinedTipis.length <= 3) {
+      setPinedAreaListHeight(
+        COMMON_MENU_PINED_AREA_SINGLE_MIN_HEIGHT * pinedTipis.length,
+      )
+    } else {
+      setPinedAreaListHeight(
+        (ILLAPublicStorage.getLocalStorage("pinedAreaListHeight") as
+          | undefined
+          | number) ?? COMMON_MENU_PINED_AREA_MIN_HEIGHT,
+      )
+    }
+  }, [pinedTipis.length])
 
   const hasPinedTipis = pinedTipis.length > 0
 

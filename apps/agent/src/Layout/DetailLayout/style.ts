@@ -4,6 +4,7 @@ export const tipiDetailContainerStyle = css`
   display: flex;
   width: 100%;
   height: 100%;
+  padding: 16px 0;
   flex-direction: column;
   align-items: center;
 `
@@ -20,4 +21,12 @@ export const detailContentContainerStyle = css`
   display: flex;
   flex-direction: column;
   gap: 32px;
+`
+
+export const scrollContainerStyle = css`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow-y: auto;
 `

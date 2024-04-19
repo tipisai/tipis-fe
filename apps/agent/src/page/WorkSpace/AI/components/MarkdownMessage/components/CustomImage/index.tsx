@@ -1,6 +1,6 @@
 import Icon from "@ant-design/icons"
 import { Button, Image, ImageProps, Skeleton, Tooltip } from "antd"
-import { FC, useState } from "react"
+import { FC, useRef, useState } from "react"
 import { DownloadIcon } from "@illa-public/icon"
 import { handleCreditPurchaseError } from "@illa-public/upgrade-modal"
 import imageLoadErrSrc from "@/assets/agent/imageLoadErr.svg"
@@ -13,6 +13,7 @@ const CustomImage: FC<ImageProps> = ({ alt, src }) => {
   const { fileName, isTipisStorageURL } = tipisStorageURLHelper(src)
   const [isExpired, setIsExpired] = useState(false)
   const [disabled, setDisabled] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const handleDownload = () => {
     if (!src) {
@@ -37,7 +38,7 @@ const CustomImage: FC<ImageProps> = ({ alt, src }) => {
       })
   }
   const contentBody = (
-    <div css={imageContainerStyle}>
+    <div css={imageContainerStyle} ref={containerRef}>
       <Image
         src={src}
         alt={alt}
@@ -90,6 +91,7 @@ const CustomImage: FC<ImageProps> = ({ alt, src }) => {
         offset: [-32, 0],
       }}
       placement="rightBottom"
+      getTooltipContainer={() => containerRef.current!}
     >
       {contentBody}
     </Tooltip>
