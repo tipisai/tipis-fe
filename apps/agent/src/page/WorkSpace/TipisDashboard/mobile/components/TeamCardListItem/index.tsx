@@ -18,7 +18,9 @@ import {
   DeleteIcon,
   MoreIcon,
   PenIcon,
+  PinIcon,
   ShareIcon,
+  UnPinIcon,
 } from "@illa-public/icon"
 import {
   InviteMember,
@@ -33,7 +35,12 @@ import {
   useDeleteAIAgentMutation,
   useDuplicateAIAgentMutation,
 } from "@/redux/services/agentAPI"
+import { getPinedTipisByTipisID } from "@/redux/ui/pinedTipis/selector"
 import { canShowShareTipi, canShownCreateTipi } from "@/utils/UIHelper/tipis"
+import {
+  useAddPinedTipiTabReducer,
+  useRemovePinedTipiTabByTipiIDReducer,
+} from "@/utils/pinedTabs/baseHook"
 import { getEditTipiPath, getRunTipiPath } from "@/utils/routeHelper"
 import {
   useNavigateToEditTipis,
@@ -58,6 +65,9 @@ const MobileTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
   const { data: currentUserInfo } = useGetUserInfoQuery(null)
   const currentUserRole = currentTeamInfo?.myRole ?? USER_ROLE.VIEWER
 
+  const pinedInfos = useSelector((state) => getPinedTipisByTipisID(state, id))
+  const isPined = !!pinedInfos
+
   const [isMoreActionDropdownOpen, setIsMoreActionDropdownOpen] =
     useState(false)
 
@@ -70,6 +80,8 @@ const MobileTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
   const navigateToEditTIpis = useNavigateToEditTipis()
   const [duplicateAIAgent] = useDuplicateAIAgentMutation()
   const [deleteAIAgent] = useDeleteAIAgentMutation()
+  const addPinedTipis = useAddPinedTipiTabReducer()
+  const removePinedTipiByTipisID = useRemovePinedTipiTabByTipiIDReducer()
 
   const onClickCard = () => {
     TipisTrack.track("click_run_tipi_entry", {
@@ -86,7 +98,15 @@ const MobileTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
   }
 
   const menuItems: MenuProps["items"] = useMemo(() => {
-    const originMenuItems: MenuProps["items"] = []
+    const originMenuItems: MenuProps["items"] = [
+      {
+        label: isPined
+          ? t("dashboard.common.unpin")
+          : t("dashboard.common.pin"),
+        key: isPined ? "unpin" : "pin",
+        icon: <Icon component={isPined ? UnPinIcon : PinIcon} />,
+      },
+    ]
     if (canShownCreateTipi(currentTeamInfo)) {
       originMenuItems.push(
         {
@@ -134,11 +154,25 @@ const MobileTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
       })
     }
     return originMenuItems
-  }, [currentTeamInfo, t])
+  }, [currentTeamInfo, isPined, t])
 
   const onClickMenuItem: MenuProps["onClick"] = async ({ key, domEvent }) => {
     domEvent.stopPropagation()
     switch (key) {
+      case "pin": {
+        await addPinedTipis({
+          tabID: v4(),
+          tabName: title,
+          tabIcon: icon,
+          tipiID: id,
+          tipiOwnerTeamIdentity: currentTeamInfo.identifier,
+        })
+        break
+      }
+      case "unpin": {
+        await removePinedTipiByTipisID(id)
+        break
+      }
       case "edit": {
         TipisTrack.track("click_edit_tipi_entry", {
           parameter1: "dashboard",
