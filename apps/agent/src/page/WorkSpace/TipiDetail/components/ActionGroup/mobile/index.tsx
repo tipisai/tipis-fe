@@ -84,6 +84,7 @@ const MobileActionGroup: FC<IActionGroupProps> = (props) => {
           block
           icon={<Icon component={isPined ? UnPinIcon : PinIcon} />}
           onClick={handleClickPinOrUnPin}
+          size="large"
         >
           {isPined ? t("dashboard.common.unpin") : t("dashboard.common.pin")}
         </Button>
