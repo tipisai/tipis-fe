@@ -63,7 +63,7 @@ const SortComponentPC: FC<IMarketSortComponentProps> = ({ tagList }) => {
         />
 
         <Checkbox checked={marketState.isOfficial} onChange={onOfficialChange}>
-          {t("_Official")}
+          {t("dashboard.sort-type.official")}
         </Checkbox>
       </div>
 
