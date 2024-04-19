@@ -8,6 +8,7 @@ import { IDetailLayoutProps } from "./interface"
 import {
   customRenderTitleStyle,
   detailContentContainerStyle,
+  scrollContainerStyle,
   tipiDetailContainerStyle,
 } from "./style"
 
@@ -32,7 +33,9 @@ const DetailLayout: FC<IDetailLayoutProps> = (props) => {
           )
         }}
       />
-      <div css={detailContentContainerStyle}>{props.children}</div>
+      <div css={scrollContainerStyle}>
+        <div css={detailContentContainerStyle}>{props.children}</div>
+      </div>
     </div>
   )
 }
