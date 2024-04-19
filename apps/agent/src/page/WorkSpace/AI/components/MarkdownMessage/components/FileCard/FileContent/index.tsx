@@ -1,6 +1,6 @@
 import Icon from "@ant-design/icons"
 import { Button, Tooltip } from "antd"
-import { FC, useState } from "react"
+import { FC, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { DownloadIcon, getFileIconByContentType } from "@illa-public/icon"
 import { GCS_OBJECT_TYPE } from "@illa-public/public-types"
@@ -23,6 +23,7 @@ const FileContent: FC<IFileContentProps> = ({
   const { t } = useTranslation()
   const [isExpired, setIsExpired] = useState(false)
   const [disabled, setDisabled] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
   const handleDownload = (downloadURL: string, fileName: string) => {
     if (!downloadURL || !fileName) {
       return
@@ -43,7 +44,7 @@ const FileContent: FC<IFileContentProps> = ({
       })
   }
   const contentBody = (
-    <div css={fileCardContainerStyle}>
+    <div css={fileCardContainerStyle} ref={containerRef}>
       {getFileIconByContentType(
         GCS_OBJECT_TYPE.FILE,
         contentType,
@@ -82,6 +83,7 @@ const FileContent: FC<IFileContentProps> = ({
       align={{
         offset: [-40, 4],
       }}
+      getTooltipContainer={() => containerRef.current!}
     >
       {contentBody}
     </Tooltip>
