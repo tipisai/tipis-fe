@@ -6,6 +6,7 @@ export const ACCEPT = [
   "application/json",
   "text/plain",
   "text/markdown",
+  "text/csv",
 ]
 
 export const MAX_MESSAGE_FILES_LENGTH = 10
