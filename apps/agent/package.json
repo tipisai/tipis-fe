@@ -45,7 +45,6 @@
     "@illa-public/avatar": "workspace:^",
     "@illa-public/code-editor": "workspace:^",
     "@illa-public/color-scheme": "workspace:^",
-    "@illa-public/cropper": "workspace:^",
     "@illa-public/dynamic-string": "workspace:^",
     "@illa-public/icon": "workspace:^",
     "@illa-public/icon-hot-spot": "workspace:^",
