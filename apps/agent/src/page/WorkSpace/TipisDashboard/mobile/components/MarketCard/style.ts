@@ -75,34 +75,6 @@ export const cardContentContainerStyle = css`
   align-self: stretch;
 `
 
-export const modalInfoStyle = css`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  align-self: stretch;
-`
-
-export const modelNameStyle = css`
-  color: ${getColor("grayBlue", "02")};
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 20px;
-`
-
-export const modelLogoStyle = css`
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
-  & svg {
-    height: 100%;
-    width: 100%;
-  }
-`
-
 export const textEllipsisStyle = css`
   white-space: nowrap;
   text-overflow: ellipsis;

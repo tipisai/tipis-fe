@@ -26,7 +26,9 @@ const PCActionGroup: FC<IActionGroupProps> = (props) => {
     tipisID,
     tipisIcon,
     tipisName,
+    isFromMarketplace,
     ownerTeamIdentity,
+    isPublishConfiguration,
   } = props
   const { t } = useTranslation()
   const navigateToRun = useNavigateToRunTipis()
@@ -56,6 +58,7 @@ const PCActionGroup: FC<IActionGroupProps> = (props) => {
         tipisName,
       },
       v4(),
+      ownerTeamIdentity,
     )
   }
 
@@ -71,7 +74,7 @@ const PCActionGroup: FC<IActionGroupProps> = (props) => {
       >
         {t("dashboard.common.run")} {isContribute ? runNumber : ""}
       </Button>
-      {isContribute && (
+      {isFromMarketplace && isPublishConfiguration && (
         <Button icon={<Icon component={ForkIcon} />} size="large">
           {t("dashboard.common.fork")} {forkNumber}
         </Button>

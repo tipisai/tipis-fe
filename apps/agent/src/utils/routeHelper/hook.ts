@@ -8,6 +8,7 @@ import {
   getEditTipiPath,
   getExploreFunctionsPath,
   getExploreTipisPath,
+  getMarketTipiDetailPath,
   getRunTipiPath,
   getTipiDetailPath,
 } from "."
@@ -118,12 +119,22 @@ export const useNavigateToRunTipis = () => {
         tipisName: string
       },
       tabID: string,
+      tipiOwnerTeamIdentity?: string,
     ) => {
       await addRunTipisTab(tabInfo, tabID)
       if (currentTeamInfo?.identifier) {
-        navigate(
-          `${getRunTipiPath(currentTeamInfo.identifier, tabInfo.tipisID, tabID)}`,
-        )
+        if (
+          tipiOwnerTeamIdentity &&
+          tipiOwnerTeamIdentity !== currentTeamInfo.identifier
+        ) {
+          navigate(
+            `${getRunTipiPath(currentTeamInfo.identifier, tabInfo.tipisID, tabID)}?ownerTeamIdentifier=${tipiOwnerTeamIdentity}`,
+          )
+        } else {
+          navigate(
+            `${getRunTipiPath(currentTeamInfo.identifier, tabInfo.tipisID, tabID)}`,
+          )
+        }
       }
     },
     [addRunTipisTab, currentTeamInfo?.identifier, navigate],
@@ -157,7 +168,9 @@ export const useNavigateToMarketTipiDetail = () => {
     (tabInfo: { tipisID: string; title: string; tabIcon: string }) => {
       addMarketTipisDetailTab(tabInfo)
       if (currentTeamInfo?.identifier) {
-        navigate(getTipiDetailPath(currentTeamInfo.identifier, tabInfo.tipisID))
+        navigate(
+          getMarketTipiDetailPath(currentTeamInfo.identifier, tabInfo.tipisID),
+        )
       }
     },
     [addMarketTipisDetailTab, navigate, currentTeamInfo?.identifier],

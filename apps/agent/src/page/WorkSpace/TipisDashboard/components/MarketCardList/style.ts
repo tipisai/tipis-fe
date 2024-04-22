@@ -15,7 +15,7 @@ export const listContainerStyle = css`
   width: 100%;
   height: 100%;
   overflow-y: auto;
-  padding-bottom: 32px;
+  padding: 0 24px 24px 32px;
   ${applyMobileStyle(css`
     padding: 0 20px;
   `)}

@@ -19,6 +19,7 @@ export const INIT_DASH_BOARD_UI_STATE: IDashBoardUIState = {
   search: undefined,
   hashTag: undefined,
   activeTab: TABS_KEY.TEAM,
+  isOfficial: false,
 }
 
 export const reducer = (
@@ -84,7 +85,18 @@ export const reducer = (
       break
     }
     case DASH_BOARD_UI_STATE_ACTION_TYPE.SET_UI_STATE: {
-      newState = action.payload
+      newState = {
+        ...action.payload,
+        page: INITIAL_PAGE,
+      }
+      break
+    }
+    case DASH_BOARD_UI_STATE_ACTION_TYPE.SET_IS_OFFICIAL: {
+      newState = {
+        ...state,
+        page: INITIAL_PAGE,
+        isOfficial: action.payload,
+      }
       break
     }
   }
