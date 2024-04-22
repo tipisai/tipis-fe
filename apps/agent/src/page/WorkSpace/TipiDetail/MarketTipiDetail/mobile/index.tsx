@@ -110,7 +110,7 @@ const MarketTipiDetailMobile: FC<IMarketTipiDetailProps> = ({
           )}
         />
 
-        {true && (
+        {aiAgentMarketPlaceInfo?.marketplace?.config.publishConfiguration && (
           <>
             <Prompt
               parameters={aiAgentMarketPlaceInfo?.aiAgent?.variables ?? []}
