@@ -7,7 +7,11 @@ import { IMarketSortComponentProps } from "../../../components/MarketCardList/in
 import { DASH_BOARD_UI_STATE_ACTION_TYPE } from "../../../context/interface"
 import { DashBoardUIStateContext } from "../../../context/marketListContext"
 import TagList from "../TagList"
-import { sortHeaderStyle, sortWrapperStyle } from "./style"
+import {
+  checkBoxContainerStyle,
+  sortHeaderStyle,
+  sortWrapperStyle,
+} from "./style"
 
 const SortComponentPC: FC<IMarketSortComponentProps> = ({ tagList }) => {
   const { t } = useTranslation()
@@ -57,14 +61,22 @@ const SortComponentPC: FC<IMarketSortComponentProps> = ({ tagList }) => {
           tabBarStyle={{
             marginBottom: 0,
           }}
+          style={{
+            width: "100%",
+          }}
           activeKey={marketState.sortedBy}
           onChange={onSortChange}
           items={options}
         />
 
-        <Checkbox checked={marketState.isOfficial} onChange={onOfficialChange}>
-          {t("dashboard.sort-type.official")}
-        </Checkbox>
+        <div css={checkBoxContainerStyle}>
+          <Checkbox
+            checked={marketState.isOfficial}
+            onChange={onOfficialChange}
+          >
+            {t("dashboard.sort-type.official")}
+          </Checkbox>
+        </div>
       </div>
 
       {tagList && tagList.length > 0 && (
