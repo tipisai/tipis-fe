@@ -18,7 +18,7 @@ export const INIT_DASH_BOARD_UI_STATE: IDashBoardUIState = {
   sortedBy: PRODUCT_SORT_BY.POPULAR,
   search: undefined,
   hashTag: undefined,
-  activeTab: TABS_KEY.TEAM,
+  activeTab: TABS_KEY.MARKETPLACE,
   isOfficial: false,
 }
 
