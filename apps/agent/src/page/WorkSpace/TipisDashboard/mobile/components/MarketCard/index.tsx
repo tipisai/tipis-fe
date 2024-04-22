@@ -1,7 +1,7 @@
 import Icon from "@ant-design/icons"
 import { List } from "antd"
 import { FC } from "react"
-import { ForkIcon, PlayOutlineIcon, StarOutlineIcon } from "@illa-public/icon"
+import { ForkIcon, PlayOutlineIcon } from "@illa-public/icon"
 import { formatNumForAgent } from "@illa-public/utils"
 import { useNavigateToMarketTipiDetail } from "@/utils/routeHelper/hook"
 import TagList from "../TagList"
@@ -43,10 +43,6 @@ const MarketCard: FC<MarketAgentCardProps> = (props) => {
               <div css={actionCountStyle}>
                 <Icon component={ForkIcon} css={iconStyle} />
                 {formatNumForAgent(marketplace?.numForks)}
-              </div>
-              <div css={actionCountStyle}>
-                <Icon component={StarOutlineIcon} css={iconStyle} />
-                {formatNumForAgent(marketplace?.numStars)}
               </div>
               <div css={actionCountStyle}>
                 <Icon component={PlayOutlineIcon} css={iconStyle} />
