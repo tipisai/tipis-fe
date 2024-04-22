@@ -2,14 +2,12 @@ import { Input } from "antd"
 import { FC, memo } from "react"
 import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { IAIFunctionResource } from "@illa-public/public-types"
-import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 
 const NameEditor: FC = memo(() => {
   const { t } = useTranslation()
 
-  const methods = useFormContext<IAIFunctionResource>()
+  const methods = useFormContext()
 
   const { errors } = useFormState({
     control: methods.control,
@@ -17,18 +15,29 @@ const NameEditor: FC = memo(() => {
 
   return (
     <Controller
-      name="resourceName"
+      name="name"
       control={methods.control}
       rules={{
-        required: t("editor.ai-agent.validation_blank.name"),
+        required: t("function.edit.configure.name.empty"),
+        maxLength: 64,
+        pattern: {
+          value: /^[a-zA-Z_][a-zA-Z0-9_]*$/,
+          message: t("function.edit.configure.name.validate"),
+        },
       }}
       shouldUnregister={false}
       render={({ field }) => (
-        <LayoutBlock title={t("editor.ai-agent.label.name")} required>
+        <LayoutBlock
+          title={t("editor.ai-agent.label.name")}
+          required
+          // errorMessage={
+          //   errors.name?.message ?? t("function.edit.configure.name.validate")
+          // }
+        >
           <Input
             {...field}
             placeholder={t("editor.ai-agent.placeholder.name")}
-            status={!!errors.resourceName ? "error" : undefined}
+            status={!!errors.name ? "error" : undefined}
             maxLength={60}
             onChange={(e) => {
               const value = e.target.value
@@ -36,9 +45,6 @@ const NameEditor: FC = memo(() => {
               // setInRoomUsers(updateLocalName(value, inRoomUsers))
             }}
           />
-          {errors.resourceName?.message && (
-            <ErrorText errorMessage={errors.resourceName?.message} />
-          )}
         </LayoutBlock>
       )}
     />

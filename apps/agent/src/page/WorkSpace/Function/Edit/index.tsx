@@ -5,12 +5,14 @@ import { IAIFunctionResource } from "@illa-public/public-types"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import PublishButton from "./components/PublishButton"
 import FormContext from "./context/FormContext"
+import DocPanel from "./modules/DocPanel"
 import EditPanel from "./modules/EditPanel"
-import { contentContainerStyle } from "./style"
+import { contentContainerStyle, innerContentContainerStyle } from "./style"
 
 const EditFunction: FC = () => {
   const methods = useForm<IAIFunctionResource>({
     defaultValues: aiFunctionResourceInit,
+    mode: "onChange",
   })
   return (
     <FormProvider {...methods}>
@@ -20,7 +22,10 @@ const EditFunction: FC = () => {
           extra={<PublishButton />}
         />
         <div css={contentContainerStyle}>
-          <EditPanel />
+          <div css={innerContentContainerStyle}>
+            <EditPanel />
+            <DocPanel />
+          </div>
         </div>
       </FormContext>
     </FormProvider>
