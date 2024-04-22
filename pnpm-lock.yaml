@@ -186,6 +186,9 @@ importers:
       '@illa-public/layout-auto-change':
         specifier: workspace:^
         version: link:../../packages/components/LayoutAutoChange
+      '@illa-public/market-share':
+        specifier: workspace:^
+        version: link:../../packages/components/MarketShare
       '@illa-public/new-invite-modal':
         specifier: workspace:^
         version: link:../../packages/components/newInviteModal

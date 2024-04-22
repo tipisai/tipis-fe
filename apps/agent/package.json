@@ -65,6 +65,7 @@
     "@illa-public/user-role-utils": "workspace:^",
     "@illa-public/utils": "workspace:^",
     "@illa-public/invite-modal": "workspace:^",
+    "@illa-public/market-share": "workspace:^",
     "@lezer/common": "^1.2.1",
     "@lezer/highlight": "^1.2.0",
     "@mui/material": "^5.15.3",
