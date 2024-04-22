@@ -1,16 +1,13 @@
 import Icon from "@ant-design/icons"
 import { Button } from "antd"
 import { FC, useState } from "react"
-import { Controller, useFormContext, useWatch } from "react-hook-form"
+import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { ContributeIcon } from "@illa-public/icon"
-import {
-  ContributeAgentPC,
-  HASHTAG_REQUEST_TYPE,
-} from "@illa-public/invite-modal"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { openShareAgentModal } from "@illa-public/user-role-utils"
+import ContributeTipisModal from "@/components/ContributeTipisModal"
 import { IAgentForm } from "../../interface"
 
 const ContributeButton: FC = () => {
@@ -57,33 +54,7 @@ const ContributeButton: FC = () => {
       >
         {t("editor.ai-agent.contribute")}
       </Button>
-      <Controller
-        name="publishedToMarketplace"
-        control={control}
-        render={({ field }) => (
-          <>
-            {contributedDialogVisible && (
-              <ContributeAgentPC
-                onContributed={(isAgentContributed) => {
-                  field.onChange(isAgentContributed)
-                  // if (isAgentContributed) {
-                  //   const newUrl = new URL(getAgentPublicLink(idField.value))
-                  //   newUrl.searchParams.set("token", getAuthToken())
-                  //   window.open(newUrl, "_blank")
-                  // }
-                }}
-                teamID={currentTeamInfo.id}
-                onClose={() => {
-                  setContributedDialogVisible(false)
-                }}
-                productID={aiAgentID}
-                productType={HASHTAG_REQUEST_TYPE.UNIT_TYPE_AI_AGENT}
-                productContributed={field.value}
-              />
-            )}
-          </>
-        )}
-      />
+      {contributedDialogVisible && <ContributeTipisModal />}
     </>
   )
 }

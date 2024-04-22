@@ -63,6 +63,45 @@ export const marketAPI = createApi({
             ]
           : [{ type: "MarketProducts", id: "MARKET-LIST" }],
     }),
+
+    contributeAgentWithHashtags: builder.mutation<
+      void,
+      {
+        teamID: string
+        tipisID: string
+        hashtags: string[]
+        publishConfiguration: boolean
+      }
+    >({
+      query: ({ teamID, tipisID, hashtags, publishConfiguration }) => ({
+        url: `/teams/${teamID}/products/aiAgents/${tipisID}/recontributeWith?property=hashtags,publishConfiguration`,
+        method: "POST",
+        data: {
+          hashtags,
+          publishConfiguration,
+        },
+      }),
+      invalidatesTags: [{ type: "MarketProducts", id: "MARKET-LIST" }],
+    }),
+
+    updateAgentContribute: builder.mutation<
+      void,
+      {
+        teamID: string
+        tipisID: string
+        hashtags: string[]
+        publishConfiguration: boolean
+      }
+    >({
+      query: ({ teamID, tipisID, hashtags, publishConfiguration }) => ({
+        url: `/teams/${teamID}/products/aiAgents/${tipisID}/updatePropertyWith?property=hashtags,publishConfiguration`,
+        method: "POST",
+        data: {
+          hashtags,
+          publishConfiguration,
+        },
+      }),
+    }),
   }),
 })
 
@@ -70,4 +109,6 @@ export const {
   useGetAIAgentMarketplaceInfoQuery,
   useLazyGetMarketListQuery,
   useGetMarketListQuery,
+  useContributeAgentWithHashtagsMutation,
+  useUpdateAgentContributeMutation,
 } = marketAPI
