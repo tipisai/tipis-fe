@@ -12,10 +12,14 @@ import Empty from "../page/WorkSpace/Empty"
 import { buildRouter } from "./buildRouter"
 import {
   CHAT_TEMPLATE_PATH,
+  CREATE_FUNCTION_TEMPLATE_PATH,
   CREATE_TIPI_TEMPLATE_PATH,
+  EDIT_FUNCTION_TEMPLATE_PATH,
   EDIT_TIPI_TEMPLATE_PATH,
   MARKETPLACE_DETAIL_PATH,
+  FUNCTIONS_DASHBOARD_TEMPLATE_PATH,
   RUN_TIPI_TEMPLATE_PATH,
+  TEAM_IDENTIFIER_TEMPLATE_PATH,
   TIPIS_DASHBOARD_TEMPLATE_PATH,
   TIPI_DETAIL_TEMPLATE_PATH,
   WORKSPACE_LAYOUT_PATH,
@@ -56,7 +60,13 @@ const MobileSettingNavPage = lazy(
 const TeamSetting = lazy(() => import("@/page/SettingPage/team/info"))
 const TeamBilling = lazy(() => import("@/page/SettingPage/team/billing"))
 const TeamMembers = lazy(() => import("@/page/SettingPage/team/member"))
-const EditFunctionPage = lazy(() => import("@/page/WorkSpace/Function/Edit"))
+const EditFunctionPage = lazy(
+  () => import("@/page/WorkSpace/Function/CreateOrEdit/edit"),
+)
+const CreateFunctionPage = lazy(
+  () => import("@/page/WorkSpace/Function/CreateOrEdit/create"),
+)
+
 const ChatPage = lazy(() => import("@/page/WorkSpace/Chat"))
 const TipiDetailPage = lazy(
   () => import("@/page/WorkSpace/TipiDetail/TeamTipiDetail"),
@@ -148,7 +158,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     accessByMobile: true,
     children: [
       {
-        path: ":teamIdentifier",
+        path: TEAM_IDENTIFIER_TEMPLATE_PATH,
         accessByMobile: true,
         element: <Navigate to="chat/DEFAULT_CHAT" replace />,
       },
@@ -216,7 +226,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         accessByMobile: true,
       },
       {
-        path: ":teamIdentifier/functions",
+        path: FUNCTIONS_DASHBOARD_TEMPLATE_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <FunctionDashboard />
@@ -224,26 +234,18 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         ),
       },
       {
-        path: ":teamIdentifier/function/:functionID/create",
+        path: CREATE_FUNCTION_TEMPLATE_PATH,
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <CreateFunctionPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: EDIT_FUNCTION_TEMPLATE_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <EditFunctionPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: ":teamIdentifier/function/:functionID/edit",
-        element: (
-          <Suspense fallback={<FullSectionLoading />}>
-            <FunctionDashboard />
-          </Suspense>
-        ),
-      },
-      {
-        path: ":teamIdentifier/function/:functionID/detail",
-        element: (
-          <Suspense fallback={<FullSectionLoading />}>
-            <FunctionDashboard />
           </Suspense>
         ),
       },

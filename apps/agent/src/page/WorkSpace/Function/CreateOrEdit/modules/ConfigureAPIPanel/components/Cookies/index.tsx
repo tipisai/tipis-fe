@@ -1,18 +1,17 @@
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { IAIFunctionResource } from "@illa-public/public-types"
 import ColumnLayoutContainer from "@/Layout/AIFunction/FormLayoutContainer/columnLayoutContainer"
 import { RecordEditor } from "@/components/CodeMirrorRecordEditor"
 
-const URLParametersInput: FC = () => {
+const CookiesInput: FC = () => {
   const { t } = useTranslation()
 
-  const methods = useFormContext<IAIFunctionResource>()
+  const methods = useFormContext()
 
   return (
     <Controller
-      name="content.urlParams"
+      name="content.cookies"
       control={methods.control}
       rules={{
         required: t("editor.ai-agent.validation_blank.name"),
@@ -20,39 +19,37 @@ const URLParametersInput: FC = () => {
       shouldUnregister={false}
       render={({ field }) => (
         <ColumnLayoutContainer
-          labelName={t("editor.action.resource.restapi.label.url_parameters")}
+          labelName={t("editor.action.resource.restapi.label.cookies")}
         >
           <RecordEditor
             records={field.value}
             completionOptions={{}}
             onAdd={() => {
-              const newURLParams = [...field.value].concat({
+              const newCookies = [...field.value].concat({
                 key: "",
                 value: "",
               })
-              field.onChange(newURLParams)
+              field.onChange(newCookies)
             }}
             onChangeKey={(index, key) => {
-              const newURLParams = [...field.value]
-              newURLParams[index] = {
-                ...newURLParams[index],
+              const newCookies = [...field.value]
+              newCookies[index] = {
+                ...newCookies[index],
                 key: key,
               }
-              field.onChange(newURLParams)
+              field.onChange(newCookies)
             }}
             onChangeValue={(index, _, value) => {
-              const newURLParams = [...field.value]
-              newURLParams[index] = {
-                ...newURLParams[index],
+              const newCookies = [...field.value]
+              newCookies[index] = {
+                ...newCookies[index],
                 value: value,
               }
-              field.onChange(newURLParams)
+              field.onChange(newCookies)
             }}
             onDelete={(index) => {
-              const newURLParams = [...field.value].filter(
-                (_, i) => i !== index,
-              )
-              field.onChange(newURLParams)
+              const newCookies = [...field.value].filter((_, i) => i !== index)
+              field.onChange(newCookies)
             }}
             label={""}
           />
@@ -62,4 +59,4 @@ const URLParametersInput: FC = () => {
   )
 }
 
-export default URLParametersInput
+export default CookiesInput

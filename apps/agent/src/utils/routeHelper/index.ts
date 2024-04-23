@@ -44,9 +44,9 @@ export const getChatPath = (
 
 export const getCreateFunctionPath = (
   teamIdentifier: string,
-  functionID: string,
+  functionType: string,
 ) => {
-  return `/workspace/${teamIdentifier}/function/${functionID}/create`
+  return `/workspace/${teamIdentifier}/function/create/${functionType}`
 }
 
 export const getEditFunctionPath = (

@@ -2,13 +2,12 @@ import { Select } from "antd"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { IAIFunctionResource } from "@illa-public/public-types"
 import RowLayoutContainer from "@/Layout/AIFunction/FormLayoutContainer/rowLayoutContainer"
 
 const ActionTypeSelect: FC = () => {
   const { t } = useTranslation()
 
-  const methods = useFormContext<IAIFunctionResource>()
+  const methods = useFormContext()
 
   return (
     <Controller

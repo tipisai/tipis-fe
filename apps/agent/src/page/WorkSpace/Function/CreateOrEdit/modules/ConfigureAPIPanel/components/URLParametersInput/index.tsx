@@ -1,18 +1,17 @@
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { IAIFunctionResource } from "@illa-public/public-types"
 import ColumnLayoutContainer from "@/Layout/AIFunction/FormLayoutContainer/columnLayoutContainer"
 import { RecordEditor } from "@/components/CodeMirrorRecordEditor"
 
-const HeadersInput: FC = () => {
+const URLParametersInput: FC = () => {
   const { t } = useTranslation()
 
-  const methods = useFormContext<IAIFunctionResource>()
+  const methods = useFormContext()
 
   return (
     <Controller
-      name="content.headers"
+      name="content.urlParams"
       control={methods.control}
       rules={{
         required: t("editor.ai-agent.validation_blank.name"),
@@ -20,17 +19,17 @@ const HeadersInput: FC = () => {
       shouldUnregister={false}
       render={({ field }) => (
         <ColumnLayoutContainer
-          labelName={t("editor.action.resource.restapi.label.headers")}
+          labelName={t("editor.action.resource.restapi.label.url_parameters")}
         >
           <RecordEditor
             records={field.value}
             completionOptions={{}}
             onAdd={() => {
-              const newHeaders = [...field.value].concat({
+              const newURLParams = [...field.value].concat({
                 key: "",
                 value: "",
               })
-              field.onChange(newHeaders)
+              field.onChange(newURLParams)
             }}
             onChangeKey={(index, key) => {
               const newURLParams = [...field.value]
@@ -62,4 +61,4 @@ const HeadersInput: FC = () => {
   )
 }
 
-export default HeadersInput
+export default URLParametersInput

@@ -1,7 +1,6 @@
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { IAIFunctionResource } from "@illa-public/public-types"
 import RowLayoutContainer from "@/Layout/AIFunction/FormLayoutContainer/rowLayoutContainer"
 import { CodeEditor } from "@/components/CodeEditor"
 import { CODE_LANG } from "@/components/CodeEditor/CodeMirror/extensions/interface"
@@ -10,7 +9,7 @@ import { inputPathContainerStyle } from "../../style"
 const URLInput: FC = () => {
   const { t } = useTranslation()
 
-  const methods = useFormContext<IAIFunctionResource>()
+  const methods = useFormContext()
 
   return (
     <Controller

@@ -177,6 +177,9 @@ importers:
       '@illa-public/illa-web-socket':
         specifier: workspace:^
         version: link:../../packages/utils/ILLAWebSocket
+      '@illa-public/integration-selector':
+        specifier: workspace:^
+        version: link:../../packages/components/IntegrationSelector
       '@illa-public/invite-modal':
         specifier: workspace:^
         version: link:../../packages/components/InviteModal
@@ -564,6 +567,67 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
     devDependencies:
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../devConfigs/tsconfig
+
+  packages/components/IntegrationSelector:
+    dependencies:
+      '@ant-design/icons':
+        specifier: ^5.3.1
+        version: 5.3.1(react-dom@18.2.0)(react@18.2.0)
+      '@emotion/react':
+        specifier: ^11.11.4
+        version: 11.11.4(@types/react@18.2.62)(react@18.2.0)
+      '@illa-public/color-scheme':
+        specifier: workspace:^
+        version: link:../../utils/colorScheme
+      '@illa-public/icon':
+        specifier: workspace:*
+        version: link:../Icon
+      '@illa-public/public-configs':
+        specifier: workspace:*
+        version: link:../../others/publicConfig
+      '@illa-public/public-types':
+        specifier: workspace:*
+        version: link:../../others/publicTypes
+      '@illa-public/user-data':
+        specifier: workspace:*
+        version: link:../UserData
+      '@illa-public/utils':
+        specifier: workspace:*
+        version: link:../../utils/public
+      '@types/react':
+        specifier: ^18.2.62
+        version: 18.2.62
+      '@types/react-dom':
+        specifier: ^18.2.19
+        version: 18.2.19
+      antd:
+        specifier: ^5.15.2
+        version: 5.15.2(react-dom@18.2.0)(react@18.2.0)
+      i18next:
+        specifier: ^23.10.0
+        version: 23.10.0
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      react-i18next:
+        specifier: ^14.0.5
+        version: 14.0.5(i18next@23.10.0)(react-dom@18.2.0)(react@18.2.0)
+      react-redux:
+        specifier: ^9.0.4
+        version: 9.1.0(@types/react@18.2.62)(react@18.2.0)(redux@5.0.1)
+    devDependencies:
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
       tsconfig:
         specifier: workspace:*
         version: link:../../devConfigs/tsconfig

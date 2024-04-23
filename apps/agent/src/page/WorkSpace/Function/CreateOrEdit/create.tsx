@@ -1,7 +1,8 @@
 import { FC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { aiFunctionResourceInit } from "@illa-public/public-configs"
-import { IAIFunctionResource } from "@illa-public/public-types"
+import { useParams } from "react-router-dom"
+import { getFunctionInitDataByType } from "@illa-public/public-configs"
+import { TIntegrationType } from "@illa-public/public-types"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import PublishButton from "./components/PublishButton"
 import FormContext from "./context/FormContext"
@@ -9,9 +10,13 @@ import DocPanel from "./modules/DocPanel"
 import EditPanel from "./modules/EditPanel"
 import { contentContainerStyle, innerContentContainerStyle } from "./style"
 
-const EditFunction: FC = () => {
-  const methods = useForm<IAIFunctionResource>({
-    defaultValues: aiFunctionResourceInit,
+const CreateFunction: FC = () => {
+  const { functionType } = useParams()
+
+  const INITConfig = getFunctionInitDataByType(functionType as TIntegrationType)
+
+  const methods = useForm({
+    defaultValues: INITConfig,
     mode: "onChange",
   })
   return (
@@ -32,4 +37,4 @@ const EditFunction: FC = () => {
   )
 }
 
-export default EditFunction
+export default CreateFunction

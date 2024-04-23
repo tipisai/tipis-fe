@@ -23,6 +23,7 @@ import {
   useUpdateRecentTabReducer,
 } from "./baseHook"
 import {
+  CREATE_FUNCTION_ID,
   CREATE_TIPIS_ID,
   EXPLORE_FUNCTION_ID,
   EXPLORE_TIPIS_ID,
@@ -444,19 +445,21 @@ export const useCreateFunction = () => {
   const navigate = useNavigate()
   const addRecentTab = useAddRecentTabReducer()
 
-  const createFunction = useCallback(async () => {
-    const currentTeamInfo = getCurrentTeamInfo(store.getState())!
-    const tempID = v4()
-    const tabsInfo: ITabInfo = {
-      tabName: "",
-      tabIcon: "",
-      tabType: TAB_TYPE.CREATE_FUNCTION,
-      tabID: tempID,
-      cacheID: tempID,
-    }
-    await addRecentTab(tabsInfo)
-    navigate(getCreateFunctionPath(currentTeamInfo?.identifier, tempID))
-  }, [addRecentTab, navigate])
+  const createFunction = useCallback(
+    async (functionType: string) => {
+      const currentTeamInfo = getCurrentTeamInfo(store.getState())!
+      const tabsInfo: ITabInfo = {
+        tabName: "",
+        tabIcon: "",
+        tabType: TAB_TYPE.CREATE_FUNCTION,
+        tabID: CREATE_FUNCTION_ID,
+        cacheID: CREATE_FUNCTION_ID,
+      }
+      await addRecentTab(tabsInfo)
+      navigate(getCreateFunctionPath(currentTeamInfo?.identifier, functionType))
+    },
+    [addRecentTab, navigate],
+  )
 
   return createFunction
 }
