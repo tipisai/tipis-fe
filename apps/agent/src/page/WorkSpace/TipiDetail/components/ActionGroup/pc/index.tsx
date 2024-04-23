@@ -102,7 +102,8 @@ const PCActionGroup: FC<IActionGroupProps> = (props) => {
           style={{ maxWidth: "307px" }}
           onClick={handleClickRun}
         >
-          {t("dashboard.common.run")} {isContribute ? runNumber : ""}
+          {t("dashboard.common.run")}{" "}
+          {isContribute && !!runNumber ? runNumber : ""}
         </Button>
         {isFromMarketplace && isPublishConfiguration && (
           <Button
@@ -111,7 +112,7 @@ const PCActionGroup: FC<IActionGroupProps> = (props) => {
             loading={forkLoading}
             onClick={handleClickFork}
           >
-            {t("dashboard.common.fork")} {forkNumber}
+            {t("dashboard.common.fork")} {!!forkNumber ? forkNumber : ""}
           </Button>
         )}
 
