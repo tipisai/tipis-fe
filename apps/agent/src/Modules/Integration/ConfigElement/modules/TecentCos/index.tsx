@@ -2,7 +2,7 @@ import { Input, Select } from "antd"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { ITencentCosIntegration } from "@illa-public/public-types"
-import LabelWithController from "../../components/LabelWithController"
+import LabelWithController from "../../../../../Layout/Function/LabelWithController"
 import { regionOptions } from "./constants"
 
 const TencentCosConfigElement: FC = () => {

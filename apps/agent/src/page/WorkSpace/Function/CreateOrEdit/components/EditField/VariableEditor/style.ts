@@ -35,3 +35,9 @@ export const tipisContainerStyle = css`
   font-weight: 400;
   line-height: 130%;
 `
+
+export const customModalStyle = css`
+  .ant-modal-title {
+    text-align: center;
+  }
+`

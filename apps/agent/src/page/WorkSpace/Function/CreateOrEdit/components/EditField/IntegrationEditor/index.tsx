@@ -6,20 +6,21 @@ import { useTranslation } from "react-i18next"
 import { PlusIcon } from "@illa-public/icon"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import CreateOrSelectIntegration from "@/Modules/Integration/CreateOrSelectIntegration"
+import { IBaseFunctionForm } from "../../../interface"
 import { IIntegrationEditorProps } from "./interface"
 import { customModalStyle } from "./style"
 
 const IntegrationEditor = memo((props: IIntegrationEditorProps) => {
   const { integrationType } = props
   const { t } = useTranslation()
-  const { control } = useFormContext()
+  const { control } = useFormContext<IBaseFunctionForm>()
 
   const [modalShow, setModalShow] = useState(false)
 
   return (
     <>
       <Controller
-        name="integration"
+        name="resourceID"
         control={control}
         rules={{
           required: t("function.edit.configure.label.integration"),
