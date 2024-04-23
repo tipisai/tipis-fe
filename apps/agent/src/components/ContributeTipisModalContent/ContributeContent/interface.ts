@@ -4,11 +4,13 @@ export interface IContributeFromFields {
   contributeToMarketplace: boolean
 }
 
-export interface IContributeTipisModalContentProps {
+export interface IContributeTipisModalProps {
+  visible: boolean
   isContribute: boolean
   tipisID: string
   contributeCallback: (
     publishedToMarketplace: boolean,
     successModalType?: "contribute" | "update",
   ) => void
+  closeModal: () => void
 }

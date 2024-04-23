@@ -39,7 +39,7 @@ const PublishConfig: FC = () => {
         <Controller
           name="publishConfiguration"
           control={control}
-          render={({ field }) => <Switch {...field} defaultValue />}
+          render={({ field }) => <Switch {...field} />}
         />
       </div>
     </BlockLayout>
