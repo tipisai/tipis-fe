@@ -18,9 +18,5 @@ export const sortHeaderStyle = css`
   justify-content: space-between;
   align-items: center;
   display: flex;
-`
-
-export const checkBoxContainerStyle = css`
-  position: absolute;
-  right: 24px;
+  padding: 0 20px;
 `

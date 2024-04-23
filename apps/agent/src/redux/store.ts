@@ -4,6 +4,7 @@ import { authAPI, teamAPI, teamReducer, userAPI } from "@illa-public/user-data"
 import { rtkQueryErrorLogger } from "./middleware/rtkQuery401ErrorHandler"
 import { agentAuthAPI } from "./services/agentAPI"
 import { driveAPI } from "./services/driveAPI"
+import { hashTagApi } from "./services/hashTagApi"
 import { marketAPI } from "./services/marketAPI"
 import { uiReducer } from "./ui/slice"
 
@@ -17,6 +18,7 @@ const store = configureStore({
     [driveAPI.reducerPath]: driveAPI.reducer,
     [userAPI.reducerPath]: userAPI.reducer,
     [teamAPI.reducerPath]: teamAPI.reducer,
+    [hashTagApi.reducerPath]: hashTagApi.reducer,
   },
   devTools: import.meta.env.ILLA_APP_ENV === "development",
   middleware: (getDefaultMiddleware) =>
@@ -27,6 +29,7 @@ const store = configureStore({
       driveAPI.middleware,
       userAPI.middleware,
       teamAPI.middleware,
+      hashTagApi.middleware,
       rtkQueryErrorLogger,
     ),
 })
