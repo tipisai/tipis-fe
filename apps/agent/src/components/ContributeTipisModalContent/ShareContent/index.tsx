@@ -48,6 +48,10 @@ const ShareContent: FC<IShareContentProps> = ({
       message.success(t("copied"))
     }
   }
+
+  const handleOpenLink = () => {
+    window.open(link)
+  }
   return (
     <div css={shareContainerStyle}>
       <div css={linkContainer}>
@@ -59,7 +63,9 @@ const ShareContent: FC<IShareContentProps> = ({
             value={link}
             readOnly
             width="100%"
-            suffix={<Icon component={OpenWindowIcon} />}
+            suffix={
+              <Icon component={OpenWindowIcon} onClick={handleOpenLink} />
+            }
           />
           <Button
             icon={<Icon component={CopyIcon} />}
