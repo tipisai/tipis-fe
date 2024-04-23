@@ -169,6 +169,20 @@ export const agentAuthAPI = createApi({
               data,
             ),
           )
+          dispatch(
+            agentAuthAPI.util.updateQueryData(
+              "getAIAgentListByPage",
+              { teamID },
+              (draft) => {
+                const targetAgent = draft.aiAgentList?.find(
+                  (agent) => agent.aiAgentID === aiAgentID,
+                )
+                if (targetAgent) {
+                  Object.assign(targetAgent, data)
+                }
+              },
+            ),
+          )
         } catch {}
       },
     }),
