@@ -1,7 +1,7 @@
-import { Tabs } from "antd"
 import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayout"
+import BlackTabs from "@/components/BlackTabs"
 import { DASH_BOARD_UI_STATE_ACTION_TYPE, TABS_KEY } from "../context/interface"
 import { DashBoardUIStateContext } from "../context/marketListContext"
 import HeaderTools from "./components/HeaderTools"
@@ -20,7 +20,7 @@ const TipisMobileDashboard: FC = () => {
         headerExtra={<HeaderTools />}
       >
         <div css={tabsContainerStyle}>
-          <Tabs
+          <BlackTabs
             items={[
               {
                 label: t("homepage.tipi_dashboard.tab.team"),

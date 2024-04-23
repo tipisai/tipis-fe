@@ -1,7 +1,7 @@
-import { Tabs } from "antd"
 import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
+import BlackTabs from "@/components/BlackTabs"
 import MarketCardList from "../components/MarketCardList"
 import TeamCardList from "../components/TeamCardList"
 import { DASH_BOARD_UI_STATE_ACTION_TYPE, TABS_KEY } from "../context/interface"
@@ -28,7 +28,7 @@ const TipisPCDashboard: FC = () => {
         extra={<HeaderTools />}
       />
       <div css={tabsContainerStyle}>
-        <Tabs
+        <BlackTabs
           items={[
             {
               label: t("homepage.tipi_dashboard.tab.team"),
