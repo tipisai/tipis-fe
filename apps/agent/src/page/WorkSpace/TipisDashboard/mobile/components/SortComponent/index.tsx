@@ -1,4 +1,5 @@
-import { Tabs } from "antd"
+import { Checkbox, Segmented } from "antd"
+import { CheckboxChangeEvent } from "antd/es/checkbox"
 import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { PRODUCT_SORT_BY } from "@/redux/services/marketAPI/constants"
@@ -6,7 +7,7 @@ import { IMarketSortComponentProps } from "../../../components/MarketCardList/in
 import { DASH_BOARD_UI_STATE_ACTION_TYPE } from "../../../context/interface"
 import { DashBoardUIStateContext } from "../../../context/marketListContext"
 import TagList from "../TagList"
-import { sortWrapperStyle } from "./style"
+import { sortHeaderStyle, sortWrapperStyle } from "./style"
 
 const SortComponentMobile: FC<IMarketSortComponentProps> = ({ tagList }) => {
   const { t } = useTranslation()
@@ -20,11 +21,6 @@ const SortComponentMobile: FC<IMarketSortComponentProps> = ({ tagList }) => {
       label: t("dashboard.sort-type.recent"),
       value: PRODUCT_SORT_BY.LATEST,
       key: PRODUCT_SORT_BY.LATEST,
-    },
-    {
-      label: t("dashboard.sort-type.star"),
-      value: PRODUCT_SORT_BY.STARRED,
-      key: PRODUCT_SORT_BY.STARRED,
     },
   ]
   const { dispatch, dashboardUIState: marketState } = useContext(
@@ -46,17 +42,27 @@ const SortComponentMobile: FC<IMarketSortComponentProps> = ({ tagList }) => {
     })
   }
 
+  const onOfficialChange = (e: CheckboxChangeEvent) => {
+    const v = e.target.checked
+    dispatch({
+      type: DASH_BOARD_UI_STATE_ACTION_TYPE.SET_IS_OFFICIAL,
+      payload: v,
+    })
+  }
+
   return (
     <div css={sortWrapperStyle}>
-      <Tabs
-        tabBarStyle={{
-          marginBottom: 0,
-        }}
-        defaultValue={marketState.sortedBy}
-        onChange={onSortChange}
-        items={options}
-        centered
-      />
+      <div css={sortHeaderStyle}>
+        <Segmented
+          options={options}
+          value={marketState.sortedBy}
+          onChange={onSortChange}
+        />
+
+        <Checkbox checked={marketState.isOfficial} onChange={onOfficialChange}>
+          {t("dashboard.sort-type.official")}
+        </Checkbox>
+      </div>
 
       {tagList && tagList.length > 0 && (
         <TagList

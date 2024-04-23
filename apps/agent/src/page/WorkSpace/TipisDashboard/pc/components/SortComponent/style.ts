@@ -10,4 +10,13 @@ export const sortWrapperStyle = css`
   flex-shrink: 0;
   background: ${getColor("white", "01")};
   padding-bottom: 8px;
+  padding: 0 24px;
+`
+
+export const sortHeaderStyle = css`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
 `

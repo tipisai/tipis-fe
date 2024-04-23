@@ -56,7 +56,8 @@
       "defaultBorderColor": "rgb(229, 230, 235)",
       "defaultColor": "rgb(29, 33, 41)",
       "defaultHoverColor": "rgb(29, 33, 41)",
-      "defaultHoverBg": "rgb(250, 250, 250)"
+      "defaultHoverBg": "rgb(250, 250, 250)",
+      "colorText": "rgb(29, 33, 41)"
     },
     "Divider": {
       "textPaddingInline": "1.25em",
@@ -92,7 +93,6 @@
     "Typography": {
       "fontFamilyCode": "Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif"
     },
-
     "Breadcrumb": {
       "borderRadiusSM": 8
     },
@@ -119,7 +119,6 @@
       "borderRadiusXS": 4,
       "colorBgContainerDisabled": "rgba(29, 33, 41, 0)"
     },
-
     "Input": {
       "borderRadius": 10,
       "borderRadiusLG": 12,
@@ -202,7 +201,12 @@
     "Tabs": {
       "borderRadius": 10,
       "borderRadiusLG": 12,
-      "cardGutter": 4
+      "cardGutter": 4,
+      "inkBarColor": "rgb(29, 33, 41)",
+      "colorPrimaryBorder": "rgb(29, 33, 41)",
+      "itemSelectedColor": "rgb(29, 33, 41)",
+      "itemHoverColor": "rgb(153, 155, 158)",
+      "itemActiveColor": "rgb(29, 33, 41)"
     },
     "Tooltip": {
       "colorText": "rgb(29, 33, 41)",

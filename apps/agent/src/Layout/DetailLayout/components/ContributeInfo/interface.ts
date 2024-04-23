@@ -1,6 +1,8 @@
+import { AgentEditor } from "@illa-public/public-types"
+
 export interface IContributeInfoProps {
   teamName: string
   teamAvatar: string
-  contributorAvatars: string[]
+  contributors: AgentEditor[]
   contributeLabelName?: string
 }

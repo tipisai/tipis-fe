@@ -6,8 +6,6 @@ export const pinedTipisAreaStyle = css`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 240px;
-  max-height: 240px;
 `
 
 export const headerStyle = css`
@@ -21,11 +19,11 @@ export const headerStyle = css`
   line-height: 20px;
 `
 
-export const listContainerStyle = css`
+export const listContainerStyle = (height: number) => css`
   width: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
-  height: 300 px;
+  height: ${height}px;
   overflow-y: auto;
 `

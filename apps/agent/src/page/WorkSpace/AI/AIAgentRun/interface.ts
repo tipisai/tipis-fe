@@ -1,6 +1,6 @@
-import { Agent, MarketAIAgent } from "@illa-public/public-types"
+import { Agent, IMarketAIAgent } from "@illa-public/public-types"
 
 export interface IAIAgentRunProps {
   agent: Agent
-  marketplace: MarketAIAgent | undefined
+  marketplace: IMarketAIAgent | undefined
 }

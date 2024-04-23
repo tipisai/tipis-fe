@@ -1,9 +1,9 @@
 import { useMemo } from "react"
-import { MarketAgentListData } from "@illa-public/market-agent"
+import { IMarketAgentListData } from "@illa-public/public-types"
 import { INITIAL_PAGE } from "@/redux/services/marketAPI/constants"
 import { IDashBoardUIState } from "../../context/interface"
 
-const INIT_MARKET_LIST_DATA: MarketAgentListData = {
+const INIT_MARKET_LIST_DATA: IMarketAgentListData = {
   products: [],
   summaryHashtags: [],
   recommendHashtags: [],
@@ -11,7 +11,7 @@ const INIT_MARKET_LIST_DATA: MarketAgentListData = {
 }
 
 export const useGetShowData = (
-  data: MarketAgentListData = INIT_MARKET_LIST_DATA,
+  data: IMarketAgentListData = INIT_MARKET_LIST_DATA,
   marketState: IDashBoardUIState,
   isLoading: boolean,
 ) => {

@@ -5,12 +5,13 @@ import EditPanelLayout from "@/Layout/EditPanelLayout"
 import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayout"
 import MobileSecondPageLayout from "@/Layout/Workspace/mobile/module/SecondPageLayout"
 import { AgentWSContext } from "../../../../context/AgentWSContext"
+import ContributeButton from "../../../components/ContributeButton"
 import { IAgentForm } from "../../../interface"
 import { EditPanelContent } from "../../../modules/EditPanel/content"
 import PreviewChatHistory from "../../../modules/PreviewChatHistory"
 import ActionGroup from "../ActionGroup"
 import { MOBILE_EDIT_PAGE_STEP } from "./interface"
-import { mobileEditPanelContainerStyle, placeholderDivStyle } from "./style"
+import { mobileEditPanelContainerStyle } from "./style"
 
 const MobileEditPanel: FC = () => {
   const { control } = useFormContext<IAgentForm>()
@@ -41,7 +42,7 @@ const MobileEditPanel: FC = () => {
       {currentStep === MOBILE_EDIT_PAGE_STEP.BASIC && (
         <MobileFirstPageLayout
           title={aiAgentID ? agentName : t("dashboard.button.blank-agent")}
-          headerExtra={<div css={placeholderDivStyle} />}
+          headerExtra={<ContributeButton isMobile />}
         >
           <EditPanelLayout
             customWidth="100%"
@@ -61,7 +62,7 @@ const MobileEditPanel: FC = () => {
         <MobileSecondPageLayout
           title={t("homepage.edit_tipi.mobile_preview.preview")}
           onClickClose={onClickClosePreviewPage}
-          headerExtra={<div css={placeholderDivStyle} />}
+          headerExtra={<ContributeButton isMobile />}
         >
           <PreviewChatHistory />
         </MobileSecondPageLayout>

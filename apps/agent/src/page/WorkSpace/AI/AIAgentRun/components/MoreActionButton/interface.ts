@@ -5,4 +5,5 @@ export interface IMoreActionButtonProps {
   publishToMarketplace: boolean
   isMobile: boolean
   ownerTeamIdentifier: string
+  publishConfiguration: boolean
 }

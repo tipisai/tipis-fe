@@ -1,5 +1,6 @@
 import { Avatar } from "antd"
 import { FC } from "react"
+import { getColorByString } from "@illa-public/utils"
 import { IContributeInfoProps } from "./interface"
 import {
   contributeContainerStyle,
@@ -12,7 +13,7 @@ import {
 
 const ContributeInfo: FC<IContributeInfoProps> = (props) => {
   const {
-    contributorAvatars,
+    contributors,
     teamAvatar,
     teamName,
     contributeLabelName = "Contributor",
@@ -30,8 +31,20 @@ const ContributeInfo: FC<IContributeInfoProps> = (props) => {
         <p css={labelNameStyle}>{contributeLabelName}</p>
         <div css={contributeInfoContainerStyle}>
           <Avatar.Group>
-            {contributorAvatars.map((avatar) => (
-              <Avatar size={32} key={avatar} src={avatar} />
+            {contributors.map(({ avatar, userID, nickname }) => (
+              <Avatar
+                src={avatar}
+                shape="circle"
+                size={32}
+                key={avatar}
+                style={{
+                  background: avatar
+                    ? "#ffffff"
+                    : getColorByString(userID || ""),
+                }}
+              >
+                {nickname[0] ? nickname[0].toLocaleUpperCase() : "U"}
+              </Avatar>
             ))}
           </Avatar.Group>
         </div>

@@ -1,5 +1,5 @@
-import { MarketAIAgent } from "@illa-public/public-types"
+import { IMarketAIAgent } from "@illa-public/public-types"
 
 export interface MarketAgentCardProps {
-  marketAIAgent: MarketAIAgent
+  marketAIAgent: IMarketAIAgent
 }

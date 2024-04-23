@@ -99,6 +99,10 @@ export const ContributedAgent: FC = () => {
                           ownerTeamIdentifier={
                             aiAgentMarketPlaceInfo.aiAgent.teamIdentifier
                           }
+                          publishConfiguration={
+                            aiAgentMarketPlaceInfo.marketplace.config
+                              ?.publishConfiguration
+                          }
                           isMobile
                         />
                       }

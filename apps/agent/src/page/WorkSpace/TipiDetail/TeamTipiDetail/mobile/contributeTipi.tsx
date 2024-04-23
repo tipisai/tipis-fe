@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import MobileSecondPageLayout from "@/Layout/Workspace/mobile/module/SecondPageLayout"
 import { IContributeTipiProps } from "../interface"
-import ContributeContent from "../module/contributeContent"
+import MobileContributeContent from "../module/contributeContent/mobile"
 import { contentContainerStyle, placeholderDivStyle } from "./style"
 
 const MobileContributeTipi: FC<IContributeTipiProps> = (props) => {
@@ -23,7 +23,9 @@ const MobileContributeTipi: FC<IContributeTipiProps> = (props) => {
       headerExtra={<div css={placeholderDivStyle} />}
     >
       <div css={contentContainerStyle}>
-        <ContributeContent aiAgentMarketPlaceInfo={aiAgentMarketPlaceInfo} />
+        <MobileContributeContent
+          aiAgentMarketPlaceInfo={aiAgentMarketPlaceInfo}
+        />
       </div>
     </MobileSecondPageLayout>
   )

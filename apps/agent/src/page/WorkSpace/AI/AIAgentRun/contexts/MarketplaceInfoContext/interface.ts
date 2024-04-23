@@ -1,12 +1,12 @@
 import { ReactNode } from "react"
-import { MarketAIAgent } from "@illa-public/public-types"
+import { IMarketAIAgent } from "@illa-public/public-types"
 
 export interface IMarketPlaceInfoProviderProps {
   children: ReactNode
-  marketplaceInfo: MarketAIAgent | undefined
+  marketplaceInfo: IMarketAIAgent | undefined
 }
 
 export interface IMarketPlaceInfoInject {
-  currentMarketplaceInfo: MarketAIAgent | undefined
-  setCurrentMarketplaceInfo: (info: MarketAIAgent) => void
+  currentMarketplaceInfo: IMarketAIAgent | undefined
+  setCurrentMarketplaceInfo: (info: IMarketAIAgent) => void
 }

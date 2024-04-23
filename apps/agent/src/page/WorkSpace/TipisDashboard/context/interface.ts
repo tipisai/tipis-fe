@@ -6,6 +6,7 @@ export interface IDashBoardUIState {
   search: string | undefined
   hashTag: string | undefined
   activeTab: TABS_KEY
+  isOfficial: boolean
 }
 
 export enum TABS_KEY {
@@ -22,6 +23,7 @@ export enum DASH_BOARD_UI_STATE_ACTION_TYPE {
   RESET_PARAMS = "RESET_PARAMS",
   SET_ACTIVE_TAB = "SET_ACTIVE_TAB",
   SET_UI_STATE = "SET_UI_STATE",
+  SET_IS_OFFICIAL = "SET_IS_OFFICIAL",
 }
 
 export interface IDashBoardUIStateBaseAction<T = unknown> {
@@ -67,6 +69,11 @@ export interface ISetUIStateAction
   type: DASH_BOARD_UI_STATE_ACTION_TYPE.SET_UI_STATE
 }
 
+export interface ISetIsOfficialAction
+  extends IDashBoardUIStateBaseAction<boolean> {
+  type: DASH_BOARD_UI_STATE_ACTION_TYPE.SET_IS_OFFICIAL
+}
+
 export type TDashboardUIStateAction =
   | ISetPageAction
   | ISetSortedByAction
@@ -76,3 +83,4 @@ export type TDashboardUIStateAction =
   | IResetParamsAction
   | ISetActiveTabAction
   | ISetUIStateAction
+  | ISetIsOfficialAction

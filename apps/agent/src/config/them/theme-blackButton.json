@@ -39,7 +39,8 @@
       "colorPrimaryActive": "rgb(11, 12, 15)",
       "colorPrimaryHover": "rgba(29, 33, 41, 0.9)",
       "colorTextDisabled": "rgba(255, 255, 255, 0.31)",
-      "lineWidth": 0
+      "lineWidth": 0,
+      "colorText": "rgb(101, 74, 236)"
     }
   }
 }

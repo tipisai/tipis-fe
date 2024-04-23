@@ -1,5 +1,5 @@
-import { MarketAIAgent } from "@illa-public/public-types"
+import { IMarketAIAgent } from "@illa-public/public-types"
 
 export interface IContributeContentProps {
-  aiAgentMarketPlaceInfo: MarketAIAgent
+  aiAgentMarketPlaceInfo: IMarketAIAgent
 }

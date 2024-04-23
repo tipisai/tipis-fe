@@ -11,3 +11,12 @@ export const sortWrapperStyle = css`
   background: ${getColor("white", "01")};
   padding-bottom: 8px;
 `
+
+export const sortHeaderStyle = css`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  padding: 0 20px;
+`
