@@ -13,7 +13,11 @@ import { IAgentForm } from "../../interface"
 import { IModalInstance } from "./interface"
 import { modalStyle } from "./style"
 
-const ContributeButton: FC = () => {
+interface IContributeButtonProps {
+  isMobile?: boolean
+}
+
+const ContributeButton: FC<IContributeButtonProps> = ({ isMobile }) => {
   const { control, setValue } = useFormContext<IAgentForm>()
   const [aiAgentID, publishedToMarketplace, name] = useWatch({
     control: control,
@@ -90,17 +94,17 @@ const ContributeButton: FC = () => {
       },
     })
   }
-  return (
-    <>
-      <Button
-        size="large"
-        disabled={!aiAgentID}
-        icon={<Icon component={ContributeIcon} />}
-        onClick={onShowContributeDialog}
-      >
-        {t("editor.ai-agent.contribute")}
-      </Button>
-    </>
+  return isMobile ? (
+    <Icon component={ContributeIcon} onClick={onShowContributeDialog} />
+  ) : (
+    <Button
+      size="large"
+      disabled={!aiAgentID}
+      icon={<Icon component={ContributeIcon} />}
+      onClick={onShowContributeDialog}
+    >
+      {t("editor.ai-agent.contribute")}
+    </Button>
   )
 }
 
