@@ -103,7 +103,8 @@ const MobileActionGroup: FC<IActionGroupProps> = (props) => {
           icon={<Icon component={PlayFillIcon} />}
           onClick={handleClickRun}
         >
-          {t("dashboard.common.run")} {isContribute ? runNumber : ""}
+          {t("dashboard.common.run")}{" "}
+          {isContribute && !!runNumber ? runNumber : ""}
         </Button>
 
         <div css={otherActionGroupContainerStyle}>
@@ -115,7 +116,7 @@ const MobileActionGroup: FC<IActionGroupProps> = (props) => {
               loading={forkLoading}
               onClick={handleClickFork}
             >
-              {t("dashboard.common.fork")} {forkNumber}
+              {t("dashboard.common.fork")} {!!forkNumber ? forkNumber : ""}
             </Button>
           )}
 
