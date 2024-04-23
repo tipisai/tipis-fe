@@ -2,20 +2,20 @@ import { FC } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import {
   IContributeFromFields,
-  IContributeTipisModalContentProps,
+  IContributeTipisModalProps,
 } from "../../ContributeContent/interface"
 import { TagControllerContent } from "./content"
 
-const TagController: FC<
-  Pick<IContributeTipisModalContentProps, "isContribute" | "tipisID">
-> = ({ isContribute, tipisID }) => {
+const TagController: FC<Pick<IContributeTipisModalProps, "isContribute">> = ({
+  isContribute,
+}) => {
   const { control } = useFormContext<IContributeFromFields>()
   const [contributeToMarketplace] = useWatch({
     control,
     name: ["contributeToMarketplace"],
   })
   if (isContribute && !contributeToMarketplace) return null
-  return <TagControllerContent tipisID={tipisID} />
+  return <TagControllerContent />
 }
 
 export default TagController

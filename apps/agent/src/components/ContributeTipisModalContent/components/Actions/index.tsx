@@ -12,12 +12,12 @@ import {
 } from "@/redux/services/marketAPI"
 import {
   IContributeFromFields,
-  IContributeTipisModalContentProps,
+  IContributeTipisModalProps,
 } from "../../ContributeContent/interface"
 import { actionsContainerStyle } from "./style"
 
 const Actions: FC<
-  Omit<IContributeTipisModalContentProps, "visible" | "onClose">
+  Omit<IContributeTipisModalProps, "visible" | "closeModal">
 > = ({ isContribute, tipisID, contributeCallback }) => {
   const { t } = useTranslation()
   const { trigger, getValues } = useFormContext<IContributeFromFields>()

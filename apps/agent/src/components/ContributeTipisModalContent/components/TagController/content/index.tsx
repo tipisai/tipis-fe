@@ -4,14 +4,13 @@ import { debounce } from "lodash-es"
 import { FC, useEffect, useRef, useState } from "react"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { getColor } from "@illa-public/color-scheme"
 import { LoadingIcon } from "@illa-public/icon"
 import {
   useLazyGetFuzzySearchHashTagQuery,
   useLazyGetRecommendHashtagQuery,
 } from "@/redux/services/hashTagApi"
-import { useLazyGetAIAgentMarketplaceInfoQuery } from "@/redux/services/marketAPI"
 import { IContributeFromFields } from "../../../ContributeContent/interface"
-import { TagControllerProps } from "./interface"
 import {
   recommendLabelStyle,
   tagContainer,
@@ -19,9 +18,7 @@ import {
   titleStyle,
 } from "./style"
 
-export const TagControllerContent: FC<TagControllerProps> = (props) => {
-  const { tipisID } = props
-
+export const TagControllerContent: FC = () => {
   const { t } = useTranslation()
   const { control, setValue } = useFormContext<IContributeFromFields>()
 
@@ -33,7 +30,6 @@ export const TagControllerContent: FC<TagControllerProps> = (props) => {
   const currentInputValue = useRef<string>("")
   const [triggerGetRecommendHashtag] = useLazyGetRecommendHashtagQuery()
   const [triggerGetFuzzySearchHashTag] = useLazyGetFuzzySearchHashTagQuery()
-  const [triggerGetAgentDetail] = useLazyGetAIAgentMarketplaceInfoQuery()
 
   const [recommendTags, setRecommendTags] = useState<string[]>([])
 
@@ -49,7 +45,6 @@ export const TagControllerContent: FC<TagControllerProps> = (props) => {
 
   const debounceSearchKeywords = useRef(
     debounce(async (keywords: string) => {
-      setSearchRecommendTagsLoading(true)
       try {
         const res = await triggerGetFuzzySearchHashTag(keywords).unwrap()
         if (currentInputValue.current === keywords) {
@@ -62,7 +57,6 @@ export const TagControllerContent: FC<TagControllerProps> = (props) => {
         }
       } catch (e) {
       } finally {
-        setSearchRecommendTagsLoading(false)
       }
     }, 160),
   )
@@ -76,6 +70,7 @@ export const TagControllerContent: FC<TagControllerProps> = (props) => {
   }
 
   useEffect(() => {
+    setSearchRecommendTagsLoading(true)
     triggerGetRecommendHashtag(null)
       .unwrap()
       .then((res) => {
@@ -89,15 +84,10 @@ export const TagControllerContent: FC<TagControllerProps> = (props) => {
           )
         }
       })
-  }, [triggerGetRecommendHashtag])
-
-  useEffect(() => {
-    triggerGetAgentDetail({ aiAgentID: tipisID })
-      .unwrap()
-      .then((res) => {
-        setValue("hashtags", res.marketplace.hashtags)
+      .finally(() => {
+        setSearchRecommendTagsLoading(false)
       })
-  }, [tipisID, setValue, triggerGetAgentDetail])
+  }, [triggerGetRecommendHashtag])
 
   return (
     <Controller
@@ -146,15 +136,35 @@ export const TagControllerContent: FC<TagControllerProps> = (props) => {
                 <div css={recommendLabelStyle}>
                   {t("homepage.contribute_modal.recommended_tag")}
                 </div>
-                {recommendTags.map((tag) => (
-                  <Tag
-                    bordered={currentHashtags.includes(tag) ? false : true}
-                    key={tag}
-                    onClick={() => handleClickRecommendTag(tag)}
-                  >
-                    {tag}
-                  </Tag>
-                ))}
+                {recommendTags.map((tag) => {
+                  const isActive = currentHashtags.includes(tag)
+                  return (
+                    <Tag
+                      style={{
+                        padding: "1px 8px",
+                        margin: 0,
+                        borderRadius: "12px",
+                        backgroundColor: isActive
+                          ? getColor("techPurple", "08")
+                          : getColor("grayBlue", "09"),
+                        color: isActive
+                          ? getColor("techPurple", "03")
+                          : getColor("grayBlue", "02"),
+                        border: `1px solid ${
+                          isActive
+                            ? getColor("techPurple", "03")
+                            : getColor("grayBlue", "09")
+                        }`,
+                        cursor: "pointer",
+                      }}
+                      bordered={isActive}
+                      key={tag}
+                      onClick={() => handleClickRecommendTag(tag)}
+                    >
+                      {tag}
+                    </Tag>
+                  )
+                })}
               </Space>
             )
           )}

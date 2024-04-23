@@ -1,5 +1,5 @@
 import Icon from "@ant-design/icons"
-import { App, Button, Input } from "antd"
+import { App, Button, Input, Modal } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { CopyIcon } from "@illa-public/icon"
@@ -20,13 +20,19 @@ import {
 interface IShareContentProps {
   shareTitle: string
   tipiID: string
+  closeModal: () => void
   tipisName: string
+  visible: boolean
+  successModalType?: "contribute" | "update"
 }
 
-const ShareContent: FC<IShareContentProps> = ({
+const ShareContentModal: FC<IShareContentProps> = ({
   shareTitle,
   tipiID,
   tipisName,
+  visible,
+  closeModal,
+  successModalType,
 }) => {
   const { t } = useTranslation()
   const link = getAgentPublicLink(tipiID)
@@ -53,31 +59,51 @@ const ShareContent: FC<IShareContentProps> = ({
     window.open(link)
   }
   return (
-    <div css={shareContainerStyle}>
-      <div css={linkContainer}>
-        <span css={linkTitleStyle}>
-          {t("homepage.contribute_modal.successful.link")}
-        </span>
-        <div css={inputContainerStyle}>
-          <Input
-            value={link}
-            readOnly
-            width="100%"
-            suffix={
-              <Icon component={OpenWindowIcon} onClick={handleOpenLink} />
-            }
-          />
-          <Button
-            icon={<Icon component={CopyIcon} />}
-            onClick={handleCopyMarketplaceLink}
-          >
-            {t("homepage.contribute_modal.successful.copy")}
-          </Button>
+    <Modal
+      title={
+        successModalType === "contribute"
+          ? t("homepage.contribute_modal.successful.successfully_contributed")
+          : t("homepage.contribute_modal.successful.successfully_updated")
+      }
+      footer={null}
+      closable
+      open={visible}
+      onCancel={closeModal}
+      destroyOnClose
+      width="520px"
+      style={{
+        padding: 0,
+      }}
+    >
+      <div css={shareContainerStyle}>
+        <div css={linkContainer}>
+          <span css={linkTitleStyle}>
+            {t("homepage.contribute_modal.successful.link")}
+          </span>
+          <div css={inputContainerStyle}>
+            <Input
+              value={link}
+              readOnly
+              width="100%"
+              suffix={
+                <Icon component={OpenWindowIcon} onClick={handleOpenLink} />
+              }
+            />
+            <Button
+              icon={<Icon component={CopyIcon} />}
+              onClick={handleCopyMarketplaceLink}
+            >
+              {t("homepage.contribute_modal.successful.copy")}
+            </Button>
+          </div>
         </div>
+        <ShareBlockPC
+          title={shareTitle}
+          shareUrl={getAgentPublicLink(tipiID)}
+        />
       </div>
-      <ShareBlockPC title={shareTitle} shareUrl={getAgentPublicLink(tipiID)} />
-    </div>
+    </Modal>
   )
 }
 
-export default ShareContent
+export default ShareContentModal

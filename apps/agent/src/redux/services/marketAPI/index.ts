@@ -16,7 +16,7 @@ export const marketAPI = createApi({
     baseUrl: `${HTTP_REQUEST_PUBLIC_BASE_URL}${MARKETPLACE_AUTH_REQUEST_PREFIX}`,
     prepareHeaders: prepareHeaders,
   }),
-  tagTypes: ["MarketProducts"],
+  tagTypes: ["MarketProducts", "MarketInfo"],
   endpoints: (builder) => ({
     getAIAgentMarketplaceInfo: builder.query<
       IMarketAIAgent,
@@ -25,6 +25,7 @@ export const marketAPI = createApi({
       }
     >({
       query: ({ aiAgentID }) => `/products/aiAgents/${aiAgentID}`,
+      providesTags: ["MarketInfo"],
     }),
 
     getMarketList: builder.query<IMarketAgentListData, ProductListParams>({
@@ -104,7 +105,10 @@ export const marketAPI = createApi({
           patchResult.undo()
         }
       },
-      invalidatesTags: [{ type: "MarketProducts", id: "MARKET-LIST" }],
+      invalidatesTags: [
+        { type: "MarketProducts", id: "MARKET-LIST" },
+        "MarketInfo",
+      ],
     }),
 
     updateAgentContribute: builder.mutation<
@@ -124,7 +128,10 @@ export const marketAPI = createApi({
           publishConfiguration,
         },
       }),
-      invalidatesTags: [{ type: "MarketProducts", id: "MARKET-LIST" }],
+      invalidatesTags: [
+        { type: "MarketProducts", id: "MARKET-LIST" },
+        "MarketInfo",
+      ],
     }),
 
     removeToMarketplace: builder.mutation<
@@ -160,6 +167,7 @@ export const marketAPI = createApi({
           patchResult.undo()
         }
       },
+      invalidatesTags: ["MarketInfo"],
     }),
   }),
 })

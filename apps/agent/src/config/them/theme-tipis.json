@@ -56,7 +56,8 @@
       "defaultBorderColor": "rgb(229, 230, 235)",
       "defaultColor": "rgb(29, 33, 41)",
       "defaultHoverColor": "rgb(29, 33, 41)",
-      "defaultHoverBg": "rgb(250, 250, 250)"
+      "defaultHoverBg": "rgb(250, 250, 250)",
+      "colorText": "rgb(29, 33, 41)"
     },
     "Divider": {
       "textPaddingInline": "1.25em",
