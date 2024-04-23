@@ -20,8 +20,3 @@ export const sortHeaderStyle = css`
   align-items: center;
   display: flex;
 `
-
-export const checkBoxContainerStyle = css`
-  position: absolute;
-  right: 24px;
-`

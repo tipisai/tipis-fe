@@ -1,4 +1,4 @@
-import { Checkbox, Tabs } from "antd"
+import { Checkbox, Segmented } from "antd"
 import { CheckboxChangeEvent } from "antd/es/checkbox"
 import { FC, useContext } from "react"
 import { useTranslation } from "react-i18next"
@@ -7,11 +7,7 @@ import { IMarketSortComponentProps } from "../../../components/MarketCardList/in
 import { DASH_BOARD_UI_STATE_ACTION_TYPE } from "../../../context/interface"
 import { DashBoardUIStateContext } from "../../../context/marketListContext"
 import TagList from "../TagList"
-import {
-  checkBoxContainerStyle,
-  sortHeaderStyle,
-  sortWrapperStyle,
-} from "./style"
+import { sortHeaderStyle, sortWrapperStyle } from "./style"
 
 const SortComponentMobile: FC<IMarketSortComponentProps> = ({ tagList }) => {
   const { t } = useTranslation()
@@ -57,26 +53,15 @@ const SortComponentMobile: FC<IMarketSortComponentProps> = ({ tagList }) => {
   return (
     <div css={sortWrapperStyle}>
       <div css={sortHeaderStyle}>
-        <Tabs
-          tabBarStyle={{
-            marginBottom: 0,
-          }}
-          style={{
-            width: "100%",
-          }}
-          defaultValue={marketState.sortedBy}
+        <Segmented
+          options={options}
+          value={marketState.sortedBy}
           onChange={onSortChange}
-          items={options}
         />
 
-        <div css={checkBoxContainerStyle}>
-          <Checkbox
-            checked={marketState.isOfficial}
-            onChange={onOfficialChange}
-          >
-            {t("dashboard.sort-type.official")}
-          </Checkbox>
-        </div>
+        <Checkbox checked={marketState.isOfficial} onChange={onOfficialChange}>
+          {t("dashboard.sort-type.official")}
+        </Checkbox>
       </div>
 
       {tagList && tagList.length > 0 && (

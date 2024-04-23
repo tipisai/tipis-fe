@@ -13,10 +13,10 @@ import ImgCrop from "antd-img-crop"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { FILE_SIZE_LIMIT } from "@illa-public/cropper/constants"
 import { useGetUserInfoQuery } from "@illa-public/user-data"
 import { getColorByString } from "@illa-public/utils"
 import ErrorMessage from "@/components/InputErrorMessage"
+import { FILE_SIZE_LIMIT } from "@/page/SettingPage/constants"
 import { AccountSettingFields, AccountSettingProps } from "../interface"
 import {
   avatarContainerStyle,

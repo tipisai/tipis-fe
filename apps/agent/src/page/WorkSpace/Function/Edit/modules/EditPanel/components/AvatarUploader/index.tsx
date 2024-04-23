@@ -1,19 +1,19 @@
-import Icon from "@ant-design/icons"
-import { Image } from "antd"
+// import Icon from "@ant-design/icons"
+// import { Image } from "antd"
 import { FC, memo } from "react"
 import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { getColor } from "@illa-public/color-scheme"
-import { AvatarUpload } from "@illa-public/cropper"
-import { PlusIcon } from "@illa-public/icon"
+// import { getColor } from "@illa-public/color-scheme"
+// import { PlusIcon } from "@illa-public/icon"
 import { IAIFunctionResource } from "@illa-public/public-types"
 import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
-import {
-  uploadContainerStyle,
-  uploadContentContainerStyle,
-  uploadTextStyle,
-} from "./style"
+
+// import {
+//   uploadContainerStyle,
+//   uploadContentContainerStyle,
+//   uploadTextStyle,
+// } from "./style"
 
 const AvatarUploader: FC = memo(() => {
   const { t } = useTranslation()
@@ -28,12 +28,12 @@ const AvatarUploader: FC = memo(() => {
       name="config.icon"
       control={control}
       shouldUnregister={false}
-      render={({ field }) => (
+      render={() => (
         <LayoutBlock
           title={t("editor.ai-agent.label.icon")}
           subtitleTips={t("editor.ai-agent.generate-icon.tooltips")}
         >
-          <AvatarUpload
+          {/* <AvatarUpload
             onOk={async (file) => {
               let reader = new FileReader()
               reader.onload = () => {
@@ -71,7 +71,7 @@ const AvatarUploader: FC = memo(() => {
                 />
               )}
             </div>
-          </AvatarUpload>
+          </AvatarUpload> */}
           {errors.config?.icon?.message && (
             <ErrorText errorMessage={errors.config?.icon?.message} />
           )}

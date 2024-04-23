@@ -1,51 +1,94 @@
 import Icon from "@ant-design/icons"
-import { Button } from "antd"
-import { FC, useState } from "react"
-import { Controller, useFormContext, useWatch } from "react-hook-form"
+import { App, Button } from "antd"
+import { FC, useRef } from "react"
+import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { ContributeIcon } from "@illa-public/icon"
-import {
-  ContributeAgentPC,
-  HASHTAG_REQUEST_TYPE,
-} from "@illa-public/invite-modal"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { openShareAgentModal } from "@illa-public/user-role-utils"
+import ContributeTipisModalContent from "@/components/ContributeTipisModalContent/ContributeContent"
+import ShareContent from "@/components/ContributeTipisModalContent/ShareContent"
 import { IAgentForm } from "../../interface"
+import { IModalInstance } from "./interface"
+import { modalStyle } from "./style"
 
 const ContributeButton: FC = () => {
-  const { control } = useFormContext<IAgentForm>()
-  const [aiAgentID, publishedToMarketplace] = useWatch({
+  const { control, setValue } = useFormContext<IAgentForm>()
+  const [aiAgentID, publishedToMarketplace, name] = useWatch({
     control: control,
-    name: ["aiAgentID", "publishedToMarketplace"],
+    name: ["aiAgentID", "publishedToMarketplace", "name"],
   })
+  const { modal } = App.useApp()
+  const modalInstance = useRef<IModalInstance | null>(null)
 
-  const [_shareDialogVisible, setShareDialogVisible] = useState(false)
-  // const [_defaultShareTag, setDefaultShareTag] = useState<ShareAgentTab>(
-  //   ShareAgentTab.SHARE_WITH_TEAM,
-  // )
-  const [contributedDialogVisible, setContributedDialogVisible] =
-    useState(false)
+  const closeModal = () => {
+    modalInstance.current?.destroy()
+  }
+
+  const handleUpdateCallback = (
+    publishedToMarketplace: boolean,
+    successModalType?: "contribute" | "update",
+  ) => {
+    setValue("publishedToMarketplace", publishedToMarketplace)
+    if (publishedToMarketplace) {
+      const title =
+        successModalType === "contribute"
+          ? t("homepage.contribute_modal.successful.successfully_contributed")
+          : t("homepage.contribute_modal.successful.successfully_updated")
+
+      modalInstance.current?.update({
+        title,
+        content: (
+          <ShareContent
+            shareTitle={`${t(
+              "user_management.modal.social_media.default_text.agent",
+              {
+                tipisName: name,
+              },
+            )}`}
+            tipiID={aiAgentID}
+            tipisName={name}
+          />
+        ),
+      })
+    } else {
+      closeModal()
+    }
+  }
+
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
 
   const { t } = useTranslation()
 
   const onShowContributeDialog = () => {
-    if (publishedToMarketplace) {
-      // setDefaultShareTag(ShareAgentTab.TO_MARKETPLACE)
-      setShareDialogVisible(true)
-    } else {
-      if (
-        !openShareAgentModal(
-          currentTeamInfo,
-          currentTeamInfo.myRole,
-          publishedToMarketplace,
-        )
-      ) {
-        return
-      }
-      setContributedDialogVisible(true)
+    if (
+      !openShareAgentModal(
+        currentTeamInfo,
+        currentTeamInfo.myRole,
+        publishedToMarketplace,
+      )
+    ) {
+      return
     }
+    modalInstance.current = modal.info({
+      title: t("homepage.contribute_modal.contribute"),
+      content: (
+        <ContributeTipisModalContent
+          isContribute={publishedToMarketplace}
+          tipisID={aiAgentID}
+          contributeCallback={handleUpdateCallback}
+        />
+      ),
+      width: "520px",
+      footer: null,
+      icon: null,
+      closable: true,
+      onCancel: closeModal,
+      modalRender(node) {
+        return <div css={modalStyle}>{node}</div>
+      },
+    })
   }
   return (
     <>
@@ -57,33 +100,6 @@ const ContributeButton: FC = () => {
       >
         {t("editor.ai-agent.contribute")}
       </Button>
-      <Controller
-        name="publishedToMarketplace"
-        control={control}
-        render={({ field }) => (
-          <>
-            {contributedDialogVisible && (
-              <ContributeAgentPC
-                onContributed={(isAgentContributed) => {
-                  field.onChange(isAgentContributed)
-                  // if (isAgentContributed) {
-                  //   const newUrl = new URL(getAgentPublicLink(idField.value))
-                  //   newUrl.searchParams.set("token", getAuthToken())
-                  //   window.open(newUrl, "_blank")
-                  // }
-                }}
-                teamID={currentTeamInfo.id}
-                onClose={() => {
-                  setContributedDialogVisible(false)
-                }}
-                productID={aiAgentID}
-                productType={HASHTAG_REQUEST_TYPE.UNIT_TYPE_AI_AGENT}
-                productContributed={field.value}
-              />
-            )}
-          </>
-        )}
-      />
     </>
   )
 }
