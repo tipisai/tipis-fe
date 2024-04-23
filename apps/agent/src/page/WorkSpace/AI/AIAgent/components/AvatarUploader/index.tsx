@@ -29,10 +29,7 @@ const AvatarUploader: FC = memo(() => {
       control={control}
       shouldUnregister={false}
       render={({ field }) => (
-        <LayoutBlock
-          title={t("editor.ai-agent.label.icon")}
-          subtitleTips={t("editor.ai-agent.generate-icon.tooltips")}
-        >
+        <LayoutBlock title={t("editor.ai-agent.label.icon")}>
           <ConfigProvider
             theme={{
               token: {

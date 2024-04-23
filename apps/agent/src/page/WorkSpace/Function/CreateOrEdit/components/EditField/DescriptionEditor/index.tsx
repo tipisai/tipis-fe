@@ -3,10 +3,11 @@ import { FC, memo } from "react"
 import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
+import { TBaseFunctionForm } from "../../../interface"
 
 const DescriptionEditor: FC = memo(() => {
   const { t } = useTranslation()
-  const { control } = useFormContext()
+  const { control } = useFormContext<TBaseFunctionForm>()
   const { errors } = useFormState({
     control: control,
   })
@@ -26,7 +27,6 @@ const DescriptionEditor: FC = memo(() => {
       render={({ field }) => (
         <LayoutBlock
           title={t("editor.ai-agent.label.desc")}
-          subtitleTips={t("editor.ai-agent.generate-desc.tooltips")}
           required
           // errorMessage={errors.description?.message}
         >

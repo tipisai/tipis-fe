@@ -6,6 +6,7 @@ import { TIntegrationType } from "@illa-public/public-types"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import PublishButton from "./components/PublishButton"
 import FormContext from "./context/FormContext"
+import { TBaseFunctionForm } from "./interface"
 import DocPanel from "./modules/DocPanel"
 import EditPanel from "./modules/EditPanel"
 import { contentContainerStyle, innerContentContainerStyle } from "./style"
@@ -15,7 +16,7 @@ const CreateFunction: FC = () => {
 
   const INITConfig = getFunctionInitDataByType(functionType as TIntegrationType)
 
-  const methods = useForm({
+  const methods = useForm<TBaseFunctionForm>({
     defaultValues: INITConfig,
     mode: "onChange",
   })

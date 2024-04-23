@@ -1,39 +1,40 @@
 import Icon from "@ant-design/icons"
 import { Button } from "antd"
 import { FC, memo } from "react"
-import { Controller, useFormContext, useFormState } from "react-hook-form"
+import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { PlusIcon } from "@illa-public/icon"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
+import { tipisContainerStyle, tipisOuterContainerStyle } from "./style"
 
 const VariableEditor: FC = memo(() => {
   const { t } = useTranslation()
   const { control } = useFormContext()
-  const { errors } = useFormState({
-    control: control,
-  })
 
   return (
-    <Controller
-      name="variable"
-      control={control}
-      rules={{
-        required: t("editor.ai-agent.validation_blank.description"),
-      }}
-      shouldUnregister={false}
-      render={({ field }) => (
-        <LayoutBlock
-          title={t("editor.ai-agent.label.desc")}
-          subtitleTips={t("editor.ai-agent.generate-desc.tooltips")}
-          required
-          // errorMessage={errors.description?.message}
-        >
-          <Button icon={<Icon component={PlusIcon} />} block size="large">
-            {t("editor.action.panel.btn.new")}
-          </Button>
-        </LayoutBlock>
-      )}
-    />
+    <>
+      <Controller
+        name="variable"
+        control={control}
+        shouldUnregister={false}
+        render={() => (
+          <LayoutBlock
+            title={t("function.edit.configure.label.variable")}
+            required
+            // errorMessage={errors.description?.message}
+          >
+            <div css={tipisOuterContainerStyle}>
+              <div css={tipisContainerStyle}>
+                {t("function.edit.configure.tips.variable")}
+              </div>
+            </div>
+            <Button icon={<Icon component={PlusIcon} />} block size="large">
+              {t("editor.action.panel.btn.new")}
+            </Button>
+          </LayoutBlock>
+        )}
+      />
+    </>
   )
 })
 

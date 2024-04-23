@@ -6,6 +6,7 @@ import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { PlusIcon } from "@illa-public/icon"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
+import { TBaseFunctionForm } from "../../../interface"
 import { uploadContentContainerStyle } from "./style"
 import { useBeforeUploadAvatar } from "./utils"
 
@@ -19,19 +20,16 @@ const getBase64 = (img: FileType, callback: (url: string) => void) => {
 
 const AvatarUploader: FC = memo(() => {
   const { t } = useTranslation()
-  const { control } = useFormContext()
+  const { control } = useFormContext<TBaseFunctionForm>()
   const beforeUpload = useBeforeUploadAvatar()
 
   return (
     <Controller
-      name="icon"
+      name="config.icon"
       control={control}
       shouldUnregister={false}
       render={({ field }) => (
-        <LayoutBlock
-          title={t("editor.ai-agent.label.icon")}
-          subtitleTips={t("editor.ai-agent.generate-icon.tooltips")}
-        >
+        <LayoutBlock title={t("editor.ai-agent.label.icon")}>
           <ConfigProvider
             theme={{
               token: {

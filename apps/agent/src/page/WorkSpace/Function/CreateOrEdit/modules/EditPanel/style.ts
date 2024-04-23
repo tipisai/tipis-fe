@@ -23,20 +23,3 @@ export const dividerStyle = css`
   width: 100%;
   background-color: ${getColor("grayBlue", "08")};
 `
-
-export const tipisOuterContainerStyle = css`
-  width: 100%;
-  padding: 8px 0;
-`
-
-export const tipisContainerStyle = css`
-  width: 100%;
-  padding: 16px;
-  border: 1px solid ${getColor("grayBlue", "08")};
-  background-color: #fafafa;
-  border-radius: 12px;
-  color: ${getColor("grayBlue", "03")};
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 130%;
-`
