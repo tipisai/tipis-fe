@@ -82,6 +82,7 @@ export const NotContributedAgent: FC = () => {
                           agentIcon={data.icon}
                           isMobile
                           ownerTeamIdentifier={data.teamIdentifier}
+                          publishConfiguration={false}
                         />
                       }
                       customRenderTitle={(title) => (
