@@ -2,11 +2,11 @@
   "cssVar": true,
   "hashed": false,
   "token": {
-    "colorPrimary": "#1d2129",
+    "colorPrimary": "#654aec",
     "colorSuccess": "#0bc957",
     "colorWarning": "#fa8214",
     "colorError": "#ff4747",
-    "colorInfo": "#1d2129",
+    "colorInfo": "#654aec",
     "borderRadius": 16,
     "wireframe": false,
     "boxShadowSecondary": "\n         0 2px 4px 0 rgba(0, 0, 0, 0.10),\n            0 0px 2px 0 rgba(0, 0, 0, 0.06)\n    ",

@@ -57,7 +57,7 @@ const MarketCardList: FC<IMarketCardListProps> = (props) => {
         <div css={listContainerStyle} onScroll={handleListLoadMore}>
           <List
             grid={{
-              gutter: 16,
+              gutter: 24,
               xs: 2,
               sm: 2,
               md: 2,
