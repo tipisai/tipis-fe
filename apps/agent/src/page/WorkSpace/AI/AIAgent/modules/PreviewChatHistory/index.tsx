@@ -34,7 +34,12 @@ const PreviewChatHistory: FC = memo(() => {
     }
     const isPromptDirty = !isEqual(prompt, lastRunAgent.current.prompt)
 
-    const isVariablesDirty = !isEqual(variables, lastRunAgent.current.variables)
+    const isVariablesDirty = !isEqual(
+      variables?.filter((item) => item.key !== "" && item.value !== ""),
+      lastRunAgent.current.variables?.filter(
+        (item) => item.key !== "" && item.value !== "",
+      ),
+    )
 
     const isKnowledgeDirty = !isEqual(knowledge, lastRunAgent.current.knowledge)
 
