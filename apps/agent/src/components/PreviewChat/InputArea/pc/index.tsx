@@ -265,6 +265,8 @@ const PCInputArea: FC<IInputAreaProps> = (props) => {
   const getNeedUploadAndNotAcceptFiles = useCallback((files: FileList) => {
     const acceptType = ACCEPT
 
+    console.log("test", files)
+
     const needUpdateFilesArray = Array.from(files).filter((file) =>
       acceptType.includes(file.type),
     )
