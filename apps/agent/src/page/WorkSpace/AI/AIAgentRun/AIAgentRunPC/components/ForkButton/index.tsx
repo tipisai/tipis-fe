@@ -3,20 +3,20 @@ import { App, Button } from "antd"
 import { FC, useContext, useState } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { ForkIcon } from "@illa-public/icon"
-import { getCurrentTeamInfo } from "@illa-public/user-data"
 import { formatNumForAgent } from "@illa-public/utils"
 import { IAgentForm } from "@/page/WorkSpace/AI/AIAgent/interface"
 import { useForkAIAgentToTeamMutation } from "@/redux/services/agentAPI"
+import { getEditTipiPath } from "@/utils/routeHelper"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { MarketplaceInfoContext } from "../../../contexts/MarketplaceInfoContext"
 
 const ForkButton: FC = () => {
   const { t } = useTranslation()
   const { currentMarketplaceInfo } = useContext(MarketplaceInfoContext)
 
-  const currentTeamInfo = useSelector(getCurrentTeamInfo)!
+  const currentTeamInfo = useGetCurrentTeamInfo()
   const navigate = useNavigate()
   const { message: messageAPI } = App.useApp()
 
@@ -29,13 +29,14 @@ const ForkButton: FC = () => {
   const [forkAIAgentToTeam] = useForkAIAgentToTeamMutation()
 
   const handleClickFork = async () => {
+    if (!currentTeamInfo) return
     setForkLoading(true)
     try {
       const newAgent = await forkAIAgentToTeam({
         teamID: currentTeamInfo.id,
         aiAgentID: aiAgentID,
       }).unwrap()
-      navigate(`/${currentTeamInfo.identifier}/ai-agent/${newAgent.aiAgentID}`)
+      navigate(getEditTipiPath(currentTeamInfo.identifier, newAgent.aiAgentID))
     } catch (e) {
       messageAPI.error({
         content: t("dashboard.message.fork-failed"),
@@ -52,10 +53,9 @@ const ForkButton: FC = () => {
       onClick={handleClickFork}
       loading={forkLoading}
     >
-      <span>{t("marketplace.fork")}</span>
+      <span>{t("marketplace.fork")}&nbsp;</span>
       {(currentMarketplaceInfo?.marketplace.numForks ?? 0) > 0 && (
         <span>
-          {" "}
           {formatNumForAgent(currentMarketplaceInfo?.marketplace.numForks ?? 0)}
         </span>
       )}

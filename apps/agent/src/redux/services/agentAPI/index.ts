@@ -132,6 +132,20 @@ export const agentAuthAPI = createApi({
         url: `/aiAgent/${aiAgentID}/forkTo/teams/${teamID}`,
         method: "POST",
       }),
+      async onQueryStarted({ teamID }, { dispatch, queryFulfilled }) {
+        try {
+          const { data: agentDetail } = await queryFulfilled
+          dispatch(
+            agentAuthAPI.util.updateQueryData(
+              "getAIAgentListByPage",
+              { teamID },
+              (draft) => {
+                draft.aiAgentList?.unshift(agentDetail)
+              },
+            ),
+          )
+        } catch {}
+      },
     }),
     putAgentDetail: builder.mutation<
       Agent,

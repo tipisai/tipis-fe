@@ -1,8 +1,9 @@
 import Icon from "@ant-design/icons"
-import { Button } from "antd"
+import { App, Button } from "antd"
 import { FC, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import { v4 } from "uuid"
 import {
   ForkIcon,
@@ -13,9 +14,12 @@ import {
 } from "@illa-public/icon"
 import { MarketShareModal } from "@illa-public/market-share"
 import { TipisTrack } from "@illa-public/track-utils"
+import { useForkAIAgentToTeamMutation } from "@/redux/services/agentAPI"
 import { getPinedTipisByTipisID } from "@/redux/ui/pinedTipis/selector"
 import { usePinOrUnpinTipis } from "@/utils/pinedTabs/hook"
+import { getEditTipiPath } from "@/utils/routeHelper"
 import { useNavigateToRunTipis } from "@/utils/routeHelper/hook"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { IActionGroupProps } from "../interface"
 import { actionGroupContainerStyle } from "./style"
 
@@ -32,11 +36,16 @@ const PCActionGroup: FC<IActionGroupProps> = (props) => {
     isPublishConfiguration,
   } = props
   const { t } = useTranslation()
+  const { message: messageAPI } = App.useApp()
+  const currentTeamInfo = useGetCurrentTeamInfo()
   const navigateToRun = useNavigateToRunTipis()
   const pinedInfos = useSelector((state) =>
     getPinedTipisByTipisID(state, tipisID),
   )
   const [shareVisible, setShareVisible] = useState(false)
+  const [forkLoading, setForkLoading] = useState(false)
+  const [forkAIAgentToTeam] = useForkAIAgentToTeamMutation()
+  const navigate = useNavigate()
 
   const isPined = !!pinedInfos
   const pinOrUnpinTipis = usePinOrUnpinTipis()
@@ -64,6 +73,24 @@ const PCActionGroup: FC<IActionGroupProps> = (props) => {
     )
   }
 
+  const handleClickFork = async () => {
+    if (!currentTeamInfo) return
+    setForkLoading(true)
+    try {
+      const newAgent = await forkAIAgentToTeam({
+        teamID: currentTeamInfo.id,
+        aiAgentID: tipisID,
+      }).unwrap()
+      navigate(getEditTipiPath(currentTeamInfo.identifier, newAgent.aiAgentID))
+    } catch (e) {
+      messageAPI.error({
+        content: t("dashboard.message.fork-failed"),
+      })
+    } finally {
+      setForkLoading(false)
+    }
+  }
+
   return (
     <>
       <div css={actionGroupContainerStyle}>
@@ -78,7 +105,12 @@ const PCActionGroup: FC<IActionGroupProps> = (props) => {
           {t("dashboard.common.run")} {isContribute ? runNumber : ""}
         </Button>
         {isFromMarketplace && isPublishConfiguration && (
-          <Button icon={<Icon component={ForkIcon} />} size="large">
+          <Button
+            icon={<Icon component={ForkIcon} />}
+            size="large"
+            loading={forkLoading}
+            onClick={handleClickFork}
+          >
             {t("dashboard.common.fork")} {forkNumber}
           </Button>
         )}

@@ -8,6 +8,7 @@ import {
   canManage,
 } from "@illa-public/user-role-utils"
 import { IAgentForm } from "@/page/WorkSpace/AI/AIAgent/interface"
+import { useGetAIAgentMarketplaceInfoQuery } from "@/redux/services/marketAPI"
 import MoreActionButton from "../../../components/MoreActionButton"
 import ForkButton from "../ForkButton"
 import StartButton from "../StartButton"
@@ -17,7 +18,6 @@ const HeaderTools: FC = () => {
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const { control } = useFormContext<IAgentForm>()
 
-  // agentID, agentName, publishToMarketplace, isMobile
   const [
     publishedToMarketplace,
     agentID,
@@ -35,6 +35,13 @@ const HeaderTools: FC = () => {
     ],
   })
 
+  const { data: marketplaceAgentInfo } = useGetAIAgentMarketplaceInfoQuery(
+    { aiAgentID: agentID },
+    {
+      skip: !publishedToMarketplace,
+    },
+  )
+
   const canManageFork = canManage(
     currentTeamInfo.myRole,
     ATTRIBUTE_GROUP.AI_AGENT,
@@ -51,8 +58,15 @@ const HeaderTools: FC = () => {
         isMobile={false}
         agentIcon={agentIcon}
         ownerTeamIdentifier={ownerTeamIdentifier}
+        publishConfiguration={
+          !!marketplaceAgentInfo?.marketplace?.config?.publishConfiguration
+        }
       />
-      {canManageFork && publishedToMarketplace && <ForkButton />}
+      {canManageFork &&
+        publishedToMarketplace &&
+        marketplaceAgentInfo?.marketplace?.config?.publishConfiguration && (
+          <ForkButton />
+        )}
       <StartButton />
     </div>
   )

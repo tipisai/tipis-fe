@@ -1,10 +1,12 @@
 import Icon from "@ant-design/icons"
-import { Button, Dropdown, MenuProps } from "antd"
+import { App, Button, Dropdown, MenuProps } from "antd"
 import { FC, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import { v4 } from "uuid"
 import {
+  ForkIcon,
   InfoIcon,
   MoreIcon,
   PenIcon,
@@ -20,6 +22,7 @@ import { USER_ROLE } from "@illa-public/public-types"
 import { TipisTrack } from "@illa-public/track-utils"
 import { useGetUserInfoQuery } from "@illa-public/user-data"
 import { getILLACloudURL } from "@illa-public/utils"
+import { useForkAIAgentToTeamMutation } from "@/redux/services/agentAPI"
 import { getPinedTipisByTipisID } from "@/redux/ui/pinedTipis/selector"
 import { canShowShareTipi, canShownEditTipi } from "@/utils/UIHelper/tipis"
 import { copyToClipboard } from "@/utils/copyToClipboard"
@@ -27,7 +30,7 @@ import {
   useAddPinedTipiTabReducer,
   useRemovePinedTipiTabByTipiIDReducer,
 } from "@/utils/pinedTabs/baseHook"
-import { getRunTipiPath } from "@/utils/routeHelper"
+import { getEditTipiPath, getRunTipiPath } from "@/utils/routeHelper"
 import {
   useNavigateToEditTipis,
   useNavigateToTipiDetail,
@@ -36,14 +39,23 @@ import { useGetCurrentTeamInfo } from "@/utils/team"
 import { IMoreActionButtonProps } from "./interface"
 
 const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
-  const { agentID, agentName, isMobile, agentIcon, ownerTeamIdentifier } = props
+  const {
+    agentID,
+    agentName,
+    isMobile,
+    agentIcon,
+    ownerTeamIdentifier,
+    publishConfiguration,
+  } = props
   const { t } = useTranslation()
   const [shareVisible, setShareVisible] = useState(false)
+  const { message: messageAPI } = App.useApp()
   const currentTeamInfo = useGetCurrentTeamInfo()
   const currentUserRole = currentTeamInfo?.myRole ?? USER_ROLE.VIEWER
   const pinedInfos = useSelector((state) =>
     getPinedTipisByTipisID(state, agentID),
   )
+  const navigate = useNavigate()
 
   const isPined = !!pinedInfos
 
@@ -52,6 +64,7 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
   const navigateToTipiDetails = useNavigateToTipiDetail()
   const addPinedTipis = useAddPinedTipiTabReducer()
   const removePinedTipiByTipisID = useRemovePinedTipiTabByTipiIDReducer()
+  const [forkAIAgentToTeam] = useForkAIAgentToTeamMutation()
 
   const items: MenuProps["items"] = useMemo(() => {
     const originMenuItems: MenuProps["items"] = [
@@ -71,6 +84,14 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
       })
     }
 
+    if (isMobile && canShownEditTipi(currentTeamInfo) && publishConfiguration) {
+      originMenuItems.push({
+        key: "fork",
+        label: t("marketplace.fork"),
+        icon: <Icon component={ForkIcon} />,
+      })
+    }
+
     if (canShowShareTipi(currentTeamInfo)) {
       originMenuItems.push({
         key: "share",
@@ -84,7 +105,7 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
       icon: <Icon component={InfoIcon} />,
     })
     return originMenuItems
-  }, [currentTeamInfo, isPined, t])
+  }, [currentTeamInfo, isMobile, isPined, publishConfiguration, t])
 
   const onClickMenuItem: MenuProps["onClick"] = async ({ key, domEvent }) => {
     domEvent.stopPropagation()
@@ -111,6 +132,23 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
           setShareVisible(true)
         }
         break
+      case "fork": {
+        if (!currentTeamInfo) return
+        try {
+          const newAgent = await forkAIAgentToTeam({
+            teamID: currentTeamInfo.id,
+            aiAgentID: agentID,
+          }).unwrap()
+          navigate(
+            getEditTipiPath(currentTeamInfo.identifier, newAgent.aiAgentID),
+          )
+        } catch (e) {
+          messageAPI.error({
+            content: t("dashboard.message.fork-failed"),
+          })
+        }
+        break
+      }
       case "edit": {
         TipisTrack.track("click_edit_tipi_entry", {
           parameter1: "run",
