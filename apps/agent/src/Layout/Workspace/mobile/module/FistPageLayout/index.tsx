@@ -1,5 +1,5 @@
 import { App, Drawer } from "antd"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -8,7 +8,12 @@ import MenuFooter from "@/Layout/Workspace/modules/MenuFooter"
 import MobilePinedTipisArea from "@/Layout/Workspace/modules/PinedTipis/mobile"
 import MobileRecentTabs from "@/Layout/Workspace/modules/RecentTabs/mobile"
 import TeamSelectAndInviteButton from "@/Layout/Workspace/modules/TeamSelectAndInviteButton"
+import {
+  COMMON_MENU_PINED_AREA_MIN_HEIGHT,
+  COMMON_MENU_PINED_AREA_SINGLE_MIN_HEIGHT,
+} from "@/Layout/Workspace/pc/config"
 import MobileMenuIcon from "@/assets/workspace/mobileMenu.svg?react"
+import { getPinedTipis } from "@/redux/ui/pinedTipis/selector"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { useRemoveAllRecentTabReducer } from "@/utils/recentTabs/baseHook"
 import { getChatPath } from "@/utils/routeHelper"
@@ -34,6 +39,10 @@ const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
   const navigate = useNavigate()
   const { modal } = App.useApp()
   const currentTeamInfo = useGetCurrentTeamInfo()
+  const pinedTipis = useSelector(getPinedTipis)
+  const [pinedAreaListHeight, setPinedAreaListHeight] = useState(0)
+
+  const hasPinedTipis = pinedTipis.length > 0
 
   const recentTabInfos = useSelector(getRecentTabInfos)
 
@@ -58,6 +67,16 @@ const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
     setOpenDrawer(false)
   }
 
+  useEffect(() => {
+    if (pinedTipis.length <= 3) {
+      setPinedAreaListHeight(
+        COMMON_MENU_PINED_AREA_SINGLE_MIN_HEIGHT * pinedTipis.length,
+      )
+    } else {
+      setPinedAreaListHeight(COMMON_MENU_PINED_AREA_MIN_HEIGHT)
+    }
+  }, [pinedTipis.length])
+
   return (
     <div css={mobileFirstPageLayoutContainerStyle}>
       <WorkspaceMobileHeaderLayout
@@ -80,7 +99,9 @@ const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
       >
         <div css={menuContentStyle}>
           <FeatureArea />
-          <MobilePinedTipisArea />
+          {hasPinedTipis && (
+            <MobilePinedTipisArea height={pinedAreaListHeight} />
+          )}
           <div css={dividerOuterContainerStyle}>
             <div css={dividerInnerContainerStyle}>
               <div css={dividerStyle} className="divider" />
