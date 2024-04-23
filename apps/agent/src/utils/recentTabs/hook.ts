@@ -453,7 +453,7 @@ export const useCreateFunction = () => {
         tabIcon: "",
         tabType: TAB_TYPE.CREATE_FUNCTION,
         tabID: CREATE_FUNCTION_ID,
-        cacheID: CREATE_FUNCTION_ID,
+        cacheID: functionType,
       }
       await addRecentTab(tabsInfo)
       navigate(getCreateFunctionPath(currentTeamInfo?.identifier, functionType))

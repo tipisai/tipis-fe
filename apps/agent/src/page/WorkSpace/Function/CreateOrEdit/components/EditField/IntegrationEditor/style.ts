@@ -17,3 +17,9 @@ export const descTextStyle = css`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 `
+
+export const customModalStyle = css`
+  .ant-modal-title {
+    text-align: center;
+  }
+`

@@ -3,11 +3,11 @@ import { FC, memo } from "react"
 import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
-import { TBaseFunctionForm } from "../../../interface"
+import { IBaseFunctionForm } from "../../../interface"
 
 const DescriptionEditor: FC = memo(() => {
   const { t } = useTranslation()
-  const { control } = useFormContext<TBaseFunctionForm>()
+  const { control } = useFormContext<IBaseFunctionForm>()
   const { errors } = useFormState({
     control: control,
   })

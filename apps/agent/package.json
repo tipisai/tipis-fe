@@ -51,7 +51,6 @@
     "@illa-public/illa-net": "workspace:^",
     "@illa-public/illa-storage": "workspace:^",
     "@illa-public/illa-web-socket": "workspace:^",
-    "@illa-public/integration-selector": "workspace:^",
     "@illa-public/invite-modal": "workspace:^",
     "@illa-public/layout-auto-change": "workspace:^",
     "@illa-public/market-share": "workspace:^",

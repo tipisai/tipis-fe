@@ -1,3 +1,3 @@
 import { IBaseFunction } from "@illa-public/public-types"
 
-export type TBaseFunctionForm = Omit<IBaseFunction, "content">
+export type IBaseFunctionForm = Omit<IBaseFunction, "content">
