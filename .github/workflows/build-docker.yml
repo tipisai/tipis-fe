@@ -83,7 +83,6 @@ jobs:
       - name: Push application Docker image
         run: |
           docker login -u $DOCKER_LOGIN -p $DOCKER_PWD
-          docker pull
           docker tag tipisai-fe "illasoft/tipisai-fe:$GITHUB_REF_NAME"
           docker push "illasoft/tipisai-fe:$GITHUB_REF_NAME"
 
