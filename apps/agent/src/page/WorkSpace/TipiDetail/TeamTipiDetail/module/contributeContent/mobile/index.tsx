@@ -38,9 +38,7 @@ const MobileContributeContent: FC<IContributeContentProps> = ({
       <ContributeInfo
         teamName={aiAgentMarketPlaceInfo.marketplace.contributorTeam.name}
         teamAvatar={aiAgentMarketPlaceInfo.marketplace.contributorTeam.icon}
-        contributorAvatars={aiAgentMarketPlaceInfo.aiAgent.editedBy.map(
-          (item) => item.avatar,
-        )}
+        contributors={aiAgentMarketPlaceInfo.aiAgent.editedBy}
       />
       {aiAgentMarketPlaceInfo.marketplace.config.publishConfiguration && (
         <>
