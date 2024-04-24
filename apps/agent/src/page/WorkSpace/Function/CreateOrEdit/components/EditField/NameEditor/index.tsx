@@ -2,7 +2,8 @@ import { Input } from "antd"
 import { FC, memo } from "react"
 import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import LayoutBlock from "@/Layout/Form/LayoutBlock"
+import { ErrorText } from "@/Layout/Form/ErrorText"
+import LayoutBlock from "@/Layout/Function/LayoutBlock"
 import { IBaseFunctionForm } from "../../../interface"
 
 const NameEditor: FC = memo(() => {
@@ -28,13 +29,7 @@ const NameEditor: FC = memo(() => {
       }}
       shouldUnregister={false}
       render={({ field }) => (
-        <LayoutBlock
-          title={t("editor.ai-agent.label.name")}
-          required
-          // errorMessage={
-          //   errors.name?.message ?? t("function.edit.configure.name.validate")
-          // }
-        >
+        <LayoutBlock title={t("editor.ai-agent.label.name")} required>
           <Input
             {...field}
             size="large"
@@ -47,6 +42,7 @@ const NameEditor: FC = memo(() => {
               // setInRoomUsers(updateLocalName(value, inRoomUsers))
             }}
           />
+          <ErrorText message={errors.name?.message} />
         </LayoutBlock>
       )}
     />

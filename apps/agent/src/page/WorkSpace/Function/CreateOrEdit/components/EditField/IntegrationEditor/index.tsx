@@ -9,8 +9,8 @@ import {
   PenIcon,
   PlusIcon,
 } from "@illa-public/icon"
-import LayoutBlock from "@/Layout/Form/LayoutBlock"
-import CreateOrSelectIntegrationModal from "@/Modules/Integration/CreateOrSelectIntegration/modal"
+import LayoutBlock from "@/Layout/Function/LayoutBlock"
+import IntegrationSelectorModal from "@/Modules/Integration/CreateOrSelectIntegration/modal"
 import { IBaseFunctionForm } from "../../../interface"
 import { IIntegrationEditorProps } from "./interface"
 import {
@@ -46,7 +46,6 @@ const IntegrationEditor = memo((props: IIntegrationEditorProps) => {
           <LayoutBlock
             title={t("function.edit.configure.label.integration")}
             required
-            // errorMessage={errors.description?.message}
           >
             {!field.value ? (
               <>
@@ -88,7 +87,7 @@ const IntegrationEditor = memo((props: IIntegrationEditorProps) => {
                 </div>
               </div>
             )}
-            <CreateOrSelectIntegrationModal
+            <IntegrationSelectorModal
               open={createOrSelectModalShow}
               changeOpen={setCreateOrSelectModalShow}
               integrationType={integrationType}

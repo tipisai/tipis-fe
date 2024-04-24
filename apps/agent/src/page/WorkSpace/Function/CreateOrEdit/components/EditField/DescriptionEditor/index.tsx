@@ -2,7 +2,8 @@ import { Input } from "antd"
 import { FC, memo } from "react"
 import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import LayoutBlock from "@/Layout/Form/LayoutBlock"
+import { ErrorText } from "@/Layout/Form/ErrorText"
+import LayoutBlock from "@/Layout/Function/LayoutBlock"
 import { IBaseFunctionForm } from "../../../interface"
 
 const DescriptionEditor: FC = memo(() => {
@@ -25,11 +26,7 @@ const DescriptionEditor: FC = memo(() => {
       }}
       shouldUnregister={false}
       render={({ field }) => (
-        <LayoutBlock
-          title={t("editor.ai-agent.label.desc")}
-          required
-          // errorMessage={errors.description?.message}
-        >
+        <LayoutBlock title={t("editor.ai-agent.label.desc")} required>
           <Input.TextArea
             {...field}
             size="large"
@@ -41,6 +38,7 @@ const DescriptionEditor: FC = memo(() => {
               maxRows: 5,
             }}
           />
+          <ErrorText message={errors.description?.message} />
         </LayoutBlock>
       )}
     />

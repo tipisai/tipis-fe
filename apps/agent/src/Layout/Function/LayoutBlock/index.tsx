@@ -1,7 +1,6 @@
 import { Tooltip } from "antd"
 import { FC } from "react"
 import RequireIcon from "@/assets/agent/require.svg?react"
-import { ErrorText } from "../ErrorText"
 import { ILayoutBlock } from "./interface"
 import {
   agentBlockStyle,
@@ -23,13 +22,11 @@ export const LayoutBlock: FC<ILayoutBlock> = (props) => {
     subtitle,
     subtitleTips,
     required,
-    scrollId,
     isMobile = false,
-    errorMessage,
   } = props
 
   return (
-    <div css={agentBlockStyle(isMobile)} data-scroll-id={scrollId}>
+    <div css={agentBlockStyle(isMobile)}>
       <div css={titleAndDescriptionContainerStyle}>
         <div css={blockTitleContainer}>
           <div css={blockTItleAndRequireContainerStyle}>
@@ -50,10 +47,7 @@ export const LayoutBlock: FC<ILayoutBlock> = (props) => {
         </div>
         {description && <div css={descriptionStyle}>{description}</div>}
       </div>
-      <div css={childrenAndErrorMessageContainerStyle}>
-        {children}
-        {errorMessage && <ErrorText message={errorMessage} />}
-      </div>
+      <div css={childrenAndErrorMessageContainerStyle}>{children}</div>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import { FC, memo } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import LayoutBlock from "@/Layout/Form/LayoutBlock"
+import LayoutBlock from "@/Layout/Function/LayoutBlock"
 import { IBaseFunctionForm } from "../../../interface"
 import CreateVariableButton from "./components/CreateVariableButton"
 import VariableList from "./components/VariableList"
@@ -23,7 +23,6 @@ const VariableEditor: FC = memo(() => {
               title={t("function.edit.configure.label.variable")}
               description={t("function.edit.configure.tips.variable")}
               required
-              // errorMessage={errors.description?.message}
             >
               <CreateVariableButton
                 buttonProps={{
