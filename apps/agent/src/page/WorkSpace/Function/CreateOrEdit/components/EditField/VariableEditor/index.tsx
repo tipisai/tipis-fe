@@ -1,31 +1,19 @@
 import Icon from "@ant-design/icons"
-import { Button, Modal } from "antd"
+import { Button } from "antd"
 import { FC, memo, useState } from "react"
-import { Controller, useFormContext, useWatch } from "react-hook-form"
+import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { PlusIcon } from "@illa-public/icon"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { IBaseFunctionForm } from "../../../interface"
-import VariableContent from "./components/VariableContent"
-import {
-  customModalStyle,
-  tipisContainerStyle,
-  tipisOuterContainerStyle,
-} from "./style"
+import VariableModalContent from "./components/VariableContent"
+import VariableList from "./components/VariableList"
+import { tipisContainerStyle, tipisOuterContainerStyle } from "./style"
 
 const VariableEditor: FC = memo(() => {
   const { t } = useTranslation()
   const { control } = useFormContext<IBaseFunctionForm>()
   const [showCreateModal, setShowCreateModal] = useState(false)
-
-  const variables = useWatch({
-    control,
-    name: "config.variables",
-  })
-
-  const hasVariable = variables.length > 0
-
-  console.log("hasVariable", hasVariable)
 
   return (
     <>
@@ -57,7 +45,7 @@ const VariableEditor: FC = memo(() => {
                         name: "",
                         type: "string",
                         testValue: "",
-                        required: false,
+                        required: true,
                         enumValues: [],
                       },
                     ])
@@ -67,16 +55,13 @@ const VariableEditor: FC = memo(() => {
                   {t("editor.action.panel.btn.new")}
                 </Button>
               )}
-              {hasVariable && <div>List</div>}
+              {hasVariable && <VariableList />}
 
-              <Modal
+              <VariableModalContent
+                index={0}
                 open={showCreateModal}
-                title="Configure Variable"
-                css={customModalStyle}
-                footer={false}
-              >
-                <VariableContent index={0} />
-              </Modal>
+                openChange={setShowCreateModal}
+              />
             </LayoutBlock>
           )
         }}

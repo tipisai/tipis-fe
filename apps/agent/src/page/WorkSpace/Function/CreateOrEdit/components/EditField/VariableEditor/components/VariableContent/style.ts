@@ -8,3 +8,9 @@ export const variableContentStyle = css`
     display: none;
   }
 `
+
+export const customModalStyle = css`
+  .ant-modal-title {
+    text-align: center;
+  }
+`

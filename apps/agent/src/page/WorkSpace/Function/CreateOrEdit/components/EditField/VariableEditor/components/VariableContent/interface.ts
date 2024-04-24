@@ -1,3 +1,5 @@
-export interface IVariableContentProps {
+export interface IVariableModalContentProps {
   index: number
+  open: boolean
+  openChange: (open: boolean) => void
 }

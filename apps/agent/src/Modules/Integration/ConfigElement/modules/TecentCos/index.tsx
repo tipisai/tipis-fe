@@ -65,10 +65,10 @@ const TencentCosConfigElement: FC = () => {
       <Controller
         name="content.secretAccessKey"
         control={control}
-        render={() => {
+        render={({ field }) => {
           return (
             <LabelWithController title="SecretKey">
-              <Input size="large" />
+              <Input size="large" {...field} />
             </LabelWithController>
           )
         }}
