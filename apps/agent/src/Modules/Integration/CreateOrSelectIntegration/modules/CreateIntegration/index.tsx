@@ -15,17 +15,10 @@ const CreateIntegration: FC<ICreateIntegrationProps> = (props) => {
     },
   })
 
-  const onSubmit = (data: IBaseIntegration) => {
-    console.log("ddddd", data)
-    onConfirm(data.resourceID)
-  }
-
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <ConfigElement />
-        <ConfigElementFooter onBack={onBack} />
-      </form>
+      <ConfigElement />
+      <ConfigElementFooter onBack={onBack} onConfirm={onConfirm} />
     </FormProvider>
   )
 }

@@ -1,14 +1,19 @@
 import Icon from "@ant-design/icons"
-import { Button, Modal } from "antd"
+import { Button } from "antd"
 import { memo, useState } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { PlusIcon } from "@illa-public/icon"
+import { INTEGRATION_TYPE_MAP_ICON, PlusIcon } from "@illa-public/icon"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
-import CreateOrSelectIntegration from "@/Modules/Integration/CreateOrSelectIntegration"
+import CreateOrSelectIntegrationModal from "@/Modules/Integration/CreateOrSelectIntegration/modal"
 import { IBaseFunctionForm } from "../../../interface"
 import { IIntegrationEditorProps } from "./interface"
-import { customModalStyle } from "./style"
+import {
+  integrationContainerStyle,
+  integrationIconStyle,
+  integrationNameAndIconStyle,
+  integrationNameStyle,
+} from "./style"
 
 const IntegrationEditor = memo((props: IIntegrationEditorProps) => {
   const { integrationType } = props
@@ -16,6 +21,8 @@ const IntegrationEditor = memo((props: IIntegrationEditorProps) => {
   const { control } = useFormContext<IBaseFunctionForm>()
 
   const [modalShow, setModalShow] = useState(false)
+
+  const IntegrationIcon = INTEGRATION_TYPE_MAP_ICON[integrationType]
 
   return (
     <>
@@ -32,7 +39,7 @@ const IntegrationEditor = memo((props: IIntegrationEditorProps) => {
             required
             // errorMessage={errors.description?.message}
           >
-            {!field.value && (
+            {!field.value ? (
               <>
                 <Button
                   icon={<Icon component={PlusIcon} />}
@@ -44,26 +51,28 @@ const IntegrationEditor = memo((props: IIntegrationEditorProps) => {
                 >
                   {t("editor.action.panel.btn.new")}
                 </Button>
-                <Modal
-                  open={modalShow}
-                  destroyOnClose
-                  title="dddddd"
-                  width={696}
-                  footer={false}
-                  css={customModalStyle}
-                  onCancel={() => {
-                    setModalShow(false)
-                  }}
-                >
-                  <CreateOrSelectIntegration
-                    onConfirm={(integrationID) => {
-                      field.onChange(integrationID)
-                    }}
-                    integrationType={integrationType}
-                  />
-                </Modal>
               </>
+            ) : (
+              <div css={integrationContainerStyle}>
+                <div css={integrationNameAndIconStyle}>
+                  {IntegrationIcon ? (
+                    <IntegrationIcon css={integrationIconStyle} />
+                  ) : (
+                    <div css={integrationIconStyle} />
+                  )}
+                  <p css={integrationNameStyle}>{field.value}</p>
+                </div>
+              </div>
             )}
+            <CreateOrSelectIntegrationModal
+              open={modalShow}
+              changeOpen={setModalShow}
+              integrationType={integrationType}
+              onConfirm={(integrationID: string) => {
+                field.onChange(integrationID)
+                setModalShow(false)
+              }}
+            />
           </LayoutBlock>
         )}
       />

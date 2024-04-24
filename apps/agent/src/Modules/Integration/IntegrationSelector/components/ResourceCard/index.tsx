@@ -1,5 +1,5 @@
 import { FC } from "react"
-import { RESOURCE_TYPE_MAP_ICON } from "@illa-public/icon"
+import { INTEGRATION_TYPE_MAP_ICON } from "@illa-public/icon"
 import { useGetResourceNameFormResourceType } from "@illa-public/utils"
 import { ResourceCardSelectorProps } from "./interface"
 import { applyItemStyle, nameStyle, titleContainerStyle } from "./style"
@@ -12,7 +12,7 @@ export const ResourceCard: FC<ResourceCardSelectorProps> = (props) => {
   const onClickCard = () => {
     onSelect(resourceType)
   }
-  const ResourceIcon = RESOURCE_TYPE_MAP_ICON[resourceType]
+  const ResourceIcon = INTEGRATION_TYPE_MAP_ICON[resourceType]
 
   return (
     <div css={applyItemStyle} onClick={onClickCard}>
