@@ -5,7 +5,6 @@ import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { IBaseFunctionForm } from "../../../interface"
 import CreateVariableButton from "./components/CreateVariableButton"
 import VariableList from "./components/VariableList"
-import { tipisContainerStyle, tipisOuterContainerStyle } from "./style"
 
 const VariableEditor: FC = memo(() => {
   const { t } = useTranslation()
@@ -22,15 +21,10 @@ const VariableEditor: FC = memo(() => {
           return (
             <LayoutBlock
               title={t("function.edit.configure.label.variable")}
+              description={t("function.edit.configure.tips.variable")}
               required
               // errorMessage={errors.description?.message}
             >
-              <div css={tipisOuterContainerStyle}>
-                <div css={tipisContainerStyle}>
-                  {t("function.edit.configure.tips.variable")}
-                </div>
-              </div>
-
               <CreateVariableButton
                 buttonProps={{
                   size: "large",

@@ -1,5 +1,4 @@
 import { css } from "@emotion/react"
-import { getColor } from "@illa-public/color-scheme"
 
 export const descContainerStyle = css`
   cursor: pointer;
@@ -17,21 +16,4 @@ export const descTextStyle = css`
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-`
-
-export const tipisOuterContainerStyle = css`
-  width: 100%;
-  padding: 8px 0;
-`
-
-export const tipisContainerStyle = css`
-  width: 100%;
-  padding: 16px;
-  border: 1px solid ${getColor("grayBlue", "08")};
-  background-color: #fafafa;
-  border-radius: 12px;
-  color: ${getColor("grayBlue", "03")};
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 130%;
 `
