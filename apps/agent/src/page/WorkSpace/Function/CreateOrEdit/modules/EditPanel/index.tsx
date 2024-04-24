@@ -4,6 +4,7 @@ import DescriptionEditor from "../../components/EditField/DescriptionEditor"
 import IntegrationEditor from "../../components/EditField/IntegrationEditor"
 import NameEditor from "../../components/EditField/NameEditor"
 import VariableEditor from "../../components/EditField/VariableEditor"
+import EventEditor from "../EventEditor"
 import { IEditPanelProps } from "./interface"
 import {
   basicContainerStyle,
@@ -24,6 +25,7 @@ const EditPanel: FC<IEditPanelProps> = (props) => {
       <div css={basicContainerStyle}>
         <IntegrationEditor integrationType={integrationType} />
         <VariableEditor />
+        <EventEditor integrationType={integrationType} />
       </div>
     </div>
   )
