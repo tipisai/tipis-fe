@@ -37,6 +37,7 @@ const NameEditor: FC = memo(() => {
         >
           <Input
             {...field}
+            size="large"
             placeholder={t("editor.ai-agent.placeholder.name")}
             status={!!errors.name ? "error" : undefined}
             maxLength={60}
