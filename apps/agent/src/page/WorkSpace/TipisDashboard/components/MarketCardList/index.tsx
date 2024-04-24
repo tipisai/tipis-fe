@@ -63,7 +63,7 @@ const MarketCardList: FC<IMarketCardListProps> = (props) => {
               md: 2,
               lg: 3,
               xl: 4,
-              xxl: 5,
+              xxl: 6,
             }}
             dataSource={data.products}
             renderItem={(item) => <RenderItem marketAIAgent={item} />}
