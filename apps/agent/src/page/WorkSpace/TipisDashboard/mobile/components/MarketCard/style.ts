@@ -19,21 +19,18 @@ export const headerStyle = css`
   justify-content: flex-end;
   width: 100%;
   border-radius: 8px;
-  height: 161px;
   overflow: hidden;
   position: relative;
   z-index: 0;
 `
 
 export const agentIconStyle = css`
-  object-fit: cover;
   width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: -1;
 `
 
 export const actionContainerStyle = css`
+  position: absolute;
+  bottom: 0;
   display: flex;
   width: 100%;
   height: 48px;
