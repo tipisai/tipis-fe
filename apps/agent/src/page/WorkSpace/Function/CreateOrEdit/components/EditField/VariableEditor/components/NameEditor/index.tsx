@@ -2,18 +2,16 @@ import { Input } from "antd"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { IVariables } from "@illa-public/public-types"
 import LabelWithController from "@/Layout/Function/LabelWithController"
-import { IBaseFunctionForm } from "../../../../../interface"
-import { IBaseVariableItemEditorProps } from "../../interface"
 
-const NameEditor: FC<IBaseVariableItemEditorProps> = (props) => {
-  const { index } = props
-  const { control } = useFormContext<IBaseFunctionForm>()
+const NameEditor: FC = () => {
+  const { control } = useFormContext<IVariables>()
   const { t } = useTranslation()
 
   return (
     <Controller
-      name={`config.variables.${index}.name`}
+      name="name"
       control={control}
       render={({ field }) => {
         return (

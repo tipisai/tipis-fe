@@ -14,7 +14,6 @@ const ConfigElementFooter: FC<IFooterProps> = (props) => {
   const { handleSubmit } = useFormContext<IBaseIntegration>()
 
   const onSubmit = (data: IBaseIntegration) => {
-    console.log("ddddd", data)
     onConfirm(data.resourceID)
   }
 

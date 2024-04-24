@@ -33,7 +33,7 @@ const VariableList: FC = () => {
                 buttonProps={{
                   type: "text",
                 }}
-                addedIndex={field.value.length - 1}
+                addedIndex={field.value.length}
               />
             </>
           )}

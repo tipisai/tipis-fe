@@ -4,9 +4,8 @@ import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { CloseIcon, PlusIcon } from "@illa-public/icon"
+import { IVariables } from "@illa-public/public-types"
 import LabelWithController from "@/Layout/Function/LabelWithController"
-import { IBaseFunctionForm } from "@/page/WorkSpace/Function/CreateOrEdit/interface"
-import { IBaseVariableItemEditorProps } from "../../interface"
 import {
   deleteIconStyle,
   enumOptionItemContainerStyle,
@@ -14,15 +13,14 @@ import {
   subTitleStyle,
 } from "./style"
 
-const EnumOptionsEditor: FC<IBaseVariableItemEditorProps> = (props) => {
-  const { index } = props
-  const { control } = useFormContext<IBaseFunctionForm>()
+const EnumOptionsEditor: FC = () => {
+  const { control } = useFormContext<IVariables>()
 
   const { t } = useTranslation()
 
   return (
     <Controller
-      name={`config.variables.${index}.enumValues`}
+      name="enumValues"
       control={control}
       render={({ field }) => {
         return (

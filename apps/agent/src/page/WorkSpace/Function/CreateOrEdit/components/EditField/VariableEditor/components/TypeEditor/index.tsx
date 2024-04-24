@@ -2,14 +2,11 @@ import { Select } from "antd"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { VARIABLE_TYPE } from "@illa-public/public-types"
+import { IVariables, VARIABLE_TYPE } from "@illa-public/public-types"
 import LabelWithController from "@/Layout/Function/LabelWithController"
-import { IBaseFunctionForm } from "@/page/WorkSpace/Function/CreateOrEdit/interface"
-import { IBaseVariableItemEditorProps } from "../../interface"
 
-const TypeEditor: FC<IBaseVariableItemEditorProps> = (props) => {
-  const { index } = props
-  const { control } = useFormContext<IBaseFunctionForm>()
+const TypeEditor: FC = () => {
+  const { control } = useFormContext<IVariables>()
 
   const { t } = useTranslation()
 
@@ -34,7 +31,7 @@ const TypeEditor: FC<IBaseVariableItemEditorProps> = (props) => {
 
   return (
     <Controller
-      name={`config.variables.${index}.type`}
+      name="type"
       control={control}
       render={({ field }) => {
         return (

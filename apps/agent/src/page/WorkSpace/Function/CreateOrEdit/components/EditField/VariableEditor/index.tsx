@@ -31,7 +31,7 @@ const VariableEditor: FC = memo(() => {
                   block: true,
                   hiddenButton: hasVariable,
                 }}
-                addedIndex={field.value.length - 1}
+                addedIndex={field.value.length}
               />
               {hasVariable && <VariableList />}
             </LayoutBlock>

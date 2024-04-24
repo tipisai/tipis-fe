@@ -8,6 +8,8 @@ export const editPanelContainerStyle = css`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  overflow: hidden;
+  overflow-y: auto;
 `
 
 export const basicContainerStyle = css`

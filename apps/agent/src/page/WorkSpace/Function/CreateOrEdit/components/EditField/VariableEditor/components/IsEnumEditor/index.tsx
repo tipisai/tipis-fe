@@ -2,27 +2,24 @@ import { Switch } from "antd"
 import { FC } from "react"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { VARIABLE_TYPE } from "@illa-public/public-types"
+import { IVariables, VARIABLE_TYPE } from "@illa-public/public-types"
 import LabelWithController from "@/Layout/Function/LabelWithController"
-import { IBaseFunctionForm } from "../../../../../interface"
-import { IBaseVariableItemEditorProps } from "../../interface"
 
-const IsEnumEditor: FC<IBaseVariableItemEditorProps> = (props) => {
-  const { index } = props
-  const { control } = useFormContext<IBaseFunctionForm>()
+const IsEnumEditor: FC = () => {
+  const { control } = useFormContext<IVariables>()
 
   const { t } = useTranslation()
 
-  const [type] = useWatch({
+  const type = useWatch({
     control,
-    name: [`config.variables.${index}.type`],
+    name: "type",
   })
 
   const isBoolean = type === VARIABLE_TYPE.BOOLEAN
 
   return (
     <Controller
-      name={`config.variables.${index}.isEnum`}
+      name="isEnum"
       control={control}
       render={({ field }) => {
         return (

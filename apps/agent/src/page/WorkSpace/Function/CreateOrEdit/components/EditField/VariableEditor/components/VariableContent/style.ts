@@ -14,3 +14,14 @@ export const customModalStyle = css`
     text-align: center;
   }
 `
+
+export const footerContainerStyle = css`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 24px;
+`
+
+export const buttonStyle = css`
+  width: 200px;
+`
