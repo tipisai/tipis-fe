@@ -54,3 +54,18 @@ export const childrenAndErrorMessageContainerStyle = css`
   flex-direction: column;
   gap: 8px;
 `
+
+export const titleAndDescriptionContainerStyle = css`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`
+
+export const descriptionStyle = css`
+  width: 100%;
+  color: ${getColor("grayBlue", "03")};
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 130%;
+`
