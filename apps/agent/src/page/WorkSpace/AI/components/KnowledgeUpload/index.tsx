@@ -29,7 +29,7 @@ import {
   IFileDetailInfo,
   useUploadFileToDrive,
 } from "@/utils/drive"
-import { multipleFileHandler } from "@/utils/drive/utils"
+import { getRealFileType, multipleFileHandler } from "@/utils/drive/utils"
 import { UploadContext } from "../../AIAgent/components/UploadContext"
 import { IAgentForm } from "../../AIAgent/interface"
 import StatusIcon from "./StatusIcon"
@@ -113,14 +113,19 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
       parameter1: aiAgentID ? "edit_tipi" : "create_tipi",
     })
     const currentFiles = [...currentValue]
-    const formatFiles = multipleFileHandler(
+    const { needUploadFiles, notAcceptFiles } = await multipleFileHandler(
       files,
       currentFiles,
       uploadFileStore,
     )
+    if (notAcceptFiles.length > 0) {
+      messageAPI.warning({
+        content: t("homepage.tipi_chat.message.failed_to_add"),
+      })
+    }
     try {
-      for (let item of formatFiles) {
-        const { fileName, file, abortController, queryID } = item
+      for (let item of needUploadFiles) {
+        const { fileName, file, abortController, queryID, contentType } = item
         if (!file) break
         if (file.size > MAX_FILE_SIZE) {
           TipisTrack.track("knowledge_file_over_size", {
@@ -136,6 +141,7 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
         const uploadRes = await uploadKnowledgeFile(
           queryID,
           file,
+          contentType,
           abortController.signal,
           uploadFileStore,
         )
@@ -222,14 +228,17 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
   }, [uploadFileStore])
 
   const getNeedUploadAndNotAcceptFiles = (files: FileList) => {
-    const acceptType = ACCEPT
+    const needUpdateFilesArray: File[] = []
+    const notAcceptFilesArray: File[] = []
 
-    const needUpdateFilesArray = Array.from(files).filter((file) =>
-      acceptType.includes(file.type),
-    )
-    const notAcceptFilesArray = Array.from(files).filter(
-      (file) => !acceptType.includes(file.type),
-    )
+    Array.from(files).map((file) => {
+      const contentType = getRealFileType(file, file.name.split(".")[1])
+      if (!contentType) {
+        notAcceptFilesArray.push(file)
+      } else {
+        needUpdateFilesArray.push(file)
+      }
+    })
 
     return { needUpdateFilesArray, notAcceptFilesArray }
   }

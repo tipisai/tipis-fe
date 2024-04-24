@@ -7,3 +7,4 @@ export const CREATE_TIPI_TEMPLATE_PATH = `${TEAM_TIPI_TEMPLATE_PATH}/create`
 export const EDIT_TIPI_TEMPLATE_PATH = `${TEAM_TIPI_TEMPLATE_PATH}/:agentID/edit`
 export const RUN_TIPI_TEMPLATE_PATH = `${TEAM_TIPI_TEMPLATE_PATH}/:agentID/run/:tabID`
 export const TIPI_DETAIL_TEMPLATE_PATH = `${TEAM_TIPI_TEMPLATE_PATH}/:agentID/detail`
+export const MARKETPLACE_DETAIL_PATH = `${TEAM_IDENTIFIER_TEMPLATE_PATH}/marketTipi/:agentID/detail`
