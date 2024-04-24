@@ -32,6 +32,7 @@ const DescriptionEditor: FC = memo(() => {
         >
           <Input.TextArea
             {...field}
+            size="large"
             status={!!errors.description ? "error" : undefined}
             maxLength={160}
             placeholder={t("editor.ai-agent.placeholder.desc")}
