@@ -40,3 +40,9 @@ export const uploadContentContainerStyle = css`
     inset: 1px;
   }
 `
+
+export const customUploadStyle = css`
+  .ant-image {
+    flex: none;
+  }
+`

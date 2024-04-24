@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next"
 import { PlusIcon } from "@illa-public/icon"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { IBaseFunctionForm } from "../../../interface"
-import { uploadContentContainerStyle } from "./style"
+import { customUploadStyle, uploadContentContainerStyle } from "./style"
 import { useBeforeUploadAvatar } from "./utils"
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0]
@@ -33,7 +33,7 @@ const AvatarUploader: FC = memo(() => {
           <ConfigProvider
             theme={{
               token: {
-                controlHeightLG: 26,
+                controlHeightLG: 47,
               },
             }}
           >
@@ -50,6 +50,7 @@ const AvatarUploader: FC = memo(() => {
               <Upload
                 listType="picture-card"
                 showUploadList={false}
+                css={customUploadStyle}
                 onRemove={() => {
                   field.onChange("")
                 }}
@@ -59,8 +60,8 @@ const AvatarUploader: FC = memo(() => {
                   <Image
                     src={field.value}
                     css={uploadContentContainerStyle}
-                    width="64px"
-                    height="64px"
+                    width="120px"
+                    height="120px"
                     preview={{
                       visible: false,
                       mask: <Icon component={PlusIcon} />,
