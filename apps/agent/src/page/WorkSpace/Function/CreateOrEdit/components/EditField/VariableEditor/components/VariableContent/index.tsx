@@ -78,7 +78,7 @@ const VariableModalContent: FC<IVariableModalContentProps> = (props) => {
         </div>
         <div css={footerContainerStyle}>
           <BlackButton size="large" css={buttonStyle} onClick={onClickConfirm}>
-            Confirm
+            {t("function.edit.variable_modal.button.confirm")}
           </BlackButton>
         </div>
       </FormProvider>

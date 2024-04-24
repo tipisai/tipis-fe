@@ -2,6 +2,7 @@ import Icon from "@ant-design/icons"
 import { Button } from "antd"
 import { FC } from "react"
 import { useFormContext } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import { PreviousIcon } from "@illa-public/icon"
 import { IBaseIntegration } from "@illa-public/public-types"
 import BlackButton from "@/components/BlackButton"
@@ -10,6 +11,7 @@ import { confirmButtonStyle, footerContainerStyle } from "./style"
 
 const ConfigElementFooter: FC<IFooterProps> = (props) => {
   const { onBack, onConfirm } = props
+  const { t } = useTranslation()
 
   const { handleSubmit } = useFormContext<IBaseIntegration>()
 
@@ -26,7 +28,7 @@ const ConfigElementFooter: FC<IFooterProps> = (props) => {
           icon={<Icon component={PreviousIcon} />}
           size="large"
         >
-          Back
+          {t("function.edit.variable_modal.button.back")}
         </Button>
       )}
       <BlackButton
@@ -36,7 +38,7 @@ const ConfigElementFooter: FC<IFooterProps> = (props) => {
         size="large"
         onClick={handleSubmit(onSubmit)}
       >
-        Confirm
+        {t("function.edit.variable_modal.button.confirm")}
       </BlackButton>
     </div>
   )

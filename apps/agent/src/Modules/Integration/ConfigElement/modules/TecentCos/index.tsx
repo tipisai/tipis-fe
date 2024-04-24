@@ -1,12 +1,14 @@
 import { Input, Select } from "antd"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 import { ITencentCosIntegration } from "@illa-public/public-types"
-import LabelWithController from "../../../../../Layout/Function/LabelWithController"
+import LabelWithController from "@/Layout/Function/LabelWithController"
 import { regionOptions } from "./constants"
 
 const TencentCosConfigElement: FC = () => {
   const { control } = useFormContext<ITencentCosIntegration>()
+  const { t } = useTranslation()
   return (
     <>
       <Controller
@@ -25,8 +27,14 @@ const TencentCosConfigElement: FC = () => {
         control={control}
         render={({ field }) => {
           return (
-            <LabelWithController title="Bucket name">
-              <Input size="large" {...field} />
+            <LabelWithController
+              title={t("editor.action.form.label.tx.bucket_name")}
+            >
+              <Input
+                size="large"
+                {...field}
+                placeholder="examplebucket-1250000000"
+              />
             </LabelWithController>
           )
         }}
@@ -36,7 +44,9 @@ const TencentCosConfigElement: FC = () => {
         control={control}
         render={({ field }) => {
           return (
-            <LabelWithController title="Region">
+            <LabelWithController
+              title={t("editor.action.form.label.tx.region")}
+            >
               <Select
                 options={regionOptions}
                 style={{
@@ -56,7 +66,9 @@ const TencentCosConfigElement: FC = () => {
         control={control}
         render={({ field }) => {
           return (
-            <LabelWithController title="SecretID">
+            <LabelWithController
+              title={t("editor.action.form.label.tx.secret_id")}
+            >
               <Input size="large" {...field} />
             </LabelWithController>
           )
@@ -67,7 +79,9 @@ const TencentCosConfigElement: FC = () => {
         control={control}
         render={({ field }) => {
           return (
-            <LabelWithController title="SecretKey">
+            <LabelWithController
+              title={t("editor.action.form.label.tx.secret_key")}
+            >
               <Input size="large" {...field} />
             </LabelWithController>
           )

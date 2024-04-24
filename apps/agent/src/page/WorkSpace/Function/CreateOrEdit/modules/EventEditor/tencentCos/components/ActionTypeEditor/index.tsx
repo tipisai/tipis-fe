@@ -17,17 +17,17 @@ const ActionTypeEditor: FC = () => {
 
   const actionTypeOptions = [
     {
-      label: t("list"),
+      label: t("editor.action.form.label.tx.action_type.list"),
       value: FUNCTION_ACTION_TYPE.LIST,
     },
     {
-      label: t("getDownloadUrl"),
+      label: t("editor.action.form.option.tx.action_type.download"),
       value: FUNCTION_ACTION_TYPE.GET_DOWNLOAD_URL,
     },
   ]
 
   return (
-    <LabelWithEditor label="ActionType">
+    <LabelWithEditor label={t("editor.action.form.label.tx.action_type")}>
       <Controller
         control={control}
         name="content.actionType"
