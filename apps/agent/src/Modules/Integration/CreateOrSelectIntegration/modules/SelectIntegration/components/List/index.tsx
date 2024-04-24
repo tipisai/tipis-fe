@@ -1,11 +1,12 @@
 import { FC } from "react"
 import { IIntegrationListProps } from "./interface"
 import IntegrationListItem from "./item"
+import { listContainerStyle } from "./style"
 
 const IntegrationList: FC<IIntegrationListProps> = (props) => {
   const { onClickItem, selectedIntegrationID } = props
   return (
-    <div>
+    <div css={listContainerStyle}>
       <IntegrationListItem
         integrationType={"tencentcos"}
         integrationName={"1111"}

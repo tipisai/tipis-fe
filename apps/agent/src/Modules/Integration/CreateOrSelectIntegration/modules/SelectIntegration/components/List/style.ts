@@ -7,10 +7,11 @@ export const itemContainerStyle = (isSelected: boolean) => css`
   display: flex;
   align-items: center;
   cursor: pointer;
+  border-radius: 8px;
   transition: background-color 0.2s;
-  background-color: ${isSelected ? getColor("grayBlue", "07") : "transparent"};
+  background-color: ${isSelected ? getColor("grayBlue", "09") : "transparent"};
   :hover {
-    background-color: ${getColor("grayBlue", "07")};
+    background-color: ${getColor("grayBlue", "09")};
   }
 `
 
@@ -46,4 +47,11 @@ export const itemTimeContainerStyle = css`
   width: 120px;
   padding: 0px 16px;
   align-items: center;
+`
+
+export const listContainerStyle = css`
+  min-height: 384px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 `

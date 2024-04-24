@@ -1,16 +1,19 @@
 import { FC } from "react"
-import { ICreateOrSelectIntegrationProps } from "./interface"
+// import { useGetIntegrationListQuery } from "@/redux/services/integrationAPI"
+// import { useGetCurrentTeamInfo } from "@/utils/team"
+import { IIntegrationSelectorProps } from "./interface"
 import CreateIntegration from "./modules/CreateIntegration"
-import SelectIntegration from "./modules/SelectIntegration"
+import SelectAndCreateIntegration from "./modules/SelectAndCreate"
 
 const hasResource = true
 
-const CreateOrSelectIntegration: FC<ICreateOrSelectIntegrationProps> = (
-  props,
-) => {
+const IntegrationSelector: FC<IIntegrationSelectorProps> = (props) => {
+  // const currentTeamInfo = useGetCurrentTeamInfo()
+  // const { data, error } = useGetIntegrationListQuery(currentTeamInfo!.id)
+
   const { onConfirm, integrationType } = props
   return hasResource ? (
-    <SelectIntegration
+    <SelectAndCreateIntegration
       onConfirm={onConfirm}
       integrationType={integrationType}
     />
@@ -22,4 +25,4 @@ const CreateOrSelectIntegration: FC<ICreateOrSelectIntegrationProps> = (
   )
 }
 
-export default CreateOrSelectIntegration
+export default IntegrationSelector

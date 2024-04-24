@@ -35,7 +35,7 @@ export const integrationContainerStyle = css`
   border: 1px solid ${getColor("grayBlue", "08")};
   cursor: pointer;
   :hover {
-    background-color: ${getColor("grayBlue", "07")};
+    background-color: ${getColor("grayBlue", "09")};
   }
 `
 
@@ -56,7 +56,7 @@ export const buttonStyle = css`
   border: 1px solid ${getColor("grayBlue", "08")};
   margin: -1px;
   :hover {
-    background-color: ${getColor("grayBlue", "07")};
+    background-color: ${getColor("grayBlue", "09")};
   }
 `
 

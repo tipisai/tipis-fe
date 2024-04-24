@@ -55,7 +55,7 @@ const KnowledgeEditor: FC = memo(() => {
             values={field.value}
           />
           {errors.knowledge?.message && (
-            <ErrorText errorMessage={errors.knowledge?.message} />
+            <ErrorText message={errors.knowledge?.message} />
           )}
         </LayoutBlock>
       )}

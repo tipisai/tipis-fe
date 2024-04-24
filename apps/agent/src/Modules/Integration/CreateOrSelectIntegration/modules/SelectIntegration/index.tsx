@@ -1,42 +1,29 @@
-import { FC, useState } from "react"
-import CreateIntegration from "../CreateIntegration"
+import { FC, useEffect, useState } from "react"
+import { useIntegrationSelectorContext } from "../../utils"
 import SelectIntegrationFooter from "./components/Footer"
 import IntegrationList from "./components/List"
-import { ISelectIntegrationProps, SELECT_INTEGRATION_STEP } from "./interface"
+import { ISelectIntegrationProps } from "./interface"
 
 const SelectIntegration: FC<ISelectIntegrationProps> = (props) => {
-  const { onConfirm, integrationType } = props
-  const [step, setStep] = useState<SELECT_INTEGRATION_STEP>(
-    SELECT_INTEGRATION_STEP.SELECT,
-  )
+  const { onClickCreate, onConfirm } = props
   const [selectedIntegration, setSelectedIntegration] = useState<string>("")
+  const { setModalName } = useIntegrationSelectorContext()
+
+  useEffect(() => {
+    setModalName("select")
+  }, [setModalName])
+
   return (
     <>
-      {step === SELECT_INTEGRATION_STEP.SELECT && (
-        <>
-          <IntegrationList
-            onClickItem={setSelectedIntegration}
-            selectedIntegrationID={selectedIntegration}
-          />
-          <SelectIntegrationFooter
-            onCreateIntegration={() => {
-              setSelectedIntegration("")
-              setStep(SELECT_INTEGRATION_STEP.CREATE)
-            }}
-            selectedIntegration={selectedIntegration}
-            onConfirm={onConfirm}
-          />
-        </>
-      )}
-      {step === SELECT_INTEGRATION_STEP.CREATE && (
-        <CreateIntegration
-          onBack={() => {
-            setStep(SELECT_INTEGRATION_STEP.SELECT)
-          }}
-          onConfirm={onConfirm}
-          integrationType={integrationType}
-        />
-      )}
+      <IntegrationList
+        onClickItem={setSelectedIntegration}
+        selectedIntegrationID={selectedIntegration}
+      />
+      <SelectIntegrationFooter
+        onCreateIntegration={onClickCreate}
+        selectedIntegration={selectedIntegration}
+        onConfirm={onConfirm}
+      />
     </>
   )
 }

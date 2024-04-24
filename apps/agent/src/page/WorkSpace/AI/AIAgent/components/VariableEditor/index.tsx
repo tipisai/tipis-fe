@@ -105,7 +105,7 @@ const VariableEditor: FC = memo(() => {
             label={""}
           />
           {errors.variables?.message && (
-            <ErrorText errorMessage={errors.variables?.message} />
+            <ErrorText message={errors.variables?.message} />
           )}
         </LayoutBlock>
       )}

@@ -1,31 +1,40 @@
 import { Modal } from "antd"
-import { FC } from "react"
-import CreateOrSelectIntegration from "."
-import { ICreateOrSelectIntegrationModalProps } from "./interface"
+import { FC, useState } from "react"
+import IntegrationSelector from "."
+import { IIntegrationSelectorModalProps } from "./interface"
 import { customModalStyle } from "./style"
+import { IntegrationSelectorContext } from "./utils"
 
-const CreateOrSelectIntegrationModal: FC<
-  ICreateOrSelectIntegrationModalProps
-> = (props) => {
+const IntegrationSelectorModal: FC<IIntegrationSelectorModalProps> = (
+  props,
+) => {
   const { open, changeOpen, onConfirm, integrationType } = props
+  const [modalName, setModalName] = useState("")
   return (
-    <Modal
-      open={open}
-      destroyOnClose
-      title="dddddd"
-      width={696}
-      footer={false}
-      css={customModalStyle}
-      onCancel={() => {
-        changeOpen(false)
+    <IntegrationSelectorContext.Provider
+      value={{
+        modalName,
+        setModalName,
       }}
     >
-      <CreateOrSelectIntegration
-        onConfirm={onConfirm}
-        integrationType={integrationType}
-      />
-    </Modal>
+      <Modal
+        open={open}
+        destroyOnClose
+        title={modalName}
+        width={696}
+        footer={false}
+        css={customModalStyle}
+        onCancel={() => {
+          changeOpen(false)
+        }}
+      >
+        <IntegrationSelector
+          onConfirm={onConfirm}
+          integrationType={integrationType}
+        />
+      </Modal>
+    </IntegrationSelectorContext.Provider>
   )
 }
 
-export default CreateOrSelectIntegrationModal
+export default IntegrationSelectorModal
