@@ -14,19 +14,24 @@ import {
 
 const CopyPanel: FC<ICopyPanelProps> = (props) => {
   const { t } = useTranslation()
-  const {
-    title,
-    copyButtonText = t("user_management.modal.link.copy"),
-    content,
-  } = props
+  const { title, copyButtonProps, content, onClickCopyButton } = props
+
+  const { text = t("user_management.modal.link.copy"), disabled } =
+    copyButtonProps ?? {}
   return (
     <div css={copyPanelStyle}>
       <div css={copyPanelHeaderStyle}>
         <p css={headerTextStyle}>{title}</p>
-        <Button icon={<Icon component={CopyIcon} />}>{copyButtonText}</Button>
+        <Button
+          icon={<Icon component={CopyIcon} />}
+          onClick={onClickCopyButton}
+          disabled={disabled}
+        >
+          {text}
+        </Button>
       </div>
       <div css={contentContainerStyle}>
-        <p css={contentTextStyle}>{content}</p>
+        <div css={contentTextStyle}>{content}</div>
       </div>
     </div>
   )

@@ -1,5 +1,11 @@
+import { ReactNode } from "react"
+
 export interface ICopyPanelProps {
   title: string
-  copyButtonText?: string
-  content: string
+  copyButtonProps?: {
+    text?: string
+    disabled?: boolean
+  }
+  content: ReactNode
+  onClickCopyButton: () => void
 }

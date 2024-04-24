@@ -1,13 +1,25 @@
 import Icon from "@ant-design/icons"
-import { Button } from "antd"
+import { Button, Skeleton } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { DocsIcon } from "@illa-public/icon"
+import { useGetWhiteListIPQuery } from "@/redux/services/peripheralAPI"
+import { useCopyToClipboard } from "@/utils/copyToClipboard"
 import CopyPanel from "../../components/CopyPanel"
 import { blockStyle, descStyle, docPanelStyle, titleStyle } from "./style"
 
 const DocPanel: FC = () => {
   const { t } = useTranslation()
+  const { data, isLoading } = useGetWhiteListIPQuery()
+  const copyToClipboard = useCopyToClipboard()
+
+  const onClickCopyPrompt = () => {}
+
+  const onClickCopyIP = () => {
+    if (!data) return
+    copyToClipboard(data.resources.join("\n"))
+  }
+
   return (
     <div css={docPanelStyle}>
       <Button icon={<Icon component={DocsIcon} />}>
@@ -20,8 +32,11 @@ const DocPanel: FC = () => {
         <p css={titleStyle}>{t("function.edit.right_panel.write_in_prompt")}</p>
         <p css={descStyle}>{t("function.edit.right_panel.for_example")}</p>
         <CopyPanel
+          onClickCopyButton={onClickCopyPrompt}
           title="Prompt"
-          copyButtonText={t("function.edit.right_panel.copy_prompt")}
+          copyButtonProps={{
+            text: t("function.edit.right_panel.copy_prompt"),
+          }}
           content={t("function.edit.right_panel.example_prompt")}
         />
       </div>
@@ -30,14 +45,24 @@ const DocPanel: FC = () => {
         <p css={descStyle}>{t("function.edit.right_panel.for_example")}</p>
         <CopyPanel
           title="IP"
-          copyButtonText={t("function.edit.right_panel.copy_ip")}
-          content={`52.177.12.28/32\n
-            52.175.251.223/32\n
-            35.90.103.132/30\n
-            44.208.168.68/30\n
-            52.177.12.28/32\n
-            52.175.251.223/32\n
-            35.90.103.132/30`}
+          copyButtonProps={{
+            text: t("function.edit.right_panel.copy_ip"),
+            disabled: !data,
+          }}
+          onClickCopyButton={onClickCopyIP}
+          content={
+            isLoading ? (
+              <Skeleton
+                title={false}
+                active
+                paragraph={{
+                  rows: 3,
+                }}
+              />
+            ) : (
+              data?.resources.map((ip) => <p key={ip}>{ip}</p>)
+            )
+          }
         />
       </div>
     </div>
