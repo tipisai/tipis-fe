@@ -36,19 +36,25 @@ const VariableModalContent: FC<IVariableModalContentProps> = (props) => {
   })
   const { t } = useTranslation()
 
-  const [isEnum, variables] = useWatch({
+  const variables = useWatch({
     control,
-    name: [`config.variables.${index}.isEnum`, `config.variables`],
+    name: "config.variables",
   })
 
   const methods = useForm<IVariables>({
     defaultValues: variables[index] ?? INIT_VARIABLE,
+    mode: "onChange",
   })
 
-  const onClickConfirm = () => {
+  const isEnum = useWatch({
+    control: methods.control,
+    name: "isEnum",
+  })
+
+  const onClickConfirm = (data: IVariables) => {
+    console.log("data", data)
     const values = variableControl.field.value
-    const newValue = methods.getValues()
-    values[index] = newValue
+    values[index] = data
     variableControl.field.onChange(values)
     openChange(false)
   }
@@ -77,7 +83,11 @@ const VariableModalContent: FC<IVariableModalContentProps> = (props) => {
           <TestValueEditor />
         </div>
         <div css={footerContainerStyle}>
-          <BlackButton size="large" css={buttonStyle} onClick={onClickConfirm}>
+          <BlackButton
+            size="large"
+            css={buttonStyle}
+            onClick={methods.handleSubmit(onClickConfirm)}
+          >
             {t("function.edit.variable_modal.button.confirm")}
           </BlackButton>
         </div>

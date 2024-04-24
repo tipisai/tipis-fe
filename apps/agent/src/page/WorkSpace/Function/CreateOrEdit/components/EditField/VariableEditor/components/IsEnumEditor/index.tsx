@@ -1,6 +1,11 @@
 import { Switch } from "antd"
 import { FC } from "react"
-import { Controller, useFormContext, useWatch } from "react-hook-form"
+import {
+  Controller,
+  useController,
+  useFormContext,
+  useWatch,
+} from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { IVariables, VARIABLE_TYPE } from "@illa-public/public-types"
 import LabelWithController from "@/Layout/Function/LabelWithController"
@@ -15,6 +20,11 @@ const IsEnumEditor: FC = () => {
     name: "type",
   })
 
+  const enumValuesController = useController({
+    control,
+    name: "enumValues",
+  })
+
   const isBoolean = type === VARIABLE_TYPE.BOOLEAN
 
   return (
@@ -26,7 +36,18 @@ const IsEnumEditor: FC = () => {
           <LabelWithController
             title={t("function.edit.variable_modal.label.enum")}
           >
-            <Switch {...field} disabled={isBoolean} />
+            <div>
+              <Switch
+                {...field}
+                disabled={isBoolean}
+                onChange={(checked) => {
+                  if (!checked) {
+                    enumValuesController.field.onChange([])
+                  }
+                  field.onChange(checked)
+                }}
+              />
+            </div>
           </LabelWithController>
         )
       }}

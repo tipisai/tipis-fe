@@ -4,6 +4,9 @@ export const variableContentStyle = css`
   width: 100%;
   max-height: 536px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   ::-webkit-scrollbar {
     display: none;
   }

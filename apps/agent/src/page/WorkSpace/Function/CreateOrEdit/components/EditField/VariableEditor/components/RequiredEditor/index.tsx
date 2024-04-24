@@ -19,7 +19,9 @@ const RequiredEditor: FC = () => {
           <LabelWithController
             title={t("function.edit.variable_modal.label.required")}
           >
-            <Switch {...field} />
+            <div>
+              <Switch {...field} />
+            </div>
           </LabelWithController>
         )
       }}
