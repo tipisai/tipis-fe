@@ -1,5 +1,5 @@
 import Icon from "@ant-design/icons"
-import { Button, Divider, Input } from "antd"
+import { Button, Divider, Input, Typography } from "antd"
 import { FC, useEffect, useState } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
@@ -8,7 +8,6 @@ import { GithubIcon } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
 import { EMAIL_FORMAT, isCloudVersion } from "@illa-public/utils"
 import ErrorMessage from "@/components/InputErrorMessage"
-import LinkButton from "@/components/LinkButton"
 import { FORGOT_PASSWORD_PATH, REGISTER_PATH } from "@/utils/routeHelper"
 import { OAuthButton } from "../../components/OAuthButton"
 import { CAN_SHOW_OAUTH } from "../../constants"
@@ -91,9 +90,11 @@ export const PCLogin: FC<LoginPageProps> = (props) => {
               i18nKey="page.user.sign_in.description.register"
               t={t}
               components={[
-                <LinkButton
-                  fontSize={16}
+                <Typography.Link
                   key="text-link"
+                  style={{
+                    fontSize: 16,
+                  }}
                   onClick={handleClickRegister}
                 />,
               ]}
@@ -155,14 +156,14 @@ export const PCLogin: FC<LoginPageProps> = (props) => {
               <label css={formLabelStyle}>
                 {t("page.user.sign_in.fields.password")}
               </label>
-              <LinkButton
+              <Typography.Link
                 style={{
                   marginRight: 8,
                 }}
                 onClick={handleClickForgotPassword}
               >
                 {t("page.user.sign_in.description.forgot_password")}
-              </LinkButton>
+              </Typography.Link>
             </div>
             <Controller
               name="password"
