@@ -48,7 +48,7 @@ export const LayoutBlock: FC<ILayoutBlock> = (props) => {
             </Tooltip>
           )}
         </div>
-        {description && <p css={descriptionStyle}>{description}</p>}
+        {description && <div css={descriptionStyle}>{description}</div>}
       </div>
       <div css={childrenAndErrorMessageContainerStyle}>
         {children}

@@ -7,7 +7,7 @@ import {
   IBaseFunction,
   TTencentCosFunctionContent,
 } from "@illa-public/public-types"
-import LabelWithEditor from "../../../labelWithEditor"
+import LabelWithEditor from "../../../../components/labelWithEditor"
 
 const ActionTypeEditor: FC = () => {
   const { control } =

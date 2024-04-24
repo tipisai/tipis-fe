@@ -7,9 +7,9 @@ import { IEventEditorProps } from "./interface"
 const getEventEditorByIntegrationType = (integrationType: TIntegrationType) => {
   switch (integrationType) {
     case "tencentcos":
-      return lazy(() => import("./tencentCos"))
+      return lazy(() => import("./panels/tencentCos"))
     case "larkBot":
-      return lazy(() => import("./tencentCos"))
+      return lazy(() => import("./panels/tencentCos"))
   }
 }
 

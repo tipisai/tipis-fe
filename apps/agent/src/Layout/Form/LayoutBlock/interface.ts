@@ -2,7 +2,7 @@ import { ReactNode } from "react"
 
 export interface ILayoutBlock {
   title: string
-  description?: string
+  description?: ReactNode
   tips?: string
   subtitle?: string | ReactNode
   children?: ReactNode

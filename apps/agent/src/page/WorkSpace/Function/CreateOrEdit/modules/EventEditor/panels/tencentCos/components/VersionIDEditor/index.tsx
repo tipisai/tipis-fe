@@ -6,7 +6,7 @@ import {
   IBaseFunction,
   IDownloadAnObjectContent,
 } from "@illa-public/public-types"
-import LabelWithEditor from "../../../labelWithEditor"
+import LabelWithEditor from "../../../../components/labelWithEditor"
 
 const VersionIDEditor: FC = () => {
   const { control } = useFormContext<IBaseFunction<IDownloadAnObjectContent>>()

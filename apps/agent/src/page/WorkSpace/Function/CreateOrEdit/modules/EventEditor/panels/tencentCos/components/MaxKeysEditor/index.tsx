@@ -3,7 +3,7 @@ import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { IBaseFunction, IListObjectContent } from "@illa-public/public-types"
-import LabelWithEditor from "../../../labelWithEditor"
+import LabelWithEditor from "../../../../components/labelWithEditor"
 
 const MaxKeysEditor: FC = () => {
   const { control } = useFormContext<IBaseFunction<IListObjectContent>>()
