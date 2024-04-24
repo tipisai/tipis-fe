@@ -108,22 +108,27 @@ const MobileInputArea: FC<IInputAreaProps> = (props) => {
       setUploadKnowledgeLoading(true)
       const currentFiles = [...knowledgeFiles]
 
-      const formatFiles = multipleFileHandler(
+      const { needUploadFiles, notAcceptFiles } = await multipleFileHandler(
         files,
         currentFiles,
         chatUploadStoreRef.current,
       )
+      if (notAcceptFiles.length > 0) {
+        messageAPI.warning({
+          content: t("homepage.tipi_chat.message.failed_to_add"),
+        })
+      }
       currentFiles.push(
-        ...formatFiles.map((item) => ({
+        ...needUploadFiles.map((item) => ({
           fileName: item.fileName,
-          contentType: item.file.type,
+          contentType: item.contentType,
           fileID: "",
         })),
       )
       setKnowledgeFiles(currentFiles)
       try {
-        for (let item of formatFiles) {
-          const { fileName, file, abortController } = item
+        for (let item of needUploadFiles) {
+          const { fileName, file, abortController, contentType } = item
           if (!file) break
           if (file.size > MAX_FILE_SIZE) {
             TipisTrack.track("chat_file_over_size", {
@@ -142,6 +147,7 @@ const MobileInputArea: FC<IInputAreaProps> = (props) => {
           const uploadRes = await uploadChatFile(
             item.queryID,
             file,
+            contentType,
             abortController.signal,
             chatUploadStoreRef.current,
           )

@@ -16,6 +16,7 @@ export type IListener = () => void
 export type IUploadToDrive = (
   queryID: string,
   needUploadFile: File,
+  contentType: string,
   abortSignal: AbortSignal,
 ) => void
 

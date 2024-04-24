@@ -29,6 +29,7 @@ export const useUploadFileToDrive = () => {
   const uploadChatFile = async (
     queryID: string,
     needUploadFile: File,
+    contentType: string,
     abortSignal: AbortSignal,
     store: UploadFileStore,
   ) => {
@@ -41,7 +42,7 @@ export const useUploadFileToDrive = () => {
       })
       const { uploadAddress, fileID } = await triggerGetChatUploadAddress({
         name: needUploadFile.name,
-        contentType: needUploadFile.type,
+        contentType,
         size: needUploadFile.size,
         teamID,
       }).unwrap()
@@ -94,6 +95,7 @@ export const useUploadFileToDrive = () => {
   const uploadKnowledgeFile = async (
     queryID: string,
     needUploadFile: File,
+    contentType: string,
     abortSignal: AbortSignal,
     store: UploadFileStore,
   ) => {
@@ -106,7 +108,7 @@ export const useUploadFileToDrive = () => {
       })
       const { uploadAddress, fileID } = await triggerGetKnowledgeUploadAddress({
         name: needUploadFile.name,
-        contentType: needUploadFile.type,
+        contentType,
         size: needUploadFile.size,
         teamID,
       }).unwrap()

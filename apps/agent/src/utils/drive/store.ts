@@ -73,6 +73,7 @@ export class UploadFileStore {
       uploadFileToDrive(
         queryID,
         uploadInfo.needUploadFile,
+        uploadInfo.contentType,
         uploadInfo.abortController?.signal!,
       )
       this.listeners.forEach((listener) => listener())
