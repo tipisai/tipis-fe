@@ -14,6 +14,7 @@ import {
   CHAT_TEMPLATE_PATH,
   CREATE_TIPI_TEMPLATE_PATH,
   EDIT_TIPI_TEMPLATE_PATH,
+  MARKETPLACE_DETAIL_PATH,
   RUN_TIPI_TEMPLATE_PATH,
   TIPIS_DASHBOARD_TEMPLATE_PATH,
   TIPI_DETAIL_TEMPLATE_PATH,
@@ -197,7 +198,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         accessByMobile: true,
       },
       {
-        path: ":teamIdentifier/marketTipi/:agentID/detail",
+        path: MARKETPLACE_DETAIL_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <MarketTipiDetailPage />

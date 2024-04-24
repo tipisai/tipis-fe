@@ -1,9 +1,8 @@
-import { App, Statistic } from "antd"
+import { App, Statistic, Typography } from "antd"
 import { FC } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { getColor } from "@illa-public/color-scheme"
-import LinkButton from "../LinkButton"
 import { EmailCodeProps } from "./interface"
 
 const { Countdown } = Statistic
@@ -49,15 +48,8 @@ export const EmailCode: FC<EmailCodeProps> = (props) => {
       }}
     />
   ) : (
-    <LinkButton
-      style={{
-        height: "auto",
-        border: "none",
-      }}
-      fontSize={14}
-      onClick={handleClickSend}
-    >
+    <Typography.Link onClick={handleClickSend}>
       {t("page.user.sign_up.actions.send")}
-    </LinkButton>
+    </Typography.Link>
   )
 }

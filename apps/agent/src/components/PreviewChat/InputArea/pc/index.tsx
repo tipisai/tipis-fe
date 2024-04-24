@@ -17,12 +17,11 @@ import { TipisTrack } from "@illa-public/track-utils"
 import { useGetUserInfoQuery } from "@illa-public/user-data"
 import UnselectComponentIcon from "@/assets/agent/unselectComponent.svg?react"
 import {
-  ACCEPT,
   MAX_FILE_SIZE,
   MAX_MESSAGE_FILES_LENGTH,
 } from "@/config/constants/knowledge"
 import { UploadFileStore, useUploadFileToDrive } from "@/utils/drive"
-import { multipleFileHandler } from "@/utils/drive/utils"
+import { getRealFileType, multipleFileHandler } from "@/utils/drive/utils"
 import { PRESET_OPTION_ID } from "../../PresetOptions/constants"
 import { useGetPrompt } from "../../PresetOptions/hook"
 import PresetOptions from "../../PresetOptions/pc"
@@ -124,24 +123,32 @@ const PCInputArea: FC<IInputAreaProps> = (props) => {
         parameter1: useTo,
       })
       setUploadKnowledgeLoading(true)
+
       const currentFiles = [...knowledgeFiles]
 
-      const formatFiles = multipleFileHandler(
+      const { needUploadFiles, notAcceptFiles } = await multipleFileHandler(
         files,
         currentFiles,
         chatUploadStoreRef.current,
       )
+      if (notAcceptFiles.length > 0) {
+        messageAPI.warning({
+          content: t("homepage.tipi_chat.message.failed_to_add"),
+        })
+      }
+
+      console.log("needUploadFiles", needUploadFiles)
       currentFiles.push(
-        ...formatFiles.map((item) => ({
+        ...needUploadFiles.map((item) => ({
           fileName: item.fileName,
-          contentType: item.file.type,
+          contentType: item.contentType,
           fileID: "",
         })),
       )
       setKnowledgeFiles(currentFiles)
       try {
-        for (let item of formatFiles) {
-          const { fileName, file, abortController } = item
+        for (let item of needUploadFiles) {
+          const { fileName, file, abortController, contentType } = item
           if (!file) break
           if (file.size > MAX_FILE_SIZE) {
             TipisTrack.track("chat_file_over_size", {
@@ -160,6 +167,7 @@ const PCInputArea: FC<IInputAreaProps> = (props) => {
           const uploadRes = await uploadChatFile(
             item.queryID,
             file,
+            contentType,
             abortController.signal,
             chatUploadStoreRef.current,
           )
@@ -263,15 +271,16 @@ const PCInputArea: FC<IInputAreaProps> = (props) => {
   )
 
   const getNeedUploadAndNotAcceptFiles = useCallback((files: FileList) => {
-    const acceptType = ACCEPT
-
-    const needUpdateFilesArray = Array.from(files).filter((file) =>
-      acceptType.includes(file.type),
-    )
-    const notAcceptFilesArray = Array.from(files).filter(
-      (file) => !acceptType.includes(file.type),
-    )
-
+    const needUpdateFilesArray: File[] = []
+    const notAcceptFilesArray: File[] = []
+    Array.from(files).map((file) => {
+      const contentType = getRealFileType(file, file.name.split(".")[1])
+      if (!contentType) {
+        notAcceptFilesArray.push(file)
+      } else {
+        needUpdateFilesArray.push(file)
+      }
+    })
     return { needUpdateFilesArray, notAcceptFilesArray }
   }, [])
 

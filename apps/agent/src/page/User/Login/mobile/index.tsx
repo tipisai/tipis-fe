@@ -1,5 +1,5 @@
 import Icon from "@ant-design/icons"
-import { Button, Input } from "antd"
+import { Button, Input, Typography } from "antd"
 import { FC, useEffect, useState } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom"
 import { GithubIcon } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
 import ErrorMessage from "@/components/InputErrorMessage"
-import LinkButton from "@/components/LinkButton"
 import { FORGOT_PASSWORD_PATH, REGISTER_PATH } from "@/utils/routeHelper"
 import { OAuthButton } from "../../components/OAuthButton"
 import { CAN_SHOW_OAUTH, EMAIL_FORMAT } from "../../constants"
@@ -83,11 +82,7 @@ export const MobileLogin: FC<LoginPageProps> = (props) => {
               i18nKey="page.user.sign_in.description.register"
               t={t}
               components={[
-                <LinkButton
-                  style={{
-                    marginRight: 8,
-                  }}
-                  fontSize={14}
+                <Typography.Link
                   key="text-link"
                   onClick={handleClickRegister}
                 />,
@@ -178,14 +173,14 @@ export const MobileLogin: FC<LoginPageProps> = (props) => {
         </section>
 
         <div css={forgotPwdStyle}>
-          <LinkButton
+          <Typography.Link
             style={{
               marginRight: 8,
             }}
             onClick={handleClickForgotPassword}
           >
             {t("page.user.sign_in.description.forgot_password")}
-          </LinkButton>
+          </Typography.Link>
         </div>
         <Button
           type="primary"

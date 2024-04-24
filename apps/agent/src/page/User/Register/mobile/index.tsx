@@ -1,5 +1,5 @@
 import Icon from "@ant-design/icons"
-import { Button, Input } from "antd"
+import { Button, Input, Typography } from "antd"
 import { FC, useEffect, useState } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
@@ -8,7 +8,6 @@ import { GithubIcon } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
 import { EmailCode } from "@/components/EmailCode"
 import ErrorMessage from "@/components/InputErrorMessage"
-import LinkButton from "@/components/LinkButton"
 import { LOGIN_PATH } from "@/utils/routeHelper"
 import { OAuthButton } from "../../components/OAuthButton"
 import { CAN_SHOW_OAUTH, EMAIL_FORMAT } from "../../constants"
@@ -89,11 +88,10 @@ export const MobileRegister: FC<RegisterProps> = (props) => {
               i18nKey="page.user.sign_up.description.login"
               t={t}
               components={[
-                <LinkButton
+                <Typography.Link
                   style={{
                     marginRight: 8,
                   }}
-                  fontSize={14}
                   key="go-to-login"
                   onClick={handleClickToLogin}
                 />,

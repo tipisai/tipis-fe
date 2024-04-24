@@ -19,7 +19,6 @@ export const headerStyle = css`
   flex-direction: column;
   justify-content: flex-end;
   width: 100%;
-  height: 220px;
   overflow: hidden;
   border-radius: 16px;
   position: relative;
@@ -27,14 +26,12 @@ export const headerStyle = css`
 `
 
 export const agentIconStyle = css`
-  object-fit: cover;
   width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: -1;
 `
 
 export const actionContainerStyle = css`
+  position: absolute;
+  bottom: 0;
   display: flex;
   width: 100%;
   height: 64px;

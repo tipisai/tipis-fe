@@ -1,7 +1,8 @@
-import { Switch, Typography } from "antd"
+import { Typography } from "antd"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
+import BlackSwitch from "@/components/BlackSwitch"
 import { IContributeFromFields } from "../../ContributeContent/interface"
 import BlockLayout from "../BlockLayout"
 import FirstLabel from "../Label/FistLabel"
@@ -39,7 +40,7 @@ const PublishConfig: FC = () => {
         <Controller
           name="publishConfiguration"
           control={control}
-          render={({ field }) => <Switch {...field} />}
+          render={({ field }) => <BlackSwitch {...field} size="small" />}
         />
       </div>
     </BlockLayout>

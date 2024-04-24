@@ -3,10 +3,10 @@ import { FC } from "react"
 import BlackButtonTheme from "@/config/them/theme-blackButton.json"
 
 const BlackButton: FC<ButtonProps> = (props) => {
-  const { children, ...antdButtonProps } = props
+  const { children, type = "primary", ...antdButtonProps } = props
   return (
     <ConfigProvider theme={BlackButtonTheme as ThemeConfig}>
-      <Button {...antdButtonProps} type="primary">
+      <Button {...antdButtonProps} type={type}>
         {children}
       </Button>
     </ConfigProvider>

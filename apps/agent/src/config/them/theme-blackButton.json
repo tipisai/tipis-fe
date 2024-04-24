@@ -41,6 +41,17 @@
       "colorTextDisabled": "rgba(255, 255, 255, 0.31)",
       "lineWidth": 0,
       "colorText": "rgb(101, 74, 236)"
+    },
+    "Switch": {
+      "colorPrimary": "rgb(29, 33, 41)",
+      "colorPrimaryHover": "rgba(29, 33, 41, 0.8)",
+      "colorText": "rgba(255, 255, 255, 0.88)",
+      "trackMinWidth": 41,
+      "trackMinWidthSM": 25,
+      "trackHeight": 24,
+      "trackPadding": 3,
+      "colorTextQuaternary": "rgb(218, 222, 229)",
+      "colorTextTertiary": "rgb(200, 203, 209)"
     }
   }
 }
