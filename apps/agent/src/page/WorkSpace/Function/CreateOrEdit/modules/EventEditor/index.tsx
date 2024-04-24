@@ -21,8 +21,6 @@ const EventEditor: FC<IEventEditorProps> = (props) => {
     <LayoutBlock
       title={t("function.edit.configure.label.event")}
       description={t("function.edit.configure.tips.event")}
-      required
-      // errorMessage={errors.description?.message}
     >
       <Suspense>
         <EventEditorComponent />

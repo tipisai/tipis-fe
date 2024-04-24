@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useIntegrationSelectorContext } from "../../utils"
 import SelectIntegrationFooter from "./components/Footer"
 import IntegrationList from "./components/List"
@@ -8,10 +9,11 @@ const SelectIntegration: FC<ISelectIntegrationProps> = (props) => {
   const { onClickCreate, onConfirm } = props
   const [selectedIntegration, setSelectedIntegration] = useState<string>("")
   const { setModalName } = useIntegrationSelectorContext()
+  const { t } = useTranslation()
 
   useEffect(() => {
-    setModalName("select")
-  }, [setModalName])
+    setModalName(t("editor.action.modal.select_integration"))
+  }, [setModalName, t])
 
   return (
     <>

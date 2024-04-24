@@ -22,7 +22,6 @@ const VariableEditor: FC = memo(() => {
             <LayoutBlock
               title={t("function.edit.configure.label.variable")}
               description={t("function.edit.configure.tips.variable")}
-              required
             >
               <CreateVariableButton
                 buttonProps={{
