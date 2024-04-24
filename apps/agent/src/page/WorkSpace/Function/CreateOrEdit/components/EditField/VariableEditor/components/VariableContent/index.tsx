@@ -2,7 +2,7 @@ import { Modal } from "antd"
 import { FC } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { IBaseFunctionForm } from "../../../../../interface"
+import { IBaseFunctionForm } from "@/page/WorkSpace/Function/CreateOrEdit/interface"
 import DescriptionEditor from "../DescriptionEditor"
 import EnumOptionsEditor from "../EnumOptionsEditor"
 import IsEnumEditor from "../IsEnumEditor"
@@ -29,8 +29,12 @@ const VariableModalContent: FC<IVariableModalContentProps> = (props) => {
       title={t("function.edit.variable_modal.title.edit_variable")}
       css={customModalStyle}
       footer={false}
-      onCancel={() => openChange(false)}
+      onCancel={(e) => {
+        e.stopPropagation()
+        openChange(false)
+      }}
       destroyOnClose
+      width={696}
     >
       <div css={variableContentStyle}>
         <NameEditor index={index} />

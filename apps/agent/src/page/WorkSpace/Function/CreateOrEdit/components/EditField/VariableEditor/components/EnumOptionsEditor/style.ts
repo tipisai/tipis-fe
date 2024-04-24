@@ -19,3 +19,7 @@ export const subTitleStyle = css`
   font-weight: 400;
   line-height: 22px;
 `
+
+export const deleteIconStyle = css`
+  flex: none;
+`

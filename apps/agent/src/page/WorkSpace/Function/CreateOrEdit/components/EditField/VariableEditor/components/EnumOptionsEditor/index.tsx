@@ -3,11 +3,12 @@ import { Button, Input } from "antd"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { CloseIcon } from "@illa-public/icon"
+import { CloseIcon, PlusIcon } from "@illa-public/icon"
 import LabelWithController from "@/Layout/Function/LabelWithController"
-import { IBaseFunctionForm } from "../../../../../interface"
+import { IBaseFunctionForm } from "@/page/WorkSpace/Function/CreateOrEdit/interface"
 import { IBaseVariableItemEditorProps } from "../../interface"
 import {
+  deleteIconStyle,
   enumOptionItemContainerStyle,
   enumOptionsEditorContainerStyle,
   subTitleStyle,
@@ -44,6 +45,7 @@ const EnumOptionsEditor: FC<IBaseVariableItemEditorProps> = (props) => {
                     }}
                   />
                   <Button
+                    css={deleteIconStyle}
                     type="text"
                     onClick={() => {
                       field.onChange(
@@ -60,8 +62,9 @@ const EnumOptionsEditor: FC<IBaseVariableItemEditorProps> = (props) => {
                   onClick={() => {
                     field.onChange([...field.value, ""])
                   }}
+                  icon={<Icon component={PlusIcon} />}
                 >
-                  + New
+                  {t("editor.action.panel.btn.new")}
                 </Button>
               </div>
             </div>

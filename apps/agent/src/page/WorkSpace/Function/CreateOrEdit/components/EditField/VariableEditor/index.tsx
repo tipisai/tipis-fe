@@ -1,19 +1,15 @@
-import Icon from "@ant-design/icons"
-import { Button } from "antd"
-import { FC, memo, useState } from "react"
+import { FC, memo } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { PlusIcon } from "@illa-public/icon"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { IBaseFunctionForm } from "../../../interface"
-import VariableModalContent from "./components/VariableContent"
+import CreateVariableButton from "./components/CreateVariableButton"
 import VariableList from "./components/VariableList"
 import { tipisContainerStyle, tipisOuterContainerStyle } from "./style"
 
 const VariableEditor: FC = memo(() => {
   const { t } = useTranslation()
   const { control } = useFormContext<IBaseFunctionForm>()
-  const [showCreateModal, setShowCreateModal] = useState(false)
 
   return (
     <>
@@ -34,34 +30,16 @@ const VariableEditor: FC = memo(() => {
                   {t("function.edit.configure.tips.variable")}
                 </div>
               </div>
-              {!hasVariable && (
-                <Button
-                  icon={<Icon component={PlusIcon} />}
-                  block
-                  size="large"
-                  onClick={() => {
-                    field.onChange([
-                      {
-                        name: "",
-                        type: "string",
-                        testValue: "",
-                        required: true,
-                        enumValues: [],
-                      },
-                    ])
-                    setShowCreateModal(true)
-                  }}
-                >
-                  {t("editor.action.panel.btn.new")}
-                </Button>
-              )}
-              {hasVariable && <VariableList />}
 
-              <VariableModalContent
-                index={0}
-                open={showCreateModal}
-                openChange={setShowCreateModal}
+              <CreateVariableButton
+                buttonProps={{
+                  size: "large",
+                  block: true,
+                  hiddenButton: hasVariable,
+                }}
+                addedIndex={field.value.length - 1}
               />
+              {hasVariable && <VariableList />}
             </LayoutBlock>
           )
         }}

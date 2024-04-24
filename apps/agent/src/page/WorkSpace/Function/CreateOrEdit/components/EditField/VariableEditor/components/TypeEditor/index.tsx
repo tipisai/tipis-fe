@@ -4,7 +4,7 @@ import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { VARIABLE_TYPE } from "@illa-public/public-types"
 import LabelWithController from "@/Layout/Function/LabelWithController"
-import { IBaseFunctionForm } from "../../../../../interface"
+import { IBaseFunctionForm } from "@/page/WorkSpace/Function/CreateOrEdit/interface"
 import { IBaseVariableItemEditorProps } from "../../interface"
 
 const TypeEditor: FC<IBaseVariableItemEditorProps> = (props) => {
@@ -15,19 +15,19 @@ const TypeEditor: FC<IBaseVariableItemEditorProps> = (props) => {
 
   const canUsedVariableType = [
     {
-      label: t("function.edit.variable_modal.option.int"),
+      label: "Int",
       value: VARIABLE_TYPE.INT,
     },
     {
-      label: t("function.edit.variable_modal.option.float"),
+      label: "Float",
       value: VARIABLE_TYPE.FLOAT,
     },
     {
-      label: t("function.edit.variable_modal.option.string"),
+      label: "String",
       value: VARIABLE_TYPE.STRING,
     },
     {
-      label: t("function.edit.variable_modal.option.boolean"),
+      label: "Boolean",
       value: VARIABLE_TYPE.BOOLEAN,
     },
   ]
@@ -45,6 +45,7 @@ const TypeEditor: FC<IBaseVariableItemEditorProps> = (props) => {
               style={{
                 width: "100%",
               }}
+              size="large"
               options={canUsedVariableType}
               {...field}
             />

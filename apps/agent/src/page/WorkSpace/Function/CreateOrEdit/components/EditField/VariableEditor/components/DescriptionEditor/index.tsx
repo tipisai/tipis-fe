@@ -3,7 +3,7 @@ import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import LabelWithController from "@/Layout/Function/LabelWithController"
-import { IBaseFunctionForm } from "../../../../../interface"
+import { IBaseFunctionForm } from "@/page/WorkSpace/Function/CreateOrEdit/interface"
 import { IBaseVariableItemEditorProps } from "../../interface"
 
 const DescriptionEditor: FC<IBaseVariableItemEditorProps> = (props) => {
@@ -25,10 +25,8 @@ const DescriptionEditor: FC<IBaseVariableItemEditorProps> = (props) => {
               placeholder={t(
                 "function.edit.variable_modal.placeholder.description",
               )}
-              autoSize={{
-                minRows: 1,
-                maxRows: 5,
-              }}
+              rows={5}
+              autoSize={{ minRows: 5, maxRows: 5 }}
               {...field}
             />
           </LabelWithController>

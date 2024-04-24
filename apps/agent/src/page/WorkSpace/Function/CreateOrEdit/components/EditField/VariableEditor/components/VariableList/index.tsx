@@ -1,6 +1,7 @@
 import { FC } from "react"
-import { useFormContext, useWatch } from "react-hook-form"
-import { IBaseFunctionForm } from "../../../../../interface"
+import { Controller, useFormContext, useWatch } from "react-hook-form"
+import { IBaseFunctionForm } from "@/page/WorkSpace/Function/CreateOrEdit/interface"
+import CreateVariableButton from "../CreateVariableButton"
 import VariableListItem from "./item"
 import { variableListContainerStyle } from "./style"
 
@@ -11,6 +12,7 @@ const VariableList: FC = () => {
     control,
     name: "config.variables",
   })
+
   return (
     <div css={variableListContainerStyle}>
       {variables.map((variable, index) => (
@@ -20,6 +22,23 @@ const VariableList: FC = () => {
           variableName={variable.name}
         />
       ))}
+      <div>
+        <Controller
+          name="config.variables"
+          control={control}
+          shouldUnregister={false}
+          render={({ field }) => (
+            <>
+              <CreateVariableButton
+                buttonProps={{
+                  type: "text",
+                }}
+                addedIndex={field.value.length - 1}
+              />
+            </>
+          )}
+        />
+      </div>
     </div>
   )
 }

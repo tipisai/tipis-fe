@@ -3,7 +3,7 @@ import { Button } from "antd"
 import { FC, useState } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { DeleteIcon, PenIcon } from "@illa-public/icon"
-import { IBaseFunctionForm } from "../../../../../interface"
+import { IBaseFunctionForm } from "@/page/WorkSpace/Function/CreateOrEdit/interface"
 import VariableModalContent from "../VariableContent"
 import { IVariableItemProps } from "./interface"
 import {
@@ -19,8 +19,12 @@ const VariableListItem: FC<IVariableItemProps> = (props) => {
 
   const [showEditModal, setShowEditModal] = useState(false)
 
+  const handleClickEdit = () => {
+    setShowEditModal(true)
+  }
+
   return (
-    <div css={listItemContainerStyle}>
+    <div css={listItemContainerStyle} onClick={handleClickEdit}>
       <p css={variableNameStyle}>{variableName}</p>
       <div css={buttonGroupStyle}>
         <Button
@@ -28,6 +32,7 @@ const VariableListItem: FC<IVariableItemProps> = (props) => {
           icon={<Icon component={PenIcon} />}
           size="small"
           css={buttonStyle}
+          onClick={handleClickEdit}
         />
         <Controller
           control={control}
@@ -38,7 +43,8 @@ const VariableListItem: FC<IVariableItemProps> = (props) => {
               size="small"
               type="text"
               icon={<Icon component={DeleteIcon} />}
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation()
                 const newVariables = field.value.filter(
                   (_, itemIndex) => itemIndex !== index,
                 )

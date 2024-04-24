@@ -3,7 +3,7 @@ import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import LabelWithController from "@/Layout/Function/LabelWithController"
-import { IBaseFunctionForm } from "../../../../../interface"
+import { IBaseFunctionForm } from "@/page/WorkSpace/Function/CreateOrEdit/interface"
 import { IBaseVariableItemEditorProps } from "../../interface"
 
 const TestValueEditor: FC<IBaseVariableItemEditorProps> = (props) => {
@@ -21,7 +21,7 @@ const TestValueEditor: FC<IBaseVariableItemEditorProps> = (props) => {
           <LabelWithController
             title={t("function.edit.variable_modal.label.test_value")}
           >
-            <Input {...field} />
+            <Input {...field} size="large" />
           </LabelWithController>
         )
       }}

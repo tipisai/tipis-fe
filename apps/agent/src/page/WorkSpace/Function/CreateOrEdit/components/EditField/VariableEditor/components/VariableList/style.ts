@@ -6,12 +6,13 @@ export const variableListContainerStyle = css`
   display: flex;
   gap: 16px;
   width: 100%;
+  flex-direction: column;
 `
 
 export const listItemContainerStyle = css`
   display: flex;
   justify-content: space-between;
-  padding: 8px 16px;
+  padding: 7px 16px;
   border-radius: 12px;
   border: 1px solid ${getColor("grayBlue", "08")};
   width: 100%;
