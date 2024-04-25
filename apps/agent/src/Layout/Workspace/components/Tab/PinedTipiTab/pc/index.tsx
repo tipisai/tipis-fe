@@ -8,7 +8,6 @@ import { MoreIcon } from "@illa-public/icon"
 import { getPinedTipisByTipisID } from "@/redux/ui/pinedTipis/selector"
 import { useRemovePinedTipiTabByTipiIDReducer } from "@/utils/pinedTabs/baseHook"
 import { useNavigateToRunTipis } from "@/utils/routeHelper/hook"
-import { useGetCurrentTeamInfo } from "@/utils/team"
 import DropIndicator from "../../DropIndicator/DropIndicator"
 import {
   baseMenuItemContainerStyle,
@@ -26,14 +25,11 @@ const PCPinedTipiTab: FC<IPCPinedTipisTab> = (props) => {
   const pinedTipiTabInfo = useSelector((state) =>
     getPinedTipisByTipisID(state, tipiID),
   )!
-  const currentTeamInfo = useGetCurrentTeamInfo()
   const navigateToRunTipis = useNavigateToRunTipis()
   const removePinedTipi = useRemovePinedTipiTabByTipiIDReducer()
   const { t } = useTranslation()
 
   const { tabIcon, tabName, tipiOwnerTeamIdentity } = pinedTipiTabInfo
-  const isCurrentUserTeam =
-    currentTeamInfo?.identifier === tipiOwnerTeamIdentity
 
   const ref = useRef<HTMLDivElement>(null)
 
@@ -61,16 +57,15 @@ const PCPinedTipiTab: FC<IPCPinedTipisTab> = (props) => {
   }
 
   const handleNavigateToRunTipis = () => {
-    if (isCurrentUserTeam) {
-      navigateToRunTipis(
-        {
-          tipisID: tipiID,
-          tipisIcon: tabIcon,
-          tipisName: tabName,
-        },
-        v4(),
-      )
-    }
+    navigateToRunTipis(
+      {
+        tipisID: tipiID,
+        tipisIcon: tabIcon,
+        tipisName: tabName,
+      },
+      v4(),
+      tipiOwnerTeamIdentity,
+    )
   }
 
   const onClick = () => {
