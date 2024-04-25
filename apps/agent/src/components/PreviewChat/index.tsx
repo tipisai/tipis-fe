@@ -8,7 +8,11 @@ import InputArea from "./InputArea"
 import MessageList from "./MessageList"
 import { SEND_MESSAGE_WS_TYPE } from "./TipisWebscoketContext/interface"
 import { SCROLL_DIRECTION } from "./constants"
-import { ChatSendRequestPayload, PreviewChatProps } from "./interface"
+import {
+  ChatMessage,
+  ChatSendRequestPayload,
+  PreviewChatProps,
+} from "./interface"
 import {
   inputTextContainerStyle,
   maxWidthStyle,
@@ -43,6 +47,14 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
     }
     cacheLastScroll.current = e.currentTarget.scrollTop
   }, [])
+
+  const handleSendMessage = (cheatMessage: ChatMessage) => {
+    scrollDirectRef.current = SCROLL_DIRECTION.DOWN
+    chatRef.current?.scrollTo({
+      top: chatRef.current.scrollHeight,
+    })
+    onSendMessage(cheatMessage)
+  }
 
   useEffect(() => {
     if (chatMessages.length === 0) {
@@ -80,7 +92,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
             />
             <InputArea
               isReceiving={isReceiving}
-              onSendMessage={onSendMessage}
+              onSendMessage={handleSendMessage}
               hasMessage={chatMessages.length > 0}
             />
           </>
