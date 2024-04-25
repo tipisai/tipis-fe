@@ -1,8 +1,9 @@
 import { FC, Suspense, lazy } from "react"
+import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { TIntegrationType } from "@illa-public/public-types"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
-import { IEventEditorProps } from "./interface"
+import { IBaseFunctionForm } from "../../interface"
 
 const getEventEditorByIntegrationType = (integrationType: TIntegrationType) => {
   switch (integrationType) {
@@ -13,9 +14,13 @@ const getEventEditorByIntegrationType = (integrationType: TIntegrationType) => {
   }
 }
 
-const EventEditor: FC<IEventEditorProps> = (props) => {
-  const { integrationType } = props
+const EventEditor: FC = () => {
   const { t } = useTranslation()
+  const { control } = useFormContext<IBaseFunctionForm>()
+  const integrationType = useWatch({
+    control,
+    name: "type",
+  })
   const EventEditorComponent = getEventEditorByIntegrationType(integrationType)
   return (
     <LayoutBlock

@@ -18,7 +18,7 @@ const DescriptionEditor: FC = () => {
       name="description"
       control={control}
       rules={{
-        required: t("function.edit.configure.name.empty"),
+        required: t("function.edit.variable_modal.error.description"),
         maxLength: 1024,
       }}
       render={({ field }) => {

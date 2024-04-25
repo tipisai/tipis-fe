@@ -25,7 +25,7 @@ const EditFunction: FC = () => {
         />
         <div css={contentContainerStyle}>
           <div css={innerContentContainerStyle}>
-            <EditPanel integrationType="tencentcos" />
+            <EditPanel />
             <DocPanel />
           </div>
         </div>

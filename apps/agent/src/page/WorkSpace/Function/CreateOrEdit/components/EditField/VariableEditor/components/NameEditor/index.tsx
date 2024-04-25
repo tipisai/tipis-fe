@@ -18,7 +18,7 @@ const NameEditor: FC = () => {
       name="name"
       control={control}
       rules={{
-        required: t("function.edit.configure.name.empty"),
+        required: t("function.edit.variable_modal.error.variable_name"),
         maxLength: 64,
         pattern: {
           value: /^[a-zA-Z_][a-zA-Z0-9_]*$/,

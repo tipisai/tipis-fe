@@ -30,7 +30,7 @@ const CreateFunction: FC = () => {
         />
         <div css={contentContainerStyle}>
           <div css={innerContentContainerStyle}>
-            <EditPanel integrationType={functionType as TIntegrationType} />
+            <EditPanel />
             <DocPanel />
           </div>
         </div>

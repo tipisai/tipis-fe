@@ -1,7 +1,12 @@
 import Icon from "@ant-design/icons"
 import { Button } from "antd"
 import { memo, useState } from "react"
-import { Controller, useFormContext, useFormState } from "react-hook-form"
+import {
+  Controller,
+  useFormContext,
+  useFormState,
+  useWatch,
+} from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import {
   DownIcon,
@@ -13,7 +18,6 @@ import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Function/LayoutBlock"
 import IntegrationSelectorModal from "@/Modules/Integration/CreateOrSelectIntegration/modal"
 import { IBaseFunctionForm } from "../../../interface"
-import { IIntegrationEditorProps } from "./interface"
 import {
   buttonStyle,
   downIconContainerStyle,
@@ -25,10 +29,13 @@ import {
   outerIntegrationContainerStyle,
 } from "./style"
 
-const IntegrationEditor = memo((props: IIntegrationEditorProps) => {
-  const { integrationType } = props
+const IntegrationEditor = memo(() => {
   const { t } = useTranslation()
   const { control } = useFormContext<IBaseFunctionForm>()
+  const integrationType = useWatch({
+    control,
+    name: "type",
+  })
 
   const [createOrSelectModalShow, setCreateOrSelectModalShow] = useState(false)
   const { errors } = useFormState({

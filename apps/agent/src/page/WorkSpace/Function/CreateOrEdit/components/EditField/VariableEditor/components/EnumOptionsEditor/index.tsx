@@ -1,7 +1,7 @@
 import Icon from "@ant-design/icons"
 import { Button, Input } from "antd"
 import { FC } from "react"
-import { Controller, useFormContext } from "react-hook-form"
+import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { CloseIcon, PlusIcon } from "@illa-public/icon"
 import { IVariables } from "@illa-public/public-types"
@@ -18,13 +18,28 @@ const EnumOptionsEditor: FC = () => {
 
   const { t } = useTranslation()
 
+  const { errors } = useFormState({
+    control: control,
+  })
+
   return (
     <Controller
       name="enumValues"
       control={control}
+      rules={{
+        validate: (value) => {
+          if (value.length === 0) {
+            return t("function.edit.variable_modal.error.options")
+          }
+          return true
+        },
+      }}
       render={({ field }) => {
         return (
-          <LabelWithController title="">
+          <LabelWithController
+            title=""
+            errorMessage={errors.enumValues?.message}
+          >
             <div css={enumOptionsEditorContainerStyle}>
               <p css={subTitleStyle}>
                 {t("function.edit.variable_modal.label.options")}
