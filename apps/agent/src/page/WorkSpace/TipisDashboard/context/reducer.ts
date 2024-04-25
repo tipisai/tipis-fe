@@ -69,6 +69,7 @@ export const reducer = (
         sortedBy: PRODUCT_SORT_BY.POPULAR,
         search: undefined,
         hashTag: action.payload,
+        isOfficial: false,
       }
       break
     }

@@ -9,7 +9,10 @@ import { DashBoardUIStateContext } from "../../../context/marketListContext"
 import TagList from "../TagList"
 import { sortHeaderStyle, sortWrapperStyle } from "./style"
 
-const SortComponentPC: FC<IMarketSortComponentProps> = ({ tagList }) => {
+const SortComponentPC: FC<IMarketSortComponentProps> = ({
+  tagList,
+  showRecommendTag,
+}) => {
   const { t } = useTranslation()
   const options = [
     {
@@ -63,7 +66,7 @@ const SortComponentPC: FC<IMarketSortComponentProps> = ({ tagList }) => {
         </Checkbox>
       </div>
 
-      {tagList && tagList.length > 0 && (
+      {!showRecommendTag && tagList && tagList.length > 0 && (
         <TagList
           tagList={tagList}
           handleTagChange={onTagChange}
