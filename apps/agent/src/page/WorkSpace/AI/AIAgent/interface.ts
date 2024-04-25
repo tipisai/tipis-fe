@@ -1,4 +1,10 @@
-import { AI_AGENT_MODEL, AI_AGENT_TYPE, Agent } from "@illa-public/public-types"
+import {
+  AI_AGENT_MODEL,
+  AI_AGENT_TYPE,
+  Agent,
+  SCHEDULE_TYPES,
+} from "@illa-public/public-types"
+import { ILLADayjs } from "@illa-public/utils"
 
 export interface IAgentForm
   extends Omit<
@@ -24,6 +30,16 @@ export const AgentInitial: IAgentForm = {
   teamName: "",
   teamIdentifier: "",
   publishedToMarketplace: false,
+  schedule: {
+    enabled: false,
+    timezone: ILLADayjs.tz.guess(),
+    type: SCHEDULE_TYPES.EVERY_DAY,
+    options: {
+      hour: 0,
+      minute: 0,
+      interval: 1,
+    },
+  },
 }
 
 export enum SCROLL_ID {

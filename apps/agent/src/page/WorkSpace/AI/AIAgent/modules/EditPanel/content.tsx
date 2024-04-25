@@ -4,6 +4,7 @@ import DescriptionEditor from "../../components/DescriptionEditor"
 import KnowledgeEditor from "../../components/KnowledgeEditor"
 import NameEditor from "../../components/NameEditor"
 import PromptEditor from "../../components/PromptEditor"
+import ScheduleEditor from "../../components/ScheduleEditor"
 import VariableEditor from "../../components/VariableEditor"
 
 export const EditPanelContent: FC = () => {
@@ -15,6 +16,7 @@ export const EditPanelContent: FC = () => {
       <PromptEditor />
       <VariableEditor />
       <KnowledgeEditor />
+      <ScheduleEditor />
     </>
   )
 }
