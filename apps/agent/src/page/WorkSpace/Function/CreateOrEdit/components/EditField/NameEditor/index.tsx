@@ -1,6 +1,6 @@
 import { Input } from "antd"
 import { FC, memo } from "react"
-import { Controller, useFormContext, useFormState } from "react-hook-form"
+import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Function/LayoutBlock"
@@ -10,10 +10,6 @@ const NameEditor: FC = memo(() => {
   const { t } = useTranslation()
 
   const methods = useFormContext<IBaseFunctionForm>()
-
-  const { errors } = useFormState({
-    control: methods.control,
-  })
 
   return (
     <Controller
@@ -28,13 +24,13 @@ const NameEditor: FC = memo(() => {
         },
       }}
       shouldUnregister={false}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <LayoutBlock title={t("editor.ai-agent.label.name")} required>
           <Input
             {...field}
             size="large"
             placeholder={t("editor.ai-agent.placeholder.name")}
-            status={!!errors.name ? "error" : undefined}
+            status={!!fieldState.error?.message ? "error" : undefined}
             maxLength={60}
             onChange={(e) => {
               const value = e.target.value
@@ -42,7 +38,7 @@ const NameEditor: FC = memo(() => {
               // setInRoomUsers(updateLocalName(value, inRoomUsers))
             }}
           />
-          <ErrorText message={errors.name?.message} />
+          <ErrorText message={fieldState.error?.message} />
         </LayoutBlock>
       )}
     />

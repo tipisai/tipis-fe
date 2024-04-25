@@ -22,7 +22,7 @@ const IsEnumEditor: FC = () => {
 
   const enumValuesController = useController({
     control,
-    name: "enumValues",
+    name: "enum",
   })
 
   const isBoolean = type === VARIABLE_TYPE.BOOLEAN

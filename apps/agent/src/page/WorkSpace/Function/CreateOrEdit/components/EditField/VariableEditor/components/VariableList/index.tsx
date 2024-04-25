@@ -10,7 +10,7 @@ const VariableList: FC = () => {
 
   const variables = useWatch({
     control,
-    name: "config.variables",
+    name: "parameters",
   })
 
   return (
@@ -24,7 +24,7 @@ const VariableList: FC = () => {
       ))}
       <div>
         <Controller
-          name="config.variables"
+          name="parameters"
           control={control}
           shouldUnregister={false}
           render={({ field }) => (

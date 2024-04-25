@@ -18,7 +18,7 @@ const EditPanel: FC = () => {
 
   const integrationID = useWatch({
     control,
-    name: "integrationID",
+    name: "resourceID",
   })
 
   return (

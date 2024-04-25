@@ -36,7 +36,7 @@ const VariableListItem: FC<IVariableItemProps> = (props) => {
         />
         <Controller
           control={control}
-          name="config.variables"
+          name="parameters"
           render={({ field }) => (
             <Button
               css={buttonStyle}

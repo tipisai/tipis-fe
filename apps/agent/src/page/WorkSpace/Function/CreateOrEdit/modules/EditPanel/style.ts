@@ -2,8 +2,6 @@ import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
 
 export const editPanelContainerStyle = css`
-  min-width: 480px;
-  max-width: 800px;
   width: 100%;
   display: flex;
   flex-direction: column;

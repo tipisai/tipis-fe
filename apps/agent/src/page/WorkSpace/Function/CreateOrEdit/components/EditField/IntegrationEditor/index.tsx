@@ -1,12 +1,7 @@
 import Icon from "@ant-design/icons"
 import { Button } from "antd"
 import { memo, useState } from "react"
-import {
-  Controller,
-  useFormContext,
-  useFormState,
-  useWatch,
-} from "react-hook-form"
+import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import {
   DownIcon,
@@ -34,26 +29,23 @@ const IntegrationEditor = memo(() => {
   const { control } = useFormContext<IBaseFunctionForm>()
   const integrationType = useWatch({
     control,
-    name: "type",
+    name: "resourceType",
   })
 
   const [createOrSelectModalShow, setCreateOrSelectModalShow] = useState(false)
-  const { errors } = useFormState({
-    control: control,
-  })
 
   const IntegrationIcon = INTEGRATION_TYPE_MAP_ICON[integrationType]
 
   return (
     <>
       <Controller
-        name="integrationID"
+        name="resourceID"
         control={control}
         rules={{
           required: t("function.edit.configure.error.integration"),
         }}
         shouldUnregister={false}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <LayoutBlock
             title={t("function.edit.configure.label.integration")}
             required
@@ -64,7 +56,7 @@ const IntegrationEditor = memo(() => {
                   icon={<Icon component={PlusIcon} />}
                   block
                   size="large"
-                  danger={!!errors.integrationID?.message}
+                  danger={!!fieldState.error?.message}
                   onClick={() => {
                     setCreateOrSelectModalShow(true)
                   }}
@@ -99,7 +91,7 @@ const IntegrationEditor = memo(() => {
                 </div>
               </div>
             )}
-            <ErrorText message={errors.integrationID?.message} />
+            <ErrorText message={fieldState.error?.message} />
 
             <IntegrationSelectorModal
               open={createOrSelectModalShow}

@@ -13,7 +13,7 @@ const VariableEditor: FC = memo(() => {
   return (
     <>
       <Controller
-        name="config.variables"
+        name="parameters"
         control={control}
         shouldUnregister={false}
         render={({ field }) => {

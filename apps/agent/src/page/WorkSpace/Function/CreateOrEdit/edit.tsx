@@ -6,7 +6,7 @@ import FormContext from "./context/FormContext"
 import DocPanel from "./modules/DocPanel"
 import EditPanel from "./modules/EditPanel"
 import HeaderTools from "./modules/HeaderTools"
-import { contentContainerStyle, innerContentContainerStyle } from "./style"
+import { contentContainerStyle } from "./style"
 
 const EditFunction: FC = () => {
   const { functionID } = useParams()
@@ -24,10 +24,8 @@ const EditFunction: FC = () => {
           extra={<HeaderTools />}
         />
         <div css={contentContainerStyle}>
-          <div css={innerContentContainerStyle}>
-            <EditPanel />
-            <DocPanel />
-          </div>
+          <EditPanel />
+          <DocPanel />
         </div>
       </FormContext>
     </FormProvider>

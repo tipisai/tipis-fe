@@ -1,7 +1,7 @@
 import Icon from "@ant-design/icons"
 import { Button, Input } from "antd"
 import { FC } from "react"
-import { Controller, useFormContext, useFormState } from "react-hook-form"
+import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { CloseIcon, PlusIcon } from "@illa-public/icon"
 import { IVariables } from "@illa-public/public-types"
@@ -18,13 +18,9 @@ const EnumOptionsEditor: FC = () => {
 
   const { t } = useTranslation()
 
-  const { errors } = useFormState({
-    control: control,
-  })
-
   return (
     <Controller
-      name="enumValues"
+      name="enum"
       control={control}
       rules={{
         validate: (value) => {
@@ -34,11 +30,11 @@ const EnumOptionsEditor: FC = () => {
           return true
         },
       }}
-      render={({ field }) => {
+      render={({ field, fieldState }) => {
         return (
           <LabelWithController
             title=""
-            errorMessage={errors.enumValues?.message}
+            errorMessage={fieldState.error?.message}
           >
             <div css={enumOptionsEditorContainerStyle}>
               <p css={subTitleStyle}>

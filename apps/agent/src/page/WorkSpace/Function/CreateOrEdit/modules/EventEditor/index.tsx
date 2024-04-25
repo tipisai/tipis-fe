@@ -19,7 +19,7 @@ const EventEditor: FC = () => {
   const { control } = useFormContext<IBaseFunctionForm>()
   const integrationType = useWatch({
     control,
-    name: "type",
+    name: "resourceType",
   })
   const EventEditorComponent = getEventEditorByIntegrationType(integrationType)
   return (

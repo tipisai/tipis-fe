@@ -9,7 +9,7 @@ import { IBaseFunctionForm } from "./interface"
 import DocPanel from "./modules/DocPanel"
 import EditPanel from "./modules/EditPanel"
 import HeaderTools from "./modules/HeaderTools"
-import { contentContainerStyle, innerContentContainerStyle } from "./style"
+import { contentContainerStyle } from "./style"
 
 const CreateFunction: FC = () => {
   const { functionType } = useParams()
@@ -29,10 +29,8 @@ const CreateFunction: FC = () => {
           extra={<HeaderTools />}
         />
         <div css={contentContainerStyle}>
-          <div css={innerContentContainerStyle}>
-            <EditPanel />
-            <DocPanel />
-          </div>
+          <EditPanel />
+          <DocPanel />
         </div>
       </FormContext>
     </FormProvider>

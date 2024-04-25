@@ -1,6 +1,6 @@
 import { Input } from "antd"
 import { FC } from "react"
-import { Controller, useFormContext, useFormState } from "react-hook-form"
+import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { IVariables } from "@illa-public/public-types"
 import LabelWithController from "@/Layout/Function/LabelWithController"
@@ -8,10 +8,6 @@ import LabelWithController from "@/Layout/Function/LabelWithController"
 const NameEditor: FC = () => {
   const { control } = useFormContext<IVariables>()
   const { t } = useTranslation()
-
-  const { errors } = useFormState({
-    control: control,
-  })
 
   return (
     <Controller
@@ -25,17 +21,17 @@ const NameEditor: FC = () => {
           message: t("function.edit.configure.name.validate"),
         },
       }}
-      render={({ field }) => {
+      render={({ field, fieldState }) => {
         return (
           <LabelWithController
             title={t("function.edit.variable_modal.label.variable_name")}
             required
-            errorMessage={errors.name?.message}
+            errorMessage={fieldState.error?.message}
           >
             <Input
               size="large"
               {...field}
-              status={!!errors.name?.message ? "error" : undefined}
+              status={!!fieldState.error?.message ? "error" : undefined}
               placeholder={t(
                 "function.edit.variable_modal.placeholder.variable_name",
               )}

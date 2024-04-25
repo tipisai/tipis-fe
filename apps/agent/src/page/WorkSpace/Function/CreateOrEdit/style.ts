@@ -10,11 +10,6 @@ export const contentContainerStyle = css`
   display: flex;
 `
 
-export const innerContentContainerStyle = css`
-  display: flex;
-  margin: 0 auto;
-`
-
 export const leftPlaceContentStyle = css`
   min-width: 240px;
   max-width: 400px;

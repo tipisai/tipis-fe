@@ -32,13 +32,13 @@ const VariableModalContent: FC<IVariableModalContentProps> = (props) => {
   const { control } = useFormContext<IBaseFunctionForm>()
   const variableControl = useController({
     control,
-    name: "config.variables",
+    name: "parameters",
   })
   const { t } = useTranslation()
 
   const variables = useWatch({
     control,
-    name: "config.variables",
+    name: "parameters",
   })
 
   const methods = useForm<IVariables>({
