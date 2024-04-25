@@ -1,6 +1,7 @@
 import { FC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { useParams } from "react-router-dom"
+// import { DraggableModal } from "@illa-public/draggable-modal"
 import { getFunctionInitDataByType } from "@illa-public/public-configs"
 import { TIntegrationType } from "@illa-public/public-types"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
@@ -32,6 +33,11 @@ const CreateFunction: FC = () => {
           <EditPanel />
           <DocPanel />
         </div>
+        {/* <DraggableModal
+          title="dddddd"
+          open
+          changeOpen={() => {}}
+        ></DraggableModal> */}
       </FormContext>
     </FormProvider>
   )

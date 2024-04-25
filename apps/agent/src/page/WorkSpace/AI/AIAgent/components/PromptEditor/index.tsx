@@ -1,10 +1,9 @@
 import { FC, memo } from "react"
 import { Controller, useFormContext, useFormState } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { CodeEditor } from "@illa-public/code-editor"
+import { CodeEditor } from "@illa-public/code-editor-new"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { IAgentForm, SCROLL_ID } from "../../interface"
-import { codeEditorErrorStyle } from "./style"
 
 const PromptEditor: FC = memo(() => {
   const { t } = useTranslation()
@@ -35,11 +34,13 @@ const PromptEditor: FC = memo(() => {
           <div>
             <CodeEditor
               {...promptField}
-              css={codeEditorErrorStyle(!!errors.prompt)}
+              // css={codeEditorErrorStyle(!!errors.prompt)}
               placeholder={t("editor.ai-agent.placeholder.prompt")}
-              height="100%"
-              minHeight="200px"
-              maxHeight="600px"
+              styles={{
+                height: "100%",
+                minHeight: "200px",
+                maxHeight: "600px",
+              }}
               completionOptions={variables}
             />
           </div>
