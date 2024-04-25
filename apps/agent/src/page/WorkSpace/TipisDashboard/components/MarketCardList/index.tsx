@@ -48,7 +48,7 @@ const MarketCardList: FC<IMarketCardListProps> = (props) => {
 
   return (
     <div css={contentStyle}>
-      <RenderSortBy tagList={tagList} />
+      <RenderSortBy tagList={tagList} showRecommendTag={showRecommendTag} />
       {isFetching && !isMoreLoading ? (
         <FullSectionLoading />
       ) : !data?.products || data.products.length === 0 ? (
