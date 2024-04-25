@@ -42,9 +42,6 @@ const CreditCard: FC = () => {
     openCreditDrawer,
   } = useContext(BillingContext)
 
-  const creditNum =
-    (creditInfo?.quantity ?? 0) * CREDIT_UNIT_BY_CYCLE[creditInfo?.cycle] * 1000
-
   return (
     <section css={licenseCardContainerStyle} id="license">
       <span css={infoTitleStyle}>{t("billing.menu.overview")}</span>
@@ -128,7 +125,7 @@ const CreditCard: FC = () => {
                     {t("tipi_billing.subscribed_credits")}
                   </span>
                   <span css={cardPayDetailNumStyle}>
-                    {toThousands(creditNum || 0)}
+                    {toThousands(creditInfo.volumeConverted || 0)}
                   </span>
                 </div>
               )}
