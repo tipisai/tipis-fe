@@ -38,11 +38,11 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 18.12.1
+          node-version: 20.12.2
 
       - uses: pnpm/action-setup@v3
         with:
-          version: 8.7.0
+          version: 9.0.6
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
