@@ -12,6 +12,7 @@ export interface IMarketCardEmptyListProps {
 
 export interface IMarketSortComponentProps {
   tagList: string[]
+  showRecommendTag: boolean
 }
 
 export interface IMarketCardListProps {

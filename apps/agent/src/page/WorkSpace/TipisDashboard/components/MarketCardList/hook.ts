@@ -15,25 +15,21 @@ export const useGetShowData = (
   marketState: IDashBoardUIState,
   isLoading: boolean,
 ) => {
-  const { search, hashTag, page } = marketState
+  const { hashTag, page } = marketState
   const { recommendHashtags, summaryHashtags, products } = data
 
   const showRecommendTag = products.length === 0 && !hashTag
   const isMoreLoading = isLoading && page !== INITIAL_PAGE
 
   const tagList = useMemo(() => {
-    if (search) {
-      if (products && products.length > 0) {
-        return summaryHashtags || []
-      } else if (hashTag) {
-        return [hashTag]
-      } else {
-        return []
-      }
+    if (products && products.length > 0) {
+      return summaryHashtags || []
+    } else if (hashTag) {
+      return [hashTag]
     } else {
       return recommendHashtags
     }
-  }, [hashTag, products, recommendHashtags, search, summaryHashtags])
+  }, [hashTag, products, recommendHashtags, summaryHashtags])
 
   return {
     showRecommendTag,
