@@ -6,7 +6,6 @@ import { v4 } from "uuid"
 import { getPinedTipisByTipisID } from "@/redux/ui/pinedTipis/selector"
 import { useRemovePinedTipiTabByTipiIDReducer } from "@/utils/pinedTabs/baseHook"
 import { useNavigateToRunTipis } from "@/utils/routeHelper/hook"
-import { useGetCurrentTeamInfo } from "@/utils/team"
 import {
   baseMenuItemContainerStyle,
   baseOuterContainerStyle,
@@ -20,7 +19,6 @@ const MobilePinedTipiTab: FC<IMobilePinedTipisTab> = (props) => {
   const pinedTipiTabInfo = useSelector((state) =>
     getPinedTipisByTipisID(state, tipiID),
   )!
-  const currentTeamInfo = useGetCurrentTeamInfo()
   const { t } = useTranslation()
 
   const navigateToRunTipis = useNavigateToRunTipis()
@@ -43,8 +41,6 @@ const MobilePinedTipiTab: FC<IMobilePinedTipisTab> = (props) => {
   ]
 
   const { tabIcon, tabName, tipiOwnerTeamIdentity } = pinedTipiTabInfo
-  const isCurrentUserTeam =
-    currentTeamInfo?.identifier === tipiOwnerTeamIdentity
 
   const onTouchStart = () => {
     isLongPressTriggered.current = false
@@ -64,16 +60,15 @@ const MobilePinedTipiTab: FC<IMobilePinedTipisTab> = (props) => {
   }
 
   const handleNavigateToRunTipis = () => {
-    if (isCurrentUserTeam) {
-      navigateToRunTipis(
-        {
-          tipisID: tipiID,
-          tipisIcon: tabIcon,
-          tipisName: tabName,
-        },
-        v4(),
-      )
-    }
+    navigateToRunTipis(
+      {
+        tipisID: tipiID,
+        tipisIcon: tabIcon,
+        tipisName: tabName,
+      },
+      v4(),
+      tipiOwnerTeamIdentity,
+    )
   }
 
   const handleMenuCLick: MenuProps["onClick"] = async ({ key, domEvent }) => {
