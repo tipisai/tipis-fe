@@ -2,10 +2,9 @@ import { Global } from "@emotion/react"
 import { App as AntdContextProvider, ConfigProvider, ThemeConfig } from "antd"
 import { HelmetProvider } from "react-helmet-async"
 import { IntercomProvider } from "react-use-intercom"
-import { illaCodeMirrorTooltipStyle } from "@illa-public/code-editor-new/CodeMirror/theme"
 import tipisThemConfig from "@/config/them/theme-tipis.json"
 import { ILLARouterProvider } from "./router/config"
-import { globalStyle } from "./style"
+import { globalStyle, globalTooltipContainerStyle } from "./style"
 import AntdStore from "./utils/antdStore"
 
 function App() {
@@ -23,7 +22,7 @@ function App() {
           </IntercomProvider>
           <div
             className="illaCodeMirrorWrapper"
-            css={illaCodeMirrorTooltipStyle}
+            css={globalTooltipContainerStyle}
           />
         </HelmetProvider>
       </AntdContextProvider>

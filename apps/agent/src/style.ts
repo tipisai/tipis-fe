@@ -1,4 +1,5 @@
 import { css } from "@emotion/react"
+import { illaCodeMirrorTooltipStyle } from "@illa-public/code-editor-new/CodeMirror/theme"
 
 export const globalStyle = css`
   html,
@@ -38,5 +39,14 @@ export const globalStyle = css`
   *::before,
   *::after {
     box-sizing: border-box;
+  }
+`
+
+export const globalTooltipContainerStyle = css`
+  ${illaCodeMirrorTooltipStyle}
+  > div {
+    height: 0;
+    min-height: 0;
+    max-height: 0;
   }
 `

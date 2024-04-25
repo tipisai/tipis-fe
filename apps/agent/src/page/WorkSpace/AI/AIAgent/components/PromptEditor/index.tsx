@@ -42,6 +42,7 @@ const PromptEditor: FC = memo(() => {
                 maxHeight: "600px",
               }}
               completionOptions={variables}
+              canExpand
             />
           </div>
         </LayoutBlock>
