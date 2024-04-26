@@ -43,6 +43,7 @@ const PromptEditor: FC = memo(() => {
               }}
               completionOptions={variables}
               canExpand
+              modalTitle="prompt"
             />
           </div>
         </LayoutBlock>

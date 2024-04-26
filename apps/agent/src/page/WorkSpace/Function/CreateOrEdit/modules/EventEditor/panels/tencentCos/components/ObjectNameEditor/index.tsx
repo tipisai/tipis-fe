@@ -6,7 +6,7 @@ import {
   IBaseFunction,
   IDownloadAnObjectContent,
 } from "@illa-public/public-types"
-import { useVariableToCompletionOption } from "../../../../../../util"
+import { useVariableToCompletionOption } from "@/page/WorkSpace/Function/CreateOrEdit/util"
 import LabelWithEditor from "../../../../components/labelWithEditor"
 
 const ObjectNameEditor: FC = () => {

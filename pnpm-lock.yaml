@@ -721,6 +721,9 @@ importers:
       '@illa-public/dynamic-string':
         specifier: workspace:^
         version: link:../../utils/dynamicStringUtils
+      '@illa-public/icon':
+        specifier: workspace:*
+        version: link:../Icon
       '@illa-public/utils':
         specifier: workspace:*
         version: link:../../utils/public
