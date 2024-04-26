@@ -1,63 +1,69 @@
 import Icon from "@ant-design/icons"
-import { Button, Image } from "antd"
+import { App, Button, Image } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
-import { DeleteIcon, DoubtIcon, PenIcon } from "@illa-public/icon"
+import { useNavigate } from "react-router-dom"
+import { DeleteIcon, PenIcon } from "@illa-public/icon"
+import { getEditFunctionPath } from "@/utils/routeHelper"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { IEditorFunctionItemProps } from "./interface"
-import {
-  deletedFunctionNameStyle,
-  deletedIconStyle,
-  functionItemContainerStyle,
-  functionNameStyle,
-} from "./style"
+import { functionItemContainerStyle, functionNameStyle } from "./style"
 
 const EditorFunctionItem: FC<IEditorFunctionItemProps> = ({
-  isDeleted,
-  functionID,
-  functionName,
-  functionIcon,
+  aiToolID,
+  name,
+  config,
+  isMobile,
   handleRemoveItem,
 }) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const teamInfo = useGetCurrentTeamInfo()
+  const { modal } = App.useApp()
   const handleClickEdit = () => {
-    console.log(functionID)
+    if (!teamInfo) return
+    navigate(getEditFunctionPath(teamInfo.identifier, aiToolID))
   }
-  return isDeleted ? (
-    <div css={functionItemContainerStyle}>
-      <div css={deletedIconStyle}>
-        <Icon component={DoubtIcon} />
-      </div>
-      <span css={deletedFunctionNameStyle}>
-        {t("_This function has been deleted")}
-      </span>
-      <Button
-        type="text"
-        size="small"
-        icon={<Icon component={DeleteIcon} />}
-        onClick={() => handleRemoveItem(functionID)}
-      />
-    </div>
-  ) : (
+
+  const handleClickRemove = () => {
+    modal.confirm({
+      title: t("homepage.edit_tipi.modal.delete_function.title"),
+      content: t("homepage.edit_tipi.modal.delete_function.desc"),
+      cancelText: t("homepage.edit_tipi.modal.delete_function.cancel"),
+      okText: t("homepage.edit_tipi.modal.delete_function.confirm"),
+      okButtonProps: {
+        type: "primary",
+        danger: true,
+      },
+      onOk: () => {
+        handleRemoveItem(aiToolID)
+      },
+    })
+  }
+
+  return (
     <div css={functionItemContainerStyle}>
       <Image
         width={32}
         height={32}
         preview={false}
-        src={functionIcon}
+        src={config.icon}
         style={{ borderRadius: 8 }}
       />
-      <span css={functionNameStyle}>{functionName}</span>
-      <Button
-        type="text"
-        size="small"
-        icon={<Icon component={PenIcon} />}
-        onClick={handleClickEdit}
-      />
+      <span css={functionNameStyle}>{name}</span>
+      {!isMobile && (
+        <Button
+          type="text"
+          size="small"
+          icon={<Icon component={PenIcon} />}
+          onClick={handleClickEdit}
+        />
+      )}
       <Button
         size="small"
         type="text"
         icon={<Icon component={DeleteIcon} />}
-        onClick={() => handleRemoveItem(functionID)}
+        onClick={handleClickRemove}
       />
     </div>
   )

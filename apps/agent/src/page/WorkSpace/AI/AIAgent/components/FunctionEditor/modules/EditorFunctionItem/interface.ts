@@ -1,6 +1,6 @@
-import { IEditorFunctionItem } from "@illa-public/public-types"
+import { IEditorFunction } from "@illa-public/public-types"
 
-export interface IEditorFunctionItemProps extends IEditorFunctionItem {
-  isDeleted?: boolean
+export interface IEditorFunctionItemProps extends IEditorFunction {
+  isMobile?: boolean
   handleRemoveItem: (functionID: string) => void
 }

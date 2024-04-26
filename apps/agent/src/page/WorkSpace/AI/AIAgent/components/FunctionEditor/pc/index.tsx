@@ -4,17 +4,13 @@ import { FC, memo, useState } from "react"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { AddIcon } from "@illa-public/icon"
-import {
-  IEditorFunctionItem,
-  TIntegrationType,
-} from "@illa-public/public-types"
+import { IEditorFunction, TIntegrationType } from "@illa-public/public-types"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { IntegrationTypeSelector } from "@/Modules/Integration/IntegrationSelector"
 import BlackButton from "@/components/BlackButton"
 import { useCreateFunction } from "@/utils/recentTabs/hook"
 import { IAgentForm } from "../../../interface"
 import { FUNCTION_LEARN_MORE_LINK } from "../constants"
-import { IFunctionItemDetail } from "../interface"
 import { MOCK_LIST_DATA } from "../mockData"
 import EditorFunctionItem from "../modules/EditorFunctionItem"
 import EmptyFunctionContentPC from "./components/EmptyFunctionContentPC"
@@ -29,20 +25,20 @@ const FunctionsEditorPC: FC = memo(() => {
   const [integrationVisible, setIntegrationVisible] = useState(false)
   const createFunction = useCreateFunction()
 
-  const [fieldFunctions] = useWatch({
+  const [fieldAiTools] = useWatch({
     control,
-    name: ["functions"],
+    name: ["aiTools"],
   })
 
-  const handleValueChange = (values: IEditorFunctionItem[]) => {
-    setValue("functions", values)
+  const handleValueChange = (values: IEditorFunction[]) => {
+    setValue("aiTools", values)
   }
 
-  const handleRemoveFunction = (functionID: string) => {
-    const functions = getValues("functions")
+  const handleRemoveFunction = (aiToolID: string) => {
+    const aiTools = getValues("aiTools")
     setValue(
-      "functions",
-      functions.filter((item) => item.functionID !== functionID),
+      "aiTools",
+      aiTools.filter((item) => item.aiToolID !== aiToolID),
     )
   }
 
@@ -52,17 +48,17 @@ const FunctionsEditorPC: FC = memo(() => {
   }
 
   // t--------empData
-  const [listData, setListData] = useState<IFunctionItemDetail[]>([])
+  const [listData, setListData] = useState<IEditorFunction[]>([])
   const handleOpenSelectModal = async () => {
     // triggerGetValue()
-    setListData(MOCK_LIST_DATA)
+    setListData(MOCK_LIST_DATA as IEditorFunction[])
     setSelectModalVisible(true)
   }
 
   return (
     <>
       <Controller
-        name="functions"
+        name="aiTools"
         control={control}
         shouldUnregister={false}
         render={({ field }) => (
@@ -84,15 +80,15 @@ const FunctionsEditorPC: FC = memo(() => {
           >
             <div css={containerStyle}>
               <div css={functionContainerStyle}>
-                {field.value.map((item) => (
+                {field.value?.map((item) => (
                   <EditorFunctionItem
-                    key={item.functionID}
+                    key={item.aiToolID}
                     {...item}
                     handleRemoveItem={handleRemoveFunction}
                   />
                 ))}
               </div>
-              {field.value.length > 0 ? (
+              {field.value?.length > 0 ? (
                 <BlackButton
                   style={{
                     marginBottom: "8px",
@@ -147,7 +143,7 @@ const FunctionsEditorPC: FC = memo(() => {
             functions={listData}
             onCancel={() => setSelectModalVisible(false)}
             onConfirm={handleValueChange}
-            fieldFunctions={fieldFunctions}
+            fieldFunctions={fieldAiTools}
             handleClickCreate={handleClickCreate}
           />
         ) : (

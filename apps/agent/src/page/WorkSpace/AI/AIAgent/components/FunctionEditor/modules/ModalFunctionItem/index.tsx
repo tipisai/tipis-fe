@@ -10,20 +10,16 @@ import {
 } from "./style"
 
 const ModalFunctionItem: FC<IModalFunctionItemProps> = ({
-  functionDescription,
-  functionID,
-  functionName,
-  functionIcon,
+  aiToolID,
+  name,
+  description,
+  config,
   handleSelected,
   checked,
 }) => {
   const onSelectChange = (e: CheckboxChangeEvent) => {
     const v = e.target.checked
-    handleSelected(v, {
-      functionID,
-      functionName,
-      functionIcon,
-    })
+    handleSelected(v, aiToolID)
   }
   return (
     <label css={functionItemContainerStyle}>
@@ -31,12 +27,12 @@ const ModalFunctionItem: FC<IModalFunctionItemProps> = ({
         width={32}
         height={32}
         preview={false}
-        src={functionIcon}
+        src={config.icon}
         style={{ borderRadius: 8 }}
       />
       <span css={functionInfoStyle}>
-        <span css={functionNameStyle}>{functionName}</span>
-        <span css={functionDescStyle}>{functionDescription}</span>
+        <span css={functionNameStyle}>{name}</span>
+        <span css={functionDescStyle}>{description}</span>
       </span>
       <Checkbox checked={checked} onChange={onSelectChange} />
     </label>

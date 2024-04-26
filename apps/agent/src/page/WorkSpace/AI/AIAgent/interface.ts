@@ -1,10 +1,22 @@
-import { AI_AGENT_MODEL, AI_AGENT_TYPE, Agent } from "@illa-public/public-types"
+import {
+  AI_AGENT_MODEL,
+  AI_AGENT_TYPE,
+  Agent,
+  IEditorFunction,
+} from "@illa-public/public-types"
 
 export interface IAgentForm
   extends Omit<
     Agent,
-    "createdAt" | "createdBy" | "updatedBy" | "updatedAt" | "editedBy"
-  > {}
+    | "createdAt"
+    | "createdBy"
+    | "updatedBy"
+    | "updatedAt"
+    | "editedBy"
+    | "aiToolIDs"
+  > {
+  aiTools: IEditorFunction[]
+}
 
 export const AgentInitial: IAgentForm = {
   name: "",
@@ -24,7 +36,7 @@ export const AgentInitial: IAgentForm = {
   teamName: "",
   teamIdentifier: "",
   publishedToMarketplace: false,
-  functions: [],
+  aiTools: [],
 }
 
 export enum SCROLL_ID {

@@ -1,10 +1,6 @@
-import { IEditorFunctionItem } from "@illa-public/public-types"
+import { IEditorFunction } from "@illa-public/public-types"
 
-export interface IModalFunctionItemProps {
-  functionDescription: string
-  functionName: string
-  functionIcon: string
-  functionID: string
-  handleSelected: (checked: boolean, functionItem: IEditorFunctionItem) => void
+export interface IModalFunctionItemProps extends IEditorFunction {
+  handleSelected: (checked: boolean, aiToolID: string) => void
   checked: boolean
 }
