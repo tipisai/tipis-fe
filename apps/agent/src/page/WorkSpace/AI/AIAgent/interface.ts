@@ -24,6 +24,7 @@ export const AgentInitial: IAgentForm = {
   teamName: "",
   teamIdentifier: "",
   publishedToMarketplace: false,
+  functions: [],
 }
 
 export enum SCROLL_ID {
