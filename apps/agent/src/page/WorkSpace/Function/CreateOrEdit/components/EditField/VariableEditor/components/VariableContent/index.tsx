@@ -44,6 +44,7 @@ const VariableModalContent: FC<IVariableModalContentProps> = (props) => {
   const methods = useForm<IVariables>({
     defaultValues: variables[index] ?? INIT_VARIABLE,
     mode: "onChange",
+    shouldUnregister: true,
   })
 
   const isEnum = useWatch({

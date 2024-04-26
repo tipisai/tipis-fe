@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next"
 import LayoutBlock from "@/Layout/Function/LayoutBlock"
 import { IBaseFunctionForm } from "../../../interface"
 import CreateVariableButton from "./components/CreateVariableButton"
-import VariableList from "./components/VariableList"
+import NewVariableList from "./components/NewVariableList"
 
 const VariableEditor: FC = memo(() => {
   const { t } = useTranslation()
@@ -31,7 +31,8 @@ const VariableEditor: FC = memo(() => {
                 }}
                 addedIndex={field.value.length}
               />
-              {hasVariable && <VariableList />}
+              {/* {hasVariable && <VariableList />} */}
+              {hasVariable && <NewVariableList />}
             </LayoutBlock>
           )
         }}
