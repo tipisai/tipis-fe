@@ -4,14 +4,15 @@ import { FC, memo, useState } from "react"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { AddIcon } from "@illa-public/icon"
-import { IEditorFunction, TIntegrationType } from "@illa-public/public-types"
+import { IEditorAIToolsVO, TIntegrationType } from "@illa-public/public-types"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { IntegrationTypeSelector } from "@/Modules/Integration/IntegrationSelector"
 import BlackButton from "@/components/BlackButton"
+import { useLazyGetAllAIToolsListQuery } from "@/redux/services/aiToolsAPI"
 import { useCreateFunction } from "@/utils/recentTabs/hook"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { IAgentForm } from "../../../interface"
 import { FUNCTION_LEARN_MORE_LINK } from "../constants"
-import { MOCK_LIST_DATA } from "../mockData"
 import EditorFunctionItem from "../modules/EditorFunctionItem"
 import EmptyFunctionContentPC from "./components/EmptyFunctionContentPC"
 import SelectModalContentPC from "./components/SelectModalContentPC"
@@ -24,13 +25,17 @@ const FunctionsEditorPC: FC = memo(() => {
   const [selectModalVisible, setSelectModalVisible] = useState(false)
   const [integrationVisible, setIntegrationVisible] = useState(false)
   const createFunction = useCreateFunction()
+  const teamInfo = useGetCurrentTeamInfo()
+  const [newloading, setNewLoading] = useState(false)
+
+  const [triggerGetAllAIToolsList] = useLazyGetAllAIToolsListQuery()
 
   const [fieldAiTools] = useWatch({
     control,
     name: ["aiTools"],
   })
 
-  const handleValueChange = (values: IEditorFunction[]) => {
+  const handleValueChange = (values: IEditorAIToolsVO[]) => {
     setValue("aiTools", values)
   }
 
@@ -47,12 +52,21 @@ const FunctionsEditorPC: FC = memo(() => {
     setIntegrationVisible(true)
   }
 
-  // t--------empData
-  const [listData, setListData] = useState<IEditorFunction[]>([])
+  const [listData, setListData] = useState<IEditorAIToolsVO[]>([])
   const handleOpenSelectModal = async () => {
-    // triggerGetValue()
-    setListData(MOCK_LIST_DATA as IEditorFunction[])
-    setSelectModalVisible(true)
+    if (!teamInfo) return
+    try {
+      setNewLoading(true)
+      const list = await triggerGetAllAIToolsList({
+        teamID: teamInfo.id,
+        sortBy: "createdAt",
+      }).unwrap()
+      setListData(list.aiToolList)
+      setSelectModalVisible(true)
+    } catch (e) {
+    } finally {
+      setNewLoading(false)
+    }
   }
 
   return (
@@ -95,6 +109,7 @@ const FunctionsEditorPC: FC = memo(() => {
                     padding: "1px 8px",
                     minWidth: "32px",
                   }}
+                  loading={newloading}
                   type="text"
                   icon={<Icon component={AddIcon} />}
                   onClick={handleOpenSelectModal}
@@ -105,6 +120,7 @@ const FunctionsEditorPC: FC = memo(() => {
                 <Button
                   block
                   size="large"
+                  loading={newloading}
                   icon={<Icon component={AddIcon} />}
                   onClick={handleOpenSelectModal}
                 >

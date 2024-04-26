@@ -94,4 +94,5 @@ export const aiToolsAPI = createApi({
   }),
 })
 
-export const { useGetAllAIToolsListQuery } = aiToolsAPI
+export const { useGetAllAIToolsListQuery, useLazyGetAllAIToolsListQuery } =
+  aiToolsAPI

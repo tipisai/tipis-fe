@@ -4,9 +4,11 @@ import { FC, memo, useState } from "react"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { AddIcon, CloseIcon } from "@illa-public/icon"
-import { IEditorFunction } from "@illa-public/public-types"
+import { IEditorAIToolsVO } from "@illa-public/public-types"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import BlackButton from "@/components/BlackButton"
+import { useLazyGetAllAIToolsListQuery } from "@/redux/services/aiToolsAPI"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import { IAgentForm } from "../../../interface"
 import { FUNCTION_LEARN_MORE_LINK } from "../constants"
 import EditorFunctionItem from "../modules/EditorFunctionItem"
@@ -24,13 +26,17 @@ const FunctionsEditorMobile: FC = memo(() => {
 
   const { control, getValues, setValue } = useFormContext<IAgentForm>()
   const [selectModalVisible, setSelectModalVisible] = useState(false)
+  const teamInfo = useGetCurrentTeamInfo()
+  const [newloading, setNewLoading] = useState(false)
+
+  const [triggerGetAllAIToolsList] = useLazyGetAllAIToolsListQuery()
 
   const [fieldAiTools] = useWatch({
     control,
     name: ["aiTools"],
   })
 
-  const handleValueChange = (values: IEditorFunction[]) => {
+  const handleValueChange = (values: IEditorAIToolsVO[]) => {
     setValue("aiTools", values)
   }
 
@@ -42,12 +48,21 @@ const FunctionsEditorMobile: FC = memo(() => {
     )
   }
 
-  // t--------empData
-  const [listData, setListData] = useState<IEditorFunction[]>([])
+  const [listData, setListData] = useState<IEditorAIToolsVO[]>([])
   const handleOpenSelectModal = async () => {
-    // triggerGetValue()
-    setListData([])
-    setSelectModalVisible(true)
+    if (!teamInfo) return
+    try {
+      setNewLoading(true)
+      const list = await triggerGetAllAIToolsList({
+        teamID: teamInfo.id,
+        sortBy: "createdAt",
+      }).unwrap()
+      setListData(list.aiToolList)
+      setSelectModalVisible(true)
+    } catch (e) {
+    } finally {
+      setNewLoading(false)
+    }
   }
 
   return (

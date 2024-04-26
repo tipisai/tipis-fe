@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom"
 import { DeleteIcon, PenIcon } from "@illa-public/icon"
 import { getEditFunctionPath } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
-import { IEditorFunctionItemProps } from "./interface"
+import { IEditorAIToolsVOItemProps } from "./interface"
 import { functionItemContainerStyle, functionNameStyle } from "./style"
 
-const EditorFunctionItem: FC<IEditorFunctionItemProps> = ({
+const EditorFunctionItem: FC<IEditorAIToolsVOItemProps> = ({
   aiToolID,
   name,
   config,

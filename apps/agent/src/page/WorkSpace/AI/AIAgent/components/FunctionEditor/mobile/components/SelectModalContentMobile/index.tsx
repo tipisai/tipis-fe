@@ -1,6 +1,6 @@
 import { FC, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { IEditorFunction } from "@illa-public/public-types"
+import { IEditorAIToolsVO } from "@illa-public/public-types"
 import BlackButton from "@/components/BlackButton"
 import ModalFunctionItem from "../../../modules/ModalFunctionItem"
 import { ISelectModalContentMobileProps } from "./interface"
@@ -18,7 +18,7 @@ const SelectModalContentMobile: FC<ISelectModalContentMobileProps> = ({
 }) => {
   const { t } = useTranslation()
   const [selectedItems, setSelectedItems] =
-    useState<IEditorFunction[]>(fieldFunctions)
+    useState<IEditorAIToolsVO[]>(fieldFunctions)
 
   const selectIDs = useMemo(() => {
     return selectedItems.map((item) => item.aiToolID)

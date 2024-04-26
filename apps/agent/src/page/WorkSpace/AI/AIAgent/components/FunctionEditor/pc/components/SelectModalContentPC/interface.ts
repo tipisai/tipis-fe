@@ -1,9 +1,9 @@
-import { IEditorFunction } from "@illa-public/public-types"
+import { IEditorAIToolsVO } from "@illa-public/public-types"
 
 export interface ISelectModalContentPCProps {
   onCancel: () => void
-  onConfirm: (value: IEditorFunction[]) => void
+  onConfirm: (value: IEditorAIToolsVO[]) => void
   handleClickCreate: () => void
-  functions: IEditorFunction[]
-  fieldFunctions: IEditorFunction[]
+  functions: IEditorAIToolsVO[]
+  fieldFunctions: IEditorAIToolsVO[]
 }

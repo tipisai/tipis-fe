@@ -3,7 +3,7 @@ import { Button } from "antd"
 import { FC, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { AddIcon } from "@illa-public/icon"
-import { IEditorFunction } from "@illa-public/public-types"
+import { IEditorAIToolsVO } from "@illa-public/public-types"
 import BlackButton from "@/components/BlackButton"
 import ModalFunctionItem from "../../../modules/ModalFunctionItem"
 import { ISelectModalContentPCProps } from "./interface"
@@ -22,7 +22,7 @@ const SelectModalContentPC: FC<ISelectModalContentPCProps> = ({
 }) => {
   const { t } = useTranslation()
   const [selectedItems, setSelectedItems] =
-    useState<IEditorFunction[]>(fieldFunctions)
+    useState<IEditorAIToolsVO[]>(fieldFunctions)
 
   const selectIDs = useMemo(() => {
     return selectedItems.map((item) => item.aiToolID)

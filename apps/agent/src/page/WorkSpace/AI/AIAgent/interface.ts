@@ -2,7 +2,7 @@ import {
   AI_AGENT_MODEL,
   AI_AGENT_TYPE,
   Agent,
-  IEditorFunction,
+  IEditorAIToolsVO,
 } from "@illa-public/public-types"
 
 export interface IAgentForm
@@ -15,7 +15,7 @@ export interface IAgentForm
     | "editedBy"
     | "aiToolIDs"
   > {
-  aiTools: IEditorFunction[]
+  aiTools: IEditorAIToolsVO[]
 }
 
 export const AgentInitial: IAgentForm = {
