@@ -1,28 +1,47 @@
 import Icon from "@ant-design/icons"
 import { Button, Skeleton } from "antd"
 import { FC } from "react"
+import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { DocsIcon } from "@illa-public/icon"
 import { useGetWhiteListIPQuery } from "@/redux/services/peripheralAPI"
 import { useCopyToClipboard } from "@/utils/copyToClipboard"
 import CopyPanel from "../../components/CopyPanel"
+import { IBaseFunctionForm } from "../../interface"
 import { blockStyle, descStyle, docPanelStyle, titleStyle } from "./style"
+import { INTEGRATION_TYPE_MAP_DOC } from "./utils"
 
 const DocPanel: FC = () => {
   const { t } = useTranslation()
   const { data, isLoading } = useGetWhiteListIPQuery()
   const copyToClipboard = useCopyToClipboard()
 
-  const onClickCopyPrompt = () => {}
+  const { control } = useFormContext<IBaseFunctionForm>()
+  const [integrationType, functionName] = useWatch({
+    control,
+    name: ["resourceType", "name"],
+  })
+
+  const onClickCopyPrompt = () => {
+    console.log(
+      t("function.edit.right_panel.example_prompt", {
+        functionName: functionName || "functionName",
+      }),
+    )
+  }
 
   const onClickCopyIP = () => {
     if (!data) return
     copyToClipboard(data.resources.join("\n"))
   }
 
+  const openDocs = () => {
+    window.open(INTEGRATION_TYPE_MAP_DOC[integrationType], "_blank")
+  }
+
   return (
     <div css={docPanelStyle}>
-      <Button icon={<Icon component={DocsIcon} />}>
+      <Button icon={<Icon component={DocsIcon} />} onClick={openDocs}>
         {t("homepage.left_panel.setting.documentation")}
       </Button>
       <div css={blockStyle}>
