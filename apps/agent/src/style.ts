@@ -43,7 +43,7 @@ export const globalStyle = css`
 `
 
 export const globalTooltipContainerStyle = css`
-  ${illaCodeMirrorTooltipStyle}
+  ${illaCodeMirrorTooltipStyle()}
   > div {
     height: 0;
     min-height: 0;
