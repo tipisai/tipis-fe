@@ -4,6 +4,7 @@ import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { IVariables } from "@illa-public/public-types"
 import LabelWithController from "@/Layout/Function/LabelWithController"
+import { containerStyle } from "./style"
 
 const RequiredEditor: FC = () => {
   const { control } = useFormContext<IVariables>()
@@ -19,7 +20,7 @@ const RequiredEditor: FC = () => {
           <LabelWithController
             title={t("function.edit.variable_modal.label.required")}
           >
-            <div>
+            <div css={containerStyle}>
               <Switch {...field} />
             </div>
           </LabelWithController>
