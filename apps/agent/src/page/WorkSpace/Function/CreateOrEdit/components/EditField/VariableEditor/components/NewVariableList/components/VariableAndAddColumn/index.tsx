@@ -3,36 +3,39 @@ import { Button } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { PlusIcon } from "@illa-public/icon"
+import { useVariableToCompletionOption } from "@/page/WorkSpace/Function/CreateOrEdit/util"
 import HeaderField from "../HeaderField"
-import { IDescriptionColumnProps } from "./interface"
 import {
-  descriptionContainerStyle,
-  descriptionTextStyle,
+  addColumnContainerStyle,
   listItemContainerStyle,
   placeholderStyle,
   variableNameAndAddColumnStyle,
+  variableNameContainerStyle,
+  variableNameStyle,
 } from "./style"
 
-const VariableAndAddColumn: FC<IDescriptionColumnProps> = (props) => {
-  const { descriptions = [] } = props
+const VariableAndAddColumn: FC = () => {
   const { t } = useTranslation()
+
+  const options = useVariableToCompletionOption()
+
   return (
     <div css={variableNameAndAddColumnStyle}>
-      <div css={descriptionContainerStyle}>
+      <div css={addColumnContainerStyle}>
         <div css={placeholderStyle} />
-        {descriptions.map((des, i) => (
-          <div key={i} css={listItemContainerStyle}>
-            <Button icon={<Icon component={PlusIcon} />} />
+        {options.map((des, i) => (
+          <div key={i} css={listItemContainerStyle(0)}>
+            <Button icon={<Icon component={PlusIcon} />} type="text" />
           </div>
         ))}
       </div>
-      <div css={descriptionContainerStyle}>
+      <div css={variableNameContainerStyle}>
         <HeaderField
-          title={t("function.edit.variable_modal.label.description")}
+          title={t("function.edit.variable_modal.label.variable_name")}
         />
-        {descriptions.map((des, i) => (
-          <div key={i} css={listItemContainerStyle}>
-            <p css={descriptionTextStyle}>{des}</p>
+        {options.map((item, i) => (
+          <div key={i} css={listItemContainerStyle(item.depth)}>
+            <p css={variableNameStyle}>{item.key}</p>
           </div>
         ))}
       </div>

@@ -1,6 +1,8 @@
+import { useFormContext, useWatch } from "react-hook-form"
 import { DATA_VALUE_TYPE } from "@illa-public/code-editor-new"
 import { ICompletionOption } from "@illa-public/code-editor-new/CodeMirror/extensions/interface"
 import { IVariables, VARIABLE_TYPE } from "@illa-public/public-types"
+import { IBaseFunctionForm } from "./interface"
 
 export const MOCK_DATA: IVariables[] = [
   {
@@ -87,9 +89,17 @@ export const MOCK_DATA: IVariables[] = [
   },
 ]
 
+export type TTransResult = ICompletionOption & {
+  depth: number
+  originType: VARIABLE_TYPE
+  required: boolean
+  name: string
+  parentKey: string
+}
+
 export function variableToCompletionOption(
   variable: IVariables,
-): ICompletionOption[] {
+): TTransResult[] {
   // Define the mapping from VARIABLE_TYPE to DATA_VALUE_TYPE
   const typeMapping: { [key in VARIABLE_TYPE]: DATA_VALUE_TYPE } = {
     [VARIABLE_TYPE.STRING]: DATA_VALUE_TYPE.STRING,
@@ -109,23 +119,29 @@ export function variableToCompletionOption(
   // Recursive function to handle objects and their children
   function mapVariable(
     variable: IVariables,
-    parentKey?: string,
-  ): ICompletionOption[] {
-    const baseOption: ICompletionOption = {
+    parentKey: string = "",
+    depth: number = 0,
+  ): TTransResult[] {
+    const baseOption: TTransResult = {
       key: parentKey ? `${parentKey}.${variable.name}` : variable.name,
+      name: variable.name,
       value: variable.testValue,
       description: variable.description,
       type: typeMapping[variable.type],
+      originType: variable.type,
+      required: variable.required,
+      parentKey,
+      depth,
     }
 
-    let options: ICompletionOption[] = [baseOption]
+    let options: TTransResult[] = [baseOption]
 
     if (
       variable.type === VARIABLE_TYPE.OBJECT &&
       variable.children.length > 0
     ) {
       const childOptions = variable.children.flatMap((child) =>
-        mapVariable(child, baseOption.key),
+        mapVariable(child, baseOption.key, depth + 1),
       )
       options = options.concat(childOptions)
     }
@@ -134,4 +150,15 @@ export function variableToCompletionOption(
   }
 
   return mapVariable(variable)
+}
+
+export const useVariableToCompletionOption = () => {
+  const { control } = useFormContext<IBaseFunctionForm>()
+
+  const variables = useWatch({
+    control,
+    name: "parameters",
+  })
+
+  return variables.map((v) => variableToCompletionOption(v)).flat()
 }

@@ -1,22 +1,23 @@
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
+import { useVariableToCompletionOption } from "../../../../../../../util"
 import HeaderField from "../HeaderField"
-import { ITypeColumnProps } from "./interface"
 import {
   listItemContainerStyle,
   typeContainerStyle,
   typeTextStyle,
 } from "./style"
 
-const TypeColumn: FC<ITypeColumnProps> = (props) => {
-  const { types = [] } = props
+const TypeColumn: FC = () => {
   const { t } = useTranslation()
+  const options = useVariableToCompletionOption()
+
   return (
     <div css={typeContainerStyle}>
       <HeaderField title={t("function.edit.variable_modal.label.type")} />
-      {types.map((vType, i) => (
+      {options.map((item, i) => (
         <div key={i} css={listItemContainerStyle}>
-          <p css={typeTextStyle}>{vType}</p>
+          <p css={typeTextStyle}>{item.originType}</p>
         </div>
       ))}
     </div>

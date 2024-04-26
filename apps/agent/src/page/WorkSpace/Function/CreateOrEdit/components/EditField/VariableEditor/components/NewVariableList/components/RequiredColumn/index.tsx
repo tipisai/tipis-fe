@@ -1,8 +1,8 @@
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { ErrorIcon, SuccessIcon } from "@illa-public/icon"
+import { useVariableToCompletionOption } from "../../../../../../../util"
 import HeaderField from "../HeaderField"
-import { IRequiredColumnProps } from "./interface"
 import {
   descriptionContainerStyle,
   errorIconStyle,
@@ -18,15 +18,16 @@ const getRequiredIcon = (required: boolean) => {
   )
 }
 
-const RequiredColumn: FC<IRequiredColumnProps> = (props) => {
-  const { requireds = [] } = props
+const RequiredColumn: FC = () => {
+  const options = useVariableToCompletionOption()
+
   const { t } = useTranslation()
   return (
     <div css={descriptionContainerStyle}>
       <HeaderField title={t("function.edit.variable_modal.label.required")} />
-      {requireds.map((req, i) => (
+      {options.map((item, i) => (
         <div key={i} css={listItemContainerStyle}>
-          {getRequiredIcon(req)}
+          {getRequiredIcon(!!item.required)}
         </div>
       ))}
     </div>

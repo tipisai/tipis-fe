@@ -1,23 +1,24 @@
 import Icon from "@ant-design/icons"
 import { Button } from "antd"
 import { FC } from "react"
-import { DeleteIcon, PenIcon } from "@illa-public/icon"
-import { IActionColumnProps } from "./interface"
+import { DeleteOutlineIcon, PenIcon } from "@illa-public/icon"
+import { useVariableToCompletionOption } from "../../../../../../../util"
 import {
   actionContainerStyle,
   listItemContainerStyle,
   placeholderStyle,
 } from "./style"
 
-const ActionColumn: FC<IActionColumnProps> = (props) => {
-  const { descriptions = [] } = props
+const ActionColumn: FC = () => {
+  const options = useVariableToCompletionOption()
+
   return (
     <div css={actionContainerStyle}>
       <div css={placeholderStyle} />
-      {descriptions.map((des, i) => (
+      {options.map((_, i) => (
         <div key={i} css={listItemContainerStyle}>
           <Button icon={<Icon component={PenIcon} />} type="text" />
-          <Button icon={<Icon component={DeleteIcon} />} type="text" />
+          <Button icon={<Icon component={DeleteOutlineIcon} />} type="text" />
         </div>
       ))}
     </div>
