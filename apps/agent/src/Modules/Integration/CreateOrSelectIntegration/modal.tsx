@@ -8,7 +8,7 @@ import { IntegrationSelectorContext } from "./utils"
 const IntegrationSelectorModal: FC<IIntegrationSelectorModalProps> = (
   props,
 ) => {
-  const { open, changeOpen, onConfirm, integrationType } = props
+  const { open, changeOpen, onConfirm, integrationType, integrationID } = props
   const [modalName, setModalName] = useState("")
   return (
     <IntegrationSelectorContext.Provider
@@ -31,6 +31,7 @@ const IntegrationSelectorModal: FC<IIntegrationSelectorModalProps> = (
         <IntegrationSelector
           onConfirm={onConfirm}
           integrationType={integrationType}
+          integrationID={integrationID}
         />
       </Modal>
     </IntegrationSelectorContext.Provider>

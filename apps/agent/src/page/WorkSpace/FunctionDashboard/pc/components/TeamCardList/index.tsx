@@ -1,5 +1,9 @@
 import { List } from "antd"
 import { FC } from "react"
+import FullSectionLoading from "../../../../../../components/FullSectionLoading"
+import TeamNoData from "../../../../../../components/TeamNoData"
+import { useGetAllAIToolsListQuery } from "../../../../../../redux/services/aiToolsAPI"
+import { useGetCurrentTeamInfo } from "../../../../../../utils/team"
 import TeamCardListItem from "./Item"
 
 const mockData = [
@@ -74,6 +78,19 @@ const mockData = [
 ]
 
 const TeamCardList: FC = () => {
+  const currentTeamInfo = useGetCurrentTeamInfo()!
+  const { data, isLoading } = useGetAllAIToolsListQuery({
+    teamID: currentTeamInfo.id,
+    sortBy: "updateAt",
+  })
+
+  if (isLoading) {
+    return <FullSectionLoading />
+  }
+
+  if (data?.totalAIToolCount === 0) {
+    return <TeamNoData showCreate={false} onClickButton={() => {}} />
+  }
   return (
     <List
       grid={{
@@ -94,27 +111,6 @@ const TeamCardList: FC = () => {
           publishToMarketplace={index % 2 === 0}
           id={item.id}
         />
-        // <List.Item>
-        //   <TeamCard
-        //     icon={item.icon}
-        //     title={item.title}
-        //     description={item.description}
-        //     tags={undefined}
-        //     moreButton={
-        //       <Button type="text" icon={<Icon component={MoreIcon} />} />
-        //     }
-        //     editButton={
-        //       <>
-        //         <Button type="text" icon={<Icon component={PenIcon} />}>
-        //           Edit
-        //         </Button>
-        //         <Button type="text" icon={<Icon component={PlayFillIcon} />}>
-        //           Run
-        //         </Button>
-        //       </>
-        //     }
-        //   />
-        // </List.Item>
       )}
     />
   )

@@ -1,5 +1,6 @@
 import { FC, useEffect } from "react"
 import { FormProvider, useForm } from "react-hook-form"
+import { INTEGRATION_TYPE_MAP_CONFIG } from "@illa-public/public-configs"
 import { IBaseIntegration } from "@illa-public/public-types"
 import { useGetResourceNameFormResourceType } from "@illa-public/utils"
 import ConfigElement from "../../../ConfigElement"
@@ -11,10 +12,7 @@ const CreateIntegration: FC<ICreateIntegrationProps> = (props) => {
   const { onBack, onConfirm, integrationType } = props
 
   const methods = useForm<IBaseIntegration>({
-    defaultValues: {
-      resourceName: "",
-      resourceType: integrationType,
-    },
+    defaultValues: INTEGRATION_TYPE_MAP_CONFIG[integrationType],
   })
 
   const { setModalName } = useIntegrationSelectorContext()

@@ -5,3 +5,8 @@ export const customModalStyle = css`
     text-align: center;
   }
 `
+
+export const loadingContainerStyle = css`
+  width: 100%;
+  height: 520px;
+`

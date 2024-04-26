@@ -2,7 +2,7 @@ import Icon from "@ant-design/icons"
 import { Button, List, Tag } from "antd"
 import { FC, MouseEventHandler } from "react"
 import { useNavigate } from "react-router-dom"
-import { MoreIcon, PenIcon, PlayFillIcon } from "@illa-public/icon"
+import { MoreIcon, PenIcon } from "@illa-public/icon"
 import PCTeamCard from "@/components/TeamCard/pc"
 import { ITeamCardListItemProps } from "./interface"
 
@@ -22,11 +22,6 @@ const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
     navigate(`edit/${id}`)
   }
 
-  const onClickRunButton: MouseEventHandler<HTMLElement> = (e) => {
-    e.stopPropagation()
-    navigate(`run/${id}`)
-  }
-
   return (
     <List.Item>
       <PCTeamCard
@@ -44,13 +39,6 @@ const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
               onClick={onClickEditButton}
             >
               Edit
-            </Button>
-            <Button
-              type="text"
-              icon={<Icon component={PlayFillIcon} />}
-              onClick={onClickRunButton}
-            >
-              Run
             </Button>
           </>
         }

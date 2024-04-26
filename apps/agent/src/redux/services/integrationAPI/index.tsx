@@ -5,6 +5,7 @@ import {
 } from "@illa-public/illa-net"
 import { IBaseIntegration } from "@illa-public/public-types"
 import { prepareHeaders } from "@illa-public/user-data"
+import { IIntegrationDTO } from "./interface"
 
 export const integrationAPI = createApi({
   reducerPath: "integrationAPI",
@@ -13,14 +14,14 @@ export const integrationAPI = createApi({
     prepareHeaders: prepareHeaders,
   }),
   endpoints: (builder) => ({
-    getIntegrationList: builder.query<IBaseIntegration[], string>({
+    getIntegrationList: builder.query<IIntegrationDTO<unknown>[], string>({
       query: (teamID) => ({
         url: `/teams/${teamID}/resources`,
         method: "GET",
       }),
     }),
     updateIntegrationByID: builder.mutation<
-      IBaseIntegration,
+      IIntegrationDTO<unknown>,
       {
         teamID: string
         integrationID: string
@@ -59,7 +60,7 @@ export const integrationAPI = createApi({
       },
     }),
     createIntegration: builder.mutation<
-      IBaseIntegration,
+      IIntegrationDTO<unknown>,
       {
         teamID: string
         integrationData: IBaseIntegration
@@ -86,7 +87,7 @@ export const integrationAPI = createApi({
       },
     }),
     deleteIntegrationByID: builder.mutation<
-      IBaseIntegration,
+      IIntegrationDTO<unknown>,
       {
         teamID: string
         integrationID: string

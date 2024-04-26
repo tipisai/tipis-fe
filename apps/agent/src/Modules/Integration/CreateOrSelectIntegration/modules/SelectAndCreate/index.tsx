@@ -1,5 +1,5 @@
 import { FC, useState } from "react"
-import CreateIntegration from "../CreateIntegration"
+import CreateIntegration from "../CreateOrUpdateIntegration/createIntegration"
 import SelectIntegration from "../SelectIntegration"
 import {
   ISelectAndCreateIntegrationProps,

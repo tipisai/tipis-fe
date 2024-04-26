@@ -1,26 +1,38 @@
 import { FC } from "react"
-// import { useGetIntegrationListQuery } from "@/redux/services/integrationAPI"
-// import { useGetCurrentTeamInfo } from "@/utils/team"
+import { useGetIntegrationListQuery } from "@/redux/services/integrationAPI"
+import { useGetCurrentTeamInfo } from "@/utils/team"
+import FullSectionLoading from "../../../components/FullSectionLoading"
 import { IIntegrationSelectorProps } from "./interface"
-import CreateIntegration from "./modules/CreateIntegration"
+import CreateOrUpdateIntegration from "./modules/CreateOrUpdateIntegration"
 import SelectAndCreateIntegration from "./modules/SelectAndCreate"
-
-const hasResource = true
+import { loadingContainerStyle } from "./style"
 
 const IntegrationSelector: FC<IIntegrationSelectorProps> = (props) => {
-  // const currentTeamInfo = useGetCurrentTeamInfo()
-  // const { data, error } = useGetIntegrationListQuery(currentTeamInfo!.id)
+  const currentTeamInfo = useGetCurrentTeamInfo()
+  const { onConfirm, integrationType, integrationID } = props
 
-  const { onConfirm, integrationType } = props
-  return hasResource ? (
+  const { data, isLoading } = useGetIntegrationListQuery(currentTeamInfo!.id, {
+    skip: !!integrationID,
+  })
+
+  if (isLoading) {
+    return (
+      <div css={loadingContainerStyle}>
+        <FullSectionLoading />
+      </div>
+    )
+  }
+
+  return data ? (
     <SelectAndCreateIntegration
       onConfirm={onConfirm}
       integrationType={integrationType}
     />
   ) : (
-    <CreateIntegration
+    <CreateOrUpdateIntegration
       onConfirm={onConfirm}
       integrationType={integrationType}
+      integrationID={integrationID}
     />
   )
 }

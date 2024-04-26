@@ -3,6 +3,7 @@ import { setupListeners } from "@reduxjs/toolkit/query"
 import { authAPI, teamAPI, teamReducer, userAPI } from "@illa-public/user-data"
 import { rtkQueryErrorLogger } from "./middleware/rtkQuery401ErrorHandler"
 import { agentAuthAPI } from "./services/agentAPI"
+import { aiToolsAPI } from "./services/aiToolsAPI"
 import { driveAPI } from "./services/driveAPI"
 import { hashTagApi } from "./services/hashTagApi"
 import { integrationAPI } from "./services/integrationAPI"
@@ -23,6 +24,7 @@ const store = configureStore({
     [hashTagApi.reducerPath]: hashTagApi.reducer,
     [integrationAPI.reducerPath]: integrationAPI.reducer,
     [peripheralAPI.reducerPath]: peripheralAPI.reducer,
+    [aiToolsAPI.reducerPath]: aiToolsAPI.reducer,
   },
   devTools: import.meta.env.ILLA_APP_ENV === "development",
   middleware: (getDefaultMiddleware) =>
@@ -36,6 +38,7 @@ const store = configureStore({
       hashTagApi.middleware,
       integrationAPI.middleware,
       peripheralAPI.middleware,
+      aiToolsAPI.middleware,
       rtkQueryErrorLogger,
     ),
 })

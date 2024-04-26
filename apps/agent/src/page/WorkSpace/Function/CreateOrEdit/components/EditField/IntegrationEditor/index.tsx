@@ -84,7 +84,12 @@ const IntegrationEditor = memo(() => {
                     </div>
                   </div>
                 </div>
-                <div css={buttonStyle}>
+                <div
+                  css={buttonStyle}
+                  onClick={() => {
+                    setCreateOrSelectModalShow(true)
+                  }}
+                >
                   <div css={iconContainerStyle}>
                     <PenIcon />
                   </div>
@@ -101,6 +106,7 @@ const IntegrationEditor = memo(() => {
                 field.onChange(integrationID)
                 setCreateOrSelectModalShow(false)
               }}
+              integrationID={field.value}
             />
           </LayoutBlock>
         )}
