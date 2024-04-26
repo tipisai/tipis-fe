@@ -2,11 +2,10 @@ import { FC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { useParams } from "react-router-dom"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
-import FormContext from "./context/FormContext"
 import DocPanel from "./modules/DocPanel"
 import EditPanel from "./modules/EditPanel"
 import HeaderTools from "./modules/HeaderTools"
-import { contentContainerStyle } from "./style"
+import { contentContainerStyle, formStyle } from "./style"
 
 const EditFunction: FC = () => {
   const { functionID } = useParams()
@@ -18,7 +17,7 @@ const EditFunction: FC = () => {
   })
   return (
     <FormProvider {...methods}>
-      <FormContext>
+      <form onSubmit={methods.handleSubmit((_data) => {})} css={formStyle}>
         <WorkspacePCHeaderLayout
           title="Edit function"
           extra={<HeaderTools />}
@@ -27,7 +26,7 @@ const EditFunction: FC = () => {
           <EditPanel />
           <DocPanel />
         </div>
-      </FormContext>
+      </form>
     </FormProvider>
   )
 }

@@ -2,14 +2,14 @@ import { Input } from "antd"
 import { FC, memo } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { IFunctionInterface } from "@illa-public/public-types"
 import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Function/LayoutBlock"
-import { IBaseFunctionForm } from "../../../interface"
 
 const NameEditor: FC = memo(() => {
   const { t } = useTranslation()
 
-  const methods = useFormContext<IBaseFunctionForm>()
+  const methods = useFormContext<IFunctionInterface>()
 
   return (
     <Controller

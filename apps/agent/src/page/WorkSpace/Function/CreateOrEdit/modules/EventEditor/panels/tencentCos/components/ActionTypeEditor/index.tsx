@@ -3,26 +3,25 @@ import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import {
-  FUNCTION_ACTION_TYPE,
-  IBaseFunction,
-  TTencentCosFunctionContent,
+  // FUNCTION_ACTION_TYPE,
+  ITencentCosFunction,
+  TENCENT_COS_ACTION_OPERATION,
 } from "@illa-public/public-types"
 import LabelWithEditor from "../../../../components/labelWithEditor"
 
 const ActionTypeEditor: FC = () => {
-  const { control } =
-    useFormContext<IBaseFunction<TTencentCosFunctionContent>>()
+  const { control } = useFormContext<ITencentCosFunction>()
 
   const { t } = useTranslation()
 
   const actionTypeOptions = [
     {
       label: t("editor.action.form.label.tx.action_type.list"),
-      value: FUNCTION_ACTION_TYPE.LIST,
+      value: TENCENT_COS_ACTION_OPERATION.TENCENT_COS_LIST,
     },
     {
       label: t("editor.action.form.option.tx.action_type.download"),
-      value: FUNCTION_ACTION_TYPE.GET_DOWNLOAD_URL,
+      value: TENCENT_COS_ACTION_OPERATION.TENCENT_COS_DOWNLOAD,
     },
   ]
 
@@ -30,7 +29,7 @@ const ActionTypeEditor: FC = () => {
     <LabelWithEditor label={t("editor.action.form.label.tx.action_type")}>
       <Controller
         control={control}
-        name="content.actionType"
+        name="actionOperation"
         render={({ field }) => {
           return (
             <Select

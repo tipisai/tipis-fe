@@ -9,10 +9,10 @@ import {
   PenIcon,
   PlusIcon,
 } from "@illa-public/icon"
+import { IFunctionInterface } from "@illa-public/public-types"
 import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Function/LayoutBlock"
 import IntegrationSelectorModal from "@/Modules/Integration/CreateOrSelectIntegration/modal"
-import { IBaseFunctionForm } from "../../../interface"
 import {
   buttonStyle,
   downIconContainerStyle,
@@ -26,7 +26,7 @@ import {
 
 const IntegrationEditor = memo(() => {
   const { t } = useTranslation()
-  const { control } = useFormContext<IBaseFunctionForm>()
+  const { control } = useFormContext<IFunctionInterface>()
   const integrationType = useWatch({
     control,
     name: "resourceType",

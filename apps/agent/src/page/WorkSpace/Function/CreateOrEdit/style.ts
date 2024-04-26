@@ -17,3 +17,10 @@ export const leftPlaceContentStyle = css`
   padding: 8px 24px;
   width: 240px;
 `
+
+export const formStyle = css`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+`

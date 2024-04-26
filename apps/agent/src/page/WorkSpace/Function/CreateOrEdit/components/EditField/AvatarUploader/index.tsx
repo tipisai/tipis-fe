@@ -5,8 +5,8 @@ import { FC, memo } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { PlusIcon } from "@illa-public/icon"
+import { IFunctionInterface } from "@illa-public/public-types"
 import LayoutBlock from "@/Layout/Function/LayoutBlock"
-import { IBaseFunctionForm } from "../../../interface"
 import { customUploadStyle, uploadContentContainerStyle } from "./style"
 import { useBeforeUploadAvatar } from "./utils"
 
@@ -20,7 +20,7 @@ const getBase64 = (img: FileType, callback: (url: string) => void) => {
 
 const AvatarUploader: FC = memo(() => {
   const { t } = useTranslation()
-  const { control } = useFormContext<IBaseFunctionForm>()
+  const { control } = useFormContext<IFunctionInterface>()
   const beforeUpload = useBeforeUploadAvatar()
 
   return (

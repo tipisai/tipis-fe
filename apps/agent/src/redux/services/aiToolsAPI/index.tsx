@@ -4,13 +4,10 @@ import {
   AGENT_REQUEST_PREFIX,
   HTTP_REQUEST_PUBLIC_BASE_URL,
 } from "@illa-public/illa-net"
+import { IFunctionInterface } from "@illa-public/public-types"
 import { prepareHeaders } from "@illa-public/user-data"
 import { getFileExtensionFromBase64 } from "../../../utils/file"
-import {
-  IAIToolDTO,
-  ICreateOrUpdateAIToolRequestDTO,
-  IGetAllAIToolsListResponseDTO,
-} from "./interface"
+import { IAIToolDTO, IGetAllAIToolsListResponseDTO } from "./interface"
 
 export const aiToolsAPI = createApi({
   reducerPath: "aiToolsAPI",
@@ -34,7 +31,7 @@ export const aiToolsAPI = createApi({
       IAIToolDTO<unknown>,
       {
         teamID: string
-        aiTool: ICreateOrUpdateAIToolRequestDTO<unknown>
+        aiTool: IFunctionInterface
       }
     >({
       query: ({ teamID, aiTool }) => ({
@@ -48,7 +45,7 @@ export const aiToolsAPI = createApi({
       {
         teamID: string
         aiToolID: string
-        aiTool: ICreateOrUpdateAIToolRequestDTO<unknown>
+        aiTool: IFunctionInterface
       }
     >({
       query: ({ teamID, aiTool, aiToolID }) => ({
@@ -94,5 +91,11 @@ export const aiToolsAPI = createApi({
   }),
 })
 
-export const { useGetAllAIToolsListQuery, useLazyGetAllAIToolsListQuery } =
-  aiToolsAPI
+export const {
+  useGetAllAIToolsListQuery,
+  useCreateAIToolMutation,
+  useDeleteAIToolByIDMutation,
+  useDuplicateAIToolByIDMutation,
+  useGetAIToolIconUploadAddressMutation,
+  useUpdateAiToolByIDMutation,
+} = aiToolsAPI

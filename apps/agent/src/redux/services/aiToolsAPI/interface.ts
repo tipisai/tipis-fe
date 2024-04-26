@@ -60,5 +60,4 @@ export interface ICreateOrUpdateAIToolRequestDTO<T> {
     icon: string
   }
   content: T
-  publishedToMarketplace: boolean
 }

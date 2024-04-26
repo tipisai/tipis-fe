@@ -9,9 +9,8 @@ import {
 } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { INIT_VARIABLE } from "@illa-public/public-configs"
-import { IVariables } from "@illa-public/public-types"
+import { IFunctionInterface, IVariables } from "@illa-public/public-types"
 import BlackButton from "@/components/BlackButton"
-import { IBaseFunctionForm } from "@/page/WorkSpace/Function/CreateOrEdit/interface"
 import DescriptionEditor from "../DescriptionEditor"
 import EnumOptionsEditor from "../EnumOptionsEditor"
 import IsEnumEditor from "../IsEnumEditor"
@@ -29,7 +28,7 @@ import {
 
 const VariableModalContent: FC<IVariableModalContentProps> = (props) => {
   const { index, open, openChange } = props
-  const { control } = useFormContext<IBaseFunctionForm>()
+  const { control } = useFormContext<IFunctionInterface>()
   const variableControl = useController({
     control,
     name: "parameters",

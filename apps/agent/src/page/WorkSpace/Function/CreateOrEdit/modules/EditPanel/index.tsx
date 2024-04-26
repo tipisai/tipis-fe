@@ -1,12 +1,12 @@
 import { FC } from "react"
-// import { useFormContext, useWatch } from "react-hook-form"
+import { useFormContext, useWatch } from "react-hook-form"
+import { IFunctionInterface } from "@illa-public/public-types"
 import AvatarUploader from "../../components/EditField/AvatarUploader"
 import DescriptionEditor from "../../components/EditField/DescriptionEditor"
 import IntegrationEditor from "../../components/EditField/IntegrationEditor"
 import NameEditor from "../../components/EditField/NameEditor"
 // import VariableEditor from "../../components/EditField/VariableEditor"
-// import { IBaseFunctionForm } from "../../interface"
-// import EventEditor from "../EventEditor"
+import EventEditor from "../EventEditor"
 import {
   basicContainerStyle,
   dividerStyle,
@@ -14,12 +14,12 @@ import {
 } from "./style"
 
 const EditPanel: FC = () => {
-  // const { control } = useFormContext<IBaseFunctionForm>()
+  const { control } = useFormContext<IFunctionInterface>()
 
-  // const integrationID = useWatch({
-  //   control,
-  //   name: "resourceID",
-  // })
+  const integrationID = useWatch({
+    control,
+    name: "resourceID",
+  })
 
   return (
     <div css={editPanelContainerStyle}>
@@ -31,8 +31,8 @@ const EditPanel: FC = () => {
       <div css={dividerStyle} />
       <div css={basicContainerStyle}>
         <IntegrationEditor />
-        {/* {!!integrationID && <VariableEditor />}
-        {!!integrationID && <EventEditor />} */}
+        {/* {!!integrationID && <VariableEditor />} */}
+        {!!integrationID && <EventEditor />}
       </div>
     </div>
   )
