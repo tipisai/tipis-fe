@@ -47,7 +47,7 @@ const UserInfoPopoverContent: FC = () => {
 
   const onClickOpenDocs = () => {
     TipisTrack.track("open_docs")
-    window.open("https://help.tipis.ai/en/", "_blank")
+    window.open("https://help.tipis.ai", "_blank")
   }
   return (
     <ConfigProvider
