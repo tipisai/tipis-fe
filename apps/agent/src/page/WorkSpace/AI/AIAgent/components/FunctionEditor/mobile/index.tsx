@@ -106,6 +106,7 @@ const FunctionsEditorMobile: FC = memo(() => {
                     padding: "1px 8px",
                     minWidth: "32px",
                   }}
+                  loading={newloading}
                   type="text"
                   icon={<Icon component={AddIcon} />}
                   onClick={handleOpenSelectModal}
@@ -116,6 +117,7 @@ const FunctionsEditorMobile: FC = memo(() => {
                 <Button
                   block
                   size="large"
+                  loading={newloading}
                   icon={<Icon component={AddIcon} />}
                   onClick={handleOpenSelectModal}
                 >
