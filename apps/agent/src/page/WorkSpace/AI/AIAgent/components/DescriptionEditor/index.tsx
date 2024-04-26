@@ -28,7 +28,6 @@ const DescriptionEditor: FC = memo(() => {
         <LayoutBlock
           scrollId={SCROLL_ID.DESCRIPTION}
           title={t("editor.ai-agent.label.desc")}
-          subtitleTips={t("editor.ai-agent.generate-desc.tooltips")}
           required
           errorMessage={errors.description?.message}
         >
