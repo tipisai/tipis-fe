@@ -10,7 +10,7 @@ import DelimiterEditor from "./components/DelimiterEditor"
 import MaxKeysEditor from "./components/MaxKeysEditor"
 import ObjectNameEditor from "./components/ObjectNameEditor"
 import PrefixEditor from "./components/PrefixEditor"
-import VersionIDEditor from "./components/VersionIDEditor"
+// import VersionIDEditor from "./components/VersionIDEditor"
 import { tencentCosContainerStyle } from "./style"
 
 const TencentCosEventEditor: FC = () => {
@@ -20,6 +20,7 @@ const TencentCosEventEditor: FC = () => {
     control,
     name: "content.actionType",
   })
+
   return (
     <div css={tencentCosContainerStyle}>
       <ActionTypeEditor />
@@ -33,7 +34,7 @@ const TencentCosEventEditor: FC = () => {
       {actionType === FUNCTION_ACTION_TYPE.GET_DOWNLOAD_URL && (
         <>
           <ObjectNameEditor />
-          <VersionIDEditor />
+          {/* <VersionIDEditor /> */}
         </>
       )}
     </div>
