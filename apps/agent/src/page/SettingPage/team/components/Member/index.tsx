@@ -45,7 +45,7 @@ export const MemberListPage: FC = () => {
           teamID: teamInfo.id,
           teamMemberID,
           userRole,
-        })
+        }).unwrap()
         message.success({
           content: t("user_management.mes.change_role_suc"),
         })
