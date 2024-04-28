@@ -8,6 +8,7 @@ export const customModalStyle = css`
 
 export const variableContentStyle = css`
   max-height: 800px;
+  min-height: 384px;
   overflow: hidden;
   overflow-y: auto;
 `
