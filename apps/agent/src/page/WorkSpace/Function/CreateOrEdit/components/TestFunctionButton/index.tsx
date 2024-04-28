@@ -4,9 +4,10 @@ import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { SuccessCircleIcon } from "@illa-public/icon"
 import { NextIcon } from "@illa-public/icon"
-import { IFunctionInterface } from "@illa-public/public-types"
-import { useRunAIToolsMutation } from "@/redux/services/aiToolsAPI"
+import { useTestRunAIToolsMutation } from "@/redux/services/aiToolsAPI"
 import { FUNCTION_RUN_RESULT_EVENT } from "@/utils/eventEmitter/constants"
+import { useGetCurrentTeamInfo } from "@/utils/team"
+import { IFunctionForm } from "../../interface"
 import { TestRunResultEventEmitter } from "../TestRunResult/utils"
 import {
   actionRunResultButtonStyle,
@@ -20,13 +21,22 @@ import {
 const TestFunctionButton: FC = () => {
   const { t } = useTranslation()
 
-  const { control } = useFormContext<IFunctionInterface>()
-  const resourceID = useWatch({
-    control,
-    name: "resourceID",
-  })
+  const currentTeamInfo = useGetCurrentTeamInfo()!
 
-  const [runAITools, { data: runAIToolsData }] = useRunAIToolsMutation()
+  const { control } = useFormContext<IFunctionForm>()
+  const [resourceID, resourceType, actionOperation, parameters, content] =
+    useWatch({
+      control,
+      name: [
+        "integrationInfo.resourceID",
+        "resourceType",
+        "actionOperation",
+        "parameters",
+        "content",
+      ],
+    })
+
+  const [testRunAITools, { data: runAIToolsData }] = useTestRunAIToolsMutation()
 
   const onClickTestResultButton = () => {
     TestRunResultEventEmitter.emit(
@@ -37,10 +47,15 @@ const TestFunctionButton: FC = () => {
 
   const onClickTestConnectionButton = async () => {
     try {
-      await runAITools({
-        teamID: "",
-        aiToolID: resourceID,
-        context: {},
+      await testRunAITools({
+        teamID: currentTeamInfo?.id,
+        testData: {
+          resourceID: resourceID,
+          resourceType: resourceType,
+          actionOperation: actionOperation,
+          parameters: parameters,
+          content: content,
+        },
       }).unwrap()
       TestRunResultEventEmitter.emit(
         FUNCTION_RUN_RESULT_EVENT.CHANGE_DRAWER_OPEN_STATUS,

@@ -1,14 +1,14 @@
 import { FC, memo } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { IFunctionInterface } from "@illa-public/public-types"
 import LayoutBlock from "@/Layout/Function/LayoutBlock"
+import { IFunctionForm } from "../../../interface"
 import CreateVariableButton from "./components/CreateVariableButton"
 import NewVariableList from "./components/NewVariableList"
 
 const VariableEditor: FC = memo(() => {
   const { t } = useTranslation()
-  const { control } = useFormContext<IFunctionInterface>()
+  const { control } = useFormContext<IFunctionForm>()
 
   return (
     <>

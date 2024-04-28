@@ -4,10 +4,10 @@ import { FC } from "react"
 import { useController, useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { DocsIcon } from "@illa-public/icon"
-import { IFunctionInterface } from "@illa-public/public-types"
 import { useGetWhiteListIPQuery } from "@/redux/services/peripheralAPI"
 import { useCopyToClipboard } from "@/utils/copyToClipboard"
 import CopyPanel from "../../components/CopyPanel"
+import { IFunctionForm } from "../../interface"
 import { blockStyle, descStyle, docPanelStyle, titleStyle } from "./style"
 import { INTEGRATION_TYPE_MAP_DOC } from "./utils"
 
@@ -16,7 +16,7 @@ const DocPanel: FC = () => {
   const { data, isLoading } = useGetWhiteListIPQuery()
   const copyToClipboard = useCopyToClipboard()
 
-  const { control } = useFormContext<IFunctionInterface>()
+  const { control } = useFormContext<IFunctionForm>()
   const [integrationType, functionName] = useWatch({
     control,
     name: ["resourceType", "name"],

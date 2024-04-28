@@ -3,10 +3,11 @@ import { FormProvider, useForm } from "react-hook-form"
 import { useParams } from "react-router-dom"
 // import { DraggableModal } from "@illa-public/draggable-modal"
 import { getFunctionInitDataByType } from "@illa-public/public-configs"
-import { IFunctionInterface, TIntegrationType } from "@illa-public/public-types"
+import { IBaseFunction, TIntegrationType } from "@illa-public/public-types"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import { useCreateAIToolMutation } from "@/redux/services/aiToolsAPI"
 import TestRunResult from "./components/TestRunResult"
+import { IFunctionForm } from "./interface"
 import DocPanel from "./modules/DocPanel"
 import EditPanel from "./modules/EditPanel"
 import HeaderTools from "./modules/HeaderTools"
@@ -17,18 +18,22 @@ const CreateFunction: FC = () => {
 
   const INITConfig = getFunctionInitDataByType(functionType as TIntegrationType)
 
-  const methods = useForm<IFunctionInterface>({
+  const methods = useForm<IFunctionForm>({
     defaultValues: INITConfig,
     mode: "onChange",
   })
 
   const [createAITool] = useCreateAIToolMutation()
 
-  const createFunctionWhenSubmit = async (data: IFunctionInterface) => {
+  const createFunctionWhenSubmit = async (data: IFunctionForm) => {
+    const aiTool: IBaseFunction = {
+      ...data,
+      resourceID: data.integrationInfo.resourceID,
+    }
     try {
       await createAITool({
         teamID: "1",
-        aiTool: data,
+        aiTool: aiTool,
       })
     } catch {}
   }

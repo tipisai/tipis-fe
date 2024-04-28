@@ -3,7 +3,7 @@ import { Button } from "antd"
 import { FC, useState } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { DeleteIcon, PenIcon } from "@illa-public/icon"
-import { IFunctionInterface } from "@illa-public/public-types"
+import { IFunctionForm } from "../../../../../interface"
 import VariableModalContent from "../VariableContent"
 import { IVariableItemProps } from "./interface"
 import {
@@ -15,7 +15,7 @@ import {
 
 const VariableListItem: FC<IVariableItemProps> = (props) => {
   const { index, variableName } = props
-  const { control } = useFormContext<IFunctionInterface>()
+  const { control } = useFormContext<IFunctionForm>()
 
   const [showEditModal, setShowEditModal] = useState(false)
 

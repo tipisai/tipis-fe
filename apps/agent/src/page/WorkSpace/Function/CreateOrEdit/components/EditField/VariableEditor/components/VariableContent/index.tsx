@@ -9,14 +9,14 @@ import {
 } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { INIT_VARIABLE } from "@illa-public/public-configs"
-import { IFunctionInterface, IVariables } from "@illa-public/public-types"
+import { IVariables } from "@illa-public/public-types"
 import BlackButton from "@/components/BlackButton"
+import { IFunctionForm } from "../../../../../interface"
 import DescriptionEditor from "../DescriptionEditor"
 import EnumOptionsEditor from "../EnumOptionsEditor"
 import IsEnumEditor from "../IsEnumEditor"
 import NameEditor from "../NameEditor"
 import RequiredEditor from "../RequiredEditor"
-import TestValueEditor from "../TestValueEditor"
 import TypeEditor from "../TypeEditor"
 import { IVariableModalContentProps } from "./interface"
 import {
@@ -28,7 +28,7 @@ import {
 
 const VariableModalContent: FC<IVariableModalContentProps> = (props) => {
   const { index, open, openChange } = props
-  const { control } = useFormContext<IFunctionInterface>()
+  const { control } = useFormContext<IFunctionForm>()
   const variableControl = useController({
     control,
     name: "parameters",
@@ -80,7 +80,6 @@ const VariableModalContent: FC<IVariableModalContentProps> = (props) => {
           <TypeEditor />
           <IsEnumEditor />
           {isEnum && <EnumOptionsEditor />}
-          <TestValueEditor />
         </div>
         <div css={footerContainerStyle}>
           <BlackButton

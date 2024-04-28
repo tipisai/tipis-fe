@@ -1,11 +1,8 @@
 import { useFormContext, useWatch } from "react-hook-form"
 import { DATA_VALUE_TYPE } from "@illa-public/code-editor-new"
 import { ICompletionOption } from "@illa-public/code-editor-new/CodeMirror/extensions/interface"
-import {
-  IFunctionInterface,
-  IVariables,
-  VARIABLE_TYPE,
-} from "@illa-public/public-types"
+import { IVariables, VARIABLE_TYPE } from "@illa-public/public-types"
+import { IFunctionForm } from "./interface"
 
 export const MOCK_DATA: IVariables[] = [
   {
@@ -156,7 +153,7 @@ export function variableToCompletionOption(
 }
 
 export const useVariableToCompletionOption = () => {
-  const { control } = useFormContext<IFunctionInterface>()
+  const { control } = useFormContext<IFunctionForm>()
 
   const variables = useWatch({
     control,

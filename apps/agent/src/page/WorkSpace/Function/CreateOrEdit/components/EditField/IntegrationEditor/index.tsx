@@ -9,10 +9,13 @@ import {
   PenIcon,
   PlusIcon,
 } from "@illa-public/icon"
-import { IFunctionInterface } from "@illa-public/public-types"
 import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Function/LayoutBlock"
 import IntegrationSelectorModal from "@/Modules/Integration/CreateOrSelectIntegration/modal"
+import { useAppDispatch } from "@/redux/hooks"
+import { integrationAPI } from "@/redux/services/integrationAPI"
+import { useGetCurrentTeamInfo } from "@/utils/team"
+import { IFunctionForm } from "../../../interface"
 import {
   buttonStyle,
   downIconContainerStyle,
@@ -26,11 +29,14 @@ import {
 
 const IntegrationEditor = memo(() => {
   const { t } = useTranslation()
-  const { control } = useFormContext<IFunctionInterface>()
+  const { control } = useFormContext<IFunctionForm>()
   const integrationType = useWatch({
     control,
     name: "resourceType",
   })
+
+  const currentTeamInfo = useGetCurrentTeamInfo()!
+  const dispatch = useAppDispatch()
 
   const [createOrSelectModalShow, setCreateOrSelectModalShow] = useState(false)
 
@@ -39,7 +45,7 @@ const IntegrationEditor = memo(() => {
   return (
     <>
       <Controller
-        name="resourceID"
+        name="integrationInfo"
         control={control}
         rules={{
           required: t("function.edit.configure.error.integration"),
@@ -78,7 +84,7 @@ const IntegrationEditor = memo(() => {
                     ) : (
                       <div css={integrationIconStyle} />
                     )}
-                    <p css={integrationNameStyle}>{field.value}</p>
+                    <p css={integrationNameStyle}>{field.value.resourceName}</p>
                     <div css={downIconContainerStyle}>
                       <DownIcon />
                     </div>
@@ -102,11 +108,26 @@ const IntegrationEditor = memo(() => {
               open={createOrSelectModalShow}
               changeOpen={setCreateOrSelectModalShow}
               integrationType={integrationType}
-              onConfirm={(integrationID: string) => {
-                field.onChange(integrationID)
-                setCreateOrSelectModalShow(false)
+              onConfirm={async (integrationID) => {
+                try {
+                  const integrationList = await dispatch(
+                    integrationAPI.endpoints.getIntegrationList.initiate(
+                      currentTeamInfo.id!,
+                    ),
+                  ).unwrap()
+                  const targetIntegration = integrationList.find(
+                    (integration) => integration.resourceID === integrationID,
+                  )
+                  if (targetIntegration) {
+                    field.onChange({
+                      resourceID: targetIntegration.resourceID,
+                      resourceName: targetIntegration.resourceName,
+                    })
+                    setCreateOrSelectModalShow(false)
+                  }
+                } catch {}
               }}
-              integrationID={field.value}
+              integrationID={field.value.resourceID}
             />
           </LayoutBlock>
         )}

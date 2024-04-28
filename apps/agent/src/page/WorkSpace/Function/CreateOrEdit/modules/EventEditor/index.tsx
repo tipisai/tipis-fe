@@ -1,8 +1,9 @@
 import { FC, Suspense, lazy } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { IFunctionInterface, TIntegrationType } from "@illa-public/public-types"
+import { TIntegrationType } from "@illa-public/public-types"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
+import { IFunctionForm } from "../../interface"
 
 const getEventEditorByIntegrationType = (integrationType: TIntegrationType) => {
   switch (integrationType) {
@@ -15,7 +16,7 @@ const getEventEditorByIntegrationType = (integrationType: TIntegrationType) => {
 
 const EventEditor: FC = () => {
   const { t } = useTranslation()
-  const { control } = useFormContext<IFunctionInterface>()
+  const { control } = useFormContext<IFunctionForm>()
   const integrationType = useWatch({
     control,
     name: "resourceType",

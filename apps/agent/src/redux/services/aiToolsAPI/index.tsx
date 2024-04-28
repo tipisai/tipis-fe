@@ -4,10 +4,14 @@ import {
   AGENT_REQUEST_PREFIX,
   HTTP_REQUEST_PUBLIC_BASE_URL,
 } from "@illa-public/illa-net"
-import { IFunctionInterface } from "@illa-public/public-types"
+import { IBaseFunction, TActionOperation } from "@illa-public/public-types"
 import { prepareHeaders } from "@illa-public/user-data"
 import { getFileExtensionFromBase64 } from "../../../utils/file"
-import { IAIToolDTO, IGetAllAIToolsListResponseDTO } from "./interface"
+import {
+  IAIToolDTO,
+  IAIToolParametersDTO,
+  IGetAllAIToolsListResponseDTO,
+} from "./interface"
 
 export const aiToolsAPI = createApi({
   reducerPath: "aiToolsAPI",
@@ -31,7 +35,7 @@ export const aiToolsAPI = createApi({
       IAIToolDTO<unknown>,
       {
         teamID: string
-        aiTool: IFunctionInterface
+        aiTool: IBaseFunction
       }
     >({
       query: ({ teamID, aiTool }) => ({
@@ -45,7 +49,7 @@ export const aiToolsAPI = createApi({
       {
         teamID: string
         aiToolID: string
-        aiTool: IFunctionInterface
+        aiTool: IBaseFunction
       }
     >({
       query: ({ teamID, aiTool, aiToolID }) => ({
@@ -93,9 +97,31 @@ export const aiToolsAPI = createApi({
       { teamID: string; aiToolID: string; context: Record<string, unknown> }
     >({
       query: ({ teamID, aiToolID, context }) => ({
-        url: `/tems/${teamID}/aiTool/${aiToolID}/run`,
+        url: `/teams/${teamID}/aiTool/${aiToolID}/run`,
         method: "POST",
         body: context,
+      }),
+    }),
+    testRunAITools: builder.mutation<
+      { payload: unknown },
+      {
+        teamID: string
+        testData: {
+          resourceID: string
+          resourceType: string
+          actionOperation: TActionOperation
+          parameters: IAIToolParametersDTO[]
+          content: unknown
+        }
+      }
+    >({
+      query: ({ teamID, testData }) => ({
+        url: `/teams/${teamID}/aiTool/testRun`,
+        method: "POST",
+        body: {
+          ...testData,
+          context: [],
+        },
       }),
     }),
   }),
@@ -109,4 +135,5 @@ export const {
   useGetAIToolIconUploadAddressMutation,
   useUpdateAiToolByIDMutation,
   useRunAIToolsMutation,
+  useTestRunAIToolsMutation,
 } = aiToolsAPI

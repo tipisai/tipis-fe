@@ -1,12 +1,12 @@
 import { FC } from "react"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
-import { IFunctionInterface } from "@illa-public/public-types"
+import { IFunctionForm } from "../../../../../interface"
 import CreateVariableButton from "../CreateVariableButton"
 import VariableListItem from "./item"
 import { variableListContainerStyle } from "./style"
 
 const VariableList: FC = () => {
-  const { control } = useFormContext<IFunctionInterface>()
+  const { control } = useFormContext<IFunctionForm>()
 
   const variables = useWatch({
     control,

@@ -1,10 +1,10 @@
 import { FC } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
-import { IFunctionInterface } from "@illa-public/public-types"
 import AvatarUploader from "../../components/EditField/AvatarUploader"
 import DescriptionEditor from "../../components/EditField/DescriptionEditor"
 import IntegrationEditor from "../../components/EditField/IntegrationEditor"
 import NameEditor from "../../components/EditField/NameEditor"
+import { IFunctionForm } from "../../interface"
 // import VariableEditor from "../../components/EditField/VariableEditor"
 import EventEditor from "../EventEditor"
 import {
@@ -14,11 +14,11 @@ import {
 } from "./style"
 
 const EditPanel: FC = () => {
-  const { control } = useFormContext<IFunctionInterface>()
+  const { control } = useFormContext<IFunctionForm>()
 
-  const integrationID = useWatch({
+  const integrationInfo = useWatch({
     control,
-    name: "resourceID",
+    name: "integrationInfo",
   })
 
   return (
@@ -32,7 +32,7 @@ const EditPanel: FC = () => {
       <div css={basicContainerStyle}>
         <IntegrationEditor />
         {/* {!!integrationID && <VariableEditor />} */}
-        {!!integrationID && <EventEditor />}
+        {!!integrationInfo && <EventEditor />}
       </div>
     </div>
   )
