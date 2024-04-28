@@ -127,7 +127,7 @@ const IntegrationEditor = memo(() => {
                   }
                 } catch {}
               }}
-              integrationID={field.value.resourceID}
+              integrationID={field.value?.resourceID ?? ""}
             />
           </LayoutBlock>
         )}

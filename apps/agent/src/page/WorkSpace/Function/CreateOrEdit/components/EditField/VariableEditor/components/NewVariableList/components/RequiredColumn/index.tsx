@@ -1,7 +1,7 @@
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { ErrorIcon, SuccessIcon } from "@illa-public/icon"
-import { useVariableToCompletionOption } from "@/page/WorkSpace/Function/CreateOrEdit/util"
+import { useVariableToCompletionOption } from "@/utils/function/hook"
 import HeaderField from "../HeaderField"
 import {
   descriptionContainerStyle,

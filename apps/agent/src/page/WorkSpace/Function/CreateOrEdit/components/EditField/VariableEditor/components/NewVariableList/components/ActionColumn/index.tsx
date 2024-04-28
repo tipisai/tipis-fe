@@ -2,7 +2,7 @@ import Icon from "@ant-design/icons"
 import { Button } from "antd"
 import { FC } from "react"
 import { DeleteOutlineIcon, PenIcon } from "@illa-public/icon"
-import { useVariableToCompletionOption } from "@/page/WorkSpace/Function/CreateOrEdit/util"
+import { useVariableToCompletionOption } from "@/utils/function/hook"
 import {
   actionContainerStyle,
   listItemContainerStyle,

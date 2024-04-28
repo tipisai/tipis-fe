@@ -3,7 +3,7 @@ import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { CodeEditor } from "@illa-public/code-editor-new"
 import { IBaseFunction, IListObjectContent } from "@illa-public/public-types"
-import { useVariableToCompletionOption } from "@/page/WorkSpace/Function/CreateOrEdit/util"
+import { useVariableToCompletionOption } from "@/utils/function/hook"
 import LabelWithEditor from "../../../../components/labelWithEditor"
 
 const PrefixEditor: FC = () => {

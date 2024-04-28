@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 import { CODE_LANG, CodeEditor } from "@illa-public/code-editor-new"
 import { CloseIcon } from "@illa-public/icon"
 import { FUNCTION_RUN_RESULT_EVENT } from "@/utils/eventEmitter/constants"
+import { TestRunResultEventEmitter } from "@/utils/function"
 import { IRunResultValue } from "./interface"
 import {
   extraInfoContainerStyle,
@@ -13,7 +14,6 @@ import {
   runResultContainerStyle,
   statusStyle,
 } from "./style"
-import { TestRunResultEventEmitter } from "./utils"
 
 const TestRunResult: FC = () => {
   const [openDrawer, setOpenDrawer] = useState(false)
