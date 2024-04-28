@@ -6,6 +6,7 @@ import { getFunctionInitDataByType } from "@illa-public/public-configs"
 import { IFunctionInterface, TIntegrationType } from "@illa-public/public-types"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import { useCreateAIToolMutation } from "@/redux/services/aiToolsAPI"
+import TestRunResult from "./components/TestRunResult"
 import DocPanel from "./modules/DocPanel"
 import EditPanel from "./modules/EditPanel"
 import HeaderTools from "./modules/HeaderTools"
@@ -45,6 +46,7 @@ const CreateFunction: FC = () => {
         <div css={contentContainerStyle}>
           <EditPanel />
           <DocPanel />
+          <TestRunResult />
         </div>
       </form>
     </FormProvider>

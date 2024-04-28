@@ -2,6 +2,7 @@ import { FC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { useParams } from "react-router-dom"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
+import TestRunResult from "./components/TestRunResult"
 import DocPanel from "./modules/DocPanel"
 import EditPanel from "./modules/EditPanel"
 import HeaderTools from "./modules/HeaderTools"
@@ -25,6 +26,7 @@ const EditFunction: FC = () => {
         <div css={contentContainerStyle}>
           <EditPanel />
           <DocPanel />
+          <TestRunResult />
         </div>
       </form>
     </FormProvider>

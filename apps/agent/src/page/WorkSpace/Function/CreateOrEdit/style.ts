@@ -8,6 +8,7 @@ export const contentContainerStyle = css`
   overflow: hidden;
   overflow-x: auto;
   display: flex;
+  position: relative;
 `
 
 export const leftPlaceContentStyle = css`

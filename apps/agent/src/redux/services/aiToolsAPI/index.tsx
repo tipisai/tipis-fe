@@ -88,6 +88,16 @@ export const aiToolsAPI = createApi({
         }
       },
     }),
+    runAITools: builder.mutation<
+      { payload: unknown },
+      { teamID: string; aiToolID: string; context: Record<string, unknown> }
+    >({
+      query: ({ teamID, aiToolID, context }) => ({
+        url: `/tems/${teamID}/aiTool/${aiToolID}/run`,
+        method: "POST",
+        body: context,
+      }),
+    }),
   }),
 })
 
@@ -98,4 +108,5 @@ export const {
   useDuplicateAIToolByIDMutation,
   useGetAIToolIconUploadAddressMutation,
   useUpdateAiToolByIDMutation,
+  useRunAIToolsMutation,
 } = aiToolsAPI
