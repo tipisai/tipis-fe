@@ -68,7 +68,7 @@ export const useLeaveTeamModal = () => {
   const deleteTeam = async () => {
     try {
       TipisTrack.track("click_delete_team")
-      deleteTeamByID(teamInfo?.id || "")
+      deleteTeamByID(teamInfo?.id || "").unwrap()
       message.success({
         content: t("team_setting.mes.delete_suc"),
       })
