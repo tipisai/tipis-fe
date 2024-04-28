@@ -16,10 +16,13 @@ import remarkGfm from "remark-gfm"
 import { MarkdownMessageProps } from "@/page/WorkSpace/AI/components/MarkdownMessage/interface"
 import {
   cellStyle,
+  headStyle,
   listStyle,
   markdownMessageContainerStyle,
   markdownMessageStyle,
+  rowStyle,
   tableStyle,
+  thStyle,
 } from "@/page/WorkSpace/AI/components/MarkdownMessage/style"
 import CustomAnchor from "./components/CustomAnchor"
 import CustomCode from "./components/CustomCode"
@@ -71,16 +74,20 @@ export const MarkdownMessage = memo((props: MarkdownMessageProps) => {
               {children}
             </Typography.Paragraph>
           ),
-          tr: ({ children }) => <TableRow>{children}</TableRow>,
+          tr: ({ children }) => <TableRow css={rowStyle}>{children}</TableRow>,
           th: ({ children }) => (
-            <TableCell align="center">{children}</TableCell>
+            <TableCell align="center" css={thStyle}>
+              {children}
+            </TableCell>
           ),
           td: ({ children }) => (
             <TableCell align="left" css={cellStyle}>
               {children}
             </TableCell>
           ),
-          thead: ({ children }) => <TableHead>{children}</TableHead>,
+          thead: ({ children }) => (
+            <TableHead css={headStyle}>{children}</TableHead>
+          ),
           tbody: ({ children }) => <TableBody>{children}</TableBody>,
           tfoot: ({ children }) => <TableFooter>{children}</TableFooter>,
           table: ({ children }) => (
