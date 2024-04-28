@@ -8,15 +8,13 @@ import { menuItemStyle, rightIconStyle } from "./style"
 const Item: FC<MenuItemProps> = ({ onClick, path, label }) => {
   const navigate = useNavigate()
 
-  const handleClick = (key: string) => {
-    navigate(key)
+  const handleClick = (path: string) => {
+    onClick?.()
+    path && navigate(path)
   }
 
   return (
-    <div
-      css={menuItemStyle}
-      onClick={() => (onClick ? onClick() : handleClick(path))}
-    >
+    <div css={menuItemStyle} onClick={() => handleClick(path)}>
       <div>{label}</div>
       <Icon component={NextIcon} css={rightIconStyle} />
     </div>
