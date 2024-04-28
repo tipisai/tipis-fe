@@ -62,10 +62,11 @@ const SelectModalContentPC: FC<ISelectModalContentPCProps> = ({
           icon={<Icon component={AddIcon} />}
           onClick={handleClickCreate}
         >
-          {t("create_new")}
+          {t("editor.action.form.button.general.create_new")}
         </Button>
         <BlackButton size="large" block onClick={handleOnConfirm}>
-          {t("confirm")} {selectIDs.length > 0 ? `(${selectIDs.length})` : ""}
+          {t("editor.action.form.button.general.confirm")}{" "}
+          {selectIDs.length > 0 ? `(${selectIDs.length})` : ""}
         </BlackButton>
       </div>
     </div>

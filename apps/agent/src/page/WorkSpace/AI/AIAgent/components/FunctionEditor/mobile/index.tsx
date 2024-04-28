@@ -1,35 +1,23 @@
 import Icon from "@ant-design/icons"
-import { Button, Drawer, Typography } from "antd"
+import { Button, Typography } from "antd"
 import { FC, memo, useState } from "react"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
-import { AddIcon, CloseIcon } from "@illa-public/icon"
+import { AddIcon } from "@illa-public/icon"
 import { IEditorAIToolsVO } from "@illa-public/public-types"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import BlackButton from "@/components/BlackButton"
-import { useLazyGetAllAIToolsListQuery } from "@/redux/services/aiToolsAPI"
-import { useGetCurrentTeamInfo } from "@/utils/team"
 import { IAgentForm } from "../../../interface"
 import { FUNCTION_LEARN_MORE_LINK } from "../constants"
 import EditorFunctionItem from "../modules/EditorFunctionItem"
-import EmptyFunctionContentMobile from "./components/EmptyFunctionContentMobile"
-import SelectModalContentMobile from "./components/SelectModalContentMobile"
-import {
-  closeIconStyle,
-  containerStyle,
-  functionContainerStyle,
-  titleStyle,
-} from "./style"
+import SelectDrawer from "./components/SelectDrawer"
+import { containerStyle, functionContainerStyle } from "./style"
 
 const FunctionsEditorMobile: FC = memo(() => {
   const { t } = useTranslation()
 
   const { control, getValues, setValue } = useFormContext<IAgentForm>()
   const [selectModalVisible, setSelectModalVisible] = useState(false)
-  const teamInfo = useGetCurrentTeamInfo()
-  const [newloading, setNewLoading] = useState(false)
-
-  const [triggerGetAllAIToolsList] = useLazyGetAllAIToolsListQuery()
 
   const [fieldAiTools] = useWatch({
     control,
@@ -48,21 +36,8 @@ const FunctionsEditorMobile: FC = memo(() => {
     )
   }
 
-  const [listData, setListData] = useState<IEditorAIToolsVO[]>([])
   const handleOpenSelectModal = async () => {
-    if (!teamInfo) return
-    try {
-      setNewLoading(true)
-      const list = await triggerGetAllAIToolsList({
-        teamID: teamInfo.id,
-        sortBy: "createdAt",
-      }).unwrap()
-      setListData(list.aiToolList)
-      setSelectModalVisible(true)
-    } catch (e) {
-    } finally {
-      setNewLoading(false)
-    }
+    setSelectModalVisible(true)
   }
 
   return (
@@ -106,7 +81,6 @@ const FunctionsEditorMobile: FC = memo(() => {
                     padding: "1px 8px",
                     minWidth: "32px",
                   }}
-                  loading={newloading}
                   type="text"
                   icon={<Icon component={AddIcon} />}
                   onClick={handleOpenSelectModal}
@@ -117,7 +91,6 @@ const FunctionsEditorMobile: FC = memo(() => {
                 <Button
                   block
                   size="large"
-                  loading={newloading}
                   icon={<Icon component={AddIcon} />}
                   onClick={handleOpenSelectModal}
                 >
@@ -128,37 +101,14 @@ const FunctionsEditorMobile: FC = memo(() => {
           </LayoutBlock>
         )}
       />
-      <Drawer
-        open={selectModalVisible}
-        destroyOnClose
-        footer={false}
-        title={
-          <span css={titleStyle}>
-            {t("editor.action.form.title.general.add_functions")}
-          </span>
-        }
-        width="100%"
-        height="100%"
-        placement="bottom"
-        onClose={() => setSelectModalVisible(false)}
-        closeIcon={<Icon component={CloseIcon} css={closeIconStyle} />}
-        styles={{
-          body: {
-            padding: 0,
-          },
-        }}
-      >
-        {Array.isArray(listData) && listData.length > 0 ? (
-          <SelectModalContentMobile
-            functions={listData}
-            onCancel={() => setSelectModalVisible(false)}
-            onConfirm={handleValueChange}
-            fieldFunctions={fieldAiTools}
-          />
-        ) : (
-          <EmptyFunctionContentMobile />
-        )}
-      </Drawer>
+      {selectModalVisible && (
+        <SelectDrawer
+          selectModalVisible={selectModalVisible}
+          onCancel={() => setSelectModalVisible(false)}
+          fieldAiTools={fieldAiTools}
+          handleValueChange={handleValueChange}
+        />
+      )}
     </>
   )
 })

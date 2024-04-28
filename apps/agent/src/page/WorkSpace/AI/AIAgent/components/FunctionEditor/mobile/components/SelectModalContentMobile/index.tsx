@@ -53,7 +53,8 @@ const SelectModalContentMobile: FC<ISelectModalContentMobileProps> = ({
       </div>
       <div css={actionContainerStyle}>
         <BlackButton size="large" block onClick={handleOnConfirm}>
-          {t("confirm")} {selectIDs.length > 0 ? `(${selectIDs.length})` : ""}
+          {t("editor.action.form.button.general.confirm")}{" "}
+          {selectIDs.length > 0 ? `(${selectIDs.length})` : ""}
         </BlackButton>
       </div>
     </div>
