@@ -26,7 +26,7 @@ const TestFunctionButton: FC = () => {
     name: "resourceID",
   })
 
-  const [runAITools] = useRunAIToolsMutation()
+  const [runAITools, { data: runAIToolsData }] = useRunAIToolsMutation()
 
   const onClickTestResultButton = () => {
     TestRunResultEventEmitter.emit(
@@ -56,16 +56,18 @@ const TestFunctionButton: FC = () => {
 
   return (
     <div css={testFunctionRunContainerStyle}>
-      <div css={actionRunResultButtonStyle} onClick={onClickTestResultButton}>
-        <div css={iconAndTextContainerStyle}>
-          <SuccessCircleIcon />
-          <p css={textStyle}>{t("function.edit.test.result.success")}</p>
-          {/* <p>  t("function.edit.test.result.failed")</p> */}
+      {runAIToolsData && (
+        <div css={actionRunResultButtonStyle} onClick={onClickTestResultButton}>
+          <div css={iconAndTextContainerStyle}>
+            <SuccessCircleIcon />
+            <p css={textStyle}>{t("function.edit.test.result.success")}</p>
+            {/* <p>  t("function.edit.test.result.failed")</p> */}
+          </div>
+          <div css={iconContainerStyle}>
+            <NextIcon css={nextIconStyle} />
+          </div>
         </div>
-        <div css={iconContainerStyle}>
-          <NextIcon css={nextIconStyle} />
-        </div>
-      </div>
+      )}
       <Button size="large" onClick={onClickTestConnectionButton}>
         {t("function.edit.test.button.test_connection")}
       </Button>

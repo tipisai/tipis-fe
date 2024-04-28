@@ -2,8 +2,9 @@ import { Tabs } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
+import TeamCardList from "../components/TeamCardList"
 import HeaderTools from "./components/HeaderTools"
-import TeamCardList from "./components/TeamCardList"
+import TeamCardListItem from "./components/TeamCardListItem"
 import {
   cardListContainerStyle,
   functionPCDashboardContainerStyle,
@@ -26,7 +27,7 @@ const FunctionPCDashboard: FC = () => {
               key: "team",
               children: (
                 <div css={cardListContainerStyle}>
-                  <TeamCardList />
+                  <TeamCardList RenderItem={TeamCardListItem} />
                 </div>
               ),
             },

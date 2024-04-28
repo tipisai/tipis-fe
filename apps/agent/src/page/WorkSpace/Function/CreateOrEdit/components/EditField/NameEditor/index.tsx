@@ -22,6 +22,12 @@ const NameEditor: FC = memo(() => {
           value: /^[a-zA-Z_][a-zA-Z0-9_]*$/,
           message: t("function.edit.configure.name.validate"),
         },
+        validate: (value) => {
+          if (value.startsWith("_sys")) {
+            return t("function.edit.configure.name.validate")
+          }
+          return true
+        },
       }}
       shouldUnregister={false}
       render={({ field, fieldState }) => (

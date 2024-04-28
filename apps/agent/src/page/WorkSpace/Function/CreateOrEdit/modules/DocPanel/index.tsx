@@ -1,7 +1,7 @@
 import Icon from "@ant-design/icons"
 import { Button, Skeleton } from "antd"
 import { FC } from "react"
-import { useFormContext, useWatch } from "react-hook-form"
+import { useController, useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { DocsIcon } from "@illa-public/icon"
 import { IFunctionInterface } from "@illa-public/public-types"
@@ -22,10 +22,23 @@ const DocPanel: FC = () => {
     name: ["resourceType", "name"],
   })
 
+  const { fieldState } = useController({
+    control,
+    name: "name",
+  })
+
+  const isNameInvalid = fieldState.invalid
+
+  const finalFunctionName = functionName
+    ? isNameInvalid
+      ? "functionName"
+      : functionName
+    : "functionName"
+
   const onClickCopyPrompt = () => {
-    console.log(
+    copyToClipboard(
       t("function.edit.right_panel.example_prompt", {
-        functionName: functionName || "functionName",
+        functionName: finalFunctionName,
       }),
     )
   }
@@ -56,7 +69,9 @@ const DocPanel: FC = () => {
           copyButtonProps={{
             text: t("function.edit.right_panel.copy_prompt"),
           }}
-          content={t("function.edit.right_panel.example_prompt")}
+          content={t("function.edit.right_panel.example_prompt", {
+            functionName: finalFunctionName,
+          })}
         />
       </div>
       <div css={blockStyle}>
