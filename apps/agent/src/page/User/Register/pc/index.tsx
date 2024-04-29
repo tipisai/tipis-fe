@@ -39,7 +39,6 @@ export const PCRegister: FC<RegisterProps> = (props) => {
     loading,
     showCountDown,
     onCountDownChange,
-    sendEmail,
   } = props
   const navigate = useNavigate()
   const { handleSubmit, control, formState, trigger } =
@@ -206,7 +205,6 @@ export const PCRegister: FC<RegisterProps> = (props) => {
                       usage="signup"
                       showCountDown={showCountDown}
                       onCountDownChange={onCountDownChange}
-                      sendEmail={sendEmail}
                     />
                   }
                   placeholder={t(

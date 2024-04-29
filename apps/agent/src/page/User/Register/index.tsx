@@ -10,10 +10,7 @@ import {
   TIPIS_TRACK_PUBLIC_PAGE_NAME,
   TipisTrack,
 } from "@illa-public/track-utils"
-import {
-  useSendVerificationCodeToEmailMutation,
-  useSignUpMutation,
-} from "@illa-public/user-data"
+import { useSignUpMutation } from "@illa-public/user-data"
 import { setAuthToken } from "@illa-public/utils"
 import { useNavigateTargetWorkspace } from "@/utils/routeHelper/hook"
 import { useRedirectToRedirectURL } from "@/utils/routeHelper/redirectHook"
@@ -32,7 +29,6 @@ const RegisterPage: FC = () => {
   const paramsRedirectURL = searchParams.get("redirectURL")
 
   const [signUp] = useSignUpMutation()
-  const [sendVerificationCodeToEmail] = useSendVerificationCodeToEmailMutation()
   const navigateToWorkspace = useNavigateTargetWorkspace()
   const redirect = useRedirectToRedirectURL()
 
@@ -115,15 +111,6 @@ const RegisterPage: FC = () => {
     }
   }
 
-  const handleSendEmail = async (email: string) => {
-    try {
-      await sendVerificationCodeToEmail({
-        email,
-        usage: "signup",
-      })
-    } catch (e) {}
-  }
-
   useEffect(() => {
     TipisTrack.pageViewTrack(TIPIS_TRACK_PUBLIC_PAGE_NAME.SIGNUP)
     return () => {
@@ -147,7 +134,6 @@ const RegisterPage: FC = () => {
               loading={loading}
               errorMsg={errorMsg}
               onSubmit={onSubmit}
-              sendEmail={handleSendEmail}
               lockedEmail={email ?? searchParams.get("email") ?? ""}
               showCountDown={showCountDown}
               onCountDownChange={setShowCountDown}
@@ -158,7 +144,6 @@ const RegisterPage: FC = () => {
               loading={loading}
               errorMsg={errorMsg}
               onSubmit={onSubmit}
-              sendEmail={handleSendEmail}
               lockedEmail={email ?? searchParams.get("email") ?? ""}
               showCountDown={showCountDown}
               onCountDownChange={setShowCountDown}

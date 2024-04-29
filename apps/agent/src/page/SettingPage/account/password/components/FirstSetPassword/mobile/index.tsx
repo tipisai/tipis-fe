@@ -10,8 +10,7 @@ import { controllerContainerStyle, formContainerStyle } from "./style"
 const { Password } = Input
 
 const SetPasswordMobile: FC<FirstSetPasswordProps> = (props) => {
-  const { onSubmit, errorMsg, showCountDown, onCountDownChange, sendEmail } =
-    props
+  const { onSubmit, errorMsg, showCountDown, onCountDownChange } = props
   const { t } = useTranslation()
   const { handleSubmit, control, formState } =
     useFormContext<IFirstSetPasswordFields>()
@@ -41,7 +40,6 @@ const SetPasswordMobile: FC<FirstSetPasswordProps> = (props) => {
                     usage="forgetpwd"
                     showCountDown={showCountDown}
                     onCountDownChange={onCountDownChange}
-                    sendEmail={sendEmail}
                   />
                 }
                 placeholder={t(
