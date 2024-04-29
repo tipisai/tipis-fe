@@ -30,9 +30,9 @@ import {
   useUploadFileToDrive,
 } from "@/utils/drive"
 import { getRealFileType, multipleFileHandler } from "@/utils/drive/utils"
-import { UploadContext } from "../../AIAgent/components/UploadContext"
-import { IAgentForm } from "../../AIAgent/interface"
-import StatusIcon from "./StatusIcon"
+import { IAgentForm } from "../../../../interface"
+import { UploadContext } from "../../../UploadContext"
+import StatusIcon from "../StatusIcon"
 import { IKnowledgeUploadProps } from "./interface"
 import {
   containerStyle,
@@ -227,18 +227,18 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
     }
   }, [uploadFileStore])
 
-  const getNeedUploadAndNotAcceptFiles = (files: FileList) => {
+  const getNeedUploadAndNotAcceptFiles = async (files: FileList) => {
     const needUpdateFilesArray: File[] = []
     const notAcceptFilesArray: File[] = []
 
-    Array.from(files).map((file) => {
-      const contentType = getRealFileType(file, file.name.split(".")[1])
+    for (let file of files) {
+      const contentType = await getRealFileType(file, file.name.split(".")[1])
       if (!contentType) {
         notAcceptFilesArray.push(file)
       } else {
         needUpdateFilesArray.push(file)
       }
-    })
+    }
 
     return { needUpdateFilesArray, notAcceptFilesArray }
   }
@@ -252,7 +252,7 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
     })
     setIsDragFileOver(false)
     const { needUpdateFilesArray, notAcceptFilesArray } =
-      getNeedUploadAndNotAcceptFiles(e.dataTransfer.files)
+      await getNeedUploadAndNotAcceptFiles(e.dataTransfer.files)
 
     if (notAcceptFilesArray.length > 0) {
       TipisTrack.track("knowledge_file_format_error", {
