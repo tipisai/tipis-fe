@@ -33,7 +33,6 @@ export const MobileReset: FC<ResetProps> = (props) => {
     resetLabel,
     showCountDown,
     onCountDownChange,
-    sendEmail,
   } = props
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -115,7 +114,6 @@ export const MobileReset: FC<ResetProps> = (props) => {
                   usage="forgetpwd"
                   showCountDown={showCountDown}
                   onCountDownChange={onCountDownChange}
-                  sendEmail={sendEmail}
                 />
               }
               placeholder={t(
