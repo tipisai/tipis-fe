@@ -116,8 +116,7 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
   } catch (e) {}
 
   const getInfoByStatus = useGetInfoByStatus()
-
-  const { InfoIcon, InfoTitle, infoDesc } = getInfoByStatus(
+  const { infoDesc, InfoIcon, InfoTitle } = getInfoByStatus(
     messageStatus,
     runRequestType,
   )

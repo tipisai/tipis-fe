@@ -4,15 +4,15 @@ import { WarningCircleIcon } from "@illa-public/icon"
 import { errorMsgStyle } from "./style"
 
 interface ErrorTextProps {
-  errorMessage: string
+  message: string | null | undefined
 }
 
-export const ErrorText: FC<ErrorTextProps> = ({ errorMessage }) => {
-  if (!errorMessage) return null
+export const ErrorText: FC<ErrorTextProps> = ({ message }) => {
+  if (!message) return null
   return (
     <div css={errorMsgStyle}>
       <Icon component={WarningCircleIcon} size={16} />
-      {errorMessage}
+      {message}
     </div>
   )
 }

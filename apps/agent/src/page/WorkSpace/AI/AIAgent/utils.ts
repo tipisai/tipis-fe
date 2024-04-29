@@ -3,7 +3,7 @@ import { useCallback } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
-import { Agent } from "@illa-public/public-types"
+import { Agent, AgentRaw } from "@illa-public/public-types"
 import { TipisTrack } from "@illa-public/track-utils"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import {
@@ -39,16 +39,29 @@ export const useSubmitSaveAgent = () => {
   const currentTeamInfo = useSelector(getCurrentTeamInfo)!
   const { reset } = useFormContext<IAgentForm>()
 
+  const getAgentRowData = useCallback((formData: IAgentForm): AgentRaw => {
+    return {
+      name: formData.name,
+      agentType: formData.agentType,
+      model: formData.model,
+      variables: formData.variables.filter(
+        (v) => v.key !== "" && v.value !== "",
+      ),
+      prompt: formData.prompt,
+      modelConfig: formData.modelConfig,
+      description: formData.description,
+      icon: formData.icon,
+      knowledge: formData.knowledge,
+      aiToolIDs: formData.aiTools.map((item) => item.aiToolID),
+    }
+  }, [])
+
   const handleCreateAgent = useCallback(
     async (currentData: IAgentForm) => {
+      const agentRawData = getAgentRowData(currentData)
       const serverAgent = await createAgent({
         teamID: currentTeamInfo.id,
-        agentRaw: {
-          ...currentData,
-          variables: currentData.variables.filter(
-            (v) => v.key !== "" && v.value !== "",
-          ),
-        },
+        agentRaw: agentRawData,
       }).unwrap()
       await deleteFormDataByTabID(currentTeamInfo.id, CREATE_TIPIS_ID)
       await updateCreateTipiTabToEditTipiTab(CREATE_TIPIS_ID, {
@@ -64,20 +77,21 @@ export const useSubmitSaveAgent = () => {
       })
       return serverAgent
     },
-    [createAgent, currentTeamInfo.id, updateCreateTipiTabToEditTipiTab],
+    [
+      createAgent,
+      currentTeamInfo.id,
+      updateCreateTipiTabToEditTipiTab,
+      getAgentRowData,
+    ],
   )
 
   const handleChangeAgent = useCallback(
     async (currentData: IAgentForm) => {
+      const agentRawData = getAgentRowData(currentData)
       const serverAgent = await putAgentDetail({
         teamID: currentTeamInfo.id,
         aiAgentID: currentData.aiAgentID,
-        agentRaw: {
-          ...currentData,
-          variables: currentData.variables.filter(
-            (v) => v.key !== "" && v.value !== "",
-          ),
-        },
+        agentRaw: agentRawData,
       }).unwrap()
       const recentTabs = getRecentTabInfos(store.getState())
       const currentAgentTabs = recentTabs.filter(
@@ -107,7 +121,7 @@ export const useSubmitSaveAgent = () => {
       })
       return serverAgent
     },
-    [batchUpdateTabInfo, currentTeamInfo.id, putAgentDetail],
+    [batchUpdateTabInfo, currentTeamInfo.id, putAgentDetail, getAgentRowData],
   )
 
   const handleSubmitSave = useCallback(
@@ -150,6 +164,7 @@ export const useSubmitSaveAgent = () => {
           knowledge: Array.isArray(agentInfo.knowledge)
             ? agentInfo.knowledge
             : [],
+          aiTools: Array.isArray(agentInfo.aiTools) ? agentInfo.aiTools : [],
         }
         reset(newFormData)
 

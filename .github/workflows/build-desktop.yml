@@ -39,6 +39,7 @@ jobs:
         'beta' }}
     env:
       ILLA_API_BASE_URL: ${{ vars.ILLA_API_BASE_URL }}
+      ILLA_PERIPHERAL_API_BASE_URL: ${{ vars.ILLA_PERIPHERAL_API_BASE_URL }}
       ILLA_APP_ENV: ${{ vars.ILLA_APP_ENV }}
       ILLA_CLOUD_URL: tauri://localhost
       ILLA_MARKET_URL: ${{ vars.ILLA_MARKET_URL }}

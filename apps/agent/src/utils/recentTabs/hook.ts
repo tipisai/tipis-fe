@@ -12,7 +12,6 @@ import {
 } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import {
-  getCreateFunctionPath,
   getEditTipiPath,
   getMarketTipiDetailPath,
   getRunTipiPath,
@@ -23,6 +22,7 @@ import {
   useUpdateRecentTabReducer,
 } from "./baseHook"
 import {
+  CREATE_FUNCTION_ID,
   CREATE_TIPIS_ID,
   EXPLORE_FUNCTION_ID,
   EXPLORE_TIPIS_ID,
@@ -440,23 +440,97 @@ export const useAddExploreFunctionsTab = () => {
   return addExploreTipisTab
 }
 
-export const useCreateFunction = () => {
-  const navigate = useNavigate()
+export const useAddCreateFunction = () => {
+  const dispatch = useDispatch()
   const addRecentTab = useAddRecentTabReducer()
 
-  const createFunction = useCallback(async () => {
-    const currentTeamInfo = getCurrentTeamInfo(store.getState())!
-    const tempID = v4()
-    const tabsInfo: ITabInfo = {
-      tabName: "",
-      tabIcon: "",
-      tabType: TAB_TYPE.CREATE_FUNCTION,
-      tabID: tempID,
-      cacheID: tempID,
-    }
-    await addRecentTab(tabsInfo)
-    navigate(getCreateFunctionPath(currentTeamInfo?.identifier, tempID))
-  }, [addRecentTab, navigate])
+  const addCreateFunctionTab = useCallback(
+    async (functionType: string) => {
+      const historyTabs = getRecentTabInfos(store.getState())
+      const createFunctionTab = historyTabs.find(
+        (tab) => tab.tabType === TAB_TYPE.CREATE_FUNCTION,
+      )
+      if (!createFunctionTab) {
+        const tabsInfo: ITabInfo = {
+          tabName: "",
+          tabIcon: "",
+          tabType: TAB_TYPE.CREATE_FUNCTION,
+          tabID: CREATE_FUNCTION_ID,
+          cacheID: functionType,
+        }
+        await addRecentTab(tabsInfo)
+      } else {
+        dispatch(
+          recentTabActions.updateCurrentRecentTabIDReducer(
+            createFunctionTab.tabID,
+          ),
+        )
+      }
+    },
+    [addRecentTab, dispatch],
+  )
 
-  return createFunction
+  return addCreateFunctionTab
+}
+
+export const useAddOrUpdateEditFunctionTab = () => {
+  const addRecentTab = useAddRecentTabReducer()
+  const dispatch = useDispatch()
+  const batchUpdateRecentTab = useBatchUpdateRecentTabReducer()
+
+  const addOrUpdateEditFunctionTab = useCallback(
+    async (functionInfo: { functionName: string; functionID: string }) => {
+      const { functionID, functionName } = functionInfo
+      const historyTabs = getRecentTabInfos(store.getState())
+      const useThisTipTab = historyTabs.filter(
+        (tab) => tab.cacheID === functionID,
+      )
+      const newTabInfo = {
+        tabName: functionName,
+        tabIcon: "",
+        tabType: TAB_TYPE.EDIT_FUNCTION,
+        tabID: v4(),
+        cacheID: functionID,
+      }
+      if (useThisTipTab.length > 0) {
+        const currentTab = useThisTipTab.find(
+          (tab) => tab.tabType === TAB_TYPE.EDIT_FUNCTION,
+        )
+
+        const needUpdateTabInfoTab = useThisTipTab.filter(
+          (tab) => tab.tabType === TAB_TYPE.EDIT_FUNCTION,
+        )
+        if (needUpdateTabInfoTab.length > 0) {
+          const updateSlice = needUpdateTabInfoTab
+            .map((tabInfo) => ({
+              ...tabInfo,
+              cacheID: functionID,
+              tabName: functionName,
+            }))
+            .reduce(
+              (acc, tabInfo) => {
+                acc[tabInfo.tabID] = tabInfo
+                return acc
+              },
+              {} as Record<string, ITabInfo>,
+            )
+
+          await batchUpdateRecentTab(updateSlice)
+        }
+
+        if (currentTab) {
+          dispatch(
+            recentTabActions.updateCurrentRecentTabIDReducer(currentTab.tabID),
+          )
+        } else {
+          await addRecentTab(newTabInfo)
+        }
+      } else {
+        await addRecentTab(newTabInfo)
+      }
+    },
+    [addRecentTab, batchUpdateRecentTab, dispatch],
+  )
+
+  return addOrUpdateEditFunctionTab
 }

@@ -12,10 +12,14 @@ import Empty from "../page/WorkSpace/Empty"
 import { buildRouter } from "./buildRouter"
 import {
   CHAT_TEMPLATE_PATH,
+  CREATE_FUNCTION_TEMPLATE_PATH,
   CREATE_TIPI_TEMPLATE_PATH,
+  EDIT_FUNCTION_TEMPLATE_PATH,
   EDIT_TIPI_TEMPLATE_PATH,
+  FUNCTIONS_DASHBOARD_TEMPLATE_PATH,
   MARKETPLACE_DETAIL_PATH,
   RUN_TIPI_TEMPLATE_PATH,
+  TEAM_IDENTIFIER_TEMPLATE_PATH,
   TIPIS_DASHBOARD_TEMPLATE_PATH,
   TIPI_DETAIL_TEMPLATE_PATH,
   WORKSPACE_LAYOUT_PATH,
@@ -23,21 +27,39 @@ import {
 import { RoutesObjectPro } from "./interface"
 import { rootLoader } from "./loader/rootLoader"
 
-const RunAgentPage = lazy(() => import("@/page/WorkSpace/AI/AIAgentRun"))
-const EditAgentPage = lazy(
-  () => import("@/page/WorkSpace/AI/AIAgent/editAgent"),
-)
+/**
+ *
+ * @group Tipis page
+ *
+ */
+const TipisDashboard = lazy(() => import("@/page/WorkSpace/TipisDashboard"))
+const RunTipiPage = lazy(() => import("@/page/WorkSpace/AI/AIAgentRun"))
+const EditTipiPage = lazy(() => import("@/page/WorkSpace/AI/AIAgent/editAgent"))
 const CreateAgentPage = lazy(
   () => import("@/page/WorkSpace/AI/AIAgent/createAgent"),
 )
-const TipisDashboard = lazy(() => import("@/page/WorkSpace/TipisDashboard"))
-const FunctionDashboard = lazy(
-  () => import("@/page/WorkSpace/FunctionDashboard/pc"),
+const TipiDetailPage = lazy(
+  () => import("@/page/WorkSpace/TipiDetail/TeamTipiDetail"),
 )
+const MarketTipiDetailPage = lazy(
+  () => import("@/page/WorkSpace/TipiDetail/MarketTipiDetail"),
+)
+
+/**
+ *
+ * @group User page
+ *
+ */
 const LoginPage = lazy(() => import("@/page/User/Login"))
 const RegisterPage = lazy(() => import("@/page/User/Register"))
 const ForgotPasswordPage = lazy(() => import("@/page/User/ResetPassword"))
 const OAuth = lazy(() => import("@/page/User/Oauth"))
+
+/**
+ *
+ * @group Setting Account page
+ *
+ */
 const PersonalSetting = lazy(
   () => import("@/page/SettingPage/account/personal"),
 )
@@ -53,17 +75,37 @@ const LinkedSettingPage = lazy(
 const MobileSettingNavPage = lazy(
   () => import("@/page/SettingPage/mobileSettingNavPage"),
 )
+
+/**
+ *
+ * @group Setting Team Page
+ *
+ */
 const TeamSetting = lazy(() => import("@/page/SettingPage/team/info"))
 const TeamBilling = lazy(() => import("@/page/SettingPage/team/billing"))
 const TeamMembers = lazy(() => import("@/page/SettingPage/team/member"))
-const EditFunctionPage = lazy(() => import("@/page/WorkSpace/Function/Edit"))
+
+/**
+ *
+ * @group Function Page
+ *
+ */
+const FunctionDashboard = lazy(
+  () => import("@/page/WorkSpace/FunctionDashboard"),
+)
+const EditFunctionPage = lazy(
+  () => import("@/page/WorkSpace/Function/CreateOrEdit/edit"),
+)
+const CreateFunctionPage = lazy(
+  () => import("@/page/WorkSpace/Function/CreateOrEdit/create"),
+)
+
+/**
+ *
+ * @group Chat Page
+ *
+ */
 const ChatPage = lazy(() => import("@/page/WorkSpace/Chat"))
-const TipiDetailPage = lazy(
-  () => import("@/page/WorkSpace/TipiDetail/TeamTipiDetail"),
-)
-const MarketTipiDetailPage = lazy(
-  () => import("@/page/WorkSpace/TipiDetail/MarketTipiDetail"),
-)
 
 const SubScribeRedirect = lazy(
   () => import("@/page/SettingPage/subscribedRedirect"),
@@ -148,7 +190,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     accessByMobile: true,
     children: [
       {
-        path: ":teamIdentifier",
+        path: TEAM_IDENTIFIER_TEMPLATE_PATH,
         accessByMobile: true,
         element: <Navigate to="chat/DEFAULT_CHAT" replace />,
       },
@@ -183,7 +225,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         path: EDIT_TIPI_TEMPLATE_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
-            <EditAgentPage />
+            <EditTipiPage />
           </Suspense>
         ),
         accessByMobile: true,
@@ -210,40 +252,33 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         path: RUN_TIPI_TEMPLATE_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
-            <RunAgentPage />
+            <RunTipiPage />
           </Suspense>
         ),
         accessByMobile: true,
       },
       {
-        path: ":teamIdentifier/functions",
+        path: FUNCTIONS_DASHBOARD_TEMPLATE_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <FunctionDashboard />
           </Suspense>
         ),
+        accessByMobile: true,
       },
       {
-        path: ":teamIdentifier/function/:functionID/create",
+        path: CREATE_FUNCTION_TEMPLATE_PATH,
+        element: (
+          <Suspense fallback={<FullSectionLoading />}>
+            <CreateFunctionPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: EDIT_FUNCTION_TEMPLATE_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <EditFunctionPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: ":teamIdentifier/function/:functionID/edit",
-        element: (
-          <Suspense fallback={<FullSectionLoading />}>
-            <FunctionDashboard />
-          </Suspense>
-        ),
-      },
-      {
-        path: ":teamIdentifier/function/:functionID/detail",
-        element: (
-          <Suspense fallback={<FullSectionLoading />}>
-            <FunctionDashboard />
           </Suspense>
         ),
       },

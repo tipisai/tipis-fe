@@ -4,7 +4,9 @@ import { useLazyGetTeamsInfoQuery } from "@illa-public/user-data"
 import {
   EMPTY_TEAM_PATH,
   getChatPath,
+  getCreateFunctionPath,
   getCreateTipiPath,
+  getEditFunctionPath,
   getEditTipiPath,
   getExploreFunctionsPath,
   getExploreTipisPath,
@@ -14,10 +16,12 @@ import {
 } from "."
 import {
   useAddChatTab,
+  useAddCreateFunction,
   useAddCreateTipisTab,
   useAddExploreFunctionsTab,
   useAddExploreTipisTab,
   useAddMarketTipiDetailTab,
+  useAddOrUpdateEditFunctionTab,
   useAddOrUpdateEditTipisTab,
   useAddOrUpdateRunTipisTab,
   useAddTipisDetailTab,
@@ -221,4 +225,45 @@ export const useNavigateToExploreFunction = () => {
     }
   }, [addExploreFunctionTab, currentTeamInfo?.identifier, navigate])
   return navigateToExploreTipis
+}
+
+export const useNavigateToCreateFunction = () => {
+  const navigate = useNavigate()
+  const currentTeamInfo = useGetCurrentTeamInfo()
+  const addCreateFunctionTab = useAddCreateFunction()
+
+  const navigateToCreteTipis = useCallback(
+    async (functionType: string) => {
+      await addCreateFunctionTab(functionType)
+      if (currentTeamInfo?.identifier) {
+        navigate(
+          getCreateFunctionPath(currentTeamInfo?.identifier, functionType),
+        )
+      }
+    },
+    [addCreateFunctionTab, currentTeamInfo?.identifier, navigate],
+  )
+  return navigateToCreteTipis
+}
+
+export const useNavigateToEditFunction = () => {
+  const navigate = useNavigate()
+  const addOrUpdateEditFunctionTab = useAddOrUpdateEditFunctionTab()
+  const currentTeamInfo = useGetCurrentTeamInfo()
+
+  const navigateToEditTipis = useCallback(
+    async (functionInfo: { functionName: string; functionID: string }) => {
+      await addOrUpdateEditFunctionTab(functionInfo)
+      if (currentTeamInfo?.identifier) {
+        navigate(
+          getEditFunctionPath(
+            currentTeamInfo.identifier,
+            functionInfo.functionID,
+          ),
+        )
+      }
+    },
+    [addOrUpdateEditFunctionTab, currentTeamInfo?.identifier, navigate],
+  )
+  return navigateToEditTipis
 }

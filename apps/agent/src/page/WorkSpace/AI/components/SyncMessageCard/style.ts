@@ -143,6 +143,8 @@ export const messageContainerStyle = css`
 
 export const infoIconStyle = css`
   font-size: 24px;
+  width: 24px;
+  height: 24px;
 `
 
 export const stopIconStyle = css`
