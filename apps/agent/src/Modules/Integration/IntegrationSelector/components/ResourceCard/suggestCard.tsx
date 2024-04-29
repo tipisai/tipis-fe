@@ -12,10 +12,7 @@ export const SuggestResourceCard: FC = () => {
   const { t } = useTranslation()
 
   const handleClickTellUs = () => {
-    window.open(
-      "https://builder.illacloud.com/illacloud/deploy/app/ILAbx4p1C7Q2",
-      "_blank",
-    )
+    window.open("https://forms.gle/ngEoRvBtWvrTuWDNA", "_blank")
   }
   return (
     <a css={applyItemStyle} onClick={handleClickTellUs}>

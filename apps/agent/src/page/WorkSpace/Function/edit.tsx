@@ -1,8 +1,10 @@
 import { App } from "antd"
-import { FC } from "react"
-import { FormProvider, useForm } from "react-hook-form"
-import { useParams } from "react-router-dom"
+import { FC, useCallback, useEffect, useState } from "react"
+import { FormProvider, useForm, useWatch } from "react-hook-form"
+import { useTranslation } from "react-i18next"
+import { useBeforeUnload, useParams } from "react-router-dom"
 import { IBaseFunction } from "@illa-public/public-types"
+import { getCurrentId } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import {
@@ -10,7 +12,18 @@ import {
   useUpdateAIToolByIDMutation,
 } from "@/redux/services/aiToolsAPI"
 import { useGetIntegrationListQuery } from "@/redux/services/integrationAPI"
+import store from "@/redux/store"
+import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
+import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { useGetIconURL } from "@/utils/function/hook"
+import {
+  getFormDataByTabID,
+  setFormDataByTabID,
+} from "@/utils/localForage/formData"
+import {
+  useAddOrUpdateEditFunctionTab,
+  useUpdateCurrentTabToTipisDashboard,
+} from "@/utils/recentTabs/hook"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import TestRunResult from "./components/TestRunResult"
 import { IEditFunctionProps, IFunctionForm } from "./interface"
@@ -24,6 +37,10 @@ const EditFunctionDataProvider: FC = () => {
   const { functionID } = useParams()
 
   const currentTeamInfo = useGetCurrentTeamInfo()!
+
+  const [cacheData, setCacheData] = useState<undefined | IFunctionForm>(
+    undefined,
+  )
 
   const {
     data: detailData,
@@ -39,10 +56,6 @@ const EditFunctionDataProvider: FC = () => {
     isLoading: isListLoading,
     isError: isListError,
   } = useGetIntegrationListQuery(currentTeamInfo.id)
-
-  if (isDetailError || isListError)
-    return <EmptyDetail functionID={functionID!} />
-  if (isListLoading || isDetailLoading) return <FullSectionLoading />
 
   const formattedData: IFunctionForm | undefined = detailData
     ? {
@@ -62,23 +75,89 @@ const EditFunctionDataProvider: FC = () => {
       }
     : undefined
 
-  return formattedData ? <EditFunction functionInfo={formattedData} /> : null
+  const addOrUpdateFunctionTab = useAddOrUpdateEditFunctionTab()
+
+  useEffect(() => {
+    if (detailData) {
+      addOrUpdateFunctionTab({
+        functionName: detailData.name,
+        functionID: detailData.aiToolID,
+      })
+    }
+  }, [addOrUpdateFunctionTab, detailData])
+
+  useEffect(() => {
+    const getHistoryDataAndSetFormData = async () => {
+      if (!functionID) return
+      const historyTabs = getRecentTabInfos(store.getState())
+      const currentTab = historyTabs.find(
+        (tab) =>
+          tab.cacheID === functionID && tab.tabType === TAB_TYPE.EDIT_FUNCTION,
+      )
+      if (!currentTab) return
+      const teamID = getCurrentId(store.getState())!
+      const formData = (await getFormDataByTabID(teamID, currentTab.tabID)) as
+        | IFunctionForm
+        | undefined
+
+      if (formData) {
+        setCacheData(formData)
+      }
+    }
+    getHistoryDataAndSetFormData()
+  }, [functionID])
+
+  if (isDetailError || isListError)
+    return <EmptyDetail functionID={functionID!} />
+  if (isListLoading || isDetailLoading) return <FullSectionLoading />
+
+  return formattedData ? (
+    <EditFunction originData={formattedData} cacheData={cacheData} />
+  ) : null
 }
 
-const EditFunction: FC<IEditFunctionProps> = ({ functionInfo }) => {
+const EditFunction: FC<IEditFunctionProps> = ({ originData, cacheData }) => {
   const { functionID } = useParams()
-
-  const { message } = App.useApp()
-
-  const methods = useForm<IFunctionForm>({
-    defaultValues: functionInfo,
-    mode: "onChange",
-  })
+  const currentTeamInfo = useGetCurrentTeamInfo()!
 
   const [updateAITool] = useUpdateAIToolByIDMutation()
 
   const getIconURL = useGetIconURL()
-  const currentTeamInfo = useGetCurrentTeamInfo()!
+  const updateCurrentTabToTipisDashboard = useUpdateCurrentTabToTipisDashboard()
+
+  const { t } = useTranslation()
+
+  const { message, modal } = App.useApp()
+
+  const methods = useForm<IFunctionForm>({
+    defaultValues: originData,
+    mode: "onChange",
+  })
+
+  const values = useWatch({
+    control: methods.control,
+  })
+
+  const setUiHistoryFormData = useCallback(async () => {
+    if (!functionID) return
+    const historyTabs = getRecentTabInfos(store.getState())
+    const currentTab = historyTabs.find((tab) => tab.cacheID === functionID)
+    if (!currentTab) return
+    const formData = await getFormDataByTabID(
+      currentTeamInfo.id,
+      currentTab.tabID,
+    )
+    if (formData) {
+      await setFormDataByTabID(currentTeamInfo.id!, currentTab.tabID, {
+        ...formData,
+        ...values,
+      })
+    } else {
+      await setFormDataByTabID(currentTeamInfo.id!, currentTab.tabID, {
+        ...values,
+      })
+    }
+  }, [currentTeamInfo.id, functionID, values])
 
   const updateFunctionWhenSubmit = async (data: IFunctionForm) => {
     const icon = data.config.icon
@@ -99,7 +178,7 @@ const EditFunction: FC<IEditFunctionProps> = ({ functionInfo }) => {
     try {
       const iconURL = await getIconURL(aiTool.config.icon)
 
-      await updateAITool({
+      const serverData = await updateAITool({
         teamID: currentTeamInfo?.id,
         aiToolID: functionID as string,
         aiTool: {
@@ -109,12 +188,38 @@ const EditFunction: FC<IEditFunctionProps> = ({ functionInfo }) => {
             icon: iconURL,
           },
         },
+      }).unwrap()
+      modal.success({
+        closable: true,
+        title: t("function.edit.modal.update.title"),
+        content: t("function.edit.modal.update.desc"),
+        okText: t("function.edit.modal.save.button"),
+        onOk: async () => {
+          return updateCurrentTabToTipisDashboard({
+            tabName: serverData.name,
+            tabIcon: "",
+            cacheID: serverData.aiToolID,
+          })
+        },
       })
-      message.success("Create function successfully")
     } catch (e) {
-      message.error("Create function failed")
+      message.error(t("function.edit.message.failed_to_update"))
     }
   }
+
+  useEffect(() => {
+    if (cacheData) {
+      methods.reset(cacheData, {
+        keepDefaultValues: true,
+      })
+    }
+  }, [cacheData, methods])
+
+  useBeforeUnload(setUiHistoryFormData)
+
+  useEffect(() => {
+    setUiHistoryFormData()
+  }, [setUiHistoryFormData])
 
   return (
     <FormProvider {...methods}>

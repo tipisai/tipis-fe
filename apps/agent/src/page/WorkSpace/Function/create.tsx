@@ -1,13 +1,27 @@
 import { App } from "antd"
-import { FC } from "react"
-import { FormProvider, useForm } from "react-hook-form"
-import { useParams } from "react-router-dom"
+import { FC, useCallback, useEffect } from "react"
+import { FormProvider, useForm, useWatch } from "react-hook-form"
+import { useTranslation } from "react-i18next"
+import { useBeforeUnload, useParams } from "react-router-dom"
 // import { DraggableModal } from "@illa-public/draggable-modal"
 import { getFunctionInitDataByType } from "@illa-public/public-configs"
 import { IBaseFunction, TIntegrationType } from "@illa-public/public-types"
+import { getCurrentId } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import { useCreateAIToolMutation } from "@/redux/services/aiToolsAPI"
+import store from "@/redux/store"
+import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
 import { useGetIconURL } from "@/utils/function/hook"
+import {
+  getFormDataByTabID,
+  setFormDataByTabID,
+} from "@/utils/localForage/formData"
+import { CREATE_FUNCTION_ID } from "@/utils/recentTabs/constants"
+import {
+  useAddCreateFunction,
+  useUpdateCreateToEditFunctionTab,
+  useUpdateCurrentTabToTipisDashboard,
+} from "@/utils/recentTabs/hook"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import TestRunResult from "./components/TestRunResult"
 import { IFunctionForm } from "./interface"
@@ -18,11 +32,14 @@ import { contentContainerStyle, formStyle } from "./style"
 
 const CreateFunction: FC = () => {
   const { functionType } = useParams()
+  const { message, modal } = App.useApp()
+  const { t } = useTranslation()
 
   const INITConfig = getFunctionInitDataByType(functionType as TIntegrationType)
-
+  const createFunctionTab = useAddCreateFunction()
   const currentTeamInfo = useGetCurrentTeamInfo()!
-  const { message } = App.useApp()
+  const updateCreateToEditFunctionTab = useUpdateCreateToEditFunctionTab()
+  const updateCurrentTabToTipisDashboard = useUpdateCurrentTabToTipisDashboard()
 
   const methods = useForm<IFunctionForm>({
     defaultValues: INITConfig,
@@ -32,6 +49,36 @@ const CreateFunction: FC = () => {
   const [createAITool] = useCreateAIToolMutation()
 
   const getIconURL = useGetIconURL()
+
+  useEffect(() => {
+    if (functionType) {
+      createFunctionTab(functionType)
+    }
+  })
+
+  const { control, reset } = methods
+
+  const values = useWatch({
+    control,
+  })
+
+  const setUiHistoryFormData = useCallback(async () => {
+    const tabID = CREATE_FUNCTION_ID
+    const teamID = getCurrentId(store.getState())!
+    const historyTabs = getRecentTabInfos(store.getState())
+    const currentTab = historyTabs.find((tab) => tab.tabID === tabID)
+    if (!currentTab) return
+    const formData = await getFormDataByTabID(teamID, tabID)
+
+    if (formData) {
+      await setFormDataByTabID(teamID, tabID, {
+        ...formData,
+        ...values,
+      })
+    } else {
+      await setFormDataByTabID(teamID, tabID, values)
+    }
+  }, [values])
 
   const createFunctionWhenSubmit = async (data: IFunctionForm) => {
     const icon = data.config.icon
@@ -52,7 +99,7 @@ const CreateFunction: FC = () => {
     try {
       const iconURL = await getIconURL(aiTool.config.icon)
 
-      await createAITool({
+      const serverData = await createAITool({
         teamID: currentTeamInfo?.id,
         aiTool: {
           ...aiTool,
@@ -61,12 +108,49 @@ const CreateFunction: FC = () => {
             icon: iconURL,
           },
         },
+      }).unwrap()
+      modal.success({
+        closable: true,
+        title: t("function.edit.modal.save.title"),
+        content: t("function.edit.modal.save.desc"),
+        okText: t("function.edit.modal.save.button"),
+        onOk: async () => {
+          return updateCurrentTabToTipisDashboard({
+            tabName: serverData.name,
+            tabIcon: "",
+            cacheID: serverData.aiToolID,
+          })
+        },
+        onCancel: async () => {
+          return updateCreateToEditFunctionTab(CREATE_FUNCTION_ID, {
+            tabName: serverData.name,
+            tabIcon: "",
+            cacheID: serverData.aiToolID,
+          })
+        },
       })
-      message.success("Create function successfully")
     } catch (e) {
-      message.error("Create function failed")
+      message.error(t("function.edit.message.failed_to_create"))
     }
   }
+
+  useEffect(() => {
+    const getHistoryDataAndSetFormData = async () => {
+      const tabID = CREATE_FUNCTION_ID
+      const teamID = getCurrentId(store.getState())!
+      const formData = await getFormDataByTabID(teamID, tabID)
+      if (formData) {
+        reset(formData)
+      }
+    }
+    getHistoryDataAndSetFormData()
+  }, [reset])
+
+  useBeforeUnload(setUiHistoryFormData)
+
+  useEffect(() => {
+    setUiHistoryFormData()
+  }, [setUiHistoryFormData])
 
   return (
     <FormProvider {...methods}>
