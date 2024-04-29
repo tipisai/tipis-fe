@@ -1,7 +1,7 @@
 import { Button } from "antd"
 import { FC, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { SuccessCircleIcon } from "@illa-public/icon"
+import { ErrorCircleIcon, SuccessCircleIcon } from "@illa-public/icon"
 import { NextIcon } from "@illa-public/icon"
 import { FUNCTION_RUN_RESULT_EVENT } from "@/utils/eventEmitter/constants"
 import { TestRunResultEventEmitter } from "@/utils/function"
@@ -33,7 +33,8 @@ const TestFunctionButton: FC = () => {
     )
   }
 
-  const { onTestRunFunction, testResult, isLoading } = useTestRunFunction()
+  const { onTestRunFunction, testResult, isLoading, isError } =
+    useTestRunFunction()
   const onClickTestConnectionButton = async () => {
     if (parameterList.length === 0) {
       await onTestRunFunction()
@@ -45,14 +46,20 @@ const TestFunctionButton: FC = () => {
   return (
     <div css={testFunctionRunContainerStyle}>
       {testResult && (
-        <div css={actionRunResultButtonStyle} onClick={onClickTestResultButton}>
+        <div
+          css={actionRunResultButtonStyle(isError)}
+          onClick={onClickTestResultButton}
+        >
           <div css={iconAndTextContainerStyle}>
-            <SuccessCircleIcon />
-            <p css={textStyle}>{t("function.edit.test.result.success")}</p>
-            {/* <p>  t("function.edit.test.result.failed")</p> */}
+            {isError ? <ErrorCircleIcon /> : <SuccessCircleIcon />}
+            <p css={textStyle}>
+              {isError
+                ? t("function.edit.test.result.failed")
+                : t("function.edit.test.result.success")}
+            </p>
           </div>
           <div css={iconContainerStyle}>
-            <NextIcon css={nextIconStyle} />
+            <NextIcon css={nextIconStyle(isError)} />
           </div>
         </div>
       )}

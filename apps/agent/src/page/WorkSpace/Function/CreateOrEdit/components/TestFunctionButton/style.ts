@@ -6,13 +6,15 @@ export const testFunctionRunContainerStyle = css`
   gap: 8px;
 `
 
-export const actionRunResultButtonStyle = css`
+export const actionRunResultButtonStyle = (isError: boolean) => css`
   display: flex;
   padding: 8px 16px;
   align-items: center;
   gap: 12px;
   border-radius: 20px;
-  background-color: ${getColor("green", "08")};
+  background-color: ${isError
+    ? getColor("red", "08")
+    : getColor("green", "08")};
   cursor: pointer;
 `
 
@@ -38,8 +40,8 @@ export const iconContainerStyle = css`
   justify-content: center;
 `
 
-export const nextIconStyle = css`
+export const nextIconStyle = (isError: boolean) => css`
   transform: rotate(90deg);
-  color: ${getColor("green", "03")};
+  color: ${isError ? getColor("red", "03") : getColor("green", "03")};
   font-size: 12px;
 `

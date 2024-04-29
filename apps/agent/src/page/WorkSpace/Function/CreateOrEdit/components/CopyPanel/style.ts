@@ -6,6 +6,7 @@ export const copyPanelStyle = css`
   flex-direction: column;
   border-radius: 12px;
   border: 1px solid ${getColor("grayBlue", "08")};
+  overflow: hidden;
 `
 
 export const copyPanelHeaderStyle = css`

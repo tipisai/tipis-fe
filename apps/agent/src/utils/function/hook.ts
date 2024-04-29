@@ -1,3 +1,4 @@
+import { useCallback } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { DATA_VALUE_TYPE } from "@illa-public/code-editor-new"
 import { ICompletionOption } from "@illa-public/code-editor-new/CodeMirror/extensions/interface"
@@ -6,9 +7,13 @@ import { DEFAULT_TENCENT_COS_PARAMETERS } from "@illa-public/public-configs/func
 import { TENCENT_COS_ACTION_OPERATION } from "@illa-public/public-types"
 import { IVariables, VARIABLE_TYPE } from "@illa-public/public-types"
 import { IFunctionForm } from "@/page/WorkSpace/Function/CreateOrEdit/interface"
+import {
+  useGetAIToolIconUploadAddressMutation,
+  useTestRunAIToolsMutation,
+} from "@/redux/services/aiToolsAPI"
 import { TestRunResultEventEmitter } from "."
-import { useTestRunAIToolsMutation } from "../../redux/services/aiToolsAPI"
 import { FUNCTION_RUN_RESULT_EVENT } from "../eventEmitter/constants"
+import { fetchUploadBase64 } from "../file"
 import { useGetCurrentTeamInfo } from "../team"
 
 export const useGetParamsListByResourceType = () => {
@@ -125,7 +130,7 @@ export const useTestRunFunction = () => {
     ],
   })
 
-  const [testRunAITools, { data: runAIToolsData, isLoading }] =
+  const [testRunAITools, { data: runAIToolsData, isLoading, error, isError }] =
     useTestRunAIToolsMutation()
 
   const onTestRunFunction = async () => {
@@ -155,13 +160,50 @@ export const useTestRunFunction = () => {
 
       TestRunResultEventEmitter.emit(FUNCTION_RUN_RESULT_EVENT.SET_RUN_RESULT, {
         statusCode: 200,
-        result: JSON.stringify(data, null, 2),
+        result: JSON.stringify(data.data, null, 2),
       })
-    } catch {}
+    } catch (e) {
+      TestRunResultEventEmitter.emit(
+        FUNCTION_RUN_RESULT_EVENT.CHANGE_DRAWER_OPEN_STATUS,
+        true,
+      )
+      TestRunResultEventEmitter.emit(FUNCTION_RUN_RESULT_EVENT.SET_RUN_RESULT, {
+        statusCode: 400,
+        result: JSON.stringify(e, null, 2),
+      })
+    }
   }
   return {
     onTestRunFunction,
-    testResult: runAIToolsData,
+    testResult: runAIToolsData || error,
     isLoading,
+    isError,
   }
+}
+
+export const useGetIconURL = () => {
+  const currentTeamInfo = useGetCurrentTeamInfo()!
+
+  const [getAIToolIconUploadAddress] = useGetAIToolIconUploadAddressMutation()
+
+  const getIconURL = useCallback(
+    async (iconData: string) => {
+      const iconURL = new URL(iconData)
+      if (iconURL.protocol === "data:") {
+        const { uploadAddress } = await getAIToolIconUploadAddress({
+          teamID: currentTeamInfo.id,
+          base64: iconData,
+        }).unwrap()
+        return await fetchUploadBase64(uploadAddress, iconData)
+      }
+      if (iconURL.protocol === "http:" || iconURL.protocol === "https:") {
+        return iconData
+      }
+
+      return ""
+    },
+    [currentTeamInfo.id, getAIToolIconUploadAddress],
+  )
+
+  return getIconURL
 }
