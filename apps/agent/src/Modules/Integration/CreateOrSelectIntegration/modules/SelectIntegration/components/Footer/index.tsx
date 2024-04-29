@@ -14,7 +14,7 @@ const SelectIntegrationFooter: FC<ISelectIntegrationFooterProps> = (props) => {
     <div css={footerContainerStyle}>
       {onCreateIntegration && (
         <Button
-          type="text"
+          block
           css={confirmButtonStyle}
           size="large"
           onClick={onCreateIntegration}
@@ -25,6 +25,7 @@ const SelectIntegrationFooter: FC<ISelectIntegrationFooterProps> = (props) => {
       <BlackButton
         disabled={!selectedIntegration}
         type="primary"
+        block
         css={confirmButtonStyle}
         size="large"
         onClick={handleClickConfirm}

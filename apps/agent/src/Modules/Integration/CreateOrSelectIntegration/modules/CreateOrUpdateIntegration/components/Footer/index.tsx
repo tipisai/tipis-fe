@@ -68,6 +68,7 @@ const ConfigElementFooter: FC<IFooterProps> = (props) => {
       <BlackButton
         type="primary"
         htmlType="submit"
+        block={!onBack}
         css={confirmButtonStyle}
         size="large"
         onClick={handleSubmit(onSubmit)}

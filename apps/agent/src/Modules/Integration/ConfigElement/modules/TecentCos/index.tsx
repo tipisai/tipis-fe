@@ -14,9 +14,12 @@ const TencentCosConfigElement: FC = () => {
       <Controller
         name="resourceName"
         control={control}
+        rules={{
+          required: t("editor.action.form.tips.tx.name"),
+        }}
         render={({ field }) => {
           return (
-            <LabelWithController title="Name">
+            <LabelWithController title="Name" required>
               <Input size="large" {...field} />
             </LabelWithController>
           )
@@ -25,10 +28,14 @@ const TencentCosConfigElement: FC = () => {
       <Controller
         name="content.bucketName"
         control={control}
+        rules={{
+          required: t("editor.action.form.tips.tx.bucket_name"),
+        }}
         render={({ field }) => {
           return (
             <LabelWithController
               title={t("editor.action.form.label.tx.bucket_name")}
+              required
             >
               <Input
                 size="large"
@@ -64,10 +71,14 @@ const TencentCosConfigElement: FC = () => {
       <Controller
         name="content.accessKeyID"
         control={control}
+        rules={{
+          required: "editor.action.form.tips.tx.secret_id",
+        }}
         render={({ field }) => {
           return (
             <LabelWithController
               title={t("editor.action.form.label.tx.secret_id")}
+              required
             >
               <Input size="large" {...field} />
             </LabelWithController>
@@ -77,10 +88,14 @@ const TencentCosConfigElement: FC = () => {
       <Controller
         name="content.secretAccessKey"
         control={control}
+        rules={{
+          required: "editor.action.form.tips.tx.secret_key",
+        }}
         render={({ field }) => {
           return (
             <LabelWithController
               title={t("editor.action.form.label.tx.secret_key")}
+              required
             >
               <Input size="large" {...field} />
             </LabelWithController>

@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import {
-  BUILDER_REQUEST_PREFIX,
   HTTP_REQUEST_PUBLIC_BASE_URL,
+  INTEGRATION_REQUEST_PREFIX,
 } from "@illa-public/illa-net"
 import { IBaseIntegration } from "@illa-public/public-types"
 import { prepareHeaders } from "@illa-public/user-data"
@@ -10,7 +10,7 @@ import { IIntegrationDTO } from "./interface"
 export const integrationAPI = createApi({
   reducerPath: "integrationAPI",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${HTTP_REQUEST_PUBLIC_BASE_URL}${BUILDER_REQUEST_PREFIX}`,
+    baseUrl: `${HTTP_REQUEST_PUBLIC_BASE_URL}${INTEGRATION_REQUEST_PREFIX}`,
     prepareHeaders: prepareHeaders,
   }),
   endpoints: (builder) => ({
