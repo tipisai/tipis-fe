@@ -1,6 +1,10 @@
 import { v4 } from "uuid"
 import { IKnowledgeFile } from "@illa-public/public-types"
-import { SEND_CONTENT_TYPES, TYPE_MAPPING } from "@/config/constants/knowledge"
+import {
+  ACCEPT_CONTENT_TYPES,
+  SEND_CONTENT_TYPES,
+  TYPE_MAPPING,
+} from "@/config/constants/knowledge"
 import { FILE_ITEM_DETAIL_STATUS_IN_UI, UploadFileStore } from "."
 import { fileToString } from "../file/fileToStream"
 
@@ -59,7 +63,7 @@ export const multipleFileHandler = async (
 }
 
 export const getRealFileType = async (file: File, ext: string) => {
-  if (!!file.type) return file.type
+  if (!!file.type && ACCEPT_CONTENT_TYPES.includes(file.type)) return file.type
   const str = await fileToString(file)
   if (str.startsWith(TYPE_MAPPING.PDF)) {
     return SEND_CONTENT_TYPES.PDF
