@@ -12,17 +12,14 @@ import { ITeamCardListProps } from "./interface"
 
 const TeamCardList: FC<ITeamCardListProps> = (props) => {
   const { RenderItem } = props
-  const currentTeamInfo = useGetCurrentTeamInfo()
+  const currentTeamInfo = useGetCurrentTeamInfo()!
 
   const { changeCreateFunctionModal } = useContext(FunctionDashboardContext)
 
   const { dashboardUIState } = useContext(DashBoardUIStateContext)
   const { search } = dashboardUIState
 
-  const { data, isLoading } = useGetAllAIToolsListQuery({
-    teamID: currentTeamInfo?.id || "",
-    sortBy: "updateAt",
-  })
+  const { data, isLoading } = useGetAllAIToolsListQuery(currentTeamInfo.id)
 
   const handleClickCreateTipis = () => {
     changeCreateFunctionModal(true)

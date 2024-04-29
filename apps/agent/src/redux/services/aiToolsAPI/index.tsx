@@ -20,15 +20,9 @@ export const aiToolsAPI = createApi({
     prepareHeaders,
   }),
   endpoints: (builder) => ({
-    getAllAIToolsList: builder.query<
-      IGetAllAIToolsListResponseDTO,
-      {
-        teamID: string
-        sortBy: "id" | "createdAt" | "updateAt"
-      }
-    >({
-      query: ({ teamID, sortBy = "updateAt" }) => ({
-        url: `/teams/${teamID}/aiTool/list/sortBy/${sortBy}`,
+    getAllAIToolsList: builder.query<IGetAllAIToolsListResponseDTO, string>({
+      query: (teamID) => ({
+        url: `/teams/${teamID}/aiTool/list/sortBy/updateAt`,
       }),
     }),
     createAITool: builder.mutation<
@@ -43,8 +37,24 @@ export const aiToolsAPI = createApi({
         method: "POST",
         body: aiTool,
       }),
+      onQueryStarted: async ({ teamID }, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(
+            aiToolsAPI.util.updateQueryData(
+              "getAllAIToolsList",
+              teamID,
+              (draft) => {
+                const aiToolList = draft.aiToolList || []
+                aiToolList.unshift(data)
+                draft.aiToolList = aiToolList
+              },
+            ),
+          )
+        } catch {}
+      },
     }),
-    updateAiToolByID: builder.mutation<
+    updateAIToolByID: builder.mutation<
       IAIToolDTO<unknown>,
       {
         teamID: string
@@ -57,6 +67,31 @@ export const aiToolsAPI = createApi({
         method: "PUT",
         body: aiTool,
       }),
+      onQueryStarted: async (
+        { teamID, aiTool, aiToolID },
+        { dispatch, queryFulfilled },
+      ) => {
+        const patchResult = dispatch(
+          aiToolsAPI.util.updateQueryData(
+            "getAllAIToolsList",
+            teamID,
+            (draft) => {
+              const aiToolList = draft.aiToolList || []
+              const targetAITool = aiToolList.find(
+                (item) => item.aiToolID === aiToolID,
+              )
+              if (targetAITool) {
+                Object.assign(targetAITool, aiTool)
+              }
+            },
+          ),
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.undo()
+        }
+      },
     }),
     deleteAIToolByID: builder.mutation<
       void,
@@ -66,6 +101,31 @@ export const aiToolsAPI = createApi({
         url: `/teams/${teamID}/aiTool/${aiToolID}`,
         method: "DELETE",
       }),
+      onQueryStarted: async (
+        { teamID, aiToolID },
+        { dispatch, queryFulfilled },
+      ) => {
+        const patchResult = dispatch(
+          aiToolsAPI.util.updateQueryData(
+            "getAllAIToolsList",
+            teamID,
+            (draft) => {
+              const aiToolList = draft.aiToolList || []
+              const targetAIToolIndex = aiToolList.findIndex(
+                (item) => item.aiToolID === aiToolID,
+              )
+              if (targetAIToolIndex !== -1) {
+                aiToolList.splice(targetAIToolIndex, 1)
+              }
+            },
+          ),
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.undo()
+        }
+      },
     }),
     duplicateAIToolByID: builder.mutation<
       IAIToolDTO<unknown>,
@@ -78,6 +138,22 @@ export const aiToolsAPI = createApi({
         url: `/teams/${teamID}/aiTool/${aiToolID}/duplicate`,
         method: "POST",
       }),
+      onQueryStarted: async ({ teamID }, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled
+          dispatch(
+            aiToolsAPI.util.updateQueryData(
+              "getAllAIToolsList",
+              teamID,
+              (draft) => {
+                const aiToolList = draft.aiToolList || []
+                aiToolList.unshift(data)
+                draft.aiToolList = aiToolList
+              },
+            ),
+          )
+        } catch {}
+      },
     }),
     getAIToolIconUploadAddress: builder.mutation<
       { uploadAddress: string },
@@ -92,16 +168,7 @@ export const aiToolsAPI = createApi({
         }
       },
     }),
-    runAITools: builder.mutation<
-      { payload: unknown },
-      { teamID: string; aiToolID: string; context: Record<string, unknown> }
-    >({
-      query: ({ teamID, aiToolID, context }) => ({
-        url: `/teams/${teamID}/aiTool/${aiToolID}/run`,
-        method: "POST",
-        body: context,
-      }),
-    }),
+
     testRunAITools: builder.mutation<
       {
         data: unknown
@@ -147,8 +214,7 @@ export const {
   useDeleteAIToolByIDMutation,
   useDuplicateAIToolByIDMutation,
   useGetAIToolIconUploadAddressMutation,
-  useUpdateAiToolByIDMutation,
-  useRunAIToolsMutation,
+  useUpdateAIToolByIDMutation,
   useTestRunAIToolsMutation,
   useGetAIToolDetailQuery,
   useLazyGetAIToolDetailQuery,

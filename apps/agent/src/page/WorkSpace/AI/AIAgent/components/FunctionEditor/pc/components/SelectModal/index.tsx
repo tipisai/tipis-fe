@@ -17,10 +17,7 @@ const SelectModal: FC<ISelectModalProps> = ({
 }) => {
   const { t } = useTranslation()
   const teamInfo = useGetCurrentTeamInfo()!
-  const { data, isLoading } = useGetAllAIToolsListQuery({
-    teamID: teamInfo.id,
-    sortBy: "createdAt",
-  })
+  const { data: listData, isLoading } = useGetAllAIToolsListQuery(teamInfo.id)
 
   if (isLoading) return null
   return (
@@ -47,9 +44,10 @@ const SelectModal: FC<ISelectModalProps> = ({
         },
       }}
     >
-      {Array.isArray(data?.aiToolList) && data?.aiToolList.length > 0 ? (
+      {Array.isArray(listData?.aiToolList) &&
+      listData?.aiToolList.length > 0 ? (
         <SelectModalContentPC
-          functions={data?.aiToolList}
+          functions={listData?.aiToolList}
           onCancel={onCancel}
           onConfirm={handleValueChange}
           fieldFunctions={fieldAiTools}

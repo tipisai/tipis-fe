@@ -18,10 +18,7 @@ const SelectDrawer: FC<ISelectDrawerProps> = ({
 }) => {
   const { t } = useTranslation()
   const teamInfo = useGetCurrentTeamInfo()!
-  const { data, isLoading } = useGetAllAIToolsListQuery({
-    teamID: teamInfo.id,
-    sortBy: "createdAt",
-  })
+  const { data: listData, isLoading } = useGetAllAIToolsListQuery(teamInfo.id)
   if (isLoading) return null
   return (
     <Drawer
@@ -44,9 +41,10 @@ const SelectDrawer: FC<ISelectDrawerProps> = ({
         },
       }}
     >
-      {Array.isArray(data?.aiToolList) && data?.aiToolList.length > 0 ? (
+      {Array.isArray(listData?.aiToolList) &&
+      listData?.aiToolList.length > 0 ? (
         <SelectModalContentMobile
-          functions={data?.aiToolList}
+          functions={listData?.aiToolList}
           onCancel={onCancel}
           onConfirm={handleValueChange}
           fieldFunctions={fieldAiTools}

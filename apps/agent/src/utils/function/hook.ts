@@ -131,16 +131,11 @@ export const useTestRunFunction = () => {
   })
 
   const [testRunAITools, { data: runAIToolsData, isLoading, error, isError }] =
-    useTestRunAIToolsMutation()
+    useTestRunAIToolsMutation({
+      fixedCacheKey: "testRunAITools",
+    })
 
-  const onTestRunFunction = async () => {
-    const context = parameterList.reduce(
-      (acc, cur) => {
-        acc[cur.name] = ""
-        return acc
-      },
-      {} as Record<string, unknown>,
-    )
+  const onTestRunFunction = async (formData: Record<string, string>) => {
     try {
       const data = await testRunAITools({
         teamID: currentTeamInfo?.id,
@@ -150,7 +145,7 @@ export const useTestRunFunction = () => {
           actionOperation: actionOperation,
           parameters: parameterList,
           content: content,
-          context,
+          context: formData,
         },
       }).unwrap()
       TestRunResultEventEmitter.emit(

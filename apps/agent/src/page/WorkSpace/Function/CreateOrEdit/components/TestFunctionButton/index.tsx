@@ -37,7 +37,7 @@ const TestFunctionButton: FC = () => {
     useTestRunFunction()
   const onClickTestConnectionButton = async () => {
     if (parameterList.length === 0) {
-      await onTestRunFunction()
+      await onTestRunFunction({})
     } else {
       setShowModal(true)
     }

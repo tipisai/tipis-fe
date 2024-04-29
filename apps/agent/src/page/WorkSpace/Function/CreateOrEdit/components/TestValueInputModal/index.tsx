@@ -20,27 +20,23 @@ const TestValueModal: FC<ITestValueModalProps> = (props) => {
   const { t } = useTranslation()
   const parameters = useGetParamsListByResourceType()
 
-  const formattedParameters = parameters.map((param) => ({
-    name: param.name,
-    required: param.required,
-    type: param.type,
-    value: "",
-  }))
+  const formattedParameters = parameters.reduce(
+    (acc, cur) => {
+      acc[cur.name] = ""
+      return acc
+    },
+    {} as Record<string, string>,
+  )
 
-  const { control, handleSubmit } = useForm<
-    {
-      name: string
-      value: string
-    }[]
-  >({
+  const { control, handleSubmit } = useForm<Record<string, string>>({
     defaultValues: formattedParameters,
     shouldUnregister: true,
   })
 
   const { onTestRunFunction, isLoading } = useTestRunFunction()
 
-  const onSubmit = async () => {
-    await onTestRunFunction()
+  const onSubmit = async (formData: Record<string, string>) => {
+    await onTestRunFunction(formData)
     changeOpen(false)
   }
 
@@ -62,7 +58,7 @@ const TestValueModal: FC<ITestValueModalProps> = (props) => {
             <Controller
               control={control}
               key={i}
-              name={`${i}.value`}
+              name={`${param.name}`}
               rules={{
                 required: param.required
                   ? t("homepage.edit_tipi.modal.required")
