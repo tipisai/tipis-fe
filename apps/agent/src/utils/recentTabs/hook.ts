@@ -472,3 +472,65 @@ export const useAddCreateFunction = () => {
 
   return addCreateFunctionTab
 }
+
+export const useAddOrUpdateEditFunctionTab = () => {
+  const addRecentTab = useAddRecentTabReducer()
+  const dispatch = useDispatch()
+  const batchUpdateRecentTab = useBatchUpdateRecentTabReducer()
+
+  const addOrUpdateEditFunctionTab = useCallback(
+    async (functionInfo: { functionName: string; functionID: string }) => {
+      const { functionID, functionName } = functionInfo
+      const historyTabs = getRecentTabInfos(store.getState())
+      const useThisTipTab = historyTabs.filter(
+        (tab) => tab.cacheID === functionID,
+      )
+      const newTabInfo = {
+        tabName: functionName,
+        tabIcon: "",
+        tabType: TAB_TYPE.EDIT_FUNCTION,
+        tabID: v4(),
+        cacheID: functionID,
+      }
+      if (useThisTipTab.length > 0) {
+        const currentTab = useThisTipTab.find(
+          (tab) => tab.tabType === TAB_TYPE.EDIT_FUNCTION,
+        )
+
+        const needUpdateTabInfoTab = useThisTipTab.filter(
+          (tab) => tab.tabType === TAB_TYPE.EDIT_FUNCTION,
+        )
+        if (needUpdateTabInfoTab.length > 0) {
+          const updateSlice = needUpdateTabInfoTab
+            .map((tabInfo) => ({
+              ...tabInfo,
+              cacheID: functionID,
+              tabName: functionName,
+            }))
+            .reduce(
+              (acc, tabInfo) => {
+                acc[tabInfo.tabID] = tabInfo
+                return acc
+              },
+              {} as Record<string, ITabInfo>,
+            )
+
+          await batchUpdateRecentTab(updateSlice)
+        }
+
+        if (currentTab) {
+          dispatch(
+            recentTabActions.updateCurrentRecentTabIDReducer(currentTab.tabID),
+          )
+        } else {
+          await addRecentTab(newTabInfo)
+        }
+      } else {
+        await addRecentTab(newTabInfo)
+      }
+    },
+    [addRecentTab, batchUpdateRecentTab, dispatch],
+  )
+
+  return addOrUpdateEditFunctionTab
+}

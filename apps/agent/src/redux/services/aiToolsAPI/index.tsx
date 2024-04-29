@@ -6,7 +6,7 @@ import {
 } from "@illa-public/illa-net"
 import { IBaseFunction, TActionOperation } from "@illa-public/public-types"
 import { prepareHeaders } from "@illa-public/user-data"
-import { getFileExtensionFromBase64 } from "../../../utils/file"
+import { getFileExtensionFromBase64 } from "@/utils/file"
 import {
   IAIToolDTO,
   IAIToolParametersDTO,
@@ -19,7 +19,23 @@ export const aiToolsAPI = createApi({
     baseUrl: `${HTTP_REQUEST_PUBLIC_BASE_URL}${AGENT_REQUEST_PREFIX}`,
     prepareHeaders,
   }),
+  tagTypes: ["aiTools"],
   endpoints: (builder) => ({
+    getAIToolByID: builder.query<
+      IAIToolDTO<unknown>,
+      { teamID: string; aiToolID: string }
+    >({
+      query: ({ teamID, aiToolID }) => ({
+        url: `/teams/${teamID}/aiTool/${aiToolID}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, arg) => [
+        {
+          type: "aiTools",
+          id: arg.aiToolID,
+        },
+      ],
+    }),
     getAllAIToolsList: builder.query<IGetAllAIToolsListResponseDTO, string>({
       query: (teamID) => ({
         url: `/teams/${teamID}/aiTool/list/sortBy/updateAt`,
@@ -51,6 +67,16 @@ export const aiToolsAPI = createApi({
               },
             ),
           )
+          dispatch(
+            aiToolsAPI.util.upsertQueryData(
+              "getAIToolByID",
+              {
+                teamID,
+                aiToolID: data.aiToolID,
+              },
+              data,
+            ),
+          )
         } catch {}
       },
     }),
@@ -71,7 +97,7 @@ export const aiToolsAPI = createApi({
         { teamID, aiTool, aiToolID },
         { dispatch, queryFulfilled },
       ) => {
-        const patchResult = dispatch(
+        const updateListPathResult = dispatch(
           aiToolsAPI.util.updateQueryData(
             "getAllAIToolsList",
             teamID,
@@ -86,10 +112,21 @@ export const aiToolsAPI = createApi({
             },
           ),
         )
+
         try {
-          await queryFulfilled
+          const { data } = await queryFulfilled
+          dispatch(
+            aiToolsAPI.util.upsertQueryData(
+              "getAIToolByID",
+              {
+                teamID,
+                aiToolID: data.aiToolID,
+              },
+              data,
+            ),
+          )
         } catch {
-          patchResult.undo()
+          updateListPathResult.undo()
         }
       },
     }),
@@ -119,6 +156,14 @@ export const aiToolsAPI = createApi({
               }
             },
           ),
+        )
+        dispatch(
+          aiToolsAPI.util.invalidateTags([
+            {
+              type: "aiTools",
+              id: aiToolID,
+            },
+          ]),
         )
         try {
           await queryFulfilled
@@ -150,6 +195,16 @@ export const aiToolsAPI = createApi({
                 aiToolList.unshift(data)
                 draft.aiToolList = aiToolList
               },
+            ),
+          )
+          dispatch(
+            aiToolsAPI.util.upsertQueryData(
+              "getAIToolByID",
+              {
+                teamID,
+                aiToolID: data.aiToolID,
+              },
+              data,
             ),
           )
         } catch {}
@@ -198,6 +253,7 @@ export const aiToolsAPI = createApi({
 })
 
 export const {
+  useGetAIToolByIDQuery,
   useGetAllAIToolsListQuery,
   useCreateAIToolMutation,
   useDeleteAIToolByIDMutation,

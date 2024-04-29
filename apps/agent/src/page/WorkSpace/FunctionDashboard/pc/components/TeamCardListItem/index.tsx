@@ -2,7 +2,6 @@ import Icon from "@ant-design/icons"
 import { App, Button, Dropdown, List, MenuProps, Tag } from "antd"
 import { FC, MouseEventHandler, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
 import { CopyIcon, DeleteIcon, MoreIcon, PenIcon } from "@illa-public/icon"
 import PCTeamCard from "@/components/TeamCard/pc"
 import {
@@ -11,6 +10,7 @@ import {
 } from "@/redux/services/aiToolsAPI"
 import { canShowCreateFunction } from "@/utils/UIHelper/functions"
 import { canShownCreateTipi } from "@/utils/UIHelper/tipis"
+import { useNavigateToEditFunction } from "@/utils/routeHelper/hook"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import { ITeamCardListItemProps } from "./interface"
 
@@ -23,6 +23,7 @@ const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
 
   const [duplicateAIToolByID] = useDuplicateAIToolByIDMutation()
   const [deleteAIToolByID] = useDeleteAIToolByIDMutation()
+  const navigateToEditFunction = useNavigateToEditFunction()
 
   const [isMoreActionDropdownOpen, setIsMoreActionDropdownOpen] =
     useState(false)
@@ -30,8 +31,6 @@ const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
   const tags = publishToMarketplace ? (
     <Tag color="purple">Marketplace</Tag>
   ) : undefined
-
-  const navigate = useNavigate()
 
   const menuItems: MenuProps["items"] = useMemo(() => {
     const originMenuItems: MenuProps["items"] = []
@@ -97,9 +96,12 @@ const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
 
   const onClickCard = () => {}
 
-  const onClickEditButton: MouseEventHandler<HTMLElement> = (e) => {
+  const onClickEditButton: MouseEventHandler<HTMLElement> = async (e) => {
     e.stopPropagation()
-    navigate(`edit/${id}`)
+    await navigateToEditFunction({
+      functionName: title,
+      functionID: id,
+    })
   }
 
   const onClickMoreAction: MouseEventHandler<HTMLElement> = (e) => {

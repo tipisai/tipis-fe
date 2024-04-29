@@ -19,3 +19,7 @@ export interface ILarkBotFunctionForm
 }
 
 export type IFunctionForm = ITencentCosFunctionForm | ILarkBotFunctionForm
+
+export interface IEditFunctionProps {
+  functionInfo: IFunctionForm
+}

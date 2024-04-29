@@ -1,5 +1,5 @@
 import { Select } from "antd"
-import { FC } from "react"
+import { memo } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import {
@@ -9,7 +9,7 @@ import {
 } from "@illa-public/public-types"
 import LabelWithEditor from "../../../../components/labelWithEditor"
 
-const ActionTypeEditor: FC = () => {
+const ActionTypeEditor = memo(() => {
   const { control } = useFormContext<ITencentCosFunction>()
 
   const { t } = useTranslation()
@@ -43,6 +43,8 @@ const ActionTypeEditor: FC = () => {
       />
     </LabelWithEditor>
   )
-}
+})
+
+ActionTypeEditor.displayName = "ActionTypeEditor"
 
 export default ActionTypeEditor

@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { memo } from "react"
 import { LabelWithEditorProps } from "./interface"
 import {
   descriptionStyle,
@@ -7,7 +7,7 @@ import {
   outerContainerStyle,
 } from "./style"
 
-const LabelWithEditor: FC<LabelWithEditorProps> = (props) => {
+const LabelWithEditor = memo((props: LabelWithEditorProps) => {
   const { children, label, description } = props
   return (
     <div css={outerContainerStyle}>
@@ -23,6 +23,8 @@ const LabelWithEditor: FC<LabelWithEditorProps> = (props) => {
       )}
     </div>
   )
-}
+})
+
+LabelWithEditor.displayName = "LabelWithEditor"
 
 export default LabelWithEditor

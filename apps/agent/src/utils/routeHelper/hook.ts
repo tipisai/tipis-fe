@@ -6,6 +6,7 @@ import {
   getChatPath,
   getCreateFunctionPath,
   getCreateTipiPath,
+  getEditFunctionPath,
   getEditTipiPath,
   getExploreFunctionsPath,
   getExploreTipisPath,
@@ -20,6 +21,7 @@ import {
   useAddExploreFunctionsTab,
   useAddExploreTipisTab,
   useAddMarketTipiDetailTab,
+  useAddOrUpdateEditFunctionTab,
   useAddOrUpdateEditTipisTab,
   useAddOrUpdateRunTipisTab,
   useAddTipisDetailTab,
@@ -242,4 +244,26 @@ export const useNavigateToCreateFunction = () => {
     [addCreateFunctionTab, currentTeamInfo?.identifier, navigate],
   )
   return navigateToCreteTipis
+}
+
+export const useNavigateToEditFunction = () => {
+  const navigate = useNavigate()
+  const addOrUpdateEditFunctionTab = useAddOrUpdateEditFunctionTab()
+  const currentTeamInfo = useGetCurrentTeamInfo()
+
+  const navigateToEditTipis = useCallback(
+    async (functionInfo: { functionName: string; functionID: string }) => {
+      await addOrUpdateEditFunctionTab(functionInfo)
+      if (currentTeamInfo?.identifier) {
+        navigate(
+          getEditFunctionPath(
+            currentTeamInfo.identifier,
+            functionInfo.functionID,
+          ),
+        )
+      }
+    },
+    [addOrUpdateEditFunctionTab, currentTeamInfo?.identifier, navigate],
+  )
+  return navigateToEditTipis
 }

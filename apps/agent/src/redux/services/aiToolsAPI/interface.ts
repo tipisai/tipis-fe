@@ -1,4 +1,8 @@
-import { TIntegrationType } from "@illa-public/public-types"
+import {
+  TActionOperation,
+  TIntegrationType,
+  VARIABLE_TYPE,
+} from "@illa-public/public-types"
 
 export enum AI_TOOL_TYPE {
   FUNCTION = 1,
@@ -7,7 +11,7 @@ export enum AI_TOOL_TYPE {
 export interface IAIToolParametersDTO {
   name: string
   description: string
-  type: string
+  type: VARIABLE_TYPE
   isEnum: boolean
   enum: string[]
   required: boolean
@@ -32,6 +36,7 @@ export interface IAIToolDTO<T> {
   description: string
   toolType: AI_TOOL_TYPE
   parameters: IAIToolParametersDTO[]
+  actionOperation: TActionOperation
   config: {
     icon: string
   }
