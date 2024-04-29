@@ -12,9 +12,3 @@ export interface PureMessageProps {
   isMobile: boolean
   disableTrigger: boolean
 }
-
-export interface IMessageCardShowInfo {
-  InfoIcon: React.ReactNode
-  InfoTitle: string
-  infoDesc: string
-}
