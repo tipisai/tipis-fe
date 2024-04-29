@@ -1,7 +1,9 @@
 import Icon from "@ant-design/icons"
 import { Button, Drawer } from "antd"
+import { Resizable } from "re-resizable"
 import { FC, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { useWindowSize } from "react-use"
 import { CODE_LANG, CodeEditor } from "@illa-public/code-editor-new"
 import { CloseIcon } from "@illa-public/icon"
 import { FUNCTION_RUN_RESULT_EVENT } from "@/utils/eventEmitter/constants"
@@ -18,6 +20,8 @@ import {
 const TestRunResult: FC = () => {
   const [openDrawer, setOpenDrawer] = useState(false)
   const [value, setValue] = useState<IRunResultValue>({})
+
+  const { height: windowHeight } = useWindowSize()
 
   const { statusCode, result } = value
 
@@ -46,13 +50,24 @@ const TestRunResult: FC = () => {
   }, [])
 
   return (
-    <div css={runResultContainerStyle} className="run-result-container">
+    <Resizable
+      defaultSize={{
+        width: "100%",
+        height: windowHeight * 0.3,
+      }}
+      style={{
+        position: "absolute",
+      }}
+      maxHeight={windowHeight * 0.8}
+      minHeight={windowHeight * 0.1}
+      css={runResultContainerStyle}
+    >
       <Drawer
         title={t("function.edit.test.result.response")}
         open={openDrawer}
         placement="bottom"
         getContainer={false}
-        height={200}
+        height="100%"
         maskClosable={false}
         mask={false}
         keyboard={false}
@@ -91,7 +106,7 @@ const TestRunResult: FC = () => {
           }}
         />
       </Drawer>
-    </div>
+    </Resizable>
   )
 }
 

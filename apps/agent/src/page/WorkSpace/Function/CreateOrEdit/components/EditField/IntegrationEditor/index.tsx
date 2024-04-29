@@ -15,6 +15,9 @@ import IntegrationSelectorModal from "@/Modules/Integration/CreateOrSelectIntegr
 import { useAppDispatch } from "@/redux/hooks"
 import { integrationAPI } from "@/redux/services/integrationAPI"
 import { useGetCurrentTeamInfo } from "@/utils/team"
+import { SELECT_INTEGRATION_STEP } from "../../../../../../../Modules/Integration/CreateOrSelectIntegration/modules/SelectAndCreate/interface"
+import { CREATE_INTEGRATION_EVENT } from "../../../../../../../utils/eventEmitter/constants"
+import { IntegrationEventEmitter } from "../../../../../../../utils/function"
 import { IFunctionForm } from "../../../interface"
 import {
   buttonStyle,
@@ -64,6 +67,10 @@ const IntegrationEditor = memo(() => {
                   size="large"
                   danger={!!fieldState.error?.message}
                   onClick={() => {
+                    IntegrationEventEmitter.emit(
+                      CREATE_INTEGRATION_EVENT.CHANGE_MODAL_STEP,
+                      SELECT_INTEGRATION_STEP.SELECT_OR_CREATE,
+                    )
                     setCreateOrSelectModalShow(true)
                   }}
                 >
@@ -75,6 +82,10 @@ const IntegrationEditor = memo(() => {
                 <div
                   css={integrationContainerStyle}
                   onClick={() => {
+                    IntegrationEventEmitter.emit(
+                      CREATE_INTEGRATION_EVENT.CHANGE_MODAL_STEP,
+                      SELECT_INTEGRATION_STEP.SELECT_OR_CREATE,
+                    )
                     setCreateOrSelectModalShow(true)
                   }}
                 >
@@ -93,6 +104,10 @@ const IntegrationEditor = memo(() => {
                 <div
                   css={buttonStyle}
                   onClick={() => {
+                    IntegrationEventEmitter.emit(
+                      CREATE_INTEGRATION_EVENT.CHANGE_MODAL_STEP,
+                      SELECT_INTEGRATION_STEP.EDIT,
+                    )
                     setCreateOrSelectModalShow(true)
                   }}
                 >

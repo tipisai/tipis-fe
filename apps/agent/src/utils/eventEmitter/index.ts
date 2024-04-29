@@ -1,7 +1,11 @@
-import { FUNCTION_RUN_RESULT_EVENT } from "./constants"
+import {
+  CREATE_INTEGRATION_EVENT,
+  FUNCTION_RUN_RESULT_EVENT,
+} from "./constants"
 
 export type TEventEmitterEventType =
-  (typeof FUNCTION_RUN_RESULT_EVENT)[keyof typeof FUNCTION_RUN_RESULT_EVENT]
+  | (typeof FUNCTION_RUN_RESULT_EVENT)[keyof typeof FUNCTION_RUN_RESULT_EVENT]
+  | (typeof CREATE_INTEGRATION_EVENT)[keyof typeof CREATE_INTEGRATION_EVENT]
 
 class EventEmitter {
   private events = new Map<TEventEmitterEventType, Function[]>()

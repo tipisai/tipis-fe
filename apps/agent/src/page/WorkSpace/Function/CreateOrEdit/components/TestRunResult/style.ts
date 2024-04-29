@@ -2,12 +2,10 @@ import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
 
 export const runResultContainerStyle = css`
+  padding: 0 24px;
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 100%;
-  height: 200px;
-  padding: 0 24px;
   .ant-drawer-content-wrapper {
     padding: 0 24px;
     box-shadow: none;

@@ -16,6 +16,7 @@ const EditFunction: FC = () => {
     },
     mode: "onChange",
   })
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit((_data) => {})} css={formStyle}>

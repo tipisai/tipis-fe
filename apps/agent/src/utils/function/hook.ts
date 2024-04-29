@@ -129,8 +129,15 @@ export const useTestRunFunction = () => {
     useTestRunAIToolsMutation()
 
   const onTestRunFunction = async () => {
+    const context = parameterList.reduce(
+      (acc, cur) => {
+        acc[cur.name] = ""
+        return acc
+      },
+      {} as Record<string, unknown>,
+    )
     try {
-      await testRunAITools({
+      const data = await testRunAITools({
         teamID: currentTeamInfo?.id,
         testData: {
           resourceID: resourceID,
@@ -138,16 +145,17 @@ export const useTestRunFunction = () => {
           actionOperation: actionOperation,
           parameters: parameterList,
           content: content,
+          context,
         },
       }).unwrap()
       TestRunResultEventEmitter.emit(
         FUNCTION_RUN_RESULT_EVENT.CHANGE_DRAWER_OPEN_STATUS,
         true,
       )
+
       TestRunResultEventEmitter.emit(FUNCTION_RUN_RESULT_EVENT.SET_RUN_RESULT, {
         statusCode: 200,
-        time: 1000,
-        result: "test result",
+        result: JSON.stringify(data, null, 2),
       })
     } catch {}
   }

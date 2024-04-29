@@ -1,5 +1,6 @@
 import { FC, useState } from "react"
 import CreateIntegration from "../CreateOrUpdateIntegration/createIntegration"
+import EditIntegrationDataProvider from "../CreateOrUpdateIntegration/editIntegration"
 import SelectIntegration from "../SelectIntegration"
 import {
   ISelectAndCreateIntegrationProps,
@@ -9,14 +10,17 @@ import {
 const SelectAndCreateIntegration: FC<ISelectAndCreateIntegrationProps> = (
   props,
 ) => {
-  const { onConfirm, integrationType } = props
-  const [step, setStep] = useState<SELECT_INTEGRATION_STEP>(
-    SELECT_INTEGRATION_STEP.SELECT,
-  )
+  const {
+    onConfirm,
+    integrationType,
+    integrationID,
+    defaultStep = SELECT_INTEGRATION_STEP.SELECT_OR_CREATE,
+  } = props
+  const [step, setStep] = useState<SELECT_INTEGRATION_STEP>(defaultStep)
 
   return (
     <>
-      {step === SELECT_INTEGRATION_STEP.SELECT && (
+      {step === SELECT_INTEGRATION_STEP.SELECT_OR_CREATE && (
         <SelectIntegration
           onClickCreate={() => {
             setStep(SELECT_INTEGRATION_STEP.CREATE)
@@ -26,13 +30,25 @@ const SelectAndCreateIntegration: FC<ISelectAndCreateIntegrationProps> = (
       )}
       {step === SELECT_INTEGRATION_STEP.CREATE && (
         <CreateIntegration
-          onBack={() => {
-            setStep(SELECT_INTEGRATION_STEP.SELECT)
-          }}
           onConfirm={onConfirm}
+          onBack={() => {
+            setStep(SELECT_INTEGRATION_STEP.SELECT_OR_CREATE)
+          }}
           integrationType={integrationType}
         />
       )}
+      {step === SELECT_INTEGRATION_STEP.EDIT &&
+        (integrationID ? (
+          <EditIntegrationDataProvider
+            onConfirm={onConfirm}
+            integrationID={integrationID}
+          />
+        ) : (
+          <CreateIntegration
+            onConfirm={onConfirm}
+            integrationType={integrationType}
+          />
+        ))}
     </>
   )
 }

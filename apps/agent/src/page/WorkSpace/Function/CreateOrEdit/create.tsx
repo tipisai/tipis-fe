@@ -6,6 +6,7 @@ import { getFunctionInitDataByType } from "@illa-public/public-configs"
 import { IBaseFunction, TIntegrationType } from "@illa-public/public-types"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import { useCreateAIToolMutation } from "@/redux/services/aiToolsAPI"
+import { useGetCurrentTeamInfo } from "@/utils/team"
 import TestRunResult from "./components/TestRunResult"
 import { IFunctionForm } from "./interface"
 import DocPanel from "./modules/DocPanel"
@@ -18,6 +19,8 @@ const CreateFunction: FC = () => {
 
   const INITConfig = getFunctionInitDataByType(functionType as TIntegrationType)
 
+  const currentTeamInfo = useGetCurrentTeamInfo()!
+
   const methods = useForm<IFunctionForm>({
     defaultValues: INITConfig,
     mode: "onChange",
@@ -26,13 +29,23 @@ const CreateFunction: FC = () => {
   const [createAITool] = useCreateAIToolMutation()
 
   const createFunctionWhenSubmit = async (data: IFunctionForm) => {
+    const icon = data.config.icon
+
     const aiTool: IBaseFunction = {
-      ...data,
+      config: {
+        ...data.config,
+        icon: icon ? icon : "",
+      },
+      content: data.content,
+      description: data.description,
+      name: data.name,
+      parameters: data.parameters,
+      resourceType: data.resourceType,
       resourceID: data.integrationInfo.resourceID,
     }
     try {
       await createAITool({
-        teamID: "1",
+        teamID: currentTeamInfo?.id,
         aiTool: aiTool,
       })
     } catch {}

@@ -3,17 +3,15 @@ import { useGetIntegrationListQuery } from "@/redux/services/integrationAPI"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import FullSectionLoading from "../../../components/FullSectionLoading"
 import { IIntegrationSelectorProps } from "./interface"
-import CreateOrUpdateIntegration from "./modules/CreateOrUpdateIntegration"
+import CreateIntegration from "./modules/CreateOrUpdateIntegration/createIntegration"
 import SelectAndCreateIntegration from "./modules/SelectAndCreate"
 import { loadingContainerStyle } from "./style"
 
 const IntegrationSelector: FC<IIntegrationSelectorProps> = (props) => {
   const currentTeamInfo = useGetCurrentTeamInfo()
-  const { onConfirm, integrationType, integrationID } = props
+  const { onConfirm, integrationType, integrationID, defaultStep } = props
 
-  const { data, isLoading } = useGetIntegrationListQuery(currentTeamInfo!.id, {
-    skip: !!integrationID,
-  })
+  const { data, isLoading } = useGetIntegrationListQuery(currentTeamInfo!.id)
 
   if (isLoading) {
     return (
@@ -27,12 +25,13 @@ const IntegrationSelector: FC<IIntegrationSelectorProps> = (props) => {
     <SelectAndCreateIntegration
       onConfirm={onConfirm}
       integrationType={integrationType}
+      integrationID={integrationID}
+      defaultStep={defaultStep}
     />
   ) : (
-    <CreateOrUpdateIntegration
+    <CreateIntegration
       onConfirm={onConfirm}
       integrationType={integrationType}
-      integrationID={integrationID}
     />
   )
 }

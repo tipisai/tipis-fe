@@ -52,7 +52,6 @@ const VariableModalContent: FC<IVariableModalContentProps> = (props) => {
   })
 
   const onClickConfirm = (data: IVariables) => {
-    console.log("data", data)
     const values = variableControl.field.value
     values[index] = data
     variableControl.field.onChange(values)

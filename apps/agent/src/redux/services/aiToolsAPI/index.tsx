@@ -103,7 +103,7 @@ export const aiToolsAPI = createApi({
       }),
     }),
     testRunAITools: builder.mutation<
-      { payload: unknown },
+      { data: unknown },
       {
         teamID: string
         testData: {
@@ -112,6 +112,7 @@ export const aiToolsAPI = createApi({
           actionOperation: TActionOperation
           parameters: IAIToolParametersDTO[]
           content: unknown
+          context: Record<string, unknown>
         }
       }
     >({
@@ -120,7 +121,7 @@ export const aiToolsAPI = createApi({
         method: "POST",
         body: {
           ...testData,
-          context: [],
+          context: testData.context || {},
         },
       }),
     }),

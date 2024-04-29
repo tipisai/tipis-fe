@@ -20,9 +20,11 @@ const ConfigElementFooter: FC<IFooterProps> = (props) => {
 
   const { handleSubmit } = useFormContext<IBaseIntegration>()
   const currentTeamInfo = useGetCurrentTeamInfo()!
-  const [createIntegration] = useCreateIntegrationMutation()
+  const [createIntegration, { isLoading: isCreateLoading }] =
+    useCreateIntegrationMutation()
 
-  const [updateIntegrationByID] = useUpdateIntegrationByIDMutation()
+  const [updateIntegrationByID, { isLoading: isUpdateLoading }] =
+    useUpdateIntegrationByIDMutation()
 
   const createIntegrationWhenSubmit = async (data: IBaseIntegration) => {
     try {
@@ -72,6 +74,7 @@ const ConfigElementFooter: FC<IFooterProps> = (props) => {
         css={confirmButtonStyle}
         size="large"
         onClick={handleSubmit(onSubmit)}
+        loading={isCreateLoading || isUpdateLoading}
       >
         {t("function.edit.variable_modal.button.confirm")}
       </BlackButton>
