@@ -10,7 +10,7 @@ const EmptyFunctionContentMobile: FC = () => {
     <div css={containerStyle}>
       <Icon component={EmptyTeamIcon} css={emptyIconStyle} />
       <span css={textStyle}>
-        {t("editor.action.form.title.general.no_function")}
+        {t("editor.action.form.title.general.no_function_mobile")}
       </span>
     </div>
   )
