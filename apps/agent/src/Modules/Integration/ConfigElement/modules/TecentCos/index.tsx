@@ -72,7 +72,7 @@ const TencentCosConfigElement: FC = () => {
         name="content.accessKeyID"
         control={control}
         rules={{
-          required: "editor.action.form.tips.tx.secret_id",
+          required: t("editor.action.form.tips.tx.secret_id"),
         }}
         render={({ field }) => {
           return (
@@ -89,7 +89,7 @@ const TencentCosConfigElement: FC = () => {
         name="content.secretAccessKey"
         control={control}
         rules={{
-          required: "editor.action.form.tips.tx.secret_key",
+          required: t("editor.action.form.tips.tx.secret_key"),
         }}
         render={({ field }) => {
           return (

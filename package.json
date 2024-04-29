@@ -7,7 +7,7 @@
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky",
-    "parser:tipis": "i18next 'apps/agent/src/**/*.{ts,tsx}' 'packages/**/*.{ts,tsx}'"
+    "parser:tipis": "i18next"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
