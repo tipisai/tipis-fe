@@ -194,17 +194,6 @@ export const aiToolsAPI = createApi({
         },
       }),
     }),
-    getAIToolDetail: builder.query<
-      IAIToolDTO<unknown>,
-      {
-        teamID: string
-        aiToolID: string
-      }
-    >({
-      query: ({ teamID, aiToolID }) => ({
-        url: `/teams/${teamID}/aiTool/${aiToolID}`,
-      }),
-    }),
   }),
 })
 
@@ -216,6 +205,4 @@ export const {
   useGetAIToolIconUploadAddressMutation,
   useUpdateAIToolByIDMutation,
   useTestRunAIToolsMutation,
-  useGetAIToolDetailQuery,
-  useLazyGetAIToolDetailQuery,
 } = aiToolsAPI
