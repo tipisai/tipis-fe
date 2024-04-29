@@ -23,7 +23,7 @@ const FunctionsEditorMobile: FC = memo(() => {
   })
 
   const handleValueChange = (values: IEditorAIToolsVO[]) => {
-    setValue("aiTools", values)
+    setValue("aiTools", values, { shouldDirty: true })
   }
 
   const handleRemoveFunction = (aiToolID: string) => {
@@ -31,6 +31,7 @@ const FunctionsEditorMobile: FC = memo(() => {
     setValue(
       "aiTools",
       aiTools.filter((item) => item.aiToolID !== aiToolID),
+      { shouldDirty: true },
     )
   }
 

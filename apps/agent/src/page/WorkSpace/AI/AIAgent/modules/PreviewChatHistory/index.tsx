@@ -20,9 +20,9 @@ const PreviewChatHistory: FC = memo(() => {
     sendMessage,
     lastRunAgent,
   } = useContext(AgentWSContext)
-  const [prompt, variables, knowledge] = useWatch({
+  const [prompt, variables, knowledge, aiTools] = useWatch({
     control,
-    name: ["prompt", "variables", "knowledge"],
+    name: ["prompt", "variables", "knowledge", "aiTools"],
   })
 
   const getIsBlockInputDirty = useCallback(() => {
@@ -43,8 +43,13 @@ const PreviewChatHistory: FC = memo(() => {
 
     const isKnowledgeDirty = !isEqual(knowledge, lastRunAgent.current.knowledge)
 
-    return isPromptDirty || isVariablesDirty || isKnowledgeDirty
-  }, [isRunning, knowledge, lastRunAgent, prompt, variables])
+    const isToolsDirty = !isEqual(
+      aiTools.map((item) => item.aiToolID),
+      lastRunAgent.current.aiTools.map((item) => item.aiToolID),
+    )
+
+    return isPromptDirty || isVariablesDirty || isKnowledgeDirty || isToolsDirty
+  }, [aiTools, isRunning, knowledge, lastRunAgent, prompt, variables])
 
   const wsContext = useMemo(
     () => ({
