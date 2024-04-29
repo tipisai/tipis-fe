@@ -15,5 +15,4 @@ export interface FirstSetPasswordProps {
   onSubmit: SubmitHandler<IFirstSetPasswordFields>
   showCountDown: boolean
   onCountDownChange: (showCountDown: boolean) => void
-  sendEmail: (email: string) => Promise<void>
 }

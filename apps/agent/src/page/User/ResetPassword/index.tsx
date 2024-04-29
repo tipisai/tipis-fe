@@ -15,10 +15,7 @@ import {
   TIPIS_TRACK_PUBLIC_PAGE_NAME,
   TipisTrack,
 } from "@illa-public/track-utils"
-import {
-  useForgetPasswordMutation,
-  useSendVerificationCodeToEmailMutation,
-} from "@illa-public/user-data"
+import { useForgetPasswordMutation } from "@illa-public/user-data"
 import { LOGIN_PATH } from "@/utils/routeHelper"
 import { TIPISStorage } from "@/utils/storage"
 import { ResetPwdFields } from "../interface"
@@ -32,7 +29,6 @@ export const ResetPasswordPage: FC = () => {
   const [searchParams] = useSearchParams()
   const { t } = useTranslation()
   const [forgetPassword] = useForgetPasswordMutation()
-  const [sendVerificationCodeToEmail] = useSendVerificationCodeToEmailMutation()
 
   const formProps = useForm<ResetPwdFields>({
     mode: "onSubmit",
@@ -93,16 +89,6 @@ export const ResetPasswordPage: FC = () => {
     }
   }
 
-  const handleSendEmail = async (email: string) => {
-    try {
-      const verificationToken = await sendVerificationCodeToEmail({
-        email,
-        usage: "forgetpwd",
-      }).unwrap()
-      TIPISStorage.setSessionStorage("verificationToken", verificationToken)
-    } catch (e) {}
-  }
-
   useEffect(() => {
     TipisTrack.pageViewTrack(TIPIS_TRACK_PUBLIC_PAGE_NAME.FORGET_PASSWORD)
     return () => {
@@ -126,7 +112,6 @@ export const ResetPasswordPage: FC = () => {
               loading={loading}
               errorMsg={errorMsg}
               onSubmit={onSubmit}
-              sendEmail={handleSendEmail}
               lockedEmail={email ?? searchParams.get("email") ?? ""}
               showCountDown={showCountDown}
               onCountDownChange={setShowCountDown}
@@ -137,7 +122,6 @@ export const ResetPasswordPage: FC = () => {
               loading={loading}
               errorMsg={errorMsg}
               onSubmit={onSubmit}
-              sendEmail={handleSendEmail}
               lockedEmail={email ?? searchParams.get("email") ?? ""}
               showCountDown={showCountDown}
               onCountDownChange={setShowCountDown}

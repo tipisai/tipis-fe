@@ -6,7 +6,6 @@ import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import {
   useGetUserInfoQuery,
-  useSendVerificationCodeToEmailMutation,
   useSetPasswordMutation,
 } from "@illa-public/user-data"
 import { TIPISStorage } from "@/utils/storage"
@@ -20,7 +19,6 @@ const FirstSetPassword = () => {
   const { message } = App.useApp()
   const [showCountDown, setShowCountDown] = useState(false)
   const [setPassword] = useSetPasswordMutation()
-  const [sendVerificationCodeToEmail] = useSendVerificationCodeToEmailMutation()
   const firstSetPasswordForm = useForm<IFirstSetPasswordFields>({
     defaultValues: {
       email: userInfo?.email,
@@ -72,21 +70,12 @@ const FirstSetPassword = () => {
     }
   }
 
-  const handleSendEmail = async (email: string) => {
-    try {
-      await sendVerificationCodeToEmail({
-        email,
-        usage: "forgetpwd",
-      })
-    } catch (e) {}
-  }
   return (
     <FormProvider {...firstSetPasswordForm}>
       <LayoutAutoChange
         desktopPage={
           <SetPasswordPC
             showCountDown={showCountDown}
-            sendEmail={handleSendEmail}
             onCountDownChange={setShowCountDown}
             errorMsg={errorMsg}
             onSubmit={onFirstSetPasswordSubmit}
@@ -95,7 +84,6 @@ const FirstSetPassword = () => {
         mobilePage={
           <SetPasswordMobile
             showCountDown={showCountDown}
-            sendEmail={handleSendEmail}
             onCountDownChange={setShowCountDown}
             errorMsg={errorMsg}
             onSubmit={onFirstSetPasswordSubmit}
