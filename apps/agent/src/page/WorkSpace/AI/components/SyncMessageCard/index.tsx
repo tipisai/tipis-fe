@@ -1,6 +1,6 @@
 import Icon from "@ant-design/icons"
 import { App, Tooltip } from "antd"
-import { FC, useRef, useState } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { CopyIcon, DownIcon, UpIcon } from "@illa-public/icon"
 import { copyToClipboard } from "@illa-public/utils"
@@ -10,7 +10,11 @@ import tipiRunLoading from "@/config/lottieConfig/tipiRunLoading.json"
 import MarkdownMessage from "../MarkdownMessage"
 import { CODE_STATUS } from "../MarkdownMessage/interface"
 import { RUN_REQUEST_TYPE } from "./constants"
-import { PureMessageProps, SyncMessageCardProps } from "./interface"
+import {
+  IMessageCardShowInfo,
+  PureMessageProps,
+  SyncMessageCardProps,
+} from "./interface"
 import {
   actionIconStyle,
   containerStyle,
@@ -95,11 +99,16 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
 }) => {
   const { t } = useTranslation()
   const [showMessage, setShowMessage] = useState(false)
-  let formatMessage, runRequestType: RUN_REQUEST_TYPE | undefined
+  const [showMessageInfo, setShowMessageInfo] =
+    useState<IMessageCardShowInfo | null>()
+  let formatMessage,
+    runRequestType: RUN_REQUEST_TYPE | undefined,
+    toolCallID: string = ""
   try {
     const res = JSON.parse(message)
     const functionName = res?.["function_name"]
     const code = res?.["function_arguments"]?.["code"]
+    toolCallID = res?.["tool_call_id"]
     if (code) {
       formatMessage = `\`\`\`python\n${code}\n\`\`\``
     }
@@ -117,10 +126,11 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
 
   const getInfoByStatus = useGetInfoByStatus()
 
-  const { InfoIcon, InfoTitle, infoDesc } = getInfoByStatus(
-    messageStatus,
-    runRequestType,
-  )
+  useEffect(() => {
+    getInfoByStatus(messageStatus, runRequestType, toolCallID).then((info) => {
+      setShowMessageInfo(info)
+    })
+  }, [getInfoByStatus, messageStatus, runRequestType, toolCallID])
 
   return (
     <div css={containerStyle}>
@@ -129,14 +139,19 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
         onClick={() => setShowMessage(!showMessage)}
       >
         <div css={infoContainerStyle}>
-          {runRequestType ||
-          messageStatus !== MESSAGE_STATUS.ANALYZE_PENDING ? (
+          {showMessageInfo &&
+          (runRequestType ||
+            messageStatus !== MESSAGE_STATUS.ANALYZE_PENDING) ? (
             <>
               <div css={textAndIconContainerStyle}>
-                <div css={iconStyle(messageStatus)}>{InfoIcon}</div>
+                <div css={iconStyle(messageStatus)}>
+                  {showMessageInfo.InfoIcon}
+                </div>
                 <div css={infoTextContainerStyle}>
-                  <span css={infoTitleStyle}>{InfoTitle}</span>
-                  <span css={infoDescStyle(messageStatus)}>{infoDesc}</span>
+                  <span css={infoTitleStyle}>{showMessageInfo.InfoTitle}</span>
+                  <span css={infoDescStyle(messageStatus)}>
+                    {showMessageInfo.infoDesc}
+                  </span>
                 </div>
               </div>
               {formatMessage && (
