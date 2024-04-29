@@ -60,7 +60,7 @@ const TestRunResult: FC = () => {
       }}
       maxHeight={windowHeight * 0.8}
       minHeight={windowHeight * 0.1}
-      css={runResultContainerStyle}
+      css={runResultContainerStyle(openDrawer)}
     >
       <Drawer
         title={t("function.edit.test.result.response")}

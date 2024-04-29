@@ -1,3 +1,4 @@
+import { App } from "antd"
 import { FC } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { useParams } from "react-router-dom"
@@ -21,6 +22,7 @@ const CreateFunction: FC = () => {
   const INITConfig = getFunctionInitDataByType(functionType as TIntegrationType)
 
   const currentTeamInfo = useGetCurrentTeamInfo()!
+  const { message } = App.useApp()
 
   const methods = useForm<IFunctionForm>({
     defaultValues: INITConfig,
@@ -45,6 +47,7 @@ const CreateFunction: FC = () => {
       parameters: data.parameters,
       resourceType: data.resourceType,
       resourceID: data.integrationInfo.resourceID,
+      actionOperation: data.actionOperation,
     }
     try {
       const iconURL = await getIconURL(aiTool.config.icon)
@@ -59,7 +62,10 @@ const CreateFunction: FC = () => {
           },
         },
       })
-    } catch {}
+      message.success("Create function successfully")
+    } catch (e) {
+      message.error("Create function failed")
+    }
   }
 
   return (
