@@ -1,5 +1,4 @@
 import Icon from "@ant-design/icons"
-import { Image } from "antd"
 import { useCallback } from "react"
 import { useTranslation } from "react-i18next"
 import { CloseIcon } from "@illa-public/icon"
@@ -162,37 +161,40 @@ export const useGetInfoByStatus = () => {
   )
 
   const getAIToolInfoByStatue = useCallback(
-    (
-      status: MESSAGE_STATUS,
-      name: string | undefined,
-      icon: string | undefined,
-    ) => {
-      if (!icon || !name) return null
+    (status: MESSAGE_STATUS, name: string | undefined) => {
+      if (!name) return null
       let InfoIcon, InfoTitle, infoDesc
       switch (status) {
         case MESSAGE_STATUS.ANALYZE_SUCCESS: {
-          InfoIcon = <Image width={24} height={24} preview={false} src={icon} />
+          InfoIcon = <Icon component={RunPythonIcon} css={infoIconStyle} />
           InfoTitle = name
           infoDesc = t("homepage.tipi_chat.processing_status.suc")
           break
         }
         case MESSAGE_STATUS.ANALYZE_FAILED: {
-          InfoIcon = <Image width={24} height={24} preview={false} src={icon} />
+          InfoIcon = <Icon component={RunPythonIcon} css={infoIconStyle} />
           InfoTitle = name
           infoDesc = t("homepage.tipi_chat.processing_status.failed")
           break
         }
         case MESSAGE_STATUS.ANALYZE_STOP: {
           InfoIcon = <Icon component={CloseIcon} css={stopIconStyle} />
-          InfoTitle = InfoTitle = name
+          InfoTitle = name
           infoDesc = t("homepage.tipi_chat.processing_status.stopped")
           break
         }
 
         default:
         case MESSAGE_STATUS.ANALYZE_PENDING: {
-          InfoIcon = <Image width={24} height={24} preview={false} src={icon} />
-          InfoTitle = InfoTitle = name
+          InfoIcon = (
+            <LottieItem
+              configJson={RunningPythonCodeIcon}
+              autoplay
+              loop
+              size={24}
+            />
+          )
+          InfoTitle = name
           infoDesc = t("homepage.tipi_chat.processing_status.processing")
           break
         }
@@ -207,11 +209,7 @@ export const useGetInfoByStatus = () => {
   )
 
   const getInfoByStatus = useCallback(
-    (
-      status: MESSAGE_STATUS,
-      runRequestType: RUN_REQUEST_TYPE | undefined,
-      icon?: string,
-    ) => {
+    (status: MESSAGE_STATUS, runRequestType: RUN_REQUEST_TYPE | undefined) => {
       switch (runRequestType) {
         case RUN_REQUEST_TYPE._SYS_READ_FILE: {
           return getReadFileInfoByStatus(status)
@@ -223,7 +221,7 @@ export const useGetInfoByStatus = () => {
           return getRunPythonInfoByStatus(status)
         }
         default: {
-          const info = getAIToolInfoByStatue(status, runRequestType, icon)
+          const info = getAIToolInfoByStatue(status, runRequestType)
           if (info !== null) {
             return info
           } else {

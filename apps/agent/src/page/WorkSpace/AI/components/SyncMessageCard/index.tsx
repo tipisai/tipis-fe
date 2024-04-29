@@ -95,14 +95,11 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
 }) => {
   const { t } = useTranslation()
   const [showMessage, setShowMessage] = useState(false)
-  let formatMessage,
-    runRequestType: RUN_REQUEST_TYPE | undefined,
-    icon: string = ""
+  let formatMessage, runRequestType: RUN_REQUEST_TYPE | undefined
   try {
     const res = JSON.parse(message)
     const functionName = res?.["function_name"]
     const code = res?.["function_arguments"]?.["code"]
-    icon = res?.["icon"]
     if (code) {
       formatMessage = `\`\`\`python\n${code}\n\`\`\``
     }
@@ -122,7 +119,6 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
   const { infoDesc, InfoIcon, InfoTitle } = getInfoByStatus(
     messageStatus,
     runRequestType,
-    icon,
   )
 
   return (
