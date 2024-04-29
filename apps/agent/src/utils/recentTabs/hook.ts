@@ -452,7 +452,9 @@ export const useAddCreateFunction = () => {
     async (functionType: string) => {
       const historyTabs = getRecentTabInfos(store.getState())
       const createFunctionTab = historyTabs.find(
-        (tab) => tab.tabType === TAB_TYPE.CREATE_FUNCTION,
+        (tab) =>
+          tab.tabType === TAB_TYPE.CREATE_FUNCTION &&
+          tab.cacheID === functionType,
       )
       if (!createFunctionTab) {
         const tabsInfo: ITabInfo = {
