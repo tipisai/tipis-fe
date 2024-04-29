@@ -1,14 +1,12 @@
-import Icon from "@ant-design/icons"
-import { Button, Typography } from "antd"
+import { Typography } from "antd"
 import { FC, memo, useState } from "react"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
-import { AddIcon } from "@illa-public/icon"
 import { IEditorAIToolsVO } from "@illa-public/public-types"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
-import BlackButton from "@/components/BlackButton"
 import { IAgentForm } from "../../../interface"
 import { FUNCTION_LEARN_MORE_LINK } from "../constants"
+import AddToolsButton from "../modules/AddToolsButton"
 import EditorFunctionItem from "../modules/EditorFunctionItem"
 import SelectDrawer from "./components/SelectDrawer"
 import { containerStyle, functionContainerStyle } from "./style"
@@ -74,29 +72,10 @@ const FunctionsEditorMobile: FC = memo(() => {
                   />
                 ))}
               </div>
-              {field.value?.length > 0 ? (
-                <BlackButton
-                  style={{
-                    marginBottom: "8px",
-                    padding: "1px 8px",
-                    minWidth: "32px",
-                  }}
-                  type="text"
-                  icon={<Icon component={AddIcon} />}
-                  onClick={handleOpenSelectModal}
-                >
-                  {t("editor.action.panel.btn.new")}
-                </BlackButton>
-              ) : (
-                <Button
-                  block
-                  size="large"
-                  icon={<Icon component={AddIcon} />}
-                  onClick={handleOpenSelectModal}
-                >
-                  {t("editor.action.panel.btn.new")}
-                </Button>
-              )}
+              <AddToolsButton
+                toolsLength={field.value?.length}
+                handleOpenSelectModal={handleOpenSelectModal}
+              />
             </div>
           </LayoutBlock>
         )}

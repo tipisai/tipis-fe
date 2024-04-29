@@ -1,17 +1,14 @@
-import Icon from "@ant-design/icons"
-import { Button, Modal, Typography } from "antd"
+import { Typography } from "antd"
 import { FC, memo, useState } from "react"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
-import { AddIcon } from "@illa-public/icon"
-import { IEditorAIToolsVO, TIntegrationType } from "@illa-public/public-types"
+import { IEditorAIToolsVO } from "@illa-public/public-types"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
-import { IntegrationTypeSelector } from "@/Modules/Integration/IntegrationSelector"
-import BlackButton from "@/components/BlackButton"
-import { useCreateFunction } from "@/utils/recentTabs/hook"
 import { IAgentForm } from "../../../interface"
 import { FUNCTION_LEARN_MORE_LINK } from "../constants"
+import AddToolsButton from "../modules/AddToolsButton"
 import EditorFunctionItem from "../modules/EditorFunctionItem"
+import IntergrationModal from "./components/IntergrationModal"
 import SelectModal from "./components/SelectModal"
 import { containerStyle, functionContainerStyle } from "./style"
 
@@ -21,7 +18,6 @@ const FunctionsEditorPC: FC = memo(() => {
   const { control, getValues, setValue } = useFormContext<IAgentForm>()
   const [selectModalVisible, setSelectModalVisible] = useState(false)
   const [integrationVisible, setIntegrationVisible] = useState(false)
-  const createFunction = useCreateFunction()
 
   const [fieldAiTools] = useWatch({
     control,
@@ -82,29 +78,10 @@ const FunctionsEditorPC: FC = memo(() => {
                   />
                 ))}
               </div>
-              {field.value?.length > 0 ? (
-                <BlackButton
-                  style={{
-                    marginBottom: "8px",
-                    padding: "1px 8px",
-                    minWidth: "32px",
-                  }}
-                  type="text"
-                  icon={<Icon component={AddIcon} />}
-                  onClick={handleOpenSelectModal}
-                >
-                  {t("editor.action.panel.btn.new")}
-                </BlackButton>
-              ) : (
-                <Button
-                  block
-                  size="large"
-                  icon={<Icon component={AddIcon} />}
-                  onClick={handleOpenSelectModal}
-                >
-                  {t("editor.action.panel.btn.new")}
-                </Button>
-              )}
+              <AddToolsButton
+                toolsLength={field.value?.length}
+                handleOpenSelectModal={handleOpenSelectModal}
+              />
             </div>
           </LayoutBlock>
         )}
@@ -119,22 +96,12 @@ const FunctionsEditorPC: FC = memo(() => {
         />
       )}
 
-      <Modal
-        open={integrationVisible}
-        destroyOnClose
-        width={1080}
-        footer={false}
-        title={t("editor.action.modal.title")}
-        onCancel={() => {
-          setIntegrationVisible(false)
-        }}
-      >
-        <IntegrationTypeSelector
-          onSelect={function (item: TIntegrationType): void {
-            createFunction(item)
-          }}
+      {integrationVisible && (
+        <IntergrationModal
+          integrationVisible={integrationVisible}
+          onCancel={() => setIntegrationVisible(false)}
         />
-      </Modal>
+      )}
     </>
   )
 })
