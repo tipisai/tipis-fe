@@ -8,7 +8,7 @@ import {
   TFunctionDashboardUIStateAction,
 } from "./interface"
 
-export const INIT_DASH_BOARD_UI_STATE: IFunctionDashBoardUIState = {
+export const INIT_FUNCTION_DASHBOARD_UI_STATE: IFunctionDashBoardUIState = {
   search: undefined,
 }
 

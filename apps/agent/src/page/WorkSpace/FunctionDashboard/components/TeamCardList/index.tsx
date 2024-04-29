@@ -6,7 +6,7 @@ import TeamNoData from "@/components/TeamNoData"
 import { useGetAllAIToolsListQuery } from "@/redux/services/aiToolsAPI"
 import { canShowCreateFunction } from "@/utils/UIHelper/functions"
 import { useGetCurrentTeamInfo } from "@/utils/team"
-import { DashBoardUIStateContext } from "../../context/functionDashboard"
+import { FunctionDashBoardUIStateContext } from "../../context/functionDashboard"
 import { FunctionDashboardContext } from "../../pc/context"
 import { ITeamCardListProps } from "./interface"
 
@@ -16,7 +16,7 @@ const TeamCardList: FC<ITeamCardListProps> = (props) => {
 
   const { changeCreateFunctionModal } = useContext(FunctionDashboardContext)
 
-  const { dashboardUIState } = useContext(DashBoardUIStateContext)
+  const { dashboardUIState } = useContext(FunctionDashBoardUIStateContext)
   const { search } = dashboardUIState
 
   const { data, isLoading } = useGetAllAIToolsListQuery(currentTeamInfo.id)

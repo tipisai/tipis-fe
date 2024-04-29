@@ -1,7 +1,8 @@
 import { FC, lazy, useEffect } from "react"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { useAddExploreFunctionsTab } from "@/utils/recentTabs/hook"
-import { DashboardUIStateProvider } from "./context/functionDashboard"
+import { FunctionDashboardUIStateProvider } from "./context/functionDashboard"
+import FunctionsMobileDashboard from "./mobile"
 
 const FunctionsPCDashboard = lazy(() => import("./pc"))
 // const TipisMobileDashboard = lazy(() => import("./mobile"))
@@ -14,12 +15,12 @@ const FunctionsDashboard: FC = () => {
   }, [addExploreFunctionTab])
 
   return (
-    <DashboardUIStateProvider>
+    <FunctionDashboardUIStateProvider>
       <LayoutAutoChange
         desktopPage={<FunctionsPCDashboard />}
-        mobilePage={<div />}
+        mobilePage={<FunctionsMobileDashboard />}
       />
-    </DashboardUIStateProvider>
+    </FunctionDashboardUIStateProvider>
   )
 }
 

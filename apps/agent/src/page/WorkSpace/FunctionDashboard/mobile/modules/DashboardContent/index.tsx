@@ -1,5 +1,5 @@
 import Icon from "@ant-design/icons"
-import { Button, Input } from "antd"
+import { Input } from "antd"
 import { debounce } from "lodash-es"
 import {
   ChangeEvent,
@@ -11,18 +11,21 @@ import {
   useRef,
   useState,
 } from "react"
-import { PlusIcon, SearchIcon } from "@illa-public/icon"
+import { SearchIcon } from "@illa-public/icon"
+import TeamCardList from "../../../components/TeamCardList"
 import { FunctionDashBoardUIStateContext } from "../../../context/functionDashboard"
 import { FUNCTION_DASHBOARD_UI_STATE_ACTION_TYPE } from "../../../context/interface"
-import { FunctionDashboardContext } from "../../context"
-import { headerToolsContainerStyle } from "./style"
+import MobileTeamCardListItem from "../../components/TeamCardListItem"
+import {
+  cardListContainerStyle,
+  dashboardContentStyle,
+  searchInputStyle,
+} from "./style"
 
-const HeaderTools: FC = () => {
+const DashboardContent: FC = () => {
   const { dispatch, dashboardUIState } = useContext(
     FunctionDashBoardUIStateContext,
   )
-
-  const { changeCreateFunctionModal } = useContext(FunctionDashboardContext)
 
   const { search } = dashboardUIState
   const [searchValue, setSearchValue] = useState(search)
@@ -59,31 +62,23 @@ const HeaderTools: FC = () => {
     [debounceHandleChange],
   )
 
-  const handleClickCreateFunction = () => {
-    changeCreateFunctionModal(true)
-  }
-
   return (
-    <>
-      <div css={headerToolsContainerStyle}>
+    <div css={dashboardContentStyle}>
+      <div css={searchInputStyle}>
         <Input
           placeholder="Search"
           prefix={<Icon component={SearchIcon} />}
           size="large"
-          onChange={handleChangeSearchValue}
           value={searchValue}
+          onChange={handleChangeSearchValue}
         />
-        <Button
-          type="primary"
-          icon={<Icon component={PlusIcon} />}
-          size="large"
-          onClick={handleClickCreateFunction}
-        >
-          Create
-        </Button>
       </div>
-    </>
+
+      <div css={cardListContainerStyle}>
+        <TeamCardList RenderItem={MobileTeamCardListItem} />
+      </div>
+    </div>
   )
 }
 
-export default HeaderTools
+export default DashboardContent
