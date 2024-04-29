@@ -1,9 +1,8 @@
 import { Modal } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
-import { TIntegrationType } from "@illa-public/public-types"
 import { IntegrationTypeSelector } from "@/Modules/Integration/IntegrationSelector"
-import { useAddCreateFunction } from "@/utils/recentTabs/hook"
+import { useNavigateToCreateFunction } from "@/utils/routeHelper/hook"
 import { IIntergrationModalProps } from "./interface"
 
 const IntergrationModal: FC<IIntergrationModalProps> = ({
@@ -11,7 +10,7 @@ const IntergrationModal: FC<IIntergrationModalProps> = ({
   onCancel,
 }) => {
   const { t } = useTranslation()
-  const createFunction = useAddCreateFunction()
+  const navigateToCreateFunction = useNavigateToCreateFunction()
 
   return (
     <Modal
@@ -22,11 +21,7 @@ const IntergrationModal: FC<IIntergrationModalProps> = ({
       title={t("editor.action.modal.title")}
       onCancel={onCancel}
     >
-      <IntegrationTypeSelector
-        onSelect={function (item: TIntegrationType): void {
-          createFunction(item)
-        }}
-      />
+      <IntegrationTypeSelector onSelect={navigateToCreateFunction} />
     </Modal>
   )
 }
