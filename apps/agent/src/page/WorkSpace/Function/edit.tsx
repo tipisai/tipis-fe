@@ -12,11 +12,11 @@ import {
 import { useGetIntegrationListQuery } from "@/redux/services/integrationAPI"
 import { useGetIconURL } from "@/utils/function/hook"
 import { useGetCurrentTeamInfo } from "@/utils/team"
-import EmptyTipis from "../AI/components/EmptyTipis"
 import TestRunResult from "./components/TestRunResult"
 import { IEditFunctionProps, IFunctionForm } from "./interface"
 import DocPanel from "./modules/DocPanel"
 import EditPanel from "./modules/EditPanel"
+import EmptyDetail from "./modules/Empty"
 import HeaderTools from "./modules/HeaderTools"
 import { contentContainerStyle, formStyle } from "./style"
 
@@ -40,7 +40,8 @@ const EditFunctionDataProvider: FC = () => {
     isError: isListError,
   } = useGetIntegrationListQuery(currentTeamInfo.id)
 
-  if (isDetailError || isListError) return <EmptyTipis tipisID={functionID!} />
+  if (isDetailError || isListError)
+    return <EmptyDetail functionID={functionID!} />
   if (isListLoading || isDetailLoading) return <FullSectionLoading />
 
   const formattedData: IFunctionForm | undefined = detailData
