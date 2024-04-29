@@ -164,3 +164,15 @@ export const useInitRecentTab = () => {
     initRecentTab()
   }, [initRecentTab])
 }
+
+export const useFindRecentTabByTabID = () => {
+  const recentTabs = useSelector(getRecentTabInfos)
+  const findRecentTabByID = useCallback(
+    (tabID: string) => {
+      return recentTabs.find((tab) => tab.tabID === tabID)
+    },
+    [recentTabs],
+  )
+
+  return findRecentTabByID
+}

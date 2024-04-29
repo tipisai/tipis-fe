@@ -32,6 +32,12 @@ import { findRecentTeamInfo, useGetCurrentTeamInfo } from "../team"
 export const NOT_HAS_TEAM_INFO_KEY = "NOT_HAS_TEAM_INFO"
 export const NOT_HAS_TARGET_TEAM_INFO_KEY = "NOT_HAS_TARGET_TEAM_INFO"
 
+export const useNavigateByTabID = () => {
+  const navigateByTabID = useCallback(async () => {}, [])
+
+  return navigateByTabID
+}
+
 export const useNavigateTargetWorkspace = () => {
   const navigate = useNavigate()
   const [getTeamsInfo] = useLazyGetTeamsInfoQuery()
