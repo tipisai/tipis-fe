@@ -33,7 +33,7 @@ const ContributeInfo: FC<IContributeInfoProps> = (props) => {
           <Avatar.Group>
             {contributors.map(({ avatar, userID, nickname }) => (
               <Avatar
-                src={avatar}
+                src={!!avatar ? avatar : undefined}
                 shape="circle"
                 size={32}
                 key={avatar}
