@@ -1,10 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import { HTTP_REQUEST_PERIPHERAL_BASE_URL } from "@illa-public/illa-net"
+import {
+  HTTP_REQUEST_PUBLIC_BASE_URL,
+  PERIPHERAL_REQUEST_PREFIX,
+} from "@illa-public/illa-net"
 
 export const peripheralAPI = createApi({
   reducerPath: "peripheralAPI",
   baseQuery: fetchBaseQuery({
-    baseUrl: HTTP_REQUEST_PERIPHERAL_BASE_URL,
+    baseUrl: `${HTTP_REQUEST_PUBLIC_BASE_URL}${PERIPHERAL_REQUEST_PREFIX}`,
   }),
   endpoints: (builder) => ({
     getWhiteListIP: builder.query<
@@ -14,7 +17,7 @@ export const peripheralAPI = createApi({
       void
     >({
       query: () => ({
-        url: `/v1/meta`,
+        url: `/meta`,
         method: "GET",
       }),
     }),

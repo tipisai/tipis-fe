@@ -3,7 +3,7 @@ import { Input } from "antd"
 import { FC } from "react"
 import { SearchIcon } from "@illa-public/icon"
 import TeamCardList from "../../../components/TeamCardList"
-import { useSearchTipisDashboard } from "../../../hook"
+import { useSearchFunctionDashboard } from "../../../utils"
 import MobileTeamCardListItem from "../../components/TeamCardListItem"
 import {
   cardListContainerStyle,
@@ -12,7 +12,7 @@ import {
 } from "./style"
 
 const DashboardContent: FC = () => {
-  const { searchValue, handleChangeSearchValue } = useSearchTipisDashboard()
+  const { searchValue, handleChangeSearchValue } = useSearchFunctionDashboard()
 
   return (
     <div css={dashboardContentStyle}>

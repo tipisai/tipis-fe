@@ -15,26 +15,28 @@ import {
   IFunctionDashBoardUIState,
   TFunctionDashboardUIStateAction,
 } from "./interface"
-import { INIT_DASH_BOARD_UI_STATE, reducer } from "./reducer"
+import { INIT_FUNCTION_DASHBOARD_UI_STATE, reducer } from "./reducer"
 
-interface IDashboardUIInject {
+interface IFunctionDashboardUIInject {
   dashboardUIState: IFunctionDashBoardUIState
   dispatch: Dispatch<TFunctionDashboardUIStateAction>
 }
 
-interface IDashBoardUIStateProviderProps {
+interface IFunctionDashBoardUIStateProviderProps {
   children: ReactNode
 }
 
-export const DashBoardUIStateContext = createContext({} as IDashboardUIInject)
+export const FunctionDashBoardUIStateContext = createContext(
+  {} as IFunctionDashboardUIInject,
+)
 
-export const DashboardUIStateProvider: FC<IDashBoardUIStateProviderProps> = ({
-  children,
-}) => {
+export const FunctionDashboardUIStateProvider: FC<
+  IFunctionDashBoardUIStateProviderProps
+> = ({ children }) => {
   const currentTeamID = useSelector(getCurrentId)
   const [dashboardUIState, dispatch] = useReducer(
     reducer,
-    INIT_DASH_BOARD_UI_STATE,
+    INIT_FUNCTION_DASHBOARD_UI_STATE,
   )
 
   useEffect(() => {
@@ -43,7 +45,8 @@ export const DashboardUIStateProvider: FC<IDashBoardUIStateProviderProps> = ({
       dispatch({
         type: FUNCTION_DASHBOARD_UI_STATE_ACTION_TYPE.SET_UI_STATE,
         payload:
-          (uiState as IFunctionDashBoardUIState) ?? INIT_DASH_BOARD_UI_STATE,
+          (uiState as IFunctionDashBoardUIState) ??
+          INIT_FUNCTION_DASHBOARD_UI_STATE,
       })
     }
 
@@ -51,8 +54,10 @@ export const DashboardUIStateProvider: FC<IDashBoardUIStateProviderProps> = ({
   }, [currentTeamID])
 
   return (
-    <DashBoardUIStateContext.Provider value={{ dashboardUIState, dispatch }}>
+    <FunctionDashBoardUIStateContext.Provider
+      value={{ dashboardUIState, dispatch }}
+    >
       {children}
-    </DashBoardUIStateContext.Provider>
+    </FunctionDashBoardUIStateContext.Provider>
   )
 }
