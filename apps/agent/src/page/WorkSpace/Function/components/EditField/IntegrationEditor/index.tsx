@@ -12,12 +12,12 @@ import {
 import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Function/LayoutBlock"
 import IntegrationSelectorModal from "@/Modules/Integration/CreateOrSelectIntegration/modal"
+import { SELECT_INTEGRATION_STEP } from "@/Modules/Integration/CreateOrSelectIntegration/modules/SelectAndCreate/interface"
 import { useAppDispatch } from "@/redux/hooks"
 import { integrationAPI } from "@/redux/services/integrationAPI"
+import { CREATE_INTEGRATION_EVENT } from "@/utils/eventEmitter/constants"
+import { IntegrationEventEmitter } from "@/utils/function"
 import { useGetCurrentTeamInfo } from "@/utils/team"
-import { SELECT_INTEGRATION_STEP } from "../../../../../../../Modules/Integration/CreateOrSelectIntegration/modules/SelectAndCreate/interface"
-import { CREATE_INTEGRATION_EVENT } from "../../../../../../../utils/eventEmitter/constants"
-import { IntegrationEventEmitter } from "../../../../../../../utils/function"
 import { IFunctionForm } from "../../../interface"
 import {
   buttonStyle,

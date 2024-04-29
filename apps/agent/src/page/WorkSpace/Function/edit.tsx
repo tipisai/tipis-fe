@@ -12,7 +12,7 @@ import {
 import { useGetIntegrationListQuery } from "@/redux/services/integrationAPI"
 import { useGetIconURL } from "@/utils/function/hook"
 import { useGetCurrentTeamInfo } from "@/utils/team"
-import EmptyTipis from "../../AI/components/EmptyTipis"
+import EmptyTipis from "../AI/components/EmptyTipis"
 import TestRunResult from "./components/TestRunResult"
 import { IEditFunctionProps, IFunctionForm } from "./interface"
 import DocPanel from "./modules/DocPanel"

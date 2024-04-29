@@ -6,7 +6,7 @@ import { DEFAULT_LARK_BOT_PARAMETERS } from "@illa-public/public-configs/functio
 import { DEFAULT_TENCENT_COS_PARAMETERS } from "@illa-public/public-configs/function/tencentCos"
 import { TENCENT_COS_ACTION_OPERATION } from "@illa-public/public-types"
 import { IVariables, VARIABLE_TYPE } from "@illa-public/public-types"
-import { IFunctionForm } from "@/page/WorkSpace/Function/CreateOrEdit/interface"
+import { IFunctionForm } from "@/page/WorkSpace/Function/interface"
 import {
   useGetAIToolIconUploadAddressMutation,
   useTestRunAIToolsMutation,

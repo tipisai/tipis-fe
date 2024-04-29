@@ -93,11 +93,9 @@ const TeamMembers = lazy(() => import("@/page/SettingPage/team/member"))
 const FunctionDashboard = lazy(
   () => import("@/page/WorkSpace/FunctionDashboard"),
 )
-const EditFunctionPage = lazy(
-  () => import("@/page/WorkSpace/Function/CreateOrEdit/edit"),
-)
+const EditFunctionPage = lazy(() => import("@/page/WorkSpace/Function/edit"))
 const CreateFunctionPage = lazy(
-  () => import("@/page/WorkSpace/Function/CreateOrEdit/create"),
+  () => import("@/page/WorkSpace/Function/create"),
 )
 
 /**
