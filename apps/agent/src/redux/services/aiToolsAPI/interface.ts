@@ -46,7 +46,7 @@ export interface IAIToolDTO<T> {
 
 export interface IGetAllAIToolsListResponseDTO {
   aiToolList: IAIToolDTO<unknown>[]
-  totalAIToolCount: number
+  hasMore: boolean
 }
 
 export interface ICreateOrUpdateAIToolRequestDTO<T> {

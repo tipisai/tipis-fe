@@ -12,7 +12,6 @@ import {
 } from "@/redux/ui/recentTab/selector"
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import {
-  getCreateFunctionPath,
   getEditTipiPath,
   getMarketTipiDetailPath,
   getRunTipiPath,
@@ -441,25 +440,35 @@ export const useAddExploreFunctionsTab = () => {
   return addExploreTipisTab
 }
 
-export const useCreateFunction = () => {
-  const navigate = useNavigate()
+export const useAddCreateFunction = () => {
+  const dispatch = useDispatch()
   const addRecentTab = useAddRecentTabReducer()
 
-  const createFunction = useCallback(
+  const addCreateFunctionTab = useCallback(
     async (functionType: string) => {
-      const currentTeamInfo = getCurrentTeamInfo(store.getState())!
-      const tabsInfo: ITabInfo = {
-        tabName: "",
-        tabIcon: "",
-        tabType: TAB_TYPE.CREATE_FUNCTION,
-        tabID: CREATE_FUNCTION_ID,
-        cacheID: functionType,
+      const historyTabs = getRecentTabInfos(store.getState())
+      const createFunctionTab = historyTabs.find(
+        (tab) => tab.tabType === TAB_TYPE.CREATE_FUNCTION,
+      )
+      if (!createFunctionTab) {
+        const tabsInfo: ITabInfo = {
+          tabName: "",
+          tabIcon: "",
+          tabType: TAB_TYPE.CREATE_FUNCTION,
+          tabID: CREATE_FUNCTION_ID,
+          cacheID: functionType,
+        }
+        await addRecentTab(tabsInfo)
+      } else {
+        dispatch(
+          recentTabActions.updateCurrentRecentTabIDReducer(
+            createFunctionTab.tabID,
+          ),
+        )
       }
-      await addRecentTab(tabsInfo)
-      navigate(getCreateFunctionPath(currentTeamInfo?.identifier, functionType))
     },
-    [addRecentTab, navigate],
+    [addRecentTab, dispatch],
   )
 
-  return createFunction
+  return addCreateFunctionTab
 }

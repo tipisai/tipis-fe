@@ -1,21 +1,20 @@
 import { List } from "antd"
 import Fuse from "fuse.js"
 import { FC, useContext } from "react"
-import { TipisTrack } from "@illa-public/track-utils"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import TeamNoData from "@/components/TeamNoData"
 import { useGetAllAIToolsListQuery } from "@/redux/services/aiToolsAPI"
 import { canShowCreateFunction } from "@/utils/UIHelper/functions"
-import { useNavigateToCreateTipis } from "@/utils/routeHelper/hook"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import { DashBoardUIStateContext } from "../../context/functionDashboard"
+import { FunctionDashboardContext } from "../../pc/context"
 import { ITeamCardListProps } from "./interface"
 
 const TeamCardList: FC<ITeamCardListProps> = (props) => {
   const { RenderItem } = props
   const currentTeamInfo = useGetCurrentTeamInfo()
 
-  const navigateToCreateTipis = useNavigateToCreateTipis()
+  const { changeCreateFunctionModal } = useContext(FunctionDashboardContext)
 
   const { dashboardUIState } = useContext(DashBoardUIStateContext)
   const { search } = dashboardUIState
@@ -26,17 +25,14 @@ const TeamCardList: FC<ITeamCardListProps> = (props) => {
   })
 
   const handleClickCreateTipis = () => {
-    TipisTrack.track("click_create_tipi_entry", {
-      parameter2: "right_corner",
-    })
-    navigateToCreateTipis()
+    changeCreateFunctionModal(true)
   }
 
   if (isLoading) {
     return <FullSectionLoading />
   }
 
-  if (data?.totalAIToolCount === 0) {
+  if (data?.aiToolList.length === 0) {
     return (
       <TeamNoData
         showCreate={!!canShowCreateFunction(currentTeamInfo)}

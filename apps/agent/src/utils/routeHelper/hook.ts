@@ -4,6 +4,7 @@ import { useLazyGetTeamsInfoQuery } from "@illa-public/user-data"
 import {
   EMPTY_TEAM_PATH,
   getChatPath,
+  getCreateFunctionPath,
   getCreateTipiPath,
   getEditTipiPath,
   getExploreFunctionsPath,
@@ -14,6 +15,7 @@ import {
 } from "."
 import {
   useAddChatTab,
+  useAddCreateFunction,
   useAddCreateTipisTab,
   useAddExploreFunctionsTab,
   useAddExploreTipisTab,
@@ -221,4 +223,23 @@ export const useNavigateToExploreFunction = () => {
     }
   }, [addExploreFunctionTab, currentTeamInfo?.identifier, navigate])
   return navigateToExploreTipis
+}
+
+export const useNavigateToCreateFunction = () => {
+  const navigate = useNavigate()
+  const currentTeamInfo = useGetCurrentTeamInfo()
+  const addCreateFunctionTab = useAddCreateFunction()
+
+  const navigateToCreteTipis = useCallback(
+    async (functionType: string) => {
+      await addCreateFunctionTab(functionType)
+      if (currentTeamInfo?.identifier) {
+        navigate(
+          getCreateFunctionPath(currentTeamInfo?.identifier, functionType),
+        )
+      }
+    },
+    [addCreateFunctionTab, currentTeamInfo?.identifier, navigate],
+  )
+  return navigateToCreteTipis
 }

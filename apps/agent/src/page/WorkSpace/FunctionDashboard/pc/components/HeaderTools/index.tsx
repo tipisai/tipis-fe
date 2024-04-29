@@ -1,5 +1,5 @@
 import Icon from "@ant-design/icons"
-import { Button, Input, Modal } from "antd"
+import { Button, Input } from "antd"
 import { debounce } from "lodash-es"
 import {
   ChangeEvent,
@@ -11,21 +11,16 @@ import {
   useRef,
   useState,
 } from "react"
-import { useTranslation } from "react-i18next"
 import { PlusIcon, SearchIcon } from "@illa-public/icon"
-import { TIntegrationType } from "@illa-public/public-types"
-import { IntegrationTypeSelector } from "@/Modules/Integration/IntegrationSelector"
-import { useCreateFunction } from "@/utils/recentTabs/hook"
 import { DashBoardUIStateContext } from "../../../context/functionDashboard"
 import { FUNCTION_DASHBOARD_UI_STATE_ACTION_TYPE } from "../../../context/interface"
+import { FunctionDashboardContext } from "../../context"
 import { headerToolsContainerStyle } from "./style"
 
 const HeaderTools: FC = () => {
-  const createFunction = useCreateFunction()
-  const [canShowModal, setShowModal] = useState(false)
-  const { t } = useTranslation()
-
   const { dispatch, dashboardUIState } = useContext(DashBoardUIStateContext)
+
+  const { changeCreateFunctionModal } = useContext(FunctionDashboardContext)
 
   const { search } = dashboardUIState
   const [searchValue, setSearchValue] = useState(search)
@@ -63,15 +58,7 @@ const HeaderTools: FC = () => {
   )
 
   const handleClickCreateFunction = () => {
-    setShowModal(true)
-    // modal.info({
-    //   title: "Create",
-    //   icon: null,
-    //   width: 1080,
-    //   content: (
-
-    //   ),
-    // })
+    changeCreateFunctionModal(true)
   }
 
   return (
@@ -93,23 +80,6 @@ const HeaderTools: FC = () => {
           Create
         </Button>
       </div>
-
-      <Modal
-        open={canShowModal}
-        destroyOnClose
-        width={1080}
-        footer={false}
-        title={t("editor.action.modal.title")}
-        onCancel={() => {
-          setShowModal(false)
-        }}
-      >
-        <IntegrationTypeSelector
-          onSelect={function (item: TIntegrationType): void {
-            createFunction(item)
-          }}
-        />
-      </Modal>
     </>
   )
 }

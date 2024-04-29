@@ -3,7 +3,7 @@ import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { TIntegrationType } from "@illa-public/public-types"
 import { IntegrationTypeSelector } from "@/Modules/Integration/IntegrationSelector"
-import { useCreateFunction } from "@/utils/recentTabs/hook"
+import { useAddCreateFunction } from "@/utils/recentTabs/hook"
 import { IIntergrationModalProps } from "./interface"
 
 const IntergrationModal: FC<IIntergrationModalProps> = ({
@@ -11,7 +11,7 @@ const IntergrationModal: FC<IIntergrationModalProps> = ({
   onCancel,
 }) => {
   const { t } = useTranslation()
-  const createFunction = useCreateFunction()
+  const createFunction = useAddCreateFunction()
 
   return (
     <Modal
