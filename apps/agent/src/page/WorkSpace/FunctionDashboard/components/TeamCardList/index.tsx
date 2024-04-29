@@ -25,11 +25,21 @@ const TeamCardList: FC<ITeamCardListProps> = (props) => {
     changeCreateFunctionModal(true)
   }
 
+  const fuseSearch = new Fuse(data?.aiToolList ?? [], {
+    keys: ["name", "description"],
+  }).search(search ?? "")
+
+  const searchResult = search
+    ? fuseSearch.length > 0
+      ? fuseSearch.map((s) => s.item)
+      : []
+    : data?.aiToolList ?? []
+
   if (isLoading) {
     return <FullSectionLoading />
   }
 
-  if (data?.aiToolList.length === 0) {
+  if (searchResult.length === 0) {
     return (
       <TeamNoData
         showCreate={!!canShowCreateFunction(currentTeamInfo)}
@@ -37,13 +47,6 @@ const TeamCardList: FC<ITeamCardListProps> = (props) => {
       />
     )
   }
-
-  const fuseSearch = new Fuse(data?.aiToolList ?? [], {
-    keys: ["name", "description"],
-  }).search(search ?? "")
-
-  const searchResult =
-    fuseSearch.length > 0 ? fuseSearch.map((s) => s.item) : data?.aiToolList
 
   return (
     <List

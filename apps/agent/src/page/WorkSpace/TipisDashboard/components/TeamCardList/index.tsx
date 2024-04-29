@@ -36,6 +36,16 @@ const TeamCardList: FC<ITeamCardListProps> = (props) => {
     navigateToCreateTipis()
   }
 
+  const fuseSearch = new Fuse(data?.aiAgentList ?? [], {
+    keys: ["name", "description"],
+  }).search(search ?? "")
+
+  const searchResult = search
+    ? fuseSearch.length > 0
+      ? fuseSearch.map((s) => s.item)
+      : []
+    : data?.aiAgentList ?? []
+
   if (isLoading) {
     return <FullSectionLoading />
   }
@@ -48,13 +58,6 @@ const TeamCardList: FC<ITeamCardListProps> = (props) => {
       />
     )
   }
-
-  const fuseSearch = new Fuse(data.aiAgentList, {
-    keys: ["name", "description"],
-  }).search(search ?? "")
-
-  const searchResult =
-    fuseSearch.length > 0 ? fuseSearch.map((s) => s.item) : data.aiAgentList
 
   return (
     <List
