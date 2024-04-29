@@ -137,7 +137,6 @@ const PCInputArea: FC<IInputAreaProps> = (props) => {
         })
       }
 
-      console.log("needUploadFiles", needUploadFiles)
       currentFiles.push(
         ...needUploadFiles.map((item) => ({
           fileName: item.fileName,
@@ -270,19 +269,22 @@ const PCInputArea: FC<IInputAreaProps> = (props) => {
     [disableSend, knowledgeFiles, sendAndClearMessage, textAreaVal],
   )
 
-  const getNeedUploadAndNotAcceptFiles = useCallback((files: FileList) => {
-    const needUpdateFilesArray: File[] = []
-    const notAcceptFilesArray: File[] = []
-    Array.from(files).map((file) => {
-      const contentType = getRealFileType(file, file.name.split(".")[1])
-      if (!contentType) {
-        notAcceptFilesArray.push(file)
-      } else {
-        needUpdateFilesArray.push(file)
+  const getNeedUploadAndNotAcceptFiles = useCallback(
+    async (files: FileList) => {
+      const needUpdateFilesArray: File[] = []
+      const notAcceptFilesArray: File[] = []
+      for (let file of files) {
+        const contentType = await getRealFileType(file, file.name.split(".")[1])
+        if (!contentType) {
+          notAcceptFilesArray.push(file)
+        } else {
+          needUpdateFilesArray.push(file)
+        }
       }
-    })
-    return { needUpdateFilesArray, notAcceptFilesArray }
-  }, [])
+      return { needUpdateFilesArray, notAcceptFilesArray }
+    },
+    [],
+  )
 
   const handleOnPaste = useCallback(
     async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
@@ -294,7 +296,7 @@ const PCInputArea: FC<IInputAreaProps> = (props) => {
       e.preventDefault()
 
       const { needUpdateFilesArray, notAcceptFilesArray } =
-        getNeedUploadAndNotAcceptFiles(e.clipboardData.files)
+        await getNeedUploadAndNotAcceptFiles(e.clipboardData.files)
 
       if (notAcceptFilesArray.length > 0) {
         TipisTrack.track("chat_file_format_error", {
@@ -333,7 +335,7 @@ const PCInputArea: FC<IInputAreaProps> = (props) => {
       })
       setIsDragFileOver(false)
       const { needUpdateFilesArray, notAcceptFilesArray } =
-        getNeedUploadAndNotAcceptFiles(e.dataTransfer.files)
+        await getNeedUploadAndNotAcceptFiles(e.dataTransfer.files)
 
       if (notAcceptFilesArray.length > 0) {
         TipisTrack.track("chat_file_format_error", {
