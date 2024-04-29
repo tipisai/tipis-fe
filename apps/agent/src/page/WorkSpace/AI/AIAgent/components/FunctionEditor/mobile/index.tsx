@@ -1,7 +1,8 @@
 import { Typography } from "antd"
-import { FC, memo, useState } from "react"
+import { FC, memo, useEffect, useState } from "react"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
+import { useParams } from "react-router-dom"
 import { IEditorAIToolsVO } from "@illa-public/public-types"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { IAgentForm } from "../../../interface"
@@ -16,6 +17,7 @@ const FunctionsEditorMobile: FC = memo(() => {
 
   const { control, getValues, setValue } = useFormContext<IAgentForm>()
   const [selectModalVisible, setSelectModalVisible] = useState(false)
+  const { aiToolID, aiToolName, aiToolIcon } = useParams()
 
   const [fieldAiTools] = useWatch({
     control,
@@ -38,6 +40,29 @@ const FunctionsEditorMobile: FC = memo(() => {
   const handleOpenSelectModal = async () => {
     setSelectModalVisible(true)
   }
+
+  useEffect(() => {
+    if (aiToolID && aiToolIcon && aiToolName) {
+      const aiTools = getValues("aiTools")
+      if (aiTools.some((item) => item.aiToolID === aiToolID)) {
+        return
+      }
+      setValue(
+        "aiTools",
+        [
+          ...aiTools,
+          {
+            aiToolID,
+            name: aiToolName,
+            config: {
+              icon: aiToolIcon,
+            },
+          },
+        ],
+        { shouldDirty: true },
+      )
+    }
+  }, [aiToolID, aiToolIcon, aiToolName, getValues, setValue])
 
   return (
     <>
