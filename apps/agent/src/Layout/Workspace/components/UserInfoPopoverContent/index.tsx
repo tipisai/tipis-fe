@@ -44,6 +44,11 @@ const UserInfoPopoverContent: FC = () => {
     })
     show()
   }
+
+  const onClickOpenDocs = () => {
+    TipisTrack.track("open_docs")
+    window.open("https://help.tipis.ai", "_blank")
+  }
   return (
     <ConfigProvider
       theme={{
@@ -61,7 +66,7 @@ const UserInfoPopoverContent: FC = () => {
             {t("homepage.left_panel.setting.help_center")}
           </div>
         </Button>
-        <Button type="text" block size="large" onClick={onClickChatWithUs}>
+        <Button type="text" block size="large" onClick={onClickOpenDocs}>
           <div css={buttonContentContainerStyle}>
             <Icon component={DocumentIcon} css={iconContainerStyle} />
             {t("homepage.left_panel.setting.documentation")}

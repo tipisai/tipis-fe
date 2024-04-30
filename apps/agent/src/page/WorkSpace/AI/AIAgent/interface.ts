@@ -2,6 +2,7 @@ import {
   AI_AGENT_MODEL,
   AI_AGENT_TYPE,
   Agent,
+  IEditorAIToolsVO,
   SCHEDULE_TYPES,
 } from "@illa-public/public-types"
 import { ILLADayjs } from "@illa-public/utils"
@@ -9,8 +10,15 @@ import { ILLADayjs } from "@illa-public/utils"
 export interface IAgentForm
   extends Omit<
     Agent,
-    "createdAt" | "createdBy" | "updatedBy" | "updatedAt" | "editedBy"
-  > {}
+    | "createdAt"
+    | "createdBy"
+    | "updatedBy"
+    | "updatedAt"
+    | "editedBy"
+    | "aiToolIDs"
+  > {
+  aiTools: IEditorAIToolsVO[]
+}
 
 export const AgentInitial: IAgentForm = {
   name: "",
@@ -30,6 +38,7 @@ export const AgentInitial: IAgentForm = {
   teamName: "",
   teamIdentifier: "",
   publishedToMarketplace: false,
+  aiTools: [],
   schedule: {
     enabled: false,
     timezone: ILLADayjs.tz.guess(),

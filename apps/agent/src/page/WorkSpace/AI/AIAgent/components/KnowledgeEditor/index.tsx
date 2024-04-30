@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next"
 import { IKnowledgeFile } from "@illa-public/public-types"
 import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
+import KnowledgeUpload from "@/page/WorkSpace/AI/AIAgent/components/KnowledgeEditor/components/KnowledgeUpload"
 import { IAgentForm, SCROLL_ID } from "@/page/WorkSpace/AI/AIAgent/interface"
-import KnowledgeUpload from "@/page/WorkSpace/AI/components/KnowledgeUpload"
 import { UploadContext } from "../UploadContext"
 import { descStyle } from "./style"
 
@@ -55,7 +55,7 @@ const KnowledgeEditor: FC = memo(() => {
             values={field.value}
           />
           {errors.knowledge?.message && (
-            <ErrorText errorMessage={errors.knowledge?.message} />
+            <ErrorText message={errors.knowledge?.message} />
           )}
         </LayoutBlock>
       )}

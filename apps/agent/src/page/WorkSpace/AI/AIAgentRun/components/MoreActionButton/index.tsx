@@ -76,7 +76,10 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
         icon: <Icon component={isPined ? UnPinIcon : PinIcon} />,
       },
     ]
-    if (canShownEditTipi(currentTeamInfo)) {
+    if (
+      canShownEditTipi(currentTeamInfo) &&
+      ownerTeamIdentifier === currentTeamInfo?.identifier
+    ) {
       originMenuItems.push({
         key: "edit",
         label: t("dashboard.common.edit"),
@@ -105,7 +108,14 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
       icon: <Icon component={InfoIcon} />,
     })
     return originMenuItems
-  }, [currentTeamInfo, isMobile, isPined, publishConfiguration, t])
+  }, [
+    currentTeamInfo,
+    isMobile,
+    isPined,
+    ownerTeamIdentifier,
+    publishConfiguration,
+    t,
+  ])
 
   const onClickMenuItem: MenuProps["onClick"] = async ({ key, domEvent }) => {
     domEvent.stopPropagation()

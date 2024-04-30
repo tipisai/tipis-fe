@@ -1,5 +1,5 @@
 import { FC } from "react"
-import { CodeEditor } from "@illa-public/code-editor"
+import { CodeEditor } from "@illa-public/code-editor-new"
 import { IPromptProps } from "./interface"
 import { knowledgeContainerStyle, labelStyle } from "./style"
 
@@ -8,7 +8,9 @@ const Prompt: FC<IPromptProps> = (props) => {
     <div css={knowledgeContainerStyle}>
       <p css={labelStyle}>Prompt</p>
       <CodeEditor
-        minWidth="100%"
+        styles={{
+          minWidth: "100%",
+        }}
         readOnly
         editable={false}
         value={props.prompt}

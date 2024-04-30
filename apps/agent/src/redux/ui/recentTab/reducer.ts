@@ -40,7 +40,7 @@ export const deleteRecentTabReducer: CaseReducer<
   }
 }
 
-export const deleteRecentTabByTipisIDReducer: CaseReducer<
+export const deleteRecentTabByCacheIDReducer: CaseReducer<
   IRecentTabState,
   PayloadAction<string>
 > = (state, action) => {

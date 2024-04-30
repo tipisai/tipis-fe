@@ -3,9 +3,8 @@ import { App as AntdContextProvider, ConfigProvider, ThemeConfig } from "antd"
 import { HelmetProvider } from "react-helmet-async"
 import { IntercomProvider } from "react-use-intercom"
 import tipisThemConfig from "@/config/them/theme-tipis.json"
-import { illaCodeMirrorTooltipStyle } from "./components/CodeEditor/CodeMirror/theme"
 import { ILLARouterProvider } from "./router/config"
-import { globalStyle } from "./style"
+import { globalStyle, globalTooltipContainerStyle } from "./style"
 import AntdStore from "./utils/antdStore"
 
 function App() {
@@ -23,7 +22,7 @@ function App() {
           </IntercomProvider>
           <div
             className="illaCodeMirrorWrapper"
-            css={illaCodeMirrorTooltipStyle}
+            css={globalTooltipContainerStyle}
           />
         </HelmetProvider>
       </AntdContextProvider>

@@ -3,6 +3,7 @@ import { Input } from "antd"
 import { FC } from "react"
 import { SearchIcon } from "@illa-public/icon"
 import TeamCardList from "../../../components/TeamCardList"
+import { useSearchTipisDashboard } from "../../../hook"
 import MobileTeamCardListItem from "../../components/TeamCardListItem"
 import {
   cardListContainerStyle,
@@ -11,6 +12,8 @@ import {
 } from "./style"
 
 const DashboardContent: FC = () => {
+  const { searchValue, handleChangeSearchValue } = useSearchTipisDashboard()
+
   return (
     <div css={dashboardContentStyle}>
       <div css={searchInputStyle}>
@@ -18,6 +21,8 @@ const DashboardContent: FC = () => {
           placeholder="Search"
           prefix={<Icon component={SearchIcon} />}
           size="large"
+          value={searchValue}
+          onChange={handleChangeSearchValue}
         />
       </div>
 

@@ -45,20 +45,20 @@ export const removeRecentTabsAndCacheData = async (
   setTeamDataByTeamID(teamID, newTeamData)
 }
 
-export const removeRecentTabsAndCacheDataByTipisID = async (
+export const removeRecentTabsAndCacheDataByCacheID = async (
   teamID: string,
-  tipisID: string,
+  cacheID: string,
 ) => {
   const teamData = await getTeamDataByTeamID(teamID)
   if (!teamData) return
   const tabs = teamData.tabsInfo ?? []
-  const targetTabs = tabs.filter((tab) => tab.cacheID === tipisID)
+  const targetTabs = tabs.filter((tab) => tab.cacheID === cacheID)
   if (targetTabs.length === 0) return
   const cacheUIHistory = teamData.uiHistory ?? {}
   targetTabs.forEach((tab) => {
     delete cacheUIHistory[tab.tabID]
   })
-  const newTabs = tabs.filter((tab) => tab.cacheID !== tipisID)
+  const newTabs = tabs.filter((tab) => tab.cacheID !== cacheID)
   const newTeamData = klona(teamData)
   newTeamData.tabsInfo = newTabs
   newTeamData.uiHistory = cacheUIHistory
