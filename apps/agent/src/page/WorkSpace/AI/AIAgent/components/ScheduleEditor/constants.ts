@@ -1,5 +1,7 @@
 import i18next from "i18next"
+import { SCHEDULE_TYPES } from "@illa-public/public-types"
 import { ILLADayjs } from "@illa-public/utils"
+import i18n from "@/i18n"
 
 export const TIMEZONES = [
   {
@@ -4491,3 +4493,26 @@ export const timezoneOptions = [
     value: timezone.name,
   })).filter((timezone) => timezone.value !== ILLADayjs.tz.guess()),
 )
+
+export const SCHEDULE_TYPE_OPTIONS = [
+  {
+    label: i18n.t("flow.editor.trigger.schedule.every_hour"),
+    value: SCHEDULE_TYPES.EVERY_HOUR,
+  },
+  {
+    label: i18n.t("flow.editor.trigger.schedule.every_day"),
+    value: SCHEDULE_TYPES.EVERY_DAY,
+  },
+  {
+    label: i18n.t("flow.editor.trigger.schedule.every_week"),
+    value: SCHEDULE_TYPES.EVERY_WEEK,
+  },
+  {
+    label: i18n.t("flow.editor.trigger.schedule.every_mont"),
+    value: SCHEDULE_TYPES.EVERY_MONTH,
+  },
+  {
+    label: i18n.t("flow.editor.trigger.schedule.every_year"),
+    value: SCHEDULE_TYPES.EVERY_YEAR,
+  },
+]

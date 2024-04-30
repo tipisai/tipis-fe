@@ -1,18 +1,13 @@
 import { Select } from "antd"
 import { FC, memo, useCallback } from "react"
-import {
-  Controller,
-  useController,
-  useFormContext,
-  useWatch,
-} from "react-hook-form"
+import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { SCHEDULE_TYPES } from "@illa-public/public-types"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import BlackSwitch from "@/components/BlackSwitch"
 import { IAgentForm } from "../../interface"
 import RowContainer from "./components/RowContainer"
-import { timezoneOptions } from "./constants"
+import { SCHEDULE_TYPE_OPTIONS, timezoneOptions } from "./constants"
 import { SCHEDULE_TYPE_MAP_SETTER } from "./module/ScheduleRule"
 import { scheduleContainerStyle } from "./style"
 import { getInitScheduleOptions } from "./utils"
@@ -20,63 +15,23 @@ import { getInitScheduleOptions } from "./utils"
 const ScheduleEditor: FC = memo(() => {
   const { t } = useTranslation()
 
-  const { control, getValues } = useFormContext<IAgentForm>()
+  const { control } = useFormContext<IAgentForm>()
 
   const [schedules, triggerIsActive] = useWatch({
     control: control,
     name: ["triggerConfig.schedule", "triggerIsActive"],
   })
 
-  const {
-    field: { onChange },
-  } = useController({
-    control,
-    name: "triggerConfig.schedule",
-  })
+  const getScheduleTypeSetter = useCallback((type: SCHEDULE_TYPES) => {
+    return SCHEDULE_TYPE_MAP_SETTER[type]
+  }, [])
 
-  const getScheduleTypeSetter = useCallback(
-    (i: number) => {
-      return SCHEDULE_TYPE_MAP_SETTER[schedules[i].scheduleConfig.type]
-    },
-    [schedules],
-  )
-
-  const SCHEDULE_TYPE_OPTIONS = [
-    {
-      label: t("flow.editor.trigger.schedule.every_hour"),
-      value: SCHEDULE_TYPES.EVERY_HOUR,
-    },
-    {
-      label: t("flow.editor.trigger.schedule.every_day"),
-      value: SCHEDULE_TYPES.EVERY_DAY,
-    },
-    {
-      label: t("flow.editor.trigger.schedule.every_week"),
-      value: SCHEDULE_TYPES.EVERY_WEEK,
-    },
-    {
-      label: t("flow.editor.trigger.schedule.every_mont"),
-      value: SCHEDULE_TYPES.EVERY_MONTH,
-    },
-    {
-      label: t("flow.editor.trigger.schedule.every_year"),
-      value: SCHEDULE_TYPES.EVERY_YEAR,
-    },
-  ]
-
-  const handleUpdateScheduleType = (v: SCHEDULE_TYPES, i: number) => {
-    const { schedule } = getValues("triggerConfig")
-    const currentSchedule = [...schedule]
+  const getUpdateScheduleConfig = (v: SCHEDULE_TYPES) => {
     const initOptions = getInitScheduleOptions(v)
-    currentSchedule[i] = {
-      ...currentSchedule[i],
-      scheduleConfig: {
-        type: v,
-        options: initOptions,
-      },
+    return {
+      type: v,
+      options: initOptions,
     }
-
-    onChange(currentSchedule)
   }
 
   if (!Array.isArray(schedules) || schedules.length === 0) {
@@ -118,7 +73,7 @@ const ScheduleEditor: FC = memo(() => {
 
         <Controller
           control={control}
-          name={`triggerConfig.schedule.${i}.scheduleConfig.type`}
+          name={`triggerConfig.schedule.${i}.scheduleConfig`}
           render={({ field }) => (
             <RowContainer
               labelName={t("flow.editor.trigger.schedule.schedule_t")}
@@ -129,8 +84,11 @@ const ScheduleEditor: FC = memo(() => {
                 style={{
                   width: 206,
                 }}
-                value={field.value}
-                onChange={(v) => handleUpdateScheduleType(v, i)}
+                value={field.value.type}
+                onChange={(v) => {
+                  const scheduleConfig = getUpdateScheduleConfig(v)
+                  field.onChange(scheduleConfig)
+                }}
                 disabled={!triggerIsActive}
               />
             </RowContainer>
@@ -139,16 +97,19 @@ const ScheduleEditor: FC = memo(() => {
 
         <Controller
           control={control}
-          name={`triggerConfig.schedule.${i}.scheduleConfig.options`}
+          name={`triggerConfig.schedule.${i}.scheduleConfig`}
           render={({ field }) => {
-            const ScheduleTypeSetter = getScheduleTypeSetter(i)
+            const ScheduleTypeSetter = getScheduleTypeSetter(field.value.type)
             return (
               <ScheduleTypeSetter
-                options={field.value}
+                options={field.value.options}
                 handleUpdateIScheduleOptions={(value) => {
                   field.onChange({
-                    ...field.value,
-                    ...value,
+                    type: field.value.type,
+                    options: {
+                      ...field.value.options,
+                      ...value,
+                    },
                   })
                 }}
                 enabled={triggerIsActive}
