@@ -48,7 +48,7 @@ const CreateFunction: FC = () => {
     if (functionType) {
       createFunctionTab(functionType)
     }
-  })
+  }, [createFunctionTab, functionType])
 
   const { control, reset } = methods
 

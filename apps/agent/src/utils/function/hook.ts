@@ -314,7 +314,6 @@ export const useOpenTipsWhenSubmit = () => {
 
       case CREATE_FUNCTION_FROM_SINGLE.CREATE_TIPIS: {
         message.success(t("function.edit.message.created"))
-
         break
       }
     }
