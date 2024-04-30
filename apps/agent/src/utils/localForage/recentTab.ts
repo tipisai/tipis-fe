@@ -1,16 +1,15 @@
 import { klona } from "klona/json"
 import { ITabInfo } from "@/redux/ui/recentTab/interface"
-import { DEFAULT_CHAT_ID, INIT_TABS } from "@/redux/ui/recentTab/state"
+import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 import { ITeamData } from "./interface"
 import { getTeamDataByTeamID, setTeamDataByTeamID } from "./teamData"
 
 export const getRecentTabs = async (teamID: string) => {
   const teamData = await getTeamDataByTeamID(teamID)
   if (!teamData) {
-    await setRecentTabs(teamID, INIT_TABS)
-    return INIT_TABS
+    return []
   }
-  const tabsInfo = teamData.tabsInfo ?? INIT_TABS
+  const tabsInfo = teamData.tabsInfo ?? []
   return tabsInfo
 }
 
@@ -70,7 +69,7 @@ export const removeAllRecentTabsAndCacheData = async (teamID: string) => {
   if (!teamData) return
   const newTeamData = klona(teamData)
   const defaultCache = teamData.uiHistory?.[DEFAULT_CHAT_ID] ?? {}
-  newTeamData.tabsInfo = INIT_TABS
+  newTeamData.tabsInfo = []
   newTeamData.uiHistory = {
     [DEFAULT_CHAT_ID]: defaultCache,
   }
