@@ -55,11 +55,9 @@ const YearScheduleSetter: FC<IScheduleRuleProps> = (props) => {
           style={{
             width: 206,
           }}
-          options={
-            options.month ? DATE_OPTIONS_MAP[options.month as number] : []
-          }
+          options={options.month ? DATE_OPTIONS_MAP[options.month] : []}
           onChange={(v) => {
-            handleUpdateIScheduleOptions({ dayOfMonth: v as string })
+            handleUpdateIScheduleOptions({ dayOfMonth: v })
           }}
         />
       </RowContainer>

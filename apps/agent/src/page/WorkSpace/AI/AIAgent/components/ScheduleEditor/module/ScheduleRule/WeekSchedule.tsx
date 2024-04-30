@@ -2,7 +2,7 @@ import { Select, TimePicker } from "antd"
 import dayjs, { Dayjs } from "dayjs"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
-import { DAY_OF_WEEK, SCHEDULE_TYPES } from "@illa-public/public-types"
+import { SCHEDULE_TYPES } from "@illa-public/public-types"
 import RowContainer from "../../components/RowContainer"
 import IntervalSetter from "../IntervalSetter"
 import { DAY_OF_WEEK_OPTIONS } from "./config"
@@ -42,7 +42,7 @@ const WeekScheduleSetter: FC<IScheduleRuleProps> = (props) => {
           options={DAY_OF_WEEK_OPTIONS}
           onChange={(v) => {
             handleUpdateIScheduleOptions({
-              weekday: v as DAY_OF_WEEK,
+              weekday: v,
             })
           }}
           disabled={!enabled}
