@@ -29,3 +29,10 @@ export const descStyle = css`
   font-weight: 400;
   line-height: 20px;
 `
+
+export const imageStyle = css`
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f2f3f5;
+`

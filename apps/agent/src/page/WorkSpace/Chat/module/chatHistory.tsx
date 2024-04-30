@@ -1,5 +1,5 @@
 import { FC, useCallback, useContext, useEffect, useMemo } from "react"
-import { useSearchParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { TextSignal } from "@/api/ws/textSignal"
 import { PreviewChat } from "@/components/PreviewChat"
 import { PreviewChatUseProvider } from "@/components/PreviewChat/PreviewChatUseContext"
@@ -9,18 +9,22 @@ import {
   ChatMessage,
   ChatSendRequestPayload,
 } from "@/components/PreviewChat/interface"
+import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
+import { useAddChatTab } from "@/utils/recentTabs/hook"
 import { ChatContext } from "../../AI/components/ChatContext"
 import { ChatStableWSContext, ChatUnStableWSContext } from "../context"
 import { INIT_CHAT_CONFIG } from "./constants"
 import { rightPanelContainerStyle } from "./style"
 
 export const ChatHistory: FC = () => {
+  const { chatID } = useParams()
+
   const { connect, leaveRoom, sendMessage } = useContext(ChatStableWSContext)
 
   const { getReadyState, isRunning, chatMessages, isReceiving, inRoomUsers } =
     useContext(ChatUnStableWSContext)
 
-  const [urlSearchParams] = useSearchParams()
+  const addChatTab = useAddChatTab()
 
   const wsContext = useMemo(
     () => ({
@@ -35,19 +39,14 @@ export const ChatHistory: FC = () => {
 
   const onSendMessage = useCallback(
     (message: ChatMessage) => {
-      const defaultModelConfig =
-        import.meta.env.ILLA_APP_ENV === "production"
-          ? INIT_CHAT_CONFIG.model
-          : urlSearchParams.get("defaultModel")
-            ? Number(urlSearchParams.get("defaultModel"))
-            : INIT_CHAT_CONFIG.model
-
+      if (DEFAULT_CHAT_ID === chatID) {
+        addChatTab(DEFAULT_CHAT_ID)
+      }
       sendMessage(
         {
           threadID: message.threadID,
           prompt: message.message,
           ...INIT_CHAT_CONFIG,
-          model: defaultModelConfig,
         } as ChatSendRequestPayload,
         TextSignal.RUN,
         SEND_MESSAGE_WS_TYPE.CHAT,
@@ -58,7 +57,7 @@ export const ChatHistory: FC = () => {
         },
       )
     },
-    [sendMessage, urlSearchParams],
+    [addChatTab, chatID, sendMessage],
   )
 
   useEffect(() => {
