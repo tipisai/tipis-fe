@@ -1,29 +1,39 @@
 import Icon from "@ant-design/icons"
 import { Button, Input } from "antd"
-import { FC } from "react"
+import { FC, useContext } from "react"
 import { PlusIcon, SearchIcon } from "@illa-public/icon"
-import { useCreateFunction } from "@/utils/recentTabs/hook"
+import { useSearchFunctionDashboard } from "../../../utils"
+import { FunctionDashboardContext } from "../../context"
 import { headerToolsContainerStyle } from "./style"
 
 const HeaderTools: FC = () => {
-  const createFunction = useCreateFunction()
+  const { changeCreateFunctionModal } = useContext(FunctionDashboardContext)
+  const { searchValue, handleChangeSearchValue } = useSearchFunctionDashboard()
+
+  const handleClickCreateFunction = () => {
+    changeCreateFunctionModal(true)
+  }
 
   return (
-    <div css={headerToolsContainerStyle}>
-      <Input
-        placeholder="Search"
-        prefix={<Icon component={SearchIcon} />}
-        size="large"
-      />
-      <Button
-        type="primary"
-        icon={<Icon component={PlusIcon} />}
-        size="large"
-        onClick={createFunction}
-      >
-        Create
-      </Button>
-    </div>
+    <>
+      <div css={headerToolsContainerStyle}>
+        <Input
+          placeholder="Search"
+          prefix={<Icon component={SearchIcon} />}
+          size="large"
+          onChange={handleChangeSearchValue}
+          value={searchValue}
+        />
+        <Button
+          type="primary"
+          icon={<Icon component={PlusIcon} />}
+          size="large"
+          onClick={handleClickCreateFunction}
+        >
+          Create
+        </Button>
+      </div>
+    </>
   )
 }
 

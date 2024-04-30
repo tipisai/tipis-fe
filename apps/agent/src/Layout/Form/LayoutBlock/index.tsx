@@ -10,11 +10,14 @@ import {
   blockTItleAndRequireContainerStyle,
   blockTitleContainer,
   childrenAndErrorMessageContainerStyle,
+  descriptionStyle,
+  titleAndDescriptionContainerStyle,
 } from "./style"
 
 export const LayoutBlock: FC<ILayoutBlock> = (props) => {
   const {
     title,
+    description,
     tips,
     children,
     subtitle,
@@ -27,26 +30,29 @@ export const LayoutBlock: FC<ILayoutBlock> = (props) => {
 
   return (
     <div css={agentBlockStyle(isMobile)} data-scroll-id={scrollId}>
-      <div css={blockTitleContainer}>
-        <div css={blockTItleAndRequireContainerStyle}>
-          {title && (
-            <Tooltip title={tips} trigger="hover" placement="top">
-              <div css={applyBlockTextStyle(tips !== undefined)}>{title}</div>
+      <div css={titleAndDescriptionContainerStyle}>
+        <div css={blockTitleContainer}>
+          <div css={blockTItleAndRequireContainerStyle}>
+            {title && (
+              <Tooltip title={tips} trigger="hover" placement="top">
+                <div css={applyBlockTextStyle(tips !== undefined)}>{title}</div>
+              </Tooltip>
+            )}
+            {required && <RequireIcon />}
+          </div>
+          {subtitle && (
+            <Tooltip title={subtitleTips} trigger="hover">
+              <div css={applyBlockSubtitleStyle(subtitleTips !== undefined)}>
+                {subtitle}
+              </div>
             </Tooltip>
           )}
-          {required && <RequireIcon />}
         </div>
-        {subtitle && (
-          <Tooltip title={subtitleTips} trigger="hover">
-            <div css={applyBlockSubtitleStyle(subtitleTips !== undefined)}>
-              {subtitle}
-            </div>
-          </Tooltip>
-        )}
+        {description && <div css={descriptionStyle}>{description}</div>}
       </div>
       <div css={childrenAndErrorMessageContainerStyle}>
         {children}
-        {errorMessage && <ErrorText errorMessage={errorMessage} />}
+        {errorMessage && <ErrorText message={errorMessage} />}
       </div>
     </div>
   )

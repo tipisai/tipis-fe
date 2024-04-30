@@ -1,6 +1,7 @@
 import { FC } from "react"
 import AvatarUploader from "../../components/AvatarUploader"
 import DescriptionEditor from "../../components/DescriptionEditor"
+import FunctionsEditor from "../../components/FunctionEditor"
 import KnowledgeEditor from "../../components/KnowledgeEditor"
 import NameEditor from "../../components/NameEditor"
 import PromptEditor from "../../components/PromptEditor"
@@ -14,6 +15,7 @@ export const EditPanelContent: FC = () => {
       <DescriptionEditor />
       <PromptEditor />
       <VariableEditor />
+      <FunctionsEditor />
       <KnowledgeEditor />
     </>
   )

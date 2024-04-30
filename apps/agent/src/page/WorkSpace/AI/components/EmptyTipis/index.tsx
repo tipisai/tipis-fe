@@ -8,7 +8,7 @@ import NotHasTipIcon from "@/assets/workspace/not-has-tipi.svg?react"
 import { getPinedTipisByTipisID } from "@/redux/ui/pinedTipis/selector"
 import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 import { useRemovePinedTipiTabByTipiIDReducer } from "@/utils/pinedTabs/baseHook"
-import { useRemoveRecentTabByTipisIDReducer } from "@/utils/recentTabs/baseHook"
+import { useRemoveRecentTabByCacheIDReducer } from "@/utils/recentTabs/baseHook"
 import { useNavigateToNewChat } from "@/utils/routeHelper/hook"
 import { IEmptyTipisProps } from "./interface"
 import {
@@ -28,7 +28,7 @@ const EmptyTipis: FC<IEmptyTipisProps> = (props) => {
 
   const navigateToDefaultChat = useNavigateToNewChat()
   const removePinedByTipiID = useRemovePinedTipiTabByTipiIDReducer()
-  const removeAllRecentTabsByTipisID = useRemoveRecentTabByTipisIDReducer()
+  const removeAllRecentTabsByTipisID = useRemoveRecentTabByCacheIDReducer()
 
   const isPined = !!pinedTipis
 

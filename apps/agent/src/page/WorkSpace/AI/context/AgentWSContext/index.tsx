@@ -353,8 +353,8 @@ export const AgentWSProvider: FC<IAgentWSProviderProps> = (props) => {
             modelConfig: getValues("modelConfig"),
             model: getValues("model"),
             agentType: getValues("agentType"),
-            // TODO: delete variables
             variables: getValues("variables"),
+            aiToolIDs: getValues("aiTools")?.map((tool) => tool.aiToolID),
           }
           startSendMessage(
             {

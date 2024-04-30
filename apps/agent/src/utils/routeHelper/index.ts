@@ -1,3 +1,4 @@
+import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 
 export const getExploreTipisPath = (teamIdentifier: string) => {
@@ -44,9 +45,9 @@ export const getChatPath = (
 
 export const getCreateFunctionPath = (
   teamIdentifier: string,
-  functionID: string,
+  functionType: string,
 ) => {
-  return `/workspace/${teamIdentifier}/function/${functionID}/create`
+  return `/workspace/${teamIdentifier}/function/create/${functionType}`
 }
 
 export const getEditFunctionPath = (
@@ -74,9 +75,51 @@ export const getTeamInfoSetting = (teamIdentifier: string) => {
   return `/setting/${teamIdentifier}/team-settings`
 }
 
+export const genTabNavigateLink = (
+  teamIdentifier: string = "",
+  tabType: TAB_TYPE,
+  cacheID: string,
+  tabID: string,
+) => {
+  switch (tabType) {
+    case TAB_TYPE.CREATE_TIPIS:
+      return getCreateTipiPath(teamIdentifier)
+    case TAB_TYPE.EDIT_TIPIS:
+      return getEditTipiPath(teamIdentifier, cacheID)
+    case TAB_TYPE.RUN_TIPIS:
+      return `${getRunTipiPath(teamIdentifier, cacheID, tabID)}`
+    case TAB_TYPE.CHAT:
+      return getChatPath(teamIdentifier, cacheID)
+    case TAB_TYPE.CREATE_FUNCTION:
+      return getCreateFunctionPath(teamIdentifier, cacheID)
+    case TAB_TYPE.EDIT_FUNCTION:
+      return getEditFunctionPath(teamIdentifier, cacheID)
+    case TAB_TYPE.EXPLORE_TIPIS:
+      return getExploreTipisPath(teamIdentifier)
+    case TAB_TYPE.EXPLORE_FUNCTION:
+      return getExploreFunctionsPath(teamIdentifier)
+    case TAB_TYPE.EXPLORE_TIPIS_DETAIL:
+      return getTipiDetailPath(teamIdentifier, cacheID)
+    case TAB_TYPE.EXPLORE_MARKET_TIPIS_DETAIL:
+      return getMarketTipiDetailPath(teamIdentifier, cacheID)
+    case TAB_TYPE.EXPLORE_MARKET_FUNCTION_DETAIL:
+    case TAB_TYPE.EXPLORE_FUNCTION_DETAIL:
+      return ""
+  }
+}
+
 export const REGISTER_PATH = "/user/register"
 export const FORGOT_PASSWORD_PATH = "/user/forgotPassword"
 export const LOGIN_PATH = "/user/login"
 export const PASSWORD_PATH = "/setting/password"
 export const LINKED_PATH = "/setting/linked"
 export const EMPTY_TEAM_PATH = "/empty-workspace"
+
+export enum CREATE_FUNCTION_FROM_SINGLE {
+  CREATE_TIPIS = "createTipis",
+  EDIT_TIPIS = "editTipis",
+  DASHBOARD = "dashboard",
+}
+
+export const CREATE_FUNCTION_FROM_SINGLE_KEY = "from"
+export const CREATE_FUNCTION_FROM_TAB_KEY = "fromTabID"

@@ -169,6 +169,20 @@ export const agentAuthAPI = createApi({
               data,
             ),
           )
+          dispatch(
+            agentAuthAPI.util.updateQueryData(
+              "getAIAgentListByPage",
+              { teamID },
+              (draft) => {
+                const targetAgent = draft.aiAgentList?.find(
+                  (agent) => agent.aiAgentID === aiAgentID,
+                )
+                if (targetAgent) {
+                  Object.assign(targetAgent, data)
+                }
+              },
+            ),
+          )
         } catch {}
       },
     }),
@@ -206,17 +220,6 @@ export const agentAuthAPI = createApi({
           )
         } catch {}
       },
-    }),
-    generatePromptDescription: builder.mutation<
-      { payload: string },
-      { teamID: string; prompt: string }
-    >({
-      query: ({ teamID, prompt }) => ({
-        url: `/teams/${teamID}/aiAgent/generatePromptDescription`,
-        method: "POST",
-        timeout: 600000,
-        body: { prompt: encodeURIComponent(prompt) },
-      }),
     }),
     getAgentIconUploadAddress: builder.mutation<
       { uploadAddress: string },
@@ -307,7 +310,6 @@ export const {
   useForkAIAgentToTeamMutation,
   usePutAgentDetailMutation,
   useCreateAgentMutation,
-  useGeneratePromptDescriptionMutation,
   useGetAgentIconUploadAddressMutation,
   useGetAIAgentListByPageQuery,
   useDuplicateAIAgentMutation,

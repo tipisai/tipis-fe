@@ -8,18 +8,6 @@ import FunctionIcon from "@/assets/workspace/function.svg?react"
 import MarketplaceIcon from "@/assets/workspace/marketplace.svg?react"
 import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
-import {
-  getChatPath,
-  getCreateFunctionPath,
-  getCreateTipiPath,
-  getEditFunctionPath,
-  getEditTipiPath,
-  getExploreFunctionsPath,
-  getExploreTipisPath,
-  getMarketTipiDetailPath,
-  getRunTipiPath,
-  getTipiDetailPath,
-} from "@/utils/routeHelper"
 import { basePCMenuItemButtonCustomIconContainerStyle } from "../baseTabStyle"
 import { chatIconStyle, menuItemIconContainerStyle } from "./style"
 
@@ -103,37 +91,4 @@ export const useGetTabName = () => {
   )
 
   return getTabName
-}
-
-export const genTabNavigateLink = (
-  teamIdentifier: string = "",
-  tabType: TAB_TYPE,
-  cacheID: string,
-  tabID: string,
-) => {
-  switch (tabType) {
-    case TAB_TYPE.CREATE_TIPIS:
-      return getCreateTipiPath(teamIdentifier)
-    case TAB_TYPE.EDIT_TIPIS:
-      return getEditTipiPath(teamIdentifier, cacheID)
-    case TAB_TYPE.RUN_TIPIS:
-      return `${getRunTipiPath(teamIdentifier, cacheID, tabID)}`
-    case TAB_TYPE.CHAT:
-      return getChatPath(teamIdentifier, cacheID)
-    case TAB_TYPE.CREATE_FUNCTION:
-      return getCreateFunctionPath(teamIdentifier, cacheID)
-    case TAB_TYPE.EDIT_FUNCTION:
-      return getEditFunctionPath(teamIdentifier, cacheID)
-    case TAB_TYPE.EXPLORE_TIPIS:
-      return getExploreTipisPath(teamIdentifier)
-    case TAB_TYPE.EXPLORE_FUNCTION:
-      return getExploreFunctionsPath(teamIdentifier)
-    case TAB_TYPE.EXPLORE_TIPIS_DETAIL:
-      return getTipiDetailPath(teamIdentifier, cacheID)
-    case TAB_TYPE.EXPLORE_MARKET_TIPIS_DETAIL:
-      return getMarketTipiDetailPath(teamIdentifier, cacheID)
-    case TAB_TYPE.EXPLORE_MARKET_FUNCTION_DETAIL:
-    case TAB_TYPE.EXPLORE_FUNCTION_DETAIL:
-      return ""
-  }
 }

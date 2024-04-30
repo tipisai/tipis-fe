@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 interface ImportMetaEnv {
   readonly ILLA_API_BASE_URL: string
+  readonly ILLA_PERIPHERAL_API_BASE_URL: string
   readonly ILLA_CLOUD_URL: string
   readonly ILLA_MARKET_URL: string
   readonly ILLA_INSTANCE_ID: string
