@@ -10,6 +10,7 @@ import "@/i18n"
 import { initI18n } from "@/i18n"
 import App from "./App.tsx"
 import store from "./redux/store.ts"
+import { TIPISStorage } from "./utils/storage/index.ts"
 
 if (import.meta.env.ILLA_APP_ENV === "production") {
   Sentry.init({
@@ -21,16 +22,16 @@ if (import.meta.env.ILLA_APP_ENV === "production") {
 if (import.meta.env.ILLA_MUI_LICENSE) {
   LicenseInfo.setLicenseKey(import.meta.env.ILLA_MUI_LICENSE)
 }
-
 initGTMConfig()
 initI18n().then(() => {
   createRoot(document.getElementById("root")!).render(
     <StrictMode>
       <PostHogProvider
         apiKey={
-          import.meta.env.ILLA_APP_ENV !== "production"
-            ? ""
-            : import.meta.env.ILLA_POSTHOG_KEY
+          import.meta.env.ILLA_APP_ENV === "production" ||
+          TIPISStorage.getSessionStorage("openPostHog") === true
+            ? import.meta.env.ILLA_POSTHOG_KEY
+            : ""
         }
       >
         <Provider store={store}>

@@ -4,6 +4,7 @@ import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useBeforeUnload, useParams } from "react-router-dom"
 import { IBaseFunction } from "@illa-public/public-types"
+import { TipisTrack } from "@illa-public/track-utils"
 import { getCurrentId } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
@@ -157,6 +158,10 @@ const EditFunction: FC<IEditFunctionProps> = ({ originData, cacheData }) => {
   }, [currentTeamInfo.id, functionID, values])
 
   const updateFunctionWhenSubmit = async (data: IFunctionForm) => {
+    TipisTrack.track("function_save", {
+      parameter1: "edit_function",
+      parameter2: data.resourceType,
+    })
     const icon = data.config.icon
 
     const aiTool: IBaseFunction = {

@@ -3,6 +3,7 @@ import { App, Button, Dropdown, List, MenuProps, Tag } from "antd"
 import { FC, MouseEventHandler, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { CopyIcon, DeleteIcon, MoreIcon, PenIcon } from "@illa-public/icon"
+import { TipisTrack } from "@illa-public/track-utils"
 import PCTeamCard from "@/components/TeamCard/pc"
 import {
   useDeleteAIToolByIDMutation,
@@ -12,10 +13,10 @@ import { canShowCreateFunction } from "@/utils/UIHelper/functions"
 import { canShownCreateTipi } from "@/utils/UIHelper/tipis"
 import { useNavigateToEditFunction } from "@/utils/routeHelper/hook"
 import { useGetCurrentTeamInfo } from "@/utils/team"
-import { ITeamCardListItemProps } from "./interface"
+import { ITeamCardListItemProps } from "../../../components/TeamCardList/interface"
 
 const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
-  const { icon, title, description, id, publishToMarketplace } = props
+  const { icon, title, description, id, publishToMarketplace, type } = props
   const { modal, message } = App.useApp()
 
   const { t } = useTranslation()
@@ -94,10 +95,13 @@ const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
     }
   }
 
-  const onClickCard = () => {}
-
   const onClickEditButton: MouseEventHandler<HTMLElement> = async (e) => {
     e.stopPropagation()
+    TipisTrack.track("click_function_card_edit", {
+      parameter1: "dashboard_edit",
+      parameter2: type,
+    })
+
     await navigateToEditFunction({
       functionName: title,
       functionID: id,
@@ -116,7 +120,6 @@ const TeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
         title={title}
         description={description}
         tags={tags}
-        onClickCard={onClickCard}
         moreButton={
           menuItems.length > 0 && (
             <Dropdown

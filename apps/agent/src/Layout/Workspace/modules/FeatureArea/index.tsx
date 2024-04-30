@@ -73,7 +73,7 @@ const FeatureArea: FC = () => {
 
   const handleClickFunction = () => {
     const isEmptyTeam = getIsEmptyTeam(store.getState())
-    TipisTrack.track("click_function_entry")
+    TipisTrack.track("click_function_dashboard_tab")
 
     if (isEmptyTeam) {
       TipisTrack.track("click_create_team_entry", {

@@ -10,11 +10,13 @@ export interface IIntegrationInfo {
 
 export interface ITencentCosFunctionForm
   extends Omit<ITencentCosFunction, "resourceID"> {
+  aiToolID: string
   integrationInfo: IIntegrationInfo
 }
 
 export interface ILarkBotFunctionForm
   extends Omit<IFunctionInterface, "resourceID"> {
+  aiToolID: string
   integrationInfo: IIntegrationInfo
 }
 
