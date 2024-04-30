@@ -1,5 +1,9 @@
+import { App } from "antd"
 import { useCallback } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
+import { useTranslation } from "react-i18next"
+import { useSelector } from "react-redux"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { DATA_VALUE_TYPE } from "@illa-public/code-editor-new"
 import { ICompletionOption } from "@illa-public/code-editor-new/CodeMirror/extensions/interface"
 import { DEFAULT_LARK_BOT_PARAMETERS } from "@illa-public/public-configs/function/larkBot"
@@ -11,9 +15,26 @@ import {
   useGetAIToolIconUploadAddressMutation,
   useTestRunAIToolsMutation,
 } from "@/redux/services/aiToolsAPI"
+import { IAIToolDTO } from "@/redux/services/aiToolsAPI/interface"
+import { getCurrentTabID } from "@/redux/ui/recentTab/selector"
 import { TestRunResultEventEmitter } from "."
 import { FUNCTION_RUN_RESULT_EVENT } from "../eventEmitter/constants"
 import { fetchUploadBase64 } from "../file"
+import {
+  useFindRecentTabByTabID,
+  useRemoveRecentTabReducer,
+} from "../recentTabs/baseHook"
+import { CREATE_FUNCTION_ID } from "../recentTabs/constants"
+import {
+  useUpdateCreateToEditFunctionTab,
+  useUpdateCurrentTabToTipisDashboard,
+} from "../recentTabs/hook"
+import {
+  CREATE_FUNCTION_FROM_SINGLE,
+  CREATE_FUNCTION_FROM_SINGLE_KEY,
+  CREATE_FUNCTION_FROM_TAB_KEY,
+  genTabNavigateLink,
+} from "../routeHelper"
 import { useGetCurrentTeamInfo } from "../team"
 
 export const useGetParamsListByResourceType = () => {
@@ -201,4 +222,117 @@ export const useGetIconURL = () => {
   )
 
   return getIconURL
+}
+
+export const useOpenTipsWhenSubmit = () => {
+  const { t } = useTranslation()
+  const { message, modal } = App.useApp()
+
+  const [searchParams] = useSearchParams()
+
+  const updateCreateToEditFunctionTab = useUpdateCreateToEditFunctionTab()
+  const updateCurrentTabToTipisDashboard = useUpdateCurrentTabToTipisDashboard()
+  const removeTab = useRemoveRecentTabReducer()
+  const findTabByTabID = useFindRecentTabByTabID()
+  const navigate = useNavigate()
+  const currentTeamInfo = useGetCurrentTeamInfo()!
+  const currentTabID = useSelector(getCurrentTabID)
+
+  const openCreateSuccessModal = (serverData: IAIToolDTO<unknown>) => {
+    modal.success({
+      closable: true,
+      title: t("function.edit.modal.save.title"),
+      content: t("function.edit.modal.save.desc"),
+      okText: t("function.edit.modal.save.button"),
+      onOk: async () => {
+        return updateCurrentTabToTipisDashboard({
+          tabName: serverData.name,
+          tabIcon: "",
+          cacheID: serverData.aiToolID,
+        })
+      },
+      onCancel: async () => {
+        return updateCreateToEditFunctionTab(CREATE_FUNCTION_ID, {
+          tabName: serverData.name,
+          tabIcon: "",
+          cacheID: serverData.aiToolID,
+        })
+      },
+    })
+  }
+
+  const openUpdateSuccessModal = (serverData: IAIToolDTO<unknown>) => {
+    modal.success({
+      closable: true,
+      title: t("function.edit.modal.update.title"),
+      content: t("function.edit.modal.update.desc"),
+      okText: t("function.edit.modal.save.button"),
+      onOk: async () => {
+        return updateCurrentTabToTipisDashboard({
+          tabName: serverData.name,
+          tabIcon: "",
+          cacheID: serverData.aiToolID,
+        })
+      },
+    })
+  }
+
+  const openTipsWhenSubmit = async (
+    serverData: IAIToolDTO<unknown>,
+    modalType: "create" | "edit" = "create",
+  ) => {
+    const defaultAlertMethod =
+      modalType === "edit" ? openUpdateSuccessModal : openCreateSuccessModal
+
+    const from = searchParams.get(
+      CREATE_FUNCTION_FROM_SINGLE_KEY,
+    ) as CREATE_FUNCTION_FROM_SINGLE | null
+
+    const createFromTabID = searchParams.get(CREATE_FUNCTION_FROM_TAB_KEY)
+
+    if (!from || !createFromTabID) {
+      defaultAlertMethod(serverData)
+      return
+    }
+
+    const tabInfo = findTabByTabID(createFromTabID)
+
+    if (!tabInfo) {
+      defaultAlertMethod(serverData)
+      return
+    }
+
+    switch (from) {
+      case CREATE_FUNCTION_FROM_SINGLE.DASHBOARD: {
+        defaultAlertMethod(serverData)
+        return
+      }
+      case CREATE_FUNCTION_FROM_SINGLE.EDIT_TIPIS: {
+        message.success(t("function.edit.message.updated"))
+        break
+      }
+
+      case CREATE_FUNCTION_FROM_SINGLE.CREATE_TIPIS: {
+        message.success(t("function.edit.message.created"))
+
+        break
+      }
+    }
+    await removeTab(currentTabID)
+    const newSearchParams = new URLSearchParams({
+      aiToolID: serverData.aiToolID,
+      aiToolName: serverData.name,
+      aiToolIcon: serverData.config.icon,
+    })
+    navigate(
+      `${genTabNavigateLink(
+        currentTeamInfo.identifier,
+        tabInfo.tabType,
+        tabInfo.cacheID,
+        tabInfo.tabID,
+      )}?${newSearchParams.toString()}`,
+    )
+  }
+
+  return openTipsWhenSubmit
 }

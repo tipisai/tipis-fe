@@ -15,15 +15,12 @@ import { useGetIntegrationListQuery } from "@/redux/services/integrationAPI"
 import store from "@/redux/store"
 import { TAB_TYPE } from "@/redux/ui/recentTab/interface"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
-import { useGetIconURL } from "@/utils/function/hook"
+import { useGetIconURL, useOpenTipsWhenSubmit } from "@/utils/function/hook"
 import {
   getFormDataByTabID,
   setFormDataByTabID,
 } from "@/utils/localForage/formData"
-import {
-  useAddOrUpdateEditFunctionTab,
-  useUpdateCurrentTabToTipisDashboard,
-} from "@/utils/recentTabs/hook"
+import { useAddOrUpdateEditFunctionTab } from "@/utils/recentTabs/hook"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import TestRunResult from "./components/TestRunResult"
 import { IEditFunctionProps, IFunctionForm } from "./interface"
@@ -123,11 +120,11 @@ const EditFunction: FC<IEditFunctionProps> = ({ originData, cacheData }) => {
   const [updateAITool] = useUpdateAIToolByIDMutation()
 
   const getIconURL = useGetIconURL()
-  const updateCurrentTabToTipisDashboard = useUpdateCurrentTabToTipisDashboard()
+  const openTips = useOpenTipsWhenSubmit()
 
   const { t } = useTranslation()
 
-  const { message, modal } = App.useApp()
+  const { message } = App.useApp()
 
   const methods = useForm<IFunctionForm>({
     defaultValues: originData,
@@ -189,19 +186,7 @@ const EditFunction: FC<IEditFunctionProps> = ({ originData, cacheData }) => {
           },
         },
       }).unwrap()
-      modal.success({
-        closable: true,
-        title: t("function.edit.modal.update.title"),
-        content: t("function.edit.modal.update.desc"),
-        okText: t("function.edit.modal.save.button"),
-        onOk: async () => {
-          return updateCurrentTabToTipisDashboard({
-            tabName: serverData.name,
-            tabIcon: "",
-            cacheID: serverData.aiToolID,
-          })
-        },
-      })
+      await openTips(serverData, "edit")
     } catch (e) {
       message.error(t("function.edit.message.failed_to_update"))
     }

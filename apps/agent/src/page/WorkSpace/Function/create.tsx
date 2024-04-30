@@ -2,13 +2,7 @@ import { App } from "antd"
 import { FC, useCallback, useEffect } from "react"
 import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import {
-  useBeforeUnload,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom"
-// import { DraggableModal } from "@illa-public/draggable-modal"
+import { useBeforeUnload, useParams } from "react-router-dom"
 import { getFunctionInitDataByType } from "@illa-public/public-configs"
 import { IBaseFunction, TIntegrationType } from "@illa-public/public-types"
 import { getCurrentId } from "@illa-public/user-data"
@@ -16,27 +10,13 @@ import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import { useCreateAIToolMutation } from "@/redux/services/aiToolsAPI"
 import store from "@/redux/store"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
-import { useGetIconURL } from "@/utils/function/hook"
+import { useGetIconURL, useOpenTipsWhenSubmit } from "@/utils/function/hook"
 import {
   getFormDataByTabID,
   setFormDataByTabID,
 } from "@/utils/localForage/formData"
-import {
-  useFindRecentTabByTabID,
-  useRemoveRecentTabReducer,
-} from "@/utils/recentTabs/baseHook"
 import { CREATE_FUNCTION_ID } from "@/utils/recentTabs/constants"
-import {
-  useAddCreateFunction,
-  useUpdateCreateToEditFunctionTab,
-  useUpdateCurrentTabToTipisDashboard,
-} from "@/utils/recentTabs/hook"
-import {
-  CREATE_FUNCTION_FROM_SINGLE,
-  CREATE_FUNCTION_FROM_SINGLE_KEY,
-  CREATE_FUNCTION_FROM_TAB_KEY,
-  genTabNavigateLink,
-} from "@/utils/routeHelper"
+import { useAddCreateFunction } from "@/utils/recentTabs/hook"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import TestRunResult from "./components/TestRunResult"
 import { IFunctionForm } from "./interface"
@@ -47,18 +27,13 @@ import { contentContainerStyle, formStyle } from "./style"
 
 const CreateFunction: FC = () => {
   const { functionType } = useParams()
-  const { message, modal } = App.useApp()
+  const { message } = App.useApp()
   const { t } = useTranslation()
-  const [searchParams] = useSearchParams()
 
   const INITConfig = getFunctionInitDataByType(functionType as TIntegrationType)
   const createFunctionTab = useAddCreateFunction()
   const currentTeamInfo = useGetCurrentTeamInfo()!
-  const updateCreateToEditFunctionTab = useUpdateCreateToEditFunctionTab()
-  const updateCurrentTabToTipisDashboard = useUpdateCurrentTabToTipisDashboard()
-  const removeTab = useRemoveRecentTabReducer()
-  const findTabByTabID = useFindRecentTabByTabID()
-  const navigate = useNavigate()
+  const openTips = useOpenTipsWhenSubmit()
 
   const methods = useForm<IFunctionForm>({
     defaultValues: INITConfig,
@@ -128,80 +103,7 @@ const CreateFunction: FC = () => {
           },
         },
       }).unwrap()
-
-      const defaultAlertMethod = () => {
-        modal.success({
-          closable: true,
-          title: t("function.edit.modal.save.title"),
-          content: t("function.edit.modal.save.desc"),
-          okText: t("function.edit.modal.save.button"),
-          onOk: async () => {
-            return updateCurrentTabToTipisDashboard({
-              tabName: serverData.name,
-              tabIcon: "",
-              cacheID: serverData.aiToolID,
-            })
-          },
-          onCancel: async () => {
-            return updateCreateToEditFunctionTab(CREATE_FUNCTION_ID, {
-              tabName: serverData.name,
-              tabIcon: "",
-              cacheID: serverData.aiToolID,
-            })
-          },
-        })
-      }
-
-      const from = searchParams.get(
-        CREATE_FUNCTION_FROM_SINGLE_KEY,
-      ) as CREATE_FUNCTION_FROM_SINGLE
-
-      const createFromTabID = searchParams.get(CREATE_FUNCTION_FROM_TAB_KEY)
-
-      if (!from || !createFromTabID) {
-        defaultAlertMethod()
-        return
-      }
-
-      const tabInfo = findTabByTabID(createFromTabID)
-
-      if (!tabInfo) {
-        defaultAlertMethod()
-        return
-      }
-
-      switch (from) {
-        case CREATE_FUNCTION_FROM_SINGLE.EDIT_TIPIS: {
-          message.success(t("function.edit.modal.save.title"))
-          await removeTab(functionType!)
-          navigate(
-            genTabNavigateLink(
-              currentTeamInfo.identifier,
-              tabInfo.tabType,
-              tabInfo.cacheID,
-              tabInfo.tabID,
-            ),
-          )
-          break
-        }
-        case CREATE_FUNCTION_FROM_SINGLE.CREATE_TIPIS: {
-          message.success(t("function.edit.modal.save.title"))
-          await removeTab(functionType!)
-          navigate(
-            genTabNavigateLink(
-              currentTeamInfo.identifier,
-              tabInfo.tabType,
-              tabInfo.cacheID,
-              tabInfo.tabID,
-            ),
-          )
-
-          break
-        }
-        case CREATE_FUNCTION_FROM_SINGLE.DASHBOARD: {
-          defaultAlertMethod()
-        }
-      }
+      await openTips(serverData)
     } catch (e) {
       message.error(t("function.edit.message.failed_to_create"))
     }
