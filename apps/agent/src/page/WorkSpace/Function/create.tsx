@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 import { useBeforeUnload, useParams } from "react-router-dom"
 import { getFunctionInitDataByType } from "@illa-public/public-configs"
 import { IBaseFunction, TIntegrationType } from "@illa-public/public-types"
+import { TipisTrack } from "@illa-public/track-utils"
 import { getCurrentId } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import { useCreateAIToolMutation } from "@/redux/services/aiToolsAPI"
@@ -75,6 +76,10 @@ const CreateFunction: FC = () => {
   }, [values])
 
   const createFunctionWhenSubmit = async (data: IFunctionForm) => {
+    TipisTrack.track("create_function", {
+      parameter1: "edit_function",
+      parameter2: data.resourceType,
+    })
     const icon = data.config.icon
 
     const aiTool: IBaseFunction = {

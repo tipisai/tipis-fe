@@ -1,6 +1,7 @@
 import { List } from "antd"
 import Fuse from "fuse.js"
 import { FC, useContext } from "react"
+import { TipisTrack } from "@illa-public/track-utils"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import TeamNoData from "@/components/TeamNoData"
 import { useGetAllAIToolsListQuery } from "@/redux/services/aiToolsAPI"
@@ -22,6 +23,9 @@ const TeamCardList: FC<ITeamCardListProps> = (props) => {
   const { data, isLoading } = useGetAllAIToolsListQuery(currentTeamInfo.id)
 
   const handleClickCreateTipis = () => {
+    TipisTrack.track("click_create_function_entry", {
+      parameter1: "dashboard_create",
+    })
     changeCreateFunctionModal(true)
   }
 
@@ -67,6 +71,7 @@ const TeamCardList: FC<ITeamCardListProps> = (props) => {
           description={item.description}
           publishToMarketplace={item.publishedToMarketplace}
           id={item.aiToolID}
+          type={item.resourceType}
         />
       )}
     />
