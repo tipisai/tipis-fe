@@ -13,6 +13,7 @@ const CreateIntegration: FC<ICreateIntegrationProps> = (props) => {
 
   const methods = useForm<IBaseIntegration>({
     defaultValues: INTEGRATION_TYPE_MAP_CONFIG[integrationType],
+    mode: "onChange",
   })
 
   const { setModalName } = useIntegrationSelectorContext()
@@ -24,7 +25,7 @@ const CreateIntegration: FC<ICreateIntegrationProps> = (props) => {
 
   return (
     <FormProvider {...methods}>
-      <ConfigElement />
+      <ConfigElement integrationType={integrationType} />
       <ConfigElementFooter onBack={onBack} onConfirm={onConfirm} />
     </FormProvider>
   )

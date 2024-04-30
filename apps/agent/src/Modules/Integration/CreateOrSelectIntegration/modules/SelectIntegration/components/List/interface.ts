@@ -11,4 +11,5 @@ export interface IIntegrationListItemProps {
 export interface IIntegrationListProps {
   onClickItem: (integrationID: string) => void
   selectedIntegrationID: string
+  integrationType: TIntegrationType
 }

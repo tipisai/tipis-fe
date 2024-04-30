@@ -18,6 +18,7 @@ const EditIntegration: FC<IEditIntegrationProps> = (props) => {
 
   const methods = useForm<IBaseIntegration>({
     defaultValues: integration,
+    mode: "onChange",
   })
 
   const { setModalName } = useIntegrationSelectorContext()
@@ -29,7 +30,7 @@ const EditIntegration: FC<IEditIntegrationProps> = (props) => {
 
   return (
     <FormProvider {...methods}>
-      <ConfigElement />
+      <ConfigElement integrationType={integration.resourceType} />
       <ConfigElementFooter onBack={onBack} onConfirm={onConfirm} />
     </FormProvider>
   )

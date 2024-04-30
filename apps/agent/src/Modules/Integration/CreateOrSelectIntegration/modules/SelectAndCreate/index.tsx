@@ -26,6 +26,7 @@ const SelectAndCreateIntegration: FC<ISelectAndCreateIntegrationProps> = (
             setStep(SELECT_INTEGRATION_STEP.CREATE)
           }}
           onConfirm={onConfirm}
+          integrationType={integrationType}
         />
       )}
       {step === SELECT_INTEGRATION_STEP.CREATE && (
