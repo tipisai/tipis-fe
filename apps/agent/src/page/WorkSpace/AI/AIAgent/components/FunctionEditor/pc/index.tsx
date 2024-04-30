@@ -9,7 +9,7 @@ import { IAgentForm } from "../../../interface"
 import { FUNCTION_LEARN_MORE_LINK } from "../constants"
 import AddToolsButton from "../modules/AddToolsButton"
 import EditorFunctionItem from "../modules/EditorFunctionItem"
-import IntergrationModal from "./components/IntergrationModal"
+import IntegrationModal from "./components/IntegrationModal"
 import SelectModal from "./components/SelectModal"
 import { containerStyle, functionContainerStyle } from "./style"
 
@@ -50,20 +50,28 @@ const FunctionsEditorPC: FC = memo(() => {
 
   useEffect(() => {
     if (aiToolID && aiToolIcon && aiToolName) {
-      const aiTools = getValues("aiTools")
-      if (aiTools.some((item) => item.aiToolID === aiToolID)) {
-        return
-      }
-      setValue("aiTools", [
-        ...aiTools,
-        {
+      const aiTools = [...getValues("aiTools")]
+      const targetAiToolIndex = aiTools.findIndex(
+        (item) => item.aiToolID === aiToolID,
+      )
+      if (targetAiToolIndex !== -1) {
+        aiTools[targetAiToolIndex] = {
+          ...aiTools[targetAiToolIndex],
+          name: aiToolName,
+          config: {
+            icon: aiToolIcon,
+          },
+        }
+      } else {
+        aiTools.push({
           aiToolID,
           name: aiToolName,
           config: {
             icon: aiToolIcon,
           },
-        },
-      ])
+        })
+      }
+      setValue("aiTools", aiTools)
     }
   }, [aiToolID, aiToolIcon, aiToolName, getValues, setValue])
 
@@ -119,7 +127,7 @@ const FunctionsEditorPC: FC = memo(() => {
       )}
 
       {integrationVisible && (
-        <IntergrationModal
+        <IntegrationModal
           integrationVisible={integrationVisible}
           onCancel={() => setIntegrationVisible(false)}
         />

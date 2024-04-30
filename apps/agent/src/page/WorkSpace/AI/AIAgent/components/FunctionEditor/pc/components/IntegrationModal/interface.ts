@@ -1,4 +1,4 @@
-export interface IIntergrationModalProps {
+export interface IIntegrationModalProps {
   integrationVisible: boolean
   onCancel: () => void
 }
