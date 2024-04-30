@@ -1,7 +1,7 @@
-import { FC, useCallback, useEffect, useState } from "react"
+import { FC, useCallback, useEffect, useRef, useState } from "react"
 import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useSelector } from "react-redux"
-import { useBeforeUnload, useParams } from "react-router-dom"
+import { useBeforeUnload, useParams, useSearchParams } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { Agent } from "@illa-public/public-types"
 import { getCurrentId } from "@illa-public/user-data"
@@ -82,9 +82,12 @@ const EditAIAgentPage: FC<{
   const { agentID } = useParams()
   const teamID = useSelector(getCurrentId)
   const historyTabs = useSelector(getRecentTabInfos)
+  const [searchParams, setSearchParams] = useSearchParams()
   const currentTab = historyTabs.find(
     (tab) => tab.cacheID === agentID && tab.tabType === TAB_TYPE.EDIT_TIPIS,
   )
+
+  const canReadCacheRef = useRef(true)
 
   const methods = useForm<IAgentForm>({
     defaultValues: originAgent,
@@ -92,13 +95,58 @@ const EditAIAgentPage: FC<{
 
   const { control, reset } = methods
 
+  const handleRedirectToolInfo = useCallback(
+    (formData: IAgentForm) => {
+      const aiToolID = searchParams.get("aiToolID")
+      const aiToolName = searchParams.get("aiToolName")
+      const aiToolIcon = searchParams.get("aiToolIcon")
+      const { aiTools = [] } = formData
+      if (aiToolID && aiToolIcon && aiToolName) {
+        searchParams.delete("aiToolID")
+        searchParams.delete("aiToolName")
+        searchParams.delete("aiToolIcon")
+        setSearchParams(searchParams)
+        const targetAiToolIndex = aiTools.findIndex(
+          (item) => item.aiToolID === aiToolID,
+        )
+        if (targetAiToolIndex !== -1) {
+          aiTools[targetAiToolIndex] = {
+            ...aiTools[targetAiToolIndex],
+            name: aiToolName,
+            config: {
+              icon: aiToolIcon,
+            },
+          }
+        } else {
+          aiTools.push({
+            aiToolID,
+            name: aiToolName,
+            config: {
+              icon: aiToolIcon,
+            },
+          })
+        }
+      }
+      return aiTools
+    },
+    [searchParams, setSearchParams],
+  )
+
   useEffect(() => {
-    if (cacheData) {
-      reset(cacheData, {
-        keepDefaultValues: true,
-      })
+    if (cacheData && canReadCacheRef.current) {
+      canReadCacheRef.current = false
+      const aiTools = handleRedirectToolInfo(cacheData as IAgentForm)
+      reset(
+        {
+          ...cacheData,
+          aiTools,
+        },
+        {
+          keepDefaultValues: true,
+        },
+      )
     }
-  }, [cacheData, reset])
+  }, [cacheData, handleRedirectToolInfo, reset])
 
   const values = useWatch({
     control,
