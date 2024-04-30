@@ -41,23 +41,19 @@ export const LayoutBlock: FC<ILayoutBlock> = (props) => {
             )}
             {required && <RequireIcon />}
           </div>
-          {subtitle && (
-            <Tooltip title={subtitleTips} trigger="hover">
-              <div css={applyBlockSubtitleStyle(subtitleTips !== undefined)}>
-                {subtitle}
-              </div>
-            </Tooltip>
-          )}
+          {customRenderSubtitle
+            ? customRenderSubtitle
+            : subtitle && (
+                <Tooltip title={subtitleTips} trigger="hover">
+                  <div
+                    css={applyBlockSubtitleStyle(subtitleTips !== undefined)}
+                  >
+                    {subtitle}
+                  </div>
+                </Tooltip>
+              )}
         </div>
-        {customRenderSubtitle
-          ? customRenderSubtitle
-          : subtitle && (
-              <Tooltip title={subtitleTips} trigger="hover">
-                <div css={applyBlockSubtitleStyle(subtitleTips !== undefined)}>
-                  {subtitle}
-                </div>
-              </Tooltip>
-            )}
+
         {description && <div css={descriptionStyle}>{description}</div>}
       </div>
       <div css={childrenAndErrorMessageContainerStyle}>

@@ -3,7 +3,12 @@ import { useCallback } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
-import { Agent, AgentRaw } from "@illa-public/public-types"
+import {
+  Agent,
+  AgentRaw,
+  IScheduleDTO,
+  ITriggerConfigDTO,
+} from "@illa-public/public-types"
 import { TipisTrack } from "@illa-public/track-utils"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import {
@@ -40,6 +45,18 @@ export const useSubmitSaveAgent = () => {
   const { reset } = useFormContext<IAgentForm>()
 
   const getAgentRowData = useCallback((formData: IAgentForm): AgentRaw => {
+    const scheduleVO = formData.triggerConfig.schedule ?? []
+    const schedules: IScheduleDTO[] = scheduleVO.map((item) => ({
+      name: "",
+      contentID: "",
+      triggerType: "schedule",
+      ...item,
+    }))
+    const triggerConfig: ITriggerConfigDTO = {
+      poll: [],
+      webhook: [],
+      schedule: schedules,
+    }
     return {
       name: formData.name,
       agentType: formData.agentType,
@@ -53,6 +70,8 @@ export const useSubmitSaveAgent = () => {
       icon: formData.icon,
       knowledge: formData.knowledge,
       aiToolIDs: formData.aiTools.map((item) => item.aiToolID),
+      triggerIsActive: formData.triggerIsActive,
+      triggerConfig,
     }
   }, [])
 

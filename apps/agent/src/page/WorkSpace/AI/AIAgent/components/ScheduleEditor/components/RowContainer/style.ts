@@ -1,5 +1,6 @@
 import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
+import { applyMobileStyle } from "@illa-public/utils"
 
 const basLayoutContainerStyle = css`
   display: flex;
@@ -21,4 +22,7 @@ export const labelStyle = (enabled: boolean) => css`
   font-weight: 500;
   white-space: nowrap;
   width: 200px;
+  ${applyMobileStyle(css`
+    width: auto;
+  `)}
 `

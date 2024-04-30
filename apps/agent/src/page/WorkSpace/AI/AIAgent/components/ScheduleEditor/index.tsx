@@ -1,8 +1,13 @@
 import { Select } from "antd"
-import { FC, memo } from "react"
-import { Controller, useFormContext, useWatch } from "react-hook-form"
+import { FC, memo, useCallback } from "react"
+import {
+  Controller,
+  useController,
+  useFormContext,
+  useWatch,
+} from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { IScheduleOptions, SCHEDULE_TYPES } from "@illa-public/public-types"
+import { SCHEDULE_TYPES } from "@illa-public/public-types"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import BlackSwitch from "@/components/BlackSwitch"
 import { IAgentForm } from "../../interface"
@@ -15,14 +20,26 @@ import { getInitScheduleOptions } from "./utils"
 const ScheduleEditor: FC = memo(() => {
   const { t } = useTranslation()
 
-  const { control, setValue, getValues } = useFormContext<IAgentForm>()
+  const { control, getValues } = useFormContext<IAgentForm>()
 
-  const [schedule] = useWatch({
+  const [schedules, triggerIsActive] = useWatch({
     control: control,
-    name: ["schedule"],
+    name: ["triggerConfig.schedule", "triggerIsActive"],
   })
 
-  const ScheduleTypeSetter = SCHEDULE_TYPE_MAP_SETTER[schedule.type]
+  const {
+    field: { onChange },
+  } = useController({
+    control,
+    name: "triggerConfig.schedule",
+  })
+
+  const getScheduleTypeSetter = useCallback(
+    (i: number) => {
+      return SCHEDULE_TYPE_MAP_SETTER[schedules[i].scheduleConfig.type]
+    },
+    [schedules],
+  )
 
   const SCHEDULE_TYPE_OPTIONS = [
     {
@@ -47,96 +64,101 @@ const ScheduleEditor: FC = memo(() => {
     },
   ]
 
-  const handleUpdateTimezone = (v: string) => {
-    const schedule = getValues("schedule")
-    setValue("schedule", {
-      ...schedule,
-      timezone: v,
-    })
-  }
-  const handleUpdateScheduleType = (v: SCHEDULE_TYPES) => {
-    const schedule = getValues("schedule")
+  const handleUpdateScheduleType = (v: SCHEDULE_TYPES, i: number) => {
+    const { schedule } = getValues("triggerConfig")
+    const currentSchedule = [...schedule]
     const initOptions = getInitScheduleOptions(v)
-    setValue("schedule", {
-      ...schedule,
-      type: v,
-      options: initOptions,
-    })
-  }
-  const handleUpdateIScheduleOptions = (v: IScheduleOptions) => {
-    const schedule = getValues("schedule")
-    setValue("schedule", {
-      ...schedule,
-      options: {
-        ...schedule.options,
-        ...v,
+    currentSchedule[i] = {
+      ...currentSchedule[i],
+      scheduleConfig: {
+        type: v,
+        options: initOptions,
       },
-    })
-  }
-  const handleUpdateEnabled = (v: boolean) => {
-    const schedule = getValues("schedule")
-    setValue("schedule", {
-      ...schedule,
-      enabled: v,
-    })
+    }
+
+    onChange(currentSchedule)
   }
 
-  return (
-    <Controller
-      name="schedule"
-      control={control}
-      shouldUnregister={false}
-      render={({ field }) => (
-        <LayoutBlock
-          title={t("editor.ai-agent.label.schedule")}
-          customRenderSubtitle={
-            <BlackSwitch
-              value={field.value.enabled}
-              onChange={handleUpdateEnabled}
-              size="small"
-            />
-          }
-        >
-          <div css={scheduleContainerStyle(field.value.enabled)}>
+  if (!Array.isArray(schedules) || schedules.length === 0) {
+    return null
+  }
+  return schedules.map((_, i) => (
+    <LayoutBlock
+      key={i}
+      title={t("editor.ai-agent.label.schedule")}
+      customRenderSubtitle={
+        <Controller
+          control={control}
+          name="triggerIsActive"
+          render={({ field }) => <BlackSwitch {...field} size="small" />}
+        />
+      }
+    >
+      <div css={scheduleContainerStyle(triggerIsActive)}>
+        <Controller
+          control={control}
+          name={`triggerConfig.schedule.${i}.timezone`}
+          render={({ field }) => (
             <RowContainer
               labelName={t("flow.editor.trigger.schedule.time_zone")}
-              enabled={field.value.enabled}
+              enabled={triggerIsActive}
             >
               <Select
+                {...field}
                 options={timezoneOptions}
                 style={{
                   width: 206,
                 }}
-                value={field.value.timezone}
                 showSearch
-                onChange={handleUpdateTimezone}
-                disabled={!field.value.enabled}
+                disabled={!triggerIsActive}
               />
             </RowContainer>
+          )}
+        />
+
+        <Controller
+          control={control}
+          name={`triggerConfig.schedule.${i}.scheduleConfig.type`}
+          render={({ field }) => (
             <RowContainer
               labelName={t("flow.editor.trigger.schedule.schedule_t")}
-              enabled={field.value.enabled}
+              enabled={triggerIsActive}
             >
               <Select
                 options={SCHEDULE_TYPE_OPTIONS}
                 style={{
                   width: 206,
                 }}
-                value={field.value.type}
-                onChange={handleUpdateScheduleType}
-                disabled={!field.value.enabled}
+                value={field.value}
+                onChange={(v) => handleUpdateScheduleType(v, i)}
+                disabled={!triggerIsActive}
               />
             </RowContainer>
-            <ScheduleTypeSetter
-              options={field.value.options}
-              handleUpdateIScheduleOptions={handleUpdateIScheduleOptions}
-              enabled={field.value.enabled}
-            />
-          </div>
-        </LayoutBlock>
-      )}
-    />
-  )
+          )}
+        />
+
+        <Controller
+          control={control}
+          name={`triggerConfig.schedule.${i}.scheduleConfig.options`}
+          render={({ field }) => {
+            const ScheduleTypeSetter = getScheduleTypeSetter(i)
+            return (
+              <ScheduleTypeSetter
+                options={field.value}
+                handleUpdateIScheduleOptions={(value) => {
+                  field.onChange({
+                    ...field.value,
+                    ...value,
+                  })
+                }}
+                enabled={triggerIsActive}
+              />
+            )
+          }}
+        />
+      </div>
+    </LayoutBlock>
+  ))
 })
 
 ScheduleEditor.displayName = "ScheduleEditor"
