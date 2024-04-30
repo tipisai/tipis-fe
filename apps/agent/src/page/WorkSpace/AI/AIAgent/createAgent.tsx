@@ -5,6 +5,8 @@ import { useBeforeUnload, useSearchParams } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { getCurrentId } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
+import { PreviewChatUseProvider } from "@/components/PreviewChat/PreviewChatUseContext"
+import { PREVIEW_CHAT_USE_TO } from "@/components/PreviewChat/PreviewChatUseContext/constants"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
 import store from "@/redux/store"
 import { getRecentTabInfos } from "@/redux/ui/recentTab/selector"
@@ -124,17 +126,19 @@ export const CreateAIAgentPage: FC = () => {
       <TipisWebSocketProvider>
         <AgentWSProvider tabID={CREATE_TIPIS_ID}>
           <FormContext>
-            <UploadContextProvider>
-              <LayoutAutoChange
-                desktopPage={
-                  <WorkspacePCHeaderLayout
-                    title={t("dashboard.button.blank-agent")}
-                    extra={<HeaderTools />}
-                  />
-                }
-              />
-              <AIAgent />
-            </UploadContextProvider>
+            <PreviewChatUseProvider useTo={PREVIEW_CHAT_USE_TO.CREATE_TIPI}>
+              <UploadContextProvider>
+                <LayoutAutoChange
+                  desktopPage={
+                    <WorkspacePCHeaderLayout
+                      title={t("dashboard.button.blank-agent")}
+                      extra={<HeaderTools />}
+                    />
+                  }
+                />
+                <AIAgent />
+              </UploadContextProvider>
+            </PreviewChatUseProvider>
           </FormContext>
         </AgentWSProvider>
       </TipisWebSocketProvider>
