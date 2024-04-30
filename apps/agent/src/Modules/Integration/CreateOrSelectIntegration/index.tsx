@@ -13,6 +13,10 @@ const IntegrationSelector: FC<IIntegrationSelectorProps> = (props) => {
 
   const { data, isLoading } = useGetIntegrationListQuery(currentTeamInfo!.id)
 
+  const targetTypeIntegration = (data ?? []).filter(
+    (item) => item.resourceType === integrationType,
+  )
+
   if (isLoading) {
     return (
       <div css={loadingContainerStyle}>
@@ -21,7 +25,7 @@ const IntegrationSelector: FC<IIntegrationSelectorProps> = (props) => {
     )
   }
 
-  return data ? (
+  return targetTypeIntegration.length > 0 ? (
     <SelectAndCreateIntegration
       onConfirm={onConfirm}
       integrationType={integrationType}

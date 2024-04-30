@@ -16,6 +16,9 @@ export const labelStyle = css`
   font-weight: 500;
   line-height: 22px;
   font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 export const requiredIconStyle = css`

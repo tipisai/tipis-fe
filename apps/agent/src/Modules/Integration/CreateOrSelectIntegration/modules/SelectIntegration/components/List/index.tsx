@@ -6,13 +6,15 @@ import IntegrationListItem from "./item"
 import { listContainerStyle } from "./style"
 
 const IntegrationList: FC<IIntegrationListProps> = (props) => {
-  const { onClickItem, selectedIntegrationID } = props
+  const { onClickItem, selectedIntegrationID, integrationType } = props
 
   const currentTeamInfo = useGetCurrentTeamInfo()
 
   const { integrationList } = useGetIntegrationListQuery(currentTeamInfo!.id, {
     selectFromResult: ({ data }) => ({
-      integrationList: data ?? [],
+      integrationList: (data ?? []).filter(
+        (item) => item.resourceType === integrationType,
+      ),
     }),
   })
 
