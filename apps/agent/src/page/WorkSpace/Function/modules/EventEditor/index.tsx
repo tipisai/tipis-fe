@@ -5,12 +5,14 @@ import { TIntegrationType } from "@illa-public/public-types"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { IFunctionForm } from "../../interface"
 
+const tencentCos = lazy(() => import("./panels/tencentCos"))
+
 const getEventEditorByIntegrationType = (integrationType: TIntegrationType) => {
   switch (integrationType) {
     case "tencentcos":
-      return lazy(() => import("./panels/tencentCos"))
-    case "larkBot":
-      return lazy(() => import("./panels/tencentCos"))
+      return tencentCos
+    case "larkbot":
+      return null
   }
 }
 
@@ -22,7 +24,7 @@ const EventEditor: FC = () => {
     name: "resourceType",
   })
   const EventEditorComponent = getEventEditorByIntegrationType(integrationType)
-  return (
+  return EventEditorComponent ? (
     <LayoutBlock
       title={t("function.edit.configure.label.event")}
       description={t("function.edit.configure.tips.event")}
@@ -31,7 +33,7 @@ const EventEditor: FC = () => {
         <EventEditorComponent />
       </Suspense>
     </LayoutBlock>
-  )
+  ) : null
 }
 
 export default EventEditor

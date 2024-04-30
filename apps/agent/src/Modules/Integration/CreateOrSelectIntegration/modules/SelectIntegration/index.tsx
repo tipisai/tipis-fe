@@ -6,7 +6,7 @@ import IntegrationList from "./components/List"
 import { ISelectIntegrationProps } from "./interface"
 
 const SelectIntegration: FC<ISelectIntegrationProps> = (props) => {
-  const { onClickCreate, onConfirm } = props
+  const { onClickCreate, onConfirm, integrationType } = props
   const [selectedIntegration, setSelectedIntegration] = useState<string>("")
   const { setModalName } = useIntegrationSelectorContext()
   const { t } = useTranslation()
@@ -20,6 +20,7 @@ const SelectIntegration: FC<ISelectIntegrationProps> = (props) => {
       <IntegrationList
         onClickItem={setSelectedIntegration}
         selectedIntegrationID={selectedIntegration}
+        integrationType={integrationType}
       />
       <SelectIntegrationFooter
         onCreateIntegration={onClickCreate}

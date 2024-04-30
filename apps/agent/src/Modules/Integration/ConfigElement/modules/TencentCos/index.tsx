@@ -12,20 +12,6 @@ const TencentCosConfigElement: FC = () => {
   return (
     <>
       <Controller
-        name="resourceName"
-        control={control}
-        rules={{
-          required: t("editor.action.form.tips.tx.name"),
-        }}
-        render={({ field }) => {
-          return (
-            <LabelWithController title="Name" required>
-              <Input size="large" {...field} />
-            </LabelWithController>
-          )
-        }}
-      />
-      <Controller
         name="content.bucketName"
         control={control}
         rules={{

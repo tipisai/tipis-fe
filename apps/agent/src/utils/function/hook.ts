@@ -55,7 +55,7 @@ export const useGetParamsListByResourceType = () => {
         }
       }
     }
-    case "larkBot": {
+    case "larkbot": {
       return DEFAULT_LARK_BOT_PARAMETERS
     }
 
