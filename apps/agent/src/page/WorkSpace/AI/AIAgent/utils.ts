@@ -23,7 +23,7 @@ import { deleteFormDataByTabID } from "@/utils/localForage/formData"
 import { useBatchUpdateRecentTabReducer } from "@/utils/recentTabs/baseHook"
 import { CREATE_TIPIS_ID } from "@/utils/recentTabs/constants"
 import { useUpdateCreateTipiTabToEditTipiTab } from "@/utils/recentTabs/hook"
-import { AgentInitial, IAgentForm } from "./interface"
+import { AgentInitial, IAgentForm, INIT_TRIGGER_CONFIG } from "./interface"
 
 export const handleScrollToElement = (scrollId: string) => {
   const el = document.querySelector(`[data-scroll-id=${scrollId}]`)
@@ -45,7 +45,7 @@ export const useSubmitSaveAgent = () => {
   const { reset } = useFormContext<IAgentForm>()
 
   const getAgentRowData = useCallback((formData: IAgentForm): AgentRaw => {
-    const scheduleVO = formData.triggerConfig.schedule ?? []
+    const scheduleVO = formData.triggerConfig?.schedule ?? []
     const schedules: IScheduleDTO[] = scheduleVO.map((item) => ({
       name: "",
       contentID: "",
@@ -209,4 +209,15 @@ export const useSubmitSaveAgent = () => {
   )
 
   return handleSubmitSave
+}
+
+export const mergeDefaultValueData = (originAgent: Agent) => {
+  let fixedFormData = { ...originAgent }
+  if (fixedFormData.triggerIsActive === undefined) {
+    fixedFormData.triggerIsActive = false
+  }
+  if (fixedFormData.triggerConfig === undefined) {
+    fixedFormData.triggerConfig = INIT_TRIGGER_CONFIG
+  }
+  return fixedFormData
 }
