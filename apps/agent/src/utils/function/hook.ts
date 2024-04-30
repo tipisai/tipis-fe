@@ -318,6 +318,7 @@ export const useOpenTipsWhenSubmit = () => {
         break
       }
     }
+    console.log("currentTabID", currentTabID)
     await removeTab(currentTabID)
     const newSearchParams = new URLSearchParams({
       aiToolID: serverData.aiToolID,

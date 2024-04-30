@@ -1,8 +1,12 @@
 import { Typography } from "antd"
-import { FC, memo, useEffect, useState } from "react"
-import { Controller, useFormContext, useWatch } from "react-hook-form"
+import { FC, memo, useState } from "react"
+import {
+  Controller,
+  useController,
+  useFormContext,
+  useWatch,
+} from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
-import { useParams } from "react-router-dom"
 import { IEditorAIToolsVO } from "@illa-public/public-types"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { IAgentForm } from "../../../interface"
@@ -16,10 +20,15 @@ import { containerStyle, functionContainerStyle } from "./style"
 const FunctionsEditorPC: FC = memo(() => {
   const { t } = useTranslation()
 
-  const { control, getValues, setValue } = useFormContext<IAgentForm>()
+  const { control, getValues } = useFormContext<IAgentForm>()
   const [selectModalVisible, setSelectModalVisible] = useState(false)
   const [integrationVisible, setIntegrationVisible] = useState(false)
-  const { aiToolID, aiToolName, aiToolIcon } = useParams()
+  const {
+    field: { onChange },
+  } = useController({
+    control,
+    name: "aiTools",
+  })
 
   const [fieldAiTools] = useWatch({
     control,
@@ -27,16 +36,12 @@ const FunctionsEditorPC: FC = memo(() => {
   })
 
   const handleValueChange = (values: IEditorAIToolsVO[]) => {
-    setValue("aiTools", values, { shouldDirty: true })
+    onChange(values)
   }
 
   const handleRemoveFunction = (aiToolID: string) => {
     const aiTools = getValues("aiTools")
-    setValue(
-      "aiTools",
-      aiTools.filter((item) => item.aiToolID !== aiToolID),
-      { shouldDirty: true },
-    )
+    onChange(aiTools.filter((item) => item.aiToolID !== aiToolID))
   }
 
   const handleClickCreate = () => {
@@ -47,33 +52,6 @@ const FunctionsEditorPC: FC = memo(() => {
   const handleOpenSelectModal = async () => {
     setSelectModalVisible(true)
   }
-
-  useEffect(() => {
-    if (aiToolID && aiToolIcon && aiToolName) {
-      const aiTools = [...getValues("aiTools")]
-      const targetAiToolIndex = aiTools.findIndex(
-        (item) => item.aiToolID === aiToolID,
-      )
-      if (targetAiToolIndex !== -1) {
-        aiTools[targetAiToolIndex] = {
-          ...aiTools[targetAiToolIndex],
-          name: aiToolName,
-          config: {
-            icon: aiToolIcon,
-          },
-        }
-      } else {
-        aiTools.push({
-          aiToolID,
-          name: aiToolName,
-          config: {
-            icon: aiToolIcon,
-          },
-        })
-      }
-      setValue("aiTools", aiTools)
-    }
-  }, [aiToolID, aiToolIcon, aiToolName, getValues, setValue])
 
   return (
     <>
