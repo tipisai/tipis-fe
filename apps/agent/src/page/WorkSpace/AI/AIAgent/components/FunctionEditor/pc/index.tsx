@@ -1,5 +1,5 @@
 import { Typography } from "antd"
-import { FC, memo, useState } from "react"
+import { FC, memo, useContext, useState } from "react"
 import {
   Controller,
   useController,
@@ -8,7 +8,9 @@ import {
 } from "react-hook-form"
 import { Trans, useTranslation } from "react-i18next"
 import { IEditorAIToolsVO } from "@illa-public/public-types"
+import { TipisTrack } from "@illa-public/track-utils"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
+import { PreviewChatUseContext } from "@/components/PreviewChat/PreviewChatUseContext"
 import { IAgentForm } from "../../../interface"
 import { FUNCTION_LEARN_MORE_LINK } from "../constants"
 import AddToolsButton from "../modules/AddToolsButton"
@@ -23,6 +25,7 @@ const FunctionsEditorPC: FC = memo(() => {
   const { control, getValues } = useFormContext<IAgentForm>()
   const [selectModalVisible, setSelectModalVisible] = useState(false)
   const [integrationVisible, setIntegrationVisible] = useState(false)
+  const { useTo } = useContext(PreviewChatUseContext)
   const {
     field: { onChange },
   } = useController({
@@ -36,6 +39,9 @@ const FunctionsEditorPC: FC = memo(() => {
   })
 
   const handleValueChange = (values: IEditorAIToolsVO[]) => {
+    TipisTrack.track("click_add_function_entry", {
+      parameter1: useTo,
+    })
     onChange(values)
   }
 
@@ -45,6 +51,7 @@ const FunctionsEditorPC: FC = memo(() => {
   }
 
   const handleClickCreate = () => {
+    TipisTrack.track("tipi_add_function_create")
     setSelectModalVisible(false)
     setIntegrationVisible(true)
   }
