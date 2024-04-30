@@ -42,7 +42,7 @@ const MonthScheduleSetter: FC<IScheduleRuleProps> = (props) => {
           options={DAY_OF_MONTH_OPTIONS}
           onChange={(v) => {
             handleUpdateIScheduleOptions({
-              dayOfMonth: v as string,
+              dayOfMonth: v,
             })
           }}
           disabled={!enabled}

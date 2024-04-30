@@ -25,7 +25,7 @@ const HourScheduleSetter: FC<IScheduleRuleProps> = (props) => {
           options={MINUTE_OPTIONS}
           onChange={(v) => {
             handleUpdateIScheduleOptions({
-              minute: v as number,
+              minute: v,
             })
           }}
           disabled={!enabled}
