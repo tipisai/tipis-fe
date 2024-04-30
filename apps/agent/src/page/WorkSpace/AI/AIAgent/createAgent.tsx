@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect } from "react"
+import { FC, useCallback, useEffect, useRef } from "react"
 import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useBeforeUnload, useSearchParams } from "react-router-dom"
@@ -31,6 +31,8 @@ export const CreateAIAgentPage: FC = () => {
   const methods = useForm<IAgentForm>({
     defaultValues: AgentInitial,
   })
+
+  const canReadCacheRef = useRef(true)
 
   const { reset, control } = methods
   const values = useWatch({
@@ -84,7 +86,6 @@ export const CreateAIAgentPage: FC = () => {
     const currentTab = historyTabs.find((tab) => tab.tabID === tabID)
     if (!currentTab) return
     const formData = await getFormDataByTabID(teamID, tabID)
-
     if (formData) {
       await setFormDataByTabID(teamID, tabID, {
         ...formData,
@@ -97,6 +98,7 @@ export const CreateAIAgentPage: FC = () => {
 
   useEffect(() => {
     const getHistoryDataAndSetFormData = async () => {
+      canReadCacheRef.current = false
       const tabID = CREATE_TIPIS_ID
       const teamID = getCurrentId(store.getState())!
       const formData = await getFormDataByTabID(teamID, tabID)
@@ -108,7 +110,7 @@ export const CreateAIAgentPage: FC = () => {
         })
       }
     }
-    getHistoryDataAndSetFormData()
+    canReadCacheRef.current && getHistoryDataAndSetFormData()
   }, [handleRedirectToolInfo, reset, searchParams])
 
   useBeforeUnload(setUiHistoryFormData)

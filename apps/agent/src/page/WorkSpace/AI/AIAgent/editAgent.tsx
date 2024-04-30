@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from "react"
+import { FC, useCallback, useEffect, useRef, useState } from "react"
 import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useSelector } from "react-redux"
 import { useBeforeUnload, useParams, useSearchParams } from "react-router-dom"
@@ -87,6 +87,8 @@ const EditAIAgentPage: FC<{
     (tab) => tab.cacheID === agentID && tab.tabType === TAB_TYPE.EDIT_TIPIS,
   )
 
+  const canReadCacheRef = useRef(true)
+
   const methods = useForm<IAgentForm>({
     defaultValues: originAgent,
   })
@@ -131,7 +133,8 @@ const EditAIAgentPage: FC<{
   )
 
   useEffect(() => {
-    if (cacheData) {
+    if (cacheData && canReadCacheRef.current) {
+      canReadCacheRef.current = false
       const aiTools = handleRedirectToolInfo(cacheData as IAgentForm)
       reset(
         {

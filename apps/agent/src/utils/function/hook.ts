@@ -317,13 +317,13 @@ export const useOpenTipsWhenSubmit = () => {
         break
       }
     }
-    console.log("currentTabID", currentTabID)
-    await removeTab(currentTabID)
+
     const newSearchParams = new URLSearchParams({
       aiToolID: serverData.aiToolID,
       aiToolName: serverData.name,
       aiToolIcon: serverData.config.icon,
     })
+
     navigate(
       `${genTabNavigateLink(
         currentTeamInfo.identifier,
@@ -332,6 +332,7 @@ export const useOpenTipsWhenSubmit = () => {
         tabInfo.tabID,
       )}?${newSearchParams.toString()}`,
     )
+    await removeTab(currentTabID)
   }
 
   return openTipsWhenSubmit

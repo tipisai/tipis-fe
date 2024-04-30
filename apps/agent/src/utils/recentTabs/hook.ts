@@ -503,28 +503,14 @@ export const useAddOrUpdateEditFunctionTab = () => {
           (tab) => tab.tabType === TAB_TYPE.EDIT_FUNCTION,
         )
 
-        const needUpdateTabInfoTab = useThisTipTab.filter(
-          (tab) => tab.tabType === TAB_TYPE.EDIT_FUNCTION,
-        )
-        if (needUpdateTabInfoTab.length > 0) {
-          const updateSlice = needUpdateTabInfoTab
-            .map((tabInfo) => ({
-              ...tabInfo,
-              cacheID: functionID,
-              tabName: functionName,
-            }))
-            .reduce(
-              (acc, tabInfo) => {
-                acc[tabInfo.tabID] = tabInfo
-                return acc
-              },
-              {} as Record<string, ITabInfo>,
-            )
-
-          await batchUpdateRecentTab(updateSlice)
-        }
-
         if (currentTab) {
+          await batchUpdateRecentTab({
+            [currentTab.tabID]: {
+              ...currentTab,
+              ...newTabInfo,
+              tabID: currentTab.tabID,
+            },
+          })
           dispatch(
             recentTabActions.updateCurrentRecentTabIDReducer(currentTab.tabID),
           )
