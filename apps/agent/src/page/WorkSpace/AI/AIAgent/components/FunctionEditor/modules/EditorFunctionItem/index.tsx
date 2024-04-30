@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { DeleteIcon, PenIcon } from "@illa-public/icon"
+import { TipisTrack } from "@illa-public/track-utils"
 import { IAgentForm } from "@/page/WorkSpace/AI/AIAgent/interface"
 import { getCurrentTabID } from "@/redux/ui/recentTab/selector"
 import {
@@ -33,6 +34,7 @@ const EditorFunctionItem: FC<IEditorAIToolsVOItemProps> = ({
   const currentTabID = useSelector(getCurrentTabID)
   const handleClickEdit = () => {
     if (!teamInfo) return
+    TipisTrack.track("tipi_add_function_edit")
     const searchParams = new URLSearchParams()
     const from = !!getValues("aiAgentID")
       ? CREATE_FUNCTION_FROM_SINGLE.EDIT_TIPIS
