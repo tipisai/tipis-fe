@@ -9,6 +9,7 @@ import {
   PenIcon,
   PlusIcon,
 } from "@illa-public/icon"
+import { TipisTrack } from "@illa-public/track-utils"
 import { ErrorText } from "@/Layout/Form/ErrorText"
 import LayoutBlock from "@/Layout/Function/LayoutBlock"
 import IntegrationSelectorModal from "@/Modules/Integration/CreateOrSelectIntegration/modal"
@@ -33,9 +34,10 @@ import {
 const IntegrationEditor = memo(() => {
   const { t } = useTranslation()
   const { control } = useFormContext<IFunctionForm>()
-  const integrationType = useWatch({
+
+  const [integrationType, aiToolID] = useWatch({
     control,
-    name: "resourceType",
+    name: ["resourceType", "aiToolID"],
   })
 
   const currentTeamInfo = useGetCurrentTeamInfo()!
@@ -71,6 +73,12 @@ const IntegrationEditor = memo(() => {
                       CREATE_INTEGRATION_EVENT.CHANGE_MODAL_STEP,
                       SELECT_INTEGRATION_STEP.SELECT_OR_CREATE,
                     )
+                    TipisTrack.track("function_add_integration", {
+                      parameter1: aiToolID
+                        ? "edit_function"
+                        : "create_function",
+                      parameter2: integrationType,
+                    })
                     setCreateOrSelectModalShow(true)
                   }}
                 >
@@ -86,6 +94,12 @@ const IntegrationEditor = memo(() => {
                       CREATE_INTEGRATION_EVENT.CHANGE_MODAL_STEP,
                       SELECT_INTEGRATION_STEP.SELECT_OR_CREATE,
                     )
+                    TipisTrack.track("function_change_integration", {
+                      parameter1: aiToolID
+                        ? "edit_function"
+                        : "create_function",
+                      parameter2: integrationType,
+                    })
                     setCreateOrSelectModalShow(true)
                   }}
                 >
@@ -104,6 +118,12 @@ const IntegrationEditor = memo(() => {
                 <div
                   css={buttonStyle}
                   onClick={() => {
+                    TipisTrack.track("function_edit_integration", {
+                      parameter1: aiToolID
+                        ? "edit_function"
+                        : "create_function",
+                      parameter2: integrationType,
+                    })
                     IntegrationEventEmitter.emit(
                       CREATE_INTEGRATION_EVENT.CHANGE_MODAL_STEP,
                       SELECT_INTEGRATION_STEP.EDIT,
@@ -124,6 +144,10 @@ const IntegrationEditor = memo(() => {
               changeOpen={setCreateOrSelectModalShow}
               integrationType={integrationType}
               onConfirm={async (integrationID) => {
+                TipisTrack.track("integration_save", {
+                  parameter1: aiToolID ? "edit_function" : "create_function",
+                  parameter2: integrationType,
+                })
                 try {
                   const integrationList = await dispatch(
                     integrationAPI.endpoints.getIntegrationList.initiate(
