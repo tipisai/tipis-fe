@@ -26,6 +26,7 @@ export const LayoutBlock: FC<ILayoutBlock> = (props) => {
     scrollId,
     isMobile = false,
     errorMessage,
+    customRenderSubtitle,
   } = props
 
   return (
@@ -40,14 +41,19 @@ export const LayoutBlock: FC<ILayoutBlock> = (props) => {
             )}
             {required && <RequireIcon />}
           </div>
-          {subtitle && (
-            <Tooltip title={subtitleTips} trigger="hover">
-              <div css={applyBlockSubtitleStyle(subtitleTips !== undefined)}>
-                {subtitle}
-              </div>
-            </Tooltip>
-          )}
+          {customRenderSubtitle
+            ? customRenderSubtitle
+            : subtitle && (
+                <Tooltip title={subtitleTips} trigger="hover">
+                  <div
+                    css={applyBlockSubtitleStyle(subtitleTips !== undefined)}
+                  >
+                    {subtitle}
+                  </div>
+                </Tooltip>
+              )}
         </div>
+
         {description && <div css={descriptionStyle}>{description}</div>}
       </div>
       <div css={childrenAndErrorMessageContainerStyle}>

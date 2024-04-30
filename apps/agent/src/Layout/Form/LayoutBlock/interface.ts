@@ -11,4 +11,5 @@ export interface ILayoutBlock {
   scrollId?: string
   isMobile?: boolean
   errorMessage?: string
+  customRenderSubtitle?: ReactNode
 }
