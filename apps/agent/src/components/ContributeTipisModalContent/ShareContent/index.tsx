@@ -3,7 +3,8 @@ import { App, Button, Input, Modal } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { CopyIcon } from "@illa-public/icon"
-import { ShareBlockPC } from "@illa-public/market-share"
+import { LayoutAutoChange } from "@illa-public/layout-auto-change"
+import { ShareBlockMobile, ShareBlockPC } from "@illa-public/market-share"
 import {
   COPY_STATUS,
   copyToClipboard,
@@ -97,9 +98,19 @@ const ShareContentModal: FC<IShareContentProps> = ({
             </Button>
           </div>
         </div>
-        <ShareBlockPC
-          title={shareTitle}
-          shareUrl={getAgentPublicLink(tipiID)}
+        <LayoutAutoChange
+          desktopPage={
+            <ShareBlockPC
+              title={shareTitle}
+              shareUrl={getAgentPublicLink(tipiID)}
+            />
+          }
+          mobilePage={
+            <ShareBlockMobile
+              title={shareTitle}
+              shareUrl={getAgentPublicLink(tipiID)}
+            />
+          }
         />
       </div>
     </Modal>
