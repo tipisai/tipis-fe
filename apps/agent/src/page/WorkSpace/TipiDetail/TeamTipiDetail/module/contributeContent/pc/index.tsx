@@ -1,6 +1,7 @@
 import { FC } from "react"
 import ContributeInfo from "@/Layout/DetailLayout/components/ContributeInfo"
 import PCDetailHeader from "@/Layout/DetailLayout/components/DetailHeader/pc"
+import Schedule from "@/page/WorkSpace/TipiDetail/components/Schedule"
 import PCActionGroup from "../../../../components/ActionGroup/pc"
 import Knowledge from "../../../../components/Knowledge"
 import Parameters from "../../../../components/Parameters"
@@ -36,6 +37,13 @@ const PCContributeContent: FC<IContributeContentProps> = ({
       />
       {aiAgentMarketPlaceInfo.marketplace.config.publishConfiguration && (
         <>
+          {!!aiAgentMarketPlaceInfo.aiAgent.triggerIsActive && (
+            <Schedule
+              schedule={
+                aiAgentMarketPlaceInfo.aiAgent.triggerConfig?.schedule ?? []
+              }
+            />
+          )}
           <Prompt
             parameters={aiAgentMarketPlaceInfo.aiAgent.variables ?? []}
             prompt={aiAgentMarketPlaceInfo.aiAgent.prompt}

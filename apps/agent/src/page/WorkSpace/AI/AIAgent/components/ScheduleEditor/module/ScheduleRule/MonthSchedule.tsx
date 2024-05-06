@@ -3,9 +3,9 @@ import dayjs, { Dayjs } from "dayjs"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { SCHEDULE_TYPES } from "@illa-public/public-types"
+import { DAY_OF_MONTH_OPTIONS } from "@/config/constants/schedule"
 import RowContainer from "../../components/RowContainer"
 import IntervalSetter from "../IntervalSetter"
-import { DAY_OF_MONTH_OPTIONS } from "./config"
 import { IScheduleRuleProps } from "./interface"
 
 const MonthScheduleSetter: FC<IScheduleRuleProps> = (props) => {
