@@ -123,9 +123,9 @@ const MarketTipiDetailMobile: FC<IMarketTipiDetailProps> = ({
               prompt={aiAgentMarketPlaceInfo?.aiAgent?.prompt}
             />
             {Array.isArray(aiAgentMarketPlaceInfo?.aiAgent?.variables) &&
-              aiAgentMarketPlaceInfo?.aiAgent?.variables && (
+              aiAgentMarketPlaceInfo?.aiAgent?.variables.length > 0 && (
                 <Parameters
-                  parameters={aiAgentMarketPlaceInfo?.aiAgent?.variables ?? []}
+                  parameters={aiAgentMarketPlaceInfo?.aiAgent?.variables}
                 />
               )}
             {Array.isArray(aiAgentMarketPlaceInfo?.aiAgent?.knowledge) &&
