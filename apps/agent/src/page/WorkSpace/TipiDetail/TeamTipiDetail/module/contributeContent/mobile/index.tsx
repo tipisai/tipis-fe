@@ -3,6 +3,7 @@ import { FC } from "react"
 import ContributeInfo from "@/Layout/DetailLayout/components/ContributeInfo"
 import MobileDetailHeader from "@/Layout/DetailLayout/components/DetailHeader/mobile"
 import MobileActionGroup from "@/page/WorkSpace/TipiDetail/components/ActionGroup/mobile"
+import Schedule from "@/page/WorkSpace/TipiDetail/components/Schedule"
 import Knowledge from "../../../../components/Knowledge"
 import Parameters from "../../../../components/Parameters"
 import Prompt from "../../../../components/Prompt"
@@ -42,6 +43,13 @@ const MobileContributeContent: FC<IContributeContentProps> = ({
       />
       {aiAgentMarketPlaceInfo.marketplace.config.publishConfiguration && (
         <>
+          {!!aiAgentMarketPlaceInfo.aiAgent.triggerIsActive && (
+            <Schedule
+              schedule={
+                aiAgentMarketPlaceInfo.aiAgent.triggerConfig?.schedule ?? []
+              }
+            />
+          )}
           <Prompt
             parameters={aiAgentMarketPlaceInfo.aiAgent.variables ?? []}
             prompt={aiAgentMarketPlaceInfo.aiAgent.prompt}

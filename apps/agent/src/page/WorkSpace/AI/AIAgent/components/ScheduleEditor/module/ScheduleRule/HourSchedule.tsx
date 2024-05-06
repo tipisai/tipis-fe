@@ -2,9 +2,9 @@ import { Select } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import { SCHEDULE_TYPES } from "@illa-public/public-types"
+import { MINUTE_OPTIONS } from "@/config/constants/schedule"
 import RowContainer from "../../components/RowContainer"
 import IntervalSetter from "../IntervalSetter"
-import { MINUTE_OPTIONS } from "./config"
 import { IScheduleRuleProps } from "./interface"
 
 const HourScheduleSetter: FC<IScheduleRuleProps> = (props) => {

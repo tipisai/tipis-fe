@@ -1,6 +1,7 @@
 import { Divider } from "antd"
 import { FC } from "react"
 import MobileDetailHeader from "@/Layout/DetailLayout/components/DetailHeader/mobile"
+import Schedule from "@/page/WorkSpace/TipiDetail/components/Schedule"
 import MobileActionGroup from "../../../../components/ActionGroup/mobile"
 import Knowledge from "../../../../components/Knowledge"
 import Parameters from "../../../../components/Parameters"
@@ -28,6 +29,9 @@ const MobileNotContributeContent: FC<INotContributeContentProps> = (props) => {
           margin: "0",
         }}
       />
+      {!!agentInfo.triggerIsActive && (
+        <Schedule schedule={agentInfo.triggerConfig?.schedule ?? []} />
+      )}
       <Prompt
         parameters={agentInfo.variables ?? []}
         prompt={agentInfo.prompt}
