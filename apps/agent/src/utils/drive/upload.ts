@@ -2,6 +2,8 @@ import { App } from "antd"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { UPLOAD_FILE_STATUS } from "@illa-public/public-types"
+import { useCreditModal } from "@illa-public/upgrade-modal"
+import { BILLING_REPORT_FROM } from "@illa-public/upgrade-modal/constants"
 import { getCurrentId } from "@illa-public/user-data"
 import {
   useLazyGetChatUploadAddressQuery,
@@ -12,11 +14,13 @@ import {
 import { uploadFileToObjectStorage } from "@/services/drive"
 import { FILE_ITEM_DETAIL_STATUS_IN_UI } from "./interface"
 import { UploadFileStore } from "./store"
+import { isGenerateDescWithCreditError } from "./utils"
 
 export const useUploadFileToDrive = () => {
   const { message } = App.useApp()
   const { t } = useTranslation()
   const teamID = useSelector(getCurrentId)!
+  const creditModal = useCreditModal()
 
   const [triggerGetChatUploadAddress] = useLazyGetChatUploadAddressQuery()
   const [triggerGetKnowledgeUploadAddress] =
@@ -88,6 +92,10 @@ export const useUploadFileToDrive = () => {
       store.updateFileDetailInfo(queryID, {
         status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
       })
+      isGenerateDescWithCreditError(e) &&
+        creditModal({
+          from: BILLING_REPORT_FROM.RUN,
+        })
       message.error(t("editor.inspect.setter_message.uploadfail"))
     }
   }
@@ -154,6 +162,10 @@ export const useUploadFileToDrive = () => {
       store.updateFileDetailInfo(queryID, {
         status: FILE_ITEM_DETAIL_STATUS_IN_UI.ERROR,
       })
+      isGenerateDescWithCreditError(e) &&
+        creditModal({
+          from: BILLING_REPORT_FROM.RUN,
+        })
       message.error(t("editor.inspect.setter_message.uploadfail"))
     }
   }
