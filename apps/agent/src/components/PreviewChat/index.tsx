@@ -22,7 +22,8 @@ import {
 export const PreviewChat: FC<PreviewChatProps> = (props) => {
   const { blockInput, onSendMessage, wsContextValue } = props
 
-  const { chatMessages, isReceiving, sendMessage } = wsContextValue
+  const { chatMessages, isReceiving, sendMessage, currentRenderMessage } =
+    wsContextValue
 
   const { data: currentUserInfo } = useGetUserInfoQuery(null)
 
@@ -80,6 +81,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
         chatMessages={chatMessages}
         isReceiving={isReceiving}
         currentUserID={currentUserInfo?.userID ?? ""}
+        currentRenderMessage={currentRenderMessage}
       />
       <div css={[inputTextContainerStyle, maxWidthStyle]}>
         {blockInput ? (

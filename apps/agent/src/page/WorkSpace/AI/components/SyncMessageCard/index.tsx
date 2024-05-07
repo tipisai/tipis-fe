@@ -44,7 +44,7 @@ export const PureMessage: FC<PureMessageProps> = ({
 
   const contentBody = (
     <div css={pureMessageContainerStyle} ref={containerRef}>
-      <MarkdownMessage isReceiving={false}>{message}</MarkdownMessage>
+      <MarkdownMessage>{message}</MarkdownMessage>
     </div>
   )
 
@@ -91,7 +91,7 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
   message,
   messageStatus,
   messageResult,
-  isReceiving,
+  disableTrigger,
 }) => {
   const { t } = useTranslation()
   const [showMessage, setShowMessage] = useState(false)
@@ -156,7 +156,7 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
         <>
           <SyncMessageLine />
           <div css={messageContainerStyle}>
-            <MarkdownMessage isReceiving={isReceiving}>
+            <MarkdownMessage disableTrigger={disableTrigger}>
               {formatMessage}
             </MarkdownMessage>
             {errorInfo && (
@@ -168,7 +168,7 @@ export const SyncMessageCard: FC<SyncMessageCardProps> = ({
                   {t("homepage.tipi_chat.response.resonse")}
                 </span>
                 <MarkdownMessage
-                  isReceiving={isReceiving}
+                  disableTrigger={disableTrigger}
                   codeStatus={CODE_STATUS.ERROR}
                 >
                   {errorInfo}

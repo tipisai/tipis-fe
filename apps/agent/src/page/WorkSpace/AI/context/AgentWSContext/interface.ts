@@ -34,6 +34,7 @@ export interface IAgentWSInject
   isRunning: boolean
   inRoomUsers: CollaboratorsInfo[]
   chatMessages: (IGroupMessage | ChatMessage)[]
+  currentRenderMessage: IGroupMessage | ChatMessage | null
   connect: () => Promise<void>
   reconnect: () => Promise<void>
   sendMessage: IChatSendMessage

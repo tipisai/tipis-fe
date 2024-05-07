@@ -50,7 +50,7 @@ import {
   delayHandleTask,
   formatSendMessagePayload,
   getNeedCacheUIMessage,
-  groupReceivedMessagesForUI,
+  groupRenderReceivedMessageForUI,
 } from "@/utils/agent/wsUtils"
 import {
   getChatMessageAndUIState,
@@ -88,6 +88,12 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
   const cacheMessageQueue = useRef<ICachePayloadQueue[]>([])
   const teamID = useSelector(getCurrentId)
   const { chatID } = useParams()
+  const cacheCurrentRenderMessageRef = useRef<
+    IGroupMessage | ChatMessage | null
+  >(null)
+  const [currentRenderMessage, setCurrentRenderMessage] = useState<
+    IGroupMessage | ChatMessage | null
+  >(null)
 
   const [triggerGetAIAgentAnonymousAddressQuery] =
     useLazyGetAIAgentAnonymousAddressQuery()
@@ -108,14 +114,28 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
   )
 
   const onUpdateChatMessage = useCallback((message: ChatMessage) => {
-    const newMessageList = groupReceivedMessagesForUI(
-      chatMessagesRef.current,
+    const newMessage = groupRenderReceivedMessageForUI(
+      cacheCurrentRenderMessageRef.current,
       message,
     )
-    if (newMessageList) {
-      chatMessagesRef.current = newMessageList
-      setChatMessages(newMessageList)
+    if (newMessage) {
+      cacheCurrentRenderMessageRef.current = newMessage
+      setCurrentRenderMessage(newMessage)
     }
+  }, [])
+
+  const messageEndCallback = useCallback(() => {
+    if (cacheCurrentRenderMessageRef.current) {
+      chatMessagesRef.current.push(cacheCurrentRenderMessageRef.current)
+    }
+    const needUpdateMessageList = cancelPendingMessage(chatMessagesRef.current)
+    if (needUpdateMessageList) {
+      chatMessagesRef.current = needUpdateMessageList
+    }
+    setChatMessages(chatMessagesRef.current)
+    cacheCurrentRenderMessageRef.current = null
+    setCurrentRenderMessage(cacheCurrentRenderMessageRef.current)
+    setIsReceiving(false)
   }, [])
 
   const { sendMessage, connect, getReadyState, leaveRoom, cleanMessage } =
@@ -295,21 +315,19 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           onUpdateChatMessage(chatCallback)
           break
         case "stop_all/remote":
-          setIsReceiving(false)
-          const needUpdateMessageList = cancelPendingMessage(
-            chatMessagesRef.current,
-          )
-          if (needUpdateMessageList) {
-            chatMessagesRef.current = needUpdateMessageList
-            setChatMessages(needUpdateMessageList)
-          }
+          messageEndCallback()
           break
         case "clean/remote":
           setIsReceiving(false)
           break
       }
     },
-    [onUpdateRoomUser, initChatMessage, onUpdateChatMessage],
+    [
+      onUpdateRoomUser,
+      initChatMessage,
+      onUpdateChatMessage,
+      messageEndCallback,
+    ],
   )
 
   const onMessageFailedCallback = useCallback(
@@ -323,14 +341,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
           })
           break
         case WEBSOCKET_ERROR_CODE.ERROR_MESSAGE_END:
-          const needUpdateMessageList = cancelPendingMessage(
-            chatMessagesRef.current,
-          )
-          if (needUpdateMessageList) {
-            chatMessagesRef.current = needUpdateMessageList
-            setChatMessages(needUpdateMessageList)
-          }
-          setIsReceiving(false)
+          messageEndCallback()
           break
         case WEBSOCKET_ERROR_CODE.CONTEXT_LENGTH_EXCEEDED:
           messageAPI.error({
@@ -351,7 +362,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
         }
       }
     },
-    [clearCacheQueue, creditModal, messageAPI, t],
+    [clearCacheQueue, creditModal, messageAPI, messageEndCallback, t],
   )
 
   const onMessageCallBack = useCallback(
@@ -438,6 +449,8 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
     })
     cleanMessage()
     setChatMessages([])
+    setCurrentRenderMessage(null)
+    cacheCurrentRenderMessageRef.current = null
     chatMessagesRef.current = []
     await removeChatMessageAndUIState(teamID, chatID)
   }, [chatID, cleanMessage, startSendMessage, teamID])
@@ -459,6 +472,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       isRunning,
       inRoomUsers,
       chatMessages,
+      currentRenderMessage,
     }),
     [
       chatMessages,
@@ -467,6 +481,7 @@ export const ChatWSProvider: FC<IChatWSProviderProps> = (props) => {
       isReceiving,
       isRunning,
       getReadyState,
+      currentRenderMessage,
     ],
   )
 

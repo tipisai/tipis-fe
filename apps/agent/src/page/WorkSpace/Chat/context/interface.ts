@@ -42,6 +42,7 @@ export interface IChatUnStableWSInject {
   isRunning: boolean
   inRoomUsers: CollaboratorsInfo[]
   chatMessages: (IGroupMessage | ChatMessage)[]
+  currentRenderMessage: IGroupMessage | ChatMessage | null
   getReadyState: () => WS_READYSTATE
 }
 
