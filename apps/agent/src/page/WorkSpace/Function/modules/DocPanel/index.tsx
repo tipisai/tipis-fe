@@ -8,7 +8,13 @@ import { useGetWhiteListIPQuery } from "@/redux/services/peripheralAPI"
 import { useCopyToClipboard } from "@/utils/copyToClipboard"
 import CopyPanel from "../../components/CopyPanel"
 import { IFunctionForm } from "../../interface"
-import { blockStyle, descStyle, docPanelStyle, titleStyle } from "./style"
+import {
+  blockStyle,
+  descStyle,
+  docPanelStyle,
+  imageStyle,
+  titleStyle,
+} from "./style"
 import { INTEGRATION_TYPE_MAP_DOC } from "./utils"
 
 const DocPanel: FC = () => {
@@ -59,6 +65,10 @@ const DocPanel: FC = () => {
       </Button>
       <div css={blockStyle}>
         <p css={titleStyle}>{t("function.edit.right_panel.add_to_tipi")}</p>
+        <img
+          src="https://cdn.tipis.ai/tipis/how_to_add_functions.gif"
+          css={imageStyle}
+        />
       </div>
       <div css={blockStyle}>
         <p css={titleStyle}>{t("function.edit.right_panel.write_in_prompt")}</p>
