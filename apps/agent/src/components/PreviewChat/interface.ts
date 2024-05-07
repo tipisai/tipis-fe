@@ -77,6 +77,7 @@ export interface PreviewChatProps {
   onSendMessage: (cheatMessage: ChatMessage) => void
   wsContextValue: {
     chatMessages: (IGroupMessage | ChatMessage)[]
+    currentRenderMessage: IGroupMessage | ChatMessage | null
     isReceiving: boolean
     sendMessage: IChatSendMessage
   }

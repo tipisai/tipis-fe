@@ -41,6 +41,7 @@ export const AIAgentRunPC: FC = () => {
     sendMessage,
     lastRunAgent,
     tabID,
+    currentRenderMessage,
   } = useContext(AgentWSContext)
 
   const isVariablesDirty = getFieldState("variables").isDirty
@@ -65,6 +66,7 @@ export const AIAgentRunPC: FC = () => {
       isReceiving,
       sendMessage,
       lastRunAgent,
+      currentRenderMessage,
     }),
     [
       chatMessages,
@@ -73,6 +75,7 @@ export const AIAgentRunPC: FC = () => {
       lastRunAgent,
       sendMessage,
       getReadyState,
+      currentRenderMessage,
     ],
   )
 

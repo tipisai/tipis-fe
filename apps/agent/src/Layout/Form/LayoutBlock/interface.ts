@@ -2,6 +2,7 @@ import { ReactNode } from "react"
 
 export interface ILayoutBlock {
   title: string
+  description?: ReactNode
   tips?: string
   subtitle?: string | ReactNode
   children?: ReactNode
@@ -10,4 +11,5 @@ export interface ILayoutBlock {
   scrollId?: string
   isMobile?: boolean
   errorMessage?: string
+  customRenderSubtitle?: ReactNode
 }

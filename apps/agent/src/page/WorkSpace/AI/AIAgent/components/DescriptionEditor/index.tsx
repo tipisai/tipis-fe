@@ -1,6 +1,6 @@
 import { Input } from "antd"
 import { FC, memo } from "react"
-import { Controller, useFormContext, useFormState } from "react-hook-form"
+import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import LayoutBlock from "@/Layout/Form/LayoutBlock"
 import { IAgentForm, SCROLL_ID } from "../../interface"
@@ -8,9 +8,6 @@ import { IAgentForm, SCROLL_ID } from "../../interface"
 const DescriptionEditor: FC = memo(() => {
   const { t } = useTranslation()
   const { control } = useFormContext<IAgentForm>()
-  const { errors } = useFormState({
-    control: control,
-  })
 
   return (
     <Controller
@@ -24,16 +21,16 @@ const DescriptionEditor: FC = memo(() => {
         },
       }}
       shouldUnregister={false}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <LayoutBlock
           scrollId={SCROLL_ID.DESCRIPTION}
           title={t("editor.ai-agent.label.desc")}
           required
-          errorMessage={errors.description?.message}
+          errorMessage={fieldState.error?.message}
         >
           <Input.TextArea
             {...field}
-            status={!!errors.description ? "error" : undefined}
+            status={!!fieldState.error?.message ? "error" : undefined}
             maxLength={160}
             placeholder={t("editor.ai-agent.placeholder.desc")}
             autoSize={{

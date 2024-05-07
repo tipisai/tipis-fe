@@ -9,6 +9,7 @@ export const headerLayoutContainerStyle = css`
   align-items: center;
   gap: 24px;
   justify-content: space-between;
+  flex: none;
 `
 
 export const titleAndTitleDescContainerStyle = css`

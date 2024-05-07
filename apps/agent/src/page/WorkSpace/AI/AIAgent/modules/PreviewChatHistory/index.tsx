@@ -2,8 +2,6 @@ import { isEqual } from "lodash-es"
 import { FC, memo, useCallback, useContext, useMemo } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { PreviewChat } from "@/components/PreviewChat"
-import { PreviewChatUseProvider } from "@/components/PreviewChat/PreviewChatUseContext"
-import { PREVIEW_CHAT_USE_TO } from "@/components/PreviewChat/PreviewChatUseContext/constants"
 import { ChatMessage } from "@/components/PreviewChat/interface"
 import { getSendMessageBody } from "@/utils/agent/wsUtils"
 import { AgentWSContext } from "../../../context/AgentWSContext"
@@ -19,10 +17,11 @@ const PreviewChatHistory: FC = memo(() => {
     isReceiving,
     sendMessage,
     lastRunAgent,
+    currentRenderMessage,
   } = useContext(AgentWSContext)
-  const [prompt, variables, knowledge] = useWatch({
+  const [prompt, variables, knowledge, aiTools] = useWatch({
     control,
-    name: ["prompt", "variables", "knowledge"],
+    name: ["prompt", "variables", "knowledge", "aiTools"],
   })
 
   const getIsBlockInputDirty = useCallback(() => {
@@ -43,8 +42,13 @@ const PreviewChatHistory: FC = memo(() => {
 
     const isKnowledgeDirty = !isEqual(knowledge, lastRunAgent.current.knowledge)
 
-    return isPromptDirty || isVariablesDirty || isKnowledgeDirty
-  }, [isRunning, knowledge, lastRunAgent, prompt, variables])
+    const isToolsDirty = !isEqual(
+      aiTools.map((item) => item.aiToolID),
+      lastRunAgent.current.aiTools.map((item) => item.aiToolID),
+    )
+
+    return isPromptDirty || isVariablesDirty || isKnowledgeDirty || isToolsDirty
+  }, [aiTools, isRunning, knowledge, lastRunAgent, prompt, variables])
 
   const wsContext = useMemo(
     () => ({
@@ -54,6 +58,7 @@ const PreviewChatHistory: FC = memo(() => {
       isReceiving,
       sendMessage,
       lastRunAgent,
+      currentRenderMessage,
     }),
     [
       chatMessages,
@@ -62,6 +67,7 @@ const PreviewChatHistory: FC = memo(() => {
       lastRunAgent,
       sendMessage,
       getReadyState,
+      currentRenderMessage,
     ],
   )
 
@@ -80,21 +86,13 @@ const PreviewChatHistory: FC = memo(() => {
   )
 
   return (
-    <PreviewChatUseProvider
-      useTo={
-        !!getValues("aiAgentID")
-          ? PREVIEW_CHAT_USE_TO.EDIT_TIPI
-          : PREVIEW_CHAT_USE_TO.CREATE_TIPI
-      }
-    >
-      <div css={rightPanelContainerStyle}>
-        <PreviewChat
-          blockInput={getIsBlockInputDirty()}
-          onSendMessage={onSendMessage}
-          wsContextValue={wsContext}
-        />
-      </div>
-    </PreviewChatUseProvider>
+    <div css={rightPanelContainerStyle}>
+      <PreviewChat
+        blockInput={getIsBlockInputDirty()}
+        onSendMessage={onSendMessage}
+        wsContextValue={wsContext}
+      />
+    </div>
   )
 })
 

@@ -21,6 +21,7 @@ export const cardIconAndTitleContainerStyle = css`
   align-items: center;
   gap: 16px;
   width: 100%;
+  overflow: hidden;
 `
 
 export const cardIconContainerStyle = css`

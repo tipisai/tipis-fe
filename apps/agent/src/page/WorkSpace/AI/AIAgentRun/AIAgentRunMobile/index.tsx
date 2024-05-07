@@ -29,6 +29,7 @@ export const AIAgentRunMobile: FC = () => {
     connect,
     isConnecting,
     inRoomUsers,
+    currentRenderMessage,
   } = useContext(AgentWSContext)
 
   const wsContext = useMemo(
@@ -39,6 +40,7 @@ export const AIAgentRunMobile: FC = () => {
       isReceiving,
       sendMessage,
       lastRunAgent,
+      currentRenderMessage,
     }),
     [
       chatMessages,
@@ -47,6 +49,7 @@ export const AIAgentRunMobile: FC = () => {
       lastRunAgent,
       sendMessage,
       getReadyState,
+      currentRenderMessage,
     ],
   )
 

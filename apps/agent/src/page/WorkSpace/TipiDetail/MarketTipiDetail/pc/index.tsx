@@ -19,6 +19,7 @@ import PCActionGroup from "../../components/ActionGroup/pc"
 import Knowledge from "../../components/Knowledge"
 import Parameters from "../../components/Parameters"
 import Prompt from "../../components/Prompt"
+import Schedule from "../../components/Schedule"
 import { IMarketTipiDetailProps } from "../interface"
 
 const MarketTipiDetailPC: FC<IMarketTipiDetailProps> = ({
@@ -99,6 +100,13 @@ const MarketTipiDetailPC: FC<IMarketTipiDetailProps> = ({
 
       {aiAgentMarketPlaceInfo?.marketplace?.config.publishConfiguration && (
         <>
+          {!!aiAgentMarketPlaceInfo.aiAgent.triggerIsActive && (
+            <Schedule
+              schedule={
+                aiAgentMarketPlaceInfo.aiAgent.triggerConfig?.schedule ?? []
+              }
+            />
+          )}
           <Prompt
             parameters={aiAgentMarketPlaceInfo?.aiAgent?.variables ?? []}
             prompt={aiAgentMarketPlaceInfo?.aiAgent?.prompt}

@@ -299,14 +299,6 @@ const KnowledgeUpload: FC<IKnowledgeUploadProps> = ({
             </p>
           </div>
         </div>
-        {/* <Button
-          block
-          size="large"
-          icon={<Icon component={UploadIcon} />}
-          onClick={handleClickUpload}
-        >
-          {t("homepage.edit_tipi.modal.upload")}
-        </Button> */}
         <input
           style={{ display: "none" }}
           type="file"

@@ -1,12 +1,14 @@
-import { FC, useCallback, useEffect, useState } from "react"
+import { FC, useCallback, useEffect, useRef, useState } from "react"
 import { FormProvider, useForm, useWatch } from "react-hook-form"
 import { useSelector } from "react-redux"
-import { useBeforeUnload, useParams } from "react-router-dom"
+import { useBeforeUnload, useParams, useSearchParams } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { Agent } from "@illa-public/public-types"
 import { getCurrentId } from "@illa-public/user-data"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
+import { PreviewChatUseProvider } from "@/components/PreviewChat/PreviewChatUseContext"
+import { PREVIEW_CHAT_USE_TO } from "@/components/PreviewChat/PreviewChatUseContext/constants"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
 import { useGetAgentDetailQuery } from "@/redux/services/agentAPI"
 import store from "@/redux/store"
@@ -24,6 +26,7 @@ import FormContext from "./components/FormContext"
 import HeaderTools from "./components/HeaderTools"
 import { UploadContextProvider } from "./components/UploadContext"
 import { IAgentForm } from "./interface"
+import { mergeDefaultValueData } from "./utils"
 
 const EditAIAgentGetValuePage: FC = () => {
   const { agentID } = useParams()
@@ -70,7 +73,10 @@ const EditAIAgentGetValuePage: FC = () => {
   if (isLoading) return <FullSectionLoading />
 
   return data ? (
-    <EditAIAgentPage originAgent={data} cacheData={cacheData} />
+    <EditAIAgentPage
+      originAgent={mergeDefaultValueData(data)}
+      cacheData={cacheData}
+    />
   ) : null
 }
 
@@ -82,9 +88,12 @@ const EditAIAgentPage: FC<{
   const { agentID } = useParams()
   const teamID = useSelector(getCurrentId)
   const historyTabs = useSelector(getRecentTabInfos)
+  const [searchParams, setSearchParams] = useSearchParams()
   const currentTab = historyTabs.find(
     (tab) => tab.cacheID === agentID && tab.tabType === TAB_TYPE.EDIT_TIPIS,
   )
+
+  const canReadCacheRef = useRef(true)
 
   const methods = useForm<IAgentForm>({
     defaultValues: originAgent,
@@ -92,13 +101,58 @@ const EditAIAgentPage: FC<{
 
   const { control, reset } = methods
 
+  const handleRedirectToolInfo = useCallback(
+    (formData: IAgentForm) => {
+      const aiToolID = searchParams.get("aiToolID")
+      const aiToolName = searchParams.get("aiToolName")
+      const aiToolIcon = searchParams.get("aiToolIcon")
+      const { aiTools = [] } = formData
+      if (aiToolID && aiToolIcon && aiToolName) {
+        searchParams.delete("aiToolID")
+        searchParams.delete("aiToolName")
+        searchParams.delete("aiToolIcon")
+        setSearchParams(searchParams)
+        const targetAiToolIndex = aiTools.findIndex(
+          (item) => item.aiToolID === aiToolID,
+        )
+        if (targetAiToolIndex !== -1) {
+          aiTools[targetAiToolIndex] = {
+            ...aiTools[targetAiToolIndex],
+            name: aiToolName,
+            config: {
+              icon: aiToolIcon,
+            },
+          }
+        } else {
+          aiTools.push({
+            aiToolID,
+            name: aiToolName,
+            config: {
+              icon: aiToolIcon,
+            },
+          })
+        }
+      }
+      return aiTools
+    },
+    [searchParams, setSearchParams],
+  )
+
   useEffect(() => {
-    if (cacheData) {
-      reset(cacheData, {
-        keepDefaultValues: true,
-      })
+    if (cacheData && canReadCacheRef.current) {
+      canReadCacheRef.current = false
+      const aiTools = handleRedirectToolInfo(cacheData as IAgentForm)
+      reset(
+        {
+          ...cacheData,
+          aiTools,
+        },
+        {
+          keepDefaultValues: true,
+        },
+      )
     }
-  }, [cacheData, reset])
+  }, [cacheData, handleRedirectToolInfo, reset])
 
   const values = useWatch({
     control,
@@ -133,17 +187,19 @@ const EditAIAgentPage: FC<{
       <TipisWebSocketProvider>
         <AgentWSProvider tabID={currentTab?.tabID ?? ""}>
           <FormContext>
-            <UploadContextProvider>
-              <LayoutAutoChange
-                desktopPage={
-                  <WorkspacePCHeaderLayout
-                    title={values.name!}
-                    extra={<HeaderTools />}
-                  />
-                }
-              />
-              <AIAgent />
-            </UploadContextProvider>
+            <PreviewChatUseProvider useTo={PREVIEW_CHAT_USE_TO.EDIT_TIPI}>
+              <UploadContextProvider>
+                <LayoutAutoChange
+                  desktopPage={
+                    <WorkspacePCHeaderLayout
+                      title={values.name!}
+                      extra={<HeaderTools />}
+                    />
+                  }
+                />
+                <AIAgent />
+              </UploadContextProvider>
+            </PreviewChatUseProvider>
           </FormContext>
         </AgentWSProvider>
       </TipisWebSocketProvider>

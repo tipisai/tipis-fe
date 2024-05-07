@@ -18,7 +18,7 @@ import {
 } from "./style"
 
 export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
-  const { message, isReceiving, isLastMessage } = props
+  const { message, disableTrigger } = props
   const chatContext = useContext(ChatContext)
   const isMobile = useIsMobile()
 
@@ -68,16 +68,12 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
                   messageItem.status ?? MESSAGE_STATUS.ANALYZE_PENDING
                 }
                 messageResult={messageItem.messageResult}
-                isReceiving={isReceiving}
+                disableTrigger={disableTrigger}
               />
             )
           } else {
             element = (
-              <PureMessage
-                message={messageItem.message}
-                isMobile={isMobile}
-                disableTrigger={isReceiving && isLastMessage}
-              />
+              <PureMessage message={messageItem.message} isMobile={isMobile} />
             )
           }
           return (
