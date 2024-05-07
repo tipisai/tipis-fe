@@ -91,6 +91,7 @@ export const nameStyle = css`
 export const descriptionStyle = css`
   color: ${getColor("grayBlue", "03")};
   font-size: 12px;
+  width: 100%;
   font-weight: 400;
   line-height: 16px;
   text-overflow: ellipsis;
@@ -98,4 +99,5 @@ export const descriptionStyle = css`
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+  word-break: break-all;
 `

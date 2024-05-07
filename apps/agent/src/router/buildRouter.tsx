@@ -33,7 +33,12 @@ export const buildRouter = (config: RoutesObjectPro[]) => {
       if (saveTokenLoader) {
         return saveTokenLoader
       }
-      return originLoader?.(args) || null
+
+      return typeof originLoader === "function"
+        ? originLoader?.(args)
+        : typeof originLoader === "boolean"
+          ? originLoader
+          : null
     }
     ProtectComponent &&
       (newRouteItem.element = (

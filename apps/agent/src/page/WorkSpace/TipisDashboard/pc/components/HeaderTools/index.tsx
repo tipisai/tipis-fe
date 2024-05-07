@@ -1,65 +1,19 @@
 import Icon from "@ant-design/icons"
 import { Button, Input } from "antd"
 import { t } from "i18next"
-import { debounce } from "lodash-es"
-import {
-  ChangeEvent,
-  FC,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react"
+import { FC } from "react"
 import { PlusIcon, SearchIcon } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
 import { canShownCreateTipi } from "@/utils/UIHelper/tipis"
 import { useNavigateToCreateTipis } from "@/utils/routeHelper/hook"
 import { useGetCurrentTeamInfo } from "@/utils/team"
-import { DASH_BOARD_UI_STATE_ACTION_TYPE } from "../../../context/interface"
-import { DashBoardUIStateContext } from "../../../context/marketListContext"
+import { useSearchTipisDashboard } from "../../../hook"
 import { headerToolsContainerStyle } from "./style"
 
 const HeaderTools: FC = () => {
   const navigateToCreateTipis = useNavigateToCreateTipis()
 
-  const { dispatch, dashboardUIState } = useContext(DashBoardUIStateContext)
-  const { search } = dashboardUIState
-  const [searchValue, setSearchValue] = useState(search)
-  const prevSearchRef = useRef(search)
   const currentTeamInfo = useGetCurrentTeamInfo()
-
-  const handleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const v = e.target.value
-      prevSearchRef.current = v
-      dispatch({
-        type: DASH_BOARD_UI_STATE_ACTION_TYPE.SET_SEARCH,
-        payload: v,
-      })
-    },
-    [dispatch],
-  )
-
-  useEffect(() => {
-    if (prevSearchRef.current !== search) {
-      setSearchValue(search)
-      prevSearchRef.current = search
-    }
-  }, [search])
-
-  const debounceHandleChange = useMemo(() => {
-    return debounce(handleChange, 160)
-  }, [handleChange])
-
-  const handleChangeSearchValue = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setSearchValue(e.target.value)
-      debounceHandleChange(e)
-    },
-    [debounceHandleChange],
-  )
 
   const handleClickCreateTIpis = () => {
     TipisTrack.track("click_create_tipi_entry", {
@@ -67,6 +21,8 @@ const HeaderTools: FC = () => {
     })
     navigateToCreateTipis()
   }
+
+  const { searchValue, handleChangeSearchValue } = useSearchTipisDashboard()
 
   return (
     <div css={headerToolsContainerStyle}>

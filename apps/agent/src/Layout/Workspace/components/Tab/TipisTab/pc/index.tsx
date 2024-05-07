@@ -13,7 +13,7 @@ import {
 import { recentTabActions } from "@/redux/ui/recentTab/slice"
 import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 import { useRemoveRecentTabReducer } from "@/utils/recentTabs/baseHook"
-import { getChatPath } from "@/utils/routeHelper"
+import { genTabNavigateLink, getChatPath } from "@/utils/routeHelper"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import DropIndicator from "../../DropIndicator/DropIndicator"
 import {
@@ -24,7 +24,7 @@ import {
 import { DRAG_TAB_TYPES, useTabSortableItem } from "../../hook"
 import { SHOULD_MODEL_TIP_TAB_TYPES } from "../constant"
 import { menuItemNameStyle, menuItemStyle, navLinkStyle } from "../style"
-import { genTabNavigateLink, getIconByTabInfo, useGetTabName } from "../utils"
+import { getIconByTabInfo, useGetTabName } from "../utils"
 import { IPCTipisTab } from "./interface"
 
 const PCTipisTab: FC<IPCTipisTab> = (props) => {

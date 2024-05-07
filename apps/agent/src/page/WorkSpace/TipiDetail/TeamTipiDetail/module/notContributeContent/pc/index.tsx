@@ -1,4 +1,5 @@
 import { FC } from "react"
+import Schedule from "@/page/WorkSpace/TipiDetail/components/Schedule"
 import PCDetailHeader from "../../../../../../../Layout/DetailLayout/components/DetailHeader/pc"
 import PCActionGroup from "../../../../components/ActionGroup/pc"
 import Knowledge from "../../../../components/Knowledge"
@@ -22,6 +23,9 @@ const PCNotContributeContent: FC<INotContributeContentProps> = (props) => {
         tipisIcon={agentInfo.icon}
         ownerTeamIdentity={agentInfo.teamIdentifier}
       />
+      {!!agentInfo.triggerIsActive && (
+        <Schedule schedule={agentInfo.triggerConfig?.schedule ?? []} />
+      )}
       <Prompt
         parameters={agentInfo.variables ?? []}
         prompt={agentInfo.prompt}

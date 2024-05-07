@@ -36,7 +36,6 @@ export const PCReset: FC<ResetProps> = (props) => {
     resetLabel,
     showCountDown,
     onCountDownChange,
-    sendEmail,
   } = props
   const { handleSubmit, control, formState } = useFormContext<ResetPwdFields>()
 
@@ -130,7 +129,6 @@ export const PCReset: FC<ResetProps> = (props) => {
                     usage="forgetpwd"
                     showCountDown={showCountDown}
                     onCountDownChange={onCountDownChange}
-                    sendEmail={sendEmail}
                   />
                 }
                 placeholder={t(

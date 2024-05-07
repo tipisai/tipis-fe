@@ -2,6 +2,7 @@ import { FC, lazy, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
+import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
 import { useAddChatTab } from "@/utils/recentTabs/hook"
 import { ChatWSProvider } from "./context"
 
@@ -13,7 +14,7 @@ const ChatPage: FC = () => {
   const addChatTab = useAddChatTab()
 
   useEffect(() => {
-    if (chatID) {
+    if (chatID && chatID !== DEFAULT_CHAT_ID) {
       addChatTab(chatID)
     }
   }, [addChatTab, chatID])

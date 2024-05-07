@@ -2,9 +2,14 @@ import { useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 import { useLazyGetTeamsInfoQuery } from "@illa-public/user-data"
 import {
+  CREATE_FUNCTION_FROM_SINGLE,
+  CREATE_FUNCTION_FROM_SINGLE_KEY,
+  CREATE_FUNCTION_FROM_TAB_KEY,
   EMPTY_TEAM_PATH,
   getChatPath,
+  getCreateFunctionPath,
   getCreateTipiPath,
+  getEditFunctionPath,
   getEditTipiPath,
   getExploreFunctionsPath,
   getExploreTipisPath,
@@ -14,10 +19,12 @@ import {
 } from "."
 import {
   useAddChatTab,
+  useAddCreateFunction,
   useAddCreateTipisTab,
   useAddExploreFunctionsTab,
   useAddExploreTipisTab,
   useAddMarketTipiDetailTab,
+  useAddOrUpdateEditFunctionTab,
   useAddOrUpdateEditTipisTab,
   useAddOrUpdateRunTipisTab,
   useAddTipisDetailTab,
@@ -27,6 +34,12 @@ import { findRecentTeamInfo, useGetCurrentTeamInfo } from "../team"
 
 export const NOT_HAS_TEAM_INFO_KEY = "NOT_HAS_TEAM_INFO"
 export const NOT_HAS_TARGET_TEAM_INFO_KEY = "NOT_HAS_TARGET_TEAM_INFO"
+
+export const useNavigateByTabID = () => {
+  const navigateByTabID = useCallback(async () => {}, [])
+
+  return navigateByTabID
+}
 
 export const useNavigateTargetWorkspace = () => {
   const navigate = useNavigate()
@@ -221,4 +234,62 @@ export const useNavigateToExploreFunction = () => {
     }
   }, [addExploreFunctionTab, currentTeamInfo?.identifier, navigate])
   return navigateToExploreTipis
+}
+
+export const useNavigateToCreateFunction = () => {
+  const navigate = useNavigate()
+  const currentTeamInfo = useGetCurrentTeamInfo()
+  const addCreateFunctionTab = useAddCreateFunction()
+
+  const navigateToCreteTipis = useCallback(
+    async (
+      functionType: string,
+      from?: CREATE_FUNCTION_FROM_SINGLE,
+      tabID?: string,
+    ) => {
+      await addCreateFunctionTab(functionType)
+      if (currentTeamInfo?.identifier) {
+        const searchParams = new URLSearchParams()
+        if (from) {
+          searchParams.append(CREATE_FUNCTION_FROM_SINGLE_KEY, from)
+        }
+        if (tabID) {
+          searchParams.append(CREATE_FUNCTION_FROM_TAB_KEY, tabID)
+        }
+        if (!!searchParams.toString()) {
+          navigate(
+            `${getCreateFunctionPath(currentTeamInfo?.identifier, functionType)}?${searchParams.toString()}`,
+          )
+        } else {
+          navigate(
+            getCreateFunctionPath(currentTeamInfo?.identifier, functionType),
+          )
+        }
+      }
+    },
+    [addCreateFunctionTab, currentTeamInfo?.identifier, navigate],
+  )
+  return navigateToCreteTipis
+}
+
+export const useNavigateToEditFunction = () => {
+  const navigate = useNavigate()
+  const addOrUpdateEditFunctionTab = useAddOrUpdateEditFunctionTab()
+  const currentTeamInfo = useGetCurrentTeamInfo()
+
+  const navigateToEditTipis = useCallback(
+    async (functionInfo: { functionName: string; functionID: string }) => {
+      await addOrUpdateEditFunctionTab(functionInfo)
+      if (currentTeamInfo?.identifier) {
+        navigate(
+          getEditFunctionPath(
+            currentTeamInfo.identifier,
+            functionInfo.functionID,
+          ),
+        )
+      }
+    },
+    [addOrUpdateEditFunctionTab, currentTeamInfo?.identifier, navigate],
+  )
+  return navigateToEditTipis
 }

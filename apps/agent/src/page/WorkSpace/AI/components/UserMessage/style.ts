@@ -11,7 +11,7 @@ export const agentMessageContainer = css`
   flex: none;
   flex-direction: row;
   ${applyMobileStyle(css`
-    padding: 24px 12px 8px 12px;
+    padding: 24px 0 8px 0;
   `)}
 `
 

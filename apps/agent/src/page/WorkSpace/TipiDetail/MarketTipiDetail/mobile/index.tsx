@@ -20,6 +20,7 @@ import MobileActionGroup from "../../components/ActionGroup/mobile"
 import Knowledge from "../../components/Knowledge"
 import Parameters from "../../components/Parameters"
 import Prompt from "../../components/Prompt"
+import Schedule from "../../components/Schedule"
 import { IMarketTipiDetailProps } from "../interface"
 import { contentContainerStyle, placeholderDivStyle } from "./style"
 
@@ -110,15 +111,23 @@ const MarketTipiDetailMobile: FC<IMarketTipiDetailProps> = ({
 
         {aiAgentMarketPlaceInfo?.marketplace?.config.publishConfiguration && (
           <>
+            {!!aiAgentMarketPlaceInfo.aiAgent.triggerIsActive && (
+              <Schedule
+                schedule={
+                  aiAgentMarketPlaceInfo.aiAgent.triggerConfig?.schedule ?? []
+                }
+              />
+            )}
             <Prompt
               parameters={aiAgentMarketPlaceInfo?.aiAgent?.variables ?? []}
               prompt={aiAgentMarketPlaceInfo?.aiAgent?.prompt}
             />
-            {aiAgentMarketPlaceInfo?.aiAgent?.variables && (
-              <Parameters
-                parameters={aiAgentMarketPlaceInfo?.aiAgent?.variables ?? []}
-              />
-            )}
+            {Array.isArray(aiAgentMarketPlaceInfo?.aiAgent?.variables) &&
+              aiAgentMarketPlaceInfo?.aiAgent?.variables.length > 0 && (
+                <Parameters
+                  parameters={aiAgentMarketPlaceInfo?.aiAgent?.variables}
+                />
+              )}
             {Array.isArray(aiAgentMarketPlaceInfo?.aiAgent?.knowledge) &&
               aiAgentMarketPlaceInfo?.aiAgent?.knowledge.length > 0 && (
                 <Knowledge

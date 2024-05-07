@@ -171,7 +171,7 @@ const PCWorkspaceMenu: FC = () => {
                           className="divider"
                         />
                       </div>
-                      {recentTabInfos.length > 1 && (
+                      {recentTabInfos.length > 0 && (
                         <div
                           css={closeAllContainerStyle}
                           onClick={handleClickCloseAll}

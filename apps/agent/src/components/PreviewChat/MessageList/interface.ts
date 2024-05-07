@@ -6,4 +6,5 @@ export interface IMessageListProps {
   chatMessages: (IGroupMessage | ChatMessage)[]
   isReceiving: boolean
   currentUserID: string
+  currentRenderMessage: IGroupMessage | ChatMessage | null
 }

@@ -1,4 +1,5 @@
 import { v4 } from "uuid"
+import { ERROR_FLAG, ILLAApiError, isILLAAPiError } from "@illa-public/illa-net"
 import { IKnowledgeFile } from "@illa-public/public-types"
 import {
   ACCEPT_CONTENT_TYPES,
@@ -97,5 +98,21 @@ export const getRealFileType = async (file: File, ext: string) => {
         return SEND_CONTENT_TYPES.TEXT
       }
     }
+  }
+}
+
+export const isGenerateDescWithCreditError = (e: unknown) => {
+  if (!isILLAAPiError(e)) return false
+  const creditPrefix = "generate file description error: "
+  const message = e.data.errorMessage
+  try {
+    if (message.startsWith(creditPrefix)) {
+      const realError = JSON.parse(
+        message.split(creditPrefix)[1],
+      ) as ILLAApiError
+      return realError.errorFlag === ERROR_FLAG.ERROR_FLAG_INSUFFICIENT_CREDIT
+    }
+  } catch (e) {
+    return false
   }
 }

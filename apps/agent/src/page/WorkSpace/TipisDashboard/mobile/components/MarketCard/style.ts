@@ -91,10 +91,12 @@ export const descriptionStyle = css`
   color: ${getColor("grayBlue", "03")};
   font-size: 12px;
   font-weight: 400;
+  width: 100%;
   line-height: 16px;
   text-overflow: ellipsis;
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+  word-break: break-all;
 `

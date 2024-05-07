@@ -1,4 +1,5 @@
 import { FC, useCallback, useContext, useEffect, useMemo } from "react"
+import { useParams } from "react-router-dom"
 import { TextSignal } from "@/api/ws/textSignal"
 import { PreviewChat } from "@/components/PreviewChat"
 import { PreviewChatUseProvider } from "@/components/PreviewChat/PreviewChatUseContext"
@@ -8,16 +9,28 @@ import {
   ChatMessage,
   ChatSendRequestPayload,
 } from "@/components/PreviewChat/interface"
+import { DEFAULT_CHAT_ID } from "@/redux/ui/recentTab/state"
+import { useAddChatTab } from "@/utils/recentTabs/hook"
 import { ChatContext } from "../../AI/components/ChatContext"
 import { ChatStableWSContext, ChatUnStableWSContext } from "../context"
 import { INIT_CHAT_CONFIG } from "./constants"
 import { rightPanelContainerStyle } from "./style"
 
 export const ChatHistory: FC = () => {
+  const { chatID } = useParams()
+
   const { connect, leaveRoom, sendMessage } = useContext(ChatStableWSContext)
 
-  const { getReadyState, isRunning, chatMessages, isReceiving, inRoomUsers } =
-    useContext(ChatUnStableWSContext)
+  const {
+    getReadyState,
+    isRunning,
+    chatMessages,
+    isReceiving,
+    inRoomUsers,
+    currentRenderMessage,
+  } = useContext(ChatUnStableWSContext)
+
+  const addChatTab = useAddChatTab()
 
   const wsContext = useMemo(
     () => ({
@@ -26,12 +39,23 @@ export const ChatHistory: FC = () => {
       chatMessages,
       isReceiving,
       sendMessage,
+      currentRenderMessage,
     }),
-    [chatMessages, isReceiving, isRunning, sendMessage, getReadyState],
+    [
+      chatMessages,
+      isReceiving,
+      isRunning,
+      sendMessage,
+      getReadyState,
+      currentRenderMessage,
+    ],
   )
 
   const onSendMessage = useCallback(
     (message: ChatMessage) => {
+      if (DEFAULT_CHAT_ID === chatID) {
+        addChatTab(DEFAULT_CHAT_ID)
+      }
       sendMessage(
         {
           threadID: message.threadID,
@@ -47,7 +71,7 @@ export const ChatHistory: FC = () => {
         },
       )
     },
-    [sendMessage],
+    [addChatTab, chatID, sendMessage],
   )
 
   useEffect(() => {

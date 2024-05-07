@@ -5,27 +5,28 @@ import { v4 } from "uuid"
 import { PenIcon, PlusIcon } from "@illa-public/icon"
 import { TipisTrack } from "@illa-public/track-utils"
 import { getIsEmptyTeam } from "@illa-public/user-data"
-// import FunctionIcon from "@/assets/workspace/function.svg?react"
+import FunctionIcon from "@/assets/workspace/function.svg?react"
 import MarketplaceIcon from "@/assets/workspace/marketplace.svg?react"
 import store from "@/redux/store"
 import { canShownCreateTipi } from "@/utils/UIHelper/tipis"
 import {
   useNavigateToCreateTipis,
+  useNavigateToExploreFunction,
   useNavigateToExploreTipis,
   useNavigateToNewChat,
 } from "@/utils/routeHelper/hook"
 import { useGetCurrentTeamInfo } from "@/utils/team"
-// import FeatureCard from "../../components/FeatureCard"
+import FeatureCard from "../../components/FeatureCard"
 import MenuItemButton from "../../components/MenuItemButton"
 import { createTeamContext } from "../../context"
-import { featureAreaContainerStyle } from "./style"
+import { featureAreaContainerStyle, featureCardsContainerStyle } from "./style"
 
 const FeatureArea: FC = () => {
   const { t } = useTranslation()
   const navigateToCreateTIpis = useNavigateToCreateTipis()
   const navigateToChat = useNavigateToNewChat()
   const navigateToExploreTipis = useNavigateToExploreTipis()
-  // const navigateToExploreFunction = useNavigateToExploreFunction()
+  const navigateToExploreFunction = useNavigateToExploreFunction()
   const { onChangeTeamVisible } = useContext(createTeamContext)
   const currentTeamInfo = useGetCurrentTeamInfo()
 
@@ -70,23 +71,23 @@ const FeatureArea: FC = () => {
     navigateToExploreTipis()
   }
 
-  // const handleClickFunction = () => {
-  //   const isEmptyTeam = getIsEmptyTeam(store.getState())
-  //   TipisTrack.track("click_function_entry")
+  const handleClickFunction = () => {
+    const isEmptyTeam = getIsEmptyTeam(store.getState())
+    TipisTrack.track("click_function_dashboard_tab")
 
-  //   if (isEmptyTeam) {
-  //       TipisTrack.track("click_create_team_entry", {
-  //   parameter1: "left_panel_no_team",
-  // })
-  //     onChangeTeamVisible?.(true)
-  //     return
-  //   }
-  //   navigateToExploreFunction()
-  // }
+    if (isEmptyTeam) {
+      TipisTrack.track("click_create_team_entry", {
+        parameter1: "left_panel_no_team",
+      })
+      onChangeTeamVisible?.(true)
+      return
+    }
+    navigateToExploreFunction()
+  }
 
   return (
     <div css={featureAreaContainerStyle}>
-      {/* <div css={featureCardsContainerStyle}>
+      <div css={featureCardsContainerStyle}>
         <FeatureCard
           icon={<Icon component={MarketplaceIcon} />}
           title={t("homepage.left_panel.feature.explore_tipi")}
@@ -99,12 +100,7 @@ const FeatureArea: FC = () => {
           position="right"
           onClick={handleClickFunction}
         />
-      </div> */}
-      <MenuItemButton
-        text={t("homepage.left_panel.feature.explore_tipi")}
-        icon={<Icon component={MarketplaceIcon} />}
-        onClick={handleClickExploreTipis}
-      />
+      </div>
       <MenuItemButton
         text={t("homepage.left_panel.feature.new_chat")}
         icon={<Icon component={PlusIcon} />}

@@ -18,8 +18,7 @@ const { Password } = Input
 
 const SetPasswordPC: FC<FirstSetPasswordProps> = (props) => {
   const { t } = useTranslation()
-  const { onSubmit, errorMsg, showCountDown, onCountDownChange, sendEmail } =
-    props
+  const { onSubmit, errorMsg, showCountDown, onCountDownChange } = props
   const { handleSubmit, control, formState, watch } =
     useFormContext<IFirstSetPasswordFields>()
   const { newPassword, verificationCode } = watch()
@@ -64,7 +63,6 @@ const SetPasswordPC: FC<FirstSetPasswordProps> = (props) => {
                           usage="forgetpwd"
                           showCountDown={showCountDown}
                           onCountDownChange={onCountDownChange}
-                          sendEmail={sendEmail}
                         />
                       }
                       placeholder={t(

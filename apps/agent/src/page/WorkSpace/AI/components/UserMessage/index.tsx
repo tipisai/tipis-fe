@@ -19,7 +19,7 @@ import {
 import ShowFiles from "./ShowFiles"
 
 export const UserMessage: FC<UserMessageProps> = (props) => {
-  const { message, isReceiving } = props
+  const { message, disableTrigger } = props
   const { data: currentUserInfo } = useGetUserInfoQuery(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
@@ -28,7 +28,7 @@ export const UserMessage: FC<UserMessageProps> = (props) => {
 
   const contentBody = (
     <div css={messageContainerStyle} ref={containerRef}>
-      <MarkdownMessage isOwnMessage isReceiving={isReceiving}>
+      <MarkdownMessage isOwnMessage disableTrigger={disableTrigger}>
         {message.message}
       </MarkdownMessage>
     </div>

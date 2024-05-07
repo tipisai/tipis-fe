@@ -3,21 +3,29 @@ import { FC } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { getColor } from "@illa-public/color-scheme"
+import { useSendVerificationCodeToEmailMutation } from "@illa-public/user-data"
+import { TIPISStorage } from "@/utils/storage"
 import { EmailCodeProps } from "./interface"
 
 const { Countdown } = Statistic
 
 export const EmailCode: FC<EmailCodeProps> = (props) => {
-  const { showCountDown, onCountDownChange, sendEmail } = props
+  const { showCountDown, onCountDownChange, usage } = props
   const { getValues, trigger } = useFormContext()
   const { t } = useTranslation()
   const { message } = App.useApp()
+  const [sendVerificationCodeToEmail] = useSendVerificationCodeToEmailMutation()
 
   const sendEmailCode = async () => {
     onCountDownChange(true)
     try {
-      await sendEmail(getValues("email"))
+      const verificationToken = await sendVerificationCodeToEmail({
+        email: getValues("email"),
+        usage,
+      }).unwrap()
       message.success(t("page.user.sign_up.tips.verification_code"))
+      usage === "forgetpwd" &&
+        TIPISStorage.setSessionStorage("verificationToken", verificationToken)
     } catch (error: any) {
       onCountDownChange(false)
       if (error?.response) {
