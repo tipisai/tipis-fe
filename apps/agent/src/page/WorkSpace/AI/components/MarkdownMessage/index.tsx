@@ -30,7 +30,7 @@ import CustomImage from "./components/CustomImage"
 import { handleParseText } from "./utils"
 
 export const MarkdownMessage = memo((props: MarkdownMessageProps) => {
-  const { children, isOwnMessage, codeStatus, isReceiving } = props
+  const { children, isOwnMessage, codeStatus, disableTrigger } = props
 
   return (
     <div css={markdownMessageContainerStyle}>
@@ -99,7 +99,7 @@ export const MarkdownMessage = memo((props: MarkdownMessageProps) => {
             <CustomCode
               {...props}
               codeStatus={codeStatus}
-              isReceiving={isReceiving}
+              disableTrigger={disableTrigger}
             />
           ),
           img: ({ src, alt }) => <CustomImage src={src} alt={alt} />,

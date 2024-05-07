@@ -48,7 +48,7 @@ export const AIAgentMessage: FC<AIAgentMessageProps> = (props) => {
 
   const contentBody = (
     <div css={messageContainerStyle} ref={containerRef}>
-      <MarkdownMessage isReceiving={isReceiving}>
+      <MarkdownMessage disableTrigger={isReceiving && isLastMessage}>
         {message.message}
       </MarkdownMessage>
     </div>

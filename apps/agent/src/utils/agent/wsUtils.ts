@@ -1,3 +1,4 @@
+import { klona } from "klona"
 import { TextSignal } from "@/api/ws/textSignal"
 import { SEND_MESSAGE_WS_TYPE } from "@/components/PreviewChat/TipisWebscoketContext/interface"
 import {
@@ -178,6 +179,62 @@ export const groupReceivedMessagesForUI = (
     }
   }
   return newMessageList
+}
+
+export const groupRenderReceivedMessageForUI = (
+  oldMessage: IGroupMessage | ChatMessage | null,
+  message: ChatMessage,
+) => {
+  if (!oldMessage || oldMessage.threadID !== message.threadID) {
+    if (isRequestMessage(message)) {
+      return {
+        threadID: message.threadID,
+        items: [
+          {
+            sender: message.sender,
+            message: message.message,
+            threadID: message.threadID,
+            messageType: message.messageType,
+            status: MESSAGE_STATUS.ANALYZE_PENDING,
+          },
+        ],
+      }
+    } else {
+      return {
+        sender: message.sender,
+        message: message.message,
+        threadID: message.threadID,
+        messageType: message.messageType,
+      }
+    }
+  } else {
+    let copyOldMessage = klona(oldMessage)
+    if (isNormalMessage(copyOldMessage)) {
+      if (copyOldMessage.messageType === message.messageType) {
+        copyOldMessage.message = copyOldMessage.message + message.message
+      } else {
+        // compliant not use request type start
+        copyOldMessage = {
+          threadID: oldMessage.threadID,
+          items: [
+            {
+              sender: copyOldMessage.sender,
+              message: copyOldMessage.message,
+              threadID: copyOldMessage.threadID,
+              messageType: copyOldMessage.messageType,
+              status: isRequestMessage(copyOldMessage)
+                ? MESSAGE_STATUS.ANALYZE_PENDING
+                : undefined,
+            },
+          ],
+        }
+        handleUpdateMessageList(copyOldMessage as IGroupMessage, message)
+      }
+    } else {
+      handleUpdateMessageList(copyOldMessage, message)
+    }
+    return copyOldMessage
+  }
 }
 
 export const getNeedCacheUIMessage = (

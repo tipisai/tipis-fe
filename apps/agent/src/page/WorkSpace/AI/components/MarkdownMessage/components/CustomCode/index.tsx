@@ -17,16 +17,16 @@ import {
 } from "./style"
 
 const CustomCode: FC<
-  CodeProps & Pick<MarkdownMessageProps, "codeStatus" | "isReceiving">
+  CodeProps & Pick<MarkdownMessageProps, "codeStatus" | "disableTrigger">
 > = (props) => {
-  const { codeStatus = CODE_STATUS.DEFAULT, isReceiving } = props
+  const { codeStatus = CODE_STATUS.DEFAULT, disableTrigger } = props
   const { t } = useTranslation()
   const { message: messageAPI } = App.useApp()
   const language =
     /language-(\w+)/.exec(props.className || "")?.[1] ?? "markdown"
 
   const handleCopyClick = () => {
-    if (isReceiving) {
+    if (disableTrigger) {
       return
     }
     copyToClipboard(props.children?.[0])
@@ -43,7 +43,7 @@ const CustomCode: FC<
     <div css={codeBlockContainerStyle(codeStatus)}>
       <div css={codeBlockHeaderStyle(codeStatus)}>
         <span>{language.toLocaleLowerCase()}</span>
-        <div css={copyStyle(isReceiving)} onClick={handleCopyClick}>
+        <div css={copyStyle(!!disableTrigger)} onClick={handleCopyClick}>
           <Icon component={CopyIcon} size={16} />
           <span>{t("editor.ai-agent.copy_code")}</span>
         </div>
