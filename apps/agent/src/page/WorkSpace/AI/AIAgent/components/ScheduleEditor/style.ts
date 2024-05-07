@@ -11,3 +11,7 @@ export const scheduleContainerStyle = (enabled: boolean) => css`
   border: 1px solid
     ${enabled ? getColor("grayBlue", "08") : getColor("grayBlue", "09")};
 `
+
+export const scheduleInputsContainerStyle = css`
+  padding-bottom: 16px;
+`
