@@ -26,6 +26,7 @@ import FormContext from "./components/FormContext"
 import HeaderTools from "./components/HeaderTools"
 import { UploadContextProvider } from "./components/UploadContext"
 import { IAgentForm } from "./interface"
+import { mergeDefaultValueData } from "./utils"
 
 const EditAIAgentGetValuePage: FC = () => {
   const { agentID } = useParams()
@@ -72,7 +73,10 @@ const EditAIAgentGetValuePage: FC = () => {
   if (isLoading) return <FullSectionLoading />
 
   return data ? (
-    <EditAIAgentPage originAgent={data} cacheData={cacheData} />
+    <EditAIAgentPage
+      originAgent={mergeDefaultValueData(data)}
+      cacheData={cacheData}
+    />
   ) : null
 }
 

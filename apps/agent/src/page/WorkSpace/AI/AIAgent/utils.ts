@@ -3,7 +3,12 @@ import { useCallback } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
-import { Agent, AgentRaw } from "@illa-public/public-types"
+import {
+  Agent,
+  AgentRaw,
+  IScheduleDTO,
+  ITriggerConfigDTO,
+} from "@illa-public/public-types"
 import { TipisTrack } from "@illa-public/track-utils"
 import { getCurrentTeamInfo } from "@illa-public/user-data"
 import {
@@ -18,7 +23,7 @@ import { deleteFormDataByTabID } from "@/utils/localForage/formData"
 import { useBatchUpdateRecentTabReducer } from "@/utils/recentTabs/baseHook"
 import { CREATE_TIPIS_ID } from "@/utils/recentTabs/constants"
 import { useUpdateCreateTipiTabToEditTipiTab } from "@/utils/recentTabs/hook"
-import { AgentInitial, IAgentForm } from "./interface"
+import { AgentInitial, IAgentForm, INIT_SCHEDULE_CONFIG } from "./interface"
 
 export const handleScrollToElement = (scrollId: string) => {
   const el = document.querySelector(`[data-scroll-id=${scrollId}]`)
@@ -40,6 +45,18 @@ export const useSubmitSaveAgent = () => {
   const { reset } = useFormContext<IAgentForm>()
 
   const getAgentRowData = useCallback((formData: IAgentForm): AgentRaw => {
+    const scheduleVO = formData.triggerConfig?.schedule ?? []
+    const schedules: IScheduleDTO[] = scheduleVO.map((item) => ({
+      name: "",
+      contentID: "",
+      triggerType: "schedule",
+      ...item,
+    }))
+    const triggerConfig: ITriggerConfigDTO = {
+      poll: [],
+      webhook: [],
+      schedule: schedules,
+    }
     return {
       name: formData.name,
       agentType: formData.agentType,
@@ -53,6 +70,8 @@ export const useSubmitSaveAgent = () => {
       icon: formData.icon,
       knowledge: formData.knowledge,
       aiToolIDs: formData.aiTools.map((item) => item.aiToolID),
+      triggerIsActive: formData.triggerIsActive,
+      triggerConfig,
     }
   }, [])
 
@@ -190,4 +209,23 @@ export const useSubmitSaveAgent = () => {
   )
 
   return handleSubmitSave
+}
+
+export const mergeDefaultValueData = (originAgent: Agent) => {
+  let fixedFormData = JSON.parse(JSON.stringify(originAgent))
+  if (fixedFormData.triggerIsActive === undefined) {
+    fixedFormData.triggerIsActive = false
+  }
+  if (fixedFormData.triggerConfig === undefined) {
+    fixedFormData.triggerConfig = {
+      schedule: INIT_SCHEDULE_CONFIG,
+    }
+  }
+  if (
+    fixedFormData.triggerConfig.schedule === undefined ||
+    fixedFormData.triggerConfig.schedule.length === 0
+  ) {
+    fixedFormData.triggerConfig.schedule = INIT_SCHEDULE_CONFIG
+  }
+  return fixedFormData
 }
