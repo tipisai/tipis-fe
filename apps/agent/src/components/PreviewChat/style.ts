@@ -22,7 +22,7 @@ export const inputTextContainerStyle = css`
   flex: none;
   ${applyMobileStyle(css`
     border-top: 1px solid ${getColor("grayBlue", "09")};
-    padding: 20px;
+    padding: 12px 20px;
   `)}
 `
 
