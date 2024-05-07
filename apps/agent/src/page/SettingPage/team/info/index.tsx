@@ -58,6 +58,12 @@ const TeamInfo: FC = () => {
         name: data.name,
         identifier: data.identifier,
       })
+      TipisTrack.group(teamInfo.id, {
+        name: data.name!,
+        identifier: data.identifier!,
+        paymentPlan: teamInfo.credit.plan,
+        cycle: teamInfo.credit.cycle,
+      })
       if (data.identifier && data.identifier !== teamIdentifier) {
         navigate(getTeamInfoSetting(data.identifier))
       }
