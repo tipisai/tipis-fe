@@ -5,6 +5,7 @@ import {
   TIPIS_TRACK_CLOUD_PAGE_NAME,
   TipisTrack,
 } from "@illa-public/track-utils"
+import { useInitRustEvent } from "@/utils/routeHelper/rustRoute"
 import { CreateTeamContextProvider } from "./context"
 import MobileWorkspaceLayout from "./mobile"
 import PCWorkspaceLayout from "./pc"
@@ -23,6 +24,8 @@ const WorkspaceLayout: FC = () => {
   }, [trackLeave])
 
   useBeforeUnload(trackLeave)
+
+  useInitRustEvent()
 
   return (
     <CreateTeamContextProvider>

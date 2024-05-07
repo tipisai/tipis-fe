@@ -1,7 +1,7 @@
 {
   "name": "agent",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.2",
   "type": "module",
   "scripts": {
     "dev": "vite --force",
@@ -42,7 +42,6 @@
     "@illa-public/illa-net": "workspace:^",
     "@illa-public/illa-storage": "workspace:^",
     "@illa-public/illa-web-socket": "workspace:^",
-    "@illa-public/invite-modal": "workspace:^",
     "@illa-public/layout-auto-change": "workspace:^",
     "@illa-public/market-share": "workspace:^",
     "@illa-public/new-invite-modal": "workspace:^",
@@ -56,6 +55,7 @@
     "@illa-public/user-data": "workspace:^",
     "@illa-public/user-role-utils": "workspace:^",
     "@illa-public/utils": "workspace:^",
+    "@illa-public/cross-platform-utils": "workspace:^",
     "@mui/material": "^5.15.3",
     "@mui/x-data-grid-premium": "^6.19.6",
     "@reduxjs/toolkit": "^2.2.1",
