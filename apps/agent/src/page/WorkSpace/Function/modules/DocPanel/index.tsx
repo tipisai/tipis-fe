@@ -3,6 +3,7 @@ import { Button, Skeleton } from "antd"
 import { FC } from "react"
 import { useController, useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { openLinkOnNewTab } from "@illa-public/cross-platform-utils"
 import { DocsIcon } from "@illa-public/icon"
 import { useGetWhiteListIPQuery } from "@/redux/services/peripheralAPI"
 import { useCopyToClipboard } from "@/utils/copyToClipboard"
@@ -49,7 +50,7 @@ const DocPanel: FC = () => {
   }
 
   const openDocs = () => {
-    window.open(INTEGRATION_TYPE_MAP_DOC[integrationType], "_blank")
+    openLinkOnNewTab(INTEGRATION_TYPE_MAP_DOC[integrationType])
   }
 
   return (

@@ -2,6 +2,7 @@ import Icon from "@ant-design/icons"
 import { App, Button, Input, Modal } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
+import { openLinkOnNewTab } from "@illa-public/cross-platform-utils"
 import { CopyIcon } from "@illa-public/icon"
 import { ShareBlockPC } from "@illa-public/market-share"
 import {
@@ -56,8 +57,9 @@ const ShareContentModal: FC<IShareContentProps> = ({
   }
 
   const handleOpenLink = () => {
-    window.open(link)
+    openLinkOnNewTab(link)
   }
+
   return (
     <Modal
       title={
