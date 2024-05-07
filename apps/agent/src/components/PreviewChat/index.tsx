@@ -31,7 +31,6 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
 
   const scrollDirectRef = useRef<SCROLL_DIRECTION>(SCROLL_DIRECTION.DOWN)
   const cacheLastScroll = useRef<number>(0)
-  const cacheMessageLength = useRef(chatMessages.length)
 
   const handleClickStopGenerating = useCallback(() => {
     TipisTrack.track("click_stop_generate")
@@ -58,20 +57,15 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
   }
 
   useEffect(() => {
-    if (chatMessages.length === 0) {
-      scrollDirectRef.current = SCROLL_DIRECTION.DOWN
-    }
-    if (scrollDirectRef.current === SCROLL_DIRECTION.DOWN) {
+    if (
+      !!currentRenderMessage &&
+      scrollDirectRef.current === SCROLL_DIRECTION.DOWN
+    ) {
       chatRef.current?.scrollTo({
         top: chatRef.current.scrollHeight,
       })
-    } else {
-      if (cacheMessageLength.current !== chatMessages.length) {
-        scrollDirectRef.current = SCROLL_DIRECTION.DOWN
-      }
     }
-    cacheMessageLength.current = chatMessages.length
-  }, [chatMessages])
+  }, [currentRenderMessage])
 
   return (
     <div css={previewChatContainerStyle}>
