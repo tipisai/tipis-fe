@@ -43,7 +43,8 @@ const TeamCheck: FC<BaseProtectComponentProps> = (props) => {
       TipisTrack.group(currentTeam.id, {
         name: currentTeam.name,
         identifier: currentTeam.identifier,
-        paymentPlan: currentTeam.currentTeamLicense.plan,
+        paymentPlan: currentTeam.credit.plan,
+        cycle: currentTeam.credit.cycle,
       })
     }
 

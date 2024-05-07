@@ -38,11 +38,25 @@ const Billing: FC = () => {
     try {
       refetch()
       triggerGetTeamsInfo(null)
+      TipisTrack.group(teamInfo.id, {
+        name: teamInfo.name,
+        identifier: teamInfo.identifier,
+        paymentPlan: teamInfo.credit.plan,
+        cycle: teamInfo.credit.cycle,
+      })
     } catch (error) {
     } finally {
       setLoading(false)
     }
-  }, [refetch, teamInfo?.id, triggerGetTeamsInfo])
+  }, [
+    refetch,
+    teamInfo.credit.cycle,
+    teamInfo.credit.plan,
+    teamInfo.id,
+    teamInfo.identifier,
+    teamInfo.name,
+    triggerGetTeamsInfo,
+  ])
 
   const openCreditDrawer = useCallback(
     (subCycle?: SUBSCRIPTION_CYCLE) => {
