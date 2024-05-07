@@ -23,21 +23,19 @@ export interface IAgentForm
   triggerConfig: ITriggerConfigVO
 }
 
-export const INIT_TRIGGER_CONFIG = {
-  schedule: [
-    {
-      timezone: ILLADayjs.tz.guess(),
-      scheduleConfig: {
-        type: SCHEDULE_TYPES.EVERY_DAY,
-        options: {
-          hour: 0,
-          minute: 0,
-          interval: 1,
-        },
+export const INIT_SCHEDULE_CONFIG = [
+  {
+    timezone: ILLADayjs.tz.guess(),
+    scheduleConfig: {
+      type: SCHEDULE_TYPES.EVERY_DAY,
+      options: {
+        hour: 0,
+        minute: 0,
+        interval: 1,
       },
     },
-  ],
-}
+  },
+]
 
 export const AgentInitial: IAgentForm = {
   name: "",
@@ -59,7 +57,9 @@ export const AgentInitial: IAgentForm = {
   publishedToMarketplace: false,
   aiTools: [],
   triggerIsActive: false,
-  triggerConfig: INIT_TRIGGER_CONFIG,
+  triggerConfig: {
+    schedule: INIT_SCHEDULE_CONFIG,
+  },
 }
 
 export enum SCROLL_ID {
