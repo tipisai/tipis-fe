@@ -46,8 +46,6 @@ const MessageList = forwardRef<HTMLDivElement, IMessageListProps>(
             }
           })}
         </div>
-
-        {/* <div css={maxWidthStyle}>{messagesList}</div> */}
       </div>
     )
   },
