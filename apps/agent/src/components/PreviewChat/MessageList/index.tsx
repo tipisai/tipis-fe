@@ -1,50 +1,39 @@
 import { forwardRef } from "react"
-import { isGroupMessage } from "@/utils/agent/typeHelper"
-import AIAgentMessage from "../../../page/WorkSpace/AI/components/AIAgentMessage"
-import GroupAgentMessage from "../../../page/WorkSpace/AI/components/GroupAgentMessage"
-import UserMessage from "../../../page/WorkSpace/AI/components/UserMessage"
-import { SenderType } from "../interface"
+import MessageItem from "./components/MessageListItem"
 import { IMessageListProps } from "./interface"
 import { chatContainerStyle, maxWidthStyle } from "./style"
 
 const MessageList = forwardRef<HTMLDivElement, IMessageListProps>(
   (props, ref) => {
-    const { handleScroll, chatMessages, isReceiving, currentUserID } = props
+    const {
+      handleScroll,
+      chatMessages,
+      isReceiving,
+      currentUserID,
+      currentRenderMessage,
+    } = props
     return (
       <div ref={ref} css={chatContainerStyle} onScroll={handleScroll}>
         <div css={maxWidthStyle}>
-          {chatMessages.map((message, i) => {
-            if (isGroupMessage(message)) {
-              return (
-                <GroupAgentMessage
-                  key={message.threadID}
-                  message={message}
-                  isReceiving={isReceiving}
-                  isLastMessage={i === chatMessages.length - 1}
-                />
-              )
-            } else if (
-              message.sender.senderType === SenderType.USER &&
-              message.sender.senderID === currentUserID
-            ) {
-              return (
-                <UserMessage
-                  key={message.threadID}
-                  message={message}
-                  isReceiving={isReceiving}
-                />
-              )
-            } else {
-              return (
-                <AIAgentMessage
-                  key={message.threadID}
-                  message={message}
-                  isLastMessage={i === chatMessages.length - 1}
-                  isReceiving={isReceiving}
-                />
-              )
-            }
-          })}
+          {chatMessages.map((message, i) => (
+            <MessageItem
+              key={message.threadID}
+              message={message}
+              currentUserID={currentUserID}
+              isLastMessage={i === chatMessages.length - 1}
+              isReceiving={isReceiving}
+            />
+          ))}
+
+          {!!currentRenderMessage && (
+            <MessageItem
+              key={currentRenderMessage.threadID}
+              message={currentRenderMessage}
+              currentUserID={currentUserID}
+              isLastMessage
+              isReceiving={isReceiving}
+            />
+          )}
         </div>
       </div>
     )

@@ -21,8 +21,14 @@ export const ChatHistory: FC = () => {
 
   const { connect, leaveRoom, sendMessage } = useContext(ChatStableWSContext)
 
-  const { getReadyState, isRunning, chatMessages, isReceiving, inRoomUsers } =
-    useContext(ChatUnStableWSContext)
+  const {
+    getReadyState,
+    isRunning,
+    chatMessages,
+    isReceiving,
+    inRoomUsers,
+    currentRenderMessage,
+  } = useContext(ChatUnStableWSContext)
 
   const addChatTab = useAddChatTab()
 
@@ -33,8 +39,16 @@ export const ChatHistory: FC = () => {
       chatMessages,
       isReceiving,
       sendMessage,
+      currentRenderMessage,
     }),
-    [chatMessages, isReceiving, isRunning, sendMessage, getReadyState],
+    [
+      chatMessages,
+      isReceiving,
+      isRunning,
+      sendMessage,
+      getReadyState,
+      currentRenderMessage,
+    ],
   )
 
   const onSendMessage = useCallback(

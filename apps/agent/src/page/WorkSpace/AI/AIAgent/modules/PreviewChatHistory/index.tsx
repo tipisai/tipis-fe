@@ -17,6 +17,7 @@ const PreviewChatHistory: FC = memo(() => {
     isReceiving,
     sendMessage,
     lastRunAgent,
+    currentRenderMessage,
   } = useContext(AgentWSContext)
   const [prompt, variables, knowledge, aiTools] = useWatch({
     control,
@@ -57,6 +58,7 @@ const PreviewChatHistory: FC = memo(() => {
       isReceiving,
       sendMessage,
       lastRunAgent,
+      currentRenderMessage,
     }),
     [
       chatMessages,
@@ -65,6 +67,7 @@ const PreviewChatHistory: FC = memo(() => {
       lastRunAgent,
       sendMessage,
       getReadyState,
+      currentRenderMessage,
     ],
   )
 
