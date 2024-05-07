@@ -10,5 +10,4 @@ export interface SyncMessageCardProps {
 export interface PureMessageProps {
   message: string
   isMobile: boolean
-  disableTrigger: boolean
 }

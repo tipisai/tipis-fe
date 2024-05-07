@@ -33,11 +33,7 @@ import {
 } from "./style"
 import { useGetInfoByStatus } from "./utils"
 
-export const PureMessage: FC<PureMessageProps> = ({
-  message,
-  disableTrigger,
-  isMobile,
-}) => {
+export const PureMessage: FC<PureMessageProps> = ({ message, isMobile }) => {
   const { message: messageAPI } = App.useApp()
   const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -49,7 +45,7 @@ export const PureMessage: FC<PureMessageProps> = ({
   )
 
   if (!message) return null
-  return isMobile || disableTrigger ? (
+  return isMobile ? (
     contentBody
   ) : (
     <Tooltip

@@ -73,11 +73,7 @@ export const GroupAgentMessage: FC<GroupAgentMessageProps> = (props) => {
             )
           } else {
             element = (
-              <PureMessage
-                message={messageItem.message}
-                isMobile={isMobile}
-                disableTrigger={disableTrigger}
-              />
+              <PureMessage message={messageItem.message} isMobile={isMobile} />
             )
           }
           return (
