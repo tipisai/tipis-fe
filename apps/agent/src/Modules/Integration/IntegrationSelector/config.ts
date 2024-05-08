@@ -12,7 +12,7 @@ export const Apis: ResourceItem[] = [
     resourceType: "tencentcos",
   },
   {
-    resourceType: "larkbot",
+    resourceType: "larkim",
   },
 ]
 
