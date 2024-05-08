@@ -11,9 +11,9 @@ export const Apis: ResourceItem[] = [
   {
     resourceType: "tencentcos",
   },
-  // {
-  //   resourceType: "larkbot",
-  // },
+  {
+    resourceType: "larkbot",
+  },
 ]
 
 export const useGetIntegrationTypeList = () => {
