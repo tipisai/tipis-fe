@@ -58,7 +58,7 @@ export const getOptionDetail = (
         (item) => item.value === options.month,
       )?.label
 
-      detail = `${time}, ${monthOfYear ? `${onStr} ${dayOfMonth} ${monthOfYear}, ` : ""}${i18n.t("flow.editor.trigger.schedule.every_mont")}`
+      detail = `${time}, ${monthOfYear ? `${onStr} ${dayOfMonth} ${monthOfYear}, ` : ""}${i18n.t("flow.editor.trigger.schedule.every_year")}`
       break
     }
   }
