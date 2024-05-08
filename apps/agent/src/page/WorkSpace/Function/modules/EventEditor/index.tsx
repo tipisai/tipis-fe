@@ -11,7 +11,7 @@ const getEventEditorByIntegrationType = (integrationType: TIntegrationType) => {
   switch (integrationType) {
     case "tencentcos":
       return tencentCos
-    case "larkbot":
+    case "larkim":
       return null
   }
 }
