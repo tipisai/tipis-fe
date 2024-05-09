@@ -3,6 +3,7 @@ import { invoke } from "@tauri-apps/api/tauri"
 import { appWindow } from "@tauri-apps/api/window"
 import { useEffect, useRef } from "react"
 import { v4 } from "uuid"
+import { IS_IN_APP_CLIENT } from "@illa-public/cross-platform-utils"
 import { useGetCurrentTeamInfo } from "../team"
 import { useNavigateToExploreTipis, useNavigateToNewChat } from "./hook"
 
@@ -23,6 +24,7 @@ export const useInitRustEvent = () => {
   const openExploreTipiListenerRef = useRef<Promise<UnlistenFn>>()
 
   useEffect(() => {
+    if (!IS_IN_APP_CLIENT) return
     const chatListener = openNewChatListenerRef.current
     const exploreListener = openExploreTipiListenerRef.current
     if (!currentTeamInfo) {
