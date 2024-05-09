@@ -1,5 +1,5 @@
 import { App, Statistic, Typography } from "antd"
-import { FC } from "react"
+import { FC, useRef } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { getColor } from "@illa-public/color-scheme"
@@ -15,9 +15,11 @@ export const EmailCode: FC<EmailCodeProps> = (props) => {
   const { t } = useTranslation()
   const { message } = App.useApp()
   const [sendVerificationCodeToEmail] = useSendVerificationCodeToEmailMutation()
+  const countDownRef = useRef<number>(0)
 
   const sendEmailCode = async () => {
     onCountDownChange(true)
+    countDownRef.current = Date.now() + 1000 * 60
     try {
       const verificationToken = await sendVerificationCodeToEmail({
         email: getValues("email"),
@@ -45,7 +47,7 @@ export const EmailCode: FC<EmailCodeProps> = (props) => {
   }
   return showCountDown ? (
     <Countdown
-      value={Date.now() + 1000 * 60}
+      value={countDownRef.current}
       format="ss"
       valueStyle={{
         fontSize: 14,
