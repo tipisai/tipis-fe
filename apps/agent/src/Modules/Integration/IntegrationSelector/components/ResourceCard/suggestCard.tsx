@@ -1,5 +1,6 @@
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
+import { openLinkOnNewTab } from "@illa-public/cross-platform-utils"
 import { CommentIcon } from "@illa-public/icon"
 import {
   applyItemStyle,
@@ -12,7 +13,7 @@ export const SuggestResourceCard: FC = () => {
   const { t } = useTranslation()
 
   const handleClickTellUs = () => {
-    window.open("https://forms.gle/ngEoRvBtWvrTuWDNA", "_blank")
+    openLinkOnNewTab("https://forms.gle/ngEoRvBtWvrTuWDNA")
   }
   return (
     <a css={applyItemStyle} onClick={handleClickTellUs}>

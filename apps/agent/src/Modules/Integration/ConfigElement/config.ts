@@ -8,6 +8,6 @@ export const INTEGRATION_TYPE_MAP_CONFIG_ELEMENT: Record<
   TIntegrationType,
   ComponentType
 > = {
-  larkbot: LarkBotConfigElement,
+  larkim: LarkBotConfigElement,
   tencentcos: TencentCosConfigElement,
 }

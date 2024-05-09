@@ -1,20 +1,15 @@
-import { Input, Switch } from "antd"
+import { Input } from "antd"
 import { FC } from "react"
-import { Controller, useFormContext, useWatch } from "react-hook-form"
+import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { ILarkBotIntegration } from "@illa-public/public-types"
 import LabelWithController from "@/Layout/Function/LabelWithController"
 import { WEBHOOK_PREFIX_RULES } from "./rules"
-import { switchContext } from "./style"
 
 const TencentCosConfigElement: FC = () => {
   const { control } = useFormContext<ILarkBotIntegration>()
   const { t } = useTranslation()
 
-  const allowImageContent = useWatch({
-    control,
-    name: "content.allowImageContent",
-  })
   return (
     <>
       <Controller
@@ -41,42 +36,21 @@ const TencentCosConfigElement: FC = () => {
           )
         }}
       />
+
       <Controller
-        name="content.allowImageContent"
+        name="content.bearerToken"
         control={control}
+        shouldUnregister
         render={({ field }) => {
           return (
             <LabelWithController
-              title={t("editor.action.form.label.lark.image")}
+              title={t("editor.action.form.label.lark.token")}
             >
-              <div css={switchContext}>
-                <Switch {...field} />
-              </div>
+              <Input size="large" {...field} />
             </LabelWithController>
           )
         }}
       />
-      {allowImageContent && (
-        <Controller
-          name="content.bearerToken"
-          control={control}
-          rules={{
-            required: t("editor.action.form.tips.lark.token_null"),
-          }}
-          shouldUnregister
-          render={({ field, fieldState }) => {
-            return (
-              <LabelWithController
-                title={t("editor.action.form.label.lark.token")}
-                required
-                errorMessage={fieldState.error?.message}
-              >
-                <Input size="large" {...field} />
-              </LabelWithController>
-            )
-          }}
-        />
-      )}
     </>
   )
 }

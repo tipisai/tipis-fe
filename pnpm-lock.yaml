@@ -133,6 +133,9 @@ importers:
       '@illa-public/color-scheme':
         specifier: workspace:^
         version: link:../../packages/utils/colorScheme
+      '@illa-public/cross-platform-utils':
+        specifier: workspace:^
+        version: link:../../packages/utils/crossPlatform
       '@illa-public/draggable-modal':
         specifier: workspace:*
         version: link:../../packages/components/DraggableModal
@@ -154,9 +157,6 @@ importers:
       '@illa-public/illa-web-socket':
         specifier: workspace:^
         version: link:../../packages/utils/ILLAWebSocket
-      '@illa-public/invite-modal':
-        specifier: workspace:^
-        version: link:../../packages/components/InviteModal
       '@illa-public/layout-auto-change':
         specifier: workspace:^
         version: link:../../packages/components/LayoutAutoChange
@@ -520,91 +520,6 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
     devDependencies:
-      tsconfig:
-        specifier: workspace:*
-        version: link:../../devConfigs/tsconfig
-
-  packages/components/InviteModal:
-    dependencies:
-      '@ant-design/icons':
-        specifier: 5.3.6
-        version: 5.3.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@emotion/react':
-        specifier: ^11.11.4
-        version: 11.11.4(@types/react@18.2.79)(react@18.2.0)
-      '@illa-public/auth-shown':
-        specifier: workspace:*
-        version: link:../AuthShown
-      '@illa-public/avatar':
-        specifier: workspace:*
-        version: link:../Avatar
-      '@illa-public/color-scheme':
-        specifier: workspace:^
-        version: link:../../utils/colorScheme
-      '@illa-public/icon':
-        specifier: workspace:*
-        version: link:../Icon
-      '@illa-public/illa-net':
-        specifier: workspace:*
-        version: link:../../utils/ILLANet
-      '@illa-public/layout-auto-change':
-        specifier: workspace:*
-        version: link:../LayoutAutoChange
-      '@illa-public/public-types':
-        specifier: workspace:*
-        version: link:../../others/publicTypes
-      '@illa-public/role-selector':
-        specifier: workspace:*
-        version: link:../RoleSelector
-      '@illa-public/track-utils':
-        specifier: workspace:*
-        version: link:../../utils/trackUtils
-      '@illa-public/upgrade-modal':
-        specifier: workspace:*
-        version: link:../UpgradeModal
-      '@illa-public/user-data':
-        specifier: workspace:^
-        version: link:../UserData
-      '@illa-public/user-role-utils':
-        specifier: workspace:*
-        version: link:../../utils/UserRoleUtils
-      '@illa-public/utils':
-        specifier: workspace:*
-        version: link:../../utils/public
-      '@types/react':
-        specifier: ^18.2.79
-        version: 18.2.79
-      '@types/react-dom':
-        specifier: ^18.2.25
-        version: 18.2.25
-      antd:
-        specifier: ^5.16.4
-        version: 5.16.4(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      copy-to-clipboard:
-        specifier: ^3.3.2
-        version: 3.3.3
-      i18next:
-        specifier: ^23.11.2
-        version: 23.11.2
-      lodash-es:
-        specifier: ^4.17.21
-        version: 4.17.21
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-      react-i18next:
-        specifier: ^14.1.1
-        version: 14.1.1(i18next@23.11.2)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      react-share:
-        specifier: ^4.4.1
-        version: 4.4.1(react@18.2.0)
-    devDependencies:
-      '@types/lodash-es':
-        specifier: ^4.17.12
-        version: 4.17.12
       tsconfig:
         specifier: workspace:*
         version: link:../../devConfigs/tsconfig
@@ -1191,6 +1106,37 @@ importers:
       '@types/color':
         specifier: ^3.0.3
         version: 3.0.6
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../devConfigs/tsconfig
+
+  packages/utils/crossPlatform:
+    dependencies:
+      '@emotion/react':
+        specifier: ^11.11.4
+        version: 11.11.4(@types/react@18.2.79)(react@18.2.0)
+      '@tauri-apps/api':
+        specifier: ^1.5.3
+        version: 1.5.4
+      '@types/react':
+        specifier: ^18.2.79
+        version: 18.2.79
+      '@types/react-dom':
+        specifier: ^18.2.25
+        version: 18.2.25
+      i18next:
+        specifier: ^23.11.2
+        version: 23.11.2
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      react-i18next:
+        specifier: ^14.1.1
+        version: 14.1.1(i18next@23.11.2)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+    devDependencies:
       tsconfig:
         specifier: workspace:*
         version: link:../../devConfigs/tsconfig
