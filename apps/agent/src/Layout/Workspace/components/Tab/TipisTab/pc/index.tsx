@@ -59,7 +59,7 @@ const PCTipisTab: FC<IPCTipisTab> = (props) => {
     async function removeTab() {
       await deleteTab(tabID)
 
-      if (newTabs.length === 1) {
+      if (newTabs.length === 0) {
         navigate(getChatPath(currentTeamInfo?.identifier ?? ""))
         return
       }

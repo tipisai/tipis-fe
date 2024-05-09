@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { useIntercom } from "react-use-intercom"
+import { openLinkOnNewTab } from "@illa-public/cross-platform-utils"
 import { TipisTrack } from "@illa-public/track-utils"
 import {
   getCurrentTeamInfo,
@@ -47,7 +48,7 @@ const UserInfoPopoverContent: FC = () => {
 
   const onClickOpenDocs = () => {
     TipisTrack.track("open_docs")
-    window.open("https://help.tipis.ai", "_blank")
+    openLinkOnNewTab("https://help.tipis.ai")
   }
   return (
     <ConfigProvider
