@@ -128,7 +128,12 @@ const SetPasswordPC: FC<FirstSetPasswordProps> = (props) => {
             </section>
           </section>
           <span>
-            <Button type="primary" size="large" disabled={disabled}>
+            <Button
+              type="primary"
+              size="large"
+              disabled={disabled}
+              htmlType="submit"
+            >
               {t("profile.setting.save")}
             </Button>
           </span>
