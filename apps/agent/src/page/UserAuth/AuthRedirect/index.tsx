@@ -4,7 +4,6 @@ import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { useGetAuthSessionQuery } from "@illa-public/user-data"
-import { setAuthToken } from "@illa-public/utils"
 import TextAndLogo from "@/assets/public/textLogo.svg?react"
 import { AUTH_PAGE_PATH } from "@/router/constants"
 import { AUTH_ERROR, AUTH_ERROR_PARAMS_KEY } from "./constants"
@@ -49,7 +48,6 @@ const AuthRedirect: FC = () => {
     if (!data?.session && !isLoading) {
       navigate(AUTH_PAGE_PATH)
     } else if (data?.session?.access_token) {
-      setAuthToken(data.session.access_token)
       // navigate to workspace
     }
   }, [data?.session, isLoading, navigate])
