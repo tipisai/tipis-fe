@@ -108,9 +108,6 @@ export const genTabNavigateLink = (
   }
 }
 
-export const PASSWORD_PATH = "/setting/password"
-export const EMPTY_TEAM_PATH = "/empty-workspace"
-
 export enum CREATE_FUNCTION_FROM_SINGLE {
   CREATE_TIPIS = "createTipis",
   EDIT_TIPIS = "editTipis",

@@ -19,3 +19,12 @@ export const CREATE_FUNCTION_TEMPLATE_PATH = `${TEAM_FUNCTION_TEMPLATE_PATH}/cre
 
 export const AUTH_PAGE_PATH = "/auth"
 export const AUTH_REDIRECT_PATH = "/authRedirect"
+export const EMPTY_TEAM_PATH = "/empty-workspace"
+export const SETTING_PATH = "/setting"
+export const SETTING_ACCOUNT_PATH = "account"
+export const SETTING_LANGUAGE_PATH = "language"
+export const SETTING_PASSWORD_PATH = "password"
+export const SETTING_LINKED_PATH = "linked"
+export const SETTING_TEAM_INFO_PATH = "team-settings"
+export const SETTING_MEMBERS_PATH = "members"
+export const SETTING_BILLING_PATH = "billing"

@@ -1,7 +1,6 @@
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
 import { MobileForbidden } from "@illa-public/status-page"
 import { RoutesObjectPro } from "./interface"
-import { saveTokenToLocalStorageLoader } from "./loader/beautifyURLLoader"
 
 export const buildRouter = (config: RoutesObjectPro[]) => {
   return config.map((route) => {
@@ -29,10 +28,10 @@ export const buildRouter = (config: RoutesObjectPro[]) => {
 
     newRouteItem.loader = async (args) => {
       // check login
-      const saveTokenLoader = saveTokenToLocalStorageLoader(args)
-      if (saveTokenLoader) {
-        return saveTokenLoader
-      }
+      // const saveTokenLoader = saveTokenToLocalStorageLoader(args)
+      // if (saveTokenLoader) {
+      //   return saveTokenLoader
+      // }
 
       return typeof originLoader === "function"
         ? originLoader?.(args)

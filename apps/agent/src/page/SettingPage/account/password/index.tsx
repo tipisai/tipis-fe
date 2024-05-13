@@ -10,6 +10,7 @@ import { useGetUserInfoQuery } from "@illa-public/user-data"
 import ChangePassword from "./components/ChangePassword"
 import FirstSetPassword from "./components/FirstSetPassword"
 
+// current not support yet
 const PasswordSettingPage: FC = () => {
   const { data: userInfo } = useGetUserInfoQuery(null)
   const { t } = useTranslation()
