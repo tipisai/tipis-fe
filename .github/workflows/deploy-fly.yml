@@ -28,6 +28,8 @@ jobs:
       ILLA_CLOUD_URL: ${{ vars.ILLA_CLOUD_URL }}
       ILLA_MARKET_URL: ${{ vars.ILLA_MARKET_URL }}
       ILLA_PERIPHERAL_API_BASE_URL: ${{ vars.ILLA_PERIPHERAL_API_BASE_URL }}
+      ILLA_SUPABASE_ANON_KEY: ${{ vars.ILLA_SUPABASE_ANON_KEY }}
+      ILLA_SUPABASE_URL: ${{ vars.ILLA_SUPABASE_URL }}
 
     steps:
       - uses: actions/checkout@v4
