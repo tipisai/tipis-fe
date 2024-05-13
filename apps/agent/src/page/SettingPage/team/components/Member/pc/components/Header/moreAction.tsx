@@ -14,7 +14,8 @@ import {
   useUpdateTeamPermissionConfigMutation,
 } from "@illa-public/user-data"
 import store from "@/redux/store"
-import { EMPTY_TEAM_PATH, getChatPath } from "@/utils/routeHelper"
+import { EMPTY_TEAM_PATH } from "@/router/constants"
+import { getChatPath } from "@/utils/routeHelper"
 import {
   removeLocalTeamIdentifier,
   setLocalTeamIdentifier,

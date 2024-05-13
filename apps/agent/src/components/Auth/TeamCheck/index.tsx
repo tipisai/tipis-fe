@@ -3,8 +3,8 @@ import { FC } from "react"
 import { Navigate, useParams } from "react-router-dom"
 import { TipisTrack } from "@illa-public/track-utils"
 import { useGetTeamsInfoAndCurrentIDQuery } from "@illa-public/user-data"
+import { EMPTY_TEAM_PATH } from "@/router/constants"
 import { BaseProtectComponentProps } from "@/router/interface"
-import { EMPTY_TEAM_PATH } from "@/utils/routeHelper"
 import {
   getSessionCurrentTeamInfo,
   setSessionCurrentTeamInfo,

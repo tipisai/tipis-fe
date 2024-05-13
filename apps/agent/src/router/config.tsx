@@ -17,9 +17,17 @@ import {
   CREATE_TIPI_TEMPLATE_PATH,
   EDIT_FUNCTION_TEMPLATE_PATH,
   EDIT_TIPI_TEMPLATE_PATH,
+  EMPTY_TEAM_PATH,
   FUNCTIONS_DASHBOARD_TEMPLATE_PATH,
   MARKETPLACE_DETAIL_PATH,
   RUN_TIPI_TEMPLATE_PATH,
+  SETTING_ACCOUNT_PATH,
+  SETTING_BILLING_PATH,
+  SETTING_LANGUAGE_PATH,
+  SETTING_LINKED_PATH,
+  SETTING_MEMBERS_PATH,
+  SETTING_PATH,
+  SETTING_TEAM_INFO_PATH,
   TEAM_IDENTIFIER_TEMPLATE_PATH,
   TIPIS_DASHBOARD_TEMPLATE_PATH,
   TIPI_DETAIL_TEMPLATE_PATH,
@@ -65,9 +73,9 @@ const PersonalSetting = lazy(
 const LanguageSetting = lazy(
   () => import("@/page/SettingPage/account/language"),
 )
-const PasswordSettingPage = lazy(
-  () => import("@/page/SettingPage/account/password"),
-)
+// const PasswordSettingPage = lazy(
+//   () => import("@/page/SettingPage/account/password"),
+// )
 const LinkedSettingPage = lazy(
   () => import("@/page/SettingPage/account/linked"),
 )
@@ -134,7 +142,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     ),
   },
   {
-    path: "/empty-workspace",
+    path: EMPTY_TEAM_PATH,
     ProtectComponent: AuthCheck,
     accessByMobile: true,
     element: <WorkspaceLayout />,
@@ -253,7 +261,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   },
 
   {
-    path: "/setting",
+    path: SETTING_PATH,
     accessByMobile: true,
     ProtectComponent: AuthCheck,
     element: <SettingLayout />,
@@ -268,7 +276,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         accessByMobile: true,
       },
       {
-        path: "account",
+        path: SETTING_ACCOUNT_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <PersonalSetting />
@@ -277,7 +285,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         accessByMobile: true,
       },
       {
-        path: "language",
+        path: SETTING_LANGUAGE_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <LanguageSetting />
@@ -285,17 +293,17 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         ),
         accessByMobile: true,
       },
+      // {
+      //   path: SETTING_PASSWORD_PATH,
+      //   element: (
+      //     <Suspense fallback={<FullSectionLoading />}>
+      //       <PasswordSettingPage />
+      //     </Suspense>
+      //   ),
+      //   accessByMobile: true,
+      // },
       {
-        path: "password",
-        element: (
-          <Suspense fallback={<FullSectionLoading />}>
-            <PasswordSettingPage />
-          </Suspense>
-        ),
-        accessByMobile: true,
-      },
-      {
-        path: "linked",
+        path: SETTING_LINKED_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <LinkedSettingPage />
@@ -307,13 +315,13 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   },
 
   {
-    path: "/setting/:teamIdentifier",
+    path: `${SETTING_PATH}/${TEAM_IDENTIFIER_TEMPLATE_PATH}`,
     accessByMobile: true,
     element: <SettingLayout />,
     ProtectComponent: TeamAndLoginCheck,
     children: [
       {
-        path: "team-settings",
+        path: SETTING_TEAM_INFO_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <TeamSetting />
@@ -322,7 +330,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         accessByMobile: true,
       },
       {
-        path: "members",
+        path: SETTING_MEMBERS_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <TeamMembers />
@@ -331,7 +339,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         accessByMobile: true,
       },
       {
-        path: "billing",
+        path: SETTING_BILLING_PATH,
         element: (
           <Suspense fallback={<FullSectionLoading />}>
             <TeamBilling />

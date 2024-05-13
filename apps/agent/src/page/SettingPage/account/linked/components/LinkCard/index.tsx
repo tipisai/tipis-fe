@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { useCancelLinkedMutation } from "@illa-public/user-data"
 import { useLazyGetOAuthURIQuery } from "@illa-public/user-data"
+import { SETTING_PASSWORD_PATH } from "@/router/constants"
 import { OAUTH_REDIRECT_URL } from "@/utils/oauth"
-import { PASSWORD_PATH } from "@/utils/routeHelper"
 import { LinkCardProps } from "./interface"
 import {
   buttonWrapperStyle,
@@ -37,7 +37,7 @@ export const LinkCard: FC<LinkCardProps> = (props) => {
           open: false,
         })
 
-        navigate(PASSWORD_PATH)
+        navigate(SETTING_PASSWORD_PATH)
       },
       onCancel: () => {
         tipsModal.update({

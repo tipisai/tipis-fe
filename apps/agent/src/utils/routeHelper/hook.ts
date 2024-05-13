@@ -1,11 +1,11 @@
 import { useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 import { useLazyGetTeamsInfoQuery } from "@illa-public/user-data"
+import { EMPTY_TEAM_PATH } from "@/router/constants"
 import {
   CREATE_FUNCTION_FROM_SINGLE,
   CREATE_FUNCTION_FROM_SINGLE_KEY,
   CREATE_FUNCTION_FROM_TAB_KEY,
-  EMPTY_TEAM_PATH,
   getChatPath,
   getCreateFunctionPath,
   getCreateTipiPath,
