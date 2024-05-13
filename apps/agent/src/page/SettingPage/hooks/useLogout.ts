@@ -5,6 +5,7 @@ import {
   getILLACloudURL,
   removeAuthToken,
 } from "@illa-public/utils"
+import { AUTH_PAGE_PATH } from "@/router/constants"
 import { TIPISStorage } from "@/utils/storage"
 
 export const useLogout = () => {
@@ -16,14 +17,14 @@ export const useLogout = () => {
     removeAuthToken()
     TIPISStorage.clearLocalStorage()
     if (!ILLAToken) {
-      window.location.href = `${getILLACloudURL(window.customDomain)}/user/login`
+      window.location.href = `${getILLACloudURL(window.customDomain)}${AUTH_PAGE_PATH}`
       return
     }
     try {
       await logoutMutation(ILLAToken)
     } catch (e) {
     } finally {
-      window.location.href = `${getILLACloudURL(window.customDomain)}/user/login`
+      window.location.href = `${getILLACloudURL(window.customDomain)}${AUTH_PAGE_PATH}`
     }
   }
   return logout

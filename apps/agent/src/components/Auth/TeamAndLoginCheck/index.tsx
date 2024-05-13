@@ -1,15 +1,15 @@
 import { FC } from "react"
 import { BaseProtectComponentProps } from "@/router/interface"
-import LoginAuth from "../LoginAuth"
+import AuthCheck from "../AuthCheck"
 import TeamCheck from "../TeamCheck"
 
 const TeamAndLoginCheck: FC<BaseProtectComponentProps> = (props) => {
   const { children, needRole } = props
 
   return (
-    <LoginAuth>
+    <AuthCheck>
       <TeamCheck needRole={needRole}>{children}</TeamCheck>
-    </LoginAuth>
+    </AuthCheck>
   )
 }
 

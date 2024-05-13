@@ -1,11 +1,12 @@
 import { LoaderFunctionArgs, redirect } from "react-router-dom"
 import { setAuthToken } from "@illa-public/utils"
+import { AUTH_PAGE_PATH } from "../constants"
 import { getUserInfoLoader } from "./authLoader"
 
 export const rootLoader = async (args: LoaderFunctionArgs) => {
   const { request } = args
   const url = new URL(request.url)
-  const inviteToken = url.searchParams.get("inviteToken")
+  // const inviteToken = url.searchParams.get("inviteToken")
   const paramsToken = url.searchParams.get("token")
   if (paramsToken) {
     setAuthToken(paramsToken)
@@ -15,9 +16,10 @@ export const rootLoader = async (args: LoaderFunctionArgs) => {
   if (isLogin) {
     return null
   } else {
-    if (inviteToken) {
-      return redirect(`/user/register${url.search ?? ""}`)
-    }
-    return redirect(`/user/login${url.search ?? ""}`)
+    // if (inviteToken) {
+    //   return redirect(`/user/register${url.search ?? ""}`)
+    // }
+    // return redirect(`/user/login${url.search ?? ""}`)
+    return redirect(`${AUTH_PAGE_PATH}${url.search ?? ""}`)
   }
 }

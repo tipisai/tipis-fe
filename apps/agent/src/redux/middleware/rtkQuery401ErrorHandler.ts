@@ -3,6 +3,7 @@ import type { Middleware, MiddlewareAPI } from "@reduxjs/toolkit"
 import { TipisTrack } from "@illa-public/track-utils"
 import { teamAPI, userAPI } from "@illa-public/user-data"
 import { getILLACloudURL, removeAuthToken } from "@illa-public/utils"
+import { AUTH_PAGE_PATH } from "@/router/constants"
 import { isFetchBaseQueryError } from "../helper"
 
 export const rtkQueryErrorLogger: Middleware =
@@ -16,7 +17,7 @@ export const rtkQueryErrorLogger: Middleware =
           dispatch(teamAPI.util.resetApiState())
           dispatch(userAPI.util.resetApiState())
           TipisTrack.reset()
-          window.location.href = `${getILLACloudURL()}/user/login?redirectURL=${encodeURIComponent(
+          window.location.href = `${getILLACloudURL()}${AUTH_PAGE_PATH}?redirectURL=${encodeURIComponent(
             window.location.href,
           )}`
           break

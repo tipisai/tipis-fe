@@ -108,11 +108,7 @@ export const genTabNavigateLink = (
   }
 }
 
-export const REGISTER_PATH = "/user/register"
-export const FORGOT_PASSWORD_PATH = "/user/forgotPassword"
-export const LOGIN_PATH = "/user/login"
 export const PASSWORD_PATH = "/setting/password"
-export const LINKED_PATH = "/setting/linked"
 export const EMPTY_TEAM_PATH = "/empty-workspace"
 
 export enum CREATE_FUNCTION_FROM_SINGLE {

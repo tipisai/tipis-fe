@@ -1,14 +1,12 @@
 import { Suspense, lazy } from "react"
 import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom"
 import { Page403, Page404, Page500 } from "@illa-public/status-page"
-// import AuthCheck from "@/components/Auth/AuthCheck"
+import AuthCheck from "@/components/Auth/AuthCheck"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import SettingLayout from "@/page/SettingPage"
 import WorkspaceLayout from "../Layout/Workspace"
-import LoginAuth from "../components/Auth/LoginAuth"
 import TeamAndLoginCheck from "../components/Auth/TeamAndLoginCheck"
 import RootPage from "../page/RootPage"
-import UserLayout from "../page/User/Layout/index"
 import Empty from "../page/WorkSpace/Empty"
 import { buildRouter } from "./buildRouter"
 import {
@@ -55,16 +53,6 @@ const MarketTipiDetailPage = lazy(
  */
 const AuthPage = lazy(() => import("@/page/UserAuth/AuthPage"))
 const AuthRedirect = lazy(() => import("@/page/UserAuth/AuthRedirect"))
-
-/**
- *
- * @group User page
- *
- */
-const LoginPage = lazy(() => import("@/page/User/Login"))
-const RegisterPage = lazy(() => import("@/page/User/Register"))
-const ForgotPasswordPage = lazy(() => import("@/page/User/ResetPassword"))
-const OAuth = lazy(() => import("@/page/User/Oauth"))
 
 /**
  *
@@ -146,56 +134,8 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     ),
   },
   {
-    path: "/user",
-    element: <UserLayout />,
-    accessByMobile: true,
-    children: [
-      {
-        index: true,
-        accessByMobile: true,
-        element: <Navigate to="./login" replace />,
-      },
-      {
-        path: "login",
-        element: (
-          <Suspense fallback={<FullSectionLoading />}>
-            <LoginPage />
-          </Suspense>
-        ),
-        accessByMobile: true,
-      },
-      {
-        path: "register",
-        element: (
-          <Suspense fallback={<FullSectionLoading />}>
-            <RegisterPage />
-          </Suspense>
-        ),
-        accessByMobile: true,
-      },
-      {
-        path: "forgotPassword",
-        element: (
-          <Suspense fallback={<FullSectionLoading />}>
-            <ForgotPasswordPage />
-          </Suspense>
-        ),
-        accessByMobile: true,
-      },
-      {
-        path: "oauth",
-        element: (
-          <Suspense fallback={<FullSectionLoading />}>
-            <OAuth />
-          </Suspense>
-        ),
-        accessByMobile: true,
-      },
-    ],
-  },
-  {
     path: "/empty-workspace",
-    ProtectComponent: LoginAuth,
+    ProtectComponent: AuthCheck,
     accessByMobile: true,
     element: <WorkspaceLayout />,
     children: [
@@ -315,7 +255,7 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
   {
     path: "/setting",
     accessByMobile: true,
-    ProtectComponent: LoginAuth,
+    ProtectComponent: AuthCheck,
     element: <SettingLayout />,
     children: [
       {
