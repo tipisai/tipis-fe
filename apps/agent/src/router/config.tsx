@@ -1,6 +1,7 @@
 import { Suspense, lazy } from "react"
 import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom"
 import { Page403, Page404, Page500 } from "@illa-public/status-page"
+// import AuthCheck from "@/components/Auth/AuthCheck"
 import FullSectionLoading from "@/components/FullSectionLoading"
 import SettingLayout from "@/page/SettingPage"
 import WorkspaceLayout from "../Layout/Workspace"
@@ -11,6 +12,8 @@ import UserLayout from "../page/User/Layout/index"
 import Empty from "../page/WorkSpace/Empty"
 import { buildRouter } from "./buildRouter"
 import {
+  AUTH_PAGE_PATH,
+  AUTH_REDIRECT_PATH,
   CHAT_TEMPLATE_PATH,
   CREATE_FUNCTION_TEMPLATE_PATH,
   CREATE_TIPI_TEMPLATE_PATH,
@@ -44,6 +47,14 @@ const TipiDetailPage = lazy(
 const MarketTipiDetailPage = lazy(
   () => import("@/page/WorkSpace/TipiDetail/MarketTipiDetail"),
 )
+
+/**
+ *
+ * @group Auth page
+ *
+ */
+const AuthPage = lazy(() => import("@/page/UserAuth/AuthPage"))
+const AuthRedirect = lazy(() => import("@/page/UserAuth/AuthRedirect"))
 
 /**
  *
@@ -115,6 +126,24 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
     loader: rootLoader,
     element: <RootPage />,
     accessByMobile: true,
+  },
+  {
+    path: AUTH_PAGE_PATH,
+    accessByMobile: true,
+    element: (
+      <Suspense fallback={<FullSectionLoading />}>
+        <AuthPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: AUTH_REDIRECT_PATH,
+    accessByMobile: true,
+    element: (
+      <Suspense fallback={<FullSectionLoading />}>
+        <AuthRedirect />
+      </Suspense>
+    ),
   },
   {
     path: "/user",
