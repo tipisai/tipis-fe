@@ -52,7 +52,7 @@ jobs:
 
       - name: Compress tipis
         run: |
-          tar -czvf tipis-fe.tar.gz ./apps/agent/dist ./nginx.conf ./Dockerfile ./tipisai-frontend.conf
+          tar -czvf tipis-fe.tar.gz ./apps/agent/dist ./nginx.conf ./Dockerfile ./tipisai-frontend.conf ./fly.toml
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
