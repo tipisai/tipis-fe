@@ -1,50 +1,42 @@
 import Icon from "@ant-design/icons"
-import { FC, useEffect, useMemo } from "react"
+import { FC, useEffect } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
-import { useBeforeUnload, useNavigate } from "react-router-dom"
-import { USER_ROLE } from "@illa-public/public-types"
+import { useBeforeUnload } from "react-router-dom"
 import {
   TIPIS_TRACK_CLOUD_PAGE_NAME,
   TipisTrack,
 } from "@illa-public/track-utils"
-import { getPlanUtils } from "@illa-public/user-data"
-import { canAccessMember, canManagePayment } from "@illa-public/user-role-utils"
 import ProfileIcon from "@/assets/setting/profile.svg?react"
-import TeamIcon from "@/assets/setting/team.svg?react"
-import TeamSelect from "@/components/TeamSelect"
-import { useLeaveTeamModal } from "@/page/SettingPage/hooks/useLeaveTeamModal"
-import { useLogout } from "@/page/SettingPage/hooks/useLogout"
-import { useGetCurrentTeamInfo } from "@/utils/team"
+import { useSignOut } from "@/page/SettingPage/hooks/useSignOut"
 import SettingMenu from "../Menu"
 import {
   landingMenuItemsStyle,
   landingMenuTitleStyle,
-  landingTitleStyle,
-  teamSwitchStyle,
+  landingTitleStyle, // teamSwitchStyle,
 } from "./style"
 
 const Entrance: FC = () => {
   const { t } = useTranslation()
-  const currentTeamInfo = useGetCurrentTeamInfo()
-  const logout = useLogout()
-  const navigate = useNavigate()
+  // const currentTeamInfo = useGetCurrentTeamInfo()
+  const signOut = useSignOut()
+  // const navigate = useNavigate()
 
-  const handleLeaveOrDeleteTeamModal = useLeaveTeamModal()
-  const { hiddenMember, leaveLabel } = useMemo(() => {
-    return {
-      hiddenMember: !canAccessMember(currentTeamInfo),
-      leaveLabel:
-        currentTeamInfo?.myRole === USER_ROLE.OWNER
-          ? t("team_setting.left_panel.delete")
-          : t("team_setting.left_panel.leave"),
-    }
-  }, [currentTeamInfo, t])
+  // const handleLeaveOrDeleteTeamModal = useLeaveTeamModal()
+  // const { hiddenMember, leaveLabel } = useMemo(() => {
+  //   return {
+  //     hiddenMember: !canAccessMember(currentTeamInfo),
+  //     leaveLabel:
+  //       currentTeamInfo?.myRole === USER_ROLE.OWNER
+  //         ? t("team_setting.left_panel.delete")
+  //         : t("team_setting.left_panel.leave"),
+  //   }
+  // }, [currentTeamInfo, t])
 
-  const showBilling = canManagePayment(
-    currentTeamInfo?.myRole,
-    getPlanUtils(currentTeamInfo),
-  )
+  // const showBilling = canManagePayment(
+  //   currentTeamInfo?.myRole,
+  //   getPlanUtils(currentTeamInfo),
+  // )
 
   const accountOptions = [
     {
@@ -68,40 +60,40 @@ const Entrance: FC = () => {
       path: "",
       label: t("profile.setting.logout"),
       onClick: () => {
-        logout()
+        signOut()
       },
     },
   ]
 
-  const teamOptions = currentTeamInfo?.identifier
-    ? [
-        {
-          path: `/setting/${currentTeamInfo.identifier}/team-settings`,
-          label: t("team_setting.team_info.title"),
-        },
-        {
-          path: `/setting/${currentTeamInfo.identifier}/members`,
-          label: t("team_setting.left_panel.member"),
-          hidden: hiddenMember,
-        },
-        {
-          path: `/setting/${currentTeamInfo.identifier}/billing`,
-          label: t("billing.menu.billing"),
-          hidden: !showBilling,
-        },
-        {
-          path: "",
-          label: leaveLabel,
-          onClick: () => {
-            handleLeaveOrDeleteTeamModal()
-          },
-        },
-      ]
-    : []
+  // const teamOptions = currentTeamInfo?.identifier
+  //   ? [
+  //       {
+  //         path: `/setting/${currentTeamInfo.identifier}/team-settings`,
+  //         label: t("team_setting.team_info.title"),
+  //       },
+  //       {
+  //         path: `/setting/${currentTeamInfo.identifier}/members`,
+  //         label: t("team_setting.left_panel.member"),
+  //         hidden: hiddenMember,
+  //       },
+  //       {
+  //         path: `/setting/${currentTeamInfo.identifier}/billing`,
+  //         label: t("billing.menu.billing"),
+  //         hidden: !showBilling,
+  //       },
+  //       {
+  //         path: "",
+  //         label: leaveLabel,
+  //         onClick: () => {
+  //           handleLeaveOrDeleteTeamModal()
+  //         },
+  //       },
+  //     ]
+  //   : []
 
-  const handleSwitchTeam = () => {
-    navigate("/setting")
-  }
+  // const handleSwitchTeam = () => {
+  //   navigate("/setting")
+  // }
 
   useEffect(() => {
     TipisTrack.pageViewTrack(TIPIS_TRACK_CLOUD_PAGE_NAME.MOBILE_SETTING_NAV)
@@ -126,7 +118,7 @@ const Entrance: FC = () => {
       </div>
       <SettingMenu itemList={accountOptions} />
       <div css={landingMenuItemsStyle} />
-      {currentTeamInfo && (
+      {/* {currentTeamInfo && (
         <>
           <div css={landingMenuTitleStyle}>
             <Icon component={TeamIcon} />
@@ -137,7 +129,7 @@ const Entrance: FC = () => {
           </div>
         </>
       )}
-      <SettingMenu itemList={teamOptions} />
+      <SettingMenu itemList={teamOptions} /> */}
     </>
   )
 }
