@@ -1,27 +1,82 @@
-// import Icon from "@ant-design/icons"
-// import { FC } from "react"
-// import { useTranslation } from "react-i18next"
-// import { GithubIcon } from "@illa-public/icon"
-// import { useGetUserInfoQuery } from "@illa-public/user-data"
-// import { LinkCard } from "../components/LinkCard"
+import Icon from "@ant-design/icons"
+import { App } from "antd"
+import { FC } from "react"
+import { useTranslation } from "react-i18next"
+import {
+  useGetIdentifiersQuery,
+  useLinkIdentityMutation,
+  useUnlinkIdentityMutation,
+} from "@illa-public/user-data"
+import GithubIcon from "@/assets/public/github.svg?react"
+import GoogleIcon from "@/assets/public/googleIcon.svg?react"
+import { LinkCard } from "../components/LinkCard"
+import { ILinkProvider } from "../interface"
+import { cardContainerStyle } from "./style"
 
-// export const MobileLinkedSetting: FC = () => {
-//   const { t } = useTranslation()
+const MobileLinkedSetting: FC = () => {
+  const { t } = useTranslation()
+  const { message } = App.useApp()
 
-//   const { data } = useGetUserInfoQuery(null)
-//   const ssoVerified = data?.ssoVerified
-//   const hasPassword = data?.isPasswordSet
+  const { data, isLoading } = useGetIdentifiersQuery(null)
+  const [linkIdentity] = useLinkIdentityMutation()
+  const [unLinkIdentity] = useUnlinkIdentityMutation()
 
-//   return (
-//     <LinkCard
-//       title="Github"
-//       description={t("profile.setting.oauth.description.GitHub_unconnect")}
-//       icon={<Icon component={GithubIcon} />}
-//       type="github"
-//       isConnected={ssoVerified?.github ?? false}
-//       hasPassword={hasPassword ?? false}
-//     />
-//   )
-// }
+  const providers = data?.map((identifier) => identifier.provider) || []
 
-export {}
+  const handleConnect = async (provider: ILinkProvider) => {
+    try {
+      await linkIdentity({
+        provider,
+        redirectTo: window.location.href,
+      }).unwrap()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const handleDisconnect = async (provider: ILinkProvider) => {
+    try {
+      const identifier = data?.find(
+        (identifier) => identifier.provider === provider,
+      )!
+      await unLinkIdentity(identifier).unwrap()
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const handleClick = (provider: ILinkProvider) => {
+    if (!providers?.includes(provider)) {
+      handleConnect(provider)
+    } else if (providers.length === 1) {
+      message.error(
+        "profile.setting.oauth.disconnect.not_disconnect_last_oauth",
+      )
+      handleDisconnect(provider)
+    } else {
+      handleDisconnect(provider)
+    }
+  }
+
+  if (isLoading) return null
+  return (
+    <div css={cardContainerStyle}>
+      <LinkCard
+        title="Github"
+        description={t("profile.setting.oauth.description.GitHub_unconnect")}
+        icon={<Icon component={GithubIcon} />}
+        handleClick={() => handleClick("github")}
+        isConnected={!!providers?.includes("github")}
+      />
+      <LinkCard
+        title="Google"
+        description={t("profile.setting.oauth.description.google")}
+        icon={<Icon component={GoogleIcon} />}
+        handleClick={() => handleClick("google")}
+        isConnected={!!providers?.includes("google")}
+      />
+    </div>
+  )
+}
+
+export default MobileLinkedSetting

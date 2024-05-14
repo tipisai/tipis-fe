@@ -3,8 +3,7 @@ import { App } from "antd"
 import { FC } from "react"
 import { useTranslation } from "react-i18next"
 import {
-  useGetProvidersQuery,
-  useLazyGetIdentifierQuery,
+  useGetIdentifiersQuery,
   useLinkIdentityMutation,
   useUnlinkIdentityMutation,
 } from "@illa-public/user-data"
@@ -15,14 +14,15 @@ import { LinkCard } from "../components/LinkCard"
 import { ILinkProvider } from "../interface"
 import { cardContainerStyle, containerStyle } from "./style"
 
-export const PCLinkedSetting: FC = () => {
+const PCLinkedSetting: FC = () => {
   const { t } = useTranslation()
   const { message } = App.useApp()
 
-  const { data, isLoading } = useGetProvidersQuery(null)
-  const [triggerGetIdentifier] = useLazyGetIdentifierQuery()
+  const { data, isLoading } = useGetIdentifiersQuery(null)
   const [linkIdentity] = useLinkIdentityMutation()
   const [unLinkIdentity] = useUnlinkIdentityMutation()
+
+  const providers = data?.map((identifier) => identifier.provider) || []
 
   const handleConnect = async (provider: ILinkProvider) => {
     try {
@@ -37,18 +37,22 @@ export const PCLinkedSetting: FC = () => {
 
   const handleDisconnect = async (provider: ILinkProvider) => {
     try {
-      const Identifier = await triggerGetIdentifier(provider).unwrap()
-      await unLinkIdentity(Identifier).unwrap()
+      const identifier = data?.find(
+        (identifier) => identifier.provider === provider,
+      )!
+      await unLinkIdentity(identifier).unwrap()
     } catch (e) {
       console.log(e)
     }
   }
 
   const handleClick = (provider: ILinkProvider) => {
-    if (!data?.includes(provider)) {
+    if (!providers?.includes(provider)) {
       handleConnect(provider)
-    } else if (data.length === 1) {
-      message.error("just one")
+    } else if (providers.length === 1) {
+      message.error(
+        "profile.setting.oauth.disconnect.not_disconnect_last_oauth",
+      )
       handleDisconnect(provider)
     } else {
       handleDisconnect(provider)
@@ -65,16 +69,18 @@ export const PCLinkedSetting: FC = () => {
           description={t("profile.setting.oauth.description.GitHub_unconnect")}
           icon={<Icon component={GithubIcon} />}
           handleClick={() => handleClick("github")}
-          isConnected={!!data?.includes("github")}
+          isConnected={!!providers?.includes("github")}
         />
         <LinkCard
           title="Google"
-          description={t("profile.setting.oauth.description.GitHub_unconnect")}
+          description={t("profile.setting.oauth.description.google")}
           icon={<Icon component={GoogleIcon} />}
           handleClick={() => handleClick("google")}
-          isConnected={!!data?.includes("google")}
+          isConnected={!!providers?.includes("google")}
         />
       </div>
     </div>
   )
 }
+
+export default PCLinkedSetting
