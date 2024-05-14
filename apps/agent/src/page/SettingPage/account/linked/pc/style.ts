@@ -28,7 +28,7 @@ export const containerStyle = css`
 
 export const cardContainerStyle = css`
   display: flex;
-  flex-direction: column;
   align-items: center;
+  flex-direction: column;
   gap: 32px;
 `

@@ -3,7 +3,10 @@ import { FC, useCallback, useEffect, useRef } from "react"
 import { Helmet } from "react-helmet-async"
 import { useTranslation } from "react-i18next"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { useGetAuthSessionQuery } from "@illa-public/user-data"
+import {
+  useGetAuthSessionQuery,
+  useSignOutMutation,
+} from "@illa-public/user-data"
 import { setAuthToken } from "@illa-public/utils"
 import TextAndLogo from "@/assets/public/textLogo.svg?react"
 import { AUTH_PAGE_PATH } from "@/router/constants"
@@ -17,6 +20,7 @@ const AuthRedirect: FC = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const isErrorRedirectRef = useRef(false)
+  const [signOut] = useSignOutMutation()
 
   // handle auth Error
   const errorHandler = useCallback(
@@ -53,7 +57,7 @@ const AuthRedirect: FC = () => {
       const capitalized = tokenType.charAt(0).toUpperCase() + tokenType.slice(1)
       setAuthToken(`${capitalized} ${accessToken}`)
       // navigate to workspace
-      // navigate("/setting/linked")
+      navigate("/setting/linked")
     }
   }, [data?.session, isLoading, navigate])
 
@@ -63,6 +67,7 @@ const AuthRedirect: FC = () => {
         <title>{t("page.user.new_auth.title")}</title>
       </Helmet>
       <div css={containerStyle}>
+        <button onClick={() => signOut(null)}>signOut</button>
         <TextAndLogo css={logoStyle} />
       </div>
     </>

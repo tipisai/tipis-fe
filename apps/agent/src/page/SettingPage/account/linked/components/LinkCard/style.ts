@@ -2,6 +2,8 @@ import { css } from "@emotion/react"
 import { getColor } from "@illa-public/color-scheme"
 
 export const containerStyle = css`
+  width: 400px;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   gap: 24px;
