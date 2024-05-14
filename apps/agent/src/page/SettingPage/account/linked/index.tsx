@@ -7,7 +7,7 @@ import {
   TIPIS_TRACK_CLOUD_PAGE_NAME,
   TipisTrack,
 } from "@illa-public/track-utils"
-import { MobileLinkedSetting } from "./mobile"
+// import { MobileLinkedSetting } from "./mobile"
 import { PCLinkedSetting } from "./pc"
 
 const LinkedSetting: FC = () => {
@@ -31,7 +31,7 @@ const LinkedSetting: FC = () => {
       </Helmet>
       <LayoutAutoChange
         desktopPage={<PCLinkedSetting />}
-        mobilePage={<MobileLinkedSetting />}
+        // mobilePage={<MobileLinkedSetting />}
       />
     </>
   )
