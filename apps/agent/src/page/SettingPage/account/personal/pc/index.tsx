@@ -1,3 +1,4 @@
+import Icon from "@ant-design/icons"
 import {
   App,
   Avatar,
@@ -13,13 +14,14 @@ import ImgCrop from "antd-img-crop"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { ExitIcon } from "@illa-public/icon"
 import { useGetUserInfoQuery } from "@illa-public/user-data"
 import { getColorByString } from "@illa-public/utils"
 import ErrorMessage from "@/components/InputErrorMessage"
 import { Header } from "@/page/SettingPage/components/Header"
 import { FILE_SIZE_LIMIT } from "@/page/SettingPage/constants"
+import { useSignOut } from "@/page/SettingPage/hooks/useSignOut"
 import { AccountSettingFields, AccountSettingProps } from "../interface"
-import Logout from "./logout"
 import {
   contentContainerStyle,
   formContainerStyle,
@@ -43,6 +45,7 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
   const { message } = App.useApp()
 
   const { data: userInfo } = useGetUserInfoQuery(null)
+  const signOut = useSignOut()
 
   const handleBeforeUpload = (
     file: Parameters<GetProp<UploadProps, "beforeUpload">>[0],
@@ -56,7 +59,20 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
 
   return (
     <>
-      <Header title={t("profile.setting.personal_info")} extra={<Logout />} />
+      <Header
+        title={t("profile.setting.personal_info")}
+        extra={
+          <Button
+            size="large"
+            icon={<Icon component={ExitIcon} />}
+            onClick={() => {
+              signOut()
+            }}
+          >
+            {t("profile.setting.logout")}
+          </Button>
+        }
+      />
       <div css={contentContainerStyle}>
         <div>
           <ConfigProvider
