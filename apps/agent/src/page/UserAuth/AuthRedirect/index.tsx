@@ -49,6 +49,7 @@ const AuthRedirect: FC = () => {
       navigate(AUTH_PAGE_PATH)
     } else if (data?.session?.access_token) {
       // navigate to workspace
+      // navigate("/setting/linked")
     }
   }, [data?.session, isLoading, navigate])
 

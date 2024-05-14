@@ -4,7 +4,6 @@ export interface LinkCardProps {
   title: string
   description: string
   icon: ReactNode
-  type: "google" | "github"
+  handleClick: () => void
   isConnected: boolean
-  hasPassword: boolean
 }
