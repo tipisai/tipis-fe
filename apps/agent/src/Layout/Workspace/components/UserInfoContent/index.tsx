@@ -41,7 +41,11 @@ const UserInfoContent: FC<IUserInfoContentProps> = (props) => {
       >
         <div css={avatarContainerStyle}>
           <Avatar
-            src={currentUserInfo?.avatarUrl}
+            src={
+              currentUserInfo?.avatarUrl
+                ? currentUserInfo?.avatarUrl
+                : undefined
+            }
             shape="circle"
             size={isMiniSize ? 24 : 32}
             style={{

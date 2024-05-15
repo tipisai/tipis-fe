@@ -1,28 +1,20 @@
-import { v4 } from "uuid"
-import { useLazyGetTeamIconUploadAddressQuery } from "@illa-public/user-data"
-import { uploadAvatar } from "@/services/user"
+import { useUploadTeamAvatarMutation } from "@illa-public/user-data"
+import { getAvatarURL } from "@/utils/supabaseStorage"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 
 export const useUploadTeamIcon = () => {
-  const [triggerGetTeamIconUploadAddress] =
-    useLazyGetTeamIconUploadAddressQuery()
-
-  const teamInfo = useGetCurrentTeamInfo()!
+  const teamInfo = useGetCurrentTeamInfo()
+  const [handleUploadTeamAvatar] = useUploadTeamAvatarMutation()
 
   const uploadTeamIcon = (file: File) => {
-    const fileName = v4()
+    if (!teamInfo) return
     return new Promise<string>(async (resolve, reject) => {
       try {
-        const type = file.type.split("/")[1]
-        const { data } = await triggerGetTeamIconUploadAddress({
+        const path = await handleUploadTeamAvatar({
+          file,
           teamID: teamInfo.id,
-          type,
-          fileName,
-        })
-        if (data?.uploadAddress) {
-          const imgUrl = await uploadAvatar(data?.uploadAddress, file)
-          resolve(imgUrl)
-        }
+        }).unwrap()
+        resolve(getAvatarURL(path))
       } catch (e) {
         reject(e)
       }

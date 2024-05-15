@@ -140,9 +140,7 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
                     size={120}
                     style={{
                       fontSize: 36,
-                      background: teamInfo?.name
-                        ? "#ffffff"
-                        : getColorByString(teamInfo?.id || ""),
+                      background: getColorByString(teamInfo?.id || ""),
                     }}
                   >
                     {teamInfo?.name[0]
@@ -233,7 +231,7 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
             size="large"
             htmlType="submit"
             loading={loading}
-            disabled={disabled}
+            disabled={disabled || !formState.isDirty}
           >
             {t("team_setting.team_info.save")}
           </Button>

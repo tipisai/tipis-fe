@@ -114,9 +114,7 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
                     size={120}
                     style={{
                       fontSize: 36,
-                      background: teamInfo?.name
-                        ? "#ffffff"
-                        : getColorByString(teamInfo?.id || ""),
+                      background: getColorByString(teamInfo?.id || ""),
                     }}
                   >
                     {teamInfo?.name[0]
@@ -201,7 +199,7 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
           size="large"
           htmlType="submit"
           loading={loading}
-          disabled={disabled}
+          disabled={disabled || !formState.isDirty}
           block
         >
           {t("profile.setting.save")}

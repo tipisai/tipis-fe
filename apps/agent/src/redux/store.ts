@@ -4,7 +4,6 @@ import {
   supabaseApi,
   teamAPI,
   teamReducer,
-  tempAPI,
   userAPI,
 } from "@illa-public/user-data"
 import { rtkQueryErrorLogger } from "./middleware/rtkQuery401ErrorHandler"
@@ -31,7 +30,6 @@ const store = configureStore({
     [peripheralAPI.reducerPath]: peripheralAPI.reducer,
     [aiToolsAPI.reducerPath]: aiToolsAPI.reducer,
     [supabaseApi.reducerPath]: supabaseApi.reducer,
-    [tempAPI.reducerPath]: tempAPI.reducer,
   },
   devTools: import.meta.env.ILLA_APP_ENV === "development",
   middleware: (getDefaultMiddleware) =>
@@ -46,7 +44,6 @@ const store = configureStore({
       peripheralAPI.middleware,
       aiToolsAPI.middleware,
       supabaseApi.middleware,
-      tempAPI.middleware,
       rtkQueryErrorLogger,
     ),
 })
