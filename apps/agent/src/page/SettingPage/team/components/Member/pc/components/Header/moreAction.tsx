@@ -1,17 +1,15 @@
 import Icon from "@ant-design/icons"
-import { App, Button, Dropdown, MenuProps, Switch } from "antd"
+import { App, Button, Dropdown, MenuProps } from "antd"
 import { FC, useCallback, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { AuthShown, SHOW_RULES } from "@illa-public/auth-shown"
 import { MoreIcon } from "@illa-public/icon"
 import { USER_ROLE } from "@illa-public/public-types"
 import {
   getTeamItems,
   teamActions,
   useRemoveTeamMemberByIDMutation,
-  useUpdateTeamPermissionConfigMutation,
 } from "@illa-public/user-data"
 import store from "@/redux/store"
 import { EMPTY_TEAM_PATH } from "@/router/constants"
@@ -21,10 +19,6 @@ import {
   setLocalTeamIdentifier,
 } from "@/utils/storage/cacheTeam"
 import { useGetCurrentTeamInfo } from "@/utils/team"
-import {
-  allowEditorOrViewerInviteWrapperStyle,
-  moreActionTextStyle,
-} from "./style"
 
 export const MoreAction: FC = () => {
   const { message, modal } = App.useApp()
@@ -32,15 +26,11 @@ export const MoreAction: FC = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const teamInfo = useGetCurrentTeamInfo()!
-  const { myRole: currentUserRole, id: currentTeamID } = teamInfo
-  const { allowEditorManageTeamMember, allowViewerManageTeamMember } =
-    teamInfo.permission
+  const { myRole: currentUserRole } = teamInfo
 
   const [dropDownShow, setDropDownShow] = useState(false)
-  const [disableSwitch, setDisableSwitch] = useState(false)
 
   const [removeTeamMemberByID] = useRemoveTeamMemberByIDMutation()
-  const [updateTeamPermissionConfig] = useUpdateTeamPermissionConfigMutation()
 
   const handleLeaveTeam = useCallback(async () => {
     try {
@@ -55,9 +45,9 @@ export const MoreAction: FC = () => {
       const teamItems = getTeamItems(store.getState()) ?? []
       const newTeamItems = teamItems.filter((team) => team.id !== teamInfo.id)
       if (Array.isArray(newTeamItems) && newTeamItems.length > 0) {
-        setLocalTeamIdentifier(newTeamItems[0].identifier)
+        setLocalTeamIdentifier(newTeamItems[0].identify)
         dispatch(teamActions.updateCurrentIdReducer(newTeamItems[0].id))
-        navigate(getChatPath(newTeamItems[0].identifier), {
+        navigate(getChatPath(newTeamItems[0].identify), {
           replace: true,
         })
       } else {
@@ -95,29 +85,8 @@ export const MoreAction: FC = () => {
     })
   }, [handleLeaveTeam, modal, t])
 
-  const handleChangeInviteByEditor = async (value: boolean) => {
-    try {
-      setDisableSwitch(true)
-      await updateTeamPermissionConfig({
-        teamID: currentTeamID,
-        data: {
-          allowEditorManageTeamMember: value,
-          allowViewerManageTeamMember: value,
-        },
-      })
-    } catch (e) {
-    } finally {
-      setDisableSwitch(false)
-    }
-  }
-
   const handleMenuClick: MenuProps["onClick"] = ({ key }) => {
     switch (key) {
-      case "allow_invite":
-        handleChangeInviteByEditor(
-          !(allowEditorManageTeamMember && allowViewerManageTeamMember),
-        )
-        break
       case "leave_team":
         handleClickDeleteOrLeaveTeam()
         setDropDownShow(false)
@@ -126,28 +95,6 @@ export const MoreAction: FC = () => {
   }
 
   const dropItems = [
-    {
-      key: "allow_invite",
-      label: (
-        <AuthShown
-          currentUserRole={currentUserRole}
-          allowRoles={[USER_ROLE.OWNER, USER_ROLE.ADMIN]}
-          rules={SHOW_RULES.EQUAL}
-        >
-          <div css={allowEditorOrViewerInviteWrapperStyle}>
-            <span css={moreActionTextStyle}>
-              {t("user_management.settings.allow_editors_invite")}
-            </span>
-            <Switch
-              disabled={disableSwitch}
-              checked={
-                allowEditorManageTeamMember && allowViewerManageTeamMember
-              }
-            />
-          </div>
-        </AuthShown>
-      ),
-    },
     {
       key: "leave_team",
       label: t("team_setting.left_panel.leave"),

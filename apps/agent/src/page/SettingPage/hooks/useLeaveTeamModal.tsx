@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { ERROR_FLAG, isILLAAPiError } from "@illa-public/illa-net"
-import { USER_ROLE } from "@illa-public/public-types"
+// import { USER_ROLE } from "@illa-public/public-types"
 import { TipisTrack } from "@illa-public/track-utils"
 import {
   getTeamItems,
@@ -48,9 +48,9 @@ export const useLeaveTeamModal = () => {
       const teamItems = getTeamItems(store.getState()) ?? []
       const newTeamItems = teamItems.filter((team) => team.id !== teamInfo.id)
       if (Array.isArray(newTeamItems) && newTeamItems.length > 0) {
-        setLocalTeamIdentifier(newTeamItems[0].identifier)
+        setLocalTeamIdentifier(newTeamItems[0].identify)
         dispatch(teamActions.updateCurrentIdReducer(newTeamItems[0].id))
-        navigate(getChatPath(newTeamItems[0].identifier), {
+        navigate(getChatPath(newTeamItems[0].identify), {
           replace: true,
         })
       } else {
@@ -69,16 +69,16 @@ export const useLeaveTeamModal = () => {
   const deleteTeam = async () => {
     try {
       TipisTrack.track("click_delete_team")
-      deleteTeamByID(teamInfo?.id || "").unwrap()
+      await deleteTeamByID(teamInfo?.id || "").unwrap()
       message.success({
         content: t("team_setting.mes.delete_suc"),
       })
       const teamItems = getTeamItems(store.getState()) ?? []
       const newTeamItems = teamItems.filter((team) => team.id !== teamInfo.id)
       if (Array.isArray(newTeamItems) && newTeamItems.length > 0) {
-        setLocalTeamIdentifier(newTeamItems[0].identifier)
+        setLocalTeamIdentifier(newTeamItems[0].identify)
         dispatch(teamActions.updateCurrentIdReducer(newTeamItems[0].id))
-        navigate(getChatPath(newTeamItems[0].identifier), {
+        navigate(getChatPath(newTeamItems[0].identify), {
           replace: true,
         })
       } else {
@@ -106,7 +106,7 @@ export const useLeaveTeamModal = () => {
     }
   }
 
-  const showLeaveTeamModal = () => {
+  const _showLeaveTeamModal = () => {
     modalInstance.current = modal.confirm({
       centered: true,
       title: t("team_setting.leave_modal.title"),
@@ -142,11 +142,13 @@ export const useLeaveTeamModal = () => {
   }
 
   const handleLeaveOrDeleteTeamModal = () => {
-    if (teamInfo.myRole === USER_ROLE.OWNER) {
-      showDeleteTeamModal()
-    } else {
-      showLeaveTeamModal()
-    }
+    showDeleteTeamModal()
+    // TODO: WTF, team role
+    // if (teamInfo.myRole === USER_ROLE.OWNER) {
+    //   showDeleteTeamModal()
+    // } else {
+    //   showLeaveTeamModal()
+    // }
   }
 
   return handleLeaveOrDeleteTeamModal

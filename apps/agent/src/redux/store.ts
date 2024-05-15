@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import {
-  authAPI,
   supabaseApi,
   teamAPI,
   teamReducer,
+  tempAPI,
   userAPI,
 } from "@illa-public/user-data"
 import { rtkQueryErrorLogger } from "./middleware/rtkQuery401ErrorHandler"
@@ -21,7 +21,6 @@ const store = configureStore({
   reducer: {
     team: teamReducer,
     ui: uiReducer,
-    [authAPI.reducerPath]: authAPI.reducer,
     [agentAuthAPI.reducerPath]: agentAuthAPI.reducer,
     [marketAPI.reducerPath]: marketAPI.reducer,
     [driveAPI.reducerPath]: driveAPI.reducer,
@@ -32,11 +31,11 @@ const store = configureStore({
     [peripheralAPI.reducerPath]: peripheralAPI.reducer,
     [aiToolsAPI.reducerPath]: aiToolsAPI.reducer,
     [supabaseApi.reducerPath]: supabaseApi.reducer,
+    [tempAPI.reducerPath]: tempAPI.reducer,
   },
   devTools: import.meta.env.ILLA_APP_ENV === "development",
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
-      authAPI.middleware,
       agentAuthAPI.middleware,
       marketAPI.middleware,
       driveAPI.middleware,
@@ -47,6 +46,7 @@ const store = configureStore({
       peripheralAPI.middleware,
       aiToolsAPI.middleware,
       supabaseApi.middleware,
+      tempAPI.middleware,
       rtkQueryErrorLogger,
     ),
 })

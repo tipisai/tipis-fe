@@ -5,6 +5,7 @@ import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useAuthByMagicLinkMutation } from "@illa-public/user-data"
 import TextAndLogo from "@/assets/public/textLogo.svg?react"
+import i18n from "@/i18n"
 import EmailCountDown from "@/page/UserAuth/components/EmailCountDown"
 import { AUTH_STEP, IEmailForm } from "../../interface"
 import { IResendPageProps } from "./interface"
@@ -35,6 +36,7 @@ const ResendPage: FC<IResendPageProps> = ({ setAuthStep }) => {
       await authByMagicLink({
         email,
         name,
+        language: i18n.language,
       }).unwrap()
       setAuthStep(AUTH_STEP.RESEND_PAGE)
     } catch (e) {

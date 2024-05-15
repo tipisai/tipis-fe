@@ -53,7 +53,7 @@ const ShareButton: FC = () => {
           currentUserRole={currentUserRole}
         >
           <InviteMember
-            redirectURL={`${getILLACloudURL()}${getEditTipiPath(currentTeamInfo.identifier, aiAgentID)}`}
+            redirectURL={`${getILLACloudURL()}${getEditTipiPath(currentTeamInfo.identify, aiAgentID)}`}
             excludeUserRole={[USER_ROLE.VIEWER]}
             onCopyInviteLink={(link) => {
               copyToClipboard(

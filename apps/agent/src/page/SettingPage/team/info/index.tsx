@@ -1,18 +1,16 @@
 import { App } from "antd"
-import { FC, useEffect, useMemo, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useBeforeUnload, useNavigate, useParams } from "react-router-dom"
 import { isILLAAPiError } from "@illa-public/illa-net"
 import { LayoutAutoChange } from "@illa-public/layout-auto-change"
-import { USER_ROLE } from "@illa-public/public-types"
 import {
   TIPIS_TRACK_CLOUD_PAGE_NAME,
   TipisTrack,
 } from "@illa-public/track-utils"
-import { useChangeTeamConfigMutation } from "@illa-public/user-data"
-import { isSmallThanTargetRole } from "@illa-public/user-role-utils"
+import { useUpdateTeamInfoMutation } from "@illa-public/user-data"
 import TeamInfoMobile from "@/page/SettingPage/team/info/components/TeamInfoMobile"
 import TeamInfoPC from "@/page/SettingPage/team/info/components/TeamInfoPC"
 import { TeamInfoFields } from "@/page/SettingPage/team/interface"
@@ -28,26 +26,28 @@ const TeamInfo: FC = () => {
   const [loading, setLoading] = useState(false)
   const { message } = App.useApp()
 
-  const [changeTeamConfig] = useChangeTeamConfigMutation()
+  const [updateTeamInfo] = useUpdateTeamInfoMutation()
 
   const settingFormProps = useForm<TeamInfoFields>({
     values: {
       name: teamInfo?.name,
-      identifier: teamInfo?.identifier,
+      identify: teamInfo?.identify,
     },
   })
 
-  const disableEdit = useMemo(() => {
-    return teamInfo && isSmallThanTargetRole(USER_ROLE.ADMIN, teamInfo?.myRole)
-  }, [teamInfo])
+  // TODO: user Role
+  // const disableEdit = useMemo(() => {
+  //   return teamInfo && isSmallThanTargetRole(USER_ROLE.ADMIN, teamInfo?.myRole)
+  // }, [teamInfo])
+  const disableEdit = false
 
   const onSubmit: SubmitHandler<TeamInfoFields> = async (data) => {
     try {
       setLoading(true)
-      if (data.identifier && data.identifier !== teamIdentifier) {
-        setLocalTeamIdentifier(data.identifier)
+      if (data.identify && data.identify !== teamIdentifier) {
+        setLocalTeamIdentifier(data.identify)
       }
-      await changeTeamConfig({
+      await updateTeamInfo({
         data,
         teamID: teamInfo?.id as string,
       }).unwrap()
@@ -56,16 +56,17 @@ const TeamInfo: FC = () => {
       })
       settingFormProps.reset({
         name: data.name,
-        identifier: data.identifier,
+        identify: data.identify,
       })
-      TipisTrack.group(teamInfo.id, {
-        name: data.name!,
-        identifier: data.identifier!,
-        paymentPlan: teamInfo.credit.plan,
-        cycle: teamInfo.credit.cycle,
-      })
-      if (data.identifier && data.identifier !== teamIdentifier) {
-        navigate(getTeamInfoSetting(data.identifier))
+      // TODO: wtf after billing
+      // TipisTrack.group(teamInfo.id, {
+      //   name: data.name!,
+      //   identifier: data.identify!,
+      //   paymentPlan: teamInfo.credit.plan,
+      //   cycle: teamInfo.credit.cycle,
+      // })
+      if (data.identify && data.identify !== teamIdentifier) {
+        navigate(getTeamInfoSetting(data.identify))
       }
       return true
     } catch (e) {

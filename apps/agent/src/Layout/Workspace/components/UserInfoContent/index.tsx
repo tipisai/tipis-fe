@@ -41,14 +41,14 @@ const UserInfoContent: FC<IUserInfoContentProps> = (props) => {
       >
         <div css={avatarContainerStyle}>
           <Avatar
-            src={currentUserInfo?.avatar}
+            src={currentUserInfo?.avatarUrl}
             shape="circle"
             size={isMiniSize ? 24 : 32}
             style={{
               fontSize: isMiniSize ? 12 : 16,
-              background: currentUserInfo?.avatar
+              background: currentUserInfo?.avatarUrl
                 ? "#ffffff"
-                : getColorByString(currentUserInfo?.userID || ""),
+                : getColorByString(currentUserInfo?.id || ""),
             }}
           >
             {currentUserInfo?.nickname[0]

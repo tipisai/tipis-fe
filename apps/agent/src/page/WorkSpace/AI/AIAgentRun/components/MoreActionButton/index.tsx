@@ -78,7 +78,7 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
     ]
     if (
       canShownEditTipi(currentTeamInfo) &&
-      ownerTeamIdentifier === currentTeamInfo?.identifier
+      ownerTeamIdentifier === currentTeamInfo?.identify
     ) {
       originMenuItems.push({
         key: "edit",
@@ -150,7 +150,7 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
             aiAgentID: agentID,
           }).unwrap()
           navigate(
-            getEditTipiPath(currentTeamInfo.identifier, newAgent.aiAgentID),
+            getEditTipiPath(currentTeamInfo.identify, newAgent.aiAgentID),
           )
         } catch (e) {
           messageAPI.error({
@@ -202,7 +202,7 @@ const MoreActionButton: FC<IMoreActionButtonProps> = (props) => {
           currentUserRole={currentUserRole}
         >
           <InviteMember
-            redirectURL={`${getILLACloudURL()}${getRunTipiPath(currentTeamInfo.identifier, agentID, v4())}`}
+            redirectURL={`${getILLACloudURL()}${getRunTipiPath(currentTeamInfo.identify, agentID, v4())}`}
             onCopyInviteLink={(link) => {
               copyToClipboard(
                 t("user_management.modal.custom_copy_text_agent_invite", {

@@ -53,7 +53,7 @@ export const useNavigateTargetWorkspace = () => {
       }
       const recentTeamInfo = findRecentTeamInfo(teamInfos)
       if (recentTeamInfo) {
-        return recentTeamInfo.identifier
+        return recentTeamInfo.identify
       }
       throw new Error(NOT_HAS_TARGET_TEAM_INFO_KEY)
     } catch (e) {
@@ -95,10 +95,10 @@ export const useNavigateToCreateTipis = () => {
 
   const navigateToCreteTipis = useCallback(async () => {
     await addCreateTipisTab()
-    if (currentTeamInfo?.identifier) {
-      navigate(getCreateTipiPath(currentTeamInfo?.identifier))
+    if (currentTeamInfo?.identify) {
+      navigate(getCreateTipiPath(currentTeamInfo?.identify))
     }
-  }, [addCreateTipisTab, currentTeamInfo?.identifier, navigate])
+  }, [addCreateTipisTab, currentTeamInfo?.identify, navigate])
   return navigateToCreteTipis
 }
 
@@ -110,11 +110,11 @@ export const useNavigateToEditTipis = () => {
   const navigateToEditTipis = useCallback(
     async (tipisInfo: { tipisName: string; tipisID: string }) => {
       await addEditTipisTab(tipisInfo)
-      if (currentTeamInfo?.identifier) {
-        navigate(getEditTipiPath(currentTeamInfo.identifier, tipisInfo.tipisID))
+      if (currentTeamInfo?.identify) {
+        navigate(getEditTipiPath(currentTeamInfo.identify, tipisInfo.tipisID))
       }
     },
-    [addEditTipisTab, currentTeamInfo?.identifier, navigate],
+    [addEditTipisTab, currentTeamInfo?.identify, navigate],
   )
   return navigateToEditTipis
 }
@@ -135,22 +135,22 @@ export const useNavigateToRunTipis = () => {
       tipiOwnerTeamIdentity?: string,
     ) => {
       await addRunTipisTab(tabInfo, tabID)
-      if (currentTeamInfo?.identifier) {
+      if (currentTeamInfo?.identify) {
         if (
           tipiOwnerTeamIdentity &&
-          tipiOwnerTeamIdentity !== currentTeamInfo.identifier
+          tipiOwnerTeamIdentity !== currentTeamInfo.identify
         ) {
           navigate(
-            `${getRunTipiPath(currentTeamInfo.identifier, tabInfo.tipisID, tabID)}?ownerTeamIdentifier=${tipiOwnerTeamIdentity}`,
+            `${getRunTipiPath(currentTeamInfo.identify, tabInfo.tipisID, tabID)}?ownerTeamIdentifier=${tipiOwnerTeamIdentity}`,
           )
         } else {
           navigate(
-            `${getRunTipiPath(currentTeamInfo.identifier, tabInfo.tipisID, tabID)}`,
+            `${getRunTipiPath(currentTeamInfo.identify, tabInfo.tipisID, tabID)}`,
           )
         }
       }
     },
-    [addRunTipisTab, currentTeamInfo?.identifier, navigate],
+    [addRunTipisTab, currentTeamInfo?.identify, navigate],
   )
   return navigateToRunTipis
 }
@@ -163,11 +163,11 @@ export const useNavigateToTipiDetail = () => {
   const navigateToTipiDetail = useCallback(
     (tabInfo: { tipisID: string; title: string; tabIcon: string }) => {
       addTipisDetailTab(tabInfo)
-      if (currentTeamInfo?.identifier) {
-        navigate(getTipiDetailPath(currentTeamInfo.identifier, tabInfo.tipisID))
+      if (currentTeamInfo?.identify) {
+        navigate(getTipiDetailPath(currentTeamInfo.identify, tabInfo.tipisID))
       }
     },
-    [addTipisDetailTab, currentTeamInfo?.identifier, navigate],
+    [addTipisDetailTab, currentTeamInfo?.identify, navigate],
   )
   return navigateToTipiDetail
 }
@@ -180,13 +180,13 @@ export const useNavigateToMarketTipiDetail = () => {
   const navigateToMarketTipiDetail = useCallback(
     (tabInfo: { tipisID: string; title: string; tabIcon: string }) => {
       addMarketTipisDetailTab(tabInfo)
-      if (currentTeamInfo?.identifier) {
+      if (currentTeamInfo?.identify) {
         navigate(
-          getMarketTipiDetailPath(currentTeamInfo.identifier, tabInfo.tipisID),
+          getMarketTipiDetailPath(currentTeamInfo.identify, tabInfo.tipisID),
         )
       }
     },
-    [addMarketTipisDetailTab, navigate, currentTeamInfo?.identifier],
+    [addMarketTipisDetailTab, navigate, currentTeamInfo?.identify],
   )
   return navigateToMarketTipiDetail
 }
@@ -199,11 +199,11 @@ export const useNavigateToNewChat = () => {
   const navigateToChat = useCallback(
     async (chatID: string) => {
       await addChatTab(chatID)
-      if (currentTeamInfo?.identifier) {
-        navigate(getChatPath(currentTeamInfo.identifier, chatID))
+      if (currentTeamInfo?.identify) {
+        navigate(getChatPath(currentTeamInfo.identify, chatID))
       }
     },
-    [addChatTab, currentTeamInfo?.identifier, navigate],
+    [addChatTab, currentTeamInfo?.identify, navigate],
   )
   return navigateToChat
 }
@@ -215,10 +215,10 @@ export const useNavigateToExploreTipis = () => {
 
   const navigateToExploreTipis = useCallback(async () => {
     await addExploreTipisTab()
-    if (currentTeamInfo?.identifier) {
-      navigate(getExploreTipisPath(currentTeamInfo.identifier))
+    if (currentTeamInfo?.identify) {
+      navigate(getExploreTipisPath(currentTeamInfo.identify))
     }
-  }, [addExploreTipisTab, currentTeamInfo?.identifier, navigate])
+  }, [addExploreTipisTab, currentTeamInfo?.identify, navigate])
   return navigateToExploreTipis
 }
 
@@ -229,10 +229,10 @@ export const useNavigateToExploreFunction = () => {
 
   const navigateToExploreTipis = useCallback(async () => {
     await addExploreFunctionTab()
-    if (currentTeamInfo?.identifier) {
-      navigate(getExploreFunctionsPath(currentTeamInfo.identifier))
+    if (currentTeamInfo?.identify) {
+      navigate(getExploreFunctionsPath(currentTeamInfo.identify))
     }
-  }, [addExploreFunctionTab, currentTeamInfo?.identifier, navigate])
+  }, [addExploreFunctionTab, currentTeamInfo?.identify, navigate])
   return navigateToExploreTipis
 }
 
@@ -248,7 +248,7 @@ export const useNavigateToCreateFunction = () => {
       tabID?: string,
     ) => {
       await addCreateFunctionTab(functionType)
-      if (currentTeamInfo?.identifier) {
+      if (currentTeamInfo?.identify) {
         const searchParams = new URLSearchParams()
         if (from) {
           searchParams.append(CREATE_FUNCTION_FROM_SINGLE_KEY, from)
@@ -258,16 +258,16 @@ export const useNavigateToCreateFunction = () => {
         }
         if (!!searchParams.toString()) {
           navigate(
-            `${getCreateFunctionPath(currentTeamInfo?.identifier, functionType)}?${searchParams.toString()}`,
+            `${getCreateFunctionPath(currentTeamInfo?.identify, functionType)}?${searchParams.toString()}`,
           )
         } else {
           navigate(
-            getCreateFunctionPath(currentTeamInfo?.identifier, functionType),
+            getCreateFunctionPath(currentTeamInfo?.identify, functionType),
           )
         }
       }
     },
-    [addCreateFunctionTab, currentTeamInfo?.identifier, navigate],
+    [addCreateFunctionTab, currentTeamInfo?.identify, navigate],
   )
   return navigateToCreteTipis
 }
@@ -280,16 +280,16 @@ export const useNavigateToEditFunction = () => {
   const navigateToEditTipis = useCallback(
     async (functionInfo: { functionName: string; functionID: string }) => {
       await addOrUpdateEditFunctionTab(functionInfo)
-      if (currentTeamInfo?.identifier) {
+      if (currentTeamInfo?.identify) {
         navigate(
           getEditFunctionPath(
-            currentTeamInfo.identifier,
+            currentTeamInfo.identify,
             functionInfo.functionID,
           ),
         )
       }
     },
-    [addOrUpdateEditFunctionTab, currentTeamInfo?.identifier, navigate],
+    [addOrUpdateEditFunctionTab, currentTeamInfo?.identify, navigate],
   )
   return navigateToEditTipis
 }

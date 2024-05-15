@@ -1,5 +1,5 @@
 export interface TeamInfoFields {
   name?: string
-  identifier?: string
-  icon?: string
+  identify?: string
+  avatarUrl?: string
 }

@@ -13,15 +13,13 @@ import ImgCrop from "antd-img-crop"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { USER_ROLE } from "@illa-public/public-types"
-import { isBiggerThanTargetRole } from "@illa-public/user-role-utils"
 import { getColorByString } from "@illa-public/utils"
 import ErrorMessage from "@/components/InputErrorMessage"
 import { FILE_SIZE_LIMIT } from "@/page/SettingPage/constants"
-import { useUploadAvatar } from "@/page/SettingPage/hooks/uploadAvatar"
 import { TEAM_IDENTIFY_FORMAT } from "@/page/SettingPage/team/info/constants"
 import { TeamInfoFields } from "@/page/SettingPage/team/interface"
 import { useGetCurrentTeamInfo } from "@/utils/team"
+import { useUploadTeamIcon } from "../hooks"
 import { TeamInfoMobileProps } from "./interface"
 import {
   forgotPwdContainerStyle,
@@ -40,12 +38,12 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
   const { handleSubmit, control, formState } = useFormContext<TeamInfoFields>()
   const { message } = App.useApp()
   const teamInfo = useGetCurrentTeamInfo()!
-  const { uploadTeamIcon } = useUploadAvatar()
+  const uploadTeamIcon = useUploadTeamIcon()
 
   const handleUpdateTeamIcon = async (file: File) => {
     try {
-      const icon = await uploadTeamIcon(file)
-      return (await onSubmit?.({ icon })) as boolean
+      const avatarUrl = await uploadTeamIcon(file)
+      return (await onSubmit?.({ avatarUrl })) as boolean
     } catch {
       message.error({
         content: t("profile.setting.message.save_fail"),
@@ -63,11 +61,6 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
     }
     return true
   }
-
-  const canEditorTeamInfo = isBiggerThanTargetRole(
-    USER_ROLE.OWNER,
-    teamInfo?.myRole,
-  )
 
   return (
     <div css={mobileSettingContainerStyle}>
@@ -91,12 +84,12 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
               <Upload
                 listType="picture-circle"
                 showUploadList={false}
-                disabled={!canEditorTeamInfo}
+                disabled={disabled}
                 customRequest={() => {}}
               >
-                {teamInfo?.icon ? (
+                {teamInfo?.avatarUrl ? (
                   <Image
-                    src={teamInfo?.icon}
+                    src={teamInfo?.avatarUrl}
                     wrapperStyle={{
                       width: "100%",
                       height: "100%",
@@ -107,7 +100,7 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
                     }}
                     css={uploadContentContainerStyle}
                     preview={
-                      canEditorTeamInfo
+                      !disabled
                         ? {
                             visible: false,
                             mask: "+ Upload",
@@ -117,7 +110,6 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
                   />
                 ) : (
                   <Avatar
-                    src={teamInfo?.name}
                     shape="circle"
                     size={120}
                     style={{
@@ -176,16 +168,14 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
             </div>
             <div>
               <Controller
-                name="identifier"
+                name="identify"
                 control={control}
                 render={({ field }) => (
                   <Input
                     {...field}
                     size="large"
                     disabled={disabled}
-                    status={
-                      !!formState?.errors.identifier ? "error" : undefined
-                    }
+                    status={!!formState?.errors.identify ? "error" : undefined}
                     variant="filled"
                     placeholder={t(
                       "team_setting.team_info.team_id_placeholder",
@@ -200,8 +190,8 @@ const TeamInfoMobile: FC<TeamInfoMobileProps> = (props) => {
                   },
                 }}
               />
-              {formState?.errors.identifier && (
-                <ErrorMessage message={formState?.errors.identifier?.message} />
+              {formState?.errors.identify && (
+                <ErrorMessage message={formState?.errors.identify?.message} />
               )}
             </div>
           </section>

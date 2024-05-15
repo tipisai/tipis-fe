@@ -42,7 +42,7 @@ const TeamSelect: FC<TeamSelectProps> = (props) => {
       >
         <div css={teamSelectContainerStyle} onClick={onClickOpenPopover}>
           <div css={teamAvatarContainerStyle}>
-            <Avatar src={currentTeam?.icon} size={24} shape="square" />
+            <Avatar src={currentTeam?.avatarUrl} size={24} shape="square" />
           </div>
           <span css={teamNameStyle}>{currentTeam?.name}</span>
           <div css={iconContainerStyle}>

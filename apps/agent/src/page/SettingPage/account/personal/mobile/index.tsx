@@ -75,9 +75,9 @@ const MobileAccountSetting: FC<AccountSettingProps> = (props) => {
                 showUploadList={false}
                 customRequest={() => {}}
               >
-                {userInfo?.avatar ? (
+                {!!userInfo?.avatarUrl ? (
                   <Image
-                    src={userInfo?.avatar}
+                    src={userInfo?.avatarUrl}
                     css={uploadContentContainerStyle}
                     wrapperStyle={{
                       width: "100%",
@@ -94,14 +94,13 @@ const MobileAccountSetting: FC<AccountSettingProps> = (props) => {
                   />
                 ) : (
                   <Avatar
-                    src={userInfo?.nickname}
                     shape="circle"
                     size={120}
                     style={{
                       fontSize: 36,
-                      background: userInfo?.avatar
+                      background: userInfo?.avatarUrl
                         ? "#ffffff"
-                        : getColorByString(userInfo?.userID || ""),
+                        : getColorByString(userInfo?.id || "U"),
                     }}
                   >
                     {userInfo?.nickname[0]

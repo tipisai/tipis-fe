@@ -45,8 +45,8 @@ const CreateTeamModal: FC<CreateTeamModalProps> = (props) => {
         content: t("team_create_suc"),
       })
 
-      setLocalTeamIdentifier(res.identifier)
-      navigate(`/workspace/${res.identifier}`, { replace: true })
+      setLocalTeamIdentifier(res.identify)
+      navigate(`/workspace/${res.identify}`, { replace: true })
     } catch (e) {
       if (isILLAAPiError(e)) {
         const res = handleFreeTeamLimitError(e, FREE_TEAM_LIMIT_TYPE.CREATE)

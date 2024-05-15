@@ -13,7 +13,7 @@ const Empty: FC = () => {
 
   useEffect(() => {
     if (!isLoading && Array.isArray(data) && data.length > 0) {
-      setLocalTeamIdentifier(data[0].identifier)
+      setLocalTeamIdentifier(data[0].identify)
       navigateToWorkspace()
     }
   }, [data, isLoading, navigateToWorkspace])

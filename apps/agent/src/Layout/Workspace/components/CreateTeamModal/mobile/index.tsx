@@ -77,13 +77,13 @@ const CreateTeamMobileModal: FC<CreateTeamModalProps> = (props) => {
         </section>
         <section>
           <Controller
-            name="identifier"
+            name="identify"
             control={control}
             render={({ field }) => (
               <Input
                 {...field}
                 size="large"
-                status={!!formState?.errors.identifier ? "error" : undefined}
+                status={!!formState?.errors.identify ? "error" : undefined}
                 variant="filled"
                 placeholder={t("homepage.team_modal.team_domain") || ""}
               />
@@ -105,8 +105,8 @@ const CreateTeamMobileModal: FC<CreateTeamModalProps> = (props) => {
               {t("homepage.team_modal.tip.team_identifier")}
             </span>
           </div>
-          {formState?.errors.identifier && (
-            <ErrorMessage message={formState?.errors.identifier?.message} />
+          {formState?.errors.identify && (
+            <ErrorMessage message={formState?.errors.identify?.message} />
           )}
         </section>
         <Button

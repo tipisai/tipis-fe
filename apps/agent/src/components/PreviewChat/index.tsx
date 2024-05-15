@@ -74,7 +74,7 @@ export const PreviewChat: FC<PreviewChatProps> = (props) => {
         handleScroll={handleScroll}
         chatMessages={chatMessages}
         isReceiving={isReceiving}
-        currentUserID={currentUserInfo?.userID ?? ""}
+        currentUserID={currentUserInfo?.id ?? ""}
         currentRenderMessage={currentRenderMessage}
       />
       <div css={[inputTextContainerStyle, maxWidthStyle]}>

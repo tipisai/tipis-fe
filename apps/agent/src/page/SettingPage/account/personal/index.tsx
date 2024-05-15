@@ -11,10 +11,9 @@ import {
 } from "@illa-public/track-utils"
 import {
   useGetUserInfoQuery,
-  useUpdateNickNameMutation,
-  useUpdateUserAvatarMutation,
+  useUpdateUserProfileMutation,
 } from "@illa-public/user-data"
-import { useUploadAvatar } from "../../hooks/uploadAvatar"
+import { useUploadAvatar } from "./hooks"
 import { AccountSettingFields } from "./interface"
 import MobileAccountSetting from "./mobile"
 import PCAccountSetting from "./pc"
@@ -22,9 +21,8 @@ import PCAccountSetting from "./pc"
 export const PersonalSetting: FC = () => {
   const { t } = useTranslation()
   const { data } = useGetUserInfoQuery(null)
-  const [updateNickName] = useUpdateNickNameMutation()
-  const { uploadUserAvatar } = useUploadAvatar()
-  const [updateUserAvatar] = useUpdateUserAvatarMutation()
+  const [updateUserProfile] = useUpdateUserProfileMutation()
+  const uploadAvatar = useUploadAvatar()
 
   const { message } = App.useApp()
   const accountFormMethods = useForm<AccountSettingFields>({
@@ -35,7 +33,9 @@ export const PersonalSetting: FC = () => {
 
   const onAccountSubmit: SubmitHandler<AccountSettingFields> = async (data) => {
     try {
-      updateNickName(data.nickname)
+      updateUserProfile({
+        nickname: data.nickname,
+      })
       message.success(t("team_setting.message.save_suc"))
       accountFormMethods.reset({
         nickname: data.nickname,
@@ -45,8 +45,10 @@ export const PersonalSetting: FC = () => {
 
   const handleUpdateAvatar = async (file: File) => {
     try {
-      const icon = await uploadUserAvatar(file)
-      await updateUserAvatar(icon)
+      const avatarUrl = await uploadAvatar(file)
+      await updateUserProfile({
+        avatarUrl,
+      })
       message.success(t("profile.setting.message.save_suc"))
       return true
     } catch (e) {

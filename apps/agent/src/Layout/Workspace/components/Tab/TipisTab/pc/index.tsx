@@ -60,12 +60,12 @@ const PCTipisTab: FC<IPCTipisTab> = (props) => {
       await deleteTab(tabID)
 
       if (newTabs.length === 0) {
-        navigate(getChatPath(currentTeamInfo?.identifier ?? ""))
+        navigate(getChatPath(currentTeamInfo?.identify ?? ""))
         return
       }
       const latestTab = newTabs[0]
       const newPath = genTabNavigateLink(
-        currentTeamInfo?.identifier ?? "",
+        currentTeamInfo?.identify ?? "",
         latestTab.tabType,
         latestTab.cacheID,
         latestTab.tabID,
@@ -93,7 +93,7 @@ const PCTipisTab: FC<IPCTipisTab> = (props) => {
     <NavLink
       ref={ref}
       to={genTabNavigateLink(
-        currentTeamInfo?.identifier,
+        currentTeamInfo?.identify,
         tabType,
         cacheID,
         tabID,
