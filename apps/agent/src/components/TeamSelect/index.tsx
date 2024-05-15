@@ -2,6 +2,7 @@ import Icon from "@ant-design/icons"
 import { Avatar, Popover } from "antd"
 import { FC, useState } from "react"
 import { TipisTrack } from "@illa-public/track-utils"
+import { getColorByString } from "@illa-public/utils"
 import UpAndDownArrowIcon from "@/assets/workspace/upAndDownArrow.svg?react"
 import { useGetCurrentTeamInfo } from "@/utils/team"
 import TeamSelectContent from "./Content"
@@ -42,7 +43,21 @@ const TeamSelect: FC<TeamSelectProps> = (props) => {
       >
         <div css={teamSelectContainerStyle} onClick={onClickOpenPopover}>
           <div css={teamAvatarContainerStyle}>
-            <Avatar src={currentTeam?.avatarUrl} size={24} shape="square" />
+            <Avatar
+              src={currentTeam?.avatarUrl ? currentTeam.avatarUrl : undefined}
+              size={24}
+              shape="square"
+              style={{
+                fontSize: 12,
+                background: currentTeam?.avatarUrl
+                  ? "#ffffff"
+                  : getColorByString(currentTeam?.id || ""),
+              }}
+            >
+              {currentTeam?.name[0]
+                ? currentTeam?.name[0].toLocaleUpperCase()
+                : "T"}
+            </Avatar>
           </div>
           <span css={teamNameStyle}>{currentTeam?.name}</span>
           <div css={iconContainerStyle}>
