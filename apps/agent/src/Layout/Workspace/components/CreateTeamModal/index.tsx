@@ -82,6 +82,9 @@ const CreateTeamModal: FC<CreateTeamModalProps> = (props) => {
             break
         }
       }
+      message.error({
+        content: t("team_create_fail"),
+      })
     } finally {
       setLoading(false)
     }
