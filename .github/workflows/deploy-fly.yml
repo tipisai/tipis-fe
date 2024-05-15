@@ -30,7 +30,8 @@ jobs:
       ILLA_PERIPHERAL_API_BASE_URL: ${{ vars.ILLA_PERIPHERAL_API_BASE_URL }}
       ILLA_SUPABASE_ANON_KEY: ${{ vars.ILLA_SUPABASE_ANON_KEY }}
       ILLA_SUPABASE_URL: ${{ vars.ILLA_SUPABASE_URL }}
-
+      ILLA_V2_API_URL_ORIGIN: ${{ vars.ILLA_V2_API_URL_ORIGIN }}
+      ILLA_V2_DASH_URL_ORIGIN: ${{ vars.ILLA_V2_DASH_URL_ORIGIN }}
     steps:
       - uses: actions/checkout@v4
         with:
