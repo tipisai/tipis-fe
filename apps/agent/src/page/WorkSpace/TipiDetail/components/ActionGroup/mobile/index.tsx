@@ -83,7 +83,7 @@ const MobileActionGroup: FC<IActionGroupProps> = (props) => {
         teamID: currentTeamInfo.id,
         aiAgentID: tipisID,
       }).unwrap()
-      navigate(getEditTipiPath(currentTeamInfo.identifier, newAgent.aiAgentID))
+      navigate(getEditTipiPath(currentTeamInfo.identify, newAgent.aiAgentID))
     } catch (e) {
       messageAPI.error({
         content: t("dashboard.message.fork-failed"),

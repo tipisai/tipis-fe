@@ -25,7 +25,7 @@ export const MobileMemberListItem: FC<ListItemProps> = (props) => {
   const { handleChangeTeamMembersRole } = useContext(MemberContext)
   const teamInfo = useGetCurrentTeamInfo()!
   const { data } = useGetUserInfoQuery(null)
-  const currentUserID = data?.userID
+  const currentUserID = data?.id
 
   const currentUserRole = teamInfo.myRole
 

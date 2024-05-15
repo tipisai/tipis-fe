@@ -326,7 +326,7 @@ export const useOpenTipsWhenSubmit = () => {
 
     navigate(
       `${genTabNavigateLink(
-        currentTeamInfo.identifier,
+        currentTeamInfo.identify,
         tabInfo.tabType,
         tabInfo.cacheID,
         tabInfo.tabID,

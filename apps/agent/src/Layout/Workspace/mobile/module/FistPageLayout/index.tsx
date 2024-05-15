@@ -49,7 +49,7 @@ const MobileFirstPageLayout: FC<IFirstPageLayoutProps> = (props) => {
   const handleClickCloseAll = () => {
     const onOkModal = async () => {
       await closeAll()
-      navigate(getChatPath(currentTeamInfo?.identifier ?? ""))
+      navigate(getChatPath(currentTeamInfo?.identify ?? ""))
     }
     modal.confirm({
       content: t("homepage.edit_tipi.modal.not_save_desc"),

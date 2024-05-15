@@ -14,6 +14,7 @@ import ImgCrop from "antd-img-crop"
 import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router-dom"
 import { ExitIcon } from "@illa-public/icon"
 import { useGetUserInfoQuery } from "@illa-public/user-data"
 import { getColorByString } from "@illa-public/utils"
@@ -21,6 +22,7 @@ import ErrorMessage from "@/components/InputErrorMessage"
 import { Header } from "@/page/SettingPage/components/Header"
 import { FILE_SIZE_LIMIT } from "@/page/SettingPage/constants"
 import { useSignOut } from "@/page/SettingPage/hooks/useSignOut"
+import { AUTH_PAGE_PATH } from "@/router/constants"
 import { AccountSettingFields, AccountSettingProps } from "../interface"
 import {
   contentContainerStyle,
@@ -43,9 +45,15 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
   } = useFormContext<AccountSettingFields>()
 
   const { message } = App.useApp()
+  const navigate = useNavigate()
 
   const { data: userInfo } = useGetUserInfoQuery(null)
   const signOut = useSignOut()
+
+  const handleSignOut = () => {
+    signOut()
+    navigate(AUTH_PAGE_PATH)
+  }
 
   const handleBeforeUpload = (
     file: Parameters<GetProp<UploadProps, "beforeUpload">>[0],
@@ -65,9 +73,7 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
           <Button
             size="large"
             icon={<Icon component={ExitIcon} />}
-            onClick={() => {
-              signOut()
-            }}
+            onClick={handleSignOut}
           >
             {t("profile.setting.logout")}
           </Button>
@@ -95,9 +101,9 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
                 showUploadList={false}
                 customRequest={() => {}}
               >
-                {userInfo?.avatar ? (
+                {!!userInfo?.avatarUrl ? (
                   <Image
-                    src={userInfo?.avatar}
+                    src={userInfo?.avatarUrl}
                     wrapperStyle={{
                       width: "100%",
                       height: "100%",
@@ -114,14 +120,13 @@ const PCAccountSetting: FC<AccountSettingProps> = (props) => {
                   />
                 ) : (
                   <Avatar
-                    src={userInfo?.nickname}
                     shape="circle"
                     size={120}
                     style={{
                       fontSize: 36,
-                      background: userInfo?.avatar
+                      background: userInfo?.avatarUrl
                         ? "#ffffff"
-                        : getColorByString(userInfo?.userID || ""),
+                        : getColorByString(userInfo?.id || "U"),
                     }}
                   >
                     {userInfo?.nickname[0]

@@ -36,7 +36,7 @@ const ForkButton: FC = () => {
         teamID: currentTeamInfo.id,
         aiAgentID: aiAgentID,
       }).unwrap()
-      navigate(getEditTipiPath(currentTeamInfo.identifier, newAgent.aiAgentID))
+      navigate(getEditTipiPath(currentTeamInfo.identify, newAgent.aiAgentID))
     } catch (e) {
       messageAPI.error({
         content: t("dashboard.message.fork-failed"),

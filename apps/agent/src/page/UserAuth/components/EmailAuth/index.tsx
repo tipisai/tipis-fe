@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 import { useAuthByMagicLinkMutation } from "@illa-public/user-data"
 import { EMAIL_FORMAT } from "@illa-public/utils"
 import ErrorMessage from "@/components/InputErrorMessage"
+import i18n from "@/i18n"
 import { AUTH_STEP, IEmailForm } from "../../AuthPage/interface"
 import { IEmailAuthProps } from "./interface"
 import { formContainerStyle, inputContainerStyle } from "./style"
@@ -26,6 +27,7 @@ const EmailAuth: FC<IEmailAuthProps> = ({ setAuthStep }) => {
       await authByMagicLink({
         email,
         name,
+        language: i18n.language,
       }).unwrap()
       setAuthStep(AUTH_STEP.RESEND_PAGE)
     } catch (e) {

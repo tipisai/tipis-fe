@@ -1,7 +1,7 @@
-import { TeamInfo } from "@illa-public/public-types"
+import { ITeamInfoVO } from "@illa-public/public-types"
 
 export interface IDeleteTeamContent {
   onCancel: () => void
   deleteTeam: () => void
-  teamInfo: TeamInfo
+  teamInfo: ITeamInfoVO
 }

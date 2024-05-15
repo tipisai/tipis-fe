@@ -21,7 +21,7 @@ const MobileLinkedSetting: FC = () => {
   const [linkIdentity] = useLinkIdentityMutation()
   const [unLinkIdentity] = useUnlinkIdentityMutation()
 
-  const providers = data?.map((identifier) => identifier.provider) || []
+  const providers = data?.map((identify) => identify.provider) || []
 
   const handleConnect = async (provider: ILinkProvider) => {
     try {
@@ -36,10 +36,8 @@ const MobileLinkedSetting: FC = () => {
 
   const handleDisconnect = async (provider: ILinkProvider) => {
     try {
-      const identifier = data?.find(
-        (identifier) => identifier.provider === provider,
-      )!
-      await unLinkIdentity(identifier).unwrap()
+      const identify = data?.find((identify) => identify.provider === provider)!
+      await unLinkIdentity(identify).unwrap()
     } catch (e) {
       console.log(e)
     }

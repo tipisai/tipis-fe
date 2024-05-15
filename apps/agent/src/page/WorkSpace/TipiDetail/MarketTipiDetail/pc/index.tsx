@@ -64,7 +64,7 @@ const MarketTipiDetailPC: FC<IMarketTipiDetailProps> = ({
     } else {
       dispatch(recentTabActions.addRecentTabReducer(newTab))
     }
-    navigate(getExploreTipisPath(currentTeamInfo.identifier))
+    navigate(getExploreTipisPath(currentTeamInfo.identify))
   }
 
   return (

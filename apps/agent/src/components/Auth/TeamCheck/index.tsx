@@ -1,7 +1,6 @@
 import { isEqual } from "lodash-es"
 import { FC } from "react"
 import { Navigate, useParams } from "react-router-dom"
-import { TipisTrack } from "@illa-public/track-utils"
 import { useGetTeamsInfoAndCurrentIDQuery } from "@illa-public/user-data"
 import { EMPTY_TEAM_PATH } from "@/router/constants"
 import { BaseProtectComponentProps } from "@/router/interface"
@@ -12,9 +11,8 @@ import {
 
 const TeamCheck: FC<BaseProtectComponentProps> = (props) => {
   const { teamIdentifier } = useParams()
-  const mixedTeamIdentifier = teamIdentifier
   const { data, isSuccess, error } = useGetTeamsInfoAndCurrentIDQuery(
-    mixedTeamIdentifier,
+    teamIdentifier,
     {
       refetchOnFocus: true,
       refetchOnReconnect: true,
@@ -40,21 +38,23 @@ const TeamCheck: FC<BaseProtectComponentProps> = (props) => {
 
     if (!isEqual(cacheCurrentTeamInfo, currentTeam)) {
       setSessionCurrentTeamInfo(currentTeam)
-      TipisTrack.group(currentTeam.id, {
-        name: currentTeam.name,
-        identifier: currentTeam.identifier,
-        paymentPlan: currentTeam.credit.plan,
-        cycle: currentTeam.credit.cycle,
-      })
+      // TODO: group, need after billing
+      // TipisTrack.group(currentTeam.id, {
+      //   name: currentTeam.name,
+      //   identifier: currentTeam.identify,
+      //   paymentPlan: currentTeam.credit.plan,
+      //   cycle: currentTeam.credit.cycle,
+      // })
     }
 
-    if (
-      Array.isArray(props.needRole) &&
-      props.needRole.length > 0 &&
-      !props.needRole.includes(currentTeam.myRole)
-    ) {
-      return <Navigate to="/403" />
-    }
+    // TODO: team user role check
+    // if (
+    //   Array.isArray(props.needRole) &&
+    //   props.needRole.length > 0 &&
+    //   !props.needRole.includes(currentTeam.myRole)
+    // ) {
+    //   return <Navigate to="/403" />
+    // }
   }
 
   return isSuccess ? <>{props.children}</> : null

@@ -227,7 +227,7 @@ export const useUpdateCreateTipiTabToEditTipiTab = () => {
         })
       }
 
-      navigate(getEditTipiPath(currentTeamInfo.identifier, tabInfo.cacheID))
+      navigate(getEditTipiPath(currentTeamInfo.identify, tabInfo.cacheID))
     },
     [addRecentTab, navigate, updateRecentTab],
   )
@@ -310,7 +310,7 @@ export const useAddMarketTipiDetailTab = () => {
         }
       }
 
-      navigate(getMarketTipiDetailPath(currentTeamInfo.identifier, tipisID))
+      navigate(getMarketTipiDetailPath(currentTeamInfo.identify, tipisID))
     },
     [dispatch, navigate],
   )
@@ -337,7 +337,7 @@ export const useRunMarketTipis = () => {
       }
       dispatch(recentTabActions.addRecentTabReducer(tabsInfo))
       navigate(
-        `${getRunTipiPath(currentTeamInfo.identifier, tipisID, tabID)}?&ownerTeamIdentifier=${ownerTeamIdentifier}=${ownerTeamIdentifier}`,
+        `${getRunTipiPath(currentTeamInfo.identify, tipisID, tabID)}?&ownerTeamIdentifier=${ownerTeamIdentifier}=${ownerTeamIdentifier}`,
       )
     },
     [dispatch, navigate],
@@ -565,7 +565,7 @@ export const useUpdateCreateToEditFunctionTab = () => {
         })
       }
 
-      navigate(getEditFunctionPath(currentTeamInfo.identifier, tabInfo.cacheID))
+      navigate(getEditFunctionPath(currentTeamInfo.identify, tabInfo.cacheID))
     },
     [addRecentTab, deleteTab, navigate, updateRecentTab],
   )
@@ -606,7 +606,7 @@ export const useUpdateCurrentTabToTipisDashboard = () => {
         })
       }
 
-      navigate(getExploreTipisPath(currentTeamInfo.identifier))
+      navigate(getExploreTipisPath(currentTeamInfo.identify))
     },
     [addRecentTab, currentTabID, deleteTab, navigate, updateRecentTab],
   )

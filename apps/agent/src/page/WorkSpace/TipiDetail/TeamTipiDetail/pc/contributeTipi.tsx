@@ -49,7 +49,7 @@ const PCContributeTipi: FC<IContributeTipiProps> = (props) => {
     } else {
       await addRecentTab(newTab)
     }
-    navigate(getExploreTipisPath(currentTeamInfo.identifier))
+    navigate(getExploreTipisPath(currentTeamInfo.identify))
   }
 
   useEffect(() => {

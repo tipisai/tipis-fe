@@ -165,7 +165,7 @@ const MobileTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
           tabName: title,
           tabIcon: icon,
           tipiID: id,
-          tipiOwnerTeamIdentity: currentTeamInfo.identifier,
+          tipiOwnerTeamIdentity: currentTeamInfo.identify,
         })
         break
       }
@@ -279,7 +279,7 @@ const MobileTeamCardListItem: FC<ITeamCardListItemProps> = (props) => {
           currentUserRole={currentUserRole}
         >
           <InviteMember
-            redirectURL={`${getILLACloudURL()}${getRunTipiPath(currentTeamInfo.identifier, id, v4())}`}
+            redirectURL={`${getILLACloudURL()}${getRunTipiPath(currentTeamInfo.identify, id, v4())}`}
             onCopyInviteLink={(link) => {
               copyToClipboard(
                 t("user_management.modal.custom_copy_text_agent_invite", {

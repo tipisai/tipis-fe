@@ -15,17 +15,15 @@ import { FC } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { DeleteIcon } from "@illa-public/icon"
-import { USER_ROLE } from "@illa-public/public-types"
-import { isBiggerThanTargetRole } from "@illa-public/user-role-utils"
 import { getColorByString } from "@illa-public/utils"
 import ErrorMessage from "@/components/InputErrorMessage"
 import { Header } from "@/page/SettingPage/components/Header"
 import { FILE_SIZE_LIMIT } from "@/page/SettingPage/constants"
-import { useUploadAvatar } from "@/page/SettingPage/hooks/uploadAvatar"
 import { useLeaveTeamModal } from "@/page/SettingPage/hooks/useLeaveTeamModal"
 import { TEAM_IDENTIFY_FORMAT } from "@/page/SettingPage/team/info/constants"
 import { TeamInfoFields } from "@/page/SettingPage/team/interface"
 import { useGetCurrentTeamInfo } from "@/utils/team"
+import { useUploadTeamIcon } from "../hooks"
 import { TeamInfoPCProps } from "./interface"
 import {
   forgotPwdContainerStyle,
@@ -44,15 +42,16 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
   const { handleSubmit, control, formState } = useFormContext<TeamInfoFields>()
   const teamInfo = useGetCurrentTeamInfo()!
   const handleLeaveOrDeleteTeamModal = useLeaveTeamModal()
+  const uploadTeamIcon = useUploadTeamIcon()
 
-  const { uploadTeamIcon } = useUploadAvatar()
-
-  const isOwner = teamInfo?.myRole === USER_ROLE.OWNER
+  // TODO: wtf, user role
+  // const isOwner = teamInfo?.myRole === USER_ROLE.OWNER
+  const isOwner = true
 
   const handleUpdateTeamIcon = async (file: File) => {
     try {
-      const icon = await uploadTeamIcon(file)
-      return (await onSubmit?.({ icon })) as boolean
+      const avatarUrl = await uploadTeamIcon(file)
+      return (await onSubmit?.({ avatarUrl })) as boolean
     } catch {
       message.error({
         content: t("profile.setting.message.save_fail"),
@@ -70,11 +69,6 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
     }
     return true
   }
-
-  const canEditorTeamInfo = isBiggerThanTargetRole(
-    USER_ROLE.OWNER,
-    teamInfo?.myRole,
-  )
 
   const handleClickLeave = () => {
     handleLeaveOrDeleteTeamModal()
@@ -116,12 +110,12 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
               <Upload
                 listType="picture-circle"
                 showUploadList={false}
-                disabled={!canEditorTeamInfo}
+                disabled={disabled}
                 customRequest={() => {}}
               >
-                {teamInfo?.icon ? (
+                {!!teamInfo?.avatarUrl ? (
                   <Image
-                    src={teamInfo?.icon}
+                    src={teamInfo?.avatarUrl}
                     wrapperStyle={{
                       width: "100%",
                       height: "100%",
@@ -132,7 +126,7 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
                     }}
                     css={uploadContentContainerStyle}
                     preview={
-                      canEditorTeamInfo
+                      !disabled
                         ? {
                             visible: false,
                             mask: "+ Upload",
@@ -142,7 +136,6 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
                   />
                 ) : (
                   <Avatar
-                    src={teamInfo?.name}
                     shape="circle"
                     size={120}
                     style={{
@@ -203,7 +196,7 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
               </div>
               <div>
                 <Controller
-                  name="identifier"
+                  name="identify"
                   control={control}
                   render={({ field }) => (
                     <Input
@@ -211,7 +204,7 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
                       size="large"
                       disabled={disabled}
                       status={
-                        !!formState?.errors.identifier ? "error" : undefined
+                        !!formState?.errors.identify ? "error" : undefined
                       }
                       variant="filled"
                       placeholder={t(
@@ -229,10 +222,8 @@ const TeamInfoPC: FC<TeamInfoPCProps> = (props) => {
                     },
                   }}
                 />
-                {formState?.errors.identifier && (
-                  <ErrorMessage
-                    message={formState?.errors.identifier?.message}
-                  />
+                {formState?.errors.identify && (
+                  <ErrorMessage message={formState?.errors.identify?.message} />
                 )}
               </div>
             </section>

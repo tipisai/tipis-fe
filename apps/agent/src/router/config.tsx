@@ -73,9 +73,6 @@ const PersonalSetting = lazy(
 const LanguageSetting = lazy(
   () => import("@/page/SettingPage/account/language"),
 )
-// const PasswordSettingPage = lazy(
-//   () => import("@/page/SettingPage/account/password"),
-// )
 const LinkedSettingPage = lazy(
   () => import("@/page/SettingPage/account/linked"),
 )
@@ -293,15 +290,6 @@ const ILLA_ROUTE_CONFIG: RoutesObjectPro[] = [
         ),
         accessByMobile: true,
       },
-      // {
-      //   path: SETTING_PASSWORD_PATH,
-      //   element: (
-      //     <Suspense fallback={<FullSectionLoading />}>
-      //       <PasswordSettingPage />
-      //     </Suspense>
-      //   ),
-      //   accessByMobile: true,
-      // },
       {
         path: SETTING_LINKED_PATH,
         element: (

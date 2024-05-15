@@ -45,7 +45,7 @@ const PCInputArea: FC<IInputAreaProps> = (props) => {
   const { message: messageAPI } = App.useApp()
   const { useTo } = useContext(PreviewChatUseContext)
   const { data: currentUserInfo } = useGetUserInfoQuery(null)
-  const currentUserID = currentUserInfo?.userID || ""
+  const currentUserID = currentUserInfo?.id || ""
 
   const inputRef = useRef<HTMLInputElement>(null)
   const [textAreaVal, setTextAreaVal] = useState("")

@@ -107,15 +107,13 @@ const CreateTeamPCModal: FC<CreateTeamModalProps> = (props) => {
             </div>
             <div>
               <Controller
-                name="identifier"
+                name="identify"
                 control={control}
                 render={({ field }) => (
                   <Input
                     {...field}
                     size="large"
-                    status={
-                      !!formState?.errors.identifier ? "error" : undefined
-                    }
+                    status={!!formState?.errors.identify ? "error" : undefined}
                     variant="filled"
                   />
                 )}
@@ -135,8 +133,8 @@ const CreateTeamPCModal: FC<CreateTeamModalProps> = (props) => {
                   },
                 }}
               />
-              {formState?.errors.identifier && (
-                <ErrorMessage message={formState?.errors.identifier?.message} />
+              {formState?.errors.identify && (
+                <ErrorMessage message={formState?.errors.identify?.message} />
               )}
             </div>
           </section>

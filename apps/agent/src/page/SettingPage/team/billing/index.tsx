@@ -40,7 +40,7 @@ const Billing: FC = () => {
       triggerGetTeamsInfo(null)
       TipisTrack.group(teamInfo.id, {
         name: teamInfo.name,
-        identifier: teamInfo.identifier,
+        identifier: teamInfo.identify,
         paymentPlan: teamInfo.credit.plan,
         cycle: teamInfo.credit.cycle,
       })
@@ -53,7 +53,7 @@ const Billing: FC = () => {
     teamInfo.credit.cycle,
     teamInfo.credit.plan,
     teamInfo.id,
-    teamInfo.identifier,
+    teamInfo.identify,
     teamInfo.name,
     triggerGetTeamsInfo,
   ])

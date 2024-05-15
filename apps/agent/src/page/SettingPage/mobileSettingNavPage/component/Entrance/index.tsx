@@ -65,19 +65,19 @@ const Entrance: FC = () => {
     },
   ]
 
-  // const teamOptions = currentTeamInfo?.identifier
+  // const teamOptions = currentTeamInfo?.identify
   //   ? [
   //       {
-  //         path: `/setting/${currentTeamInfo.identifier}/team-settings`,
+  //         path: `/setting/${currentTeamInfo.identify}/team-settings`,
   //         label: t("team_setting.team_info.title"),
   //       },
   //       {
-  //         path: `/setting/${currentTeamInfo.identifier}/members`,
+  //         path: `/setting/${currentTeamInfo.identify}/members`,
   //         label: t("team_setting.left_panel.member"),
   //         hidden: hiddenMember,
   //       },
   //       {
-  //         path: `/setting/${currentTeamInfo.identifier}/billing`,
+  //         path: `/setting/${currentTeamInfo.identify}/billing`,
   //         label: t("billing.menu.billing"),
   //         hidden: !showBilling,
   //       },

@@ -48,12 +48,12 @@ const MobileTipisTab: FC<IMobileTipisTabProps> = (props) => {
       await deleteTab(tabID)
 
       if (newTabs.length === 0) {
-        navigate(getChatPath(currentTeamInfo?.identifier ?? ""))
+        navigate(getChatPath(currentTeamInfo?.identify ?? ""))
         return
       }
       const latestTab = newTabs[0]
       const newPath = genTabNavigateLink(
-        currentTeamInfo?.identifier ?? "",
+        currentTeamInfo?.identify ?? "",
         latestTab.tabType,
         latestTab.cacheID,
         latestTab.tabID,
@@ -80,7 +80,7 @@ const MobileTipisTab: FC<IMobileTipisTabProps> = (props) => {
   return (
     <NavLink
       to={genTabNavigateLink(
-        currentTeamInfo?.identifier,
+        currentTeamInfo?.identify,
         tabType,
         cacheID,
         tabID,

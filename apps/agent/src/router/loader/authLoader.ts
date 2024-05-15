@@ -15,7 +15,7 @@ export const getUserInfoLoader = async () => {
         userAPI.endpoints.getUserInfo.initiate(null),
       )
       const currentUserInfo = await promise.unwrap()
-      TipisTrack.identify(currentUserInfo.userID, {
+      TipisTrack.identify(currentUserInfo.id, {
         nickname: currentUserInfo.nickname,
         email: currentUserInfo.email,
         language: currentUserInfo.language,

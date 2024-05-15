@@ -22,11 +22,11 @@ export const useAcceptInvite = () => {
       try {
         const teamInfo = await joinTeamMutation(inviteToken).unwrap()
         message.success({ content: t("homepage.message.join_suc") })
-        setLocalTeamIdentifier(teamInfo.identifier)
+        setLocalTeamIdentifier(teamInfo.identify)
         if (redirectURL) {
           redirect(redirectURL)
         } else {
-          navigate(`/workspace/${teamInfo.identifier}`)
+          navigate(`/workspace/${teamInfo.identify}`)
         }
       } catch (e) {
         if (isILLAAPiError(e)) {

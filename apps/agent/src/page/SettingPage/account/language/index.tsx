@@ -9,7 +9,7 @@ import {
 } from "@illa-public/track-utils"
 import {
   useGetUserInfoQuery,
-  useUpdateUserLanguageMutation,
+  useUpdateUserProfileMutation,
 } from "@illa-public/user-data"
 import { defaultLanguage } from "@/i18n"
 import MobileLanguageSetting from "./mobile"
@@ -24,12 +24,14 @@ const LanguageSetting: FC = () => {
   const [languageLoading, setLanguageLoading] = useState(false)
   const { i18n, t } = useTranslation()
 
-  const [updateUserLanguage] = useUpdateUserLanguageMutation()
+  const [updateUserProfile] = useUpdateUserProfileMutation()
 
   const onSaveLanguageChange = async () => {
     try {
       setLanguageLoading(true)
-      await updateUserLanguage(currentLanguage)
+      await updateUserProfile({
+        language: currentLanguage,
+      })
       await i18n.changeLanguage(currentLanguage)
     } catch (e) {
     } finally {

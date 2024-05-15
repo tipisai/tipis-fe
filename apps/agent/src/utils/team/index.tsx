@@ -1,6 +1,6 @@
 import { useMemo } from "react"
-import { useParams, useSearchParams } from "react-router-dom"
-import { TeamInfo } from "@illa-public/public-types"
+import { useParams } from "react-router-dom"
+import { ITeamInfoVO } from "@illa-public/public-types"
 import { useGetTeamsInfoQuery } from "@illa-public/user-data"
 import {
   getLocalTeamIdentifier,
@@ -8,14 +8,14 @@ import {
   setLocalTeamIdentifier,
 } from "../storage/cacheTeam"
 
-export const findRecentTeamInfo = (teamInfos: TeamInfo[]) => {
+export const findRecentTeamInfo = (teamInfos: ITeamInfoVO[]) => {
   const cacheTeamIdentifier = getLocalTeamIdentifier()
   if (cacheTeamIdentifier) {
     const targetTeam = teamInfos.find(
-      (team) => team.identifier === cacheTeamIdentifier,
+      (team) => team.identify === cacheTeamIdentifier,
     )
     if (targetTeam) {
-      setLocalTeamIdentifier(targetTeam.identifier)
+      setLocalTeamIdentifier(targetTeam.identify)
       return targetTeam
     }
   }
@@ -23,14 +23,12 @@ export const findRecentTeamInfo = (teamInfos: TeamInfo[]) => {
     removeLocalTeamIdentifier()
     return undefined
   }
-  setLocalTeamIdentifier(teamInfos[0].identifier)
+  setLocalTeamIdentifier(teamInfos[0].identify)
   return teamInfos[0]
 }
 
 export const useGetCurrentTeamInfo = () => {
-  const [searchParams] = useSearchParams()
   const { teamIdentifier } = useParams()
-  const myTeamIdentifier = searchParams.get("myTeamIdentifier")
 
   const { data } = useGetTeamsInfoQuery(null)
 
@@ -38,15 +36,11 @@ export const useGetCurrentTeamInfo = () => {
     if (data) {
       const cacheTeamIdentifier = getLocalTeamIdentifier() as string | undefined
 
-      const priorityOrder = [
-        myTeamIdentifier,
-        teamIdentifier,
-        cacheTeamIdentifier,
-      ]
+      const priorityOrder = [teamIdentifier, cacheTeamIdentifier]
 
       for (let teamIdentifier of priorityOrder) {
         const currentTeamInfo = data.find(
-          (team) => team.identifier === teamIdentifier,
+          (team) => team.identify === teamIdentifier,
         )
         if (currentTeamInfo) {
           return currentTeamInfo
@@ -54,7 +48,7 @@ export const useGetCurrentTeamInfo = () => {
       }
     }
     return undefined
-  }, [data, myTeamIdentifier, teamIdentifier])
+  }, [data, teamIdentifier])
 
   return currentTeamInfo
 }

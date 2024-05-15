@@ -46,7 +46,7 @@ const CreditCard: FC = () => {
     <section css={licenseCardContainerStyle} id="license">
       <span css={infoTitleStyle}>{t("billing.menu.overview")}</span>
       <div css={teamInfoStyle}>
-        <img src={teamInfo?.icon} />
+        <img src={teamInfo?.avatarUrl} />
         <span>{teamInfo?.name}</span>
       </div>
       <div css={cardDetailContainerStyle}>

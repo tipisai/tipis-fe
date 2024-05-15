@@ -43,7 +43,7 @@ const EditorFunctionItem: FC<IEditorAIToolsVOItemProps> = ({
     searchParams.append(CREATE_FUNCTION_FROM_SINGLE_KEY, from)
     searchParams.append(CREATE_FUNCTION_FROM_TAB_KEY, currentTabID)
     navigate(
-      `${getEditFunctionPath(teamInfo.identifier, aiToolID)}?${searchParams.toString()}`,
+      `${getEditFunctionPath(teamInfo.identify, aiToolID)}?${searchParams.toString()}`,
     )
   }
 

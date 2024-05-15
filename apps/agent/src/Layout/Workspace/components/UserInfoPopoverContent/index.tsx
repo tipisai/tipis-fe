@@ -32,15 +32,15 @@ const UserInfoPopoverContent: FC = () => {
   const onClickChatWithUs = () => {
     TipisTrack.track("click_help_center")
     boot({
-      userId: currentUserInfo?.userID,
+      userId: currentUserInfo?.id,
       email: currentUserInfo?.email,
       company: {
         companyId: currentTeam?.id,
-        name: currentTeam?.identifier,
+        name: currentTeam?.identify,
       },
       companies: teams.map((team) => ({
         companyId: team.id,
-        name: team.identifier,
+        name: team.identify,
       })),
     })
     show()

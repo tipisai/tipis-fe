@@ -2,7 +2,7 @@ import { SubmitHandler } from "react-hook-form"
 
 export interface CreateTeamFields {
   name: string
-  identifier: string
+  identify: string
 }
 
 export interface CreateTeamModalProps {

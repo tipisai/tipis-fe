@@ -52,11 +52,11 @@ const TeamSelectContent: FC<TeamSelectContentProps> = (props) => {
             css={switchItemStyle}
             key={index}
             onClick={() => {
-              switchCurrentTeam(item.id, item.identifier)
+              switchCurrentTeam(item.id, item.identify)
             }}
           >
             <div css={teamInfoStyle}>
-              <Avatar src={item.icon} size={24} shape="square" />
+              <Avatar src={item.avatarUrl} size={24} shape="square" />
               <span>{item.name}</span>
             </div>
             {isCurrent && <Icon component={SuccessIcon} />}
