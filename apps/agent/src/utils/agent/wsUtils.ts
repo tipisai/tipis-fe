@@ -1,12 +1,12 @@
 import { klona } from "klona"
 import { TextSignal } from "@/api/ws/textSignal"
-import { SEND_MESSAGE_WS_TYPE } from "@/components/PreviewChat/TipisWebscoketContext/interface"
+import { SEND_MESSAGE_WS_TYPE } from "@/components/_PreviewChatCache/TipisWebscoketContext/interface"
 import {
   ChatMessage,
   ChatSendRequestPayload,
   IGroupMessage,
   MESSAGE_STATUS,
-} from "@/components/PreviewChat/interface"
+} from "@/components/_PreviewChatCache/interface"
 import { AgentInitial } from "@/page/WorkSpace/AI/AIAgent/interface"
 import { DELAY_TASK_TIME } from "./constants"
 import {

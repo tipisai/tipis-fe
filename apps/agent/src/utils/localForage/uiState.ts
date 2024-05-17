@@ -1,5 +1,8 @@
 import { klona } from "klona/json"
-import { ChatMessage, IGroupMessage } from "@/components/PreviewChat/interface"
+import {
+  ChatMessage,
+  IGroupMessage,
+} from "@/components/_PreviewChatCache/interface"
 import { getUiHistoryDataByTabID, setUiHistoryData } from "./uiHistory"
 
 export const getCacheUIState = async (teamID: string, tabID: string) => {

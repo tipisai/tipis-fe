@@ -2,7 +2,7 @@ import {
   ChatMessage,
   MESSAGE_STATUS,
   MESSAGE_SYNC_TYPE,
-} from "@/components/PreviewChat/interface"
+} from "@/components/_PreviewChatCache/interface"
 
 export const isChatMessage = (message: ChatMessage) => {
   return message.messageType === MESSAGE_SYNC_TYPE.GPT_CHAT_MESSAGE_TYPE_CHAT

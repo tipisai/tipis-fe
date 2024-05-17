@@ -1,4 +1,7 @@
-import { ChatMessage, IGroupMessage } from "@/components/PreviewChat/interface"
+import {
+  ChatMessage,
+  IGroupMessage,
+} from "@/components/_PreviewChatCache/interface"
 
 export const isGroupMessage = (
   messageItem: IGroupMessage | ChatMessage,

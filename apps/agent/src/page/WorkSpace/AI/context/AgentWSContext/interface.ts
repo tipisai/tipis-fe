@@ -9,13 +9,13 @@ import {
   IChatSendMessage,
   SEND_MESSAGE_WS_TYPE,
   TipisWebSocketContextType,
-} from "@/components/PreviewChat/TipisWebscoketContext/interface"
+} from "@/components/_PreviewChatCache/TipisWebscoketContext/interface"
 import {
   ChatMessage,
   ChatSendRequestPayload,
   CollaboratorsInfo,
   IGroupMessage,
-} from "@/components/PreviewChat/interface"
+} from "@/components/_PreviewChatCache/interface"
 import { IAgentForm } from "../../AIAgent/interface"
 
 export interface IAgentWSProviderProps {

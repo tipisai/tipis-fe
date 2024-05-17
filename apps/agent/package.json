@@ -96,6 +96,7 @@
     "react-use-measure": "^2.1.1",
     "remark-breaks": "^4.0.0",
     "remark-gfm": "^3.0.0",
+    "sse.js": "^2.4.1",
     "streamsaver": "^2.0.6",
     "tern": "^0.24.3",
     "uuid": "^9.0.1",

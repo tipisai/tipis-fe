@@ -1,4 +1,4 @@
-import { SEND_MESSAGE_WS_TYPE } from "@/components/PreviewChat/TipisWebscoketContext/interface"
+import { SEND_MESSAGE_WS_TYPE } from "@/components/_PreviewChatCache/TipisWebscoketContext/interface"
 import { Broadcast, FILE_SOURCE } from "./interface"
 import { TextSignal, TextTarget } from "./textSignal"
 

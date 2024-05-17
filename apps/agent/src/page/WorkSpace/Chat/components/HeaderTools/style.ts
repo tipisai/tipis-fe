@@ -5,3 +5,8 @@ export const headerToolsContainerStyle = css`
   align-items: center;
   gap: 8px;
 `
+
+export const buttonContainerStyle = css`
+  display: flex;
+  gap: 8px;
+`

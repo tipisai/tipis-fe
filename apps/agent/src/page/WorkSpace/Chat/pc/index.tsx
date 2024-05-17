@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next"
 import PCCustomTitle from "@/Layout/Workspace/pc/components/CustomTitle"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import defaultCHatIconURL from "@/assets/public/tipiChatAvatar.svg"
+import { PreviewChat } from "@/components/ChatDashBoard"
 import HeaderTools from "../components/HeaderTools"
-import ChatHistory from "../module/chatHistory"
 import { chatContainerStyle } from "./style"
 
 const PCChatPage: FC = () => {
@@ -18,7 +18,7 @@ const PCChatPage: FC = () => {
           <PCCustomTitle title={title} iconURL={defaultCHatIconURL} />
         )}
       />
-      <ChatHistory />
+      <PreviewChat />
     </div>
   )
 }
