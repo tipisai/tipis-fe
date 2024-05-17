@@ -7,7 +7,7 @@ import MobileFirstPageLayout from "@/Layout/Workspace/mobile/module/FistPageLayo
 import PCCustomTitle from "@/Layout/Workspace/pc/components/CustomTitle"
 import WorkspacePCHeaderLayout from "@/Layout/Workspace/pc/components/Header"
 import FullSectionLoading from "@/components/FullSectionLoading"
-import { TipisWebSocketProvider } from "@/components/PreviewChat/TipisWebscoketContext"
+import { TipisWebSocketProvider } from "@/components/_PreviewChatCache/TipisWebscoketContext"
 import { useGetAIAgentMarketplaceInfoQuery } from "@/redux/services/marketAPI"
 import { useAddOrUpdateRunTipisTab } from "@/utils/recentTabs/hook"
 import { AgentInitial, IAgentForm } from "../AIAgent/interface"

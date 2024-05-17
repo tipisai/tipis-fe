@@ -28,23 +28,23 @@ import {
   TextTarget,
   WEBSOCKET_ERROR_CODE,
 } from "@/api/ws/textSignal"
-import { TipisWebSocketContext } from "@/components/PreviewChat/TipisWebscoketContext"
+import { TipisWebSocketContext } from "@/components/_PreviewChatCache/TipisWebscoketContext"
 import {
   IInitWSCallback,
   ISendMessageOptions,
   SEND_MESSAGE_WS_TYPE,
-} from "@/components/PreviewChat/TipisWebscoketContext/interface"
+} from "@/components/_PreviewChatCache/TipisWebscoketContext/interface"
 import {
   useUpdateAnonymousAvatar,
   useUpdateAnonymousName,
-} from "@/components/PreviewChat/hooks"
+} from "@/components/_PreviewChatCache/hooks"
 import {
   ChatMessage,
   ChatSendRequestPayload,
   ChatWsAppendResponse,
   CollaboratorsInfo,
   IGroupMessage,
-} from "@/components/PreviewChat/interface"
+} from "@/components/_PreviewChatCache/interface"
 import {
   useLazyGetAIAgentAnonymousAddressQuery,
   useLazyGetAIAgentWsAddressQuery,
